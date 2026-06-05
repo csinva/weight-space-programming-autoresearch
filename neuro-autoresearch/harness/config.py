@@ -37,19 +37,20 @@ class Dataset:
 # Three real datasets spanning both neural modalities (fMRI + MEG) and stimulus
 # modalities (image + text). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
-    # STORY (Le Petit Prince), fMRI + word stimulus -- the FULL Li2022Petit study.
-    # Each spoken Word triggers a segment; the stimulus is the word's
-    # [length, frequency] and the target is the fMRI volume. start=2.0/duration=4.0
-    # captures the delayed (HRF) BOLD response.
+    # STORY (Le Petit Prince), fMRI + word stimulus -- one real full subject of the
+    # Li2022Petit study (English EN057, all 9 story sections) via the Li2022PetitSubj
+    # subclass in harness/li2022_subj.py. Each spoken Word triggers a segment; the
+    # stimulus is the word's [length, frequency] and the target is the fMRI volume.
+    # start=2.0/duration=4.0 captures the delayed (HRF) BOLD response.
     "text": Dataset(
-        study="Li2022Petit",
+        study="Li2022PetitSubj",
         trigger="type=='Word'",
         neural="fmri",
         stimulus="text",
         start=2.0,
         duration=4.0,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/li2022petit_full",
+        path="/home/t-ymehta/Research/neuralset/data/li2022petit_en057",
     ),
     # Natural Scenes Dataset (NSD), fMRI + image stimulus, restricted to subject 1
     # (the NsdSubj01 subclass in harness/nsd_subj01.py). Each shown Image triggers a
