@@ -64,14 +64,8 @@ class Li2022PetitSubj(Li2022Petit):
 
     # One subject (EN057) x 9 story sections; the parent's 1008-timeline count
     # would otherwise trip the "corrupted dataset" timeline check.
-    _info: tp.ClassVar[study.StudyInfo] = study.StudyInfo(
-        num_timelines=9,
-        num_subjects=1,
-        num_events_in_query=Li2022Petit._info.num_events_in_query,
-        event_types_in_query=Li2022Petit._info.event_types_in_query,
-        data_shape=Li2022Petit._info.data_shape,
-        frequency=Li2022Petit._info.frequency,
-        fmri_spaces=Li2022Petit._info.fmri_spaces,
+    _info: tp.ClassVar[study.StudyInfo] = Li2022Petit._info.model_copy(
+        update={"num_timelines": 9, "num_subjects": 1}
     )
 
     def iter_timelines(self) -> tp.Iterator[dict[str, tp.Any]]:
@@ -94,7 +88,7 @@ class Li2022PetitSubj(Li2022Petit):
                 target_shape=g["shape"],
                 interpolation="continuous",
             )
-            data = np.asarray(ds.get_fdata(), dtype="float32")[g["mask"]]
+            data = ds.get_fdata(dtype="float32")[g["mask"]]
             assert data.shape[0] == g["n"], (data.shape, g["n"])
             _VOLS[niifile] = data
         return nibabel.Nifti2Image(data, np.eye(4))
