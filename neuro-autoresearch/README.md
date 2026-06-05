@@ -1,89 +1,48 @@
 # neuro-autoresearch
 
-A tiny, **dataset-agnostic** framework for building computational models that
-predict neural activity from stimuli — across domains (image, text, …) and
-datasets — with extremely simple code.
+A bare-minimum, AlphaEvolve-style **autoresearch** proof-of-concept for
+neural encoding, built on **NeuralSet + NeuralFetch**. Structure mirrors
+[`csinva/circuit-building-autoresearch`](https://github.com/csinva/circuit-building-autoresearch)
+(`evolve-neuro/`), generalised to any NeuralSet dataset.
+
+## The loop (3 steps)
+
+1. An agent **proposes a computational model** (`model.py`) — weights written
+   directly in code, **never trained** (no gradient descent, no optimizer).
+2. The fixed harness passes the stimulus through the model → **activations**.
+3. Activations are **linearly read out with ridge regression** to predict the
+   recorded neural activity. The held-out **`test_corr`** (mean per-target
+   Pearson r) is the **reward**. Only the ridge readout is fit.
+
+So `model.py` is the evolved artifact; `test_corr` is the verifiable reward.
+
+## File map
 
 ```
-Stimulus ──(extractor)──▶ X ──(your model)──▶ Ŷ  ≈  Y  (measured neural response)
+config.py      the one active Dataset (edit one line to switch datasets)
+src/data.py    fixed: RawPixels extractor + aligned, split (X, Y) tensors
+src/eval.py    fixed: predictivity reward + evaluate() + save_results()
+model.py       EDITABLE: the model(s) + main that evaluates and saves
+results/       overall_results.csv + test_corr.png (written by save_results)
 ```
 
-The heavy lifting (downloading datasets, extracting stimulus features, reading
-neural recordings, aligning them per stimulus) is delegated entirely to
-[NeuralSet + NeuralFetch](https://facebookresearch.github.io/neuroai/). This
-repo owns only the two things that are *your* science:
-
-1. the **encoding model** `X → Ŷ`, and
-2. the **predictivity metric**.
-
-## The entire API
-
-```python
-from neuro_autoresearch import load_pairs, train_test_split, RidgeEncoder, evaluate
-from neuro_autoresearch.presets import stimulus, neural
-
-pairs = load_pairs(
-    "Grootswagers2022HumanSample",   # ← swap dataset (any in ns.Study.catalog())
-    stimulus("image"),               # ← swap domain  (image / text / …)
-    neural("eeg"),                   # ← swap modality (meg / eeg / fmri)
-    trigger="type=='Image'",
-)
-train, test = train_test_split(pairs)
-print(evaluate(RidgeEncoder(), train, test)["predictivity"])
-```
-
-* **Switch dataset** → change the string.
-* **Switch domain** → change the stimulus preset.
-* **Switch your model** → implement `fit(X, Y)` / `predict(X)` (the `Encoder`
-  protocol). Nothing else changes.
-
-## Two reference encoders
-
-| Model | Paradigm |
-|---|---|
-| `RidgeEncoder` | frozen-feature linear probe — *"how brain-predictive are these features?"* (Brain-Score style) |
-| `MLPEncoder`   | learned encoder trained end-to-end with SGD |
-
-Both satisfy the same `Encoder` protocol, so swapping is one line.
-
-## Layout
-
-```
-neuro_autoresearch/
-  data.py        load_pairs() / train_test_split()  — dataset-agnostic data layer
-  models.py      Encoder protocol + RidgeEncoder + MLPEncoder
-  eval.py        predictivity() + evaluate()
-  presets.py     domain (stimulus) & modality (neural) extractor presets
-  experiment.py  CLI: one command = one experiment
-examples/run_fake.py   offline 10-line demo
-tests/test_smoke.py    offline end-to-end test
-```
-
-## Install
-
-Requires Python 3.12 and NeuralSet's `[all]` extra (for image/text extractors):
+## Run (offline, no downloads)
 
 ```bash
-/usr/bin/python3.12 -m pip install --user --break-system-packages \
-    'neuralset[all]' neuralfetch
-/usr/bin/python3.12 -m pip install --user --break-system-packages -e .
+/usr/bin/python3.12 model.py                       # active model (random_projection)
+/usr/bin/python3.12 model.py --model identity      # the trivial baseline
 ```
 
-## Run
+Each run prints a `test_corr` summary and **upserts** a row into
+`results/overall_results.csv` (keyed by `(dataset, model_name)`), refreshing the
+`results/test_corr.png` bar plot. The default `Fake2025Meg` study scores ≈0
+(random) by design — the point is that it **runs end-to-end offline**.
 
-```bash
-# offline smoke run (no downloads)
-python3.12 -m neuro_autoresearch.experiment --study Fake2025Meg \
-    --domain image-fast --modality meg --model ridge
+## Switch datasets
 
-# tests
-python3.12 -m pytest tests/ -q
-```
+Edit the single `DATASET = Dataset(...)` line in `config.py` (e.g. set
+`study=`, `neural=`, `trigger=`, and `download=True` for a real study). Nothing
+else changes — dataset specifics live only in `config.py`.
 
-## How it maps onto NeuralSet/NeuralFetch
-
-NeuralSet/NeuralFetch already provide the aligned `(stimulus, neural)` data
-interface — one `Segmenter` with two extractors yields both tensors per
-stimulus, identically across datasets. They do **not** provide an encoding
-model, training loop, or predictivity metric. This repo is exactly that thin
-(~250-line) layer.
+Credits: data + alignment via NeuralSet/NeuralFetch; loop structure after csinva's
+circuit-building-autoresearch.
