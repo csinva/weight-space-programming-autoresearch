@@ -145,8 +145,24 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
     }
-    row.update(_slice_corrs(test_corr_vec.detach().cpu().numpy(), dataset, slices))
+    row.update(_slice_corrs(test_corr_vec.detach().cpu().numpy(), dataset,
+                            _effective_slices(dataset.study, slices)))
     return row
+
+
+def _effective_slices(study, slices, results_dir: str = "runs"):
+    """The slice names to actually compute this iteration.
+
+    Once ``runs/<study>.csv`` exists, its ``corr_<name>`` columns are authoritative
+    (they were frozen on the first write), so we recompute *those* every iteration
+    regardless of the agent's current ``LOG_SLICES`` -- the columns stay populated
+    and comparable. Before the file exists, the agent's declaration defines them.
+    """
+    csv = os.path.join(results_dir, f"{study}.csv")
+    if not os.path.exists(csv):
+        return slices
+    cols = pd.read_csv(csv, nrows=0).columns
+    return [c[len("corr_"):] for c in cols if c.startswith("corr_")]
 
 
 def _study_for(d: Dataset):
