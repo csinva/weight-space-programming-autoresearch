@@ -30,7 +30,7 @@ _NEURAL = {
 
 def load_split(d: Dataset):
     """Return (X_train, X_test, Y_train, Y_test) as 2-D float tensors."""
-    path = None if d.download else ns.CACHE_FOLDER
+    path = d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
     study = ns.Study(name=d.study, path=path)
     if d.download:
         study.download()

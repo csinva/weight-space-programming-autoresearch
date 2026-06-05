@@ -19,6 +19,7 @@ class Dataset:
     start: float = 0.0               # segment start, seconds after trigger
     duration: float = 0.3            # segment duration, seconds
     download: bool = False           # download the study before running?
+    path: str | None = None          # pre-downloaded data dir; None => shared cache
     test_frac: float = 0.2           # held-out fraction
     seed: int = 0                    # split seed
 
