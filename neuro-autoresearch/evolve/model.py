@@ -28,6 +28,7 @@ class IdentityModel:
 
     name = "identity"
     description = "Activations are the raw input pixels (no transform)."
+    idea = "Raw stimulus features straight into the ridge readout -- the baseline to beat."
     n_params = 0
 
     def __call__(self, X: torch.Tensor) -> torch.Tensor:
@@ -136,11 +137,19 @@ ITERATIONS = ["identity"]
 MODEL_NAME = "identity"
 MODEL_DESCRIPTION = IdentityModel.description
 
+# Slices to log alongside the scalar reward (the agent's per-region feedback). Each
+# name becomes a `corr_<name>` column in runs/<study>.csv: the mean per-target
+# correlation over that slice's targets. The columns are FROZEN by the first row
+# written to a study's CSV, so declare the set you want ONCE and keep it stable
+# (later additions are ignored with a warning). For NSD these are nsdgeneral
+# sub-ROIs (V1/V2/V3/hV4/FFA); datasets with no resolver (text/meg) declare none.
+LOG_SLICES = ["V1", "hV4", "FFA"]
+
 
 def _print_row(prefix: str, row: dict) -> None:
     print(f"{prefix}{row['model_name']:<18} {row['n_params']:>8}  "
           f"{row['train_corr']:>10.4f}  {row['test_corr']:>9.4f}  "
-          f"{row['frac_targets_above_0.1']:>8.4f}  {row['seconds']:>5.2f}")
+          f"{row['frac_above_0.1']:>8.4f}  {row['seconds']:>5.2f}")
 
 
 if __name__ == "__main__":
@@ -150,8 +159,8 @@ if __name__ == "__main__":
     args = p.parse_args()
 
     if args.model is not None:                       # single-model run (back-compat)
-        row = evaluate(MODELS[args.model](), DATASET)
-        print(f"[{row['dataset']}] {row['model_name']}: test_corr={row['test_corr']:.4f} "
+        row = evaluate(MODELS[args.model](), DATASET, LOG_SLICES)
+        print(f"[{row['study']}] {row['model_name']}: test_corr={row['test_corr']:.4f} "
               f"train_corr={row['train_corr']:.4f} n_params={row['n_params']} "
               f"({row['seconds']}s)")
         save_results(row)
@@ -173,6 +182,6 @@ if __name__ == "__main__":
     print(header)
     print("-" * len(header))
     for i, name in enumerate(ITERATIONS, start=1):
-        row = evaluate_on_split(MODELS[name](), split, DATASET)
+        row = evaluate_on_split(MODELS[name](), split, DATASET, LOG_SLICES)
         save_results(row)
         _print_row(f"{i:>4}  ", row)
