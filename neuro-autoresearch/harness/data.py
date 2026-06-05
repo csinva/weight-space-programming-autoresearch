@@ -19,6 +19,7 @@ from neuralset.extractors.image import BaseClassicImageExtractor
 
 from config import Dataset
 import nsd_subj01  # registers the NsdSubj01 study so name="NsdSubj01" resolves
+import li2022_subj  # registers the Li2022PetitSubj study so name="Li2022PetitSubj" resolves
 
 
 class RawPixels(BaseClassicImageExtractor):
