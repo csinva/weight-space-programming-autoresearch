@@ -106,6 +106,10 @@ def evaluate_on_split(model, split, dataset: Dataset) -> dict:
     X_train, X_test, Y_train, Y_test = split
     device = _readout_device()
     t0 = time.time()
+    # Move the stimulus to the readout device first so the model's forward pass
+    # (the stimulus -> activation matmul) also runs on the GPU, not just the readout.
+    if torch.is_tensor(X_train):
+        X_train, X_test = X_train.to(device), X_test.to(device)
     A_train = _as_f64(model(X_train), device)
     A_test = _as_f64(model(X_test), device)
     Y_train, Y_test = _as_f64(Y_train, device), _as_f64(Y_test, device)
