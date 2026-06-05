@@ -228,6 +228,7 @@ _ROI_DEFS: dict[str, tuple[str, tuple[int, ...]]] = {
     "V3": ("prf-visualrois", (5, 6)),    # V3v + V3d
     "hV4": ("prf-visualrois", (7,)),
     "FFA": ("floc-faces", (2, 3)),       # FFA-1 + FFA-2
+    "PPA": ("floc-places", (2,)),        # parahippocampal place area
 }
 
 _S3_NSD = "s3://natural-scenes-dataset"
