@@ -16,3 +16,10 @@ class NsdSubj01(Allen2022Massive):
 
     SESSIONS_PER_SUBJECT = {1: 40}
     SESSIONS_WITH_14_RUNS = {1: (21, 38)}
+
+    # The parent's StudyInfo counts all 8 subjects (3408 timelines); restricting
+    # to subject 1 yields 480 (40 sessions x 12 runs). NeuralSet validates the
+    # discovered timeline count against this, so it must reflect the subset.
+    _info = Allen2022Massive._info.model_copy(
+        update={"num_timelines": 480, "num_subjects": 1}
+    )
