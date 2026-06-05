@@ -21,7 +21,8 @@ So `model.py` is the evolved artifact; `test_corr` is the verifiable reward.
 ```
 evolve/model.py     EDITABLE: the model(s) + main that evaluates and saves
 evolve/program.md   the task description / instructions to the agent
-harness/config.py   FIXED: the one active Dataset (edit one line to switch datasets)
+harness/config.py   FIXED: the Dataset PRESETS registry (pick one with NEURO_DATASET)
+harness/nsd_subj01.py  FIXED: NSD study restricted to subject 1 (NsdSubj01)
 harness/data.py     FIXED: per-modality stimulus extractors + aligned, split (X, Y) tensors
 harness/eval.py     FIXED: predictivity reward + evaluate() + save_results()
 runs/               overall_results.csv + test_corr.png (written by save_results)
@@ -61,6 +62,7 @@ pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
 ```bash
 /usr/bin/python3.12 evolve/model.py                  # two iterations on the active dataset
 /usr/bin/python3.12 evolve/model.py --model identity # a single named model
+NEURO_DATASET=meg /usr/bin/python3.12 evolve/model.py  # pick a preset (text|nsd|meg)
 ```
 
 Run from the repo root so results land in `runs/`. The default run loads the
@@ -69,34 +71,39 @@ printing `train_corr`, `test_corr`, and `frac>0.1` per iteration with timing.
 Each evaluated model **upserts** a row into `runs/overall_results.csv` (keyed by
 `(dataset, model_name)`), refreshing the `runs/test_corr.png` bar plot.
 
-## Active dataset: Le Petit Prince story (fMRI + word stimulus)
+## Datasets: three real presets (pick one with `NEURO_DATASET`)
 
-The active dataset is the **Le Petit Prince** narrative-listening study —
-NeuralSet's `Li2022PetitSample` (fMRI), `stimulus=text`. Each spoken **Word**
-(~1517 of them, one subject) triggers a segment; the stimulus is that word's
-`[length, zipf-frequency]` and the neural target is the fMRI volume. The segment
-window is offset (`start=2.0`, `duration=4.0s`) to capture the delayed (HRF)
-BOLD response; because the stimulus uses the *trigger* word, that offset only
-shifts the neural window, not X. With ~1208 train words and a 2-D stimulus,
-`n_train ≫ feature_dim`, so the ridge readout is not overfit (`train_corr` and
-`test_corr` are both reported to confirm).
+`harness/config.py` registers three real datasets in `PRESETS` and selects the
+active one from the `NEURO_DATASET` environment variable (default `text`) — no
+source edit, so parallel runs never collide:
 
-The **sample subset is pre-downloaded locally** and pointed to via the `path=`
-field with `download=False` in `harness/config.py`, so it **runs offline**.
+| `NEURO_DATASET` | Study | neural | stimulus | window (`start`/`duration`) |
+| --- | --- | --- | --- | --- |
+| `text` (default) | `Li2022Petit` (Le Petit Prince, full) | fMRI | text (word) | 2.0 / 4.0 s |
+| `nsd` | `NsdSubj01` (NSD, subject 1) | fMRI | image | 0.0 / 3.0 s |
+| `meg` | `Bel2026PetitListenSample` (LPP-Listen) | MEG | text (word) | 0.0 / 0.5 s |
 
-> The previous active dataset, the **Natural Scenes Dataset (NSD)** image study
-> (`Allen2022MassiveSample`, fMRI), is kept one line away — see the commented
-> `Dataset(...)` in `harness/config.py`. A full download (`download=True`) would
-> need the `aws` CLI and NSD Terms & Conditions acceptance; the local sample does
-> not.
+- **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken
+  **Word** triggers a segment; the stimulus is that word's `[length,
+  zipf-frequency]` and the neural target is the fMRI volume. The window is offset
+  to capture the delayed (HRF) BOLD response; because the stimulus uses the
+  *trigger* word, that offset only shifts the neural window, not X.
+- **`nsd`** — the **Natural Scenes Dataset**, restricted to subject 1 via the
+  `NsdSubj01` subclass in `harness/nsd_subj01.py`. Each shown **Image** triggers a
+  segment; the stimulus is the resized image and the target is the fMRI volume.
+- **`meg`** — **Le Petit Prince MEG** (LPP-Listen, OpenNeuro `ds007523`), the
+  loop's first electrophysiological modality. The raw `.fif` is Elekta MaxShield,
+  handled in `data.py` via `allow_maxshield=True`.
+
+All three are pre-downloaded locally and pointed to via `path=` with
+`download=False`, so they **run offline**.
 
 ## Switch datasets
 
-Edit the single `DATASET = Dataset(...)` line in `harness/config.py` (set
-`study=`, `neural=`, `stimulus=`, `trigger=`, and either `download=True` or a
-local `path=`). Nothing else changes — dataset specifics live only in
-`config.py`. The image/fMRI NSD sample is included as a ready-to-paste
-alternative.
+Set `NEURO_DATASET` to one of `text` / `nsd` / `meg` (an unknown value raises a
+clear error listing the valid keys). To add another, name a study from
+`neuralset.Study.catalog()` and append a `Dataset(...)` entry to `PRESETS` in
+`harness/config.py` — dataset specifics live only in `config.py`.
 
 ## Drive the autoresearch loop nonstop
 

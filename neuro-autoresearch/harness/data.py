@@ -18,6 +18,7 @@ import neuralset as ns
 from neuralset.extractors.image import BaseClassicImageExtractor
 
 from config import Dataset
+import nsd_subj01  # registers the NsdSubj01 study so name="NsdSubj01" resolves
 
 
 class RawPixels(BaseClassicImageExtractor):
@@ -30,7 +31,8 @@ class RawPixels(BaseClassicImageExtractor):
 
 
 _NEURAL = {
-    "meg": lambda: ns.extractors.MegExtractor(frequency=100.0),
+    # Bel2026 raw .fif is Elekta MaxShield -> allow_maxshield or it raises.
+    "meg": lambda: ns.extractors.MegExtractor(frequency=100.0, allow_maxshield=True),
     "eeg": lambda: ns.extractors.EegExtractor(frequency=100.0),
     "fmri": lambda: ns.extractors.FmriExtractor(),
 }
