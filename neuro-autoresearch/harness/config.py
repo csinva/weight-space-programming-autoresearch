@@ -1,9 +1,15 @@
 """The single dataset this proof-of-concept runs on.
 
 Switching datasets is a ONE-LINE edit: change ``DATASET = Dataset(...)`` below.
-The default is the offline ``Fake2025Meg`` image study (no download needed).
+A dataset declares both its **stimulus modality** (``stimulus``: image | text |
+audio) and its **neural modality** (``neural``: meg | eeg | fmri); the harness
+(``data.py``) dispatches the right NeuralSet extractor for each. The model and
+the reward stay modality-agnostic, so the same loop runs across datasets and
+modalities.
+
 For real signal, name a study from ``neuralset.Study.catalog()`` and set
-``download=True`` (e.g. ``Allen2022MassiveSample`` fMRI, ``Grootswagers2022HumanSample`` EEG).
+``download=True`` (e.g. ``Allen2022MassiveSample`` fMRI image, ``Li2022PetitSample``
+fMRI word, ``Grootswagers2022HumanSample`` EEG image).
 """
 from __future__ import annotations
 
@@ -14,28 +20,41 @@ from dataclasses import dataclass
 class Dataset:
     study: str = "Fake2025Meg"       # any name in neuralset.Study.catalog()
     trigger: str = "type=='Image'"   # which events are the stimuli
-    neural: str = "meg"              # meg | eeg | fmri
-    imsize: int = 16                 # stimulus images resized to imsize x imsize
+    neural: str = "meg"              # neural modality: meg | eeg | fmri
+    stimulus: str = "image"          # stimulus modality: image | text | audio
+    imsize: int = 16                 # image stimuli resized to imsize x imsize
     start: float = 0.0               # segment start, seconds after trigger
     duration: float = 0.3            # segment duration, seconds
     download: bool = False           # download the study before running?
     path: str | None = None          # pre-downloaded data dir; None => shared cache
-    test_frac: float = 0.2           # held-out fraction
-    seed: int = 0                    # split seed
+    test_frac: float = 0.2           # held-out fraction (contiguous temporal tail)
 
 
 # The one active dataset. Edit this line to target another dataset.
-# Natural Scenes Dataset (NSD), fMRI. The sample subset is pre-downloaded at the
-# path below, so no aws CLI / NSD T&C acceptance is needed (download=False).
+# STORY (Le Petit Prince), fMRI + word stimulus. NeuralSet ``Li2022PetitSample``
+# sample, pre-downloaded at the path below (download=False, runs offline). Each
+# spoken Word triggers a segment; the stimulus is the word's [length, frequency]
+# and the target is the fMRI volume. start=2.0/duration=4.0 captures the delayed
+# (HRF) BOLD response; the stimulus is the trigger word, so the offset only
+# shifts the neural window, not X.
 DATASET = Dataset(
-    study="Allen2022MassiveSample",
-    trigger="type=='Image'",
+    study="Li2022PetitSample",
+    trigger="type=='Word'",
     neural="fmri",
-    imsize=16,
-    start=0.0,
-    duration=3.0,
+    stimulus="text",
+    start=2.0,
+    duration=4.0,
     download=False,
-    path="/home/t-ymehta/Research/neuralset/data/nsd_sample",
+    path="/home/t-ymehta/Research/neuralset/data/li2022petit_sample",
     test_frac=0.2,
-    seed=0,
 )
+
+# Switch back to the Natural Scenes Dataset (NSD), fMRI + image stimulus, by
+# replacing the DATASET above with this one (sample pre-downloaded, offline):
+#
+# DATASET = Dataset(
+#     study="Allen2022MassiveSample", trigger="type=='Image'",
+#     neural="fmri", stimulus="image", imsize=16, start=0.0, duration=3.0,
+#     download=False, path="/home/t-ymehta/Research/neuralset/data/nsd_sample",
+#     test_frac=0.2,
+# )

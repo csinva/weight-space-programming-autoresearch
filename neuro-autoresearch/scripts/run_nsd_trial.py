@@ -1,10 +1,11 @@
-"""Reproducible NSD autoresearch-trial runner.
+"""Reproducible autoresearch-trial runner for the active dataset.
 
-Drives the fixed harness end-to-end on the active dataset (NSD fMRI), loading the
-split ONCE and then, for each in-code model proposal, separately timing the model
-forward pass, the ridge readout fit, and the ridge predict. The one-off data load
-is the slow step (~9s); the linear (ridge) prediction is reported on its own so
-its cost is visible apart from the load.
+Drives the fixed harness end-to-end on the active dataset (whatever modality
+``harness/config.py`` selects), loading the split ONCE and then, for each in-code
+modality-agnostic model proposal, separately timing the model forward pass, the
+ridge readout fit, and the ridge predict. The one-off data load is the slow step;
+the linear (ridge) prediction is reported on its own so its cost is visible apart
+from the load.
 
 Run from the repo root:
     /usr/bin/python3.12 scripts/run_nsd_trial.py --iterations 2
@@ -26,7 +27,7 @@ sys.path.insert(0, os.path.join(_ROOT, "evolve"))
 from config import DATASET          # noqa: E402
 from data import load_split         # noqa: E402
 from eval import _corr_per_column, predictivity  # noqa: E402  (reuse harness logic)
-from model import MODELS            # noqa: E402
+from model import MODALITY_AGNOSTIC, MODELS       # noqa: E402
 
 
 def evaluate_model(model, split) -> dict:
@@ -70,11 +71,11 @@ def main() -> int:
     if iterations < 1:
         p.error("--iterations must be >= 1")
 
-    names = list(MODELS)
+    names = MODALITY_AGNOSTIC
     proposals = [names[i % len(names)] for i in range(iterations)]
 
-    print(f"Dataset: {DATASET.study} ({DATASET.neural}), "
-          f"imsize={DATASET.imsize}, test_frac={DATASET.test_frac}, seed={DATASET.seed}")
+    print(f"Dataset: {DATASET.study} (stimulus={DATASET.stimulus}, neural={DATASET.neural}), "
+          f"imsize={DATASET.imsize}, test_frac={DATASET.test_frac}")
     print("Loading split once via harness (this is the slow step) ...")
 
     t = time.perf_counter()
