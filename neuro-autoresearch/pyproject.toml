@@ -16,5 +16,5 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 
-[tool.setuptools.packages.find]
-include = ["neuro_autoresearch*"]
+[tool.setuptools]
+py-modules = []

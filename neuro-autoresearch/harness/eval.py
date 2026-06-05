@@ -51,7 +51,7 @@ def evaluate(model, dataset: Dataset) -> dict:
     }
 
 
-def save_results(row: dict, results_dir: str = "results") -> None:
+def save_results(row: dict, results_dir: str = "runs") -> None:
     """Upsert ``row`` into overall_results.csv keyed by (dataset, model_name) and plot."""
     os.makedirs(results_dir, exist_ok=True)
     csv = os.path.join(results_dir, "overall_results.csv")

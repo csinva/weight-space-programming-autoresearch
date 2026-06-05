@@ -4,7 +4,7 @@ A model is a plain callable  stimulus batch X (N, D_in) -> activations (N, D_out
 Its weights are written directly in code; it is NEVER trained (no optimizer, no
 backprop). Only the ridge readout in src/eval.py is fit — that is the evaluation.
 
-To evolve: edit / add a Model below. Do NOT edit the harness in src/.
+To evolve: edit / add a Model below. Do NOT edit the harness in harness/.
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import sys
 
 import torch
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "harness"))
 
 from config import DATASET
 from eval import evaluate, save_results

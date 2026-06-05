@@ -19,28 +19,33 @@ So `model.py` is the evolved artifact; `test_corr` is the verifiable reward.
 ## File map
 
 ```
-config.py      the one active Dataset (edit one line to switch datasets)
-src/data.py    fixed: RawPixels extractor + aligned, split (X, Y) tensors
-src/eval.py    fixed: predictivity reward + evaluate() + save_results()
-model.py       EDITABLE: the model(s) + main that evaluates and saves
-results/       overall_results.csv + test_corr.png (written by save_results)
+evolve/model.py     EDITABLE: the model(s) + main that evaluates and saves
+evolve/program.md   the task description / instructions to the agent
+harness/config.py   FIXED: the one active Dataset (edit one line to switch datasets)
+harness/data.py     FIXED: RawPixels extractor + aligned, split (X, Y) tensors
+harness/eval.py     FIXED: predictivity reward + evaluate() + save_results()
+runs/               overall_results.csv + test_corr.png (written by save_results)
 ```
+
+`evolve/` is the only zone the agent edits; `harness/` is the fixed evaluation
+harness the agent must not touch.
 
 ## Run (offline, no downloads)
 
 ```bash
-/usr/bin/python3.12 model.py                       # active model (random_projection)
-/usr/bin/python3.12 model.py --model identity      # the trivial baseline
+/usr/bin/python3.12 evolve/model.py                  # active model (random_projection)
+/usr/bin/python3.12 evolve/model.py --model identity # the trivial baseline
 ```
 
-Each run prints a `test_corr` summary and **upserts** a row into
-`results/overall_results.csv` (keyed by `(dataset, model_name)`), refreshing the
-`results/test_corr.png` bar plot. The default `Fake2025Meg` study scores ≈0
-(random) by design — the point is that it **runs end-to-end offline**.
+Run from the repo root so results land in `runs/`. Each run prints a `test_corr`
+summary and **upserts** a row into `runs/overall_results.csv` (keyed by
+`(dataset, model_name)`), refreshing the `runs/test_corr.png` bar plot. The
+default `Fake2025Meg` study scores ≈0 (random) by design — the point is that it
+**runs end-to-end offline**.
 
 ## Switch datasets
 
-Edit the single `DATASET = Dataset(...)` line in `config.py` (e.g. set
+Edit the single `DATASET = Dataset(...)` line in `harness/config.py` (e.g. set
 `study=`, `neural=`, `trigger=`, and `download=True` for a real study). Nothing
 else changes — dataset specifics live only in `config.py`.
 
