@@ -1,5 +1,6 @@
 dataset,model_name,description,n_params,test_corr,train_corr,frac_targets_above_0.1,seconds,status
 Fake2025Meg,identity,Activations are the raw input pixels (no transform).,0,0.0497384532509486,0.0827302245649481,0.3332244008714597,1.91,ok
 Fake2025Meg,random_projection,ReLU of a fixed seed=0 Gaussian projection to 64 dims.,49152,0.0497384532509486,0.0827302245649481,0.3332244008714597,1.86,ok
-Allen2022MassiveSample,identity,Activations are the raw input pixels (no transform).,0,0.0294724811027598,0.950552729182802,0.3076507250063597,9.83,ok
-Allen2022MassiveSample,random_projection,ReLU of a fixed seed=0 Gaussian projection to 64 dims.,196608,-0.002248994321323865,0.45807576861276456,0.2327334011701857,8.77,ok
+Allen2022MassiveSample,random_projection,ReLU of a fixed seed=0 Gaussian projection to 64 dims.,49152,0.0382086298390525,0.4467007160761025,0.3408483846349529,9.08,ok
+Allen2022MassiveSample,identity,Activations are the raw input pixels (no transform).,0,0.0416815608549884,0.9201874511063712,0.3434876621724751,9.19,ok
+Allen2022MassiveSample,spatial_pyramid,Concatenated mean-pool of the image at 4x4 + 2x2 + 1x1 grids (per channel).,0,0.020231678564967465,0.38042313942582257,0.28570974306792163,9.34,ok

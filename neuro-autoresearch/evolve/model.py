@@ -51,11 +51,44 @@ class RandomProjectionModel:
         return torch.relu(X @ self.W)
 
 
-MODELS = {"identity": IdentityModel, "random_projection": RandomProjectionModel}
+class SpatialPyramidModel:
+    """Fixed multi-scale average-pooling of the stimulus image (an image pyramid).
+
+    The raw 768-pixel input overfits (200 samples); a random 64-d projection
+    discards visual structure. This instead mean-pools each image at several
+    coarse grids and concatenates them -- a fixed, in-code linear operator (no
+    training). The pooled features are smooth and low-variance, which suits the
+    early-visual fMRI signal and the small sample count.
+    """
+
+    name = "spatial_pyramid"
+    description = "Concatenated mean-pool of the image at 4x4 + 2x2 + 1x1 grids (per channel)."
+    n_params = 0
+
+    def __init__(self, grids: tuple[int, ...] = (4, 2, 1), channels: int = 3):
+        self.grids, self.channels = grids, channels
+
+    def __call__(self, X: torch.Tensor) -> torch.Tensor:
+        n, d = X.shape
+        side = int(round((d / self.channels) ** 0.5))
+        img = X.reshape(n, side, side, self.channels)
+        feats = []
+        for g in self.grids:
+            block = side // g
+            pooled = img.reshape(n, g, block, g, block, self.channels).mean(dim=(2, 4))
+            feats.append(pooled.reshape(n, g * g * self.channels))
+        return torch.cat(feats, dim=1)
+
+
+MODELS = {
+    "identity": IdentityModel,
+    "random_projection": RandomProjectionModel,
+    "spatial_pyramid": SpatialPyramidModel,
+}
 
 # The active model the loop is currently proposing.
-MODEL_NAME = "random_projection"
-MODEL_DESCRIPTION = RandomProjectionModel.description
+MODEL_NAME = "spatial_pyramid"
+MODEL_DESCRIPTION = SpatialPyramidModel.description
 
 
 if __name__ == "__main__":

@@ -25,4 +25,17 @@ class Dataset:
 
 
 # The one active dataset. Edit this line to target another dataset.
-DATASET = Dataset()
+# Natural Scenes Dataset (NSD), fMRI. The sample subset is pre-downloaded at the
+# path below, so no aws CLI / NSD T&C acceptance is needed (download=False).
+DATASET = Dataset(
+    study="Allen2022MassiveSample",
+    trigger="type=='Image'",
+    neural="fmri",
+    imsize=16,
+    start=0.0,
+    duration=3.0,
+    download=False,
+    path="/home/t-ymehta/Research/neuralset/data/nsd_sample",
+    test_frac=0.2,
+    seed=0,
+)
