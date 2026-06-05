@@ -54,9 +54,28 @@ field and `harness/data.py` dispatches the matching offline NeuralSet extractor
 The neural side (`neural`: `meg` / `eeg` / `fmri`) is dispatched the same way.
 Targets that are constant across the training set (e.g. non-brain fMRI voxels)
 are dropped — they carry no signal and only dilute the mean-r. The train/test
-split is a **contiguous temporal hold-out** (the latest `test_frac` of triggers
-by onset), so time-adjacent samples that share a neural window can't leak across
-the split.
+split is, by default, a **contiguous temporal hold-out** (the latest `test_frac`
+of triggers by onset), so time-adjacent samples that share a neural window can't
+leak across the split.
+
+**Repeated stimuli (NSD).** When a dataset shows each stimulus multiple times,
+the loader instead collapses the repeats — one sample per *unique* stimulus, with
+the neural target averaged over its presentations (the stimulus is identical, so
+it is unchanged) — and holds out a **canonical image-disjoint** test set rather
+than a temporal tail. For NSD subject 1 this turns 30,000 trials into 10,000
+unique images and uses the standard **shared-1000** images (NSD `sharedix`) as the
+test set, with the other 9,000 for training; the split asserts zero train/test
+image overlap (no image-level leakage). Text/MEG stimuli don't repeat, so they
+keep the temporal split unchanged.
+
+**Selectable brain region (`Dataset.roi`).** For volumetric studies the target
+voxels default to the full `nsdgeneral` mask. Setting `roi` to a sub-region
+(`V1` / `V2` / `V3` / `hV4` / `FFA`) selects a **column subset** of those
+already-loaded voxels — a tiny ROI label volume is mapped onto the same voxel
+order and the matching columns are kept. It never re-reads the timeseries (the
+expensive `_build_xy` output is cached independently of `roi`), so a smaller ROI
+loads in well under a second and gives a faster, region-specific readout.
+
 
 The stimulus and neural windows can be **decoupled**: a `Dataset` may set
 `stim_start` / `stim_duration` (default `None` → reuse `start` / `duration`). When
@@ -113,6 +132,9 @@ source edit, so parallel runs never collide:
 - **`nsd`** — the **Natural Scenes Dataset**, restricted to subject 1 via the
   `NsdSubj01` subclass in `harness/nsd_subj01.py`. Each shown **Image** triggers a
   segment; the stimulus is the resized image and the target is the fMRI volume.
+  Subject 1's 10,000 images are each shown ~3×, so the loader collapses repeats to
+  one sample per unique image and holds out the canonical **shared-1000** images as
+  an image-disjoint test set; `roi` picks the target region (default `nsdgeneral`).
 - **`meg`** — **Le Petit Prince MEG** (LPP-Listen, OpenNeuro `ds007523`), the
   loop's first electrophysiological modality. Each spoken **Word** triggers a 0.5 s
   MEG epoch; the stimulus is the Mel spectrum of the audio in that same window (MEG
