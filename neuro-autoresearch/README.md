@@ -45,15 +45,28 @@ pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
 
 Run from the repo root so results land in `runs/`. Each run prints a `test_corr`
 summary and **upserts** a row into `runs/overall_results.csv` (keyed by
-`(dataset, model_name)`), refreshing the `runs/test_corr.png` bar plot. The
-default `Fake2025Meg` study scores ≈0 (random) by design — the point is that it
-**runs end-to-end offline**.
+`(dataset, model_name)`), refreshing the `runs/test_corr.png` bar plot.
+
+## Active dataset: Natural Scenes Dataset (NSD)
+
+The active dataset is the **Natural Scenes Dataset (NSD)** — NeuralSet's
+`Allen2022MassiveSample` study (fMRI), not the old offline `Fake2025Meg` demo.
+Through the harness, each stimulus image becomes a `16x16x3` raw-pixel vector and
+the neural target is the NSD fMRI volume (~31k voxels).
+
+NSD is sourced from NeuralSet's `Allen2022MassiveSample` study. The **sample
+subset is pre-downloaded locally** and pointed to via the `path=` field with
+`download=False` in `harness/config.py`, so it **runs offline** — no `aws` CLI and
+no NSD Terms & Conditions acceptance required.
+
+> A full NSD download (`download=True`) **would** require the `aws` CLI and
+> accepting the NSD Terms & Conditions.
 
 ## Switch datasets
 
 Edit the single `DATASET = Dataset(...)` line in `harness/config.py` (e.g. set
-`study=`, `neural=`, `trigger=`, and `download=True` for a real study). Nothing
-else changes — dataset specifics live only in `config.py`.
+`study=`, `neural=`, `trigger=`, and either `download=True` or a local `path=`).
+Nothing else changes — dataset specifics live only in `config.py`.
 
 ## Drive the autoresearch loop nonstop
 
