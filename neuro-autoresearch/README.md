@@ -16,6 +16,13 @@ neural encoding, built on **NeuralSet + NeuralFetch**. Structure mirrors
 
 So `model.py` is the evolved artifact; `test_corr` is the verifiable reward.
 
+> **Unified data interface:** every dataset, modality, and stimulus flows
+> through **NeuralSet / NeuralFetch** — there is no raw file or network I/O
+> anywhere in `harness/`, `evolve/`, or `scripts/`. Adding a dataset is pure
+> config, never bespoke parsing. See
+> [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the
+> agent operating contract.
+
 ## File map
 
 ```
@@ -97,6 +104,38 @@ Edit the single `DATASET = Dataset(...)` line in `harness/config.py` (set
 local `path=`). Nothing else changes — dataset specifics live only in
 `config.py`. The image/fMRI NSD sample is included as a ready-to-paste
 alternative.
+
+## Datasets staged for offline use
+
+Four studies are pre-downloaded locally (under the gitignored
+`~/Research/neuralset/data/`, nested as `<path>/<StudyName>/`) so a switch is a
+one-line, **offline** `download=False` edit. Together they span two neural
+modalities (fMRI + MEG) and three stimulus types:
+
+| Study | neural | stimulus | local path | status |
+| --- | --- | --- | --- | --- |
+| `Li2022PetitSample` (LPP story) | fmri | text | `…/li2022petit_sample` | **active** |
+| `Allen2022MassiveSample` (NSD) | fmri | image | `…/nsd_subj01`, `…/nsd_sample` | staged |
+| `Bel2026PetitListenSample` (LPP MEG, listen) | meg | text/audio | `…/bel2026petitlisten_sample` | staged |
+| `Bel2026PetitReadSample` (LPP MEG, read) | meg | text | `…/bel2026petitread_sample` | staged |
+
+Per-dataset download notes and ready-to-paste `Dataset(...)` config blocks live
+in `runs/` (`NSD_DOWNLOAD.md`, `THIRD_DATASET.md`). MEG `.fif` raws are MaxShield
+(need `allow_maxshield=True`); the NSD full pull (`nsd_subj01`) must be extracted
+before its `path` is used. **Never point an unattended run at a gated
+`download=True` study** — keep everything offline against a staged path.
+
+## Status & open ideas
+
+The loop runs end-to-end offline and the reward is genuinely held-out. Before a
+hands-off, multi-iteration overnight run, `runs/OVERNIGHT_READINESS.md` documents
+the remaining improvements: append-only result history (today's `save_results`
+upserts by name and loses the trajectory), an error safety net
+(`status="error"` instead of a bare crash), fail-fast on a missing data path
+(instead of falling through to a gated download), and a more stable reward
+(multi-seed / k-fold, a tie band, or signal-bearing target selection). See
+[`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the full
+agent contract and these open items.
 
 ## Drive the autoresearch loop nonstop
 
