@@ -297,19 +297,21 @@ def _collapse_repeats(X, Y, onsets, stim_ids):
     group mean is unchanged, while averaging Y reduces trial noise. Returns one row
     per unique stimulus (X, Y, onsets, stim_ids), ordered by stimulus id.
     """
-    uniq, inv = np.unique(stim_ids, return_inverse=True)
+    uniq, first_idx, inv = np.unique(stim_ids, return_index=True, return_inverse=True)
     inv = inv.reshape(-1)
     inv_t = torch.as_tensor(inv, dtype=torch.long)
     g = len(uniq)
     counts = torch.bincount(inv_t, minlength=g).clamp(min=1).unsqueeze(1).float()
 
-    def group_mean(M):
-        out = torch.zeros(g, M.shape[1], dtype=torch.float32)
-        out.index_add_(0, inv_t, M.float())
-        return out / counts
-
-    onsets_g = np.bincount(inv, weights=onsets) / np.bincount(inv)
-    return group_mean(X), group_mean(Y), onsets_g, uniq
+    # Y is averaged over repeats (this is what reduces trial noise).
+    Y_g = torch.zeros(g, Y.shape[1], dtype=torch.float32).index_add_(0, inv_t, Y.float()) / counts
+    # X is identical across a stimulus's repeats, so gather one row instead of
+    # averaging the (wide) stimulus tensor.
+    X_g = X[torch.as_tensor(first_idx, dtype=torch.long)]
+    # Mean onset per group (used only by non-canonical splits); one bincount.
+    counts_np = np.bincount(inv, minlength=g)
+    onsets_g = np.bincount(inv, weights=onsets, minlength=g) / np.maximum(counts_np, 1)
+    return X_g, Y_g, onsets_g, uniq
 
 
 def _image_id(filepath: str) -> int:
