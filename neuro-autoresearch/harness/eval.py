@@ -29,9 +29,14 @@ def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
     return float(_corr_per_column(np.asarray(y_hat), np.asarray(y)).mean())
 
 
-def evaluate(model, dataset: Dataset) -> dict:
+def evaluate_on_split(model, split, dataset: Dataset) -> dict:
+    """Evaluate ``model`` on an already-loaded ``split`` (the reusable core).
+
+    Times only the model + ridge readout (not the one-off data load), so callers
+    that load a split once can evaluate many proposals without re-loading.
+    """
+    X_train, X_test, Y_train, Y_test = split
     t0 = time.time()
-    X_train, X_test, Y_train, Y_test = load_split(dataset)
     A_train = np.asarray(model(X_train), dtype="float64")
     A_test = np.asarray(model(X_test), dtype="float64")
     Y_train, Y_test = Y_train.numpy(), Y_test.numpy()
@@ -49,6 +54,19 @@ def evaluate(model, dataset: Dataset) -> dict:
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
     }
+
+
+def evaluate(model, dataset: Dataset) -> dict:
+    """Load the dataset split and evaluate ``model`` on it.
+
+    ``seconds`` covers the whole from-scratch evaluation (data load + readout);
+    use :func:`evaluate_on_split` to reuse a pre-loaded split and time only the
+    readout.
+    """
+    t0 = time.time()
+    row = evaluate_on_split(model, load_split(dataset), dataset)
+    row["seconds"] = round(time.time() - t0, 2)
+    return row
 
 
 def save_results(row: dict, results_dir: str = "runs") -> None:
