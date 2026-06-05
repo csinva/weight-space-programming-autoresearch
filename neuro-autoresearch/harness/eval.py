@@ -69,6 +69,7 @@ def _ridge_gcv_coef(Xc: torch.Tensor, yc: torch.Tensor) -> torch.Tensor:
     V, s2 = Vh.transpose(-2, -1), s * s
     UT_y = U.t() @ yc
     UT_1 = U.t() @ torch.ones(n, dtype=Xc.dtype, device=Xc.device)
+    U2 = U * U                                        # reused across the alpha grid
     wide = n <= p
 
     best_score = best_coef = None
@@ -76,12 +77,12 @@ def _ridge_gcv_coef(Xc: torch.Tensor, yc: torch.Tensor) -> torch.Tensor:
         if wide:
             d = alpha / (s2 + alpha)
             alpha_c = U @ (d[:, None] * UT_y)
-            alpha_d = (d * U ** 2).sum(1)
+            alpha_d = (d * U2).sum(1)
             g = U @ (d * UT_1)
         else:  # n > p: reduced SVD misses (n-p) zero-eigenvalue directions
             m = alpha / (s2 + alpha) - 1.0
             alpha_c = U @ (m[:, None] * UT_y) + yc
-            alpha_d = (m * U ** 2).sum(1) + 1.0
+            alpha_d = (m * U2).sum(1) + 1.0
             g = U @ (m * UT_1) + 1.0
         alpha_d = alpha_d - g * (1.0 / n)             # cancel the intercept direction
         looe = alpha_c / alpha_d[:, None]
