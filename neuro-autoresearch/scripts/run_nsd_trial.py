@@ -75,7 +75,7 @@ def main() -> int:
 
     print(f"Dataset: {DATASET.study} ({DATASET.neural}), "
           f"imsize={DATASET.imsize}, test_frac={DATASET.test_frac}, seed={DATASET.seed}")
-    print(f"Loading split once via harness (this is the slow step) ...")
+    print("Loading split once via harness (this is the slow step) ...")
 
     t = time.perf_counter()
     split = load_split(DATASET)
