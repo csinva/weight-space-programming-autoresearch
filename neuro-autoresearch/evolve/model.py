@@ -48,10 +48,12 @@ class RandomProjectionModel:
         return 0 if self.W is None else self.W.numel()
 
     def __call__(self, X: torch.Tensor) -> torch.Tensor:
+        # Weights are seeded on CPU once (so they are identical on every device)
+        # and moved to X.device per call, so the matmul runs wherever X lives.
         if self.W is None:
             g = torch.Generator().manual_seed(self.seed)
             self.W = torch.randn(X.shape[1], self.out_dim, generator=g) / X.shape[1] ** 0.5
-        return torch.relu(X @ self.W)
+        return torch.relu(X @ self.W.to(X.device))
 
 
 class SpatialPyramidModel:
@@ -103,12 +105,14 @@ class RandomFourierModel:
         return 0 if self.W is None else self.W.numel() + self.b.numel()
 
     def __call__(self, X: torch.Tensor) -> torch.Tensor:
+        # Weights are seeded on CPU once (identical on every device) and moved to
+        # X.device per call, so the matmul runs wherever X lives (CPU or GPU).
         if self.W is None:
             g = torch.Generator().manual_seed(self.seed)
             scale = (self.gamma / X.shape[1]) ** 0.5
             self.W = torch.randn(X.shape[1], self.out_dim, generator=g) * scale
             self.b = torch.rand(self.out_dim, generator=g) * (2 * math.pi)
-        return torch.cos(X @ self.W + self.b)
+        return torch.cos(X @ self.W.to(X.device) + self.b.to(X.device))
 
 
 MODELS = {
@@ -122,13 +126,15 @@ MODELS = {
 # is image-only (it reshapes X into a square RGB image), so it is excluded.
 MODALITY_AGNOSTIC = ["identity", "random_projection", "random_fourier"]
 
-# The two proposals the loop evaluates by default: an initial model + ONE
-# modification (a richer fixed nonlinear basis).
-ITERATIONS = ["random_projection", "random_fourier"]
+# The proposals the loop evaluates by default. The readout is fit on the model's
+# RAW activations, so the canonical default is the identity (raw-feature) path --
+# no random projection is inserted between the activations and the ridge readout.
+# The other example models above stay available (via --model) but are not forced.
+ITERATIONS = ["identity"]
 
 # The active model the loop is currently proposing.
-MODEL_NAME = "random_fourier"
-MODEL_DESCRIPTION = RandomFourierModel.description
+MODEL_NAME = "identity"
+MODEL_DESCRIPTION = IdentityModel.description
 
 
 def _print_row(prefix: str, row: dict) -> None:
