@@ -12,6 +12,8 @@ Stimulus extractors are OFFLINE-friendly (no model-weight downloads):
 """
 from __future__ import annotations
 
+import os
+
 import numpy as np
 import torch
 import neuralset as ns
@@ -91,7 +93,11 @@ def load_split(d: Dataset):
         trigger_query=d.trigger, start=d.start, duration=d.duration,
         drop_incomplete=True,
     )
-    batch = seg.apply(events).load_all()
+    # load_all defaults to num_workers=0 (serial); the per-segment fMRI reads are
+    # I/O-bound, so parallel DataLoader workers cut the load by ~10x (e.g. the NSD
+    # subj01 load drops from ~25 min to a few min). Override via NEURO_LOAD_WORKERS.
+    n_workers = int(os.environ.get("NEURO_LOAD_WORKERS", "8"))
+    batch = seg.apply(events).load_all(num_workers=n_workers)
     X = batch.data["stim"].float()
     Y = batch.data["neural"].float().reshape(batch.data["neural"].shape[0], -1)
 
