@@ -27,8 +27,10 @@ class Dataset:
     neural: str = "meg"              # neural modality: meg | eeg | fmri
     stimulus: str = "image"          # stimulus modality: image | text | audio
     imsize: int = 16                 # image stimuli resized to imsize x imsize
-    start: float = 0.0               # segment start, seconds after trigger
-    duration: float = 0.3            # segment duration, seconds
+    start: float = 0.0               # neural segment start, seconds after trigger
+    duration: float = 0.3            # neural segment duration, seconds
+    stim_start: float | None = None  # stimulus window start; None => reuse `start`
+    stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
     download: bool = False           # download the study before running?
     path: str | None = None          # pre-downloaded data dir; None => shared cache
     test_frac: float = 0.2           # held-out fraction (contiguous temporal tail)
@@ -37,18 +39,23 @@ class Dataset:
 # Three real datasets spanning both neural modalities (fMRI + MEG) and stimulus
 # modalities (image + text). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
-    # STORY (Le Petit Prince), fMRI + word stimulus -- one real full subject of the
+    # STORY (Le Petit Prince), fMRI + audio stimulus -- one real full subject of the
     # Li2022Petit study (English EN057, all 9 story sections) via the Li2022PetitSubj
     # subclass in harness/li2022_subj.py. Each spoken Word triggers a segment; the
-    # stimulus is the word's [length, frequency] and the target is the fMRI volume.
-    # start=2.0/duration=4.0 captures the delayed (HRF) BOLD response.
+    # stimulus is the Mel spectrum of the audio AT THE WORD and the target is the
+    # fMRI volume. The neural window start=2.0/duration=4.0 captures the delayed
+    # (HRF) BOLD response, but the audio response is near-instant, so the stimulus
+    # is read from a short window AT THE WORD (stim_start=0.0/stim_duration=0.5) --
+    # decoupled from the HRF-delayed neural window (see data.py).
     "text": Dataset(
         study="Li2022PetitSubj",
         trigger="type=='Word'",
         neural="fmri",
-        stimulus="text",
+        stimulus="audio",
         start=2.0,
         duration=4.0,
+        stim_start=0.0,
+        stim_duration=0.5,
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/li2022petit_en057",
     ),
@@ -66,15 +73,17 @@ PRESETS: dict[str, Dataset] = {
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/nsd_subj01_full",
     ),
-    # Le Petit Prince MEG (LPP-Listen, OpenNeuro ds007523), MEG + word stimulus --
+    # Le Petit Prince MEG (LPP-Listen, OpenNeuro ds007523), MEG + audio stimulus --
     # the loop's first electrophysiological modality. The raw .fif is Elekta
     # MaxShield (handled in data.py via allow_maxshield=True). Each spoken Word
-    # triggers a 0.5 s MEG epoch.
+    # triggers a 0.5 s MEG epoch; the stimulus is the Mel spectrum of the audio in
+    # that same window. MEG is near-instant, so the stimulus and neural windows
+    # coincide ([0, 0.5] s) -- no decoupling needed.
     "meg": Dataset(
         study="Bel2026PetitListenSample",
         trigger="type=='Word'",
         neural="meg",
-        stimulus="text",
+        stimulus="audio",
         start=0.0,
         duration=0.5,
         download=False,

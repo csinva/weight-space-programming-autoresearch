@@ -58,6 +58,20 @@ split is a **contiguous temporal hold-out** (the latest `test_frac` of triggers
 by onset), so time-adjacent samples that share a neural window can't leak across
 the split.
 
+The stimulus and neural windows can be **decoupled**: a `Dataset` may set
+`stim_start` / `stim_duration` (default `None` → reuse `start` / `duration`). When
+they differ, the stimulus and neural are segmented separately and re-aligned by
+trigger — needed for audio-on-fMRI, where the BOLD target is HRF-delayed
+(`start=2.0`) but the audio stimulus is read from a short window **at the word**
+(`stim_start=0.0`). When the windows coincide (nsd, meg), a single segmenter
+extracts both.
+
+Loading is parallel (16 DataLoader workers, override `NEURO_LOAD_WORKERS`) and the
+resulting split is **cached on disk**, keyed by the full dataset identity, so every
+proposal rerun loads it in seconds instead of repaying the multi-minute build. The
+cache lives outside the repo at `~/.cache/neuro-autoresearch/splits` (override
+`NEURO_SPLIT_CACHE`, bypass `NEURO_NO_CACHE`).
+
 ## Install
 
 ```bash
@@ -86,21 +100,24 @@ source edit, so parallel runs never collide:
 
 | `NEURO_DATASET` | Study | neural | stimulus | window (`start`/`duration`) |
 | --- | --- | --- | --- | --- |
-| `text` (default) | `Li2022Petit` (Le Petit Prince, full) | fMRI | text (word) | 2.0 / 4.0 s |
+| `text` (default) | `Li2022Petit` (Le Petit Prince, full) | fMRI | audio | neural 2.0 / 4.0 s · stim 0.0 / 0.5 s |
 | `nsd` | `NsdSubj01` (NSD, subject 1) | fMRI | image | 0.0 / 3.0 s |
-| `meg` | `Bel2026PetitListenSample` (LPP-Listen) | MEG | text (word) | 0.0 / 0.5 s |
+| `meg` | `Bel2026PetitListenSample` (LPP-Listen) | MEG | audio | 0.0 / 0.5 s |
 
 - **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken
-  **Word** triggers a segment; the stimulus is that word's `[length,
-  zipf-frequency]` and the neural target is the fMRI volume. The window is offset
-  to capture the delayed (HRF) BOLD response; because the stimulus uses the
-  *trigger* word, that offset only shifts the neural window, not X.
+  **Word** triggers a segment; the stimulus is the **Mel spectrum of the audio at
+  the word** and the neural target is the fMRI volume. The neural window is offset
+  to capture the delayed (HRF) BOLD response, but the audio is near-instant, so the
+  stimulus is read from a short window **at the word** (`stim_start`/`stim_duration`
+  decoupled from the HRF-delayed neural window).
 - **`nsd`** — the **Natural Scenes Dataset**, restricted to subject 1 via the
   `NsdSubj01` subclass in `harness/nsd_subj01.py`. Each shown **Image** triggers a
   segment; the stimulus is the resized image and the target is the fMRI volume.
 - **`meg`** — **Le Petit Prince MEG** (LPP-Listen, OpenNeuro `ds007523`), the
-  loop's first electrophysiological modality. The raw `.fif` is Elekta MaxShield,
-  handled in `data.py` via `allow_maxshield=True`.
+  loop's first electrophysiological modality. Each spoken **Word** triggers a 0.5 s
+  MEG epoch; the stimulus is the Mel spectrum of the audio in that same window (MEG
+  is near-instant, so stimulus and neural windows coincide). The raw `.fif` is
+  Elekta MaxShield, handled in `data.py` via `allow_maxshield=True`.
 
 All three are pre-downloaded locally and pointed to via `path=` with
 `download=False`, so they **run offline**.
