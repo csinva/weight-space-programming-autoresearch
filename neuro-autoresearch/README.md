@@ -1,49 +1,59 @@
 # neuro-autoresearch
 
-A bare-minimum, AlphaEvolve-style **autoresearch** proof-of-concept for
-neural encoding, built on **NeuralSet + NeuralFetch**. Structure mirrors
-[`csinva/circuit-building-autoresearch`](https://github.com/csinva/circuit-building-autoresearch)
-(`evolve-neuro/`), generalised to any NeuralSet dataset.
+**Can an AI discover better models of the brain — without ever training one?**
+
+`neuro-autoresearch` is a self-improving research loop for **neural encoding**:
+the task of predicting recorded brain activity from the stimulus a person saw or
+heard. An agent writes a small, **fixed** computational model in code, the harness
+scores how well that model's activations predict real neural recordings, and the
+agent iterates to push the score up. No gradient descent, no optimizer — the model
+is *designed*, not trained.
+
+The result is a tight, verifiable loop where the unit of progress is a single file
+(`evolve/model.py`) and the unit of truth is a single number (`test_corr`).
+
+## Why this is interesting
+
+In computational neuroscience, the standard way to test a theory of how the brain
+represents a stimulus is **encoding**: extract features from the stimulus, fit a
+linear readout to neural activity, and measure how well it predicts held-out data.
+The features *are* the hypothesis. Here we let an agent author those features
+directly — as plain Python that maps a stimulus to activations — and use the
+held-out predictivity as an honest, automatically-computed reward. That turns
+"propose a better representation of the brain" into a closed optimization loop the
+agent can run on its own.
+
+Crucially, **the proposed model is never trained.** Its weights are written
+straight into the code. The only thing that gets fit is a ridge-regression readout,
+which *is* the evaluation — so the score can't be gamed by memorizing the data.
 
 ## The loop (3 steps)
 
-1. An agent **proposes a computational model** (`model.py`) — weights written
-   directly in code, **never trained** (no gradient descent, no optimizer).
-2. The fixed harness passes the stimulus through the model → **activations**.
-3. Activations are **linearly read out with ridge regression** to predict the
-   recorded neural activity. The held-out **`test_corr`** (mean per-target
-   Pearson r) is the **reward**. Only the ridge readout is fit.
+1. **Propose.** The agent writes a model in `evolve/model.py` — a callable mapping
+   a batch of stimuli `X (N, D_in)` to activations `(N, D_out)`. Weights are
+   hard-coded; nothing is trained.
+2. **Activate.** The fixed harness runs the stimulus through the model to get
+   activations.
+3. **Read out & score.** A ridge regression linearly predicts the recorded neural
+   activity from those activations. The reward is **`test_corr`** — the mean
+   per-target Pearson correlation on a held-out split. Only the ridge readout is
+   fit; the model is frozen.
 
-So `model.py` is the evolved artifact; `test_corr` is the verifiable reward.
+`model.py` is the evolved artifact; `test_corr` is the verifiable reward. A high
+`train_corr` with a low `test_corr` means the readout overfit, not that the model
+is good.
 
-> **Unified data interface:** every dataset, modality, and stimulus flows
-> through **NeuralSet / NeuralFetch** — there is no raw file or network I/O
-> anywhere in `harness/`, `evolve/`, or `scripts/`. Adding a dataset is pure
-> config, never bespoke parsing. See
-> [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the
-> agent operating contract.
+## One data interface for every dataset
 
-## File map
+Every dataset, neural modality, and stimulus type flows through a single unified
+interface (**NeuralSet / NeuralFetch**). There is **no raw file or network I/O**
+anywhere in `harness/`, `evolve/`, or `scripts/` — adding a new dataset is pure
+configuration, never bespoke parsing. This is what lets the same loop run, untouched,
+across fMRI and MEG, and across image, text, and audio stimuli.
 
-```
-evolve/model.py     EDITABLE: the model(s) + main that evaluates and saves
-evolve/program.md   the task description / instructions to the agent
-harness/config.py   FIXED: the Dataset PRESETS registry (pick one with NEURO_DATASET)
-harness/nsd_subj01.py  FIXED: NSD study restricted to subject 1 (NsdSubj01)
-harness/data.py     FIXED: per-modality stimulus extractors + aligned, split (X, Y) tensors
-harness/eval.py     FIXED: predictivity reward + evaluate() + save_results()
-runs/               overall_results.csv + test_corr.png (written by save_results)
-```
-
-`evolve/` is the only zone the agent edits; `harness/` is the fixed evaluation
-harness the agent must not touch.
-
-## Stimulus modalities
-
-The loop is **modality-agnostic**: the model (`stimulus batch X -> activations`)
-and the reward never assume a modality. Each `Dataset` declares a `stimulus`
-field and `harness/data.py` dispatches the matching offline NeuralSet extractor
-(no model-weight downloads):
+The loop is **modality-agnostic**: neither the model (`stimulus X -> activations`)
+nor the reward ever assumes a modality. Each dataset declares a `stimulus` type and
+the harness dispatches the matching offline feature extractor:
 
 | `stimulus` | Stimulus → X | extractor |
 | --- | --- | --- |
@@ -51,45 +61,22 @@ field and `harness/data.py` dispatches the matching offline NeuralSet extractor
 | `text` | the trigger word's `[length, zipf-frequency]` | `WordLength` + `WordFrequency` |
 | `audio` | time-averaged Mel bands | `MelSpectrum` |
 
-The neural side (`neural`: `meg` / `eeg` / `fmri`) is dispatched the same way.
-Targets that are constant across the training set (e.g. non-brain fMRI voxels)
-are dropped — they carry no signal and only dilute the mean-r. The train/test
-split is, by default, a **contiguous temporal hold-out** (the latest `test_frac`
-of triggers by onset), so time-adjacent samples that share a neural window can't
-leak across the split.
+The neural side (`fmri` / `meg` / `eeg`) is dispatched the same way.
 
-**Repeated stimuli (NSD).** When a dataset shows each stimulus multiple times,
-the loader instead collapses the repeats — one sample per *unique* stimulus, with
-the neural target averaged over its presentations (the stimulus is identical, so
-it is unchanged) — and holds out a **canonical image-disjoint** test set rather
-than a temporal tail. For NSD subject 1 this turns 30,000 trials into 10,000
-unique images and uses the standard **shared-1000** images (NSD `sharedix`) as the
-test set, with the other 9,000 for training; the split asserts zero train/test
-image overlap (no image-level leakage). Text/MEG stimuli don't repeat, so they
-keep the temporal split unchanged.
+## What you edit vs. what's fixed
 
-**Selectable brain region (`Dataset.roi`).** For volumetric studies the target
-voxels default to the full `nsdgeneral` mask. Setting `roi` to a sub-region
-(`V1` / `V2` / `V3` / `hV4` / `FFA`) selects a **column subset** of those
-already-loaded voxels — a tiny ROI label volume is mapped onto the same voxel
-order and the matching columns are kept. It never re-reads the timeseries (the
-expensive `_build_xy` output is cached independently of `roi`), so a smaller ROI
-loads in well under a second and gives a faster, region-specific readout.
+```
+evolve/model.py        EDITABLE: the model(s) + the main that evaluates and saves
+evolve/program.md      the task description handed to the agent
+harness/config.py      FIXED: the Dataset registry (pick one via NEURO_DATASET)
+harness/data.py        FIXED: stimulus extractors + aligned, split (X, Y) tensors
+harness/eval.py        FIXED: the predictivity reward, evaluate(), save_results()
+harness/nsd_subj01.py  FIXED: NSD restricted to subject 1
+runs/                  overall_results.csv + test_corr.png (written each run)
+```
 
-
-The stimulus and neural windows can be **decoupled**: a `Dataset` may set
-`stim_start` / `stim_duration` (default `None` → reuse `start` / `duration`). When
-they differ, the stimulus and neural are segmented separately and re-aligned by
-trigger — needed for audio-on-fMRI, where the BOLD target is HRF-delayed
-(`start=2.0`) but the audio stimulus is read from a short window **at the word**
-(`stim_start=0.0`). When the windows coincide (nsd, meg), a single segmenter
-extracts both.
-
-Loading is parallel (16 DataLoader workers, override `NEURO_LOAD_WORKERS`) and the
-resulting split is **cached on disk**, keyed by the full dataset identity, so every
-proposal rerun loads it in seconds instead of repaying the multi-minute build. The
-cache lives outside the repo at `~/.cache/neuro-autoresearch/splits` (override
-`NEURO_SPLIT_CACHE`, bypass `NEURO_NO_CACHE`).
+`evolve/` is the **only** zone the agent edits. `harness/` is the fixed evaluation
+harness and must not be touched — that fixedness is what makes the reward trustworthy.
 
 ## Install
 
@@ -100,97 +87,78 @@ pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
 ## Run (offline, no downloads)
 
 ```bash
-/usr/bin/python3.12 evolve/model.py                  # two iterations on the active dataset
-/usr/bin/python3.12 evolve/model.py --model identity # a single named model
-NEURO_DATASET=meg /usr/bin/python3.12 evolve/model.py  # pick a preset (text|nsd|meg)
+python evolve/model.py                   # two iterations on the active dataset
+python evolve/model.py --model identity  # evaluate a single named model
+NEURO_DATASET=meg python evolve/model.py # pick a preset (text | nsd | meg)
 ```
 
-Run from the repo root so results land in `runs/`. The default run loads the
-split once and evaluates two proposals (an initial model + one modification),
-printing `train_corr`, `test_corr`, and `frac>0.1` per iteration with timing.
-Each evaluated model **upserts** a row into `runs/overall_results.csv` (keyed by
-`(dataset, model_name)`), refreshing the `runs/test_corr.png` bar plot.
+Run from the repo root so results land in `runs/`. A default run loads the data
+split once and evaluates two proposals (an initial model plus one modification),
+printing `train_corr`, `test_corr`, and `frac>0.1` per iteration with timing. Each
+evaluated model **upserts** a row into `runs/overall_results.csv` (keyed by
+`(dataset, model_name)`) and refreshes the `runs/test_corr.png` bar plot.
 
-## Datasets: three real presets (pick one with `NEURO_DATASET`)
+## Datasets
 
-`harness/config.py` registers three real datasets in `PRESETS` and selects the
-active one from the `NEURO_DATASET` environment variable (default `text`) — no
-source edit, so parallel runs never collide:
+Three real studies are registered in `harness/config.py` and selected by the
+`NEURO_DATASET` environment variable (default `text`) — no source edit, so parallel
+runs never collide:
 
-| `NEURO_DATASET` | Study | neural | stimulus | window (`start`/`duration`) |
+| `NEURO_DATASET` | Study | neural | stimulus | window (`start` / `duration`) |
 | --- | --- | --- | --- | --- |
-| `text` (default) | `Li2022Petit` (Le Petit Prince, full) | fMRI | audio | neural 2.0 / 4.0 s · stim 0.0 / 0.5 s |
-| `nsd` | `NsdSubj01` (NSD, subject 1) | fMRI | image | 0.0 / 3.0 s |
-| `meg` | `Bel2026PetitListenSample` (LPP-Listen) | MEG | audio | 0.0 / 0.5 s |
+| `text` (default) | `Li2022Petit` (Le Petit Prince) | fMRI | audio | neural 2.0 / 4.0 s · stim 0.0 / 0.5 s |
+| `nsd` | `NsdSubj01` (Natural Scenes Dataset, subj 1) | fMRI | image | 0.0 / 3.0 s |
+| `meg` | `Bel2026PetitListen` (LPP-Listen) | MEG | audio | 0.0 / 0.5 s |
 
-- **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken
-  **Word** triggers a segment; the stimulus is the **Mel spectrum of the audio at
-  the word** and the neural target is the fMRI volume. The neural window is offset
-  to capture the delayed (HRF) BOLD response, but the audio is near-instant, so the
-  stimulus is read from a short window **at the word** (`stim_start`/`stim_duration`
-  decoupled from the HRF-delayed neural window).
-- **`nsd`** — the **Natural Scenes Dataset**, restricted to subject 1 via the
-  `NsdSubj01` subclass in `harness/nsd_subj01.py`. Each shown **Image** triggers a
-  segment; the stimulus is the resized image and the target is the fMRI volume.
-  Subject 1's 10,000 images are each shown ~3×, so the loader collapses repeats to
-  one sample per unique image and holds out the canonical **shared-1000** images as
-  an image-disjoint test set; `roi` picks the target region (default `nsdgeneral`).
-- **`meg`** — **Le Petit Prince MEG** (LPP-Listen, OpenNeuro `ds007523`), the
-  loop's first electrophysiological modality. Each spoken **Word** triggers a 0.5 s
-  MEG epoch; the stimulus is the Mel spectrum of the audio in that same window (MEG
-  is near-instant, so stimulus and neural windows coincide). The raw `.fif` is
-  Elekta MaxShield, handled in `data.py` via `allow_maxshield=True`.
+- **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken word
+  triggers a segment; X is the Mel spectrum of the audio at the word and the target
+  is the fMRI volume. The neural window is offset to capture the delayed (HRF) BOLD
+  response while the audio is read from a short window at the word, so the stimulus
+  and neural windows are decoupled (`stim_start` / `stim_duration`).
+- **`nsd`** — the **Natural Scenes Dataset**, subject 1. Each shown image triggers a
+  segment; X is the resized image, the target is the fMRI volume. Subject 1's 10,000
+  images are each shown ~3×, so the loader collapses repeats to one sample per unique
+  image (averaging the neural target) and holds out the canonical **shared-1000**
+  images as an image-disjoint test set. `roi` picks the target region (default
+  `nsdgeneral`; e.g. `V1` / `hV4` / `FFA` select a column subset of the loaded voxels).
+- **`meg`** — **Le Petit Prince MEG** (LPP-Listen), the loop's electrophysiological
+  modality. Each spoken word triggers a 0.5 s MEG epoch; X is the Mel spectrum of the
+  audio in that same window (MEG is near-instant, so stimulus and neural windows
+  coincide).
 
-All three are pre-downloaded locally and pointed to via `path=` with
-`download=False`, so they **run offline**.
+All presets are pre-staged locally and loaded with `download=False`, so they run
+**fully offline**.
 
-## Switch datasets
+### How the split avoids leakage
 
-Set `NEURO_DATASET` to one of `text` / `nsd` / `meg` (an unknown value raises a
-clear error listing the valid keys). To add another, name a study from
-`neuralset.Study.catalog()` and append a `Dataset(...)` entry to `PRESETS` in
-`harness/config.py` — dataset specifics live only in `config.py`.
+By default the train/test split is a **contiguous temporal hold-out** (the latest
+`test_frac` of triggers by onset), so time-adjacent samples that share a neural
+window can't leak across the split. For NSD, where stimuli repeat, the split is
+instead **image-disjoint** (the shared-1000 set), asserting zero train/test image
+overlap. Targets that are constant across the training set (e.g. non-brain voxels)
+are dropped, since they carry no signal and only dilute the mean correlation.
 
-## Datasets staged for offline use
+The resulting split is **cached on disk**, keyed by the full dataset identity, so
+every rerun loads in seconds instead of repaying the multi-minute build. The cache
+lives outside the repo at `~/.cache/neuro-autoresearch/splits` (override with
+`NEURO_SPLIT_CACHE`, bypass with `NEURO_NO_CACHE`).
 
-Four studies are pre-downloaded locally (under the gitignored
-`~/Research/neuralset/data/`, nested as `<path>/<StudyName>/`) so a switch is a
-one-line, **offline** `download=False` edit. Together they span two neural
-modalities (fMRI + MEG) and three stimulus types:
+### Adding a dataset
 
-| Study | neural | stimulus | local path | status |
-| --- | --- | --- | --- | --- |
-| `Li2022PetitSample` (LPP story) | fmri | text | `…/li2022petit_sample` | **active** |
-| `Allen2022MassiveSample` (NSD) | fmri | image | `…/nsd_subj01`, `…/nsd_sample` | staged |
-| `Bel2026PetitListenSample` (LPP MEG, listen) | meg | text/audio | `…/bel2026petitlisten_sample` | staged |
-| `Bel2026PetitReadSample` (LPP MEG, read) | meg | text | `…/bel2026petitread_sample` | staged |
+Name a study from `neuralset.Study.catalog()` and append a `Dataset(...)` entry to
+`PRESETS` in `harness/config.py`. Dataset specifics live only in `config.py`; the
+harness and models need no changes. Keep unattended runs pointed at a staged local
+path — **never** point an unattended run at a gated `download=True` study.
 
-Per-dataset download notes and ready-to-paste `Dataset(...)` config blocks live
-in `runs/` (`NSD_DOWNLOAD.md`, `THIRD_DATASET.md`). MEG `.fif` raws are MaxShield
-(need `allow_maxshield=True`); the NSD full pull (`nsd_subj01`) must be extracted
-before its `path` is used. **Never point an unattended run at a gated
-`download=True` study** — keep everything offline against a staged path.
+## Drive the loop nonstop
 
-## Status & open ideas
-
-The loop runs end-to-end offline and the reward is genuinely held-out. Before a
-hands-off, multi-iteration overnight run, `runs/OVERNIGHT_READINESS.md` documents
-the remaining improvements: append-only result history (today's `save_results`
-upserts by name and loses the trajectory), an error safety net
-(`status="error"` instead of a bare crash), fail-fast on a missing data path
-(instead of falling through to a gated download), and a more stable reward
-(multi-seed / k-fold, a tie band, or signal-bearing target selection). See
-[`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the full
-agent contract and these open items.
-
-## Drive the autoresearch loop nonstop
-
-The Copilot CLI sometimes stops mid-run. Wrap it with `copilot-keepgoing`
-(installed via `pip install .`) to auto-nudge it whenever it goes idle:
+The Copilot CLI sometimes stops mid-run. Wrap it with `copilot-keepgoing` (installed
+via `pip install .`) to auto-nudge it whenever it goes idle:
 
 ```bash
 copilot-keepgoing -- copilot --autopilot --yolo   # then: "Follow evolve/program.md"
 ```
 
-Credits: data + alignment via NeuralSet/NeuralFetch; loop structure after csinva's
-circuit-building-autoresearch.
+---
+
+*Data loading and alignment are provided by NeuralSet / NeuralFetch.*

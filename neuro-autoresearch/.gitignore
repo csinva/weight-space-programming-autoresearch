@@ -13,3 +13,6 @@ data/
 
 # Copilot orchestration worktrees
 .copilot-worktrees/
+
+# Local Copilot agent instructions (not part of the published project)
+.github/
