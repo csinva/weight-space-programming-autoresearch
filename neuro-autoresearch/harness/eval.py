@@ -10,10 +10,16 @@ import time
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import RidgeCV
 
 from config import Dataset
 from data import load_split
+
+# Ridge penalties searched by the readout. RidgeCV picks the best alpha PER
+# TARGET via efficient leave-one-out GCV (one SVD reused across all alphas), so
+# searching 10 alphas costs ~one fit, not 10x. A fixed alpha=1.0 massively
+# overfit small samples (train_corr >> test_corr); per-target CV closes that gap.
+_ALPHAS = np.logspace(-3, 6, 10)
 
 
 def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
@@ -41,7 +47,7 @@ def evaluate_on_split(model, split, dataset: Dataset) -> dict:
     A_test = np.asarray(model(X_test), dtype="float64")
     Y_train, Y_test = Y_train.numpy(), Y_test.numpy()
 
-    ridge = Ridge(alpha=1.0).fit(A_train, Y_train)
+    ridge = RidgeCV(alphas=_ALPHAS, alpha_per_target=True).fit(A_train, Y_train)
     test_corr = _corr_per_column(ridge.predict(A_test), Y_test)
     return {
         "dataset": dataset.study,

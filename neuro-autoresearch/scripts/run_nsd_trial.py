@@ -18,7 +18,7 @@ import sys
 import time
 
 import numpy as np
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import RidgeCV
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(_ROOT, "harness"))
@@ -42,7 +42,7 @@ def evaluate_model(model, split) -> dict:
     y_train, y_test = Y_train.numpy(), Y_test.numpy()
 
     t = time.perf_counter()
-    ridge = Ridge(alpha=1.0).fit(A_train, y_train)
+    ridge = RidgeCV(alphas=np.logspace(-3, 6, 10), alpha_per_target=True).fit(A_train, y_train)
     ridge_fit_ms = (time.perf_counter() - t) * 1e3
 
     t = time.perf_counter()
