@@ -19,11 +19,33 @@ the data loader, and the evaluator) is FIXED — do not touch it.
 
 ## The loop
 
-1. You propose / edit a `Model` in `evolve/model.py`.
-2. The fixed harness runs the stimulus through your model -> activations.
-3. Activations are linearly read out (ridge regression) to predict recorded
-   neural activity. The held-out mean per-target Pearson `r` (`test_corr`) is the
-   reward, appended to `runs/overall_results.csv`.
+Each iteration, follow these steps in order:
+
+1. **Read `DATASETS.md`** to understand the active dataset (chosen by
+   `NEURO_DATASET`): its stimulus/neural modalities, the dims of `X` and `Y`, the
+   train/test split, and the sliceable metadata available.
+2. **Read this dataset's history `runs/<study>.csv`** (`<study>` = `dataset.study`,
+   e.g. `runs/NsdSubj01.csv`) *before* proposing — the full append-only log of every
+   past iteration. Find `best_so_far`, and look at the `corr_<slice>` columns to see
+   **where** prior models did well or poorly.
+3. **Choose `LOG_SLICES` once, at the START of a run, and never change them.** Declare
+   `LOG_SLICES = [...]` once near the top of `evolve/model.py`, picking names from the
+   active dataset's slice menu in `DATASETS.md` (for `nsd`, ROIs like
+   `["V1","V2","V3","hV4","FFA","PPA"]`; for `text`/`meg`, none yet → `[]`). The
+   harness writes one `corr_<name>` column per slice and **freezes those columns on the
+   first logged row** — changing `LOG_SLICES` mid-run does nothing, so they are your
+   stable comparison axes across the whole run. Choose them deliberately.
+4. **Set a one-line `idea` each iteration** — a free-text hypothesis of what you
+   changed and why (set `model.idea`, or the model `description`). It is logged
+   verbatim as the `idea` column.
+5. **Propose / edit a `Model`** in `evolve/model.py` aimed at **beating
+   `best_so_far`**, using the `corr_<slice>` columns to decide *where* to push (e.g.
+   for `nsd`, more high-level visual structure if `FFA`/`PPA` lag, more spatial
+   detail if early-visual `V1`–`hV4` lag).
+6. The fixed harness runs the stimulus through your model -> activations, linearly
+   reads them out (ridge regression) to predict recorded neural activity, and appends
+   one row (the CORE columns + your `corr_<slice>` columns) to `runs/<study>.csv`. The
+   held-out mean per-target Pearson `r` (`test_corr`) is the reward.
 
 So `evolve/model.py` is the artifact you evolve; `test_corr` is the verifiable
-reward. Iterate to raise it.
+reward. Iterate to raise it, hill-climbing past `best_so_far`.
