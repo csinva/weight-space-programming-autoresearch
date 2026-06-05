@@ -7,10 +7,13 @@ from __future__ import annotations
 
 import os
 import time
+import warnings
+from datetime import datetime, timezone
 
 import numpy as np
 import pandas as pd
 import torch
+import neuralset as ns
 
 from config import Dataset
 from data import load_split
@@ -97,12 +100,16 @@ def _ridge_gcv_coef(Xc: torch.Tensor, yc: torch.Tensor) -> torch.Tensor:
     return best_coef
 
 
-def evaluate_on_split(model, split, dataset: Dataset) -> dict:
+def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     """Evaluate ``model`` on an already-loaded ``split`` (the reusable core).
 
     Times only the model + ridge readout (not the one-off data load), so callers
     that load a split once can evaluate many proposals without re-loading. The
     ridge readout (per-target GCV fit + Pearson scoring) runs on the GPU.
+
+    ``slices`` is the agent-declared list of slice names (``LOG_SLICES``); for each
+    resolvable name a ``corr_<name>`` field (mean per-target corr over that slice's
+    targets) is added to the returned row. The scalar reward is unchanged.
     """
     X_train, X_test, Y_train, Y_test = split
     device = _readout_device()
@@ -120,22 +127,80 @@ def evaluate_on_split(model, split, dataset: Dataset) -> dict:
     pred_train = (A_train - X_offset) @ coef + y_offset
     pred_test = (A_test - X_offset) @ coef + y_offset
 
-    test_corr = _corr_per_column_t(pred_test, Y_test)
-    train_corr = _corr_per_column_t(pred_train, Y_train).mean()
-    return {
-        "dataset": dataset.study,
+    test_corr_vec = _corr_per_column_t(pred_test, Y_test)
+    train_corr = float(_corr_per_column_t(pred_train, Y_train).mean())
+    test_corr = float(test_corr_vec.mean())
+    row = {
+        "study": dataset.study,
         "model_name": model.name,
-        "description": model.description,
+        "idea": getattr(model, "idea", model.description),
         "n_params": model.n_params,
-        "test_corr": float(test_corr.mean()),
-        "train_corr": float(train_corr),
-        "frac_targets_above_0.1": float((test_corr > 0.1).double().mean()),
+        "n_train": int(Y_train.shape[0]),
+        "n_test": int(Y_test.shape[0]),
+        "n_targets": int(Y_test.shape[1]),
+        "test_corr": test_corr,
+        "train_corr": train_corr,
+        "gap": train_corr - test_corr,
+        "frac_above_0.1": float((test_corr_vec > 0.1).double().mean()),
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
     }
+    row.update(_slice_corrs(test_corr_vec.detach().cpu().numpy(), dataset, slices))
+    return row
 
 
-def evaluate(model, dataset: Dataset) -> dict:
+def _study_for(d: Dataset):
+    """Construct the (no-download) NeuralSet study used to resolve slice names."""
+    path = d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
+    return ns.Study(name=d.study, path=path)
+
+
+def _slice_target_mask(study, name: str, n_targets: int):
+    """Boolean mask (length ``n_targets``) selecting slice ``name``'s target columns.
+
+    NSD: ``name`` is an ROI resolved by ``data._roi_voxel_keep`` to a per-voxel keep
+    mask over the nsdgeneral voxels. The eval targets are those voxels in voxel-major
+    order (``n_targets = n_voxels * n_tr``), so the per-voxel mask is repeated across
+    the TRs. Returns ``None`` (the clean extension point) when the study has no ROI
+    resolver, the name is unknown, or the targets do not map cleanly onto the voxels
+    (a sub-ROI dataset or dropped columns).
+    """
+    if not hasattr(study, "_roi_path"):     # non-volumetric studies (text/meg): no resolver
+        return None
+    from data import _roi_voxel_keep
+
+    try:
+        keep, n_voxels = _roi_voxel_keep(study, name)
+    except (ValueError, FileNotFoundError):
+        return None
+    if keep is None:                         # whole-region name (e.g. nsdgeneral)
+        return np.ones(n_targets, dtype=bool)
+    if n_targets % n_voxels:                 # targets are not a clean multiple of the voxels
+        return None
+    return np.repeat(keep, n_targets // n_voxels)
+
+
+def _slice_corrs(test_corr: np.ndarray, dataset: Dataset, slices) -> dict:
+    """Mean per-target test-corr over each declared slice -> ``{f"corr_{name}": val}``.
+
+    Names with no resolver for this study are skipped with a warning, leaving a clean
+    extension point for modalities (text/meg) that declare no slices.
+    """
+    if not slices:
+        return {}
+    study = _study_for(dataset)
+    out = {}
+    for name in slices:
+        mask = _slice_target_mask(study, name, len(test_corr))
+        if mask is None:
+            warnings.warn(f"log slice {name!r} unresolved for study {dataset.study!r}; skipping")
+            continue
+        sel = test_corr[mask]
+        out[f"corr_{name}"] = float(sel.mean()) if sel.size else float("nan")
+    return out
+
+
+def evaluate(model, dataset: Dataset, slices=()) -> dict:
     """Load the dataset split and evaluate ``model`` on it.
 
     ``seconds`` covers the whole from-scratch evaluation (data load + readout);
@@ -143,32 +208,52 @@ def evaluate(model, dataset: Dataset) -> dict:
     readout.
     """
     t0 = time.time()
-    row = evaluate_on_split(model, load_split(dataset), dataset)
+    row = evaluate_on_split(model, load_split(dataset), dataset, slices)
     row["seconds"] = round(time.time() - t0, 2)
     return row
 
 
+CORE_COLUMNS = [
+    "iteration", "timestamp", "study", "model_name", "idea", "n_params",
+    "n_train", "n_test", "n_targets", "test_corr", "train_corr", "gap",
+    "frac_above_0.1", "best_so_far", "seconds", "status",
+]
+
+
 def save_results(row: dict, results_dir: str = "runs") -> None:
-    """Upsert ``row`` into overall_results.csv keyed by (dataset, model_name) and plot."""
+    """Append ``row`` to the per-study CSV ``runs/<study>.csv`` (append-only history).
+
+    One row per evaluation -- existing rows are never overwritten, so the agent's
+    hill-climb history is preserved. The harness fills the ledger fields it owns:
+    1-based ``iteration`` (count of existing rows + 1), ``timestamp``, and running
+    ``best_so_far`` (max ``test_corr`` in the file). The agent-declared slice columns
+    (``corr_<name>``) are FROZEN by the FIRST row written: later rows fill only those
+    columns, newly declared slices are ignored with a warning, and the file never
+    gains or loses columns.
+    """
     os.makedirs(results_dir, exist_ok=True)
-    csv = os.path.join(results_dir, "overall_results.csv")
-    df = pd.read_csv(csv) if os.path.exists(csv) else pd.DataFrame()
-    key = (df["dataset"] == row["dataset"]) & (df["model_name"] == row["model_name"]) \
-        if not df.empty else pd.Series([], dtype=bool)
-    if not df.empty and key.any():
-        df = df[~key]
-    df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-    df.to_csv(csv, index=False)
+    csv = os.path.join(results_dir, f"{row['study']}.csv")
+    df = pd.read_csv(csv) if os.path.exists(csv) else None
 
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
+    row = dict(row)
+    row["iteration"] = (len(df) if df is not None else 0) + 1
+    row["timestamp"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    prev_best = df["test_corr"].max() if df is not None and len(df) else None
+    row["best_so_far"] = (
+        row["test_corr"] if prev_best is None else max(prev_best, row["test_corr"])
+    )
 
-    labels = df["dataset"] + " / " + df["model_name"]
-    plt.figure(figsize=(max(4, len(df)), 4))
-    plt.bar(labels, df["test_corr"])
-    plt.ylabel("test_corr")
-    plt.xticks(rotation=30, ha="right")
-    plt.tight_layout()
-    plt.savefig(os.path.join(results_dir, "test_corr.png"))
-    plt.close()
+    if df is not None:                      # freeze: the existing slice columns are authoritative
+        frozen = [c for c in df.columns if c.startswith("corr_")]
+        ignored = [c for c in row if c.startswith("corr_") and c not in frozen]
+        if ignored:
+            warnings.warn(f"{csv}: slice columns frozen as {frozen or '[]'}; ignoring {ignored}")
+        for c in ignored:
+            row.pop(c)
+        columns = CORE_COLUMNS + frozen
+    else:
+        columns = CORE_COLUMNS + [c for c in row if c.startswith("corr_")]
+
+    new = pd.DataFrame([row], columns=columns)
+    out = pd.concat([df, new], ignore_index=True) if df is not None else new
+    out.reindex(columns=columns).to_csv(csv, index=False)
