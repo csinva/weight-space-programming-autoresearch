@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Project data / caches (downloaded datasets are large)
+data/
+*.nii.gz
+.pytest_cache/
+
+# Copilot orchestration worktrees
+.copilot-worktrees/

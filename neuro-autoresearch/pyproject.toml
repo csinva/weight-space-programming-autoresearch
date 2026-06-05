@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neuro-autoresearch"
+version = "0.1.0"
+description = "Dataset-agnostic neural-encoding framework on top of NeuralSet/NeuralFetch."
+requires-python = ">=3.12"
+dependencies = [
+    "neuralset[all]>=0.2.2",
+    "neuralfetch>=0.2.2",
+    "torch>=2.5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["neuro_autoresearch*"]
