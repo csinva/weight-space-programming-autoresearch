@@ -30,6 +30,12 @@ runs/               overall_results.csv + test_corr.png (written by save_results
 `evolve/` is the only zone the agent edits; `harness/` is the fixed evaluation
 harness the agent must not touch.
 
+## Install
+
+```bash
+pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
+```
+
 ## Run (offline, no downloads)
 
 ```bash
@@ -48,6 +54,15 @@ default `Fake2025Meg` study scores ≈0 (random) by design — the point is that
 Edit the single `DATASET = Dataset(...)` line in `harness/config.py` (e.g. set
 `study=`, `neural=`, `trigger=`, and `download=True` for a real study). Nothing
 else changes — dataset specifics live only in `config.py`.
+
+## Drive the autoresearch loop nonstop
+
+The Copilot CLI sometimes stops mid-run. Wrap it with `copilot-keepgoing`
+(installed via `pip install .`) to auto-nudge it whenever it goes idle:
+
+```bash
+copilot-keepgoing -- copilot --autopilot --yolo   # then: "Follow evolve/program.md"
+```
 
 Credits: data + alignment via NeuralSet/NeuralFetch; loop structure after csinva's
 circuit-building-autoresearch.
