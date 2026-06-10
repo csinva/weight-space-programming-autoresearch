@@ -29,6 +29,7 @@ import json
 import os
 import re
 from dataclasses import dataclass, field
+from functools import cached_property
 
 import matplotlib
 
@@ -36,11 +37,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
 
-CORE_COLUMNS = [
-    "iteration", "timestamp", "study", "model_name", "idea", "n_params",
-    "n_train", "n_test", "n_targets", "test_corr", "train_corr", "gap",
-    "frac_above_0.1", "best_so_far", "seconds", "status",
-]
 TABLE_COLUMNS = [
     "iteration", "model_name", "idea", "test_corr", "train_corr", "best_so_far", "status",
 ]
@@ -75,7 +71,7 @@ class Run:
         head = f"{self.tag} — {dataset}"
         return f"{head} ({suffix})" if suffix else head
 
-    @property
+    @cached_property
     def included(self) -> pd.DataFrame:
         """Rows kept for plots/writeup: status ok and the idea is not about training."""
         return self.df[~self.df["excluded"]]
@@ -122,6 +118,16 @@ def _csvs_in(directory: str) -> list[str]:
     )
 
 
+def _make_run(tag: str, csv: str, metadata: dict) -> Run | None:
+    """Build a Run from one result CSV, or None if it is unreadable/empty."""
+    df = _read_csv(csv)
+    if df is None:
+        return None
+    study = df["study"].dropna().iloc[0] if df["study"].notna().any() \
+        else os.path.splitext(os.path.basename(csv))[0]
+    return Run(tag, str(study), csv, df, metadata)
+
+
 def discover_runs(runs_dir: str, repo_root: str) -> list[Run]:
     """Find every result CSV under ``runs/<tag>/results/`` and ``<repo_root>/results/``."""
     runs: list[Run] = []
@@ -133,21 +139,11 @@ def discover_runs(runs_dir: str, repo_root: str) -> list[Run]:
                 continue
             metadata = _load_metadata(run_dir)
             csvs = _csvs_in(os.path.join(run_dir, "results")) or _csvs_in(run_dir)
-            for csv in csvs:
-                df = _read_csv(csv)
-                if df is None:
-                    continue
-                study = df["study"].dropna().iloc[0] if df["study"].notna().any() else os.path.splitext(os.path.basename(csv))[0]
-                runs.append(Run(tag, str(study), csv, df, metadata))
+            runs.extend(r for csv in csvs if (r := _make_run(tag, csv, metadata)))
 
     root_results = os.path.join(repo_root, "results")
     if os.path.abspath(root_results) != os.path.abspath(os.path.join(runs_dir, "results")):
-        for csv in _csvs_in(root_results):
-            df = _read_csv(csv)
-            if df is None:
-                continue
-            study = df["study"].dropna().iloc[0] if df["study"].notna().any() else os.path.splitext(os.path.basename(csv))[0]
-            runs.append(Run("results", str(study), csv, df, {}))
+        runs.extend(r for csv in _csvs_in(root_results) if (r := _make_run("results", csv, {})))
 
     return runs
 
@@ -279,7 +275,7 @@ def attempts_table(runs: list[Run]) -> str:
                 if col == "idea":
                     cells.append(_idea_cell(str(value)))
                 elif col in ("test_corr", "train_corr", "best_so_far"):
-                    cells.append(f'<td class="num">{_fmt(float(value) if pd.notna(value) else value)}</td>')
+                    cells.append(f'<td class="num">{_fmt(value)}</td>')
                 else:
                     cells.append(f"<td>{_fmt(value)}</td>")
             flag = '<td class="flag">excluded</td>' if excluded else '<td class="flag ok">ok</td>'
@@ -391,13 +387,17 @@ def build_html(runs: list[Run]) -> str:
 """
 
 
-def build_report(runs_dir: str = "runs", out: str = "analyze/report.html", repo_root: str = ".") -> str:
-    runs = discover_runs(runs_dir, repo_root)
+def _render_to(runs: list[Run], out: str) -> str:
+    """Write the HTML report for already-discovered ``runs`` to ``out``."""
     html_text = build_html(runs)
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, "w") as fh:
         fh.write(html_text)
     return out
+
+
+def build_report(runs_dir: str = "runs", out: str = "analyze/report.html", repo_root: str = ".") -> str:
+    return _render_to(discover_runs(runs_dir, repo_root), out)
 
 
 def main() -> None:
@@ -407,8 +407,8 @@ def main() -> None:
     parser.add_argument("--out", default="analyze/report.html", help="output HTML path (default: analyze/report.html)")
     args = parser.parse_args()
 
-    out = build_report(args.runs_dir, args.out, args.repo_root)
     runs = discover_runs(args.runs_dir, args.repo_root)
+    out = _render_to(runs, args.out)
     print(f"wrote {out} ({len(runs)} run/study file(s), {sum(len(r.df) for r in runs)} attempt(s))")
 
 

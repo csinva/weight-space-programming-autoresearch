@@ -22,3 +22,6 @@ results/
 
 # Isolated per-run folders created by scripts/setup_run.py (never committed)
 runs/
+
+# Generated analysis report (built on demand by analyze/build_report.py)
+analyze/report.html
