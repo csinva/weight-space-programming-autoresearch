@@ -29,7 +29,8 @@ def _print_row(prefix: str, row: dict) -> None:
 
 
 def main() -> None:
-    print(f"Dataset: {DATASET.study}  stimulus={DATASET.stimulus}  neural={DATASET.neural}")
+    print(f"Dataset: {DATASET.study}  stimulus={DATASET.stimulus}  neural={DATASET.neural}"
+          f"  reward_roi={DATASET.reward_roi}")
     print("Loading split once (the slow step) ...")
     t = time.time()
     split = load_split(DATASET)

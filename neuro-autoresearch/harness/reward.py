@@ -126,8 +126,19 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     pred_test = (A_test - X_offset) @ coef + y_offset
 
     test_corr_vec = _corr_per_column_t(pred_test, Y_test)
-    train_corr = float(_corr_per_column_t(pred_train, Y_train).mean())
-    test_corr = float(test_corr_vec.mean())
+    train_corr_vec = _corr_per_column_t(pred_train, Y_train)
+    test_np = test_corr_vec.detach().cpu().numpy()
+    train_np = train_corr_vec.detach().cpu().numpy()
+
+    # The reward narrows the per-target scores to the chosen region (default
+    # "nsdgeneral" = all voxels); the readout above still fit ALL voxels, and every
+    # declared region is still logged below as corr_<name> extra information.
+    study = _study_for(dataset)
+    reward_mask = _slice_target_mask(study, dataset.reward_roi, test_np.shape[0])
+    if reward_mask is None:                 # unresolved (e.g. text/meg) -> all targets
+        reward_mask = np.ones(test_np.shape[0], dtype=bool)
+    test_corr = float(test_np[reward_mask].mean())
+    train_corr = float(train_np[reward_mask].mean())
     row = {
         "study": dataset.study,
         "model_name": model.name,
@@ -135,30 +146,33 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "n_params": model.n_params,
         "n_train": int(Y_train.shape[0]),
         "n_test": int(Y_test.shape[0]),
-        "n_targets": int(Y_test.shape[1]),
+        "n_targets": int(reward_mask.sum()),
         "test_corr": test_corr,
         "train_corr": train_corr,
         "gap": train_corr - test_corr,
-        "frac_above_0.1": float((test_corr_vec > 0.1).double().mean()),
+        "frac_above_0.1": float((test_np[reward_mask] > 0.1).mean()),
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
+        "reward_roi": dataset.reward_roi,
     }
-    row.update(_slice_corrs(test_corr_vec.detach().cpu().numpy(), dataset,
-                            _effective_slices(dataset.study, slices)))
+    row.update(_slice_corrs(test_np, dataset, _effective_slices(dataset, slices, study), study))
     return row
 
 
-def _effective_slices(study, slices):
-    """The slice names to actually compute this iteration.
+def _effective_slices(dataset, slices, study):
+    """The region panel to log this iteration (the ``corr_<name>`` feedback columns).
 
-    Once ``results/<study>.csv`` exists, its ``corr_<name>`` columns are
-    authoritative (they were frozen on the first write), so we recompute *those*
-    every iteration regardless of the agent's current ``LOG_SLICES`` -- the columns
-    stay populated and comparable. Before the file exists, the agent's declaration
-    defines them. The frozen set is owned by ``harness.results``.
+    Priority: (1) if the region's results CSV exists, its already-frozen columns are
+    authoritative; (2) else, for a study with an ROI resolver (NSD), the harness's own
+    FIXED region menu (``data._ROI_DEFS``) -- so every region's predictivity is logged
+    automatically, no per-run declaration needed; (3) else (text/meg, no resolver) the
+    caller's ``slices``.
     """
-    frozen = frozen_slices(study)
-    return slices if frozen is None else frozen
+    frozen = frozen_slices(dataset.study, reward_roi=dataset.reward_roi)
+    if frozen is not None:
+        return frozen
+    from harness.data import _ROI_DEFS
+    return list(_ROI_DEFS) if hasattr(study, "_roi_path") else slices
 
 
 def _study_for(d: Dataset):
@@ -192,7 +206,7 @@ def _slice_target_mask(study, name: str, n_targets: int):
     return np.repeat(keep, n_targets // n_voxels)
 
 
-def _slice_corrs(test_corr: np.ndarray, dataset: Dataset, slices) -> dict:
+def _slice_corrs(test_corr: np.ndarray, dataset: Dataset, slices, study=None) -> dict:
     """Mean per-target test-corr over each declared slice -> ``{f"corr_{name}": val}``.
 
     Names with no resolver for this study are skipped with a warning, leaving a clean
@@ -200,7 +214,7 @@ def _slice_corrs(test_corr: np.ndarray, dataset: Dataset, slices) -> dict:
     """
     if not slices:
         return {}
-    study = _study_for(dataset)
+    study = study if study is not None else _study_for(dataset)
     out = {}
     for name in slices:
         mask = _slice_target_mask(study, name, len(test_corr))

@@ -17,7 +17,7 @@ For another study, name one from ``neuralset.Study.catalog()``.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -29,6 +29,10 @@ class Dataset:
     imsize: int = 16                 # image stimuli resized to imsize x imsize
     start: float = 0.0               # neural segment start, seconds after trigger
     duration: float = 0.3            # neural segment duration, seconds
+    neural_offset: float = 0.0       # seconds to shift the neural window forward to
+                                     # align the delayed (HRF) BOLD response (fMRI)
+    neural_aggregation: str = "single"  # neural time-aggregation: "single" (keep TRs)
+                                     # or "mean" (one value per channel/voxel)
     stim_start: float | None = None  # stimulus window start; None => reuse `start`
     stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
     download: bool = False           # download the study before running?
@@ -36,8 +40,20 @@ class Dataset:
     test_frac: float = 0.2           # held-out fraction (contiguous temporal tail)
     roi: str = "nsdgeneral"          # neural-target region (volumetric studies, e.g. NSD):
                                      # "nsdgeneral" (default = all loaded voxels) or a
-                                     # sub-ROI ("V1"/"V2"/"V3"/"hV4"/"FFA"), selected as a
-                                     # fast column-subset of the already-loaded voxels.
+                                     # sub-ROI from the fixed menu (V1/hV4/FFA/PPA/EBA/
+                                     # VWFA/early/ventral), selected as a fast column-
+                                     # subset of the already-loaded voxels.
+    reward_roi: str = "nsdgeneral"   # region the scalar reward (test_corr) is computed
+                                     # over. The readout still fits ALL voxels and every
+                                     # region's predictivity is still logged (corr_<name>);
+                                     # only the headline reward narrows to this region.
+                                     # "nsdgeneral" = whole target set (the default for
+                                     # datasets without ROIs, e.g. text/meg). For NSD pick
+                                     # a famous region or visual stream: V1/hV4/FFA/PPA/
+                                     # EBA/VWFA or early/ventral. Choose per run with
+                                     # NEURO_ROI (e.g. NEURO_ROI=PPA) so parallel
+                                     # per-region loops never collide -- each writes its
+                                     # own results CSV.
 
 
 # Three real datasets spanning both neural modalities (fMRI + MEG) and stimulus
@@ -69,6 +85,12 @@ PRESETS: dict[str, Dataset] = {
     # Subject 1 saw 10,000 unique images, each repeated ~3x (30,000 trials): the
     # harness collapses the repeats to one sample per unique image and holds out the
     # canonical NSD shared-1000 images as an image-disjoint test set (see data.py).
+    # The neural target is the HRF-PEAK response: with TR=1.333s the BOLD response to
+    # the image peaks ~5s after onset, so the FmriExtractor window is shifted forward
+    # by neural_offset=5.0s and the peak TRs in a 4s window are averaged into ONE
+    # value per voxel (neural_aggregation="mean"). (offset=0/"single" over 0-3s samples
+    # pre-response baseline -- even a trained AlexNet then scores ~0.006; this
+    # HRF-aligned, TR-averaged response lifts that to ~0.32, with ventral-stream ~0.28.)
     # `roi` picks the neural-target region as a fast column-subset of the loaded
     # nsdgeneral voxels (default "nsdgeneral" = all; e.g. "V1" or "FFA" for fewer).
     "nsd": Dataset(
@@ -78,10 +100,13 @@ PRESETS: dict[str, Dataset] = {
         stimulus="image",
         imsize=16,
         start=0.0,
-        duration=3.0,
+        duration=4.0,
+        neural_offset=5.0,
+        neural_aggregation="mean",
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/nsd_subj01_full",
         roi="nsdgeneral",
+        reward_roi="ventral",
     ),
     # Le Petit Prince MEG (LPP-Listen, OpenNeuro ds007523), MEG + audio stimulus --
     # the loop's first electrophysiological modality. The raw .fif is Elekta
@@ -110,3 +135,9 @@ if _key not in PRESETS:
 
 # The one active dataset, chosen by NEURO_DATASET (default "text").
 DATASET = PRESETS[_key]
+
+# The reward region, chosen by NEURO_ROI (default = the preset's reward_roi). Lets
+# you run one auto-research loop per brain region without editing any source.
+_roi = os.environ.get("NEURO_ROI")
+if _roi:
+    DATASET = replace(DATASET, reward_roi=_roi)

@@ -13,11 +13,9 @@ from __future__ import annotations
 # (e.g. multi-seed), where repeated passes measure its variance.
 ITERATIONS = 1
 
-# Slices to log alongside the scalar reward (per-region feedback). Each name becomes
-# a ``corr_<name>`` column in ``results/<study>.csv``: the mean per-target
-# correlation over that slice's targets. The columns are FROZEN by the first row
-# written to a study's CSV, so declare the set you want ONCE and keep it stable
-# (later additions are ignored with a warning). Default is none (matches the default
-# ``text`` dataset, which has no slice resolver); for NSD set nsdgeneral sub-ROIs
-# (e.g. ["V1", "V2", "V3", "hV4", "FFA", "PPA"]).
+# Extra per-region feedback columns (``corr_<name>``) to log ALONGSIDE the scalar
+# reward, for studies with no built-in ROI menu (text/meg -> usually ``[]``). For NSD
+# this is IGNORED: the harness logs its own FIXED region menu (V1/hV4/FFA/PPA/EBA/VWFA
+# + early/ventral) automatically, so the per-region feedback is guaranteed without
+# being declared here. The single region the reward optimises is chosen with NEURO_ROI.
 LOG_SLICES: list[str] = []

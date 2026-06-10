@@ -40,9 +40,14 @@ class RawPixels(BaseClassicImageExtractor):
 
 _NEURAL = {
     # Bel2026 raw .fif is Elekta MaxShield -> allow_maxshield or it raises.
-    "meg": lambda: ns.extractors.MegExtractor(frequency=100.0, allow_maxshield=True),
-    "eeg": lambda: ns.extractors.EegExtractor(frequency=100.0),
-    "fmri": lambda: ns.extractors.FmriExtractor(),
+    "meg": lambda d: ns.extractors.MegExtractor(frequency=100.0, allow_maxshield=True),
+    "eeg": lambda d: ns.extractors.EegExtractor(frequency=100.0),
+    # fMRI: shift the window forward by `neural_offset` to align the delayed (HRF)
+    # BOLD response and time-aggregate it (`neural_aggregation`); the default cleaning
+    # (z-score + detrend) is applied by FmriExtractor itself.
+    "fmri": lambda d: ns.extractors.FmriExtractor(
+        aggregation=d.neural_aggregation, offset=d.neural_offset
+    ),
 }
 
 
@@ -95,8 +100,10 @@ def _load_workers() -> int:
 _CACHE_VERSION = "v2"
 
 # Fields that only affect post-build (cheap) steps, so they are excluded from the
-# build-cache key: ``roi`` subsets columns; ``test_frac`` only sizes a temporal tail.
-_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac")
+# build-cache key: ``roi`` subsets columns; ``test_frac`` only sizes a temporal tail;
+# ``reward_roi`` only selects which targets the scalar reward averages over. All
+# region loops therefore share ONE build (the timeseries is read only once).
+_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac", "reward_roi")
 
 
 def _cache_dir() -> str:
@@ -169,6 +176,20 @@ def _stim_window(d: Dataset) -> tuple[float, float]:
     return start, duration
 
 
+def _neural_2d(neural, d) -> torch.Tensor:
+    """Per-segment neural tensor -> 2-D (n_segments, n_targets).
+
+    With ``neural_aggregation == "mean"`` the per-segment time (TR) axis is averaged
+    into ONE value per channel -- a denoised, betas-like response that lifts the
+    encoding score markedly (for NSD it takes a trained AlexNet from ~0.28 to ~0.32).
+    ``"single"`` keeps every TR as a separate target (the default; unchanged).
+    """
+    neural = neural.float()
+    if d.neural_aggregation == "mean" and neural.dim() >= 3:
+        neural = neural.mean(dim=-1)        # collapse the trailing TR/time axis
+    return neural.reshape(neural.shape[0], -1)
+
+
 def _build_xy(d: Dataset, events):
     """Build row-aligned (X, Y, onsets, stim_ids): one row per trigger.
 
@@ -181,14 +202,14 @@ def _build_xy(d: Dataset, events):
     the result is the intersection, ordered by trigger onset.
     """
     stim_start, stim_duration = _stim_window(d)
-    stim_ext, neural_ext = _stim_extractor(d), _NEURAL[d.neural]()
+    stim_ext, neural_ext = _stim_extractor(d), _NEURAL[d.neural](d)
 
     if (stim_start, stim_duration) == (d.start, d.duration):
         batch = _segment_batch(
             d, events, dict(stim=stim_ext, neural=neural_ext), d.start, d.duration
         )
         X = batch.data["stim"].float()
-        Y = batch.data["neural"].float().reshape(len(batch.segments), -1)
+        Y = _neural_2d(batch.data["neural"], d)
         onsets = np.array([s.start for s in batch.segments])
         return X, Y, onsets, _seg_stim_ids(batch.segments)
 
@@ -207,7 +228,7 @@ def _build_xy(d: Dataset, events):
     s_idx = [j for _, j in paired]
 
     X = stim_batch.data["stim"].float()[s_idx]
-    Y = neural_batch.data["neural"].float().reshape(len(neural_batch.segments), -1)[n_idx]
+    Y = _neural_2d(neural_batch.data["neural"], d)[n_idx]
     onsets = np.array([neural_batch.segments[i].trigger.start for i in n_idx])
     stim_ids = _seg_stim_ids([neural_batch.segments[i] for i in n_idx])
     return X, Y, onsets, stim_ids
@@ -220,14 +241,18 @@ def _build_xy(d: Dataset, events):
 # voxel order the loader used (``label_volume[nsdgeneral_mask]``), then keep only
 # the requested labels. Voxels outside nsdgeneral are not available (clipped).
 #
-# Each name maps to (NSD ROI label file, the label values within it to keep):
+# Each name maps to (NSD ROI label file, the label values within it to keep). The menu
+# is the famous specific functional regions + the early/ventral visual streams; these
+# are the reward targets (pick one per loop with NEURO_ROI) and the logged feedback panel.
 _ROI_DEFS: dict[str, tuple[str, tuple[int, ...]]] = {
-    "V1": ("prf-visualrois", (1, 2)),    # V1v + V1d
-    "V2": ("prf-visualrois", (3, 4)),    # V2v + V2d
-    "V3": ("prf-visualrois", (5, 6)),    # V3v + V3d
-    "hV4": ("prf-visualrois", (7,)),
-    "FFA": ("floc-faces", (2, 3)),       # FFA-1 + FFA-2
+    "V1": ("prf-visualrois", (1, 2)),    # primary visual cortex (V1v + V1d)
+    "hV4": ("prf-visualrois", (7,)),     # human V4
+    "FFA": ("floc-faces", (2, 3)),       # fusiform face area (FFA-1 + FFA-2)
     "PPA": ("floc-places", (2,)),        # parahippocampal place area
+    "EBA": ("floc-bodies", (1,)),        # extrastriate body area
+    "VWFA": ("floc-words", (2, 3)),      # visual word form area (VWFA-1 + VWFA-2)
+    "early": ("streams", (1,)),          # early visual stream
+    "ventral": ("streams", (2, 3)),      # ventral visual stream (midventral + ventral)
 }
 
 _S3_NSD = "s3://natural-scenes-dataset"
