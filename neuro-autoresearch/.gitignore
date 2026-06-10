@@ -16,3 +16,6 @@ data/
 
 # Local Copilot agent instructions (not part of the published project)
 .github/
+
+# Generated run outputs (the machine writes these)
+results/

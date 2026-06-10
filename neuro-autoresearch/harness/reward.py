@@ -1,22 +1,20 @@
-"""Fixed reward + result saving. The agent should NOT edit this file.
+"""Fixed reward. The agent should NOT edit this file.
 
 Reward = held-out predictivity of a ridge readout from model activations to
-recorded neural activity. Only the ridge readout is fit; the model is never trained.
+recorded neural activity. Only the ridge readout is fit; the model is never
+trained. Persisting a scored row to disk lives in ``harness.results``.
 """
 from __future__ import annotations
 
-import os
 import time
 import warnings
-from datetime import datetime, timezone
 
 import numpy as np
-import pandas as pd
 import torch
 import neuralset as ns
 
-from config import Dataset
-from data import load_split
+from harness.datasets import Dataset
+from harness.results import CORR_PREFIX, frozen_slices
 
 # Ridge penalties searched by the readout. The readout picks the best alpha PER
 # TARGET via efficient leave-one-out GCV (one SVD reused across all alphas), so
@@ -133,7 +131,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     row = {
         "study": dataset.study,
         "model_name": model.name,
-        "idea": getattr(model, "idea", model.description),
+        "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
         "n_params": model.n_params,
         "n_train": int(Y_train.shape[0]),
         "n_test": int(Y_test.shape[0]),
@@ -150,19 +148,17 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     return row
 
 
-def _effective_slices(study, slices, results_dir: str = "runs"):
+def _effective_slices(study, slices):
     """The slice names to actually compute this iteration.
 
-    Once ``runs/<study>.csv`` exists, its ``corr_<name>`` columns are authoritative
-    (they were frozen on the first write), so we recompute *those* every iteration
-    regardless of the agent's current ``LOG_SLICES`` -- the columns stay populated
-    and comparable. Before the file exists, the agent's declaration defines them.
+    Once ``results/<study>.csv`` exists, its ``corr_<name>`` columns are
+    authoritative (they were frozen on the first write), so we recompute *those*
+    every iteration regardless of the agent's current ``LOG_SLICES`` -- the columns
+    stay populated and comparable. Before the file exists, the agent's declaration
+    defines them. The frozen set is owned by ``harness.results``.
     """
-    csv = os.path.join(results_dir, f"{study}.csv")
-    if not os.path.exists(csv):
-        return slices
-    cols = pd.read_csv(csv, nrows=0).columns
-    return [c[len("corr_"):] for c in cols if c.startswith("corr_")]
+    frozen = frozen_slices(study)
+    return slices if frozen is None else frozen
 
 
 def _study_for(d: Dataset):
@@ -183,7 +179,7 @@ def _slice_target_mask(study, name: str, n_targets: int):
     """
     if not hasattr(study, "_roi_path"):     # non-volumetric studies (text/meg): no resolver
         return None
-    from data import _roi_voxel_keep
+    from harness.data import _roi_voxel_keep
 
     try:
         keep, n_voxels = _roi_voxel_keep(study, name)
@@ -212,7 +208,7 @@ def _slice_corrs(test_corr: np.ndarray, dataset: Dataset, slices) -> dict:
             warnings.warn(f"log slice {name!r} unresolved for study {dataset.study!r}; skipping")
             continue
         sel = test_corr[mask]
-        out[f"corr_{name}"] = float(sel.mean()) if sel.size else float("nan")
+        out[f"{CORR_PREFIX}{name}"] = float(sel.mean()) if sel.size else float("nan")
     return out
 
 
@@ -224,52 +220,7 @@ def evaluate(model, dataset: Dataset, slices=()) -> dict:
     readout.
     """
     t0 = time.time()
+    from harness.data import load_split  # lazy: keeps score-only callers off the data/study stack
     row = evaluate_on_split(model, load_split(dataset), dataset, slices)
     row["seconds"] = round(time.time() - t0, 2)
     return row
-
-
-CORE_COLUMNS = [
-    "iteration", "timestamp", "study", "model_name", "idea", "n_params",
-    "n_train", "n_test", "n_targets", "test_corr", "train_corr", "gap",
-    "frac_above_0.1", "best_so_far", "seconds", "status",
-]
-
-
-def save_results(row: dict, results_dir: str = "runs") -> None:
-    """Append ``row`` to the per-study CSV ``runs/<study>.csv`` (append-only history).
-
-    One row per evaluation -- existing rows are never overwritten, so the agent's
-    hill-climb history is preserved. The harness fills the ledger fields it owns:
-    1-based ``iteration`` (count of existing rows + 1), ``timestamp``, and running
-    ``best_so_far`` (max ``test_corr`` in the file). The agent-declared slice columns
-    (``corr_<name>``) are FROZEN by the FIRST row written: later rows fill only those
-    columns, newly declared slices are ignored with a warning, and the file never
-    gains or loses columns.
-    """
-    os.makedirs(results_dir, exist_ok=True)
-    csv = os.path.join(results_dir, f"{row['study']}.csv")
-    df = pd.read_csv(csv) if os.path.exists(csv) else None
-
-    row = dict(row)
-    row["iteration"] = (len(df) if df is not None else 0) + 1
-    row["timestamp"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    prev_best = df["test_corr"].max() if df is not None and len(df) else None
-    row["best_so_far"] = (
-        row["test_corr"] if prev_best is None else max(prev_best, row["test_corr"])
-    )
-
-    if df is not None:                      # freeze: the existing slice columns are authoritative
-        frozen = [c for c in df.columns if c.startswith("corr_")]
-        ignored = [c for c in row if c.startswith("corr_") and c not in frozen]
-        if ignored:
-            warnings.warn(f"{csv}: slice columns frozen as {frozen or '[]'}; ignoring {ignored}")
-        for c in ignored:
-            row.pop(c)
-        columns = CORE_COLUMNS + frozen
-    else:
-        columns = CORE_COLUMNS + [c for c in row if c.startswith("corr_")]
-
-    new = pd.DataFrame([row], columns=columns)
-    out = pd.concat([df, new], ignore_index=True) if df is not None else new
-    out.reindex(columns=columns).to_csv(csv, index=False)

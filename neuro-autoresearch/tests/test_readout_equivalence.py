@@ -1,6 +1,6 @@
-"""Equivalence guard for the GPU ridge readout in harness/eval.py.
+"""Equivalence guard for the GPU ridge readout in harness/reward.py.
 
-eval.py reimplements sklearn's ``RidgeCV(alpha_per_target=True)`` per-target
+reward.py reimplements sklearn's ``RidgeCV(alpha_per_target=True)`` per-target
 leave-one-out GCV in torch so the reward runs on the GPU. That readout IS the
 reward signal in the fixed harness, so this test pins it to sklearn: on synthetic
 data covering BOTH code branches (tall ``n>p`` and wide ``n<=p``) and the real
@@ -15,8 +15,8 @@ import numpy as np
 import torch
 from sklearn.linear_model import RidgeCV
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "harness"))
-from eval import _ALPHAS, _ridge_gcv_coef  # noqa: E402
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from harness.reward import _ALPHAS, _ridge_gcv_coef  # noqa: E402
 
 
 def _predict_torch(A_train, Y_train, A_test):

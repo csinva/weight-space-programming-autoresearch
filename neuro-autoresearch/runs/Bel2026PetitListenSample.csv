@@ -1,3 +1,0 @@
-iteration,timestamp,study,model_name,idea,n_params,n_train,n_test,n_targets,test_corr,train_corr,gap,frac_above_0.1,best_so_far,seconds,status
-1,2026-06-05T19:50:29+00:00,Bel2026PetitListenSample,identity,Raw stimulus features straight into the ridge readout -- the baseline to beat.,0,1291,323,15300,-0.0036732277120355,0.5228465053082529,0.5265197330202884,0.0993464052287581,-0.0036732277120355,0.38,ok
-2,2026-06-05T19:50:34+00:00,Bel2026PetitListenSample,identity,Raw stimulus features straight into the ridge readout -- the baseline to beat.,0,1291,323,15300,-0.003673227712035505,0.5228465053082529,0.5265197330202884,0.09934640522875818,-0.0036732277120355,0.39,ok

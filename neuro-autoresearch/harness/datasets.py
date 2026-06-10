@@ -10,7 +10,7 @@ Three real datasets are pre-registered in ``PRESETS``. Pick one at run time via
 the ``NEURO_DATASET`` environment variable (default ``"text"``) -- no source edit
 needed, so parallel runs never collide::
 
-    NEURO_DATASET=meg python evolve/model.py
+    NEURO_DATASET=meg python -m harness.run
 
 For another study, name one from ``neuralset.Study.catalog()``.
 """

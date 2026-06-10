@@ -25,9 +25,8 @@ import torch
 import neuralset as ns
 from neuralset.extractors.image import BaseClassicImageExtractor
 
-from config import Dataset
-import nsd_subj01  # registers the NsdSubj01 study so name="NsdSubj01" resolves
-import li2022_subj  # registers the Li2022PetitSubj study so name="Li2022PetitSubj" resolves
+from harness.datasets import Dataset
+from harness import studies  # noqa: F401  (registers NsdSubj01 / Li2022PetitSubj)
 
 
 class RawPixels(BaseClassicImageExtractor):
