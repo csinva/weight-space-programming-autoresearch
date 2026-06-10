@@ -19,3 +19,6 @@ data/
 
 # Generated run outputs (the machine writes these)
 results/
+
+# Isolated per-run folders created by scripts/setup_run.py (never committed)
+runs/

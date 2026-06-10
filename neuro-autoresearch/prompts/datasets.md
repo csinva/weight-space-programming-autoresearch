@@ -5,6 +5,11 @@ by `NEURO_DATASET` (default `text`); the harness loads it and you propose a
 never-trained model in `model.py` whose ridge-readout `test_corr` is the
 reward. Three presets (`nsd`, `text`, `meg`) live in `harness/datasets.py`.
 
+Each run lives in its own isolated folder (`python scripts/setup_run.py <tag>`,
+then `cd runs/<tag>`): `harness/` is symlinked there (FIXED), and you edit the
+local `model.py`/`experiment.py` while results append to the run-local
+`results/<study>.csv` (see `prompts/program.md`).
+
 For each, the model sees the stimulus `X (N, D_in)` and must emit activations
 `(N, D_out)`; the fixed harness fits a ridge readout from those activations to the
 neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`**.

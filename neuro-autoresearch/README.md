@@ -76,7 +76,9 @@ harness/data.py        FIXED: stimulus extractors + aligned, split (X, Y) tensor
 harness/reward.py      FIXED: the predictivity reward, evaluate()
 harness/results.py     FIXED: append-only result ledger, save_results()
 harness/run.py         FIXED: the driver — `python -m harness.run`
+scripts/setup_run.py   FIXED: `python scripts/setup_run.py <tag>` — make an isolated run folder
 results/               <study>.csv, one appended row per evaluation (gitignored)
+runs/<tag>/            isolated per-run folder (symlinked harness + local model.py; gitignored)
 ```
 
 `model.py` (and `experiment.py`) are the **only** files the agent edits. `harness/`
@@ -91,6 +93,10 @@ pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
 
 ## Run (offline, no downloads)
 
+There are two ways to run, and both work.
+
+### Single tree (quick, from the repo root)
+
 ```bash
 python -m harness.run                    # evaluate the current model on the active dataset
 NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg)
@@ -101,6 +107,37 @@ once and evaluates the model in `model.py`, printing `train_corr`, `test_corr`, 
 `frac>0.1` with timing. Each evaluation **appends** one row to
 `results/<study>.csv` (an append-only history keyed by a monotonic `iteration`), so
 the agent's hill-climb trajectory is preserved across edits.
+
+### Isolated run folder (recommended for autoresearch)
+
+For an unattended hill-climb, give each run its own **isolated folder** so its
+`model.py`, attempt snapshots, and results never collide with another run — no git
+branch, no commits, everything local to the folder:
+
+```bash
+python scripts/setup_run.py demo-run1    # create runs/demo-run1/
+cd runs/demo-run1
+NEURO_DATASET=nsd python -m harness.run  # one evaluation pass, writes results/<study>.csv here
+```
+
+`scripts/setup_run.py <tag>` creates `runs/<tag>/` containing:
+
+```
+harness/      -> relative symlink to the repo's harness/ (FIXED; do not edit through it)
+prompts/      -> relative symlink to the repo's prompts/ (FIXED)
+model.py        local copy — EDIT this one (the evolving model)
+experiment.py   local copy — EDIT this one (ITERATIONS + LOG_SLICES)
+results/        empty — the run-local <study>.csv lands here
+models_lib/     empty — drop a snapshot of model.py per attempt here
+```
+
+The loop inside a run folder: edit the local `model.py`, snapshot each attempt
+into `models_lib/` (e.g. `cp model.py models_lib/attempt-NN.py`), run
+`python -m harness.run`, and read the appended row from the run-local
+`results/<study>.csv`. Because `harness` is symlinked, `import harness.run` and the
+local `model.py`/`experiment.py` all resolve, and `harness.results.save_results`
+writes to the cwd-relative `results/` — i.e. into `runs/<tag>/results/`. The whole
+`runs/` tree is gitignored.
 
 
 ## Datasets

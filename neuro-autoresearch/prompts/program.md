@@ -9,6 +9,23 @@ You may edit **only `model.py`** (the model) and **`experiment.py`** (the
 run-config: `ITERATIONS`, `LOG_SLICES`). Everything in `harness/` (the dataset,
 the data loader, and the evaluator) is FIXED — do not touch it.
 
+## Where you work (isolated run folder)
+
+You work inside a single **run folder** created by `python scripts/setup_run.py
+<tag>` (which makes `runs/<tag>/`). `cd runs/<tag>` and stay there — no git branch,
+no commits, everything is local to the folder:
+
+- `harness/` and `prompts/` are **symlinks** to the FIXED repo code — read them,
+  never edit through them.
+- `model.py` and `experiment.py` are your **local, editable** copies. Edit these.
+- `results/<study>.csv` (written here) is this run's append-only history.
+- `models_lib/` is where you **snapshot every attempt's `model.py`** before
+  re-running, e.g. `cp model.py models_lib/attempt-$(printf '%02d' N).py`, so the
+  full trajectory of designs is recoverable alongside the score history.
+
+(You can also run the single-tree way from the repo root with `python -m
+harness.run`; the run-folder workflow is the same loop, just isolated.)
+
 ## The rules
 
 1. A model is a plain callable: stimulus batch `X (N, D_in)` -> activations
@@ -42,7 +59,9 @@ Each iteration, follow these steps in order:
 5. **Propose / edit the `Model`** in `model.py` aimed at **beating
    `best_so_far`**, using the `corr_<slice>` columns to decide *where* to push (e.g.
    for `nsd`, more high-level visual structure if `FFA`/`PPA` lag, more spatial
-   detail if early-visual `V1`–`hV4` lag).
+   detail if early-visual `V1`–`hV4` lag). Before re-running, **snapshot the new
+   `model.py` into `models_lib/`** (e.g. `cp model.py models_lib/attempt-NN.py`) so
+   every design in the trajectory is preserved next to its score.
 6. The fixed harness runs the stimulus through your model -> activations, linearly
    reads them out (ridge regression) to predict recorded neural activity, and appends
    one row (the CORE columns + your `corr_<slice>` columns) to `results/<study>.csv`. The
