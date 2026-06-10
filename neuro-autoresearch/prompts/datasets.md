@@ -21,18 +21,24 @@ neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`*
 - **Modalities:** stimulus = **image** · neural = **fMRI**.
 - **Stimulus X:** the shown image, resized to `imsize×imsize` (default 16) and
   flattened to `[0,1]` RGB → **`16·16·3 = 768` dims** (`RawPixels`).
-- **Target Y:** the subject's fMRI response over the **`nsdgeneral`** mask
-  (~15k voxels; constant-on-train columns dropped). `n_targets` is logged per run.
+- **Target Y:** the subject's **HRF-peak fMRI response** over the **`nsdgeneral`** mask
+  (15724 voxels). The BOLD response peaks ~5 s after onset (TR 1.333 s), so the window
+  is shifted forward (`neural_offset=5.0`) and the peak TRs in a 4 s window are
+  averaged into **one value per voxel** (`neural_aggregation="mean"`) — a denoised,
+  betas-like response. (With the old 0–3 s baseline window even a trained AlexNet
+  scored ~0.006; this HRF-aligned response lifts that to ~0.32.)
 - **Split:** repeats collapsed to **one sample per unique image** (neural averaged
   over the ~3 presentations), then the **canonical NSD shared-1000** images are the
   held-out test — **image-disjoint** (asserted), **~9000 train / ~1000 test**.
-- **Sliceable metadata (USE THESE for `LOG_SLICES`):** NSD voxels carry ROI labels,
-  so you can track per-region predictivity. ROI slice menu:
-  **`V1, V2, V3, hV4, FFA` (floc-faces), `PPA` (floc-places)**. Pick a stable subset
-  once (e.g. `["V1","V2","V3","hV4","FFA","PPA"]`) to see early-visual vs. high-level
-  ventral regions separately. Separately, `Dataset.roi` (one config line) can
-  restrict the **whole eval** to one region (`V1`/`V2`/`V3`/`hV4`/`FFA`).
-- **Reward:** held-out mean per-target Pearson r (`test_corr`) over the kept voxels.
+- **Reward region (`NEURO_ROI`):** the scalar reward is the mean `test_corr` over ONE
+  brain region, chosen per run with `NEURO_ROI` (default `ventral`). The readout still
+  fits **all** nsdgeneral voxels and **every** region's predictivity is logged as a
+  `corr_<name>` column — only the headline reward narrows. Run one loop per region;
+  each writes its own `results/<study>__<roi>.csv`, so per-region hill-climbs never mix.
+- **Fixed region menu** (the harness logs all of these automatically — you do NOT
+  declare them): famous regions **`V1, hV4, FFA, PPA, EBA, VWFA`** + visual streams
+  **`early, ventral`**.
+- **Reward:** held-out mean per-target Pearson r (`test_corr`) over the reward region.
 
 ## `text` — Le Petit Prince narrative listening (`Li2022PetitSubj`)
 

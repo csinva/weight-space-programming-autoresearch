@@ -41,31 +41,31 @@ Each iteration, follow these steps in order:
 
 1. **Read `prompts/datasets.md`** to understand the active dataset (chosen by
    `NEURO_DATASET`): its stimulus/neural modalities, the dims of `X` and `Y`, the
-   train/test split, and the sliceable metadata available.
-2. **Read this dataset's history `results/<study>.csv`** (`<study>` = `dataset.study`,
-   e.g. `results/NsdSubj01.csv`) *before* proposing — the full append-only log of every
-   past iteration. Find `best_so_far`, and look at the `corr_<slice>` columns to see
-   **where** prior models did well or poorly.
-3. **Choose `LOG_SLICES` once, at the START of a run, and never change them.** Declare
-   `LOG_SLICES = [...]` in `experiment.py`, picking names from the
-   active dataset's slice menu in `prompts/datasets.md` (for `nsd`, ROIs like
-   `["V1","V2","V3","hV4","FFA","PPA"]`; for `text`/`meg`, none yet → `[]`). The
-   harness writes one `corr_<name>` column per slice and **freezes those columns on the
-   first logged row** — changing `LOG_SLICES` mid-run does nothing, so they are your
-   stable comparison axes across the whole run. Choose them deliberately.
+   train/test split, and the reward region.
+2. **Read this run's history CSV** — `results/<study>.csv`, or for a per-region NSD
+   loop `results/<study>__<reward_roi>.csv` (e.g. `results/NsdSubj01__ventral.csv`) —
+   *before* proposing: the full append-only log of every past iteration. Find
+   `best_so_far`, and read the `corr_<region>` columns to see **where** prior models
+   did well or poorly.
+3. **The reward region is FIXED for the run** (chosen by the operator via `NEURO_ROI`,
+   default `ventral` for NSD) — do NOT change the objective. You do **not** declare
+   `LOG_SLICES` for NSD: the harness automatically logs its own fixed region panel
+   (`V1, hV4, FFA, PPA, EBA, VWFA, early, ventral`) as `corr_<region>` columns, frozen
+   on the first row. The scalar reward is `test_corr` over the chosen region; the
+   readout still fits all voxels, so every region's predictivity is logged for you.
 4. **Set a one-line `idea` each iteration** — a free-text hypothesis of what you
    changed and why (set `model.idea`, or the model `description`). It is logged
    verbatim as the `idea` column.
 5. **Propose / edit the `Model`** in `model.py` aimed at **beating
-   `best_so_far`**, using the `corr_<slice>` columns to decide *where* to push (e.g.
-   for `nsd`, more high-level visual structure if `FFA`/`PPA` lag, more spatial
-   detail if early-visual `V1`–`hV4` lag). Before re-running, **snapshot the new
+   `best_so_far`** on the reward region, using the `corr_<region>` columns to decide
+   *where* to push (e.g. more high-level visual structure if `FFA`/`PPA`/`ventral` lag,
+   more spatial detail if `V1`/`hV4`/`early` lag). Before re-running, **snapshot the new
    `model.py` into `models_lib/`** (e.g. `cp model.py models_lib/attempt-NN.py`) so
    every design in the trajectory is preserved next to its score.
 6. The fixed harness runs the stimulus through your model -> activations, linearly
    reads them out (ridge regression) to predict recorded neural activity, and appends
-   one row (the CORE columns + your `corr_<slice>` columns) to `results/<study>.csv`. The
-   held-out mean per-target Pearson `r` (`test_corr`) is the reward.
+   one row (the CORE columns + the fixed `corr_<region>` panel) to the run's CSV. The
+   held-out mean per-target Pearson `r` (`test_corr`) over the reward region is the reward.
 
 So `model.py` is the artifact you evolve; `test_corr` is the verifiable
 reward. Iterate to raise it, hill-climbing past `best_so_far`.
