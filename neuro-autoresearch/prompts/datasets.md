@@ -2,8 +2,8 @@
 
 Context the autoresearch agent reads **every run**. The active dataset is chosen
 by `NEURO_DATASET` (default `text`); the harness loads it and you propose a
-never-trained model in `evolve/model.py` whose ridge-readout `test_corr` is the
-reward. Three presets (`nsd`, `text`, `meg`) live in `harness/config.py`.
+never-trained model in `model.py` whose ridge-readout `test_corr` is the
+reward. Three presets (`nsd`, `text`, `meg`) live in `harness/datasets.py`.
 
 For each, the model sees the stimulus `X (N, D_in)` and must emit activations
 `(N, D_out)`; the fixed harness fits a ridge readout from those activations to the
@@ -64,10 +64,11 @@ neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`*
 
 ## Hard rules (all datasets)
 
-1. **Edit only `evolve/model.py`.** `harness/` is fixed (the one allowed exception is
-   the `DATASET = ...` / `NEURO_DATASET` selection in `harness/config.py`).
+1. **Edit only `model.py`** (the model) and **`experiment.py`** (the run-config).
+   `harness/` is fixed (the one allowed exception is the `NEURO_DATASET` dataset
+   selection backed by `harness/datasets.py`).
 2. **Never train the model** — weights are written directly in code: no optimizer, no
-   backprop, no gradient descent. Only the ridge readout in `harness/eval.py` is fit,
+   backprop, no gradient descent. Only the ridge readout in `harness/reward.py` is fit,
    and that *is* the evaluation.
 3. The model is a plain callable `X (N, D_in) -> activations (N, D_out)` returning
    **raw activations** (the readout does the fitting). Prefer modality-agnostic

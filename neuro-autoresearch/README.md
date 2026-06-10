@@ -10,7 +10,7 @@ agent iterates to push the score up. No gradient descent, no optimizer — the m
 is *designed*, not trained.
 
 The result is a tight, verifiable loop where the unit of progress is a single file
-(`evolve/model.py`) and the unit of truth is a single number (`test_corr`).
+(`model.py`) and the unit of truth is a single number (`test_corr`).
 
 ## Why this is interesting
 
@@ -29,7 +29,7 @@ which *is* the evaluation — so the score can't be gamed by memorizing the data
 
 ## The loop (3 steps)
 
-1. **Propose.** The agent writes a model in `evolve/model.py` — a callable mapping
+1. **Propose.** The agent writes a model in `model.py` — a callable mapping
    a batch of stimuli `X (N, D_in)` to activations `(N, D_out)`. Weights are
    hard-coded; nothing is trained.
 2. **Activate.** The fixed harness runs the stimulus through the model to get
@@ -66,17 +66,22 @@ The neural side (`fmri` / `meg` / `eeg`) is dispatched the same way.
 ## What you edit vs. what's fixed
 
 ```
-evolve/model.py        EDITABLE: the model(s) + the main that evaluates and saves
-evolve/program.md      the task description handed to the agent
-harness/config.py      FIXED: the Dataset registry (pick one via NEURO_DATASET)
+model.py               EDITABLE: the one evolving model (seed: identity)
+experiment.py          EDITABLE: run-config — ITERATIONS + LOG_SLICES
+prompts/program.md     the task description handed to the agent
+prompts/datasets.md    the active-dataset context the agent reads each run
+harness/datasets.py    FIXED: the Dataset registry (pick one via NEURO_DATASET)
+harness/studies/       FIXED: per-study NeuralSet subclasses (NSD subj1, LPP subj)
 harness/data.py        FIXED: stimulus extractors + aligned, split (X, Y) tensors
-harness/eval.py        FIXED: the predictivity reward, evaluate(), save_results()
-harness/nsd_subj01.py  FIXED: NSD restricted to subject 1
-runs/                  overall_results.csv + test_corr.png (written each run)
+harness/reward.py      FIXED: the predictivity reward, evaluate()
+harness/results.py     FIXED: append-only result ledger, save_results()
+harness/run.py         FIXED: the driver — `python -m harness.run`
+results/               <study>.csv, one appended row per evaluation (gitignored)
 ```
 
-`evolve/` is the **only** zone the agent edits. `harness/` is the fixed evaluation
-harness and must not be touched — that fixedness is what makes the reward trustworthy.
+`model.py` (and `experiment.py`) are the **only** files the agent edits. `harness/`
+is the fixed evaluation harness and must not be touched — that fixedness is what
+makes the reward trustworthy.
 
 ## Install
 
@@ -87,20 +92,20 @@ pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
 ## Run (offline, no downloads)
 
 ```bash
-python evolve/model.py                   # two iterations on the active dataset
-python evolve/model.py --model identity  # evaluate a single named model
-NEURO_DATASET=meg python evolve/model.py # pick a preset (text | nsd | meg)
+python -m harness.run                    # evaluate the current model on the active dataset
+NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg)
 ```
 
-Run from the repo root so results land in `runs/`. A default run loads the data
-split once and evaluates two proposals (an initial model plus one modification),
-printing `train_corr`, `test_corr`, and `frac>0.1` per iteration with timing. Each
-evaluated model **upserts** a row into `runs/overall_results.csv` (keyed by
-`(dataset, model_name)`) and refreshes the `runs/test_corr.png` bar plot.
+Run from the repo root so results land in `results/`. A run loads the data split
+once and evaluates the model in `model.py`, printing `train_corr`, `test_corr`, and
+`frac>0.1` with timing. Each evaluation **appends** one row to
+`results/<study>.csv` (an append-only history keyed by a monotonic `iteration`), so
+the agent's hill-climb trajectory is preserved across edits.
+
 
 ## Datasets
 
-Three real studies are registered in `harness/config.py` and selected by the
+Three real studies are registered in `harness/datasets.py` and selected by the
 `NEURO_DATASET` environment variable (default `text`) — no source edit, so parallel
 runs never collide:
 
@@ -146,7 +151,7 @@ lives outside the repo at `~/.cache/neuro-autoresearch/splits` (override with
 ### Adding a dataset
 
 Name a study from `neuralset.Study.catalog()` and append a `Dataset(...)` entry to
-`PRESETS` in `harness/config.py`. Dataset specifics live only in `config.py`; the
+`PRESETS` in `harness/datasets.py`. Dataset specifics live only in `datasets.py`; the
 harness and models need no changes. Keep unattended runs pointed at a staged local
 path — **never** point an unattended run at a gated `download=True` study.
 
@@ -156,7 +161,7 @@ The Copilot CLI sometimes stops mid-run. Wrap it with `copilot-keepgoing` (insta
 via `pip install .`) to auto-nudge it whenever it goes idle:
 
 ```bash
-copilot-keepgoing -- copilot --autopilot --yolo   # then: "Follow evolve/program.md"
+copilot-keepgoing -- copilot --autopilot --yolo   # then: "Follow prompts/program.md"
 ```
 
 ---
