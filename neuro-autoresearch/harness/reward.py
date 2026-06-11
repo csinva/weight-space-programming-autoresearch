@@ -154,6 +154,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
         "reward_roi": dataset.reward_roi,
+        "run_tag": dataset.run_tag,
     }
     row.update(_slice_corrs(test_np, dataset, _effective_slices(dataset, slices, study), study))
     return row
@@ -168,7 +169,8 @@ def _effective_slices(dataset, slices, study):
     automatically, no per-run declaration needed; (3) else (text/meg, no resolver) the
     caller's ``slices``.
     """
-    frozen = frozen_slices(dataset.study, reward_roi=dataset.reward_roi)
+    frozen = frozen_slices(dataset.study, reward_roi=dataset.reward_roi,
+                           run_tag=dataset.run_tag)
     if frozen is not None:
         return frozen
     from harness.data import _ROI_DEFS

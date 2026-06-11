@@ -54,6 +54,10 @@ class Dataset:
                                      # NEURO_ROI (e.g. NEURO_ROI=PPA) so parallel
                                      # per-region loops never collide -- each writes its
                                      # own results CSV.
+    run_tag: str = ""                # optional per-run id (set by NEURO_RUN). When set,
+                                     # the results file is suffixed with it so each run
+                                     # gets its OWN unique CSV (history + best_so_far are
+                                     # not shared across runs). Empty => shared per-region.
 
 
 # Three real datasets spanning both neural modalities (fMRI + MEG) and stimulus
@@ -141,3 +145,8 @@ DATASET = PRESETS[_key]
 _roi = os.environ.get("NEURO_ROI")
 if _roi:
     DATASET = replace(DATASET, reward_roi=_roi)
+
+# Optional per-run id (NEURO_ROI-style), so each run writes its own unique results CSV.
+_run = os.environ.get("NEURO_RUN")
+if _run:
+    DATASET = replace(DATASET, run_tag=_run)

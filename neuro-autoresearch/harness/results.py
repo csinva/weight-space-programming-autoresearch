@@ -21,23 +21,26 @@ CORE_COLUMNS = [
 ]
 
 
-def _csv_path(study, results_dir: str, reward_roi: str = "nsdgeneral") -> str:
+def _csv_path(study, results_dir: str, reward_roi: str = "nsdgeneral",
+              run_tag: str = "") -> str:
     # Per-region loops get their own file (e.g. NsdSubj01__PPA.csv) so each region's
     # hill-climb history and best_so_far stay separate; "nsdgeneral" keeps the bare
-    # study name for backward compatibility.
+    # study name. A run_tag (NEURO_RUN) suffixes it further so each RUN is unique.
     stem = study if reward_roi in (None, "nsdgeneral") else f"{study}__{reward_roi}"
+    if run_tag:
+        stem = f"{stem}__{run_tag}"
     return os.path.join(results_dir, f"{stem}.csv")
 
 
 def frozen_slices(study, results_dir: str = "results",
-                  reward_roi: str = "nsdgeneral") -> list[str] | None:
+                  reward_roi: str = "nsdgeneral", run_tag: str = "") -> list[str] | None:
     """The ``corr_<name>`` slice names already frozen in the region's results CSV.
 
     Returns ``None`` when the file does not exist yet (nothing is frozen, so the
     caller's freshly declared slices apply). The ``corr_`` column convention lives
     here, in the module that owns the result schema.
     """
-    csv = _csv_path(study, results_dir, reward_roi)
+    csv = _csv_path(study, results_dir, reward_roi, run_tag)
     if not os.path.exists(csv):
         return None
     cols = pd.read_csv(csv, nrows=0).columns
@@ -56,7 +59,8 @@ def save_results(row: dict, results_dir: str = "results") -> None:
     gains or loses columns.
     """
     os.makedirs(results_dir, exist_ok=True)
-    csv = _csv_path(row["study"], results_dir, row.get("reward_roi", "nsdgeneral"))
+    csv = _csv_path(row["study"], results_dir,
+                    row.get("reward_roi", "nsdgeneral"), row.get("run_tag", ""))
     df = pd.read_csv(csv) if os.path.exists(csv) else None
 
     row = dict(row)

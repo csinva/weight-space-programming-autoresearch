@@ -101,9 +101,10 @@ _CACHE_VERSION = "v2"
 
 # Fields that only affect post-build (cheap) steps, so they are excluded from the
 # build-cache key: ``roi`` subsets columns; ``test_frac`` only sizes a temporal tail;
-# ``reward_roi`` only selects which targets the scalar reward averages over. All
-# region loops therefore share ONE build (the timeseries is read only once).
-_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac", "reward_roi")
+# ``reward_roi`` only selects which targets the scalar reward averages over; ``run_tag``
+# only names the output CSV. All region/run loops therefore share ONE build (the
+# timeseries is read only once).
+_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac", "reward_roi", "run_tag")
 
 
 def _cache_dir() -> str:

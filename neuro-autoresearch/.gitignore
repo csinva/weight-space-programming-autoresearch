@@ -25,3 +25,4 @@ runs/
 
 # Generated analysis report (built on demand by analyze/build_report.py)
 analyze/report.html
+models_lib/
