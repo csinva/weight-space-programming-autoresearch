@@ -101,14 +101,16 @@ There are two ways to run, and both work.
 python -m harness.run                    # evaluate the current model on the active dataset
 NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg)
 NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run  # NSD: reward = the PPA region
+NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=run1 python -m harness.run  # unique CSV per run
 ```
 
 Run from the repo root so results land in `results/`. A run loads the data split
 once and evaluates the model in `model.py`, printing `train_corr`, `test_corr`, and
 `frac>0.1` with timing. Each evaluation **appends** one row to
-`results/<study>.csv` — or, for a per-region NSD reward, `results/<study>__<roi>.csv`
-(an append-only history keyed by a monotonic `iteration`), so the agent's hill-climb
-trajectory is preserved across edits.
+`results/<study>.csv` — or `results/<study>__<roi>.csv` for a per-region NSD reward,
+or `results/<study>__<roi>__<run>.csv` when `NEURO_RUN` is set so **each run gets its
+own unique CSV**. The history is append-only (keyed by a monotonic `iteration`) and
+`results/` is **gitignored** — runs never write to git, only to their CSV.
 
 ### Isolated run folder (recommended for autoresearch)
 
