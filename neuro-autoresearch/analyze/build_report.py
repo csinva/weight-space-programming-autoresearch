@@ -38,8 +38,10 @@ import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
 
 TABLE_COLUMNS = [
-    "iteration", "model_name", "idea", "test_corr", "train_corr", "best_so_far", "status",
+    "iteration", "model_name", "idea", "summary", "test_corr", "train_corr", "best_so_far", "status",
 ]
+# Canonical left-to-right ordering of NSD regions (early visual -> ventral category).
+REGION_ORDER = ["V1", "V2", "V3", "hV4", "early", "ventral", "PPA", "EBA", "FFA", "VWFA"]
 _TRAIN_RE = re.compile(r"\btrain", re.IGNORECASE)
 
 
@@ -128,8 +130,13 @@ def _make_run(tag: str, csv: str, metadata: dict) -> Run | None:
     return Run(tag, str(study), csv, df, metadata)
 
 
-def discover_runs(runs_dir: str, repo_root: str) -> list[Run]:
-    """Find every result CSV under ``runs/<tag>/results/`` and ``<repo_root>/results/``."""
+def discover_runs(runs_dir: str, repo_root: str, include_root_results: bool = True) -> list[Run]:
+    """Find every result CSV under ``runs/<tag>/results/`` and ``<repo_root>/results/``.
+
+    When ``include_root_results`` is False the stray repo-root ``results/`` ledger
+    (the harness's current-model evals) is skipped, so the report shows only the
+    per-run search under ``runs/``.
+    """
     runs: list[Run] = []
 
     if os.path.isdir(runs_dir):
@@ -142,7 +149,7 @@ def discover_runs(runs_dir: str, repo_root: str) -> list[Run]:
             runs.extend(r for csv in csvs if (r := _make_run(tag, csv, metadata)))
 
     root_results = os.path.join(repo_root, "results")
-    if os.path.abspath(root_results) != os.path.abspath(os.path.join(runs_dir, "results")):
+    if include_root_results and os.path.abspath(root_results) != os.path.abspath(os.path.join(runs_dir, "results")):
         runs.extend(r for csv in _csvs_in(root_results) if (r := _make_run("results", csv, {})))
 
     return runs
@@ -272,7 +279,7 @@ def attempts_table(runs: list[Run]) -> str:
             cells = [f'<td class="run">{html.escape(run.tag)}</td>', f'<td>{html.escape(run.study)}</td>']
             for col in TABLE_COLUMNS:
                 value = row.get(col, "")
-                if col == "idea":
+                if col in ("idea", "summary"):
                     cells.append(_idea_cell(str(value)))
                 elif col in ("test_corr", "train_corr", "best_so_far"):
                     cells.append(f'<td class="num">{_fmt(value)}</td>')
@@ -294,6 +301,213 @@ def attempts_table(runs: list[Run]) -> str:
         + "".join(rows_html)
         + "</tbody></table>"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Mechanistic analysis: what the best model in each run actually computes.
+# --------------------------------------------------------------------------- #
+
+def best_row(run: Run) -> pd.Series | None:
+    """The included attempt with the highest ``test_corr`` (the model that was found)."""
+    inc = run.included
+    if inc.empty or inc["test_corr"].isna().all():
+        return None
+    return inc.loc[inc["test_corr"].idxmax()]
+
+
+def _run_dir(run: Run) -> str:
+    """The ``runs/<tag>`` directory holding a run's model source, from its CSV path."""
+    d = os.path.dirname(run.csv_path)
+    return os.path.dirname(d) if os.path.basename(d) == "results" else d
+
+
+def find_model_source(run: Run, model_name: object) -> tuple[str | None, str | None]:
+    """Locate the ``.py`` whose ``Model.name`` equals ``model_name`` in the run dir.
+
+    Searches ``model.py`` then ``models_lib/*.py``; returns ``(path, source)`` or
+    ``(None, None)`` when no file matches (e.g. test fixtures with CSVs only).
+    """
+    if not isinstance(model_name, str) or not model_name:
+        return None, None
+    run_dir = _run_dir(run)
+    candidates = []
+    top = os.path.join(run_dir, "model.py")
+    if os.path.isfile(top):
+        candidates.append(top)
+    lib = os.path.join(run_dir, "models_lib")
+    if os.path.isdir(lib):
+        candidates += [os.path.join(lib, f) for f in sorted(os.listdir(lib)) if f.endswith(".py")]
+    pat = re.compile(r"""name\s*=\s*["']""" + re.escape(model_name) + r"""["']""")
+    for path in candidates:
+        try:
+            src = open(path).read()
+        except Exception:
+            continue
+        if pat.search(src):
+            return path, src
+    return None, None
+
+
+def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[str]]:
+    """Heatmap of each run's best model scored against every region (``corr_<region>``).
+
+    Returns ``(base64_png_or_None, row_labels, col_regions)``. ``None`` when no run
+    exposes ``corr_<region>`` columns (so test fixtures simply skip the section).
+    """
+    rows, labels = [], []
+    present: list[str] = []
+    for run in runs:
+        br = best_row(run)
+        if br is None:
+            continue
+        cols = [rg for rg in REGION_ORDER if f"corr_{rg}" in run.df.columns and pd.notna(br.get(f"corr_{rg}"))]
+        if not cols:
+            continue
+        for rg in cols:
+            if rg not in present:
+                present.append(rg)
+    present = [rg for rg in REGION_ORDER if rg in present]
+    if not present:
+        return None, [], []
+
+    for run in runs:
+        br = best_row(run)
+        if br is None:
+            continue
+        vals = [br.get(f"corr_{rg}") for rg in present]
+        if all(pd.isna(v) for v in vals):
+            continue
+        target = run.metadata.get("dataset") or run.study
+        labels.append(f"{run.tag}")
+        rows.append([float(v) if pd.notna(v) else float("nan") for v in vals])
+
+    import numpy as np
+    mat = np.array(rows, dtype=float)
+    fig, ax = plt.subplots(figsize=(1.0 * len(present) + 3, 0.5 * len(rows) + 2.2), facecolor="white")
+    im = ax.imshow(mat, aspect="auto", cmap="viridis")
+    ax.set_xticks(range(len(present)))
+    ax.set_xticklabels(present, rotation=0)
+    ax.set_yticks(range(len(labels)))
+    ax.set_yticklabels(labels, fontsize=8)
+    ax.set_xlabel("region scored (corr)")
+    ax.set_title("Best model per run — predictivity across all regions")
+    for i in range(mat.shape[0]):
+        for j in range(mat.shape[1]):
+            v = mat[i, j]
+            if not np.isnan(v):
+                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7,
+                        color="white" if v < (np.nanmax(mat) * 0.6) else "black")
+    fig.colorbar(im, ax=ax, fraction=0.025, pad=0.02)
+    fig.tight_layout()
+    return _fig_to_base64(fig), labels, present
+
+
+def _code_block(source: str | None, path: str | None) -> str:
+    if not source:
+        return "<p class='meta'>Model source not available in this run folder.</p>"
+    rel = html.escape(path or "")
+    return (
+        f'<details class="code"><summary>Show model source <span class="meta">({rel})</span></summary>'
+        f"<pre><code>{html.escape(source)}</code></pre></details>"
+    )
+
+
+def _feature_note(n_params: object) -> str:
+    """Human note on a model's parameter / feature-dimension count."""
+    try:
+        n = int(float(n_params))
+    except (TypeError, ValueError):
+        return ""
+    if n == 0:
+        return "parameter-free (filters/projections are fixed or seeded random)"
+    if n >= 1_000_000:
+        return f"{n / 1e6:.0f}M fixed/expansion values (large random-feature lift, never trained)"
+    return f"{n:,} fixed values (never trained)"
+
+
+def mechanics_section(runs: list[Run]) -> str:
+    """One card per run for the best model it found: idea, summary, reward, source."""
+    cards = []
+    ranked = []
+    for run in runs:
+        br = best_row(run)
+        if br is None:
+            continue
+        ranked.append((float(br["test_corr"]) if pd.notna(br["test_corr"]) else float("-inf"), run, br))
+    ranked.sort(key=lambda t: t[0], reverse=True)
+
+    for score, run, br in ranked:
+        name = str(br.get("model_name", "") or "")
+        path, src = find_model_source(run, name)
+        idea = str(br.get("idea", "") or "")
+        summary = str(br.get("summary", "") or "")
+        note = _feature_note(br.get("n_params"))
+        target = run.metadata.get("dataset") or run.study
+        # Compact cross-region line for this model.
+        xreg = []
+        for rg in REGION_ORDER:
+            c = f"corr_{rg}"
+            if c in run.df.columns and pd.notna(br.get(c)):
+                xreg.append(f"{rg}={float(br[c]):.2f}")
+        xreg_html = (
+            f"<p class='meta'>across regions: {html.escape(' · '.join(xreg))}</p>" if xreg else ""
+        )
+        cards.append(
+            f'<div class="card">'
+            f"<h3>{html.escape(run.tag)} — <code>{html.escape(name)}</code> "
+            f'<span class="reward">test_corr {score:.4f}</span></h3>'
+            f"<p class='meta'>target region: {html.escape(str(target))}"
+            + (f" · {html.escape(note)}" if note else "")
+            + "</p>"
+            + (f"<p><b>Idea.</b> {html.escape(idea)}</p>" if idea else "")
+            + (f"<p><b>What it computes.</b> {html.escape(summary)}</p>" if summary else "")
+            + xreg_html
+            + _code_block(src, path)
+            + "</div>"
+        )
+    if not cards:
+        return "<p class='meta'>No scored models to analyze.</p>"
+    return "".join(cards)
+
+
+_FINDINGS_INTRO = """
+<p>This loop evolves a <b>hand-written, never-trained</b> feature extractor
+(<code>model.py</code>): a stimulus image is mapped to features, a ridge readout is
+fit against recorded fMRI (the only thing fit — that fit <i>is</i> the evaluation),
+and held-out <code>test_corr</code> on NSD subject 01 is the reward. Each run rewards
+a single visual region.</p>
+
+<p><b>The architecture the search converged on (in every region).</b> Without being
+told to, the loop rediscovered the classical early-visual front-end:</p>
+<ul>
+  <li><b>Quadrature Gabor banks</b> (orientations × spatial wavelengths) reduced to
+      <b>complex-cell energy</b> <code>√(cos² + sin²)</code> — V1 simple→complex cells;</li>
+  <li><b>colour opponency</b> (luminance, R−G, B−Y) — retinal/LGN channels;</li>
+  <li><b>log contrast compression</b> followed by <b>divisive normalization</b> with a
+      spatial-surround pool — Heeger's canonical cortical gain control;</li>
+  <li>raw pixels concatenated in as a low-level anchor.</li>
+</ul>
+<p>On top of this shared core, each region added a distinct elaboration: a second
+<b>scattering</b> layer (Gabor-on-energy) for V2/V3, a wider normalization pool for V3's
+larger receptive fields, <b>texture Gram matrices + GIST + random Fourier features</b> for
+scene-selective PPA, <b>colour histograms</b> for EBA, and heterogeneous random conv banks
+for the face/word regions.</p>
+
+<p><b>Key findings.</b></p>
+<ol>
+  <li><b>V1 is the most predictable region and the simplest model wins it</b> — a pure
+      Gabor-energy model with a 3×3 surround norm. Predictivity then falls along the
+      cortical hierarchy V1 &gt; V2 &gt; V3 &gt; hV4 &gt; category-selective regions.</li>
+  <li><b>Every region's best model still predicts V1 best</b> (~0.40 in the column below,
+      regardless of which region was the reward). The region-specific machinery buys only
+      modest gains on its own target — the models remain fundamentally low-level/V1-like
+      and do not yet capture high-level <b>category selectivity</b> (FFA/PPA/EBA/VWFA stay
+      ≈0.20–0.29).</li>
+  <li>These untrained encoders are <b>competitive with a frozen ImageNet AlexNet</b>
+      (~0.32 on the ventral stream as documented in <code>AGENTS.md</code>) — beating it on
+      V1, lagging on category regions where learned semantics matter.</li>
+</ol>
+"""
 
 
 _CSS = """
@@ -318,6 +532,17 @@ tr.excluded { background:#fff5f5; color:#7a3030; }
 .flag { font-weight:600; white-space:nowrap; } .flag.ok { color:#1a7f37; } tr.excluded .flag { color:#c0392b; }
 .run { white-space:nowrap; } .arrow { font-size:.7rem; color:#888; }
 .meta { color:#666; font-size:.85rem; }
+.findings ul, .findings ol { margin:.4rem 0 .8rem 1.2rem; } .findings li { margin:.25rem 0; }
+.card { margin:1.2rem 0; padding:1rem 1.2rem; border:1px solid #e3e3e3; border-left:4px solid #2563eb;
+        border-radius:8px; background:#fafbff; }
+.card h3 { margin:.1rem 0 .5rem; }
+.card .reward { float:right; font-size:.85rem; font-weight:600; color:#fff; background:#2563eb;
+        padding:.1rem .5rem; border-radius:999px; }
+.card p { margin:.35rem 0; }
+details.code summary { cursor:pointer; color:#0a58ca; margin-top:.5rem; }
+pre { background:#0d1117; color:#e6edf3; padding:.9rem 1rem; border-radius:6px; overflow:auto;
+      font-size:.8rem; line-height:1.45; max-height:30rem; }
+pre code { background:none; color:inherit; padding:0; white-space:pre; }
 """
 
 _JS = """
@@ -367,6 +592,15 @@ def build_html(runs: list[Run]) -> str:
         f"{n_excluded} excluded · datasets: {', '.join(html.escape(s) for s in studies) or '—'}</p>"
     )
 
+    heatmap, _, _ = cross_region_heatmap(runs)
+    cross_html = (
+        f'{_img_tag(heatmap, "best model per run scored across all regions")}'
+        "<p class='meta'>Rows: each run's best model. Columns: the region it is scored against. "
+        "Note how the V1 column stays high across <em>every</em> run.</p>"
+        if heatmap
+        else "<p class='meta'>No per-region (corr_&lt;region&gt;) columns found.</p>"
+    )
+
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -375,6 +609,14 @@ def build_html(runs: list[Run]) -> str:
 <body>
 <h1>neuro-autoresearch report</h1>
 {overview}
+<h2>What the search found</h2>
+<div class="findings">{_FINDINGS_INTRO}</div>
+<h2>Cross-region predictivity</h2>
+{cross_html}
+<h2>Model mechanics — what each run's best model computes</h2>
+<p class="meta">Cards are ordered by reward. Each shows the winning model's idea, what it
+computes, its cross-region profile, and the full (untrained) source.</p>
+{mechanics_section(runs)}
 {summary_html}
 <h2>Per-run trajectories</h2>
 {''.join(run_blocks) if run_blocks else "<p class='meta'>No runs found.</p>"}
@@ -396,8 +638,9 @@ def _render_to(runs: list[Run], out: str) -> str:
     return out
 
 
-def build_report(runs_dir: str = "runs", out: str = "analyze/report.html", repo_root: str = ".") -> str:
-    return _render_to(discover_runs(runs_dir, repo_root), out)
+def build_report(runs_dir: str = "runs", out: str = "analyze/report.html", repo_root: str = ".",
+                 include_root_results: bool = True) -> str:
+    return _render_to(discover_runs(runs_dir, repo_root, include_root_results), out)
 
 
 def main() -> None:
@@ -405,9 +648,11 @@ def main() -> None:
     parser.add_argument("--runs-dir", default="runs", help="directory of per-run output folders (default: runs)")
     parser.add_argument("--repo-root", default=".", help="repo root, scanned for results/<study>.csv (default: .)")
     parser.add_argument("--out", default="analyze/report.html", help="output HTML path (default: analyze/report.html)")
+    parser.add_argument("--runs-only", action="store_true",
+                        help="ignore the repo-root results/ ledger; report only runs/<tag> (used for the hosted page)")
     args = parser.parse_args()
 
-    runs = discover_runs(args.runs_dir, args.repo_root)
+    runs = discover_runs(args.runs_dir, args.repo_root, include_root_results=not args.runs_only)
     out = _render_to(runs, args.out)
     print(f"wrote {out} ({len(runs)} run/study file(s), {sum(len(r.df) for r in runs)} attempt(s))")
 
