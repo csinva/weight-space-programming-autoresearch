@@ -100,13 +100,15 @@ There are two ways to run, and both work.
 ```bash
 python -m harness.run                    # evaluate the current model on the active dataset
 NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg)
+NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run  # NSD: reward = the PPA region
 ```
 
 Run from the repo root so results land in `results/`. A run loads the data split
 once and evaluates the model in `model.py`, printing `train_corr`, `test_corr`, and
 `frac>0.1` with timing. Each evaluation **appends** one row to
-`results/<study>.csv` (an append-only history keyed by a monotonic `iteration`), so
-the agent's hill-climb trajectory is preserved across edits.
+`results/<study>.csv` — or, for a per-region NSD reward, `results/<study>__<roi>.csv`
+(an append-only history keyed by a monotonic `iteration`), so the agent's hill-climb
+trajectory is preserved across edits.
 
 ### Isolated run folder (recommended for autoresearch)
 
@@ -149,7 +151,7 @@ runs never collide:
 | `NEURO_DATASET` | Study | neural | stimulus | window (`start` / `duration`) |
 | --- | --- | --- | --- | --- |
 | `text` (default) | `Li2022Petit` (Le Petit Prince) | fMRI | audio | neural 2.0 / 4.0 s · stim 0.0 / 0.5 s |
-| `nsd` | `NsdSubj01` (Natural Scenes Dataset, subj 1) | fMRI | image | 0.0 / 3.0 s |
+| `nsd` | `NsdSubj01` (Natural Scenes Dataset, subj 1) | fMRI | image | neural HRF offset 5.0 / 4.0 s, TR-mean |
 | `meg` | `Bel2026PetitListen` (LPP-Listen) | MEG | audio | 0.0 / 0.5 s |
 
 - **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken word
@@ -158,11 +160,19 @@ runs never collide:
   response while the audio is read from a short window at the word, so the stimulus
   and neural windows are decoupled (`stim_start` / `stim_duration`).
 - **`nsd`** — the **Natural Scenes Dataset**, subject 1. Each shown image triggers a
-  segment; X is the resized image, the target is the fMRI volume. Subject 1's 10,000
+  segment; X is the resized image. The target is the **HRF-peak** fMRI response: the
+  window is shifted forward (`neural_offset=5.0 s`, since BOLD peaks ~5 s after onset)
+  and the peak TRs in a 4 s window are averaged into one value per voxel — without
+  this offset even a trained AlexNet scores ~0.006; with it, ~0.32. Subject 1's 10,000
   images are each shown ~3×, so the loader collapses repeats to one sample per unique
   image (averaging the neural target) and holds out the canonical **shared-1000**
-  images as an image-disjoint test set. `roi` picks the target region (default
-  `nsdgeneral`; e.g. `V1` / `hV4` / `FFA` select a column subset of the loaded voxels).
+  images as an image-disjoint test set (fit on the other ~9000).
+  - **Per-region reward (`NEURO_ROI`).** The scalar `test_corr` is computed over ONE
+    brain region, chosen per run (default `ventral`); menu: `V1`, `hV4`, `FFA`, `PPA`,
+    `EBA`, `VWFA` + visual streams `early`, `ventral`. The ridge readout still fits
+    **all** nsdgeneral voxels and every region's predictivity is logged as a
+    `corr_<name>` column — only the headline reward narrows. Each region writes its own
+    `results/<study>__<roi>.csv`, so parallel per-region hill-climbs never collide.
 - **`meg`** — **Le Petit Prince MEG** (LPP-Listen), the loop's electrophysiological
   modality. Each spoken word triggers a 0.5 s MEG epoch; X is the Mel spectrum of the
   audio in that same window (MEG is near-instant, so stimulus and neural windows
