@@ -92,17 +92,17 @@ e.g. k-fold / multi-seed averaging and report a std, restrict targets to a
 visually-driven voxel subset (or a noise-ceiling-normalized score), and/or treat
 changes within ±1 noise band as ties so the agent doesn't ratchet on noise.
 
-### P1-4 — A bad model edit / shape error **crashes the run with no recorded failure**
-`evaluate()` has **no try/except around `model(...)`** and never writes the
-`status` field as anything but `"ok"` (the schema has a `status` column that is
-never set to an error). So a syntax error, exception, or wrong output shape in the
-edited `evolve/model.py` makes `python evolve/model.py` exit non-zero with a
-traceback and **no row in `overall_results.csv`**. The loop relies entirely on the
-Copilot agent noticing the traceback and self-repairing. With `copilot-keepgoing`
-this is *usually* recoverable, but there is **no harness-level safety net**.
-**Fix:** wrap evaluation in try/except, write a `status="error"` row with the
-exception message, and exit cleanly so the loop has a durable record of the failed
-proposal instead of a bare crash.
+### P1-4 — A bad model edit / shape error **crashes the run with no recorded failure** ✅ DONE
+`evaluate()` originally had **no try/except around `model(...)`** and never wrote the
+`status` field as anything but `"ok"`. A syntax error, exception, or wrong output
+shape in the edited model made the run exit non-zero with a traceback and **no row**.
+**Fixed:** `harness/reward.py` now exposes `evaluate_on_split_safe`, which catches any
+exception from the model forward pass or the ridge readout (raise, wrong output shape,
+NaNs, ...), prints the traceback for the agent to read, and returns a
+`status="error: <ExcType>: <msg>"` row with NaN scores (region columns kept as NaN so
+the schema stays stable even when a run's first row fails). `harness/run.py` uses it,
+saves the row, prints the failure, and exits cleanly — so the loop keeps a durable
+record of the failed proposal. The analyzer already excludes non-`ok` rows.
 
 ### P1-5 — Empty / fully-dropped segment is an **edge-case crash**
 `load_split` uses `drop_incomplete=True`. If a (future) dataset/segment config
@@ -156,8 +156,8 @@ job (scripted) or stays a human pre-step. Do **not** point an unattended run at 
        to a gated download (P0-2).
 3. [ ] Confirm the **reward is stable enough** to optimize (multi-seed/k-fold or a
        tie band), or accept that overnight gains may be noise (P0-3).
-4. [ ] Wrap evaluation so a **bad edit records `status="error"`** instead of
-       crashing silently (P1-4).
+4. [x] Wrap evaluation so a **bad edit records `status="error"`** instead of
+       crashing silently (P1-4). **DONE** — `evaluate_on_split_safe`.
 5. [ ] Pre-stage **every dataset** for the night as local `download=False`; never
        point the run at a gated `download=True` study (P1-6).
 6. [ ] Decide and document **commit cadence / plot handling** so the night's git

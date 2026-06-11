@@ -67,17 +67,19 @@ The neural side (`fmri` / `meg` / `eeg`) is dispatched the same way.
 
 ```
 model.py               EDITABLE: the one evolving model (seed: identity)
-experiment.py          EDITABLE: run-config — ITERATIONS + LOG_SLICES
+experiment.py          EDITABLE: run-config — LOG_SLICES
 prompts/program.md     the task description handed to the agent
 prompts/datasets.md    the active-dataset context the agent reads each run
 harness/datasets.py    FIXED: the Dataset registry (pick one via NEURO_DATASET)
-harness/studies/       FIXED: per-study NeuralSet subclasses (NSD subj1, LPP subj)
+harness/studies/       FIXED: per-study NeuralSet subclasses (NSD subj1/2/3, LPP subj)
 harness/data.py        FIXED: stimulus extractors + aligned, split (X, Y) tensors
-harness/reward.py      FIXED: the predictivity reward, evaluate()
+harness/reward.py      FIXED: the predictivity reward; evaluate() + evaluate_on_split_safe()
 harness/results.py     FIXED: append-only result ledger, save_results()
 harness/run.py         FIXED: the driver — `python -m harness.run`
 scripts/setup_run.py   FIXED: `python scripts/setup_run.py <tag>` — make an isolated run folder
-results/               <study>.csv, one appended row per evaluation (gitignored)
+scripts/autoresearch.sh FIXED: nonstop launcher (Opus + copilot-keepgoing)
+scripts/generalization.py FIXED: cross-subject transfer study
+results/               <study>.csv, one appended row per model evaluated (gitignored)
 runs/<tag>/            isolated per-run folder (symlinked harness + local model.py; gitignored)
 ```
 
@@ -105,8 +107,8 @@ NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=run1 python -m harness.run  # unique C
 ```
 
 Run from the repo root so results land in `results/`. A run loads the data split
-once and evaluates the model in `model.py`, printing `train_corr`, `test_corr`, and
-`frac>0.1` with timing. Each evaluation **appends** one row to
+once and evaluates the model in `model.py` exactly once, printing `train_corr`,
+`test_corr`, and timing. Each run **appends** one row to
 `results/<study>.csv` — or `results/<study>__<roi>.csv` for a per-region NSD reward,
 or `results/<study>__<roi>__<run>.csv` when `NEURO_RUN` is set so **each run gets its
 own unique CSV**. The history is append-only (keyed by a monotonic `iteration`) and
@@ -121,7 +123,7 @@ branch, no commits, everything local to the folder:
 ```bash
 python scripts/setup_run.py demo-run1    # create runs/demo-run1/
 cd runs/demo-run1
-NEURO_DATASET=nsd python -m harness.run  # one evaluation pass, writes results/<study>.csv here
+NEURO_DATASET=nsd python -m harness.run  # evaluate one model -> one row in results/<study>.csv here
 ```
 
 `scripts/setup_run.py <tag>` creates `runs/<tag>/` containing:
@@ -130,7 +132,7 @@ NEURO_DATASET=nsd python -m harness.run  # one evaluation pass, writes results/<
 harness/      -> relative symlink to the repo's harness/ (FIXED; do not edit through it)
 prompts/      -> relative symlink to the repo's prompts/ (FIXED)
 model.py        local copy — EDIT this one (the evolving model)
-experiment.py   local copy — EDIT this one (ITERATIONS + LOG_SLICES)
+experiment.py   local copy — EDIT this one (LOG_SLICES)
 results/        empty — the run-local <study>.csv lands here
 models_lib/     empty — drop a snapshot of model.py per attempt here
 ```
@@ -170,18 +172,24 @@ runs never collide:
   image (averaging the neural target) and holds out the canonical **shared-1000**
   images as an image-disjoint test set (fit on the other ~9000).
   - **Per-region reward (`NEURO_ROI`).** The scalar `test_corr` is computed over ONE
-    brain region, chosen per run (default `ventral`); menu: `V1`, `hV4`, `FFA`, `PPA`,
-    `EBA`, `VWFA` + visual streams `early`, `ventral`. The ridge readout still fits
-    **all** nsdgeneral voxels and every region's predictivity is logged as a
+    brain region, chosen per run (default `ventral`); menu: `V1`, `V2`, `V3`, `hV4`,
+    `FFA`, `PPA`, `EBA`, `VWFA` + visual streams `early`, `ventral`. The ridge readout
+    still fits **all** nsdgeneral voxels and every region's predictivity is logged as a
     `corr_<name>` column — only the headline reward narrows. Each region writes its own
     `results/<study>__<roi>.csv`, so parallel per-region hill-climbs never collide.
+  - **The bar to beat is a trained AlexNet.** A frozen ImageNet AlexNet (fc7) read out
+    with the same ridge gives a per-region reference baseline (`prompts/datasets.md`):
+    e.g. `V1 0.342 · V2 0.299 · V3 0.321 · hV4 0.289 · FFA 0.396 · PPA 0.403 · EBA 0.436
+    · VWFA 0.321 · ventral 0.284`. The never-trained models match/beat it in early/mid
+    visual cortex (V1–V3) but trail in the high-level regions.
 - **`meg`** — **Le Petit Prince MEG** (LPP-Listen), the loop's electrophysiological
   modality. Each spoken word triggers a 0.5 s MEG epoch; X is the Mel spectrum of the
   audio in that same window (MEG is near-instant, so stimulus and neural windows
   coincide).
 
 All presets are pre-staged locally and loaded with `download=False`, so they run
-**fully offline**.
+**fully offline**. (`NsdSubj02`/`NsdSubj03` subclasses are also registered for the
+cross-subject generalization study below; their data is staged separately.)
 
 ### How the split avoids leakage
 
@@ -218,12 +226,40 @@ NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) scripts/autoresearch.sh
 NEURO_DATASET=nsd NEURO_ROI=PPA scripts/autoresearch.sh high
 ```
 
-The launcher runs `copilot -p "Follow prompts/program.md" --model claude-opus-4.8
---effort <effort> --autopilot --allow-all`, which keeps proposing and evaluating
-models in one turn until it stops or is killed. Bound a run with `timeout`:
+The launcher runs the **interactive** Copilot CLI under `copilot-keepgoing`
+(`copilot-keepgoing --idle 90 --message "<task>" -- copilot --model claude-opus-4.8
+--effort <effort> --autopilot --allow-all -C <workdir>`). keepgoing runs the agent in
+a pty and **re-nudges it to keep going whenever it falls idle**, so a run fills its
+whole budget instead of stopping the moment the agent thinks a turn is done. Because
+it never stops on its own, **always bound a run with `timeout`**:
 
 ```bash
-NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 15m scripts/autoresearch.sh
+NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 90m scripts/autoresearch.sh
+```
+
+Point the agent at an isolated run folder with `WORKDIR` (so parallel runs never
+collide), and tune the nudge cadence with `KEEPGOING_IDLE` (seconds, default 90):
+
+```bash
+WORKDIR=runs/nsd-ffa-1 NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=ffa-1 \
+  timeout 90m scripts/autoresearch.sh high
+```
+
+## Cross-subject generalization
+
+`scripts/generalization.py` asks whether a model discovered on **subject 1** also
+predicts the **same region in other subjects**. The NSD shared-1000 test images are
+shown to every subject, so each region's best subject-1 model transfers unchanged —
+only the ridge readout is re-fit per subject (it is part of eval, not the model). The
+script reuses the fixed harness wholesale: for each `(region, subject)` it loads that
+subject's split and scores the model with `evaluate_on_split_safe`, appending one row
+to `results/generalization.csv` (idempotent/resumable).
+
+```bash
+# subjects 2/3 data must be staged first (subject 1 already is)
+NSD_SUBJ02_PATH=/path/to/subj02 NSD_SUBJ03_PATH=/path/to/subj03 \
+  python scripts/generalization.py                 # all regions × subjects 1,2,3
+python scripts/generalization.py --regions V1,V2,V3 --subjects 1,2
 ```
 
 ---
