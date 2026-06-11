@@ -86,7 +86,7 @@ def _read_csv(path: str) -> pd.DataFrame | None:
         return None
     if df.empty or "iteration" not in df.columns:
         return None
-    for col in ("iteration", "test_corr", "train_corr", "best_so_far"):
+    for col in ("iteration", "test_corr", "train_corr", "best_so_far", "seconds", "n_params", "gap"):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     if "status" not in df.columns:
@@ -206,7 +206,18 @@ def per_run_plot(run: Run) -> str | None:
     ax.set_xlabel("iteration")
     ax.set_ylabel("correlation")
     ax.grid(True, alpha=0.3)
-    ax.legend(fontsize=8, loc="best")
+    handles, labels = ax.get_legend_handles_labels()
+    if "n_params" in inc.columns and inc["n_params"].notna().any():
+        ax2 = ax.twinx()
+        ax2.plot(inc["iteration"], inc["n_params"].clip(lower=1), color="#9467bd", alpha=0.55,
+                 lw=1.1, ls=":", marker=".", ms=3, label="n_params")
+        ax2.set_yscale("log")
+        ax2.set_ylabel("n_params (log)", color="#9467bd")
+        ax2.tick_params(axis="y", labelcolor="#9467bd")
+        h2, l2 = ax2.get_legend_handles_labels()
+        handles += h2
+        labels += l2
+    ax.legend(handles, labels, fontsize=8, loc="best")
     fig.tight_layout()
     return _fig_to_base64(fig)
 
@@ -217,7 +228,11 @@ def _truncate(text: str, n: int = 90) -> str:
 
 
 def run_writeup(run: Run) -> str:
-    """Prose summary: ideas tried and which raised ``best_so_far`` (included rows only)."""
+    """Prose summary: ideas tried and which raised ``best_so_far`` (included rows only).
+
+    Each improvement also reports the gain (Δ), the cumulative wall-clock at that point,
+    and the model's parameter/feature count, tying the search trace to its cost.
+    """
     inc = run.included
     total = len(run.df)
     excluded = int(run.df["excluded"].sum())
@@ -227,26 +242,47 @@ def run_writeup(run: Run) -> str:
             f"training-related idea).</p>"
         )
 
+    has_sec = "seconds" in inc.columns and inc["seconds"].notna().any()
+    cum_h = (inc["seconds"].fillna(0).cumsum() / 3600.0) if has_sec else None
+
     improvements = []
     best = float("-inf")
-    for _, row in inc.iterrows():
+    for pos, (_, row) in enumerate(inc.iterrows()):
         tc = row["test_corr"]
         if pd.notna(tc) and tc > best:
+            delta = (float(tc) - best) if best != float("-inf") else None
             best = float(tc)
-            improvements.append((int(row["iteration"]), str(row["model_name"]), str(row["idea"]), best))
+            npar = row.get("n_params")
+            improvements.append((
+                int(row["iteration"]), str(row["model_name"]), str(row["idea"]), best, delta,
+                (float(cum_h.iloc[pos]) if has_sec else None),
+                (int(npar) if pd.notna(npar) else None),
+            ))
 
+    total_h = float(inc["seconds"].fillna(0).sum() / 3600.0) if has_sec else None
     parts = [
         f"<p><b>{len(inc)}</b> scored attempt(s)"
         + (f", <b>{excluded}</b> excluded (non-ok status or training-related idea)" if excluded else "")
-        + f". Best <code>test_corr</code> = <b>{best:.4f}</b>.</p>"
+        + f". Best <code>test_corr</code> = <b>{best:.4f}</b>"
+        + (f" reached in <b>{total_h:.1f}h</b> of wall-clock" if total_h else "")
+        + ".</p>"
     ]
     if improvements:
-        items = "".join(
-            f"<li>iter <b>{it}</b> — <i>{html.escape(name)}</i>: "
-            f"{html.escape(_truncate(idea))} → <code>test_corr={val:.4f}</code></li>"
-            for it, name, idea, val in improvements
-        )
-        parts.append(f"<p>Ideas that improved <code>best_so_far</code>:</p><ul>{items}</ul>")
+        items = []
+        for it, name, idea, val, delta, h, npar in improvements:
+            meta = []
+            if delta is not None:
+                meta.append(f"+{delta:.4f}")
+            if h is not None:
+                meta.append(f"@{h:.1f}h")
+            if npar is not None:
+                meta.append(f"{npar:,}p")
+            tail = f" <span class='meta'>({', '.join(meta)})</span>" if meta else ""
+            items.append(
+                f"<li>iter <b>{it}</b> — <i>{html.escape(name)}</i>: "
+                f"{html.escape(_truncate(idea))} → <code>test_corr={val:.4f}</code>{tail}</li>"
+            )
+        parts.append(f"<p>Ideas that improved <code>best_so_far</code>:</p><ul>{''.join(items)}</ul>")
     else:
         parts.append("<p>No attempt improved on the first scored idea.</p>")
     return "".join(parts)
@@ -470,6 +506,199 @@ def mechanics_section(runs: list[Run]) -> str:
     return "".join(cards)
 
 
+# --------------------------------------------------------------------------- #
+# Search process & computational-principle attribution.
+# --------------------------------------------------------------------------- #
+
+_PRINCIPLES = {
+    "Gabor / oriented energy": r"gabor|orient|edge|complex.?cell|simple.?cell|\benergy\b|quadrature",
+    "Divisive normalization": r"divnorm|divis|normali|gain.?control|naka|rushton|surround|whiten",
+    "Colour opponency": r"colou?r|opponent|chroma|r-g|b-y|\brgb\b|\bhue\b|\blab\b",
+    "Multiscale / spatial frequency": r"multiscale|multi-scale|pyramid|\bscale|wavelength|coarse|\bfine|spatial.?freq|\bsf\b|nyquist|\bband",
+    "Scattering / second order": r"scatter|2nd.?order|second.?order|second.?layer|two.?stage|\bhier|cascade|layer.?2",
+    "Texture statistics (Gram/GIST/PS)": r"texture|\bgram\b|gist|portilla|simoncelli|co-?occur|moment|covar",
+    "Random features (RFF / random conv)": r"random|\brff\b|fourier|\bjl\b|projection|codebook|conjunction|arc-?cos",
+    "Pooling / retinotopy": r"\bpool|fovea|retino|spatial.?layout|\bgrid\b|histogram|position",
+}
+
+
+def _improvement_events(run: Run) -> list[tuple[str, float, float | None]]:
+    """``(idea, new_best, delta)`` for every attempt that raised ``best_so_far``."""
+    events = []
+    best = float("-inf")
+    for _, row in run.included.iterrows():
+        tc = row["test_corr"]
+        if pd.notna(tc) and tc > best:
+            delta = (float(tc) - best) if best != float("-inf") else None
+            best = float(tc)
+            events.append((str(row.get("idea", "") or ""), best, delta))
+    return events
+
+
+def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
+    """Sum, across runs, the ``best_so_far`` gains whose idea text names each principle.
+
+    Attribution is overlapping (one idea can invoke several principles); the chart shows
+    which computational motifs are associated with the most reward gain over the search.
+    """
+    totals = {k: 0.0 for k in _PRINCIPLES}
+    counts = {k: 0 for k in _PRINCIPLES}
+    for run in runs:
+        for idea, _val, delta in _improvement_events(run):
+            if not delta or delta <= 0:
+                continue
+            low = idea.lower()
+            for name, pat in _PRINCIPLES.items():
+                if re.search(pat, low):
+                    totals[name] += delta
+                    counts[name] += 1
+    items = [(k, v) for k, v in sorted(totals.items(), key=lambda kv: kv[1], reverse=True) if v > 0]
+    if not items:
+        return None, ""
+
+    fig, ax = plt.subplots(figsize=(8.2, 0.5 * len(items) + 1.7), facecolor="white")
+    names = [k for k, _ in items][::-1]
+    vals = [v for _, v in items][::-1]
+    ax.barh(names, vals, color="#2563eb")
+    for i, v in enumerate(vals):
+        ax.text(v, i, f" {v:.3f}", va="center", fontsize=8)
+    ax.set_xlabel("Σ gain in best test_corr from improving steps mentioning the principle")
+    ax.set_title("Which computational principles moved the reward (all runs)")
+    ax.grid(True, axis="x", alpha=0.3)
+    fig.tight_layout()
+
+    body = "".join(
+        f"<tr><td>{html.escape(k)}</td><td class='num'>{v:.4f}</td>"
+        f"<td class='num'>{counts[k]}</td></tr>"
+        for k, v in items
+    )
+    table = (
+        "<table class='principles'><thead><tr><th>principle</th>"
+        "<th>Σ Δ test_corr</th><th>#&nbsp;steps</th></tr></thead><tbody>"
+        + body + "</tbody></table>"
+    )
+    return _fig_to_base64(fig), table
+
+
+def search_dashboard(runs: list[Run]) -> str | None:
+    """Four-panel view of the search: efficiency, complexity, overfitting, compute."""
+    import numpy as np
+
+    series = []
+    for run in runs:
+        inc = run.included.dropna(subset=["test_corr"]).sort_values("iteration")
+        if not inc.empty:
+            series.append((run, inc))
+    if not series:
+        return None
+
+    cmap = plt.get_cmap("tab10" if len(series) <= 10 else "tab20")
+    colors = {run.csv_path: cmap(i % cmap.N) for i, (run, _) in enumerate(series)}
+
+    fig, axes = plt.subplots(2, 2, figsize=(13, 9), facecolor="white")
+    a, b, c, d = axes.ravel()
+
+    any_sec = False
+    for run, inc in series:
+        col = colors[run.csv_path]
+        if "seconds" in inc.columns and inc["seconds"].notna().any():
+            x = inc["seconds"].fillna(0).cumsum() / 3600.0
+            any_sec = True
+        else:
+            x = inc["iteration"]
+        a.plot(x, inc["test_corr"].cummax(), lw=1.5, color=col, label=run.tag)
+    a.set_xlabel("cumulative wall-clock (h)" if any_sec else "iteration")
+    a.set_ylabel("best_so_far (test_corr)")
+    a.set_title("Search efficiency: best reward vs wall-clock")
+    a.grid(True, alpha=0.3)
+    a.legend(fontsize=6, ncol=2)
+
+    for run, inc in series:
+        if "n_params" not in inc.columns:
+            continue
+        col = colors[run.csv_path]
+        npar = inc["n_params"].clip(lower=1)
+        b.scatter(npar, inc["test_corr"], s=14, color=col, alpha=0.55, edgecolors="none")
+        bi = inc["test_corr"].idxmax()
+        b.scatter(max(float(inc.loc[bi, "n_params"]) if pd.notna(inc.loc[bi, "n_params"]) else 1, 1),
+                  inc.loc[bi, "test_corr"], marker="*", s=130, color=col,
+                  edgecolors="black", linewidths=0.4)
+    b.set_xscale("log")
+    b.set_xlabel("n_params (log)")
+    b.set_ylabel("test_corr")
+    b.set_title("Does complexity pay? reward vs model size (★ = run best)")
+    b.grid(True, alpha=0.3)
+
+    for run, inc in series:
+        if inc["train_corr"].notna().any():
+            c.plot(inc["iteration"], inc["train_corr"] - inc["test_corr"],
+                   lw=1.2, color=colors[run.csv_path])
+    c.axhline(0, color="gray", lw=0.8, ls=":")
+    c.set_xlabel("iteration")
+    c.set_ylabel("train_corr − test_corr")
+    c.set_title("Readout generalization gap over the search")
+    c.grid(True, alpha=0.3)
+
+    order = list(np.argsort([(inc["seconds"].fillna(0).sum() / 3600.0
+                              if "seconds" in inc.columns else 0.0) for _, inc in series]))
+    ypos = np.arange(len(order))
+    hours = [float(series[i][1]["seconds"].fillna(0).sum() / 3600.0)
+             if "seconds" in series[i][1].columns else 0.0 for i in order]
+    iters = [len(series[i][1]) for i in order]
+    d.barh(ypos, hours, color=[colors[series[i][0].csv_path] for i in order])
+    for i, (h, n) in enumerate(zip(hours, iters)):
+        d.text(h, i, f" {h:.1f}h / {n} it", va="center", fontsize=7)
+    d.set_yticks(ypos)
+    d.set_yticklabels([series[i][0].tag for i in order], fontsize=7)
+    d.set_xlabel("total wall-clock (h)")
+    d.set_title("Compute spent per run")
+    d.grid(True, axis="x", alpha=0.3)
+
+    fig.tight_layout()
+    return _fig_to_base64(fig)
+
+
+_PRINCIPLES_INTRO = """
+<p>The point of the search is not just the winning model but the <b>computational
+principles</b> it keeps rediscovering. Each principle below is a known ingredient of
+biological vision; the chart sums, across all runs, the reward gained by every improving
+step whose idea invokes it (a step can invoke several, so the bars overlap).</p>
+<ul>
+  <li><b>Gabor / oriented energy</b> — quadrature filter pairs collapsed to
+      <code>√(cos²+sin²)</code> give phase-invariant edge/contrast detectors (V1 complex cells).</li>
+  <li><b>Divisive normalization</b> — dividing each unit by a pooled neighbourhood is the
+      canonical cortical gain-control that decorrelates and equalises contrast (Heeger).</li>
+  <li><b>Colour opponency</b> — luminance / R−G / B−Y channels mirror retinal–LGN coding.</li>
+  <li><b>Multiscale / spatial frequency</b> — a bank of wavelengths covers coarse layout
+      through fine detail; different regions weight the bands differently.</li>
+  <li><b>Scattering / second order</b> — a Gabor layer applied to the first layer's energy
+      captures the nonlinear pooling V2/V3 perform on V1 output (translation-stable).</li>
+  <li><b>Texture statistics</b> — Gram / GIST / Portilla–Simoncelli summaries describe
+      material and scene structure, which drives PPA and the ventral stream.</li>
+  <li><b>Random features</b> — fixed random projections (RFF, random convs, codebooks) lift
+      features into a high-dimensional kernel space without any training.</li>
+  <li><b>Pooling / retinotopy</b> — foveal weighting and spatial grids encode where things
+      are, not just what.</li>
+</ul>
+"""
+
+_PROCESS_INTRO = """
+<p>How did the search actually progress? These views read the ledger's
+<code>iteration</code>, wall-clock <code>seconds</code>, <code>n_params</code> and the
+train–test gap to characterise the search dynamics rather than any single model.</p>
+<ul>
+  <li><b>Efficiency</b> — best reward as a function of cumulative wall-clock: most gains
+      arrive early, then improvements become small and expensive.</li>
+  <li><b>Does complexity pay?</b> — reward vs model size (log axis). Bigger is not better:
+      the strongest models (e.g. V1) are among the smallest; large random-feature lifts
+      add parameters without proportional reward.</li>
+  <li><b>Generalization gap</b> — <code>train_corr − test_corr</code> tracks how much the
+      ridge readout overfits as features grow richer.</li>
+  <li><b>Compute spent</b> — total wall-clock and number of iterations per run.</li>
+</ul>
+"""
+
+
 _FINDINGS_INTRO = """
 <p>This loop evolves a <b>hand-written, never-trained</b> feature extractor
 (<code>model.py</code>): a stimulus image is mapped to features, a ridge readout is
@@ -543,6 +772,8 @@ details.code summary { cursor:pointer; color:#0a58ca; margin-top:.5rem; }
 pre { background:#0d1117; color:#e6edf3; padding:.9rem 1rem; border-radius:6px; overflow:auto;
       font-size:.8rem; line-height:1.45; max-height:30rem; }
 pre code { background:none; color:inherit; padding:0; white-space:pre; }
+table.principles { table-layout:auto; width:auto; min-width:28rem; max-width:46rem; font-size:.9rem; }
+table.principles th { position:static; }
 """
 
 _JS = """
@@ -601,6 +832,20 @@ def build_html(runs: list[Run]) -> str:
         else "<p class='meta'>No per-region (corr_&lt;region&gt;) columns found.</p>"
     )
 
+    principle_img, principle_table = principle_attribution(runs)
+    principles_html = (
+        f'<div class="findings">{_PRINCIPLES_INTRO}</div>'
+        + (f'{_img_tag(principle_img, "reward gain attributed to each computational principle")}{principle_table}'
+           if principle_img else "<p class='meta'>No improving steps to attribute.</p>")
+    )
+
+    dashboard = search_dashboard(runs)
+    process_html = (
+        f'<div class="findings">{_PROCESS_INTRO}</div>'
+        + (_img_tag(dashboard, "search process dashboard") if dashboard
+           else "<p class='meta'>Not enough data to plot the search process.</p>")
+    )
+
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -611,6 +856,10 @@ def build_html(runs: list[Run]) -> str:
 {overview}
 <h2>What the search found</h2>
 <div class="findings">{_FINDINGS_INTRO}</div>
+<h2>Computational principles</h2>
+{principles_html}
+<h2>The search process</h2>
+{process_html}
 <h2>Cross-region predictivity</h2>
 {cross_html}
 <h2>Model mechanics — what each run's best model computes</h2>
@@ -619,6 +868,9 @@ computes, its cross-region profile, and the full (untrained) source.</p>
 {mechanics_section(runs)}
 {summary_html}
 <h2>Per-run trajectories</h2>
+<p class="meta">Per run: test/train correlation and the running-max reward (left axis) with
+model size <code>n_params</code> on the right axis, plus which ideas raised
+<code>best_so_far</code> (with gain, wall-clock and parameter count).</p>
 {''.join(run_blocks) if run_blocks else "<p class='meta'>No runs found.</p>"}
 <h2>Attempts</h2>
 <p class="meta">Click a header to sort. Expand an idea to read it in full. Excluded rows

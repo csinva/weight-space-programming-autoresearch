@@ -38,6 +38,12 @@ only the per-run search under `runs/`.
   compression + divisive normalization), the region-specific elaborations, and the key
   findings (V1 is most predictable; every region's best model still predicts V1 best;
   parity with frozen AlexNet on early areas).
+- **Computational principles** — a bar chart attributing the cumulative `best_so_far`
+  gain to each principle family (Gabor energy, divisive norm, opponency, multiscale,
+  scattering, texture stats, random features, pooling), with prose on what each computes.
+- **The search process** — a four-panel dashboard from `iteration` / `seconds` /
+  `n_params` / gap: reward vs wall-clock (efficiency), reward vs model size (complexity
+  rarely pays), the train–test gap, and compute spent per run.
 - **Cross-region predictivity** — a heatmap of each run's best model scored against every
   NSD region (`corr_<region>`), exposing how V1-like the learned features remain.
 - **Model mechanics** — one card per run for the model it found: its idea, what it
@@ -45,7 +51,8 @@ only the per-run search under `runs/`.
 - **Top summary** — every run's reward (`test_corr`) vs iteration, one line per run,
   faceted by dataset (`study`).
 - **Per-run trajectories** — `test_corr` and `train_corr` vs iteration with a
-  running-max line, labelled by tag + dataset/model/effort.
+  running-max line and `n_params` on a secondary axis, plus a writeup of which ideas
+  raised `best_so_far` (each annotated with its gain, wall-clock, and parameter count).
 - **Attempts table** — interactive and sortable (click a header); the `idea` text is
   expandable so long ideas stay readable without breaking the layout.
 
