@@ -204,13 +204,26 @@ Name a study from `neuralset.Study.catalog()` and append a `Dataset(...)` entry 
 harness and models need no changes. Keep unattended runs pointed at a staged local
 path — **never** point an unattended run at a gated `download=True` study.
 
-## Drive the loop nonstop
+## Drive the loop
 
-The Copilot CLI sometimes stops mid-run. Wrap it with `copilot-keepgoing` (installed
-via `pip install .`) to auto-nudge it whenever it goes idle:
+Launch an autoresearch loop with `scripts/autoresearch.sh`. It **always** runs the
+Copilot CLI with the **Opus** model; the **only configurable knob is the reasoning
+effort** (default `medium`). The experiment is chosen by the `NEURO_*` env vars:
 
 ```bash
-copilot-keepgoing -- copilot --autopilot --yolo   # then: "Follow prompts/program.md"
+# NSD, reward = FFA region, its own results CSV, default (medium) effort:
+NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) scripts/autoresearch.sh
+
+# higher reasoning effort (none|low|medium|high|xhigh|max):
+NEURO_DATASET=nsd NEURO_ROI=PPA scripts/autoresearch.sh high
+```
+
+The launcher runs `copilot -p "Follow prompts/program.md" --model claude-opus-4.8
+--effort <effort> --autopilot --allow-all`, which keeps proposing and evaluating
+models in one turn until it stops or is killed. Bound a run with `timeout`:
+
+```bash
+NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 15m scripts/autoresearch.sh
 ```
 
 ---
