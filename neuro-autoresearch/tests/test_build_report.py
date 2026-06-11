@@ -14,8 +14,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "analyze"))
 import build_report  # noqa: E402
 
 HEADER = (
-    "iteration,timestamp,study,model_name,idea,n_params,n_train,n_test,n_targets,"
-    "test_corr,train_corr,gap,frac_above_0.1,best_so_far,seconds,status"
+    "iteration,timestamp,study,model_name,idea,summary,n_params,n_train,n_test,n_targets,"
+    "test_corr,train_corr,gap,best_so_far,seconds,status"
 )
 
 
@@ -33,9 +33,9 @@ def _make_fixture(root):
     # Run A: nsd, improving reward, with metadata.
     a = os.path.join(runs_dir, "runA")
     _write_csv(os.path.join(a, "results", "nsd.csv"), [
-        (1, "2026-01-01T00:00:00+00:00", "nsd", "identity", "raw pixels baseline", 0, 800, 200, 50, 0.10, 0.20, 0.10, 0.3, 0.10, 1.0, "ok"),
-        (2, "2026-01-01T00:01:00+00:00", "nsd", "edges", "Sobel edge features", 12, 800, 200, 50, 0.18, 0.25, 0.07, 0.4, 0.18, 1.0, "ok"),
-        (3, "2026-01-01T00:02:00+00:00", "nsd", "gabor", "Gabor filter bank", 30, 800, 200, 50, 0.31, 0.40, 0.09, 0.5, 0.31, 1.0, "ok"),
+        (1, "2026-01-01T00:00:00+00:00", "nsd", "identity", "raw pixels baseline", "returns pixels unchanged", 0, 800, 200, 50, 0.10, 0.20, 0.10, 0.10, 1.0, "ok"),
+        (2, "2026-01-01T00:01:00+00:00", "nsd", "edges", "Sobel edge features", "Sobel gradient magnitude", 12, 800, 200, 50, 0.18, 0.25, 0.07, 0.18, 1.0, "ok"),
+        (3, "2026-01-01T00:02:00+00:00", "nsd", "gabor", "Gabor filter bank", "multi-orientation Gabor energy", 30, 800, 200, 50, 0.31, 0.40, 0.09, 0.31, 1.0, "ok"),
     ])
     with open(os.path.join(a, "metadata.json"), "w") as fh:
         fh.write('{"dataset": "NSD subj1", "model": "gpt", "effort": "high", "note": "fixture"}')
@@ -43,9 +43,9 @@ def _make_fixture(root):
     # Run B: text, includes a failed row and a training-related idea (both excluded).
     b = os.path.join(runs_dir, "runB")
     _write_csv(os.path.join(b, "results", "text.csv"), [
-        (1, "2026-01-02T00:00:00+00:00", "text", "wordlen", "word length feature", 2, 500, 100, 30, 0.05, 0.09, 0.04, 0.1, 0.05, 0.5, "ok"),
-        (2, "2026-01-02T00:01:00+00:00", "text", "bigfit", "train a small MLP on the stimulus", 99, 500, 100, 30, 0.40, 0.90, 0.50, 0.6, 0.05, 0.5, "ok"),
-        (3, "2026-01-02T00:02:00+00:00", "text", "boom", "spectral features", 8, 500, 100, 30, 0.12, 0.15, 0.03, 0.2, 0.12, 0.5, "error"),
+        (1, "2026-01-02T00:00:00+00:00", "text", "wordlen", "word length feature", "char count per token", 2, 500, 100, 30, 0.05, 0.09, 0.04, 0.05, 0.5, "ok"),
+        (2, "2026-01-02T00:01:00+00:00", "text", "bigfit", "train a small MLP on the stimulus", "fits an MLP on stimulus", 99, 500, 100, 30, 0.40, 0.90, 0.50, 0.05, 0.5, "ok"),
+        (3, "2026-01-02T00:02:00+00:00", "text", "boom", "spectral features", "FFT magnitude bins", 8, 500, 100, 30, 0.12, 0.15, 0.03, 0.12, 0.5, "error"),
     ])
 
     return runs_dir

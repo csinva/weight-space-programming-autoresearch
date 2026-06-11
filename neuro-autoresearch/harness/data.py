@@ -247,6 +247,8 @@ def _build_xy(d: Dataset, events):
 # are the reward targets (pick one per loop with NEURO_ROI) and the logged feedback panel.
 _ROI_DEFS: dict[str, tuple[str, tuple[int, ...]]] = {
     "V1": ("prf-visualrois", (1, 2)),    # primary visual cortex (V1v + V1d)
+    "V2": ("prf-visualrois", (3, 4)),    # secondary visual cortex (V2v + V2d)
+    "V3": ("prf-visualrois", (5, 6)),    # third visual area (V3v + V3d)
     "hV4": ("prf-visualrois", (7,)),     # human V4
     "FFA": ("floc-faces", (2, 3)),       # fusiform face area (FFA-1 + FFA-2)
     "PPA": ("floc-places", (2,)),        # parahippocampal place area

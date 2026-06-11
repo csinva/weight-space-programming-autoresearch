@@ -15,9 +15,9 @@ import pandas as pd
 CORR_PREFIX = "corr_"
 
 CORE_COLUMNS = [
-    "iteration", "timestamp", "study", "model_name", "idea", "n_params",
+    "iteration", "timestamp", "study", "model_name", "idea", "summary", "n_params",
     "n_train", "n_test", "n_targets", "test_corr", "train_corr", "gap",
-    "frac_above_0.1", "best_so_far", "seconds", "status",
+    "best_so_far", "seconds", "status",
 ]
 
 

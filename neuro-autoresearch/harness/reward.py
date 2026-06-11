@@ -7,6 +7,7 @@ trained. Persisting a scored row to disk lives in ``harness.results``.
 from __future__ import annotations
 
 import time
+import traceback
 import warnings
 
 import numpy as np
@@ -143,6 +144,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "study": dataset.study,
         "model_name": model.name,
         "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
+        "summary": getattr(model, "summary", ""),
         "n_params": model.n_params,
         "n_train": int(Y_train.shape[0]),
         "n_test": int(Y_test.shape[0]),
@@ -150,7 +152,6 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "test_corr": test_corr,
         "train_corr": train_corr,
         "gap": train_corr - test_corr,
-        "frac_above_0.1": float((test_np[reward_mask] > 0.1).mean()),
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
         "reward_roi": dataset.reward_roi,
@@ -158,6 +159,85 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     }
     row.update(_slice_corrs(test_np, dataset, _effective_slices(dataset, slices, study), study))
     return row
+
+
+def _error_status(exc: BaseException) -> str:
+    """A compact, single-line ``status`` value for a failed evaluation.
+
+    Anything other than ``"ok"`` is treated as a non-result by the analyzer, so the
+    failed proposal is recorded but excluded from the reward trajectory.
+    """
+    msg = " ".join(f"{type(exc).__name__}: {exc}".split())
+    return ("error: " + msg)[:300]
+
+
+def _error_row(model, split, dataset: Dataset, exc: BaseException,
+               seconds: float, slices=()) -> dict:
+    """A durable ``status='error'`` row for a model/readout fault (NaN scores).
+
+    Carries the model metadata and split sizes so the failed attempt is fully logged,
+    and fills the declared region columns with NaN so the CSV schema stays stable even
+    when the very first row of a run is a failure.
+    """
+    _, _, Y_train, Y_test = split
+    nan = float("nan")
+    row = {
+        "study": dataset.study,
+        "model_name": getattr(model, "name", "?"),
+        "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
+        "summary": getattr(model, "summary", ""),
+        "n_params": getattr(model, "n_params", nan),
+        "n_train": int(Y_train.shape[0]),
+        "n_test": int(Y_test.shape[0]),
+        "n_targets": int(Y_test.shape[1]) if getattr(Y_test, "ndim", 1) > 1 else 0,
+        "test_corr": nan,
+        "train_corr": nan,
+        "gap": nan,
+        "seconds": round(seconds, 2),
+        "status": _error_status(exc),
+        "reward_roi": dataset.reward_roi,
+        "run_tag": dataset.run_tag,
+    }
+    try:                                    # keep the region columns present (as NaN)
+        study = _study_for(dataset)
+        for name in _effective_slices(dataset, slices, study):
+            row[f"{CORR_PREFIX}{name}"] = nan
+    except Exception:                       # never let row-building mask the real fault
+        pass
+    return row
+
+
+def evaluate_on_split_safe(model, split, dataset: Dataset, slices=()) -> dict:
+    """:func:`evaluate_on_split` that never raises on a model/readout fault.
+
+    The unattended autoresearch loop must record a bad proposal rather than crash, so
+    any exception from the model forward pass or the ridge readout (an exception, a
+    wrong output shape, NaNs, ...) is caught: the traceback is printed for the agent to
+    read and a ``status='error'`` row (NaN scores) is returned instead.
+    """
+    t0 = time.time()
+    try:
+        return evaluate_on_split(model, split, dataset, slices)
+    except Exception as exc:
+        traceback.print_exc()
+        row = _error_row(model, split, dataset, exc, time.time() - t0, slices)
+        _free_gpu(exc)
+        return row
+
+
+def _free_gpu(exc: BaseException | None = None) -> None:
+    """Release GPU memory after a failed eval so the next iteration starts clean.
+
+    A caught exception's traceback pins the failed eval's activation tensors; drop it,
+    then empty the CUDA caching allocator so a transient OOM does not cascade across the
+    parallel runs that share the GPU.
+    """
+    import gc
+    if exc is not None:
+        exc.__traceback__ = None
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 def _effective_slices(dataset, slices, study):

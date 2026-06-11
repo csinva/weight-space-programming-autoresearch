@@ -9,7 +9,7 @@ Result -- ``<repo_root>/runs/<tag>/`` containing:
   ``harness/``      -> relative symlink to the repo's ``harness/`` (FIXED code)
   ``prompts/``      -> relative symlink to the repo's ``prompts/`` (FIXED code)
   ``model.py``      fresh local copy (EDITABLE: the evolving model)
-  ``experiment.py`` fresh local copy (EDITABLE: ITERATIONS + LOG_SLICES)
+  ``experiment.py`` fresh local copy (EDITABLE: LOG_SLICES)
   ``results/``      empty dir -- the per-run ``<study>.csv`` lands here
   ``models_lib/``   empty dir -- per-attempt ``model.py`` snapshots
 

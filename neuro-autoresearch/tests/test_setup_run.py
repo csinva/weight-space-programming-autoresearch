@@ -33,7 +33,7 @@ def _seed_repo(tmp_path):
     open(os.path.join(tmp_path, "prompts", "program.md"), "w").write("# program\n")
     open(os.path.join(tmp_path, "model.py"), "w").write("MODEL = object()\n")
     open(os.path.join(tmp_path, "experiment.py"), "w").write(
-        "ITERATIONS = 1\nLOG_SLICES = []\n"
+        "LOG_SLICES = []\n"
     )
 
 
@@ -101,9 +101,9 @@ def test_save_results_writes_run_local(tmp_path):
     _seed_repo(tmp_path)
     run_dir = _make_run(tmp_path)
     row = {
-        "study": "DemoStudy", "model_name": "m", "idea": "i", "n_params": 0,
-        "n_train": 1, "n_test": 1, "n_targets": 1, "test_corr": 0.5,
-        "train_corr": 0.6, "gap": 0.1, "frac_above_0.1": 0.0, "seconds": 0.0,
+        "study": "DemoStudy", "model_name": "m", "idea": "i", "summary": "s",
+        "n_params": 0, "n_train": 1, "n_test": 1, "n_targets": 1, "test_corr": 0.5,
+        "train_corr": 0.6, "gap": 0.1, "seconds": 0.0,
         "status": "ok",
     }
     code = (

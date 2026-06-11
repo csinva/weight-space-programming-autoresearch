@@ -4,28 +4,30 @@ Run from the repo root::
 
     python -m harness.run
 
-Loads the active dataset split ONCE (the slow step), then runs ``ITERATIONS``
-evaluation passes of the model in ``model.py``, printing each and appending it to
-``results/<study>.csv``. The active dataset is chosen by ``NEURO_DATASET`` (see
-``harness/datasets.py``); the run-config (``ITERATIONS``, ``LOG_SLICES``) lives in
-``experiment.py``. The agent should NOT edit this file.
+Loads the active dataset split ONCE (the slow step), then evaluates the model in
+``model.py`` exactly once and appends a single row to ``results/<study>.csv`` -- one
+run = one model = one iteration (the append-only ``iteration`` column counts the
+models tried across runs). A model that raises or returns a bad shape does not crash
+the run: it is recorded as a ``status='error'`` row (NaN reward) and the run exits
+cleanly. The active dataset is chosen by ``NEURO_DATASET`` (see
+``harness/datasets.py``); the run-config (``LOG_SLICES``) lives in ``experiment.py``.
+The agent should NOT edit this file.
 """
 from __future__ import annotations
 
 import time
 
-from experiment import ITERATIONS, LOG_SLICES
+from experiment import LOG_SLICES
 from model import MODEL
 from harness.datasets import DATASET
 from harness.data import load_split
-from harness.reward import evaluate_on_split
+from harness.reward import evaluate_on_split_safe
 from harness.results import save_results
 
 
-def _print_row(prefix: str, row: dict) -> None:
-    print(f"{prefix}{row['model_name']:<18} {row['n_params']:>8}  "
-          f"{row['train_corr']:>10.4f}  {row['test_corr']:>9.4f}  "
-          f"{row['frac_above_0.1']:>8.4f}  {row['seconds']:>5.2f}")
+def _print_row(row: dict) -> None:
+    print(f"{row['model_name']:<18} {row['n_params']:>8}  "
+          f"{row['train_corr']:>10.4f}  {row['test_corr']:>9.4f}  {row['seconds']:>5.2f}")
 
 
 def main() -> None:
@@ -39,14 +41,16 @@ def main() -> None:
           f"Y_train{tuple(Ytr.shape)} Y_test{tuple(Yte.shape)}  "
           f"(load {time.time() - t:.1f}s)\n")
 
-    header = (f"{'iter':>4}  {'model':<18} {'n_params':>8}  {'train_corr':>10}  "
-              f"{'test_corr':>9}  {'frac>0.1':>8}  {'sec':>5}")
+    header = (f"{'model':<18} {'n_params':>8}  {'train_corr':>10}  "
+              f"{'test_corr':>9}  {'sec':>5}")
     print(header)
     print("-" * len(header))
-    for i in range(1, ITERATIONS + 1):
-        row = evaluate_on_split(MODEL, split, DATASET, LOG_SLICES)
-        save_results(row)
-        _print_row(f"{i:>4}  ", row)
+    row = evaluate_on_split_safe(MODEL, split, DATASET, LOG_SLICES)
+    save_results(row)
+    _print_row(row)
+    if row["status"] != "ok":
+        print(f"\n{row['status']}\n  -> recorded as a failed attempt (NaN reward); "
+              f"fix model.py and re-run.")
 
 
 if __name__ == "__main__":

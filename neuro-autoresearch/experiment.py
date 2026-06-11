@@ -4,14 +4,12 @@ This is the small set of knobs you tune *about a run* rather than about the mode
 itself -- kept out of ``model.py`` so that file stays purely the model. The active
 dataset is chosen separately via the ``NEURO_DATASET`` env var (see
 ``harness/datasets.py``).
+
+Each ``python -m harness.run`` evaluates the current model exactly once and appends a
+single row to ``results/<study>.csv``; an *iteration* is one such turn of the loop
+(propose a model -> evaluate -> read the CSV -> revise).
 """
 from __future__ import annotations
-
-# How many evaluation passes ``python -m harness.run`` performs, each appending one
-# row to ``results/<study>.csv``. The default 1 is the right autoresearch cadence
-# (one row per model edit); raise it only once the reward is stochastic
-# (e.g. multi-seed), where repeated passes measure its variance.
-ITERATIONS = 1
 
 # Extra per-region feedback columns (``corr_<name>``) to log ALONGSIDE the scalar
 # reward, for studies with no built-in ROI menu (text/meg -> usually ``[]``). For NSD
