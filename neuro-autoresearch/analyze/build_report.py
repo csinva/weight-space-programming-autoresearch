@@ -28,6 +28,7 @@ import io
 import json
 import os
 import re
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
 
@@ -42,7 +43,34 @@ TABLE_COLUMNS = [
 ]
 # Canonical left-to-right ordering of NSD regions (early visual -> ventral category).
 REGION_ORDER = ["V1", "V2", "V3", "hV4", "early", "ventral", "PPA", "EBA", "FFA", "VWFA"]
+REGION_NAMES = {
+    "V1": "primary visual cortex (V1)",
+    "V2": "secondary visual cortex (V2)",
+    "V3": "visual area V3",
+    "hV4": "color/shape area hV4",
+    "early": "early visual stream",
+    "ventral": "ventral visual stream",
+    "PPA": "place/scene area (PPA)",
+    "EBA": "body-selective area (EBA)",
+    "FFA": "face-selective area (FFA)",
+    "VWFA": "visual word-form area (VWFA)",
+}
+# Frozen ImageNet AlexNet fc7, read out with the same ridge evaluator. These are
+# documented in prompts/datasets.md and are shown only as references; no rerun occurs.
+ALEXNET_BASELINES = {
+    "V1": 0.342,
+    "V2": 0.299,
+    "V3": 0.321,
+    "hV4": 0.289,
+    "FFA": 0.396,
+    "PPA": 0.403,
+    "EBA": 0.436,
+    "VWFA": 0.321,
+    "ventral": 0.284,
+    "overall": 0.324,
+}
 _TRAIN_RE = re.compile(r"\btrain", re.IGNORECASE)
+_TAG_REGION_RE = re.compile(r"^nsd-([a-z0-9]+)-")
 
 
 def mentions_training(idea: object) -> bool:
@@ -52,6 +80,86 @@ def mentions_training(idea: object) -> bool:
 
 def is_ok(status: object) -> bool:
     return isinstance(status, str) and status.strip().lower() == "ok"
+
+
+def canonical_region(value: object) -> str | None:
+    """Map loose region spellings (tag fragments, filenames) to canonical labels."""
+    if not isinstance(value, str):
+        return None
+    low = value.strip().lower()
+    aliases = {rg.lower(): rg for rg in REGION_ORDER}
+    aliases.update({"v4": "hV4", "nsdgeneral": "overall"})
+    return aliases.get(low)
+
+
+def _valid_n_params(series: pd.Series) -> pd.Series:
+    vals = pd.to_numeric(series, errors="coerce")
+    return vals[vals.notna() & (vals > 0)]
+
+
+def has_usable_n_params(df: pd.DataFrame) -> bool:
+    """Only show model-size plots when n_params is substantially logged."""
+    if "n_params" not in df.columns:
+        return False
+    vals = _valid_n_params(df["n_params"])
+    if len(vals) < 2:
+        return False
+    return vals.nunique() > 1
+
+
+def failure_count(df: pd.DataFrame) -> int:
+    """Rows that actually failed evaluation: status is present and not ok."""
+    if "status" not in df.columns:
+        return 0
+    return int((~df["status"].apply(is_ok)).sum())
+
+
+def failure_rate(df: pd.DataFrame) -> float:
+    return failure_count(df) / len(df) if len(df) else 0.0
+
+
+def _clean_detail_echo(value: object) -> str:
+    """Remove old HTML <details> extraction artifacts like 'truncated…full text'."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    text = str(value).strip()
+    if "…" not in text:
+        return text
+    head, tail = text.split("…", 1)
+    head_words = re.sub(r"\s+", " ", head).strip()
+    tail_words = re.sub(r"\s+", " ", tail).strip()
+    if len(head_words) >= 24 and tail_words.startswith(head_words[:24]):
+        return tail.strip()
+    return text
+
+
+def run_label_map(runs: list["Run"]) -> dict[str, str]:
+    """Readable run labels, with simple numbering only when a label repeats."""
+    bases = [r.display_label for r in runs]
+    counts = Counter(bases)
+    seen: defaultdict[str, int] = defaultdict(int)
+    out = {}
+    for run in runs:
+        base = run.display_label
+        if counts[base] > 1:
+            seen[base] += 1
+            out[run.csv_path] = f"{base} #{seen[base]}"
+        else:
+            out[run.csv_path] = base
+    return out
+
+
+def display_source_path(path: str) -> str:
+    """Avoid leaking temporary reconstruction paths into the static report."""
+    if not path:
+        return "result ledger"
+    norm = os.path.abspath(path)
+    cwd = os.path.abspath(os.getcwd())
+    if norm.startswith(cwd + os.sep):
+        return os.path.relpath(norm, cwd)
+    if norm.startswith(("/tmp/", "/private/tmp/", "/var/folders/")):
+        return "reconstructed result ledger"
+    return path
 
 
 @dataclass
@@ -73,6 +181,35 @@ class Run:
         head = f"{self.tag} — {dataset}"
         return f"{head} ({suffix})" if suffix else head
 
+    @property
+    def region(self) -> str | None:
+        """Reward region inferred from metadata, filename, or tag."""
+        for key in ("roi", "region", "reward_region"):
+            val = self.metadata.get(key)
+            if isinstance(val, str) and val:
+                return canonical_region(val)
+        stem = os.path.splitext(os.path.basename(self.csv_path))[0]
+        for bit in (stem, self.tag):
+            for rg in REGION_ORDER:
+                if re.search(rf"(?:^|__|-){re.escape(rg)}(?:$|__|-)", bit, re.IGNORECASE):
+                    return rg
+            m = _TAG_REGION_RE.search(bit)
+            if m:
+                return canonical_region(m.group(1))
+        return None
+
+    @property
+    def display_label(self) -> str:
+        rg = self.region
+        if rg:
+            return f"{rg} run"
+        return self.study if self.tag == "results" else self.tag
+
+    @property
+    def region_label(self) -> str:
+        rg = self.region
+        return REGION_NAMES.get(rg, rg or self.study)
+
     @cached_property
     def included(self) -> pd.DataFrame:
         """Rows kept for plots/writeup: status ok and the idea is not about training."""
@@ -93,7 +230,9 @@ def _read_csv(path: str) -> pd.DataFrame | None:
         df["status"] = "ok"
     if "idea" not in df.columns:
         df["idea"] = ""
-    df["idea"] = df["idea"].fillna("")
+    df["idea"] = df["idea"].fillna("").map(_clean_detail_echo)
+    if "summary" in df.columns:
+        df["summary"] = df["summary"].fillna("").map(_clean_detail_echo)
     df["excluded"] = df.apply(
         lambda r: (not is_ok(r["status"])) or mentions_training(r["idea"]), axis=1
     )
@@ -168,6 +307,7 @@ def _img_tag(b64: str, alt: str) -> str:
 
 def summary_plot(runs: list[Run]) -> str | None:
     """Overlay every run's reward vs iteration, one facet per dataset (study)."""
+    labels = run_label_map(runs)
     by_study: dict[str, list[Run]] = {}
     for run in runs:
         if not run.included.empty:
@@ -182,17 +322,18 @@ def summary_plot(runs: list[Run]) -> str | None:
     for ax, study in zip(axes[0], studies):
         for run in by_study[study]:
             inc = run.included
-            ax.plot(inc["iteration"], inc["test_corr"], marker="o", ms=3, lw=1.4, label=run.label)
-        ax.set_title(f"{study}: test_corr vs iteration")
-        ax.set_xlabel("iteration")
-        ax.set_ylabel("test_corr")
+            ax.plot(inc["iteration"], inc["test_corr"], marker="o", ms=3, lw=1.4,
+                    label=labels.get(run.csv_path, run.display_label))
+        ax.set_title(f"{study}: reward over proposed models")
+        ax.set_xlabel("X: iteration")
+        ax.set_ylabel("Y: test_corr")
         ax.grid(True, alpha=0.3)
         ax.legend(fontsize=7, loc="best")
     fig.tight_layout()
     return _fig_to_base64(fig)
 
 
-def per_run_plot(run: Run) -> str | None:
+def per_run_plot(run: Run, label: str | None = None) -> str | None:
     inc = run.included
     if inc.empty:
         return None
@@ -202,17 +343,19 @@ def per_run_plot(run: Run) -> str | None:
         ax.plot(inc["iteration"], inc["train_corr"], marker="s", ms=3, lw=1.0, color="#ff7f0e", alpha=0.8, label="train_corr")
     running_max = inc["test_corr"].cummax()
     ax.plot(inc["iteration"], running_max, drawstyle="steps-post", lw=1.6, color="#2ca02c", ls="--", label="running max (test_corr)")
-    ax.set_title(run.label, fontsize=9)
-    ax.set_xlabel("iteration")
-    ax.set_ylabel("correlation")
+    ax.set_title(f"{label or run.display_label}: reward trajectory", fontsize=9)
+    ax.set_xlabel("X: iteration (one proposed model per row)")
+    ax.set_ylabel("Y: correlation (Pearson r)")
     ax.grid(True, alpha=0.3)
     handles, labels = ax.get_legend_handles_labels()
-    if "n_params" in inc.columns and inc["n_params"].notna().any():
+    if has_usable_n_params(inc):
         ax2 = ax.twinx()
-        ax2.plot(inc["iteration"], inc["n_params"].clip(lower=1), color="#9467bd", alpha=0.55,
+        npar = pd.to_numeric(inc["n_params"], errors="coerce")
+        npar = npar.where(npar > 0)
+        ax2.plot(inc["iteration"], npar, color="#9467bd", alpha=0.55,
                  lw=1.1, ls=":", marker=".", ms=3, label="n_params")
         ax2.set_yscale("log")
-        ax2.set_ylabel("n_params (log)", color="#9467bd")
+        ax2.set_ylabel("Y2: logged n_params (log)", color="#9467bd")
         ax2.tick_params(axis="y", labelcolor="#9467bd")
         h2, l2 = ax2.get_legend_handles_labels()
         handles += h2
@@ -253,10 +396,15 @@ def run_writeup(run: Run) -> str:
             delta = (float(tc) - best) if best != float("-inf") else None
             best = float(tc)
             npar = row.get("n_params")
+            npar_i = None
+            try:
+                npar_i = int(float(npar)) if pd.notna(npar) and float(npar) > 0 else None
+            except (TypeError, ValueError):
+                npar_i = None
             improvements.append((
                 int(row["iteration"]), str(row["model_name"]), str(row["idea"]), best, delta,
                 (float(cum_h.iloc[pos]) if has_sec else None),
-                (int(npar) if pd.notna(npar) else None),
+                npar_i,
             ))
 
     total_h = float(inc["seconds"].fillna(0).sum() / 3600.0) if has_sec else None
@@ -321,7 +469,10 @@ def attempts_table(runs: list[Run]) -> str:
                     cells.append(f'<td class="num">{_fmt(value)}</td>')
                 else:
                     cells.append(f"<td>{_fmt(value)}</td>")
-            flag = '<td class="flag">excluded</td>' if excluded else '<td class="flag ok">ok</td>'
+            flag = (
+                '<td class="flag fail" title="excluded from plots">✕</td>'
+                if excluded else '<td class="flag ok" title="included in plots">✓</td>'
+            )
             cls = ' class="excluded"' if excluded else ""
             rows_html.append(f"<tr{cls}>" + flag + "".join(cells) + "</tr>")
 
@@ -349,6 +500,90 @@ def best_row(run: Run) -> pd.Series | None:
     if inc.empty or inc["test_corr"].isna().all():
         return None
     return inc.loc[inc["test_corr"].idxmax()]
+
+
+def identity_row(run: Run) -> pd.Series | None:
+    """First included identity/raw-pixel baseline row for a run, when logged."""
+    inc = run.included
+    if inc.empty or "model_name" not in inc.columns:
+        return None
+    mask = inc["model_name"].astype(str).str.lower().eq("identity")
+    if not mask.any():
+        return None
+    return inc.loc[mask].iloc[0]
+
+
+def baseline_comparison(runs: list[Run]) -> str:
+    """Compare each region winner with logged identity and documented AlexNet baselines."""
+    by_region = {}
+    for run in runs:
+        rg = run.region
+        br = best_row(run)
+        if br is None or not rg:
+            continue
+        ident = identity_row(run)
+        identity = float(ident["test_corr"]) if ident is not None and pd.notna(ident.get("test_corr")) else None
+        alex = ALEXNET_BASELINES.get(rg)
+        best = float(br["test_corr"]) if pd.notna(br.get("test_corr")) else None
+        if best is None:
+            continue
+        candidate = (rg, run.display_label, run.region_label, best, identity, alex)
+        if rg not in by_region or best > by_region[rg][3]:
+            by_region[rg] = candidate
+    rows = list(by_region.values())
+    if not rows:
+        return "<p class='meta'>No logged identity rows or region-tagged NSD runs found for baseline comparison.</p>"
+
+    order = {rg: i for i, rg in enumerate(REGION_ORDER)}
+    rows.sort(key=lambda r: order.get(r[0], 999))
+    fig, ax = plt.subplots(figsize=(9.4, 0.55 * len(rows) + 2.2), facecolor="white")
+    import numpy as np
+    y = np.arange(len(rows))
+    h = 0.24
+    best_vals = [r[3] for r in rows]
+    identity_vals = [float("nan") if r[4] is None else r[4] for r in rows]
+    alex_vals = [float("nan") if r[5] is None else r[5] for r in rows]
+    ax.barh(y - h, identity_vals, height=h, color="#9ca3af", label="identity/raw pixels (logged)")
+    ax.barh(y, best_vals, height=h, color="#2563eb", label="best untrained search model")
+    ax.barh(y + h, alex_vals, height=h, color="#dc8a00", label="trained AlexNet fc7 reference")
+    for i, (_rg, _label, _name, best, ident, alex) in enumerate(rows):
+        for off, val in ((-h, ident), (0, best), (h, alex)):
+            if val is not None:
+                ax.text(val, i + off, f" {val:.3f}", va="center", fontsize=7)
+    ax.set_yticks(y)
+    ax.set_yticklabels([r[2] for r in rows], fontsize=8)
+    ax.set_xlabel("X: held-out test_corr (mean Pearson r; higher is better)")
+    ax.set_title("Baselines by reward region")
+    ax.grid(True, axis="x", alpha=0.3)
+    ax.legend(fontsize=8, loc="lower right")
+    fig.tight_layout()
+
+    body = []
+    for rg, _label, name, best, ident, alex in rows:
+        delta_identity = "" if ident is None else f"{best - ident:+.4f}"
+        delta_alex = "" if alex is None else f"{best - alex:+.4f}"
+        body.append(
+            "<tr>"
+            f"<td>{html.escape(name)}</td>"
+            f"<td class='num'>{'' if ident is None else f'{ident:.4f}'}</td>"
+            f"<td class='num'>{best:.4f}</td>"
+            f"<td class='num'>{'' if alex is None else f'{alex:.4f}'}</td>"
+            f"<td class='num'>{delta_identity}</td>"
+            f"<td class='num {'' if alex is None else ('good' if best >= alex else 'bad')}'>{delta_alex}</td>"
+            "</tr>"
+        )
+    table = (
+        "<table class='baseline'><thead><tr><th>reward region</th><th>identity</th>"
+        "<th>best untrained</th><th>trained AlexNet</th><th>Δ vs identity</th>"
+        "<th>Δ vs AlexNet</th></tr></thead><tbody>"
+        + "".join(body) + "</tbody></table>"
+    )
+    return (
+        "<p class='meta'>Identity is shown only when that row is already present in the log. "
+        "AlexNet is the documented frozen ImageNet fc7 baseline; this report does not rerun it.</p>"
+        + _img_tag(_fig_to_base64(fig), "identity, untrained winner, and AlexNet baselines by region")
+        + table
+    )
 
 
 def _run_dir(run: Run) -> str:
@@ -391,6 +626,7 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
     exposes ``corr_<region>`` columns (so test fixtures simply skip the section).
     """
     rows, labels = [], []
+    label_map = run_label_map(runs)
     present: list[str] = []
     for run in runs:
         br = best_row(run)
@@ -413,8 +649,7 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
         vals = [br.get(f"corr_{rg}") for rg in present]
         if all(pd.isna(v) for v in vals):
             continue
-        target = run.metadata.get("dataset") or run.study
-        labels.append(f"{run.tag}")
+        labels.append(label_map.get(run.csv_path, run.display_label))
         rows.append([float(v) if pd.notna(v) else float("nan") for v in vals])
 
     import numpy as np
@@ -425,8 +660,8 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
     ax.set_xticklabels(present, rotation=0)
     ax.set_yticks(range(len(labels)))
     ax.set_yticklabels(labels, fontsize=8)
-    ax.set_xlabel("region scored (corr)")
-    ax.set_title("Best model per run — predictivity across all regions")
+    ax.set_xlabel("X: brain region scored (held-out corr)")
+    ax.set_title("Y: region-optimized run; cells show cross-region predictivity")
     for i in range(mat.shape[0]):
         for j in range(mat.shape[1]):
             v = mat[i, j]
@@ -440,7 +675,7 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
 
 def _code_block(source: str | None, path: str | None) -> str:
     if not source:
-        return "<p class='meta'>Model source not available in this run folder.</p>"
+        return ""
     rel = html.escape(path or "")
     return (
         f'<details class="code"><summary>Show model source <span class="meta">({rel})</span></summary>'
@@ -454,8 +689,8 @@ def _feature_note(n_params: object) -> str:
         n = int(float(n_params))
     except (TypeError, ValueError):
         return ""
-    if n == 0:
-        return "parameter-free (filters/projections are fixed or seeded random)"
+    if n <= 0:
+        return ""
     if n >= 1_000_000:
         return f"{n / 1e6:.0f}M fixed/expansion values (large random-feature lift, never trained)"
     return f"{n:,} fixed values (never trained)"
@@ -465,6 +700,7 @@ def mechanics_section(runs: list[Run]) -> str:
     """One card per run for the best model it found: idea, summary, reward, source."""
     cards = []
     ranked = []
+    labels = run_label_map(runs)
     for run in runs:
         br = best_row(run)
         if br is None:
@@ -478,7 +714,8 @@ def mechanics_section(runs: list[Run]) -> str:
         idea = str(br.get("idea", "") or "")
         summary = str(br.get("summary", "") or "")
         note = _feature_note(br.get("n_params"))
-        target = run.metadata.get("dataset") or run.study
+        target = run.region_label
+        rg = run.region
         # Compact cross-region line for this model.
         xreg = []
         for rg in REGION_ORDER:
@@ -488,17 +725,25 @@ def mechanics_section(runs: list[Run]) -> str:
         xreg_html = (
             f"<p class='meta'>across regions: {html.escape(' · '.join(xreg))}</p>" if xreg else ""
         )
+        identity = identity_row(run)
+        identity_html = ""
+        if identity is not None and pd.notna(identity.get("test_corr")):
+            identity_html = f" · identity {float(identity['test_corr']):.4f}"
+        alex = ALEXNET_BASELINES.get(run.region or "")
+        alex_html = f" · AlexNet {alex:.4f}" if alex is not None else ""
+        source_html = _code_block(src, path)
         cards.append(
             f'<div class="card">'
-            f"<h3>{html.escape(run.tag)} — <code>{html.escape(name)}</code> "
+            f"<h3>{html.escape(labels.get(run.csv_path, run.display_label))} — best model for {html.escape(target)} "
             f'<span class="reward">test_corr {score:.4f}</span></h3>'
-            f"<p class='meta'>target region: {html.escape(str(target))}"
+            f"<p class='meta'><code>{html.escape(name)}</code>"
             + (f" · {html.escape(note)}" if note else "")
+            + identity_html + alex_html
             + "</p>"
             + (f"<p><b>Idea.</b> {html.escape(idea)}</p>" if idea else "")
-            + (f"<p><b>What it computes.</b> {html.escape(summary)}</p>" if summary else "")
+            + (f"<p><b>Computation.</b> {html.escape(summary)}</p>" if summary else "")
             + xreg_html
-            + _code_block(src, path)
+            + source_html
             + "</div>"
         )
     if not cards:
@@ -581,13 +826,14 @@ def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
 
 
 def search_dashboard(runs: list[Run]) -> str | None:
-    """Four-panel view of the search: efficiency, complexity, overfitting, compute."""
+    """Four-panel view of the search, adapting to whichever columns were logged."""
     import numpy as np
+    labels = run_label_map(runs)
 
     series = []
     for run in runs:
         inc = run.included.dropna(subset=["test_corr"]).sort_values("iteration")
-        if not inc.empty:
+        if not run.df.empty:
             series.append((run, inc))
     if not series:
         return None
@@ -600,58 +846,99 @@ def search_dashboard(runs: list[Run]) -> str | None:
 
     any_sec = False
     for run, inc in series:
+        if inc.empty:
+            continue
         col = colors[run.csv_path]
         if "seconds" in inc.columns and inc["seconds"].notna().any():
             x = inc["seconds"].fillna(0).cumsum() / 3600.0
             any_sec = True
         else:
             x = inc["iteration"]
-        a.plot(x, inc["test_corr"].cummax(), lw=1.5, color=col, label=run.tag)
-    a.set_xlabel("cumulative wall-clock (h)" if any_sec else "iteration")
-    a.set_ylabel("best_so_far (test_corr)")
-    a.set_title("Search efficiency: best reward vs wall-clock")
+        a.plot(x, inc["test_corr"].cummax(), lw=1.5, color=col,
+               label=labels.get(run.csv_path, run.display_label))
+    a.set_xlabel("X: cumulative wall-clock (h)" if any_sec else "X: iteration")
+    a.set_ylabel("Y: best_so_far test_corr")
+    a.set_title("Search progress: best reward so far")
     a.grid(True, alpha=0.3)
     a.legend(fontsize=6, ncol=2)
 
+    any_n_params = False
     for run, inc in series:
-        if "n_params" not in inc.columns:
+        if inc.empty or not has_usable_n_params(inc):
             continue
+        any_n_params = True
         col = colors[run.csv_path]
-        npar = inc["n_params"].clip(lower=1)
+        npar = pd.to_numeric(inc["n_params"], errors="coerce")
+        npar = npar.where(npar > 0)
         b.scatter(npar, inc["test_corr"], s=14, color=col, alpha=0.55, edgecolors="none")
         bi = inc["test_corr"].idxmax()
-        b.scatter(max(float(inc.loc[bi, "n_params"]) if pd.notna(inc.loc[bi, "n_params"]) else 1, 1),
-                  inc.loc[bi, "test_corr"], marker="*", s=130, color=col,
-                  edgecolors="black", linewidths=0.4)
-    b.set_xscale("log")
-    b.set_xlabel("n_params (log)")
-    b.set_ylabel("test_corr")
-    b.set_title("Does complexity pay? reward vs model size (★ = run best)")
-    b.grid(True, alpha=0.3)
+        best_n = pd.to_numeric(pd.Series([inc.loc[bi, "n_params"]]), errors="coerce").iloc[0]
+        if pd.notna(best_n) and best_n > 0:
+            b.scatter(float(best_n), inc.loc[bi, "test_corr"], marker="*", s=130, color=col,
+                      edgecolors="black", linewidths=0.4)
+    if any_n_params:
+        b.set_xscale("log")
+        b.set_xlabel("X: logged n_params (log)")
+        b.set_ylabel("Y: test_corr")
+        b.set_title("Does logged model size explain reward? (★ = run best)")
+        b.grid(True, alpha=0.3)
+    else:
+        order = list(np.argsort([failure_rate(run.df) for run, _ in series]))
+        ypos = np.arange(len(order))
+        rates = [100.0 * failure_rate(series[i][0].df) for i in order]
+        b.barh(ypos, rates, color=[colors[series[i][0].csv_path] for i in order])
+        for i, rate in enumerate(rates):
+            run = series[order[i]][0]
+            b.text(rate, i, f" {failure_count(run.df)}/{len(run.df)} ({rate:.0f}%)", va="center", fontsize=7)
+        b.set_yticks(ypos)
+        b.set_yticklabels([labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order], fontsize=7)
+        b.set_xlabel("X: failed rows (% of total iterations)")
+        b.set_title("Failure rate by run")
+        b.grid(True, axis="x", alpha=0.3)
 
+    any_gap = False
     for run, inc in series:
-        if inc["train_corr"].notna().any():
+        if not inc.empty and inc["train_corr"].notna().any():
+            any_gap = True
             c.plot(inc["iteration"], inc["train_corr"] - inc["test_corr"],
                    lw=1.2, color=colors[run.csv_path])
-    c.axhline(0, color="gray", lw=0.8, ls=":")
-    c.set_xlabel("iteration")
-    c.set_ylabel("train_corr − test_corr")
-    c.set_title("Readout generalization gap over the search")
-    c.grid(True, alpha=0.3)
+    if any_gap:
+        c.axhline(0, color="gray", lw=0.8, ls=":")
+        c.set_xlabel("X: iteration")
+        c.set_ylabel("Y: train_corr − test_corr")
+        c.set_title("Readout generalization gap over the search")
+        c.grid(True, alpha=0.3)
+    else:
+        c.axis("off")
+        c.text(0.5, 0.5, "No train_corr values available", ha="center", va="center", color="#666")
 
-    order = list(np.argsort([(inc["seconds"].fillna(0).sum() / 3600.0
-                              if "seconds" in inc.columns else 0.0) for _, inc in series]))
+    any_hours = any("seconds" in inc.columns and inc["seconds"].notna().any() for _, inc in series)
+    order = list(np.argsort([
+        (inc["seconds"].fillna(0).sum() / 3600.0 if any_hours and "seconds" in inc.columns else len(run.df))
+        for run, inc in series
+    ]))
     ypos = np.arange(len(order))
-    hours = [float(series[i][1]["seconds"].fillna(0).sum() / 3600.0)
-             if "seconds" in series[i][1].columns else 0.0 for i in order]
-    iters = [len(series[i][1]) for i in order]
-    d.barh(ypos, hours, color=[colors[series[i][0].csv_path] for i in order])
-    for i, (h, n) in enumerate(zip(hours, iters)):
-        d.text(h, i, f" {h:.1f}h / {n} it", va="center", fontsize=7)
+    if any_hours:
+        hours = [float(series[i][1]["seconds"].fillna(0).sum() / 3600.0)
+                 if "seconds" in series[i][1].columns else 0.0 for i in order]
+        d.barh(ypos, hours, color=[colors[series[i][0].csv_path] for i in order])
+        for i, (h, idx) in enumerate(zip(hours, order)):
+            d.text(h, i, f" {h:.1f}h / {len(series[idx][0].df)} total it", va="center", fontsize=7)
+        d.set_xlabel("X: total wall-clock (h)")
+        d.set_title("Compute spent per run")
+    else:
+        totals = [len(series[i][0].df) for i in order]
+        failed = [failure_count(series[i][0].df) for i in order]
+        scored = [len(series[i][1]) for i in order]
+        d.barh(ypos, scored, color="#2563eb", label="scored ok")
+        d.barh(ypos, failed, left=scored, color="#dc2626", label="failed")
+        for i, idx in enumerate(order):
+            d.text(totals[i], i, f" {failed[i]}/{totals[i]} failed", va="center", fontsize=7)
+        d.set_xlabel("X: iterations")
+        d.set_title("Scored vs failed iterations")
+        d.legend(fontsize=8, loc="lower right")
     d.set_yticks(ypos)
-    d.set_yticklabels([series[i][0].tag for i in order], fontsize=7)
-    d.set_xlabel("total wall-clock (h)")
-    d.set_title("Compute spent per run")
+    d.set_yticklabels([labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order], fontsize=7)
     d.grid(True, axis="x", alpha=0.3)
 
     fig.tight_layout()
@@ -659,10 +946,10 @@ def search_dashboard(runs: list[Run]) -> str | None:
 
 
 _PRINCIPLES_INTRO = """
-<p>The point of the search is not just the winning model but the <b>computational
-principles</b> it keeps rediscovering. Each principle below is a known ingredient of
-biological vision; the chart sums, across all runs, the reward gained by every improving
-step whose idea invokes it (a step can invoke several, so the bars overlap).</p>
+<p>Each run proposes fixed feature extractors, then the ridge readout asks:
+<i>which hand-written computation makes brain activity easier to predict?</i> The bars
+below sum the reward gains from improving steps that mention each principle. A single
+step can count for multiple principles because real models combine ingredients.</p>
 <ul>
   <li><b>Gabor / oriented energy</b> — quadrature filter pairs collapsed to
       <code>√(cos²+sin²)</code> give phase-invariant edge/contrast detectors (V1 complex cells).</li>
@@ -683,18 +970,17 @@ step whose idea invokes it (a step can invoke several, so the bars overlap).</p>
 """
 
 _PROCESS_INTRO = """
-<p>How did the search actually progress? These views read the ledger's
-<code>iteration</code>, wall-clock <code>seconds</code>, <code>n_params</code> and the
-train–test gap to characterise the search dynamics rather than any single model.</p>
+<p>How did the search actually progress? These views read the ledger's iterations,
+reward values, train–test gap, and status field to characterize the search dynamics
+rather than any single model.</p>
 <ul>
-  <li><b>Efficiency</b> — best reward as a function of cumulative wall-clock: most gains
-      arrive early, then improvements become small and expensive.</li>
-  <li><b>Does complexity pay?</b> — reward vs model size (log axis). Bigger is not better:
-      the strongest models (e.g. V1) are among the smallest; large random-feature lifts
-      add parameters without proportional reward.</li>
+  <li><b>Progress</b> — best reward as a function of iteration, or wall-clock when
+      reliable seconds are present.</li>
+  <li><b>Failure rate</b> — non-<code>ok</code> status rows as a percentage of all iterations.</li>
   <li><b>Generalization gap</b> — <code>train_corr − test_corr</code> tracks how much the
       ridge readout overfits as features grow richer.</li>
-  <li><b>Compute spent</b> — total wall-clock and number of iterations per run.</li>
+  <li><b>Iteration accounting</b> — scored rows versus failed rows when compute timing is
+      not available in the report data.</li>
 </ul>
 """
 
@@ -704,7 +990,8 @@ _FINDINGS_INTRO = """
 (<code>model.py</code>): a stimulus image is mapped to features, a ridge readout is
 fit against recorded fMRI (the only thing fit — that fit <i>is</i> the evaluation),
 and held-out <code>test_corr</code> on NSD subject 01 is the reward. Each run rewards
-a single visual region.</p>
+a single visual region, and the report compares the winner to both the logged
+identity/raw-pixel baseline and the documented trained-AlexNet reference.</p>
 
 <p><b>The architecture the search converged on (in every region).</b> Without being
 told to, the loop rediscovered the classical early-visual front-end:</p>
@@ -732,9 +1019,9 @@ for the face/word regions.</p>
       modest gains on its own target — the models remain fundamentally low-level/V1-like
       and do not yet capture high-level <b>category selectivity</b> (FFA/PPA/EBA/VWFA stay
       ≈0.20–0.29).</li>
-  <li>These untrained encoders are <b>competitive with a frozen ImageNet AlexNet</b>
-      (~0.32 on the ventral stream as documented in <code>AGENTS.md</code>) — beating it on
-      V1, lagging on category regions where learned semantics matter.</li>
+  <li>The baseline chart makes the main boundary clear: untrained encoders can match or
+      beat AlexNet in early/mid visual cortex, but still trail the learned network in
+      high-level category regions where semantics matter.</li>
 </ol>
 """
 
@@ -746,7 +1033,14 @@ body { background:#ffffff; color:#1a1a1a; font-family:-apple-system,Segoe UI,Rob
 h1 { margin-top:0; } h2 { border-bottom:2px solid #eee; padding-bottom:.3rem; margin-top:2.4rem; }
 h3 { margin-bottom:.4rem; }
 .plot { max-width:100%; height:auto; border:1px solid #eee; border-radius:6px; background:#fff; }
-.run-block { margin:1.4rem 0 2.2rem; padding:1rem 1.2rem; border:1px solid #eee; border-radius:8px; background:#fafafa; }
+.run-block { display:block; margin:1.0rem 0 1.2rem; padding:0.9rem 1.1rem; border:1px solid #eee; border-radius:8px; background:#fafafa; }
+.run-block summary { cursor:pointer; list-style:none; }
+.run-block summary::-webkit-details-marker { display:none; }
+.run-block summary::before { content:"▸"; display:inline-block; width:1rem; color:#666; }
+.run-block[open] summary::before { content:"▾"; }
+.run-title { font-weight:700; font-size:1rem; margin-right:.4rem; }
+.fail-badge { display:inline-block; margin-left:.55rem; padding:.05rem .45rem; border-radius:999px;
+        background:#fee2e2; color:#b42318; font-weight:700; font-size:.78rem; }
 .writeup { font-size:.95rem; }
 .writeup ul { margin:.3rem 0; } .writeup code { background:#eef; padding:0 .25rem; border-radius:3px; }
 table { border-collapse:collapse; width:100%; background:#fff; table-layout:fixed; font-size:.86rem; }
@@ -758,7 +1052,8 @@ th:hover { background:#e9e9f2; }
 .idea details summary { cursor:pointer; color:#0a58ca; }
 .idea details[open] summary { margin-bottom:.4rem; }
 tr.excluded { background:#fff5f5; color:#7a3030; }
-.flag { font-weight:600; white-space:nowrap; } .flag.ok { color:#1a7f37; } tr.excluded .flag { color:#c0392b; }
+.flag { font-weight:700; white-space:nowrap; text-align:center; } .flag.ok { color:#1a7f37; } .flag.fail { color:#c0392b; }
+.good { color:#1a7f37; font-weight:700; } .bad { color:#b42318; font-weight:700; }
 .run { white-space:nowrap; } .arrow { font-size:.7rem; color:#888; }
 .meta { color:#666; font-size:.85rem; }
 .findings ul, .findings ol { margin:.4rem 0 .8rem 1.2rem; } .findings li { margin:.25rem 0; }
@@ -774,6 +1069,9 @@ pre { background:#0d1117; color:#e6edf3; padding:.9rem 1rem; border-radius:6px; 
 pre code { background:none; color:inherit; padding:0; white-space:pre; }
 table.principles { table-layout:auto; width:auto; min-width:28rem; max-width:46rem; font-size:.9rem; }
 table.principles th { position:static; }
+table.baseline { table-layout:auto; font-size:.9rem; margin-top:1rem; }
+table.baseline th { position:static; }
+.num { text-align:right; font-variant-numeric:tabular-nums; }
 """
 
 _JS = """
@@ -799,7 +1097,10 @@ function sortTable(col){
 def build_html(runs: list[Run]) -> str:
     n_attempts = sum(len(r.df) for r in runs)
     n_excluded = sum(int(r.df["excluded"].sum()) for r in runs)
+    n_failed = sum(failure_count(r.df) for r in runs)
+    fail_pct = (100.0 * n_failed / n_attempts) if n_attempts else 0.0
     studies = sorted({r.study for r in runs})
+    labels = run_label_map(runs)
 
     summary = summary_plot(runs)
     summary_html = (
@@ -809,18 +1110,30 @@ def build_html(runs: list[Run]) -> str:
     )
 
     run_blocks = []
-    for run in runs:
-        plot = per_run_plot(run)
+    for idx, run in enumerate(runs):
+        label = labels.get(run.csv_path, run.display_label)
+        plot = per_run_plot(run, label=label)
         plot_html = _img_tag(plot, run.label) if plot else "<p class='meta'>No included attempts to plot.</p>"
+        fail_count = failure_count(run.df)
+        fail_pct_run = 100.0 * fail_count / len(run.df) if len(run.df) else 0.0
+        fail_badge = (
+            f"<span class='fail-badge' title='non-ok status rows'>✕ {fail_count}/{len(run.df)} "
+            f"({fail_pct_run:.0f}%)</span>"
+            if fail_count else ""
+        )
         run_blocks.append(
-            f'<div class="run-block"><h3>{html.escape(run.label)}</h3>'
-            f'<p class="meta">{html.escape(run.csv_path)}</p>'
-            f'<div class="writeup">{run_writeup(run)}</div>{plot_html}</div>'
+            f'<details class="run-block"><summary>'
+            f'<span class="run-title">{html.escape(label)}</span> '
+            f'<span class="meta">{html.escape(run.region_label)}</span>{fail_badge}</summary>'
+            f'<p class="meta">source: {html.escape(display_source_path(run.csv_path))}</p>'
+            f'<div class="writeup">{run_writeup(run)}</div>{plot_html}'
+            f'</details>'
         )
 
     overview = (
         f"<p class='meta'>{len(runs)} run/study file(s) · {n_attempts} attempt(s) · "
-        f"{n_excluded} excluded · datasets: {', '.join(html.escape(s) for s in studies) or '—'}</p>"
+        f"{n_failed} failed ({fail_pct:.0f}%) · {n_excluded} omitted from plots · "
+        f"datasets: {', '.join(html.escape(s) for s in studies) or '—'}</p>"
     )
 
     heatmap, _, _ = cross_region_heatmap(runs)
@@ -856,26 +1169,27 @@ def build_html(runs: list[Run]) -> str:
 {overview}
 <h2>What the search found</h2>
 <div class="findings">{_FINDINGS_INTRO}</div>
+<h2>Baselines</h2>
+{baseline_comparison(runs)}
 <h2>Computational principles</h2>
 {principles_html}
 <h2>The search process</h2>
 {process_html}
 <h2>Cross-region predictivity</h2>
+<p class="meta">Each row is the best model found for one reward region; each column is a
+brain region scored after the same ridge readout. This makes it easier to see whether
+a model is genuinely region-specific or mostly predicts early visual cortex.</p>
 {cross_html}
 <h2>Model mechanics — what each run's best model computes</h2>
-<p class="meta">Cards are ordered by reward. Each shows the winning model's idea, what it
-computes, its cross-region profile, and the full (untrained) source.</p>
+<p class="meta">Cards are ordered by reward. Each card names the target brain region,
+describes the computation directly, and includes source code when the original run folder is available.</p>
 {mechanics_section(runs)}
 {summary_html}
 <h2>Per-run trajectories</h2>
-<p class="meta">Per run: test/train correlation and the running-max reward (left axis) with
-model size <code>n_params</code> on the right axis, plus which ideas raised
-<code>best_so_far</code> (with gain, wall-clock and parameter count).</p>
+<p class="meta">Per run: test/train correlation and the running-max reward. Logged
+<code>n_params</code> appears only when enough positive, varying values are present to make
+the axis meaningful. Expand a run when you want its full trajectory details.</p>
 {''.join(run_blocks) if run_blocks else "<p class='meta'>No runs found.</p>"}
-<h2>Attempts</h2>
-<p class="meta">Click a header to sort. Expand an idea to read it in full. Excluded rows
-(non-ok status or training-related idea) are highlighted and omitted from the plots.</p>
-{attempts_table(runs)}
 <script>{_JS}</script>
 </body></html>
 """

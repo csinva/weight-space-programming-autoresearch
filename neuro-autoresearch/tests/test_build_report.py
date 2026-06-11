@@ -64,22 +64,23 @@ def test_report_built_and_contains_expected_content():
         html = open(result_path).read()
         assert len(html) > 2000
 
-        # Structure: summary + per-run plots (inline base64 PNGs) + table.
+        # Structure: summary + per-run plots (inline base64 PNGs), without the giant
+        # append-only attempts ledger in the human report.
         assert html.count('data:image/png;base64,') >= 3  # summary + 2 per-run
-        assert 'id="attempts"' in html
-        assert "sortTable" in html
+        assert 'id="attempts"' not in html
+        assert "Attempts</h2>" not in html
 
         # Labels from metadata + study fallback.
         assert "NSD subj1" in html and "high" in html
         assert "runA" in html and "runB" in html
 
-        # Ideas surface in the table.
+        # Ideas surface in the writeups / run details.
         assert "Gabor filter bank" in html
         assert "word length feature" in html
 
-        # Exclusion: a training idea and a non-ok row are flagged.
-        assert "train a small MLP" in html  # still listed in the table
-        assert html.count("excluded") >= 2
+        # Failures are summarized by status without requiring the raw attempt table.
+        assert "failed" in html
+        assert "✕ 1/3" in html
 
         # Writeup mentions an improving idea.
         assert "best_so_far" in html
