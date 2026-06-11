@@ -36,8 +36,14 @@ neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`*
   `corr_<name>` column — only the headline reward narrows. Run one loop per region;
   each writes its own `results/<study>__<roi>.csv`, so per-region hill-climbs never mix.
 - **Fixed region menu** (the harness logs all of these automatically — you do NOT
-  declare them): famous regions **`V1, hV4, FFA, PPA, EBA, VWFA`** + visual streams
-  **`early, ventral`**.
+  declare them): famous regions **`V1, V2, V3, hV4, FFA, PPA, EBA, VWFA`** + visual
+  streams **`early, ventral`**.
+- **Trained-AlexNet reference baseline (the bar to beat):** a frozen
+  ImageNet-pretrained AlexNet (fc7, 4096-d) read out with THIS exact ridge scores, per
+  region — `V1 0.342 · V2 0.299 · V3 0.321 · hV4 0.289 · FFA 0.396 · PPA 0.403 ·
+  EBA 0.436 · VWFA 0.321 · ventral 0.284 · overall 0.324`. This trained network — not the
+  identity floor — is the baseline your never-trained model aims to match or beat for its
+  reward region.
 - **Reward:** held-out mean per-target Pearson r (`test_corr`) over the reward region.
 
 ## `text` — Le Petit Prince narrative listening (`Li2022PetitSubj`)
