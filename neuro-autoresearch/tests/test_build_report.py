@@ -64,9 +64,11 @@ def test_report_built_and_contains_expected_content():
         html = open(result_path).read()
         assert len(html) > 2000
 
-        # Structure: summary + per-run plots (inline base64 PNGs), without the giant
+        # Structure: summary + per-run plots (offline Plotly), without the giant
         # append-only attempts ledger in the human report.
-        assert html.count('data:image/png;base64,') >= 3  # summary + 2 per-run
+        assert html.count('Plotly.newPlot(') >= 3
+        assert "cdn.plot.ly" not in html
+        assert "plotly.js" in html.lower()
         assert 'id="attempts"' not in html
         assert "Attempts</h2>" not in html
 

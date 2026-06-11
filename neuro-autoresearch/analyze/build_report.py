@@ -7,13 +7,12 @@ and writes one white-background, interactive HTML file with:
   * top summary plot(s) overlaying every run's reward (``test_corr``) vs iteration,
     faceted by dataset (the ``study`` column);
   * per-run ``test_corr`` / ``train_corr`` vs iteration with a running-max line;
-  * an interactive, sortable table of attempts with expandable ``idea`` text;
   * an auto-generated writeup of which ideas were tried and which improved
     ``best_so_far``.
 
 Rows whose ``status`` is not ``ok`` or whose ``idea`` mentions training are flagged and
-excluded from the plots and the writeup (the proposed model is never trained), but are
-still listed in the table so nothing is silently dropped.
+excluded from the plots and the writeup (the proposed model is never trained), while
+failure and exclusion counts remain visible in the report.
 
 Usage::
 
@@ -22,25 +21,19 @@ Usage::
 from __future__ import annotations
 
 import argparse
-import base64
 import html
-import io
 import json
+import math
+import numbers
 import os
 import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from functools import cached_property
+from itertools import count
 
-import matplotlib
+import pandas as pd
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import pandas as pd  # noqa: E402
-
-TABLE_COLUMNS = [
-    "iteration", "model_name", "idea", "summary", "test_corr", "train_corr", "best_so_far", "status",
-]
 # Canonical left-to-right ordering of NSD regions (early visual -> ventral category).
 REGION_ORDER = ["V1", "V2", "V3", "hV4", "early", "ventral", "PPA", "EBA", "FFA", "VWFA"]
 REGION_NAMES = {
@@ -71,6 +64,18 @@ ALEXNET_BASELINES = {
 }
 _TRAIN_RE = re.compile(r"\btrain", re.IGNORECASE)
 _TAG_REGION_RE = re.compile(r"^nsd-([a-z0-9]+)-")
+_PLOT_COUNTER = count(1)
+_PLOTLY_BUNDLE = os.path.join(os.path.dirname(__file__), "vendor", "plotly-cartesian.min.js")
+_PLOTLY_CONFIG = {
+    "responsive": True,
+    "displaylogo": False,
+    "displayModeBar": False,
+    "topojsonURL": "",
+}
+_PALETTE = [
+    "#2563eb", "#dc2626", "#16a34a", "#9333ea", "#ea580c",
+    "#0891b2", "#be123c", "#4f46e5", "#65a30d", "#c2410c",
+]
 
 
 def mentions_training(idea: object) -> bool:
@@ -294,15 +299,111 @@ def discover_runs(runs_dir: str, repo_root: str, include_root_results: bool = Tr
     return runs
 
 
-def _fig_to_base64(fig) -> str:
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png", dpi=110, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    return base64.b64encode(buf.getvalue()).decode("ascii")
+def _load_plotly_bundle() -> str:
+    if not os.path.exists(_PLOTLY_BUNDLE):
+        raise FileNotFoundError(
+            f"Plotly bundle not found at {_PLOTLY_BUNDLE}; vendor "
+            "analyze/vendor/plotly-cartesian.min.js before building the report."
+        )
+    with open(_PLOTLY_BUNDLE, encoding="utf-8") as fh:
+        bundle = fh.read()
+    # The cartesian bundle carries Plotly's default topojson CDN URL for geo
+    # traces. This report never emits geo traces, configures that URL to empty,
+    # and must not contain any CDN endpoint in the self-contained HTML.
+    bundle = re.sub(r"https://cdn\.plot\.ly/?", "", bundle)
+    if "cdn.plot.ly" in bundle:
+        raise RuntimeError("vendored Plotly bundle still references cdn.plot.ly")
+    return bundle
 
 
-def _img_tag(b64: str, alt: str) -> str:
-    return f'<img class="plot" alt="{html.escape(alt)}" src="data:image/png;base64,{b64}">'
+def _plot_color(index: int) -> str:
+    return _PALETTE[index % len(_PALETTE)]
+
+
+def _sanitize_json(value):
+    """Convert pandas/numpy scalars and non-finite numbers into Plotly-safe JSON."""
+    if isinstance(value, dict):
+        return {str(k): _sanitize_json(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_sanitize_json(v) for v in value]
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, numbers.Integral):
+        return int(value)
+    if isinstance(value, numbers.Real):
+        f = float(value)
+        return f if math.isfinite(f) else None
+    try:
+        if pd.isna(value):
+            return None
+    except (TypeError, ValueError):
+        pass
+    return value
+
+
+def _json(value) -> str:
+    return json.dumps(_sanitize_json(value), allow_nan=False, separators=(",", ":"))
+
+
+def _merge_layout(base: dict, updates: dict | None) -> dict:
+    out = dict(base)
+    for key, value in (updates or {}).items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key] = _merge_layout(out[key], value)
+        else:
+            out[key] = value
+    return out
+
+
+def _plotly_layout(layout: dict) -> dict:
+    base = {
+        "autosize": True,
+        "paper_bgcolor": "white",
+        "plot_bgcolor": "white",
+        "font": {
+            "size": 13,
+            "family": "-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+        },
+        "margin": {"l": 72, "r": 34, "t": 58, "b": 58},
+        "hovermode": "closest",
+        "legend": {
+            "orientation": "h",
+            "yanchor": "bottom",
+            "y": 1.02,
+            "xanchor": "left",
+            "x": 0,
+        },
+        "xaxis": {
+            "automargin": True,
+            "gridcolor": "#e5e7eb",
+            "zerolinecolor": "#d1d5db",
+            "linecolor": "#d1d5db",
+        },
+        "yaxis": {
+            "automargin": True,
+            "gridcolor": "#e5e7eb",
+            "zerolinecolor": "#d1d5db",
+            "linecolor": "#d1d5db",
+        },
+    }
+    return _merge_layout(base, layout)
+
+
+def _plotly_div(data: list[dict], layout: dict, *, height: int | None = None,
+                caption: str | None = None) -> str:
+    plot_id = f"plot-{next(_PLOT_COUNTER)}"
+    style = f' style="height:{int(height)}px"' if height else ""
+    caption_html = f'<p class="chart-caption">{html.escape(caption)}</p>' if caption else ""
+    return (
+        '<div class="chart-card">\n'
+        f'<div id="{plot_id}" class="chart-plot"{style}></div>\n'
+        "<script>\n"
+        f'Plotly.newPlot("{plot_id}",{_json(data)},{_json(_plotly_layout(layout))},{_json(_PLOTLY_CONFIG)});'
+        "\n</script>\n"
+        f"{caption_html}\n</div>\n"
+    )
 
 
 def summary_plot(runs: list[Run]) -> str | None:
@@ -315,54 +416,109 @@ def summary_plot(runs: list[Run]) -> str | None:
     if not by_study:
         return None
 
-    studies = sorted(by_study)
-    fig, axes = plt.subplots(
-        1, len(studies), figsize=(6.2 * len(studies), 4.4), squeeze=False, facecolor="white"
-    )
-    for ax, study in zip(axes[0], studies):
-        for run in by_study[study]:
-            inc = run.included
-            ax.plot(inc["iteration"], inc["test_corr"], marker="o", ms=3, lw=1.4,
-                    label=labels.get(run.csv_path, run.display_label))
-        ax.set_title(f"{study}: reward over proposed models")
-        ax.set_xlabel("X: iteration")
-        ax.set_ylabel("Y: test_corr")
-        ax.grid(True, alpha=0.3)
-        ax.legend(fontsize=7, loc="best")
-    fig.tight_layout()
-    return _fig_to_base64(fig)
+    charts = []
+    for study in sorted(by_study):
+        data = []
+        for idx, run in enumerate(by_study[study]):
+            inc = run.included.dropna(subset=["test_corr"]).sort_values("iteration")
+            if inc.empty:
+                continue
+            label = labels.get(run.csv_path, run.display_label)
+            data.append({
+                "type": "scatter",
+                "mode": "lines+markers",
+                "x": inc["iteration"].tolist(),
+                "y": inc["test_corr"].tolist(),
+                "name": label,
+                "line": {"width": 1.8, "color": _plot_color(idx)},
+                "marker": {"size": 6, "color": _plot_color(idx)},
+                "hovertemplate": (
+                    html.escape(label)
+                    + "<br>Iteration %{x}<br>Held-out correlation %{y:.4f}<extra></extra>"
+                ),
+            })
+        if not data:
+            continue
+        charts.append(_plotly_div(
+            data,
+            {
+                "title": {"text": f"{study}: reward across proposed models"},
+                "xaxis": {"title": {"text": "Iteration"}},
+                "yaxis": {"title": {"text": "Held-out correlation (Pearson r)"}},
+            },
+            height=420,
+            caption="Each trace is one run; use the legend to toggle runs.",
+        ))
+    return "".join(charts) if charts else None
 
 
 def per_run_plot(run: Run, label: str | None = None) -> str | None:
     inc = run.included
     if inc.empty:
         return None
-    fig, ax = plt.subplots(figsize=(6.4, 4.2), facecolor="white")
-    ax.plot(inc["iteration"], inc["test_corr"], marker="o", ms=3, lw=1.4, color="#1f77b4", label="test_corr")
+    inc = inc.sort_values("iteration")
+    x = inc["iteration"].tolist()
+    data = [{
+        "type": "scatter",
+        "mode": "lines+markers",
+        "x": x,
+        "y": inc["test_corr"].tolist(),
+        "name": "test_corr",
+        "line": {"width": 1.8, "color": "#2563eb"},
+        "marker": {"size": 6, "color": "#2563eb"},
+        "hovertemplate": "Iteration %{x}<br>test_corr %{y:.4f}<extra></extra>",
+    }]
     if inc["train_corr"].notna().any():
-        ax.plot(inc["iteration"], inc["train_corr"], marker="s", ms=3, lw=1.0, color="#ff7f0e", alpha=0.8, label="train_corr")
+        data.append({
+            "type": "scatter",
+            "mode": "lines+markers",
+            "x": x,
+            "y": inc["train_corr"].tolist(),
+            "name": "train_corr",
+            "line": {"width": 1.4, "color": "#ea580c"},
+            "marker": {"size": 6, "symbol": "square", "color": "#ea580c"},
+            "hovertemplate": "Iteration %{x}<br>train_corr %{y:.4f}<extra></extra>",
+        })
     running_max = inc["test_corr"].cummax()
-    ax.plot(inc["iteration"], running_max, drawstyle="steps-post", lw=1.6, color="#2ca02c", ls="--", label="running max (test_corr)")
-    ax.set_title(f"{label or run.display_label}: reward trajectory", fontsize=9)
-    ax.set_xlabel("X: iteration (one proposed model per row)")
-    ax.set_ylabel("Y: correlation (Pearson r)")
-    ax.grid(True, alpha=0.3)
-    handles, labels = ax.get_legend_handles_labels()
+    data.append({
+        "type": "scatter",
+        "mode": "lines",
+        "x": x,
+        "y": running_max.tolist(),
+        "name": "running max (test_corr)",
+        "line": {"width": 2, "color": "#16a34a", "dash": "dash", "shape": "hv"},
+        "hovertemplate": "Iteration %{x}<br>running max %{y:.4f}<extra></extra>",
+    })
+    layout = {
+        "title": {"text": f"{label or run.display_label}: reward trajectory"},
+        "xaxis": {"title": {"text": "Iteration (one proposed model per row)"}},
+        "yaxis": {"title": {"text": "Correlation (Pearson r)"}},
+    }
     if has_usable_n_params(inc):
-        ax2 = ax.twinx()
         npar = pd.to_numeric(inc["n_params"], errors="coerce")
-        npar = npar.where(npar > 0)
-        ax2.plot(inc["iteration"], npar, color="#9467bd", alpha=0.55,
-                 lw=1.1, ls=":", marker=".", ms=3, label="n_params")
-        ax2.set_yscale("log")
-        ax2.set_ylabel("Y2: logged n_params (log)", color="#9467bd")
-        ax2.tick_params(axis="y", labelcolor="#9467bd")
-        h2, l2 = ax2.get_legend_handles_labels()
-        handles += h2
-        labels += l2
-    ax.legend(handles, labels, fontsize=8, loc="best")
-    fig.tight_layout()
-    return _fig_to_base64(fig)
+        npar = npar.where(npar > 0).tolist()
+        data.append({
+            "type": "scatter",
+            "mode": "lines+markers",
+            "x": x,
+            "y": npar,
+            "name": "n_params",
+            "yaxis": "y2",
+            "line": {"width": 1.4, "color": "#9333ea", "dash": "dot"},
+            "marker": {"size": 5, "color": "#9333ea"},
+            "hovertemplate": "Iteration %{x}<br>n_params %{y:,}<extra></extra>",
+        })
+        layout["yaxis2"] = {
+            "title": {"text": "Logged parameters (log)"},
+            "type": "log",
+            "overlaying": "y",
+            "side": "right",
+            "showgrid": False,
+            "automargin": True,
+            "color": "#9333ea",
+        }
+        layout["margin"] = {"l": 70, "r": 82, "t": 58, "b": 58}
+    return _plotly_div(data, layout, height=420)
 
 
 def _truncate(text: str, n: int = 90) -> str:
@@ -436,60 +592,6 @@ def run_writeup(run: Run) -> str:
     return "".join(parts)
 
 
-def _idea_cell(idea: str) -> str:
-    idea = idea or ""
-    safe_full = html.escape(idea)
-    if len(idea) <= 90:
-        return f'<td class="idea">{safe_full}</td>'
-    return (
-        '<td class="idea"><details><summary>'
-        f"{html.escape(_truncate(idea))}</summary>{safe_full}</details></td>"
-    )
-
-
-def _fmt(value: object) -> str:
-    if isinstance(value, float):
-        return "" if pd.isna(value) else f"{value:.4f}"
-    if value is None:
-        return ""
-    return html.escape(str(value))
-
-
-def attempts_table(runs: list[Run]) -> str:
-    rows_html = []
-    for run in runs:
-        for _, row in run.df.iterrows():
-            excluded = bool(row["excluded"])
-            cells = [f'<td class="run">{html.escape(run.tag)}</td>', f'<td>{html.escape(run.study)}</td>']
-            for col in TABLE_COLUMNS:
-                value = row.get(col, "")
-                if col in ("idea", "summary"):
-                    cells.append(_idea_cell(str(value)))
-                elif col in ("test_corr", "train_corr", "best_so_far"):
-                    cells.append(f'<td class="num">{_fmt(value)}</td>')
-                else:
-                    cells.append(f"<td>{_fmt(value)}</td>")
-            flag = (
-                '<td class="flag fail" title="excluded from plots">✕</td>'
-                if excluded else '<td class="flag ok" title="included in plots">✓</td>'
-            )
-            cls = ' class="excluded"' if excluded else ""
-            rows_html.append(f"<tr{cls}>" + flag + "".join(cells) + "</tr>")
-
-    headers = ["flag", "run", "study"] + TABLE_COLUMNS
-    head_html = "".join(
-        f'<th onclick="sortTable({i})">{html.escape(h)} <span class="arrow"></span></th>'
-        for i, h in enumerate(headers)
-    )
-    return (
-        '<table id="attempts"><thead><tr>'
-        + head_html
-        + "</tr></thead><tbody>"
-        + "".join(rows_html)
-        + "</tbody></table>"
-    )
-
-
 # --------------------------------------------------------------------------- #
 # Mechanistic analysis: what the best model in each run actually computes.
 # --------------------------------------------------------------------------- #
@@ -536,27 +638,76 @@ def baseline_comparison(runs: list[Run]) -> str:
 
     order = {rg: i for i, rg in enumerate(REGION_ORDER)}
     rows.sort(key=lambda r: order.get(r[0], 999))
-    fig, ax = plt.subplots(figsize=(9.4, 0.55 * len(rows) + 2.2), facecolor="white")
-    import numpy as np
-    y = np.arange(len(rows))
-    h = 0.24
+    names = [r[2] for r in rows]
     best_vals = [r[3] for r in rows]
-    identity_vals = [float("nan") if r[4] is None else r[4] for r in rows]
-    alex_vals = [float("nan") if r[5] is None else r[5] for r in rows]
-    ax.barh(y - h, identity_vals, height=h, color="#9ca3af", label="identity/raw pixels (logged)")
-    ax.barh(y, best_vals, height=h, color="#2563eb", label="best untrained search model")
-    ax.barh(y + h, alex_vals, height=h, color="#dc8a00", label="trained AlexNet fc7 reference")
-    for i, (_rg, _label, _name, best, ident, alex) in enumerate(rows):
-        for off, val in ((-h, ident), (0, best), (h, alex)):
-            if val is not None:
-                ax.text(val, i + off, f" {val:.3f}", va="center", fontsize=7)
-    ax.set_yticks(y)
-    ax.set_yticklabels([r[2] for r in rows], fontsize=8)
-    ax.set_xlabel("X: held-out test_corr (mean Pearson r; higher is better)")
-    ax.set_title("Baselines by reward region")
-    ax.grid(True, axis="x", alpha=0.3)
-    ax.legend(fontsize=8, loc="lower right")
-    fig.tight_layout()
+    identity_vals = [None if r[4] is None else r[4] for r in rows]
+    alex_vals = [None if r[5] is None else r[5] for r in rows]
+    best_colors = [
+        "#16a34a" if alex is not None and best >= alex else "#2563eb"
+        for (_rg, _label, _name, best, _ident, alex) in rows
+    ]
+    best_delta = [
+        "" if alex is None else f"{best - alex:+.3f}"
+        for (_rg, _label, _name, best, _ident, alex) in rows
+    ]
+    data = [
+        {
+            "type": "bar",
+            "orientation": "h",
+            "name": "identity / raw pixels",
+            "y": names,
+            "x": identity_vals,
+            "marker": {"color": "#9ca3af"},
+            "text": ["" if v is None else f"{v:.3f}" for v in identity_vals],
+            "textposition": "outside",
+            "cliponaxis": False,
+            "hovertemplate": "identity / raw pixels<br>%{y}<br>%{x:.3f}<extra></extra>",
+        },
+        {
+            "type": "bar",
+            "orientation": "h",
+            "name": "best untrained search model",
+            "y": names,
+            "x": best_vals,
+            "customdata": best_delta,
+            "marker": {"color": best_colors},
+            "text": [f"{v:.3f}" for v in best_vals],
+            "textposition": "outside",
+            "cliponaxis": False,
+            "hovertemplate": (
+                "best untrained search model<br>%{y}<br>"
+                "%{x:.3f} (%{customdata} vs AlexNet)<extra></extra>"
+            ),
+        },
+        {
+            "type": "bar",
+            "orientation": "h",
+            "name": "trained AlexNet fc7",
+            "y": names,
+            "x": alex_vals,
+            "marker": {"color": "#dc8a00"},
+            "text": ["" if v is None else f"{v:.3f}" for v in alex_vals],
+            "textposition": "outside",
+            "cliponaxis": False,
+            "hovertemplate": "trained AlexNet fc7<br>%{y}<br>%{x:.3f}<extra></extra>",
+        },
+    ]
+    chart = _plotly_div(
+        data,
+        {
+            "title": {"text": "Baselines by reward region"},
+            "barmode": "group",
+            "xaxis": {"title": {"text": "Held-out correlation (mean Pearson r; higher is better)"}},
+            "yaxis": {
+                "title": {"text": "Reward region"},
+                "categoryorder": "array",
+                "categoryarray": names,
+            },
+            "margin": {"l": 210, "r": 48, "t": 58, "b": 58},
+        },
+        height=max(380, 62 * len(rows) + 150),
+        caption="Green untrained bars meet or beat the trained AlexNet reference for that region.",
+    )
 
     body = []
     for rg, _label, name, best, ident, alex in rows:
@@ -581,7 +732,7 @@ def baseline_comparison(runs: list[Run]) -> str:
     return (
         "<p class='meta'>Identity is shown only when that row is already present in the log. "
         "AlexNet is the documented frozen ImageNet fc7 baseline; this report does not rerun it.</p>"
-        + _img_tag(_fig_to_base64(fig), "identity, untrained winner, and AlexNet baselines by region")
+        + chart
         + table
     )
 
@@ -622,7 +773,7 @@ def find_model_source(run: Run, model_name: object) -> tuple[str | None, str | N
 def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[str]]:
     """Heatmap of each run's best model scored against every region (``corr_<region>``).
 
-    Returns ``(base64_png_or_None, row_labels, col_regions)``. ``None`` when no run
+    Returns ``(plot_html_or_None, row_labels, col_regions)``. ``None`` when no run
     exposes ``corr_<region>`` columns (so test fixtures simply skip the section).
     """
     rows, labels = [], []
@@ -650,27 +801,34 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
         if all(pd.isna(v) for v in vals):
             continue
         labels.append(label_map.get(run.csv_path, run.display_label))
-        rows.append([float(v) if pd.notna(v) else float("nan") for v in vals])
+        rows.append([float(v) if pd.notna(v) else None for v in vals])
 
-    import numpy as np
-    mat = np.array(rows, dtype=float)
-    fig, ax = plt.subplots(figsize=(1.0 * len(present) + 3, 0.5 * len(rows) + 2.2), facecolor="white")
-    im = ax.imshow(mat, aspect="auto", cmap="viridis")
-    ax.set_xticks(range(len(present)))
-    ax.set_xticklabels(present, rotation=0)
-    ax.set_yticks(range(len(labels)))
-    ax.set_yticklabels(labels, fontsize=8)
-    ax.set_xlabel("X: brain region scored (held-out corr)")
-    ax.set_title("Y: region-optimized run; cells show cross-region predictivity")
-    for i in range(mat.shape[0]):
-        for j in range(mat.shape[1]):
-            v = mat[i, j]
-            if not np.isnan(v):
-                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7,
-                        color="white" if v < (np.nanmax(mat) * 0.6) else "black")
-    fig.colorbar(im, ax=ax, fraction=0.025, pad=0.02)
-    fig.tight_layout()
-    return _fig_to_base64(fig), labels, present
+    if not rows:
+        return None, [], []
+
+    text = [["" if v is None else f"{v:.2f}" for v in row] for row in rows]
+    chart = _plotly_div(
+        [{
+            "type": "heatmap",
+            "x": present,
+            "y": labels,
+            "z": rows,
+            "text": text,
+            "texttemplate": "%{text}",
+            "colorscale": "Viridis",
+            "colorbar": {"title": {"text": "held-out corr"}},
+            "hovertemplate": "%{y} × %{x} → corr %{z:.4f}<extra></extra>",
+        }],
+        {
+            "title": {"text": "Cross-region predictivity of each run's best model"},
+            "xaxis": {"title": {"text": "Brain region scored"}},
+            "yaxis": {"title": {"text": "Run (optimized region)"}},
+            "margin": {"l": 170, "r": 80, "t": 58, "b": 70},
+        },
+        height=max(360, 42 * len(rows) + 160),
+        caption="Rows are run winners; columns are held-out predictivity in each region.",
+    )
+    return chart, labels, present
 
 
 def _code_block(source: str | None, path: str | None) -> str:
@@ -801,16 +959,38 @@ def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
     if not items:
         return None, ""
 
-    fig, ax = plt.subplots(figsize=(8.2, 0.5 * len(items) + 1.7), facecolor="white")
     names = [k for k, _ in items][::-1]
     vals = [v for _, v in items][::-1]
-    ax.barh(names, vals, color="#2563eb")
-    for i, v in enumerate(vals):
-        ax.text(v, i, f" {v:.3f}", va="center", fontsize=8)
-    ax.set_xlabel("Σ gain in best test_corr from improving steps mentioning the principle")
-    ax.set_title("Which computational principles moved the reward (all runs)")
-    ax.grid(True, axis="x", alpha=0.3)
-    fig.tight_layout()
+    chart = _plotly_div(
+        [{
+            "type": "bar",
+            "orientation": "h",
+            "y": names,
+            "x": vals,
+            "customdata": [counts[name] for name in names],
+            "marker": {"color": "#2563eb"},
+            "text": [f"{v:.3f}" for v in vals],
+            "textposition": "outside",
+            "cliponaxis": False,
+            "hovertemplate": (
+                "%{y}<br>Σ Δ test_corr %{x:.4f}<br>"
+                "%{customdata} improving step(s)<extra></extra>"
+            ),
+        }],
+        {
+            "title": {"text": "Which computational principles moved the reward (all runs)"},
+            "xaxis": {
+                "title": {
+                    "text": "Sum of held-out-correlation gain from improving steps"
+                }
+            },
+            "yaxis": {"title": {"text": "Computational principle"}},
+            "showlegend": False,
+            "margin": {"l": 230, "r": 45, "t": 58, "b": 58},
+        },
+        height=max(340, 46 * len(items) + 150),
+        caption="Bars sum overlapping attributions from ideas that improved best_so_far.",
+    )
 
     body = "".join(
         f"<tr><td>{html.escape(k)}</td><td class='num'>{v:.4f}</td>"
@@ -822,12 +1002,11 @@ def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
         "<th>Σ Δ test_corr</th><th>#&nbsp;steps</th></tr></thead><tbody>"
         + body + "</tbody></table>"
     )
-    return _fig_to_base64(fig), table
+    return chart, table
 
 
 def search_dashboard(runs: list[Run]) -> str | None:
     """Four-panel view of the search, adapting to whichever columns were logged."""
-    import numpy as np
     labels = run_label_map(runs)
 
     series = []
@@ -838,111 +1017,240 @@ def search_dashboard(runs: list[Run]) -> str | None:
     if not series:
         return None
 
-    cmap = plt.get_cmap("tab10" if len(series) <= 10 else "tab20")
-    colors = {run.csv_path: cmap(i % cmap.N) for i, (run, _) in enumerate(series)}
+    colors = {run.csv_path: _plot_color(i) for i, (run, _) in enumerate(series)}
 
-    fig, axes = plt.subplots(2, 2, figsize=(13, 9), facecolor="white")
-    a, b, c, d = axes.ravel()
-
-    any_sec = False
+    any_sec = any(
+        "seconds" in inc.columns and inc["seconds"].notna().any()
+        for _, inc in series
+    )
+    progress_data = []
     for run, inc in series:
         if inc.empty:
             continue
-        col = colors[run.csv_path]
         if "seconds" in inc.columns and inc["seconds"].notna().any():
             x = inc["seconds"].fillna(0).cumsum() / 3600.0
-            any_sec = True
         else:
             x = inc["iteration"]
-        a.plot(x, inc["test_corr"].cummax(), lw=1.5, color=col,
-               label=labels.get(run.csv_path, run.display_label))
-    a.set_xlabel("X: cumulative wall-clock (h)" if any_sec else "X: iteration")
-    a.set_ylabel("Y: best_so_far test_corr")
-    a.set_title("Search progress: best reward so far")
-    a.grid(True, alpha=0.3)
-    a.legend(fontsize=6, ncol=2)
+        label = labels.get(run.csv_path, run.display_label)
+        progress_data.append({
+            "type": "scatter",
+            "mode": "lines+markers",
+            "x": x.tolist(),
+            "y": inc["test_corr"].cummax().tolist(),
+            "name": label,
+            "line": {"width": 1.8, "color": colors[run.csv_path]},
+            "marker": {"size": 5, "color": colors[run.csv_path]},
+            "hovertemplate": (
+                html.escape(label)
+                + ("<br>Cumulative hours %{x:.3f}" if any_sec else "<br>Iteration %{x}")
+                + "<br>best_so_far %{y:.4f}<extra></extra>"
+            ),
+        })
+    progress_chart = _plotly_div(
+        progress_data,
+        {
+            "title": {"text": "Search progress: best reward so far"},
+            "xaxis": {"title": {"text": "Cumulative wall-clock (hours)" if any_sec else "Iteration"}},
+            "yaxis": {"title": {"text": "Best held-out correlation so far"}},
+        },
+        height=380,
+    )
 
-    any_n_params = False
-    for run, inc in series:
-        if inc.empty or not has_usable_n_params(inc):
-            continue
-        any_n_params = True
-        col = colors[run.csv_path]
-        npar = pd.to_numeric(inc["n_params"], errors="coerce")
-        npar = npar.where(npar > 0)
-        b.scatter(npar, inc["test_corr"], s=14, color=col, alpha=0.55, edgecolors="none")
-        bi = inc["test_corr"].idxmax()
-        best_n = pd.to_numeric(pd.Series([inc.loc[bi, "n_params"]]), errors="coerce").iloc[0]
-        if pd.notna(best_n) and best_n > 0:
-            b.scatter(float(best_n), inc.loc[bi, "test_corr"], marker="*", s=130, color=col,
-                      edgecolors="black", linewidths=0.4)
+    any_n_params = any(not inc.empty and has_usable_n_params(inc) for _, inc in series)
     if any_n_params:
-        b.set_xscale("log")
-        b.set_xlabel("X: logged n_params (log)")
-        b.set_ylabel("Y: test_corr")
-        b.set_title("Does logged model size explain reward? (★ = run best)")
-        b.grid(True, alpha=0.3)
+        size_data = []
+        for run, inc in series:
+            if inc.empty or not has_usable_n_params(inc):
+                continue
+            label = labels.get(run.csv_path, run.display_label)
+            npar = pd.to_numeric(inc["n_params"], errors="coerce").where(lambda s: s > 0)
+            color = colors[run.csv_path]
+            size_data.append({
+                "type": "scatter",
+                "mode": "markers",
+                "x": npar.tolist(),
+                "y": inc["test_corr"].tolist(),
+                "name": label,
+                "marker": {"size": 7, "color": color, "opacity": 0.62},
+                "hovertemplate": (
+                    html.escape(label)
+                    + "<br>Logged parameters %{x:,}<br>Held-out correlation %{y:.4f}<extra></extra>"
+                ),
+            })
+            bi = inc["test_corr"].idxmax()
+            best_n = pd.to_numeric(pd.Series([inc.loc[bi, "n_params"]]), errors="coerce").iloc[0]
+            if pd.notna(best_n) and best_n > 0:
+                size_data.append({
+                    "type": "scatter",
+                    "mode": "markers",
+                    "x": [float(best_n)],
+                    "y": [float(inc.loc[bi, "test_corr"])],
+                    "name": f"{label} best",
+                    "showlegend": False,
+                    "marker": {
+                        "symbol": "star",
+                        "size": 16,
+                        "color": color,
+                        "line": {"color": "#111827", "width": 1},
+                    },
+                    "hovertemplate": (
+                        html.escape(label)
+                        + " best<br>Logged parameters %{x:,}<br>"
+                        "Held-out correlation %{y:.4f}<extra></extra>"
+                    ),
+                })
+        size_chart = _plotly_div(
+            size_data,
+            {
+                "title": {"text": "Does logged model size explain reward? (star = run best)"},
+                "xaxis": {"title": {"text": "Logged parameters (log)"}, "type": "log"},
+                "yaxis": {"title": {"text": "Held-out correlation (Pearson r)"}},
+            },
+            height=380,
+        )
     else:
-        order = list(np.argsort([failure_rate(run.df) for run, _ in series]))
-        ypos = np.arange(len(order))
+        order = sorted(range(len(series)), key=lambda i: failure_rate(series[i][0].df))
         rates = [100.0 * failure_rate(series[i][0].df) for i in order]
-        b.barh(ypos, rates, color=[colors[series[i][0].csv_path] for i in order])
-        for i, rate in enumerate(rates):
-            run = series[order[i]][0]
-            b.text(rate, i, f" {failure_count(run.df)}/{len(run.df)} ({rate:.0f}%)", va="center", fontsize=7)
-        b.set_yticks(ypos)
-        b.set_yticklabels([labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order], fontsize=7)
-        b.set_xlabel("X: failed rows (% of total iterations)")
-        b.set_title("Failure rate by run")
-        b.grid(True, axis="x", alpha=0.3)
+        y_labels = [labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order]
+        size_chart = _plotly_div(
+            [{
+                "type": "bar",
+                "orientation": "h",
+                "x": rates,
+                "y": y_labels,
+                "marker": {"color": [colors[series[i][0].csv_path] for i in order]},
+                "text": [
+                    f"{failure_count(series[i][0].df)}/{len(series[i][0].df)} ({rate:.0f}%)"
+                    for i, rate in zip(order, rates)
+                ],
+                "textposition": "outside",
+                "cliponaxis": False,
+                "hovertemplate": "%{y}<br>Failed rows %{text}<extra></extra>",
+            }],
+            {
+                "title": {"text": "Failure rate by run"},
+                "xaxis": {"title": {"text": "Failed rows (% of total iterations)"}},
+                "yaxis": {"title": {"text": "Run"}},
+                "showlegend": False,
+                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+            },
+            height=380,
+        )
 
-    any_gap = False
+    gap_data = []
     for run, inc in series:
         if not inc.empty and inc["train_corr"].notna().any():
-            any_gap = True
-            c.plot(inc["iteration"], inc["train_corr"] - inc["test_corr"],
-                   lw=1.2, color=colors[run.csv_path])
-    if any_gap:
-        c.axhline(0, color="gray", lw=0.8, ls=":")
-        c.set_xlabel("X: iteration")
-        c.set_ylabel("Y: train_corr − test_corr")
-        c.set_title("Readout generalization gap over the search")
-        c.grid(True, alpha=0.3)
+            label = labels.get(run.csv_path, run.display_label)
+            gap_data.append({
+                "type": "scatter",
+                "mode": "lines",
+                "x": inc["iteration"].tolist(),
+                "y": (inc["train_corr"] - inc["test_corr"]).tolist(),
+                "name": label,
+                "line": {"width": 1.6, "color": colors[run.csv_path]},
+                "hovertemplate": (
+                    html.escape(label)
+                    + "<br>Iteration %{x}<br>train_corr - test_corr %{y:.4f}<extra></extra>"
+                ),
+            })
+    if gap_data:
+        gap_chart = _plotly_div(
+            gap_data,
+            {
+                "title": {"text": "Readout generalization gap over the search"},
+                "xaxis": {"title": {"text": "Iteration"}},
+                "yaxis": {"title": {"text": "train_corr - test_corr"}},
+                "shapes": [{
+                    "type": "line",
+                    "xref": "paper",
+                    "x0": 0,
+                    "x1": 1,
+                    "y0": 0,
+                    "y1": 0,
+                    "line": {"color": "#6b7280", "width": 1, "dash": "dot"},
+                }],
+            },
+            height=380,
+        )
     else:
-        c.axis("off")
-        c.text(0.5, 0.5, "No train_corr values available", ha="center", va="center", color="#666")
+        gap_chart = (
+            '<div class="chart-card note-card">'
+            '<p class="meta">No train_corr values available</p>'
+            "</div>"
+        )
 
-    any_hours = any("seconds" in inc.columns and inc["seconds"].notna().any() for _, inc in series)
-    order = list(np.argsort([
-        (inc["seconds"].fillna(0).sum() / 3600.0 if any_hours and "seconds" in inc.columns else len(run.df))
-        for run, inc in series
-    ]))
-    ypos = np.arange(len(order))
-    if any_hours:
-        hours = [float(series[i][1]["seconds"].fillna(0).sum() / 3600.0)
-                 if "seconds" in series[i][1].columns else 0.0 for i in order]
-        d.barh(ypos, hours, color=[colors[series[i][0].csv_path] for i in order])
-        for i, (h, idx) in enumerate(zip(hours, order)):
-            d.text(h, i, f" {h:.1f}h / {len(series[idx][0].df)} total it", va="center", fontsize=7)
-        d.set_xlabel("X: total wall-clock (h)")
-        d.set_title("Compute spent per run")
+    order = sorted(range(len(series)), key=lambda i: (
+        series[i][1]["seconds"].fillna(0).sum() / 3600.0
+        if any_sec and "seconds" in series[i][1].columns else len(series[i][0].df)
+    ))
+    y_labels = [labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order]
+    if any_sec:
+        hours = [
+            float(series[i][1]["seconds"].fillna(0).sum() / 3600.0)
+            if "seconds" in series[i][1].columns else 0.0
+            for i in order
+        ]
+        compute_chart = _plotly_div(
+            [{
+                "type": "bar",
+                "orientation": "h",
+                "x": hours,
+                "y": y_labels,
+                "customdata": [len(series[i][0].df) for i in order],
+                "marker": {"color": [colors[series[i][0].csv_path] for i in order]},
+                "text": [f"{h:.1f}h / {len(series[i][0].df)} total it" for h, i in zip(hours, order)],
+                "textposition": "outside",
+                "cliponaxis": False,
+                "hovertemplate": "%{y}<br>Total wall-clock %{x:.3f}h<br>%{customdata} total iterations<extra></extra>",
+            }],
+            {
+                "title": {"text": "Compute spent per run"},
+                "xaxis": {"title": {"text": "Total wall-clock (hours)"}},
+                "yaxis": {"title": {"text": "Run"}},
+                "showlegend": False,
+                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+            },
+            height=380,
+        )
     else:
-        totals = [len(series[i][0].df) for i in order]
-        failed = [failure_count(series[i][0].df) for i in order]
         scored = [len(series[i][1]) for i in order]
-        d.barh(ypos, scored, color="#2563eb", label="scored ok")
-        d.barh(ypos, failed, left=scored, color="#dc2626", label="failed")
-        for i, idx in enumerate(order):
-            d.text(totals[i], i, f" {failed[i]}/{totals[i]} failed", va="center", fontsize=7)
-        d.set_xlabel("X: iterations")
-        d.set_title("Scored vs failed iterations")
-        d.legend(fontsize=8, loc="lower right")
-    d.set_yticks(ypos)
-    d.set_yticklabels([labels.get(series[i][0].csv_path, series[i][0].display_label) for i in order], fontsize=7)
-    d.grid(True, axis="x", alpha=0.3)
+        failed = [failure_count(series[i][0].df) for i in order]
+        compute_chart = _plotly_div(
+            [
+                {
+                    "type": "bar",
+                    "orientation": "h",
+                    "name": "scored ok",
+                    "x": scored,
+                    "y": y_labels,
+                    "marker": {"color": "#2563eb"},
+                    "hovertemplate": "%{y}<br>Scored rows %{x}<extra></extra>",
+                },
+                {
+                    "type": "bar",
+                    "orientation": "h",
+                    "name": "failed",
+                    "x": failed,
+                    "y": y_labels,
+                    "marker": {"color": "#dc2626"},
+                    "hovertemplate": "%{y}<br>Failed rows %{x}<extra></extra>",
+                },
+            ],
+            {
+                "title": {"text": "Scored vs failed iterations"},
+                "barmode": "stack",
+                "xaxis": {"title": {"text": "Iterations"}},
+                "yaxis": {"title": {"text": "Run"}},
+                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+            },
+            height=380,
+        )
 
-    fig.tight_layout()
-    return _fig_to_base64(fig)
+    return (
+        '<div class="dashboard-grid">'
+        f"{progress_chart}{size_chart}{gap_chart}{compute_chart}"
+        "</div>"
+    )
 
 
 _PRINCIPLES_INTRO = """
@@ -1029,10 +1337,25 @@ for the face/word regions.</p>
 _CSS = """
 * { box-sizing: border-box; }
 body { background:#ffffff; color:#1a1a1a; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-       margin:0; padding:2rem; line-height:1.5; }
-h1 { margin-top:0; } h2 { border-bottom:2px solid #eee; padding-bottom:.3rem; margin-top:2.4rem; }
+       margin:0; padding:0; line-height:1.5; }
+.page { max-width:1150px; margin:0 auto; padding:2rem 1.25rem 3rem; }
+h1 { margin-top:0; } h2 { border-bottom:2px solid #eee; padding-bottom:.3rem; margin-top:2.4rem; scroll-margin-top:4.5rem; }
 h3 { margin-bottom:.4rem; }
-.plot { max-width:100%; height:auto; border:1px solid #eee; border-radius:6px; background:#fff; }
+.toc { position:sticky; top:0; z-index:10; margin:1.2rem 0 1.8rem; padding:.65rem .8rem;
+       display:flex; flex-wrap:wrap; gap:.45rem .85rem; align-items:center;
+       background:rgba(255,255,255,.96); border:1px solid #e5e7eb; border-radius:10px;
+       box-shadow:0 1px 8px rgba(15,23,42,.06); backdrop-filter:blur(6px); }
+.toc b { color:#374151; margin-right:.25rem; }
+.toc a { color:#0a58ca; text-decoration:none; font-size:.9rem; }
+.toc a:hover { text-decoration:underline; }
+.chart-card { width:100%; margin:1rem 0 1.2rem; padding:.75rem .75rem .55rem;
+       border:1px solid #e5e7eb; border-radius:10px; background:#fff;
+       box-shadow:0 1px 4px rgba(15,23,42,.04); }
+.chart-plot { width:100%; min-height:360px; }
+.chart-caption { margin:.25rem .25rem 0; color:#666; font-size:.85rem; }
+.dashboard-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:1rem; align-items:stretch; }
+.dashboard-grid .chart-card { margin:0; }
+.note-card { min-height:380px; display:flex; align-items:center; justify-content:center; text-align:center; }
 .run-block { display:block; margin:1.0rem 0 1.2rem; padding:0.9rem 1.1rem; border:1px solid #eee; border-radius:8px; background:#fafafa; }
 .run-block summary { cursor:pointer; list-style:none; }
 .run-block summary::-webkit-details-marker { display:none; }
@@ -1046,15 +1369,8 @@ h3 { margin-bottom:.4rem; }
 table { border-collapse:collapse; width:100%; background:#fff; table-layout:fixed; font-size:.86rem; }
 th, td { border:1px solid #e3e3e3; padding:.4rem .55rem; text-align:left; vertical-align:top;
          overflow-wrap:anywhere; word-break:break-word; }
-th { background:#f4f4f7; cursor:pointer; user-select:none; position:sticky; top:0; }
-th:hover { background:#e9e9f2; }
-.idea { max-width:30rem; }
-.idea details summary { cursor:pointer; color:#0a58ca; }
-.idea details[open] summary { margin-bottom:.4rem; }
-tr.excluded { background:#fff5f5; color:#7a3030; }
-.flag { font-weight:700; white-space:nowrap; text-align:center; } .flag.ok { color:#1a7f37; } .flag.fail { color:#c0392b; }
+th { background:#f4f4f7; user-select:none; }
 .good { color:#1a7f37; font-weight:700; } .bad { color:#b42318; font-weight:700; }
-.run { white-space:nowrap; } .arrow { font-size:.7rem; color:#888; }
 .meta { color:#666; font-size:.85rem; }
 .findings ul, .findings ol { margin:.4rem 0 .8rem 1.2rem; } .findings li { margin:.25rem 0; }
 .card { margin:1.2rem 0; padding:1rem 1.2rem; border:1px solid #e3e3e3; border-left:4px solid #2563eb;
@@ -1072,29 +1388,18 @@ table.principles th { position:static; }
 table.baseline { table-layout:auto; font-size:.9rem; margin-top:1rem; }
 table.baseline th { position:static; }
 .num { text-align:right; font-variant-numeric:tabular-nums; }
-"""
-
-_JS = """
-function sortTable(col){
-  var t=document.getElementById('attempts'), tb=t.tBodies[0];
-  var rows=Array.prototype.slice.call(tb.rows);
-  var dir=t.getAttribute('data-sort-col')==String(col) && t.getAttribute('data-sort-dir')=='asc' ? 'desc':'asc';
-  t.setAttribute('data-sort-col',col); t.setAttribute('data-sort-dir',dir);
-  rows.sort(function(a,b){
-    var x=a.cells[col].innerText.trim(), y=b.cells[col].innerText.trim();
-    var nx=parseFloat(x), ny=parseFloat(y);
-    var bothNum=!isNaN(nx)&&!isNaN(ny)&&x!==''&&y!=='';
-    var cmp = bothNum ? nx-ny : x.localeCompare(y);
-    return dir=='asc'?cmp:-cmp;
-  });
-  rows.forEach(function(r){tb.appendChild(r);});
-  var ths=t.tHead.rows[0].cells;
-  for(var i=0;i<ths.length;i++){var s=ths[i].querySelector('.arrow'); if(s) s.textContent = i==col ? (dir=='asc'?'▲':'▼') : '';}
+@media (max-width: 820px) {
+  .dashboard-grid { grid-template-columns:1fr; }
+  .page { padding:1rem .75rem 2rem; }
+  .toc { position:static; }
 }
 """
 
 
 def build_html(runs: list[Run]) -> str:
+    global _PLOT_COUNTER
+    _PLOT_COUNTER = count(1)
+    plotly_bundle = _load_plotly_bundle()
     n_attempts = sum(len(r.df) for r in runs)
     n_excluded = sum(int(r.df["excluded"].sum()) for r in runs)
     n_failed = sum(failure_count(r.df) for r in runs)
@@ -1104,16 +1409,16 @@ def build_html(runs: list[Run]) -> str:
 
     summary = summary_plot(runs)
     summary_html = (
-        f'<h2>Reward across all runs</h2>{_img_tag(summary, "reward vs iteration, faceted by dataset")}'
+        summary
         if summary
-        else "<h2>Reward across all runs</h2><p class='meta'>No included attempts to plot.</p>"
+        else "<p class='meta'>No included attempts to plot.</p>"
     )
 
     run_blocks = []
     for idx, run in enumerate(runs):
         label = labels.get(run.csv_path, run.display_label)
         plot = per_run_plot(run, label=label)
-        plot_html = _img_tag(plot, run.label) if plot else "<p class='meta'>No included attempts to plot.</p>"
+        plot_html = plot if plot else "<p class='meta'>No included attempts to plot.</p>"
         fail_count = failure_count(run.df)
         fail_pct_run = 100.0 * fail_count / len(run.df) if len(run.df) else 0.0
         fail_badge = (
@@ -1125,7 +1430,8 @@ def build_html(runs: list[Run]) -> str:
             f'<details class="run-block"><summary>'
             f'<span class="run-title">{html.escape(label)}</span> '
             f'<span class="meta">{html.escape(run.region_label)}</span>{fail_badge}</summary>'
-            f'<p class="meta">source: {html.escape(display_source_path(run.csv_path))}</p>'
+            f'<p class="meta">run: {html.escape(run.label)} · '
+            f'source: {html.escape(display_source_path(run.csv_path))}</p>'
             f'<div class="writeup">{run_writeup(run)}</div>{plot_html}'
             f'</details>'
         )
@@ -1138,59 +1444,78 @@ def build_html(runs: list[Run]) -> str:
 
     heatmap, _, _ = cross_region_heatmap(runs)
     cross_html = (
-        f'{_img_tag(heatmap, "best model per run scored across all regions")}'
+        f"{heatmap}"
         "<p class='meta'>Rows: each run's best model. Columns: the region it is scored against. "
         "Note how the V1 column stays high across <em>every</em> run.</p>"
         if heatmap
         else "<p class='meta'>No per-region (corr_&lt;region&gt;) columns found.</p>"
     )
 
-    principle_img, principle_table = principle_attribution(runs)
+    principle_chart, principle_table = principle_attribution(runs)
     principles_html = (
         f'<div class="findings">{_PRINCIPLES_INTRO}</div>'
-        + (f'{_img_tag(principle_img, "reward gain attributed to each computational principle")}{principle_table}'
-           if principle_img else "<p class='meta'>No improving steps to attribute.</p>")
+        + (f"{principle_chart}{principle_table}"
+           if principle_chart else "<p class='meta'>No improving steps to attribute.</p>")
     )
 
     dashboard = search_dashboard(runs)
     process_html = (
         f'<div class="findings">{_PROCESS_INTRO}</div>'
-        + (_img_tag(dashboard, "search process dashboard") if dashboard
-           else "<p class='meta'>Not enough data to plot the search process.</p>")
+        + (dashboard if dashboard else "<p class='meta'>Not enough data to plot the search process.</p>")
+    )
+
+    sections = [
+        ("findings", "What the search found"),
+        ("baselines", "Baselines"),
+        ("principles", "Computational principles"),
+        ("process", "The search process"),
+        ("cross-region", "Cross-region predictivity"),
+        ("mechanics", "Model mechanics"),
+        ("summary", "Reward across all runs"),
+        ("per-run", "Per-run trajectories"),
+    ]
+    toc = (
+        '<nav class="toc" aria-label="Report sections"><b>Sections</b>'
+        + "".join(f'<a href="#{sid}">{html.escape(title)}</a>' for sid, title in sections)
+        + "</nav>"
     )
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>autoresearch report</title>
+<script>{plotly_bundle}</script>
 <style>{_CSS}</style></head>
 <body>
+<main class="page">
 <h1>neuro-autoresearch report</h1>
 {overview}
-<h2>What the search found</h2>
+{toc}
+<h2 id="findings">What the search found</h2>
 <div class="findings">{_FINDINGS_INTRO}</div>
-<h2>Baselines</h2>
+<h2 id="baselines">Baselines</h2>
 {baseline_comparison(runs)}
-<h2>Computational principles</h2>
+<h2 id="principles">Computational principles</h2>
 {principles_html}
-<h2>The search process</h2>
+<h2 id="process">The search process</h2>
 {process_html}
-<h2>Cross-region predictivity</h2>
+<h2 id="cross-region">Cross-region predictivity</h2>
 <p class="meta">Each row is the best model found for one reward region; each column is a
 brain region scored after the same ridge readout. This makes it easier to see whether
 a model is genuinely region-specific or mostly predicts early visual cortex.</p>
 {cross_html}
-<h2>Model mechanics — what each run's best model computes</h2>
+<h2 id="mechanics">Model mechanics — what each run's best model computes</h2>
 <p class="meta">Cards are ordered by reward. Each card names the target brain region,
 describes the computation directly, and includes source code when the original run folder is available.</p>
 {mechanics_section(runs)}
+<h2 id="summary">Reward across all runs</h2>
 {summary_html}
-<h2>Per-run trajectories</h2>
+<h2 id="per-run">Per-run trajectories</h2>
 <p class="meta">Per run: test/train correlation and the running-max reward. Logged
 <code>n_params</code> appears only when enough positive, varying values are present to make
 the axis meaningful. Expand a run when you want its full trajectory details.</p>
 {''.join(run_blocks) if run_blocks else "<p class='meta'>No runs found.</p>"}
-<script>{_JS}</script>
+</main>
 </body></html>
 """
 

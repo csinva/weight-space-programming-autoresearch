@@ -12,9 +12,9 @@ python analyze/build_report.py --runs-only --out docs/index.html   # the hosted 
 ```
 
 Open the resulting HTML in any browser — it has no external dependencies (CSS, JS and
-plots are all inlined; plots are base64 PNGs rendered with the matplotlib `Agg`
-backend). `--runs-only` ignores the stray repo-root `results/` ledger so the page shows
-only the per-run search under `runs/`.
+the vendored Plotly cartesian bundle are inlined once, and every chart is rendered
+from inline Plotly specs). `--runs-only` ignores the stray repo-root `results/`
+ledger so the page shows only the per-run search under `runs/`.
 
 ## What it reads
 
@@ -53,8 +53,8 @@ only the per-run search under `runs/`.
 - **Per-run trajectories** — `test_corr` and `train_corr` vs iteration with a
   running-max line and `n_params` on a secondary axis, plus a writeup of which ideas
   raised `best_so_far` (each annotated with its gain, wall-clock, and parameter count).
-- **Attempts table** — interactive and sortable (click a header); the `idea` text is
-  expandable so long ideas stay readable without breaking the layout.
+- The large append-only attempts table is intentionally omitted from the human report;
+  failures and exclusions are summarized in the overview and per-run blocks.
 
 ## Hosting on GitHub Pages
 
@@ -73,8 +73,8 @@ git add docs/index.html && git commit -m "docs: refresh report"
 Rows whose `status` is not `ok`, or whose `idea` mentions training, are **flagged and
 excluded** from the plots and the writeup — the proposed model is never trained, so
 training-based attempts are not valid scores (parity with the reference, which
-excludes trained models). Excluded rows are still listed in the table, highlighted,
-so nothing is silently dropped.
+excludes trained models). Failure and exclusion counts remain visible in the overview
+and per-run blocks.
 
 ## Test
 
@@ -85,4 +85,4 @@ pytest tests/test_build_report.py      # or via pytest
 
 The test builds a synthetic fixture (a couple of `runs/<tag>/results/<study>.csv`,
 one with `metadata.json`, one with an excluded row) and asserts the HTML is produced
-with the expected plots, table and labels.
+with the expected Plotly charts and labels.
