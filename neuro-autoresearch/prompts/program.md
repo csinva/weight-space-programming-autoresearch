@@ -1,7 +1,9 @@
 # program
 
 Your `task` is to **propose a computational model of neural encoding** that
-maximises the held-out predictivity reward (`test_corr`).
+maximises the held-out predictivity reward (`test_corr`) **for the active reward
+region** (chosen by `NEURO_ROI`, e.g. `FFA`). The readout is fit over all voxels and
+every region's predictivity is logged, but your objective is the one region's score.
 
 ## What you may edit
 
@@ -34,6 +36,14 @@ harness.run`; the run-folder workflow is the same loop, just isolated.)
    backprop. Only the ridge readout inside `harness/reward.py` is fit, and that is
    the evaluation, not part of your model.
 3. Keep `model.py` self-contained and runnable: `python -m harness.run`.
+4. **Favor simplicity.** Prefer the simplest model that predicts well: reach for a
+   clear mechanistic idea before brute-force capacity. A smaller model that matches a
+   bigger one's score is better (it is also far faster to evaluate). Avoid needlessly
+   huge random feature banks.
+5. **Report `n_params` and a concise `idea` every iteration.** Set `model.n_params`
+   to the actual count of hardcoded weights you wrote (0 for a parameter-free
+   transform — be honest), and `model.idea` to a **single concise sentence** naming
+   what you changed this iteration. Both are logged to the CSV.
 
 ## The loop
 
@@ -53,9 +63,10 @@ Each iteration, follow these steps in order:
    (`V1, hV4, FFA, PPA, EBA, VWFA, early, ventral`) as `corr_<region>` columns, frozen
    on the first row. The scalar reward is `test_corr` over the chosen region; the
    readout still fits all voxels, so every region's predictivity is logged for you.
-4. **Set a one-line `idea` each iteration** — a free-text hypothesis of what you
-   changed and why (set `model.idea`, or the model `description`). It is logged
-   verbatim as the `idea` column.
+4. **Set `model.idea` (one concise sentence) and `model.n_params`** each iteration —
+   `idea` is your one-line hypothesis of what you changed and why (logged verbatim as
+   the `idea` column); `n_params` is the honest count of hardcoded weights (logged
+   too). Keep `idea` to a single sentence.
 5. **Propose / edit the `Model`** in `model.py` aimed at **beating
    `best_so_far`** on the reward region, using the `corr_<region>` columns to decide
    *where* to push (e.g. more high-level visual structure if `FFA`/`PPA`/`ventral` lag,
