@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>neuro·autoresearch — project & codebase overview</title>
+<style>
+/* ============================================================= *
+ *  neuro·autoresearch — a self-contained, offline overview.
+ *  Aesthetic: computational-neuroscience lab notebook × instrument.
+ *  Signature motif: the cortical-hierarchy spectrum (V1 blue → VWFA
+ *  purple), reused from the repo's own REGION_COLORS.
+ * ============================================================= */
+:root{
+  --paper:#f3eee2;
+  --paper-deep:#ece4d3;
+  --card:#fbf8f0;
+  --card-2:#f7f1e4;
+  --ink:#211d17;
+  --ink-soft:#5a5249;
+  --ink-faint:#8b8173;
+  --line:#ddd3bf;
+  --line-soft:#e7ddca;
+  --brand:#1f4fc4;       /* V1 blue, the loop's start */
+  --warm:#b04527;        /* terracotta — "needs learning" */
+  --win:#1f7a4d;         /* beat-baseline green */
+  --trail:#b04527;
+  /* cortical hierarchy spectrum */
+  --c-V1:#2563eb; --c-V2:#0891b2; --c-V3:#0d9488; --c-hV4:#16a34a;
+  --c-ventral:#ca8a04; --c-EBA:#dc2626; --c-PPA:#ea580c; --c-FFA:#be123c; --c-VWFA:#9333ea;
+  --serif:'Charter','Iowan Old Style','Palatino Linotype','Book Antiqua',Palatino,Georgia,'Times New Roman',serif;
+  --sans:'Seravek','Gill Sans Nova',Ubuntu,Calibri,'Avenir Next',Avenir,'Segoe UI',system-ui,sans-serif;
+  --mono:'JetBrains Mono','SFMono-Regular','SF Mono','Cascadia Code','Roboto Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink); background:var(--paper);
+  font-family:var(--sans); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  background-image:
+    radial-gradient(var(--line) 1px, transparent 1.4px);
+  background-size:26px 26px;
+  background-attachment:fixed;
+}
+body::before{ /* warm vignette + grain veil */
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(255,251,240,.65), transparent 60%),
+    radial-gradient(120% 120% at 50% 120%, rgba(190,176,150,.18), transparent 55%);
+}
+.wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 22px}
+
+/* ---------- header / nav ---------- */
+header.top{position:relative; z-index:3; padding:34px 0 0}
+.brandline{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+.brand{font-family:var(--serif); font-weight:700; font-size:25px; letter-spacing:-.01em}
+.brand .dot{color:var(--brand)}
+.brand .sub{color:var(--ink-faint); font-weight:400}
+.tagline{color:var(--ink-soft); font-size:14.5px; font-style:italic; font-family:var(--serif)}
+.spectrum-rule{height:4px; border-radius:3px; margin:16px 0 0;
+  background:linear-gradient(90deg,var(--c-V1),var(--c-V2),var(--c-V3),var(--c-hV4),var(--c-ventral),var(--c-PPA),var(--c-EBA),var(--c-FFA),var(--c-VWFA));
+  box-shadow:0 1px 0 rgba(0,0,0,.04)}
+nav.tabs{position:sticky; top:0; z-index:5; margin-top:18px;
+  background:linear-gradient(180deg, var(--paper) 72%, rgba(243,238,226,.0));
+  padding:10px 0 6px}
+.tabrow{position:relative; display:flex; gap:6px; flex-wrap:wrap}
+.tab{appearance:none; border:0; background:transparent; cursor:pointer;
+  font-family:var(--sans); font-size:15px; font-weight:600; letter-spacing:.01em;
+  color:var(--ink-faint); padding:9px 16px; border-radius:10px; transition:.18s color, .18s background}
+.tab .n{font-family:var(--mono); font-size:11.5px; opacity:.65; margin-right:7px}
+.tab:hover{color:var(--ink-soft); background:rgba(0,0,0,.035)}
+.tab.active{color:var(--ink)}
+.tab.active{background:var(--card)}
+.tab-underline{position:absolute; bottom:-2px; height:3px; border-radius:3px;
+  background:var(--brand); transition:.28s cubic-bezier(.6,.1,.2,1); pointer-events:none}
+
+/* ---------- panels ---------- */
+main{padding:30px 0 90px}
+.panel{display:none; animation:fade .5s ease both}
+.panel.show{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+@keyframes up{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
+.rise{opacity:0; animation:up .6s cubic-bezier(.2,.7,.2,1) forwards}
+
+/* ---------- type ---------- */
+h2.sec{font-family:var(--serif); font-size:13px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.16em; color:var(--brand); margin:0 0 4px}
+h3.head{font-family:var(--serif); font-size:30px; line-height:1.15; font-weight:700;
+  letter-spacing:-.015em; margin:.1em 0 .35em}
+.lede{font-size:18px; color:var(--ink-soft); max-width:62ch}
+.section{margin:62px 0 0}
+.eyebrow-row{display:flex; align-items:center; gap:12px}
+.eyebrow-row .num{font-family:var(--mono); font-size:12px; color:var(--ink-faint);
+  border:1px solid var(--line); border-radius:20px; padding:3px 10px}
+mark{background:linear-gradient(180deg,transparent 58%, #ffe9a8 58%); color:inherit; padding:0 1px}
+strong{font-weight:700}
+code{font-family:var(--mono); font-size:.86em; background:var(--card-2); border:1px solid var(--line-soft);
+  padding:1px 5px; border-radius:5px; color:#3a3329}
+
+/* ---------- hero ---------- */
+.hero{margin-top:30px; position:relative}
+.hero h1{font-family:var(--serif); font-weight:700; font-size:clamp(34px,5.4vw,58px);
+  line-height:1.04; letter-spacing:-.022em; margin:.1em 0 .25em; max-width:18ch}
+.hero h1 .q{color:var(--brand)}
+.hero p.lede{font-size:19.5px}
+.chips{display:flex; flex-wrap:wrap; gap:10px; margin:26px 0 4px}
+.chip{background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:10px 15px; display:flex; flex-direction:column; min-width:118px; box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.chip .v{font-family:var(--serif); font-weight:700; font-size:25px; letter-spacing:-.01em; line-height:1}
+.chip .k{font-size:11.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-faint); margin-top:5px}
+.chip .v small{font-size:14px; color:var(--ink-faint); font-weight:400}
+
+/* ---------- loop diagram ---------- */
+.loop{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:0; margin-top:8px}
+.loop .step{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 18px; position:relative}
+.loop .step .badge{font-family:var(--mono); font-size:11px; color:#fff; background:var(--ink);
+  width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:12px}
+.loop .step h4{font-family:var(--serif); font-size:20px; margin:0 0 6px; letter-spacing:-.01em}
+.loop .step p{margin:0; font-size:14.5px; color:var(--ink-soft)}
+.loop .step .tag{display:inline-block; margin-top:11px; font-family:var(--mono); font-size:11px;
+  padding:3px 8px; border-radius:6px; border:1px solid var(--line)}
+.loop .arr{display:flex; align-items:center; justify-content:center; color:var(--ink-faint); width:34px; font-size:22px}
+.loop .step.s2 .badge{background:var(--brand)}
+.loop .step.frozen{border-style:solid}
+.loop-note{margin-top:14px; font-size:13.5px; color:var(--ink-faint); font-style:italic; font-family:var(--serif)}
+@media(max-width:760px){ .loop{grid-template-columns:1fr} .loop .arr{transform:rotate(90deg); height:26px; width:auto} }
+
+/* ---------- callout ---------- */
+.callout{border-left:3px solid var(--brand); background:var(--card); border-radius:0 12px 12px 0;
+  padding:18px 22px; margin-top:18px}
+.callout.warm{border-color:var(--warm)}
+.callout h4{font-family:var(--serif); font-size:19px; margin:0 0 6px}
+.callout p{margin:0; color:var(--ink-soft); font-size:15px}
+.pullquote{font-family:var(--serif); font-size:25px; line-height:1.3; letter-spacing:-.01em;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:26px 0; margin:34px 0; max-width:30ch}
+.pullquote .em{color:var(--brand)} .pullquote .em.w{color:var(--warm)}
+
+/* ---------- charts ---------- */
+.figure{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 20px 14px; margin-top:18px;
+  box-shadow:0 1px 2px rgba(0,0,0,.025)}
+.figure .fhead{display:flex; justify-content:space-between; align-items:flex-end; gap:14px; flex-wrap:wrap; margin-bottom:4px}
+.figure .ftitle{font-family:var(--serif); font-size:20px; font-weight:700; letter-spacing:-.01em}
+.figure .fsub{font-size:13.5px; color:var(--ink-faint)}
+.legend{display:flex; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--ink-soft); margin-top:6px}
+.legend span{display:inline-flex; align-items:center; gap:7px}
+.swatch{width:13px; height:13px; border-radius:3px; display:inline-block}
+.swatch.bar{background:linear-gradient(180deg,#2563eb,#9333ea)}
+.swatch.alex{width:13px;height:13px;border:2px solid var(--ink); border-radius:2px; transform:rotate(45deg); background:transparent}
+svg{display:block; width:100%; height:auto; overflow:visible}
+.chart-tip{position:fixed; z-index:50; pointer-events:none; opacity:0; transition:opacity .12s;
+  background:var(--ink); color:#f3eee2; font-size:12.5px; line-height:1.5; padding:9px 11px; border-radius:9px;
+  max-width:240px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.chart-tip b{color:#fff} .chart-tip .d.win{color:#7ee0a6} .chart-tip .d.trail{color:#f3a98e}
+.chart-tip .mono{font-family:var(--mono); font-size:11px; color:#cdbfa8}
+
+/* ---------- two-column / cards ---------- */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:18px}
+@media(max-width:760px){ .grid2,.grid3{grid-template-columns:1fr} }
+.card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px}
+.card h4{font-family:var(--serif); font-size:19px; margin:0 0 8px; letter-spacing:-.01em}
+.card.edit{border-top:4px solid var(--brand)}
+.card.fixed{border-top:4px solid var(--ink-faint)}
+.card p{margin:.3em 0; font-size:14.5px; color:var(--ink-soft)}
+.filebadge{font-family:var(--mono); font-size:13px; color:var(--ink); background:var(--card-2);
+  border:1px solid var(--line); border-radius:6px; padding:1px 7px}
+.ds-card{position:relative; overflow:hidden}
+.ds-card .strip{position:absolute; top:0; left:0; right:0; height:5px}
+.ds-card .mods{display:flex; gap:6px; margin:4px 0 10px}
+.modtag{font-family:var(--mono); font-size:11px; padding:2px 8px; border-radius:20px; border:1px solid var(--line); color:var(--ink-soft)}
+
+/* ---------- dataflow pipeline ---------- */
+.pipe{display:flex; align-items:stretch; gap:0; margin-top:18px; flex-wrap:wrap}
+.pnode{flex:1 1 0; min-width:120px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:13px 12px; text-align:center; position:relative}
+.pnode .pk{font-family:var(--mono); font-size:11px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em}
+.pnode .pv{font-family:var(--serif); font-size:16px; font-weight:700; margin-top:3px}
+.pnode .pd{font-size:12px; color:var(--ink-soft); margin-top:3px}
+.pnode.fit{border:2px solid var(--brand); background:#f4f6ff}
+.pnode.you{border:2px solid var(--warm); background:#fdf4f0}
+.parrow{display:flex; align-items:center; color:var(--ink-faint); padding:0 2px; font-size:18px}
+@media(max-width:760px){ .pipe{flex-direction:column} .parrow{transform:rotate(90deg); height:22px; justify-content:center} }
+.pipe-key{display:flex; gap:18px; margin-top:12px; font-size:13px; color:var(--ink-soft); flex-wrap:wrap}
+
+/* ---------- file map ---------- */
+.tree{font-family:var(--mono); font-size:13.5px; background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:6px 4px; margin-top:14px; overflow:hidden}
+.trow{display:grid; grid-template-columns:minmax(210px,260px) 1fr; gap:14px; padding:7px 16px; border-bottom:1px solid var(--line-soft); align-items:baseline}
+.trow:last-child{border-bottom:0}
+.trow:hover{background:var(--card-2)}
+.trow .path{color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.trow .path .dir{color:var(--ink-faint)}
+.trow .role{font-family:var(--sans); font-size:13.5px; color:var(--ink-soft)}
+.trow .role .t{font-family:var(--mono); font-size:10.5px; padding:1px 6px; border-radius:5px; margin-right:7px; vertical-align:1px}
+.t.edit{background:#e7edff; color:#1f4fc4; border:1px solid #c9d6ff}
+.t.fixed{background:#eee9dd; color:#5a5249; border:1px solid #ddd3bf}
+.t.prompt{background:#f0eafd; color:#7c3aed; border:1px solid #ded2fb}
+.t.live{background:#e3f5ea; color:#1f7a4d; border:1px solid #c4e9d2}
+.t.once{background:#faece6; color:#b04527; border:1px solid #f0d3c6}
+.t.gen{background:#fef3da; color:#a06a08; border:1px solid #f6e2b4}
+.t.test{background:#e9eef0; color:#3f6070; border:1px solid #d2dee3}
+.t.data{background:#eee9dd; color:#8b8173; border:1px solid #ddd3bf}
+.group-label{font-family:var(--sans); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.12em;
+  color:var(--ink-faint); padding:14px 16px 6px}
+
+/* ---------- code ---------- */
+.codewrap{margin-top:14px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fbf8f0}
+.codewrap .cbar{display:flex; justify-content:space-between; align-items:center; background:var(--card-2);
+  border-bottom:1px solid var(--line); padding:9px 16px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft)}
+.codewrap .cbar .win{color:var(--win); font-weight:700}
+pre{margin:0; padding:16px 18px; overflow-x:auto; font-family:var(--mono); font-size:12.7px; line-height:1.6; color:#2b2620}
+pre .c{color:#9a8f7c; font-style:italic}     /* comment */
+pre .k{color:#1f4fc4; font-weight:600}        /* keyword */
+pre .s{color:#1f7a4d}                          /* string */
+pre .d{color:#9333ea}                          /* def/class name */
+pre .n{color:#b04527}                          /* number */
+
+/* ---------- ledger table ---------- */
+table.ledger{width:100%; border-collapse:collapse; margin-top:14px; font-size:13.5px; background:var(--card);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden}
+table.ledger th,table.ledger td{text-align:left; padding:9px 13px; border-bottom:1px solid var(--line-soft)}
+table.ledger th{font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); background:var(--card-2)}
+table.ledger td:first-child{font-family:var(--mono); font-size:12.5px; color:var(--ink); white-space:nowrap}
+table.ledger tr:last-child td{border-bottom:0}
+
+/* ---------- review section ---------- */
+.review{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px}
+@media(max-width:760px){ .review{grid-template-columns:1fr} }
+.rbox{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px}
+.rbox h4{font-family:var(--serif); font-size:18px; margin:0 0 10px; display:flex; align-items:center; gap:9px}
+.rbox h4 .ic{width:24px; height:24px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:14px; color:#fff}
+.rbox.good h4 .ic{background:var(--win)} .rbox.stale h4 .ic{background:var(--gen,#a06a08)}
+.rbox.minor h4 .ic{background:var(--ink-faint)} .rbox.no h4 .ic{background:var(--ink)}
+.rbox.gap h4 .ic{background:var(--warm)}
+.rbox ul{margin:0; padding-left:0; list-style:none}
+.rbox li{position:relative; padding:7px 0 7px 20px; font-size:14px; color:var(--ink-soft); border-bottom:1px dashed var(--line-soft)}
+.rbox li:last-child{border-bottom:0}
+.rbox li::before{content:"›"; position:absolute; left:2px; color:var(--ink-faint)}
+.rbox li b{color:var(--ink); font-weight:700}
+.rbox li code{font-size:12px}
+
+/* ---------- Q&A accordion ---------- */
+.qfilters{display:flex; gap:8px; flex-wrap:wrap; margin:18px 0 8px}
+.qf{appearance:none; border:1px solid var(--line); background:var(--card); cursor:pointer;
+  font-family:var(--sans); font-size:13px; font-weight:600; color:var(--ink-soft); padding:6px 14px; border-radius:20px; transition:.15s}
+.qf:hover{border-color:var(--ink-faint)}
+.qf.on{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.qf .cdot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:0}
+.qa{margin-top:8px}
+.qitem{border-bottom:1px solid var(--line); }
+.qitem .qq{display:flex; align-items:center; gap:14px; cursor:pointer; padding:17px 6px; list-style:none}
+.qitem .qq:hover .qtext{color:var(--brand)}
+.qitem .qq::-webkit-details-marker{display:none}
+.qcat{font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.07em;
+  padding:3px 8px; border-radius:6px; white-space:nowrap; min-width:78px; text-align:center}
+.qtext{font-family:var(--serif); font-size:19px; font-weight:600; letter-spacing:-.01em; flex:1; transition:.15s color}
+.qchev{color:var(--ink-faint); font-size:20px; transition:.25s transform; flex:none}
+.qitem[open] .qchev{transform:rotate(90deg)}
+.qans{padding:0 6px 20px 100px; color:var(--ink-soft); font-size:15.5px; line-height:1.66; animation:up .35s ease both}
+.qans code{font-size:12.5px}
+@media(max-width:680px){ .qans{padding-left:6px} .qcat{min-width:0} }
+
+/* category colors */
+.cat-concept{background:#e7edff;color:#1f4fc4}.dot-concept{background:#2563eb}
+.cat-method{background:#e1f4f3;color:#0e7c74}.dot-method{background:#0891b2}
+.cat-results{background:#e3f5ea;color:#1f7a4d}.dot-results{background:#16a34a}
+.cat-codebase{background:#fef3da;color:#a06a08}.dot-codebase{background:#ca8a04}
+.cat-skeptic{background:#faece6;color:#b04527}.dot-skeptic{background:#dc2626}
+.cat-howto{background:#f0eafd;color:#7c3aed}.dot-howto{background:#9333ea}
+
+footer{border-top:1px solid var(--line); margin-top:70px; padding:26px 0 40px; color:var(--ink-faint); font-size:13px}
+footer .spectrum-rule{margin-bottom:18px}
+a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
+.small{font-size:13px; color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="brandline">
+    <span class="brand">neuro<span class="dot">·</span>autoresearch <span class="sub">/ overview</span></span>
+    <span class="tagline">an AI that designs models of the brain — without ever training one</span>
+  </div>
+  <div class="spectrum-rule"></div>
+  <nav class="tabs">
+    <div class="tabrow" id="tabrow">
+      <button class="tab active" data-tab="project"><span class="n">01</span>The Project</button>
+      <button class="tab" data-tab="codebase"><span class="n">02</span>The Codebase</button>
+      <button class="tab" data-tab="questions"><span class="n">03</span>Questions</button>
+      <span class="tab-underline" id="tabUnderline"></span>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+<!-- ================= TAB 1 — PROJECT ================= -->
+<section class="panel show" id="panel-project">
+
+  <div class="hero">
+    <h2 class="sec rise" style="animation-delay:.02s">The big question</h2>
+    <h1 class="rise" style="animation-delay:.08s">Can an AI discover <span class="q">better models of the brain</span> — without training one?</h1>
+    <p class="lede rise" style="animation-delay:.16s">
+      <strong>Neural encoding</strong> is the task of predicting recorded brain activity from the stimulus a
+      person saw or heard. Here an agent <em>writes</em> a small computational model in code, a fixed harness
+      scores how well its activations predict real fMRI / MEG, and the agent iterates to push the score up.
+      The unit of progress is a single file, <code>model.py</code>; the unit of truth is a single number,
+      <code>test_corr</code>.
+    </p>
+    <div class="chips rise" style="animation-delay:.24s">
+      <div class="chip"><span class="v">440</span><span class="k">models evaluated</span></div>
+      <div class="chip"><span class="v">0</span><span class="k">weights trained</span></div>
+      <div class="chip"><span class="v">9</span><span class="k">brain regions</span></div>
+      <div class="chip"><span class="v">3</span><span class="k">datasets · 2 modalities</span></div>
+      <div class="chip"><span class="v">3<small>/9</small></span><span class="k">regions beat AlexNet</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">01</span><h2 class="sec">The loop, in three steps</h2></div>
+    <h3 class="head">Propose → activate → read out &amp; score</h3>
+    <div class="loop">
+      <div class="step s1">
+        <div class="badge">1</div>
+        <h4>Propose</h4>
+        <p>The agent writes a callable mapping a stimulus batch <code>X (N, D_in)</code> to activations
+           <code>(N, D_out)</code>. Every weight is hard-coded — <strong>nothing is trained</strong>.</p>
+        <span class="tag" style="border-color:#c9d6ff;color:#1f4fc4">you edit model.py</span>
+      </div>
+      <div class="arr">→</div>
+      <div class="step s2">
+        <div class="badge">2</div>
+        <h4>Activate</h4>
+        <p>The fixed harness runs the stimulus through the frozen model to get its activations. The model
+           never sees the brain data.</p>
+        <span class="tag" style="border-color:#ddd3bf">harness, fixed</span>
+      </div>
+      <div class="arr">→</div>
+      <div class="step s3 frozen">
+        <div class="badge">3</div>
+        <h4>Read out &amp; score</h4>
+        <p>A <strong>ridge regression</strong> linearly predicts recorded neural activity from those
+           activations. The reward is <code>test_corr</code> — held-out Pearson <em>r</em>. <em>Only</em> the
+           readout is fit.</p>
+        <span class="tag" style="border-color:#ddd3bf">harness, fixed</span>
+      </div>
+    </div>
+    <p class="loop-note">The model is frozen; the only thing that gets fit is the linear probe — and that probe <em>is</em> the evaluation. So the score can't be gamed by memorizing the data.</p>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">02</span><h2 class="sec">Why never train?</h2></div>
+    <h3 class="head">The features <em>are</em> the hypothesis</h3>
+    <p class="lede">In computational neuroscience, the standard way to test a theory of how the brain
+      represents a stimulus is encoding: extract features, fit a linear readout, measure held-out
+      predictivity. If you let an optimizer train the model on the brain data, a high score just means it
+      memorized the dataset. By forbidding training, a high <code>test_corr</code> becomes honest evidence
+      that the <em>hand-designed representation genuinely resembles the brain's</em>.</p>
+    <div class="callout">
+      <h4>The goal: beat a network that <em>was</em> trained</h4>
+      <p>The bar isn't the raw-pixel floor — it's a frozen ImageNet-pretrained <strong>AlexNet</strong> (fc7,
+        4096-d) read out with the identical ridge. The challenge: can a model whose weights you simply
+        <em>wrote down</em> out-predict a network trained on a million labelled images?</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">03</span><h2 class="sec">The headline result</h2></div>
+    <h3 class="head">Did it beat the trained AlexNet?</h3>
+    <p class="lede">One bar per brain region, ordered along the cortical hierarchy. Coloured bar = the best
+      <strong>never-trained</strong> model; the diamond = the <strong>trained AlexNet</strong> baseline.
+      The answer splits cleanly in two.</p>
+
+    <div class="figure">
+      <div class="fhead">
+        <div>
+          <div class="ftitle">Held-out predictivity by region — untrained vs. trained</div>
+          <div class="fsub">NSD, subject 1 · mean per-voxel Pearson <em>r</em> on the image-disjoint shared-1000 test set</div>
+        </div>
+      </div>
+      <div id="regionChart"></div>
+      <div class="legend">
+        <span><span class="swatch bar"></span> best never-trained model (this loop)</span>
+        <span><span class="swatch alex"></span> trained AlexNet fc7 (the bar to beat)</span>
+        <span style="color:var(--win)">▲ beats baseline</span>
+        <span style="color:var(--trail)">▼ trails baseline</span>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="callout">
+        <h4 style="color:var(--win)">Early visual cortex — untrained <em>wins</em></h4>
+        <p>In V1, V2 and V3, hand-built <strong>Gabor-energy</strong> models with divisive normalization beat
+          AlexNet outright (V1: <strong>0.428</strong> vs 0.342). These regions compute simple, writable
+          operations — oriented contrast, luminance, colour-opponency.</p>
+      </div>
+      <div class="callout warm">
+        <h4 style="color:var(--warm)">High-level cortex — untrained <em>trails</em></h4>
+        <p>Every category-selective area falls short: faces (FFA), places (PPA), bodies (EBA), words (VWFA).
+          The widest gap is EBA (0.290 vs 0.436). These encode <strong>learned semantics</strong> no fixed
+          filter bank captures.</p>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      Early vision is <span class="em">hand-writable</span>. High-level meaning must be
+      <span class="em w">learned</span>.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">04</span><h2 class="sec">This is search, not a guess</h2></div>
+    <h3 class="head">One region's hill-climb</h3>
+    <p class="lede">The V1 trajectory: 14 model proposals, each a snapshot saved next to its score. The
+      best-so-far climbs from the identity baseline to the AlexNet-beating
+      <code>gabor-lum-surround</code> — and iteration 6 shows the safety net catching a GPU
+      out-of-memory crash without stopping the loop.</p>
+    <div class="figure">
+      <div class="fhead">
+        <div>
+          <div class="ftitle">V1 reward trajectory — <code style="font-size:13px">runs/nsd-v1-…</code></div>
+          <div class="fsub">test_corr per iteration · the dashed line is the trained-AlexNet baseline (0.342)</div>
+        </div>
+      </div>
+      <div id="climbChart"></div>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--c-V1)"></span> evaluated model</span>
+        <span style="color:var(--win)">● new best-so-far</span>
+        <span style="color:var(--trail)">✕ caught error (OOM → NaN row, loop continues)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">05</span><h2 class="sec">One interface, every modality</h2></div>
+    <h3 class="head">Three real datasets</h3>
+    <p class="lede">Every dataset flows through one unified data interface (<strong>NeuralSet / NeuralFetch</strong>) —
+      no raw file or network I/O in the loop. The same model and reward run untouched across fMRI &amp; MEG and
+      across image, text and audio stimuli.</p>
+    <div class="grid3">
+      <div class="card ds-card">
+        <div class="strip" style="background:linear-gradient(90deg,#2563eb,#0d9488)"></div>
+        <h4>nsd</h4>
+        <div class="mods"><span class="modtag">image</span><span class="modtag">fMRI</span></div>
+        <p><strong>Natural Scenes Dataset</strong>, subject 1. 10k images, each shown ~3×. The active study —
+          where all the real results live.</p>
+        <p class="small">X = 16×16×3 RGB → 768 dims · Y = HRF-peak response over 15,724 voxels</p>
+      </div>
+      <div class="card ds-card">
+        <div class="strip" style="background:linear-gradient(90deg,#ca8a04,#ea580c)"></div>
+        <h4>text</h4>
+        <div class="mods"><span class="modtag">audio</span><span class="modtag">fMRI</span></div>
+        <p><strong>Le Petit Prince</strong>, narrative listening. Each spoken word triggers a segment; X is the
+          Mel spectrum at the word.</p>
+        <p class="small">stimulus &amp; neural windows decoupled so the HRF delay never leaks into X</p>
+      </div>
+      <div class="card ds-card">
+        <div class="strip" style="background:linear-gradient(90deg,#9333ea,#be123c)"></div>
+        <h4>meg</h4>
+        <div class="mods"><span class="modtag">audio</span><span class="modtag">MEG</span></div>
+        <p><strong>LPP-Listen</strong> MEG — the loop's electrophysiology modality. Each word triggers a 0.5 s
+          epoch; MEG is near-instant, so windows coincide.</p>
+        <p class="small">selected at run time with <code>NEURO_DATASET=meg</code></p>
+      </div>
+    </div>
+    <p class="small" style="margin-top:12px">Adding a dataset is pure configuration — append a <code>Dataset(...)</code> to <code>PRESETS</code>; the harness and models need no changes.</p>
+  </div>
+
+</section>
+
+<!-- ================= TAB 2 — CODEBASE ================= -->
+<section class="panel" id="panel-codebase">
+
+  <div class="hero" style="margin-top:8px">
+    <h2 class="sec">How it's built</h2>
+    <h3 class="head" style="font-size:38px">Two files you touch.<br>Everything else is frozen.</h3>
+    <p class="lede">The whole architecture follows from one decision: make the evaluation immutable. If the
+      agent could edit the scorer, the reward would be meaningless. So the editable surface is tiny and the
+      harness is fixed <em>by design</em> — that fixedness is what makes a higher <code>test_corr</code> a real,
+      comparable improvement rather than a moved goalpost.</p>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">01</span><h2 class="sec">The mental model</h2></div>
+    <h3 class="head">Editable vs. fixed</h3>
+    <div class="grid2">
+      <div class="card edit">
+        <h4>✎ Editable — the agent's whole world</h4>
+        <p><span class="filebadge">model.py</span> &nbsp;the one evolving model: a callable
+          <code>X → activations</code>, weights written in code. Seeded as the identity.</p>
+        <p><span class="filebadge">experiment.py</span> &nbsp;run-config: <code>LOG_SLICES</code> (extra
+          feedback columns for non-NSD studies).</p>
+        <p class="small" style="margin-top:10px">+ two env-var dials, the <em>only</em> harness knobs:
+          <code>NEURO_DATASET</code> (which preset) and <code>NEURO_ROI</code> (which reward region).</p>
+      </div>
+      <div class="card fixed">
+        <h4>🔒 Fixed — the trustworthy core</h4>
+        <p>All of <code>harness/</code>: the dataset registry, the NeuralSet data layer, the ridge readout,
+          the scoring, the append-only ledger, and the per-study Study subclasses.</p>
+        <p>Plus the agent-facing <code>prompts/</code>. None of it is touched between iterations.</p>
+        <p class="small" style="margin-top:10px">Verified: the GCV ridge reproduces sklearn's
+          <code>RidgeCV</code> to ~1e-13, and all three tests pass with no skips.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">02</span><h2 class="sec">What happens on one run</h2></div>
+    <h3 class="head">The data flow, end to end</h3>
+    <p class="lede"><code>python -m harness.run</code> loads the split once (cached after the first build),
+      runs your model forward, fits the readout, scores the held-out split, narrows to the reward region, and
+      appends one row. <strong>Only the ridge box is ever fit.</strong></p>
+    <div class="pipe">
+      <div class="pnode"><div class="pk">stimulus</div><div class="pv">image / audio / text</div><div class="pd">what the subject saw or heard</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="pk">NeuralSet</div><div class="pv">extractor</div><div class="pd">offline features → X (N×D)</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode you"><div class="pk">model.py</div><div class="pv">your model</div><div class="pd">X → activations · frozen</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode fit"><div class="pk">harness</div><div class="pv">GCV ridge</div><div class="pd">fit on train only ← the eval</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="pk">reward</div><div class="pv">test_corr</div><div class="pd">Pearson r → 1 region → CSV</div></div>
+    </div>
+    <div class="pipe-key">
+      <span><span class="swatch" style="background:#fdf4f0;border:2px solid var(--warm)"></span> the only part you write</span>
+      <span><span class="swatch" style="background:#f4f6ff;border:2px solid var(--brand)"></span> the only part that is fit</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">03</span><h2 class="sec">Where everything lives</h2></div>
+    <h3 class="head">Annotated file map</h3>
+    <div class="tree" id="filemap"></div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">04</span><h2 class="sec">A real model</h2></div>
+    <h3 class="head">The one that beat AlexNet in V1</h3>
+    <p class="lede">No magic — just neuroscience written as code. A quadrature <strong>Gabor energy</strong>
+      bank (8 orientations × 5 scales) on luminance, log-compressed, then divisively normalized by a local
+      spatial-surround pool — the canonical model of V1. Note <code>n_params</code> counts the Gabor kernel
+      weights; nothing is learned from data.</p>
+    <div class="codewrap">
+      <div class="cbar">
+        <span>runs/nsd-v1-…/models_lib/attempt-13-gabor-lum-surround.py</span>
+        <span class="win">test_corr 0.428 · AlexNet 0.342</span>
+      </div>
+      <pre id="modelcode"></pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">05</span><h2 class="sec">The record of record</h2></div>
+    <h3 class="head">The CSV ledger</h3>
+    <p class="lede">One run appends exactly one row — <code>one run = one model = one iteration</code>. The
+      history is append-only, so the <code>iteration</code> column counts every model ever tried. A model that
+      raises or returns a bad shape doesn't crash the loop: it's caught and logged as a
+      <code>status="error"</code> row with NaN reward.</p>
+    <table class="ledger">
+      <thead><tr><th>column</th><th>what it records</th></tr></thead>
+      <tbody>
+        <tr><td>iteration</td><td>monotonic counter — every model tried across all runs</td></tr>
+        <tr><td>model_name · idea · summary</td><td>the hypothesis and what the model does, logged verbatim</td></tr>
+        <tr><td>n_params</td><td>honest count of hard-coded weights (0 for a parameter-free transform)</td></tr>
+        <tr><td>test_corr <span style="color:var(--brand)">★</span></td><td><strong>the reward</strong> — held-out mean per-voxel Pearson r over the reward region</td></tr>
+        <tr><td>train_corr · gap</td><td>high train + low test = the readout overfit, not progress</td></tr>
+        <tr><td>best_so_far</td><td>running max test_corr in the file</td></tr>
+        <tr><td>status</td><td><code>ok</code>, or a one-line error string for caught failures</td></tr>
+        <tr><td>corr_&lt;region&gt;</td><td>every region's predictivity (V1…VWFA) — frozen on the first row</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">06</span><h2 class="sec">Running it</h2></div>
+    <h3 class="head">From one eval to an overnight hill-climb</h3>
+    <div class="grid2">
+      <div class="card">
+        <h4>Single tree — a quick look</h4>
+        <pre style="font-size:12.3px; background:transparent; padding:6px 0">python -m harness.run
+NEURO_DATASET=nsd NEURO_ROI=PPA \
+  python -m harness.run</pre>
+        <p class="small">Run from the repo root; the row lands in <code>results/&lt;study&gt;__&lt;roi&gt;.csv</code>.</p>
+      </div>
+      <div class="card">
+        <h4>Isolated run folder — for parallel search</h4>
+        <pre style="font-size:12.3px; background:transparent; padding:6px 0">python scripts/setup_run.py demo
+# harness/ symlinked in (fixed),
+# local model.py + models_lib/ snapshots</pre>
+        <p class="small">Ten <code>runs/nsd-*</code> folders on disk are exactly these parallel per-region hill-climbs.</p>
+      </div>
+    </div>
+    <div class="callout warm" style="margin-top:16px">
+      <h4>⚠ The one gotcha</h4>
+      <p>The unattended launcher <code>scripts/autoresearch.sh</code> runs the agent <em>nonstop</em> via
+        <code>copilot-keepgoing</code>, which never self-terminates. <strong>Always wrap it in
+        <code>timeout</code></strong> — the script doesn't enforce this itself.
+        e.g. <code>… NEURO_RUN=$(date +%s) timeout 120m scripts/autoresearch.sh high</code></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="eyebrow-row"><span class="num">07</span><h2 class="sec">Review &amp; simplify</h2></div>
+    <h3 class="head">What's solid, what's stale, what to prune</h3>
+    <p class="lede">I read every file and adversarially verified each finding against the source. The core
+      loop is clean and well-tested; almost all of the cruft is <em>stale prose and leftover data
+      artifacts</em> describing an older layout — nothing in the trustworthy core needs to change.</p>
+    <div class="review">
+      <div class="rbox good">
+        <h4><span class="ic">✓</span> Solid — leave it alone</h4>
+        <ul>
+          <li>The per-target GCV ridge in <code>reward.py</code> <b>reproduces sklearn <code>RidgeCV</code> to ~1e-13</b>, and a test pins it (<code>max|Δ|≈1e-14</code>).</li>
+          <li>All three tests pass; <b>no skips or xfails</b>. Every declared dependency is used; the NeuralSet "no raw I/O" invariant holds across <code>scripts/</code>.</li>
+          <li>The build cache is elegantly keyed by <b>every field except <code>roi/test_frac/reward_roi/run_tag</code></b> — one expensive timeseries build is reused across all 9 regions.</li>
+          <li>The fixedness of <code>harness/</code> is the whole basis of an un-gameable reward. By design, not dead code.</li>
+        </ul>
+      </div>
+      <div class="rbox stale">
+        <h4><span class="ic">⚠</span> Stale — safe to prune / update</h4>
+        <ul>
+          <li><code>README.md</code> claims "no I/O in <code>harness/</code>, <b><code>evolve/</code></b>, or <code>scripts/</code>" — but <b><code>evolve/</code> doesn't exist</b> (long renamed to repo-root <code>model.py</code>).</li>
+          <li><code>docs/overnight-readiness.md</code>, <code>nsd-trial.md</code> &amp; the download notes reference removed files (<code>harness/eval.py</code>, <code>harness/config.py</code>, <code>evolve/</code>) and the old seeded 200/50 split — historical, not current.</li>
+          <li><code>datasets.py</code> comments point at <code>harness/nsd_subj01.py</code>; the subclasses actually live under <code>harness/studies/</code>.</li>
+          <li>Committed <code>docs/index.html</code> is a <b>pre-Plotly build</b>; nothing auto-refreshes it. <code>results/NsdSubj01.pre-hrf.csv</code> is a pre-HRF-fix artifact with no signal.</li>
+        </ul>
+      </div>
+      <div class="rbox minor">
+        <h4><span class="ic">◇</span> Minor code cleanups (no behavior change)</h4>
+        <ul>
+          <li><code>bench_himalaya.py</code>: an unused <code>predictivity</code> import, stale <code>--syn-features</code> help, and no <code>ImportError</code> guard around <code>himalaya</code> (unlike <code>ref_alexnet_nsd.py</code>).</li>
+          <li><code>reward.py</code>: a vestigial <code>getattr(model,'description')</code> fallback — the template only defines <code>idea/summary</code>.</li>
+          <li><code>data.py</code>: <code>NEURO_NO_CACHE=0</code> still <em>disables</em> the cache (truthiness footgun).</li>
+          <li>A latent voxel-major mask fragility — only reachable in the non-default single-TR config; <b>not firing today</b>.</li>
+        </ul>
+      </div>
+      <div class="rbox no">
+        <h4><span class="ic">✗</span> Checked — <em>not</em> a problem</h4>
+        <ul>
+          <li><code>egg-info/</code> is already gitignored, not a committed artifact.</li>
+          <li><code>NsdSubj02/03</code> aren't dead boilerplate — overriding <code>SESSIONS_PER_SUBJECT</code> is the actual subject-restriction mechanism.</li>
+          <li>Stale-looking top-level PPA/ventral CSVs aren't a defect — <code>results/</code> is gitignored scratch.</li>
+          <li><code>test_setup_run</code> omitting <code>best_so_far</code> is correct: <code>save_results</code> computes it.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout warm" style="margin-top:16px">
+      <h4>◷ What isn't done yet (science, not bugs)</h4>
+      <p>The <strong>text</strong> and <strong>meg</strong> studies only ever ran the identity baseline — no
+        real hill-climb. The <strong>cross-subject generalization</strong> study has produced just <strong>1
+        of its 27 region×subject rows</strong> (subjects 2/3 aren't staged). The substantive results so far
+        are entirely the NSD subject-1 per-region searches.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= TAB 3 — QUESTIONS ================= -->
+<section class="panel" id="panel-questions">
+  <div class="hero" style="margin-top:8px">
+    <h2 class="sec">Ask it anything</h2>
+    <h3 class="head" style="font-size:38px">Questions, answered from the code</h3>
+    <p class="lede">Twenty-one questions a newcomer, a scientist, or a skeptic would actually ask — each answer
+      grounded in the actual files and the real numbers. Filter by theme, or click any question to expand.</p>
+  </div>
+  <div class="qfilters" id="qfilters"></div>
+  <div class="qa" id="qa"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="spectrum-rule"></div>
+  <p><strong>neuro·autoresearch</strong> — AlphaEvolve-style autoresearch for neural encoding on the NeuralSet /
+     NeuralFetch interface. This overview is a single self-contained file; the live results dashboard is built
+     separately by <code>analyze/build_report.py</code>.</p>
+  <p class="small">Generated as a project &amp; codebase explainer. Numbers reflect the result CSVs at the time
+     of writing (≈440 successful evaluations across 10 per-region NSD runs).</p>
+</footer>
+
+</div><!-- /wrap -->
+
+<div class="chart-tip" id="tip"></div>
+
+<script>
+/* =========================================================
+ *  DATA  (verified against the result CSVs)
+ * ========================================================= */
+const REGIONS = [
+  {key:'V1',  name:'V1',  sub:'primary visual',  best:0.428, alex:0.342, model:'gabor-lum-surround',  color:'#2563eb'},
+  {key:'V2',  name:'V2',  sub:'secondary visual',best:0.371, alex:0.299, model:'gabor-color-dog-hue', color:'#0891b2'},
+  {key:'V3',  name:'V3',  sub:'third visual',     best:0.350, alex:0.321, model:'gabor-v3-tunednorm',  color:'#0d9488'},
+  {key:'hV4', name:'hV4', sub:'human V4',          best:0.282, alex:0.289, model:'ranknorm-rich9s',     color:'#16a34a'},
+  {key:'ventral',name:'ventral',sub:'ventral stream',best:0.259,alex:0.284,model:'10ori+fullcross2',   color:'#ca8a04'},
+  {key:'EBA', name:'EBA', sub:'bodies',            best:0.290, alex:0.436, model:'colorhist_bw2',       color:'#dc2626'},
+  {key:'PPA', name:'PPA', sub:'places',            best:0.267, alex:0.403, model:'gist_rff_tex2hf',     color:'#ea580c'},
+  {key:'FFA', name:'FFA', sub:'faces',             best:0.261, alex:0.396, model:'spatial_moments_v90', color:'#be123c'},
+  {key:'VWFA',name:'VWFA',sub:'words',             best:0.195, alex:0.321, model:'convbank+gisttex+…',  color:'#9333ea'},
+];
+const V1_TRAJ = [
+  {it:1, name:'identity',                v:0.307},
+  {it:2, name:'gabor-energy',            v:0.367},
+  {it:3, name:'gabor-energy-multiscale', v:0.368},
+  {it:4, name:'gabor-divnorm',           v:0.369},
+  {it:5, name:'gabor-opponent',          v:0.403},
+  {it:6, name:'gabor-opponent-rich',     v:null, err:'CUDA out of memory'},
+  {it:7, name:'gabor-opponent-pooled',   v:0.407},
+  {it:8, name:'gabor-opponent-pooled',   v:0.409},
+  {it:9, name:'gabor-lum-fullres',       v:0.407},
+  {it:10,name:'gabor-lum-dense',         v:0.404},
+  {it:11,name:'gabor-lum-nodivnorm',     v:0.387},
+  {it:12,name:'gabor-lum-4scale',        v:0.424},
+  {it:13,name:'gabor-lum-5scale',        v:0.427},
+  {it:14,name:'gabor-lum-surround',      v:0.428},
+];
+
+const FILEMAP = [
+  {g:'Editable — the agent edits these'},
+  {p:'model.py', t:'edit', r:'The one evolving never-trained model (callable X→activations). Seed: identity.'},
+  {p:'experiment.py', t:'edit', r:'Run-config: LOG_SLICES (extra feedback columns for non-NSD studies).'},
+  {g:'Fixed harness — the trustworthy core'},
+  {p:'harness/run.py', t:'fixed', r:'The driver: load split once, evaluate model once, append one row.'},
+  {p:'harness/datasets.py', t:'fixed', r:'Dataset dataclass + PRESETS (nsd/text/meg). Reads NEURO_DATASET/ROI/RUN.'},
+  {p:'harness/data.py', t:'fixed', r:'NeuralSet → aligned (X,Y); HRF offset, shared-1000 split, ROI subset, build cache.'},
+  {p:'harness/reward.py', t:'fixed', r:'Per-target GCV ridge readout + Pearson scoring — the reward. Error net.'},
+  {p:'harness/results.py', t:'fixed', r:'Append-only CSV ledger; iteration / best_so_far / frozen corr_ columns.'},
+  {p:'harness/studies/', t:'fixed', r:'NeuralSet Study subclasses: NsdSubj01/02/03, Li2022PetitSubj.'},
+  {g:'Agent-facing prompts'},
+  {p:'prompts/program.md', t:'prompt', r:'The task spec handed to the agent: rules, the loop, beat-AlexNet goal.'},
+  {p:'prompts/datasets.md', t:'prompt', r:'Per-dataset context the agent reads every run (dims, split, baselines).'},
+  {g:'Scripts'},
+  {p:'scripts/setup_run.py', t:'live', r:'Scaffold an isolated runs/<tag>/ (symlinked harness + local model.py).'},
+  {p:'scripts/autoresearch.sh', t:'live', r:'Nonstop launcher: Opus via copilot-keepgoing. Wrap in timeout!'},
+  {p:'scripts/generalization.py', t:'live', r:'Cross-subject transfer: re-score each region’s best model on subj 1/2/3.'},
+  {p:'scripts/{bench,sweep,ref}…', t:'once', r:'One-off offline tooling that derived the AlexNet baseline + HRF offset.'},
+  {g:'Analysis & docs'},
+  {p:'analyze/build_report.py', t:'gen', r:'CSV ledgers → interactive HTML results dashboard (offline Plotly).'},
+  {p:'docs/, README, AGENTS.md', t:'fixed', r:'Human docs. CLAUDE.md is a symlink to AGENTS.md. Some notes are stale.'},
+  {g:'Tests & machine-written data (gitignored)'},
+  {p:'tests/test_readout_equivalence.py', t:'test', r:'Pins the GCV ridge == sklearn RidgeCV (max|Δ|≈1e-14).'},
+  {p:'results/ · runs/<tag>/', t:'data', r:'Append-only CSVs + per-run model.py snapshots. Never committed.'},
+];
+
+const MODEL_CODE =
+`class Model:
+    name = "gabor-lum-surround"
+    idea = ("Replace per-pixel divnorm with V1's spatial-surround "
+            "normalization (the canonical normalization pool).")
+    n_params = 0          # set to the Gabor kernel weight count below
+
+    def __init__(self):
+        self.orientations = [i * math.pi / 8 for i in range(8)]   # 8 orientations
+        self.wavelengths  = [1.5, 2.2, 3.2, 4.8, 7.5]             # 5 scales
+        self.ksize, self.gain = 11, 100.0
+        self.n_params = len(self.orientations) * len(self.wavelengths) * 2 * 11 * 11
+
+    def __call__(self, X):
+        N   = X.shape[0]
+        img = X.view(N, 16, 16, 3)
+        lum = _opponent(img, use_color=False)                    # luminance channel
+        bank = self._kernels(X.device, X.dtype)                  # quadrature Gabors
+        resp = F.conv2d(lum.reshape(N, 1, 16, 16), bank, padding=5)
+        # complex-cell energy = sqrt(cos^2 + sin^2), then log-compress contrast
+        energy = torch.sqrt(resp[..., 0]**2 + resp[..., 1]**2 + 1e-6)
+        energy = torch.log1p(self.gain * energy)
+        # V1 surround normalization: divide by a local 3x3 cross-channel pool
+        sur = F.avg_pool2d((energy**2).sum(1, keepdim=True), 3, stride=1, padding=1)
+        energy = energy / torch.sqrt(sur + 0.01)
+        return torch.cat([X, energy.reshape(N, -1)], dim=1)      # raw pixels + energy
+
+MODEL = Model()    # never trained — the harness only fits the ridge readout`;
+
+const QA = [
+{cat:'concept', q:'What is this project actually doing — what is the loop optimizing?', a:'An AlphaEvolve-style loop for neural encoding: an agent writes a never-trained model in <code>model.py</code> mapping a stimulus batch X (N, D_in) to activations (N, D_out), and the fixed harness fits a ridge readout from those activations to recorded brain activity. The held-out mean per-target Pearson correlation (<code>test_corr</code>) is the reward. The agent reads the reward from a CSV ledger, edits the model, and re-runs — hill-climbing without ever training the model’s own weights.'},
+{cat:'concept', q:'Why is the model "never trained"? Doesn’t that throw away the main tool of deep learning?', a:'The constraint is the scientific point: weights are written directly in code (no optimizer, no backprop), so any predictivity comes from the <em>structure of the features</em>, not from fitting to brain data. Training the model on neural responses would just memorize the dataset and tell you nothing about which computational principles the brain uses. By forbidding training, a high <code>test_corr</code> is evidence the hand-designed representation genuinely resembles the brain’s.'},
+{cat:'concept', q:'If the ridge readout is fit, why can’t the agent just game the reward through the readout?', a:'The readout is a single linear map fit on the train split only and scored on a disjoint test split, so it can’t encode test-specific information. Crucially it lives in <code>harness/reward.py</code>, which the agent may not edit — it is identical for every model. The only way to raise <code>test_corr</code> is to supply activations that are genuinely more brain-like; the linear probe has no capacity to invent signal that isn’t in the features.'},
+{cat:'concept', q:'What exactly counts as a "model" here, and what shape must it produce?', a:'A plain callable X (N, D_in) → activations (N, D_out), seeded as the identity (returns X unchanged). It carries <code>name</code>, <code>idea</code> (the iteration’s hypothesis), <code>summary</code>, and <code>n_params</code> (count of weights written in code, 0 for a parameter-free transform), all logged with each score. Models that raise or return a wrong shape don’t crash the loop — they’re caught and written as a <code>status="error"</code> row with NaN reward.'},
+{cat:'method', q:'What is the HRF offset and why does it matter so much for the NSD reward?', a:'The BOLD fMRI signal lags neural activity by several seconds, so the harness shifts the read window forward by <code>neural_offset=5.0s</code> and averages the peak TRs in a 4 s window into one value per voxel. This is the difference between measuring real evoked response versus pre-response baseline: at offset 0 even a trained AlexNet scores ~0.006, while the HRF-aligned target lifts that to ~0.32. The offset is literally what makes the encoding signal exist.'},
+{cat:'method', q:'How is the NSD train/test split built, and why image-disjoint shared-1000?', a:'Subject 1 saw ~10,000 unique images, each shown ~3× (~30,000 trials). The harness collapses repeats to one sample per image, averaging the neural target to denoise it while leaving the identical stimulus unchanged. The held-out test is the canonical NSD <em>shared-1000</em> images (~1000 test / ~9000 train), and the code asserts the train and test image sets are disjoint — preventing the most insidious leak, the same image in both splits.'},
+{cat:'method', q:'What is "per-target GCV ridge" and why not a single fixed alpha?', a:'The readout reproduces sklearn’s <code>RidgeCV(alphas=logspace(-3,6,10), alpha_per_target=True)</code>: one SVD of the centered design is reused to score each target’s leave-one-out error in closed form across all 10 alphas, and each voxel keeps its own best penalty. A fixed alpha=1.0 massively overfit small samples (train ≫ test); per-target cross-validated regularization closes that gap, and searching 10 alphas costs about one fit, not 10×. Verified to match sklearn to ~1e-13.'},
+{cat:'method', q:'How does the per-region reward work when the readout fits all voxels?', a:'For NSD the readout always fits all ~15,724 nsdgeneral voxels, but the scalar reward narrows to one region chosen by <code>NEURO_ROI</code> (default ventral). A per-voxel keep-mask selects that region’s columns and averages <code>test_corr</code> only over them, while every region in the fixed menu (V1/V2/V3/hV4/FFA/PPA/EBA/VWFA/early/ventral) is still logged as a <code>corr_&lt;name&gt;</code> column. So one run yields one headline number plus full per-region feedback.'},
+{cat:'results', q:'Which regions did never-trained models BEAT a trained AlexNet in, and by how much?', a:'Early visual cortex, cleanly: V1 reached <strong>0.428</strong> vs 0.342 (+0.086, gabor-lum-surround), V2 <strong>0.371</strong> vs 0.299 (+0.072), and V3 <strong>0.350</strong> vs 0.321 (+0.029). The winning models are all Gabor / oriented-energy designs — exactly the kind of feature an untrained network can hand-specify. These numbers come straight from the best <code>status="ok"</code> rows in the per-region run folders.'},
+{cat:'results', q:'Which regions did the never-trained models TRAIL the trained AlexNet in?', a:'Every high-level, category-selective region: FFA 0.261 vs 0.396 (−0.135), PPA 0.267 vs 0.403 (−0.136), EBA 0.290 vs 0.436 (−0.146, biggest gap), VWFA 0.195 vs 0.321 (−0.126, lowest absolute). hV4 (0.282 vs 0.289) and ventral (0.259 vs 0.284) are near-ties just short of parity. Clean dividing line: untrained wins early, approaches parity mid-stream, loses decisively in face/place/body/word areas.'},
+{cat:'results', q:'What is the scientific interpretation of that early-vs-high-level dividing line?', a:'It supports the long-standing view that early visual cortex computes simple, hand-specifiable operations — oriented Gabor/energy filters, luminance and colour-opponent contrasts — that a never-trained model can write down and even out-predict a trained network. High-level regions encode learned semantic categories that emerge only from experience, so no fixed filter bank captures them and the trained network keeps its advantage. Exactly the pattern the project predicted in advance.'},
+{cat:'results', q:'Were the text and MEG datasets actually searched, and how good is the generalization study?', a:'No — both are essentially un-run: the best text (fMRI) result is 0.0007 and the best MEG is −0.0037, both from the identity model only. The cross-subject generalization study contains exactly one data row (V1, subject 1), because that requires subject-2/3 NSD data to be staged. The substantive results so far are entirely the NSD subject-1 per-region hill-climbs.'},
+{cat:'codebase', q:'What is editable versus fixed, and why is the harness intentionally frozen?', a:'Only <code>model.py</code> and <code>experiment.py</code> are editable; everything under <code>harness/</code> is fixed, with two exceptions — the env vars <code>NEURO_DATASET</code> and <code>NEURO_ROI</code>. The fixedness is the basis of trust: if the agent could edit <code>reward.py</code> it could redefine the metric and the reward would be meaningless. Because the data loading, readout, and scoring are immutable and shared across every proposal, a higher <code>test_corr</code> is a real, comparable improvement.'},
+{cat:'codebase', q:'What happens, step by step, when you run a single evaluation?', a:'<code>python -m harness.run</code> loads the active split once via <code>load_split</code> (minutes on a cold NSD build, seconds when cached), then calls <code>evaluate_on_split_safe</code> on your model. That fits the per-target GCV ridge from train activations to train targets, predicts the held-out test split, computes per-voxel Pearson r, narrows to the reward region, and returns a row. <code>save_results</code> appends that single row. One run = one model = one row = one iteration.'},
+{cat:'codebase', q:'How does run-folder isolation let multiple region searches run in parallel without colliding?', a:'<code>scripts/setup_run.py</code> scaffolds <code>runs/&lt;tag&gt;/</code> with <code>harness/</code> symlinked in and local copies of <code>model.py</code>/<code>experiment.py</code>. Each run sets <code>NEURO_ROI</code> (and optionally <code>NEURO_RUN</code>) so its results land in a region-specific CSV, and the build cache is keyed by every Dataset field <em>except</em> roi/test_frac/reward_roi/run_tag — so different regions reuse one expensive timeseries build but never mix results.'},
+{cat:'codebase', q:'What does the CSV ledger record, and how are failed models handled?', a:'Each run appends one row with core columns (iteration, timestamp, study, model_name, idea, summary, n_params, n_train, n_test, n_targets, test_corr, train_corr, gap, best_so_far, seconds, status) plus a <code>corr_&lt;region&gt;</code> column per region. The ledger is append-only, so iteration counts every model ever tried. A model that raises or returns a bad shape is caught and written as a <code>status="error"</code> row with NaN reward; the analyzer excludes non-"ok" rows from the best-so-far curve.'},
+{cat:'skeptic', q:'Isn’t this just feature engineering dressed up as neuroscience?', a:'It is hand-designed feature engineering — and that’s precisely what makes it a hypothesis test rather than a black box. Each model encodes an explicit, falsifiable claim about how a region computes (e.g. "V1 is oriented-energy filtering"), and the fixed ridge-and-score pipeline grades that claim on a level field. The payoff is interpretability: when gabor-lum-surround beats a trained AlexNet in V1 (0.428 vs 0.342) you learn that V1’s response is essentially captured by oriented luminance contrast — a statement about the brain.'},
+{cat:'skeptic', q:'The ridge readout is fit per model and re-fit per subject — doesn’t that count as training?', a:'No, and the distinction is deliberate. The readout is a single linear map (per-target ridge) that is part of the <em>evaluation</em>, not the model — the standard neuroscience "encoding model" probe asking how linearly decodable the brain target is from a fixed representation. The model’s weights never change. In the generalization study the same image→activation model is applied unchanged to each subject and only the linear readout is re-fit, because it maps a shared feature space onto each subject’s idiosyncratic voxel layout. Re-fitting a linear probe is the measurement, not learning the representation.'},
+{cat:'skeptic', q:'Is a test_corr around 0.4 actually good, or does it sound low?', a:'For single-subject natural-image fMRI it is strong. The reference is a frozen ImageNet AlexNet (fc7) read out with the identical ridge: V1 0.342, FFA 0.396, PPA 0.403, EBA 0.436, ventral 0.284. Beating 0.342 in V1 with a hand-written Gabor model (0.428) is meaningful against a serious baseline, not an identity floor. fMRI has a noise ceiling well below 1.0 from trial-to-trial variability, so per-voxel correlations of 0.3–0.4 in early cortex are competitive — and the harness warns that differences under ~0.005 are noise.'},
+{cat:'howto', q:'How do I run a single evaluation against a specific brain region?', a:'From the repo root: <code>NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run</code>. This loads the NSD subject-1 split (cached after the first build), evaluates the current <code>model.py</code>, narrows the scalar reward to PPA, and appends a row to <code>results/NsdSubj01__PPA.csv</code> (still logging every region as <code>corr_&lt;name&gt;</code>). Swap <code>NEURO_ROI</code> for any menu entry — V1/V2/V3/hV4/FFA/PPA/EBA/VWFA/early/ventral; default is ventral.'},
+{cat:'howto', q:'How do I launch an unattended overnight hill-climb, and what’s the one gotcha?', a:'Use the launcher, bounded by timeout: <code>NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 120m scripts/autoresearch.sh high</code>. It execs <code>copilot-keepgoing</code>, which runs the Opus agent nonstop and re-nudges it whenever it falls idle. The critical gotcha: keepgoing never self-terminates, so you <strong>must</strong> wrap it in <code>timeout</code> or it runs forever — the script doesn’t enforce this. Point <code>WORKDIR</code> at an isolated <code>runs/&lt;tag&gt;</code> to run several region searches in parallel.'},
+];
+const CAT_LABEL = {concept:'Concept', method:'Method', results:'Results', codebase:'Codebase', skeptic:'Skeptic', howto:'How-to'};
+const CAT_KEY   = {concept:'concept', method:'method', results:'results', codebase:'codebase', skeptic:'skeptic', 'how-to':'howto', howto:'howto'};
+
+/* =========================================================
+ *  TABS
+ * ========================================================= */
+const tabs = [...document.querySelectorAll('.tab')];
+const underline = document.getElementById('tabUnderline');
+function moveUnderline(btn){ underline.style.left = btn.offsetLeft+'px'; underline.style.width = btn.offsetWidth+'px'; }
+function activate(name){
+  tabs.forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show', p.id==='panel-'+name));
+  moveUnderline(document.querySelector('.tab[data-tab="'+name+'"]'));
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant':'auto'});
+  if(name==='project'){ drawRegionChart(); drawClimb(); }
+}
+tabs.forEach(t=>t.addEventListener('click', ()=>activate(t.dataset.tab)));
+window.addEventListener('resize', ()=>{ const a=document.querySelector('.tab.active'); if(a) moveUnderline(a); drawRegionChart(); drawClimb(); });
+
+/* =========================================================
+ *  TOOLTIP
+ * ========================================================= */
+const tip = document.getElementById('tip');
+function showTip(html, e){ tip.innerHTML=html; tip.style.opacity=1; moveTip(e); }
+function moveTip(e){
+  const pad=14; let x=e.clientX+pad, y=e.clientY+pad;
+  const w=tip.offsetWidth, h=tip.offsetHeight;
+  if(x+w>innerWidth-8) x=e.clientX-w-pad;
+  if(y+h>innerHeight-8) y=e.clientY-h-pad;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTip(){ tip.style.opacity=0; }
+
+/* =========================================================
+ *  REGION CHART  (the money shot)
+ * ========================================================= */
+function drawRegionChart(){
+  const host = document.getElementById('regionChart');
+  if(!host) return;
+  const W=920, H=380, mL=52, mR=16, mT=34, mB=84;
+  const pw=W-mL-mR, ph=H-mT-mB, yMax=0.46;
+  const n=REGIONS.length, slot=pw/n;
+  const y = v => mT + ph - (v/yMax)*ph;
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox',`0 0 ${W} ${H}`); svg.setAttribute('role','img');
+  const FF={mono:'JetBrains Mono, SFMono-Regular, SF Mono, Menlo, Consolas, monospace', serif:'Charter, Iowan Old Style, Palatino Linotype, Georgia, serif', sans:'Seravek, Avenir Next, Segoe UI, system-ui, sans-serif'};
+
+  // background territory washes
+  const beatW = mL + 3*slot;          // V1..V3
+  const trailX = mL + 5*slot;         // EBA..VWFA start
+  function rect(x,w,fill){ const r=document.createElementNS(NS,'rect'); r.setAttribute('x',x); r.setAttribute('y',mT); r.setAttribute('width',w); r.setAttribute('height',ph); r.setAttribute('fill',fill); svg.appendChild(r); }
+  rect(mL, 3*slot, 'rgba(31,122,77,.06)');
+  rect(trailX, 4*slot, 'rgba(176,69,39,.05)');
+
+  // gridlines
+  for(let g=0; g<=0.4+1e-9; g+=0.1){
+    const yy=y(g);
+    const ln=document.createElementNS(NS,'line'); ln.setAttribute('x1',mL); ln.setAttribute('x2',W-mR); ln.setAttribute('y1',yy); ln.setAttribute('y2',yy);
+    ln.setAttribute('stroke', g===0?'#cdbfa8':'#e3dac8'); ln.setAttribute('stroke-width',1); svg.appendChild(ln);
+    const tx=document.createElementNS(NS,'text'); tx.setAttribute('x',mL-9); tx.setAttribute('y',yy+4); tx.setAttribute('text-anchor','end');
+    tx.setAttribute('font-family',FF.mono); tx.setAttribute('font-size','11'); tx.setAttribute('fill','#8b8173'); tx.textContent=g.toFixed(1); svg.appendChild(tx);
+  }
+  // divider between win & rest
+  const dv=document.createElementNS(NS,'line'); const dx=mL+3*slot;
+  dv.setAttribute('x1',dx); dv.setAttribute('x2',dx); dv.setAttribute('y1',mT-6); dv.setAttribute('y2',mT+ph);
+  dv.setAttribute('stroke','#b9ad95'); dv.setAttribute('stroke-width',1.4); dv.setAttribute('stroke-dasharray','3 4'); svg.appendChild(dv);
+  // territory labels
+  function terr(x,txt,col){ const t=document.createElementNS(NS,'text'); t.setAttribute('x',x); t.setAttribute('y',mT+13); t.setAttribute('text-anchor','middle'); t.setAttribute('font-family',FF.serif); t.setAttribute('font-size','12.5'); t.setAttribute('font-style','italic'); t.setAttribute('fill',col); t.textContent=txt; svg.appendChild(t); }
+  terr(mL+1.5*slot,'untrained beats trained', '#1f7a4d');
+  terr(trailX+2*slot,'trained wins — needs learning', '#b04527');
+
+  REGIONS.forEach((d,i)=>{
+    const cx=mL+(i+0.5)*slot;
+    const bw=Math.min(34, slot*0.46);
+    const beat = d.best>=d.alex;
+    const g=document.createElementNS(NS,'g'); g.style.cursor='default';
+    // bar (untrained best)
+    const bar=document.createElementNS(NS,'rect');
+    bar.setAttribute('x',cx-bw/2); bar.setAttribute('width',bw);
+    bar.setAttribute('y',y(d.best)); bar.setAttribute('height', mT+ph-y(d.best));
+    bar.setAttribute('rx',3); bar.setAttribute('fill',d.color); bar.setAttribute('opacity','0.92');
+    // grow-in animation
+    bar.style.transformBox='fill-box'; bar.style.transformOrigin='bottom'; bar.style.transform='scaleY(0)';
+    bar.style.transition='transform .7s cubic-bezier(.2,.7,.2,1)'; bar.style.transitionDelay=(0.05*i)+'s';
+    g.appendChild(bar);
+    setTimeout(()=>{ bar.style.transform='scaleY(1)'; }, 30);
+
+    // AlexNet diamond + tick
+    const ay=y(d.alex);
+    const tick=document.createElementNS(NS,'line'); tick.setAttribute('x1',cx-bw/2-5); tick.setAttribute('x2',cx+bw/2+5); tick.setAttribute('y1',ay); tick.setAttribute('y2',ay);
+    tick.setAttribute('stroke','#211d17'); tick.setAttribute('stroke-width',1.6); g.appendChild(tick);
+    const dia=document.createElementNS(NS,'rect'); dia.setAttribute('x',cx-4.5); dia.setAttribute('y',ay-4.5); dia.setAttribute('width',9); dia.setAttribute('height',9);
+    dia.setAttribute('fill','#f3eee2'); dia.setAttribute('stroke','#211d17'); dia.setAttribute('stroke-width',1.8); dia.setAttribute('transform',`rotate(45 ${cx} ${ay})`); g.appendChild(dia);
+
+    // delta marker
+    const delta=d.best-d.alex;
+    const dl=document.createElementNS(NS,'text');
+    dl.setAttribute('x',cx); dl.setAttribute('y',y(Math.max(d.best,d.alex))-9); dl.setAttribute('text-anchor','middle');
+    dl.setAttribute('font-family',FF.mono); dl.setAttribute('font-size','11.5'); dl.setAttribute('font-weight','700');
+    dl.setAttribute('fill', beat?'#1f7a4d':'#b04527'); dl.textContent=(delta>=0?'+':'−')+Math.abs(delta).toFixed(2);
+    svg.appendChild(g); g.appendChild(dl);
+
+    // region label
+    const lab=document.createElementNS(NS,'text'); lab.setAttribute('x',cx); lab.setAttribute('y',mT+ph+22); lab.setAttribute('text-anchor','middle');
+    lab.setAttribute('font-family',FF.sans); lab.setAttribute('font-size','13.5'); lab.setAttribute('font-weight','700'); lab.setAttribute('fill',d.color); lab.textContent=d.name; svg.appendChild(lab);
+    const sub=document.createElementNS(NS,'text'); sub.setAttribute('x',cx); sub.setAttribute('y',mT+ph+38); sub.setAttribute('text-anchor','middle');
+    sub.setAttribute('font-family',FF.sans); sub.setAttribute('font-size','10.5'); sub.setAttribute('fill','#8b8173'); sub.textContent=d.sub; svg.appendChild(sub);
+
+    // hover hit area
+    const hit=document.createElementNS(NS,'rect'); hit.setAttribute('x',mL+i*slot); hit.setAttribute('y',mT); hit.setAttribute('width',slot); hit.setAttribute('height',ph); hit.setAttribute('fill','transparent');
+    hit.addEventListener('mousemove',e=>showTip(
+      `<b>${d.name}</b> — ${d.sub}<br>untrained best: <b>${d.best.toFixed(3)}</b><br>trained AlexNet: ${d.alex.toFixed(3)}`+
+      `<br><span class="d ${beat?'win':'trail'}">${beat?'beats by +':'trails by −'}${Math.abs(delta).toFixed(3)}</span>`+
+      `<br><span class="mono">${d.model}</span>`, e));
+    hit.addEventListener('mouseleave',hideTip);
+    svg.appendChild(hit);
+  });
+
+  // axis title
+  const yt=document.createElementNS(NS,'text'); yt.setAttribute('transform',`rotate(-90 14 ${mT+ph/2})`); yt.setAttribute('x',14); yt.setAttribute('y',mT+ph/2);
+  yt.setAttribute('text-anchor','middle'); yt.setAttribute('font-family',FF.serif); yt.setAttribute('font-size','12'); yt.setAttribute('fill','#5a5249'); yt.textContent='held-out test_corr'; svg.appendChild(yt);
+
+  host.innerHTML=''; host.appendChild(svg);
+}
+
+/* =========================================================
+ *  HILL-CLIMB CHART
+ * ========================================================= */
+function drawClimb(){
+  const host=document.getElementById('climbChart'); if(!host) return;
+  const W=920, H=270, mL=52, mR=18, mT=22, mB=46;
+  const pw=W-mL-mR, ph=H-mT-mB;
+  const yMin=0.29, yMax=0.44, ALEX=0.342;
+  const n=V1_TRAJ.length;
+  const x=i=> mL + (i)/(n-1)*pw;
+  const y=v=> mT + ph - (v-yMin)/(yMax-yMin)*ph;
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg'); svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const FF={mono:'JetBrains Mono, SFMono-Regular, SF Mono, Menlo, Consolas, monospace', serif:'Charter, Iowan Old Style, Palatino Linotype, Georgia, serif', sans:'Seravek, Avenir Next, Segoe UI, system-ui, sans-serif'};
+
+  // gridlines
+  for(let g=0.30; g<=0.44+1e-9; g+=0.04){
+    const yy=y(g); const ln=document.createElementNS(NS,'line');
+    ln.setAttribute('x1',mL); ln.setAttribute('x2',W-mR); ln.setAttribute('y1',yy); ln.setAttribute('y2',yy);
+    ln.setAttribute('stroke','#e3dac8'); svg.appendChild(ln);
+    const t=document.createElementNS(NS,'text'); t.setAttribute('x',mL-9); t.setAttribute('y',yy+4); t.setAttribute('text-anchor','end');
+    t.setAttribute('font-family',FF.mono); t.setAttribute('font-size','10.5'); t.setAttribute('fill','#8b8173'); t.textContent=g.toFixed(2); svg.appendChild(t);
+  }
+  // AlexNet baseline
+  const ab=document.createElementNS(NS,'line'); ab.setAttribute('x1',mL); ab.setAttribute('x2',W-mR); ab.setAttribute('y1',y(ALEX)); ab.setAttribute('y2',y(ALEX));
+  ab.setAttribute('stroke','#211d17'); ab.setAttribute('stroke-width',1.4); ab.setAttribute('stroke-dasharray','5 4'); svg.appendChild(ab);
+  const abl=document.createElementNS(NS,'text'); abl.setAttribute('x',W-mR); abl.setAttribute('y',y(ALEX)-7); abl.setAttribute('text-anchor','end');
+  abl.setAttribute('font-family',FF.serif); abl.setAttribute('font-size','11.5'); abl.setAttribute('font-style','italic'); abl.setAttribute('fill','#211d17'); abl.textContent='trained AlexNet 0.342'; svg.appendChild(abl);
+
+  // best-so-far step path
+  let best=-1; const pts=[];
+  V1_TRAJ.forEach((d,i)=>{ if(d.v!=null){ best=Math.max(best,d.v); pts.push([x(i),y(best)]); } });
+  let path=''; pts.forEach((p,i)=> path += (i?` L ${p[0]} ${p[1]}`:`M ${p[0]} ${p[1]}`));
+  const bp=document.createElementNS(NS,'path'); bp.setAttribute('d',path); bp.setAttribute('fill','none');
+  bp.setAttribute('stroke','#1f7a4d'); bp.setAttribute('stroke-width',2); bp.setAttribute('opacity','.55'); bp.setAttribute('stroke-linejoin','round'); svg.appendChild(bp);
+
+  // points
+  best=-1;
+  V1_TRAJ.forEach((d,i)=>{
+    const cx=x(i);
+    if(d.v==null){ // error mark
+      const yy=y(yMin+0.012);
+      const e1=document.createElementNS(NS,'text'); e1.setAttribute('x',cx); e1.setAttribute('y',yy); e1.setAttribute('text-anchor','middle');
+      e1.setAttribute('font-family',FF.mono); e1.setAttribute('font-size','15'); e1.setAttribute('font-weight','700'); e1.setAttribute('fill','#b04527'); e1.textContent='✕'; svg.appendChild(e1);
+      const hit=document.createElementNS(NS,'circle'); hit.setAttribute('cx',cx); hit.setAttribute('cy',yy-4); hit.setAttribute('r',12); hit.setAttribute('fill','transparent');
+      hit.addEventListener('mousemove',ev=>showTip(`<b>iter ${d.it}</b> — ${d.name}<br><span class="d trail">caught error: ${d.err}</span><br><span class="mono">status="error", NaN reward, loop continues</span>`,ev));
+      hit.addEventListener('mouseleave',hideTip); svg.appendChild(hit);
+      return;
+    }
+    const isBest = d.v>best; if(isBest) best=d.v;
+    const c=document.createElementNS(NS,'circle'); c.setAttribute('cx',cx); c.setAttribute('cy',y(d.v)); c.setAttribute('r',isBest?5.2:4);
+    c.setAttribute('fill', isBest?'#1f7a4d':'#2563eb'); c.setAttribute('stroke','#fbf8f0'); c.setAttribute('stroke-width',1.5); svg.appendChild(c);
+    const hit=document.createElementNS(NS,'circle'); hit.setAttribute('cx',cx); hit.setAttribute('cy',y(d.v)); hit.setAttribute('r',13); hit.setAttribute('fill','transparent');
+    hit.addEventListener('mousemove',ev=>showTip(`<b>iter ${d.it}</b> — ${d.name}<br>test_corr <b>${d.v.toFixed(3)}</b>${isBest?'<br><span class="d win">● new best-so-far</span>':''}`,ev));
+    hit.addEventListener('mouseleave',hideTip); svg.appendChild(hit);
+    // x label (sparse)
+    if(i%2===0 || i===n-1){
+      const xl=document.createElementNS(NS,'text'); xl.setAttribute('x',cx); xl.setAttribute('y',mT+ph+18); xl.setAttribute('text-anchor','middle');
+      xl.setAttribute('font-family',FF.mono); xl.setAttribute('font-size','10'); xl.setAttribute('fill','#8b8173'); xl.textContent=d.it; svg.appendChild(xl);
+    }
+  });
+  // endpoint label
+  const last=V1_TRAJ[V1_TRAJ.length-1];
+  const el=document.createElementNS(NS,'text'); el.setAttribute('x',x(n-1)); el.setAttribute('y',y(last.v)-11); el.setAttribute('text-anchor','end');
+  el.setAttribute('font-family',FF.mono); el.setAttribute('font-size','11'); el.setAttribute('font-weight','700'); el.setAttribute('fill','#1f7a4d'); el.textContent='0.428'; svg.appendChild(el);
+  const xt=document.createElementNS(NS,'text'); xt.setAttribute('x',mL+pw/2); xt.setAttribute('y',H-6); xt.setAttribute('text-anchor','middle');
+  xt.setAttribute('font-family',FF.serif); xt.setAttribute('font-size','11.5'); xt.setAttribute('fill','#5a5249'); xt.textContent='iteration →'; svg.appendChild(xt);
+
+  host.innerHTML=''; host.appendChild(svg);
+}
+
+/* =========================================================
+ *  FILE MAP
+ * ========================================================= */
+(function(){
+  const host=document.getElementById('filemap'); let html='';
+  FILEMAP.forEach(row=>{
+    if(row.g){ html += `<div class="group-label">${row.g}</div>`; return; }
+    const path = row.p.replace(/(.*\/)/, '<span class="dir">$1</span>');
+    html += `<div class="trow"><span class="path">${path}</span><span class="role"><span class="t ${row.t}">${row.t}</span>${row.r}</span></div>`;
+  });
+  host.innerHTML=html;
+})();
+
+/* =========================================================
+ *  MODEL CODE (lightweight highlighter)
+ * ========================================================= */
+(function(){
+  const KW=['class','def','return','self','for','in','range','import','None','and','or','not'];
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  const lines = MODEL_CODE.split('\n').map(line=>{
+    // split off trailing comment
+    let code=line, comment='';
+    const ci=line.indexOf('#');
+    if(ci>=0 && !/["']/.test(line.slice(0,ci))){ code=line.slice(0,ci); comment=line.slice(ci); }
+    let h=esc(code);
+    h=h.replace(/(&quot;[^&]*&quot;|&#39;[^&]*&#39;|"[^"]*"|'[^']*')/g,'<span class="s">$1</span>');
+    h=h.replace(/\b(\d+\.?\d*(?:e-?\d+)?)\b/g,'<span class="n">$1</span>');
+    KW.forEach(k=>{ h=h.replace(new RegExp('\\b'+k+'\\b','g'),'<span class="k">'+k+'</span>'); });
+    h=h.replace(/\b(Model|F|torch)\b/g,'<span class="d">$1</span>');
+    if(comment) h += '<span class="c">'+esc(comment)+'</span>';
+    return h;
+  });
+  document.getElementById('modelcode').innerHTML = lines.join('\n');
+})();
+
+/* =========================================================
+ *  Q&A  accordion + filters
+ * ========================================================= */
+(function(){
+  const qa=document.getElementById('qa'); const filt=document.getElementById('qfilters');
+  const cats=['all',...Object.keys(CAT_LABEL)];
+  filt.innerHTML = cats.map(c=>{
+    const lab = c==='all'?'All':CAT_LABEL[c];
+    const dot = c==='all'?'':`<span class="cdot dot-${c}"></span>`;
+    return `<button class="qf ${c==='all'?'on':''}" data-c="${c}">${dot}${lab}</button>`;
+  }).join('');
+  qa.innerHTML = QA.map((it,i)=>{
+    const ck = CAT_KEY[it.cat]||it.cat;
+    return `<details class="qitem" data-c="${ck}" ${i===0?'open':''}>
+      <summary class="qq">
+        <span class="qcat cat-${ck}">${CAT_LABEL[ck]||it.cat}</span>
+        <span class="qtext">${it.q}</span>
+        <span class="qchev">›</span>
+      </summary>
+      <div class="qans">${it.a}</div>
+    </details>`;
+  }).join('');
+  filt.addEventListener('click',e=>{
+    const b=e.target.closest('.qf'); if(!b) return;
+    [...filt.children].forEach(x=>x.classList.toggle('on',x===b));
+    const c=b.dataset.c;
+    qa.querySelectorAll('.qitem').forEach(it=>{ it.style.display = (c==='all'||it.dataset.c===c)?'':'none'; });
+  });
+})();
+
+/* init */
+moveUnderline(document.querySelector('.tab.active'));
+drawRegionChart();
+drawClimb();
+</script>
+</body>
+</html>

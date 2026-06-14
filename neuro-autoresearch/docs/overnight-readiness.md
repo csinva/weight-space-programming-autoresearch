@@ -1,5 +1,14 @@
 # Overnight Unattended-Run Readiness Assessment
 
+> **Historical snapshot (pre-rework).** Several "open" items below have since
+> landed: the append-only single-row ledger (`harness/results.py`), the
+> `status="error"` safety net (`evaluate_on_split_safe`), the `idea`/`summary`
+> columns, the trained-AlexNet baseline + beat-AlexNet goal, the
+> `copilot-keepgoing` launcher, and V2/V3 in the ROI menu. The main remaining
+> item is a more stable reward (multi-seed / k-fold or a tie band). This document
+> also predates the harness rename (`config.py`→`datasets.py`, `eval.py`→`reward.py`,
+> `evolve/`→repo-root `model.py`) — treat its file paths as historical.
+
 Scope: can the NeuralSet-based autoresearch loop run **overnight, unattended**,
 driven by `copilot-keepgoing` wrapping the Copilot CLI, iterating
 propose-model → evaluate → record across the active dataset?

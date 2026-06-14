@@ -47,7 +47,7 @@ is good.
 
 Every dataset, neural modality, and stimulus type flows through a single unified
 interface (**NeuralSet / NeuralFetch**). There is **no raw file or network I/O**
-anywhere in `harness/`, `evolve/`, or `scripts/` — adding a new dataset is pure
+anywhere in `harness/` or `scripts/` — adding a new dataset is pure
 configuration, never bespoke parsing. This is what lets the same loop run, untouched,
 across fMRI and MEG, and across image, text, and audio stimuli.
 

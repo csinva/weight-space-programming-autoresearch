@@ -1,5 +1,12 @@
 # NSD 2-Iteration Trial — Loop Mechanics Validation
 
+> **Historical trial — superseded.** This early run predates the current NSD
+> pipeline. Paths/details below are stale: the model is now repo-root `model.py`
+> (not `evolve/model.py`), scoring lives in `harness/reward.py` (not
+> `harness/eval.py`), and the NSD split is now the HRF-offset (`neural_offset=5.0`),
+> repeat-collapsed, image-disjoint **shared-1000** hold-out — not the old seeded
+> 200/50 whole-volume split. Read it for the loop-mechanics narrative only.
+
 A short end-to-end trial of the AlphaEvolve-style autoresearch loop on the
 Natural Scenes Dataset (NSD). The loop proposes a **fixed, never-trained** model
 in `evolve/model.py`; the harness (`harness/eval.py`) fits **only** an L2 ridge

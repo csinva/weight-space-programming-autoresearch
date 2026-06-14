@@ -1,5 +1,10 @@
 # Third Dataset — Le Petit Prince MEG (LPP-Listen)
 
+> **Historical planning note.** The chosen study (`Bel2026PetitListenSample`) did
+> land and is the live `meg` preset in `harness/datasets.py`. Any ready-to-paste
+> `Dataset(...)` config and `Allen2022MassiveSample`/`harness/config.py` references
+> below are pre-rework; the current registry is `PRESETS` in `harness/datasets.py`.
+
 A third famous dataset of a **genuinely different neural modality** so the
 autoresearch loop spans modalities. NSD (`Allen2022MassiveSample`) is fMRI/vision
 and Li2022Petit is fMRI/language; this adds **MEG**.

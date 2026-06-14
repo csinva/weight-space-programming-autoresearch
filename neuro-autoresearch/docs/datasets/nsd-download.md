@@ -1,5 +1,10 @@
 # NSD subject-01 visual-cortex download
 
+> **Download-provenance note.** The download steps here are still accurate, but
+> the ready-to-paste `Dataset(...)` config further down targets the old
+> `harness/config.py` / `Allen2022MassiveSample` layout. The live config is now
+> the `NsdSubj01` preset in `harness/datasets.py`; use that, not the snippet below.
+
 Selective, **single-subject** download of the Natural Scenes Dataset (NSD,
 `Allen2022Massive`) — subject 1 only, visual cortex (`nsdgeneral` ROI in the
 `func1pt8mm` preprocessed space the NeuralSet backend masks to). The full study
