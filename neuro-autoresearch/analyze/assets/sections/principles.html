@@ -1,0 +1,22 @@
+
+<p>Each run proposes fixed feature extractors, then the ridge readout asks:
+<i>which hand-written computation makes brain activity easier to predict?</i> The bars
+below sum the reward gains from improving steps that mention each principle. A single
+step can count for multiple principles because real models combine ingredients.</p>
+<ul>
+  <li><b>Gabor / oriented energy</b> — quadrature filter pairs collapsed to
+      <code>√(cos²+sin²)</code> give phase-invariant edge/contrast detectors (V1 complex cells).</li>
+  <li><b>Divisive normalization</b> — dividing each unit by a pooled neighbourhood is the
+      canonical cortical gain-control that decorrelates and equalises contrast (Heeger).</li>
+  <li><b>Colour opponency</b> — luminance / R−G / B−Y channels mirror retinal–LGN coding.</li>
+  <li><b>Multiscale / spatial frequency</b> — a bank of wavelengths covers coarse layout
+      through fine detail; different regions weight the bands differently.</li>
+  <li><b>Scattering / second order</b> — a Gabor layer applied to the first layer's energy
+      captures the nonlinear pooling V2/V3 perform on V1 output (translation-stable).</li>
+  <li><b>Texture statistics</b> — Gram / GIST / Portilla–Simoncelli summaries describe
+      material and scene structure, which drives PPA and the ventral stream.</li>
+  <li><b>Random features</b> — fixed random projections (RFF, random convs, codebooks) lift
+      features into a high-dimensional kernel space without any training.</li>
+  <li><b>Pooling / retinotopy</b> — foveal weighting and spatial grids encode where things
+      are, not just what.</li>
+</ul>

@@ -1,0 +1,39 @@
+
+<p><i>A short orientation for readers seeing this project for the first time — where it
+started, what changed, and what we can say so far.</i></p>
+
+<p><b>Where we started.</b> The first version of this project was a <b>brain
+hyperresearch</b> setup: several autoresearch agents searching for encoding models
+<b>in parallel</b>, coordinated by a <b>conductor</b> in a hierarchical arrangement. It
+ran on a single dataset — the Natural Scenes Dataset (NSD) — and the whole loop was wired
+specifically to that data.</p>
+
+<p><b>What changed.</b> The search now sits on the <b>NeuralSet / NeuralFetch</b> unified
+data interface, so the same harness can be pointed at <b>many different datasets</b>
+(fMRI/image, fMRI/audio, MEG/audio) by flipping a single preset rather than rewriting the
+pipeline. Three things moved with it:</p>
+<ul>
+  <li><b>Unified data layer.</b> Every stimulus and every recorded response is read through
+      NeuralSet, so adding a dataset or a new subject is a config change, not a new harness.</li>
+  <li><b>A rebuilt feedback loop.</b> The signal the agent learns from has been completely
+      reworked — a structured, append-only ledger (one row per model: its idea, what it
+      computes, held-out reward, and per-region predictivity) that gives the search far
+      cleaner feedback than before.</li>
+  <li><b>Nonstop, region-targeted search.</b> The agent runs continuously via the
+      keepgoing launcher, and each run is rewarded on <b>one chosen brain region</b> at a
+      time, so we can optimize models region by region instead of for a single global score.</li>
+</ul>
+
+<p><b>What we can say so far (NSD, one subject).</b> Optimizing per region, the picture
+already matches the prior we'd expect from the visual hierarchy:</p>
+<ul>
+  <li><b>Early visual cortex (V1/V2/V3):</b> hand-written, never-trained models reach
+      <b>clearly higher predictivity</b> — as anticipated, since these regions are dominated
+      by Gabor-like oriented-energy and contrast computations that are easy to write by hand.</li>
+  <li><b>Ventral stream:</b> in the ventral ROI, the best untrained model is now
+      <b>comparable to trained AlexNet</b> for this one subject — a notable result given the
+      model is never trained and only its ridge readout is fit.</li>
+</ul>
+<p>The sections below give the full, data-driven version of this story: the architecture
+the search converged on, the head-to-head against trained AlexNet, and where untrained
+computation still falls short (the high-level category-selective regions).</p>

@@ -66,6 +66,7 @@ _TRAIN_RE = re.compile(r"\btrain", re.IGNORECASE)
 _TAG_REGION_RE = re.compile(r"^nsd-([a-z0-9]+)-")
 _PLOT_COUNTER = count(1)
 _PLOTLY_BUNDLE = os.path.join(os.path.dirname(__file__), "vendor", "plotly-cartesian.min.js")
+_ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
 _PLOTLY_CONFIG = {
     "responsive": True,
     "displaylogo": False,
@@ -76,6 +77,26 @@ _PALETTE = [
     "#2563eb", "#dc2626", "#16a34a", "#9333ea", "#ea580c",
     "#0891b2", "#be123c", "#4f46e5", "#65a30d", "#c2410c",
 ]
+# One fixed color per canonical region, used everywhere a region appears (scoreboard,
+# summary traces, dashboard, mechanics cards, run blocks) so the eye can track a region
+# across the whole report. Ordered roughly cool->warm along the cortical hierarchy.
+REGION_COLORS = {
+    "V1": "#2563eb",
+    "V2": "#0891b2",
+    "V3": "#0d9488",
+    "hV4": "#16a34a",
+    "early": "#65a30d",
+    "ventral": "#ca8a04",
+    "PPA": "#ea580c",
+    "EBA": "#dc2626",
+    "FFA": "#be123c",
+    "VWFA": "#9333ea",
+}
+
+
+def region_color(region: str | None, fallback_index: int = 0) -> str:
+    """The region's fixed color, or a palette color for region-less runs."""
+    return REGION_COLORS.get(region or "", _PALETTE[fallback_index % len(_PALETTE)])
 
 
 def mentions_training(idea: object) -> bool:
@@ -316,8 +337,19 @@ def _load_plotly_bundle() -> str:
     return bundle
 
 
-def _plot_color(index: int) -> str:
-    return _PALETTE[index % len(_PALETTE)]
+def _load_asset(*relpath: str) -> str:
+    """Read a static UI asset (CSS / HTML prose) from ``analyze/assets``.
+
+    The report's static markup lives in flat files (mirroring the vendored Plotly
+    bundle) so this module stays logic-only; the content is inlined at build time.
+    """
+    with open(os.path.join(_ASSETS_DIR, *relpath), encoding="utf-8") as fh:
+        return fh.read()
+
+
+def _section_intro(name: str) -> str:
+    """Prose intro HTML for a report section (``assets/sections/<name>.html``)."""
+    return _load_asset("sections", f"{name}.html")
 
 
 def _sanitize_json(value):
@@ -363,29 +395,47 @@ def _plotly_layout(layout: dict) -> dict:
         "paper_bgcolor": "white",
         "plot_bgcolor": "white",
         "font": {
-            "size": 13,
-            "family": "-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+            "size": 13.5,
+            "color": "#2b2f36",
+            "family": "Seravek, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
         },
-        "margin": {"l": 72, "r": 34, "t": 58, "b": 58},
+        "title": {
+            "font": {
+                "size": 17,
+                "color": "#16181d",
+                "family": "Charter, Iowan Old Style, Palatino Linotype, Georgia, serif",
+            },
+            "x": 0,
+            "xanchor": "left",
+        },
+        "margin": {"l": 72, "r": 34, "t": 80, "b": 58},
         "hovermode": "closest",
+        "hoverlabel": {
+            "bgcolor": "white",
+            "bordercolor": "#d8d5cd",
+            "font": {"size": 12.5, "color": "#0f172a"},
+        },
         "legend": {
             "orientation": "h",
             "yanchor": "bottom",
             "y": 1.02,
             "xanchor": "left",
             "x": 0,
+            "font": {"size": 12},
         },
         "xaxis": {
             "automargin": True,
-            "gridcolor": "#e5e7eb",
-            "zerolinecolor": "#d1d5db",
-            "linecolor": "#d1d5db",
+            "gridcolor": "#efede7",
+            "zerolinecolor": "#d8d5cd",
+            "linecolor": "#d8d5cd",
+            "title": {"font": {"size": 13, "color": "#6b7280"}},
         },
         "yaxis": {
             "automargin": True,
-            "gridcolor": "#e5e7eb",
-            "zerolinecolor": "#d1d5db",
-            "linecolor": "#d1d5db",
+            "gridcolor": "#efede7",
+            "zerolinecolor": "#d8d5cd",
+            "linecolor": "#d8d5cd",
+            "title": {"font": {"size": 13, "color": "#6b7280"}},
         },
     }
     return _merge_layout(base, layout)
@@ -424,14 +474,15 @@ def summary_plot(runs: list[Run]) -> str | None:
             if inc.empty:
                 continue
             label = labels.get(run.csv_path, run.display_label)
+            color = region_color(run.region, idx)
             data.append({
                 "type": "scatter",
                 "mode": "lines+markers",
                 "x": inc["iteration"].tolist(),
                 "y": inc["test_corr"].tolist(),
                 "name": label,
-                "line": {"width": 1.8, "color": _plot_color(idx)},
-                "marker": {"size": 6, "color": _plot_color(idx)},
+                "line": {"width": 1.8, "color": color},
+                "marker": {"size": 6, "color": color},
                 "hovertemplate": (
                     html.escape(label)
                     + "<br>Iteration %{x}<br>Held-out correlation %{y:.4f}<extra></extra>"
@@ -445,9 +496,12 @@ def summary_plot(runs: list[Run]) -> str | None:
                 "title": {"text": f"{study}: reward across proposed models"},
                 "xaxis": {"title": {"text": "Iteration"}},
                 "yaxis": {"title": {"text": "Held-out correlation (Pearson r)"}},
+                "legend": {"orientation": "v", "x": 1.01, "xanchor": "left",
+                           "y": 1, "yanchor": "top"},
+                "margin": {"l": 72, "r": 165, "t": 80, "b": 58},
             },
-            height=420,
-            caption="Each trace is one run; use the legend to toggle runs.",
+            height=440,
+            caption="Each trace is one run, in its region's color; click legend entries to toggle runs.",
         ))
     return "".join(charts) if charts else None
 
@@ -517,7 +571,7 @@ def per_run_plot(run: Run, label: str | None = None) -> str | None:
             "automargin": True,
             "color": "#9333ea",
         }
-        layout["margin"] = {"l": 70, "r": 82, "t": 58, "b": 58}
+        layout["margin"] = {"l": 70, "r": 82, "t": 80, "b": 58}
     return _plotly_div(data, layout, height=420)
 
 
@@ -615,8 +669,12 @@ def identity_row(run: Run) -> pd.Series | None:
     return inc.loc[mask].iloc[0]
 
 
-def baseline_comparison(runs: list[Run]) -> str:
-    """Compare each region winner with logged identity and documented AlexNet baselines."""
+def region_winners(runs: list[Run]) -> list[tuple]:
+    """Best run per reward region, in canonical region order.
+
+    Each item is ``(region, run_label, region_name, best, identity, alexnet)``;
+    shared by the header scoreboard and the baseline section.
+    """
     by_region = {}
     for run in runs:
         rg = run.region
@@ -633,80 +691,180 @@ def baseline_comparison(runs: list[Run]) -> str:
         if rg not in by_region or best > by_region[rg][3]:
             by_region[rg] = candidate
     rows = list(by_region.values())
+    order = {rg: i for i, rg in enumerate(REGION_ORDER)}
+    rows.sort(key=lambda r: order.get(r[0], 999))
+    return rows
+
+
+def region_scoreboard(runs: list[Run]) -> str:
+    """Compact card row: each region's best ``test_corr`` vs the trained-AlexNet bar."""
+    rows = region_winners(runs)
+    if not rows:
+        return ""
+    cards = []
+    for rg, _label, name, best, _ident, alex in rows:
+        color = region_color(rg)
+        if alex is None:
+            delta_html = ""
+        else:
+            beats = best >= alex
+            cls = "good" if beats else "bad"
+            sign = "▲" if beats else "▼"
+            delta_html = (
+                f"<span class='sb-delta {cls}' title='best untrained minus trained AlexNet'>"
+                f"{sign} {best - alex:+.3f}</span>"
+            )
+        alex_html = (
+            f"<span class='sb-alex'>AlexNet {alex:.3f}</span>" if alex is not None else ""
+        )
+        cards.append(
+            f"<div class='sb-card' style='border-top-color:{color}' title='{html.escape(name)}'>"
+            f"<span class='sb-region' style='color:{color}'>{html.escape(rg)}</span>"
+            f"<span class='sb-best'>{best:.3f}</span>"
+            f"{alex_html}{delta_html}</div>"
+        )
+    return (
+        "<div class='scoreboard'>"
+        + "".join(cards)
+        + "</div>"
+        "<p class='scoreboard-caption'>Best untrained model per reward region (held-out "
+        "Pearson r) vs the trained-AlexNet reference — green beats AlexNet, red trails it.</p>"
+    )
+
+
+def _takeaway(text: str) -> str:
+    """A highlighted one-paragraph insight box; callers pass already-escaped HTML."""
+    if not text:
+        return ""
+    return f"<div class='takeaway'><span class='takeaway-tag'>Takeaway</span> {text}</div>"
+
+
+_EARLY_REGIONS = {"V1", "V2", "V3", "hV4", "early"}
+_CATEGORY_REGIONS = {"FFA", "PPA", "EBA", "VWFA", "ventral"}
+
+
+def _baseline_takeaway(rows: list[tuple]) -> str:
+    """Computed verdict on the beat-AlexNet goal, from the region winners."""
+    scored = [r for r in rows if r[5] is not None]
+    if not scored:
+        return ""
+    beat = [r for r in scored if r[3] >= r[5]]
+    trail = [r for r in scored if r[3] < r[5]]
+    bits = []
+    if beat:
+        names = ", ".join(r[0] for r in beat)
+        top = max(beat, key=lambda r: r[3] - r[5])
+        bits.append(
+            f"Untrained models <b>beat trained AlexNet in {len(beat)} of {len(scored)} "
+            f"regions</b> ({names}); the biggest win is {top[0]} ({top[3] - top[5]:+.3f})."
+        )
+    else:
+        bits.append(f"No region winner beats trained AlexNet yet (0 of {len(scored)}).")
+    if trail:
+        worst = min(trail, key=lambda r: r[3] - r[5])
+        names = ", ".join(r[0] for r in trail)
+        bits.append(
+            f"They still trail in {names}; the largest deficit is {worst[0]} "
+            f"({worst[3] - worst[5]:+.3f})."
+        )
+        if beat and all(r[0] in _EARLY_REGIONS for r in beat) and \
+                all(r[0] in _CATEGORY_REGIONS for r in trail):
+            bits.append(
+                "The boundary is clean: hand-written features match learned ones in "
+                "early/mid visual cortex but not yet in category-selective regions, "
+                "where semantics matter."
+            )
+    return _takeaway(" ".join(bits))
+
+
+def baseline_comparison(runs: list[Run]) -> str:
+    """Compare each region winner with logged identity and documented AlexNet baselines."""
+    rows = region_winners(runs)
     if not rows:
         return "<p class='meta'>No logged identity rows or region-tagged NSD runs found for baseline comparison.</p>"
 
-    order = {rg: i for i, rg in enumerate(REGION_ORDER)}
-    rows.sort(key=lambda r: order.get(r[0], 999))
+    # Dumbbell chart: per region, a connector from the trained-AlexNet mark to the best
+    # untrained model — direction and colour answer "who wins, and by how much" at a glance.
     names = [r[2] for r in rows]
-    best_vals = [r[3] for r in rows]
-    identity_vals = [None if r[4] is None else r[4] for r in rows]
-    alex_vals = [None if r[5] is None else r[5] for r in rows]
-    best_colors = [
-        "#16a34a" if alex is not None and best >= alex else "#2563eb"
-        for (_rg, _label, _name, best, _ident, alex) in rows
-    ]
-    best_delta = [
-        "" if alex is None else f"{best - alex:+.3f}"
-        for (_rg, _label, _name, best, _ident, alex) in rows
-    ]
-    data = [
-        {
-            "type": "bar",
-            "orientation": "h",
-            "name": "identity / raw pixels",
-            "y": names,
-            "x": identity_vals,
-            "marker": {"color": "#9ca3af"},
-            "text": ["" if v is None else f"{v:.3f}" for v in identity_vals],
-            "textposition": "outside",
-            "cliponaxis": False,
-            "hovertemplate": "identity / raw pixels<br>%{y}<br>%{x:.3f}<extra></extra>",
-        },
-        {
-            "type": "bar",
-            "orientation": "h",
-            "name": "best untrained search model",
-            "y": names,
-            "x": best_vals,
-            "customdata": best_delta,
-            "marker": {"color": best_colors},
-            "text": [f"{v:.3f}" for v in best_vals],
-            "textposition": "outside",
-            "cliponaxis": False,
-            "hovertemplate": (
-                "best untrained search model<br>%{y}<br>"
-                "%{x:.3f} (%{customdata} vs AlexNet)<extra></extra>"
-            ),
-        },
-        {
-            "type": "bar",
-            "orientation": "h",
+    data = []
+    for rg, _label, name, best, _ident, alex in rows:
+        if alex is None:
+            continue
+        beats = best >= alex
+        data.append({
+            "type": "scatter",
+            "mode": "lines",
+            "x": [alex, best],
+            "y": [name, name],
+            "line": {"color": "#a7cdaa" if beats else "#e6b2b2", "width": 6},
+            "showlegend": False,
+            "hoverinfo": "skip",
+        })
+    alex_pts = [(r[2], r[5]) for r in rows if r[5] is not None]
+    if alex_pts:
+        data.append({
+            "type": "scatter",
+            "mode": "markers",
             "name": "trained AlexNet fc7",
-            "y": names,
-            "x": alex_vals,
-            "marker": {"color": "#dc8a00"},
-            "text": ["" if v is None else f"{v:.3f}" for v in alex_vals],
-            "textposition": "outside",
-            "cliponaxis": False,
+            "x": [v for _, v in alex_pts],
+            "y": [n for n, _ in alex_pts],
+            "marker": {"symbol": "diamond", "size": 11, "color": "#4b5563"},
             "hovertemplate": "trained AlexNet fc7<br>%{y}<br>%{x:.3f}<extra></extra>",
+        })
+    ident_pts = [(r[2], r[4]) for r in rows if r[4] is not None]
+    if ident_pts:
+        data.append({
+            "type": "scatter",
+            "mode": "markers",
+            "name": "identity / raw pixels",
+            "x": [v for _, v in ident_pts],
+            "y": [n for n, _ in ident_pts],
+            "marker": {"symbol": "circle-open", "size": 9, "color": "#9ca3af",
+                       "line": {"width": 1.5}},
+            "hovertemplate": "identity / raw pixels<br>%{y}<br>%{x:.3f}<extra></extra>",
+        })
+    deltas = ["" if r[5] is None else f"{r[3] - r[5]:+.3f}" for r in rows]
+    data.append({
+        "type": "scatter",
+        "mode": "markers+text",
+        "name": "best untrained model",
+        "x": [r[3] for r in rows],
+        "y": names,
+        "customdata": deltas,
+        "marker": {"size": 13, "color": [region_color(r[0]) for r in rows],
+                   "line": {"color": "#ffffff", "width": 1.5}},
+        "text": deltas,
+        "textposition": [
+            "middle right" if r[5] is None or r[3] >= r[5] else "middle left"
+            for r in rows
+        ],
+        "textfont": {
+            "size": 11.5,
+            "color": ["#166534" if r[5] is not None and r[3] >= r[5] else "#b91c1c"
+                      for r in rows],
         },
-    ]
+        "cliponaxis": False,
+        "hovertemplate": (
+            "best untrained model<br>%{y}<br>%{x:.3f} (%{customdata} vs AlexNet)<extra></extra>"
+        ),
+    })
     chart = _plotly_div(
         data,
         {
-            "title": {"text": "Baselines by reward region"},
-            "barmode": "group",
+            "title": {"text": "Best untrained model vs trained AlexNet, by region"},
             "xaxis": {"title": {"text": "Held-out correlation (mean Pearson r; higher is better)"}},
             "yaxis": {
-                "title": {"text": "Reward region"},
                 "categoryorder": "array",
                 "categoryarray": names,
+                "autorange": "reversed",
+                "gridcolor": "#f3f1eb",
             },
-            "margin": {"l": 210, "r": 48, "t": 58, "b": 58},
+            "margin": {"l": 210, "r": 70, "t": 80, "b": 58},
         },
-        height=max(380, 62 * len(rows) + 150),
-        caption="Green untrained bars meet or beat the trained AlexNet reference for that region.",
+        height=max(380, 48 * len(rows) + 170),
+        caption="Each row: the gap between the search's best untrained model (●, labelled with "
+                "the difference) and frozen trained AlexNet fc7 (◆). Green connector = untrained "
+                "wins; ○ = logged raw-pixel baseline. Regions run early → category down the page.",
     )
 
     body = []
@@ -730,7 +888,8 @@ def baseline_comparison(runs: list[Run]) -> str:
         + "".join(body) + "</tbody></table>"
     )
     return (
-        "<p class='meta'>Identity is shown only when that row is already present in the log. "
+        _baseline_takeaway(rows)
+        + "<p class='meta'>Identity is shown only when that row is already present in the log. "
         "AlexNet is the documented frozen ImageNet fc7 baseline; this report does not rerun it.</p>"
         + chart
         + table
@@ -770,13 +929,13 @@ def find_model_source(run: Run, model_name: object) -> tuple[str | None, str | N
     return None, None
 
 
-def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[str]]:
+def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, str]:
     """Heatmap of each run's best model scored against every region (``corr_<region>``).
 
-    Returns ``(plot_html_or_None, row_labels, col_regions)``. ``None`` when no run
+    Returns ``(plot_html, takeaway_html)``, or ``("" , "")`` parts when no run
     exposes ``corr_<region>`` columns (so test fixtures simply skip the section).
     """
-    rows, labels = [], []
+    rows, labels, targets = [], [], []
     label_map = run_label_map(runs)
     present: list[str] = []
     for run in runs:
@@ -791,7 +950,7 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
                 present.append(rg)
     present = [rg for rg in REGION_ORDER if rg in present]
     if not present:
-        return None, [], []
+        return None, ""
 
     for run in runs:
         br = best_row(run)
@@ -801,12 +960,41 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
         if all(pd.isna(v) for v in vals):
             continue
         labels.append(label_map.get(run.csv_path, run.display_label))
+        targets.append(run.region)
         rows.append([float(v) if pd.notna(v) else None for v in vals])
 
     if not rows:
-        return None, [], []
+        return None, ""
 
+    # Mark the region each model predicts best — the report's central question is
+    # whether that ever moves away from early visual cortex.
     text = [["" if v is None else f"{v:.2f}" for v in row] for row in rows]
+    argmax = []
+    for i, row in enumerate(rows):
+        j = max((j for j, v in enumerate(row) if v is not None),
+                key=lambda j: row[j], default=None)
+        argmax.append(None if j is None else present[j])
+        if j is not None:
+            text[i][j] += " ★"
+
+    takeaway = ""
+    n = sum(1 for a in argmax if a is not None)
+    if n:
+        top_counts = Counter(a for a in argmax if a is not None)
+        top_region, top_n = top_counts.most_common(1)[0]
+        on_target = sum(1 for a, t in zip(argmax, targets) if a is not None and a == t)
+        bits = [
+            f"<b>{top_n} of {n} run winners predict {top_region} best</b> (★), regardless "
+            f"of which region the search was rewarded on."
+        ]
+        if on_target < n:
+            bits.append(
+                f"Only {on_target} of {n} models predict their own target region best — "
+                "the discovered features remain fundamentally early-visual, and the "
+                "region-specific machinery buys only modest gains on its own target."
+            )
+        takeaway = _takeaway(" ".join(bits))
+
     chart = _plotly_div(
         [{
             "type": "heatmap",
@@ -822,13 +1010,14 @@ def cross_region_heatmap(runs: list[Run]) -> tuple[str | None, list[str], list[s
         {
             "title": {"text": "Cross-region predictivity of each run's best model"},
             "xaxis": {"title": {"text": "Brain region scored"}},
-            "yaxis": {"title": {"text": "Run (optimized region)"}},
-            "margin": {"l": 170, "r": 80, "t": 58, "b": 70},
+            "yaxis": {"title": {"text": "Run (optimized region)"}, "autorange": "reversed"},
+            "margin": {"l": 170, "r": 80, "t": 80, "b": 70},
         },
         height=max(360, 42 * len(rows) + 160),
-        caption="Rows are run winners; columns are held-out predictivity in each region.",
+        caption="Rows are run winners; columns are held-out predictivity in each region. "
+                "★ marks the region each model predicts best.",
     )
-    return chart, labels, present
+    return chart, takeaway
 
 
 def _code_block(source: str | None, path: str | None) -> str:
@@ -873,16 +1062,29 @@ def mechanics_section(runs: list[Run]) -> str:
         summary = str(br.get("summary", "") or "")
         note = _feature_note(br.get("n_params"))
         target = run.region_label
-        rg = run.region
-        # Compact cross-region line for this model.
-        xreg = []
-        for rg in REGION_ORDER:
-            c = f"corr_{rg}"
-            if c in run.df.columns and pd.notna(br.get(c)):
-                xreg.append(f"{rg}={float(br[c]):.2f}")
-        xreg_html = (
-            f"<p class='meta'>across regions: {html.escape(' · '.join(xreg))}</p>" if xreg else ""
-        )
+        # Compact cross-region profile: small bars instead of a number dump, so the
+        # eye picks up the shape (V1-heavy vs target-specific) instantly.
+        profile = [
+            (reg, float(br[f"corr_{reg}"]))
+            for reg in REGION_ORDER
+            if f"corr_{reg}" in run.df.columns and pd.notna(br.get(f"corr_{reg}"))
+        ]
+        xreg_html = ""
+        if profile:
+            vmax = max(v for _, v in profile) or 1.0
+            bars = "".join(
+                f"<div class='xreg-item{' xreg-target' if reg == run.region else ''}'>"
+                f"<span class='xreg-label'>{html.escape(reg)}</span>"
+                f"<div class='xreg-bar'><div class='xreg-fill' "
+                f"style='width:{100 * v / vmax:.0f}%;background:{region_color(reg)}'></div></div>"
+                f"<span class='xreg-val'>{v:.2f}</span></div>"
+                for reg, v in profile
+            )
+            xreg_html = (
+                "<div class='xreg'><span class='xreg-title'>cross-region predictivity "
+                "<span class='meta'>(reward region outlined)</span></span>"
+                f"{bars}</div>"
+            )
         identity = identity_row(run)
         identity_html = ""
         if identity is not None and pd.notna(identity.get("test_corr")):
@@ -890,8 +1092,9 @@ def mechanics_section(runs: list[Run]) -> str:
         alex = ALEXNET_BASELINES.get(run.region or "")
         alex_html = f" · AlexNet {alex:.4f}" if alex is not None else ""
         source_html = _code_block(src, path)
+        accent = region_color(run.region)
         cards.append(
-            f'<div class="card">'
+            f'<div class="card" style="border-left-color:{accent}">'
             f"<h3>{html.escape(labels.get(run.csv_path, run.display_label))} — best model for {html.escape(target)} "
             f'<span class="reward">test_corr {score:.4f}</span></h3>'
             f"<p class='meta'><code>{html.escape(name)}</code>"
@@ -906,7 +1109,7 @@ def mechanics_section(runs: list[Run]) -> str:
         )
     if not cards:
         return "<p class='meta'>No scored models to analyze.</p>"
-    return "".join(cards)
+    return f'<div class="cards-grid">{"".join(cards)}</div>'
 
 
 # --------------------------------------------------------------------------- #
@@ -986,7 +1189,7 @@ def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
             },
             "yaxis": {"title": {"text": "Computational principle"}},
             "showlegend": False,
-            "margin": {"l": 230, "r": 45, "t": 58, "b": 58},
+            "margin": {"l": 230, "r": 45, "t": 80, "b": 58},
         },
         height=max(340, 46 * len(items) + 150),
         caption="Bars sum overlapping attributions from ideas that improved best_so_far.",
@@ -1002,7 +1205,65 @@ def principle_attribution(runs: list[Run]) -> tuple[str | None, str]:
         "<th>Σ Δ test_corr</th><th>#&nbsp;steps</th></tr></thead><tbody>"
         + body + "</tbody></table>"
     )
-    return chart, table
+
+    total_gain = sum(v for _, v in items)
+    top_name, top_val = items[0]
+    takeaway = ""
+    if total_gain > 0:
+        head = (
+            f"<b>{html.escape(top_name)}</b> is associated with the most reward gain "
+            f"({top_val:.3f}, {100 * top_val / total_gain:.0f}% of attributed gain"
+        )
+        if len(items) > 1:
+            second_name, second_val = items[1]
+            head += f"), followed by <b>{html.escape(second_name)}</b> ({second_val:.3f})"
+        takeaway = _takeaway(
+            head + ". Attribution overlaps — one improving idea can invoke several "
+            "principles — so read the bars as <i>which motifs travel with progress</i>, "
+            "not as exclusive credit."
+        )
+    return takeaway + chart, table
+
+
+def search_takeaways(runs: list[Run]) -> tuple[str, str]:
+    """``(process, summary)`` insight boxes computed from the search ledger."""
+    n_scored = 0
+    n_improve = 0
+    halfway = []
+    for run in runs:
+        inc = run.included.dropna(subset=["test_corr"]).sort_values("iteration")
+        n_scored += len(inc)
+        n_improve += len(_improvement_events(run))
+        if len(inc) >= 4:
+            cm = inc["test_corr"].cummax()
+            first, final = float(cm.iloc[0]), float(cm.iloc[-1])
+            if final > first:
+                mid = float(cm.iloc[len(cm) // 2 - 1])
+                halfway.append((mid - first) / (final - first))
+    process = ""
+    if halfway:
+        pct = 100.0 * sum(halfway) / len(halfway)
+        process = _takeaway(
+            f"Progress is front-loaded: by the midpoint of a run the search had already "
+            f"captured <b>{pct:.0f}%</b> of its eventual reward gain, on average. Later "
+            "iterations mostly explore variations that do not beat the incumbent — "
+            "watch the running-max curves flatten."
+        )
+    summary = ""
+    if n_scored:
+        rate = 100.0 * n_improve / n_scored
+        lead = (
+            f"Improvements are rare: only <b>{n_improve} of {n_scored}</b> scored "
+            f"attempts ({rate:.0f}%) raised a run's best."
+            if rate < 25 else
+            f"<b>{n_improve} of {n_scored}</b> scored attempts ({rate:.0f}%) raised "
+            "their run's best at the time they were tried."
+        )
+        summary = _takeaway(
+            lead + " The rest were sideways steps — the attempts that landed are "
+            "itemized in the per-run writeups below."
+        )
+    return process, summary
 
 
 def search_dashboard(runs: list[Run]) -> str | None:
@@ -1017,7 +1278,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
     if not series:
         return None
 
-    colors = {run.csv_path: _plot_color(i) for i, (run, _) in enumerate(series)}
+    colors = {run.csv_path: region_color(run.region, i) for i, (run, _) in enumerate(series)}
 
     any_sec = any(
         "seconds" in inc.columns and inc["seconds"].notna().any()
@@ -1052,8 +1313,10 @@ def search_dashboard(runs: list[Run]) -> str | None:
             "title": {"text": "Search progress: best reward so far"},
             "xaxis": {"title": {"text": "Cumulative wall-clock (hours)" if any_sec else "Iteration"}},
             "yaxis": {"title": {"text": "Best held-out correlation so far"}},
+            "showlegend": False,
         },
         height=380,
+        caption="One line per run, in its region's color (see the scoreboard); hover for the run name.",
     )
 
     any_n_params = any(not inc.empty and has_usable_n_params(inc) for _, inc in series)
@@ -1105,6 +1368,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
                 "title": {"text": "Does logged model size explain reward? (star = run best)"},
                 "xaxis": {"title": {"text": "Logged parameters (log)"}, "type": "log"},
                 "yaxis": {"title": {"text": "Held-out correlation (Pearson r)"}},
+                "showlegend": False,
             },
             height=380,
         )
@@ -1132,7 +1396,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
                 "xaxis": {"title": {"text": "Failed rows (% of total iterations)"}},
                 "yaxis": {"title": {"text": "Run"}},
                 "showlegend": False,
-                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+                "margin": {"l": 150, "r": 45, "t": 80, "b": 58},
             },
             height=380,
         )
@@ -1160,6 +1424,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
                 "title": {"text": "Readout generalization gap over the search"},
                 "xaxis": {"title": {"text": "Iteration"}},
                 "yaxis": {"title": {"text": "train_corr - test_corr"}},
+                "showlegend": False,
                 "shapes": [{
                     "type": "line",
                     "xref": "paper",
@@ -1208,7 +1473,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
                 "xaxis": {"title": {"text": "Total wall-clock (hours)"}},
                 "yaxis": {"title": {"text": "Run"}},
                 "showlegend": False,
-                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+                "margin": {"l": 150, "r": 45, "t": 80, "b": 58},
             },
             height=380,
         )
@@ -1241,7 +1506,7 @@ def search_dashboard(runs: list[Run]) -> str | None:
                 "barmode": "stack",
                 "xaxis": {"title": {"text": "Iterations"}},
                 "yaxis": {"title": {"text": "Run"}},
-                "margin": {"l": 150, "r": 45, "t": 58, "b": 58},
+                "margin": {"l": 150, "r": 45, "t": 80, "b": 58},
             },
             height=380,
         )
@@ -1251,149 +1516,6 @@ def search_dashboard(runs: list[Run]) -> str | None:
         f"{progress_chart}{size_chart}{gap_chart}{compute_chart}"
         "</div>"
     )
-
-
-_PRINCIPLES_INTRO = """
-<p>Each run proposes fixed feature extractors, then the ridge readout asks:
-<i>which hand-written computation makes brain activity easier to predict?</i> The bars
-below sum the reward gains from improving steps that mention each principle. A single
-step can count for multiple principles because real models combine ingredients.</p>
-<ul>
-  <li><b>Gabor / oriented energy</b> — quadrature filter pairs collapsed to
-      <code>√(cos²+sin²)</code> give phase-invariant edge/contrast detectors (V1 complex cells).</li>
-  <li><b>Divisive normalization</b> — dividing each unit by a pooled neighbourhood is the
-      canonical cortical gain-control that decorrelates and equalises contrast (Heeger).</li>
-  <li><b>Colour opponency</b> — luminance / R−G / B−Y channels mirror retinal–LGN coding.</li>
-  <li><b>Multiscale / spatial frequency</b> — a bank of wavelengths covers coarse layout
-      through fine detail; different regions weight the bands differently.</li>
-  <li><b>Scattering / second order</b> — a Gabor layer applied to the first layer's energy
-      captures the nonlinear pooling V2/V3 perform on V1 output (translation-stable).</li>
-  <li><b>Texture statistics</b> — Gram / GIST / Portilla–Simoncelli summaries describe
-      material and scene structure, which drives PPA and the ventral stream.</li>
-  <li><b>Random features</b> — fixed random projections (RFF, random convs, codebooks) lift
-      features into a high-dimensional kernel space without any training.</li>
-  <li><b>Pooling / retinotopy</b> — foveal weighting and spatial grids encode where things
-      are, not just what.</li>
-</ul>
-"""
-
-_PROCESS_INTRO = """
-<p>How did the search actually progress? These views read the ledger's iterations,
-reward values, train–test gap, and status field to characterize the search dynamics
-rather than any single model.</p>
-<ul>
-  <li><b>Progress</b> — best reward as a function of iteration, or wall-clock when
-      reliable seconds are present.</li>
-  <li><b>Failure rate</b> — non-<code>ok</code> status rows as a percentage of all iterations.</li>
-  <li><b>Generalization gap</b> — <code>train_corr − test_corr</code> tracks how much the
-      ridge readout overfits as features grow richer.</li>
-  <li><b>Iteration accounting</b> — scored rows versus failed rows when compute timing is
-      not available in the report data.</li>
-</ul>
-"""
-
-
-_FINDINGS_INTRO = """
-<p>This loop evolves a <b>hand-written, never-trained</b> feature extractor
-(<code>model.py</code>): a stimulus image is mapped to features, a ridge readout is
-fit against recorded fMRI (the only thing fit — that fit <i>is</i> the evaluation),
-and held-out <code>test_corr</code> on NSD subject 01 is the reward. Each run rewards
-a single visual region, and the report compares the winner to both the logged
-identity/raw-pixel baseline and the documented trained-AlexNet reference.</p>
-
-<p><b>The architecture the search converged on (in every region).</b> Without being
-told to, the loop rediscovered the classical early-visual front-end:</p>
-<ul>
-  <li><b>Quadrature Gabor banks</b> (orientations × spatial wavelengths) reduced to
-      <b>complex-cell energy</b> <code>√(cos² + sin²)</code> — V1 simple→complex cells;</li>
-  <li><b>colour opponency</b> (luminance, R−G, B−Y) — retinal/LGN channels;</li>
-  <li><b>log contrast compression</b> followed by <b>divisive normalization</b> with a
-      spatial-surround pool — Heeger's canonical cortical gain control;</li>
-  <li>raw pixels concatenated in as a low-level anchor.</li>
-</ul>
-<p>On top of this shared core, each region added a distinct elaboration: a second
-<b>scattering</b> layer (Gabor-on-energy) for V2/V3, a wider normalization pool for V3's
-larger receptive fields, <b>texture Gram matrices + GIST + random Fourier features</b> for
-scene-selective PPA, <b>colour histograms</b> for EBA, and heterogeneous random conv banks
-for the face/word regions.</p>
-
-<p><b>Key findings.</b></p>
-<ol>
-  <li><b>V1 is the most predictable region and the simplest model wins it</b> — a pure
-      Gabor-energy model with a 3×3 surround norm. Predictivity then falls along the
-      cortical hierarchy V1 &gt; V2 &gt; V3 &gt; hV4 &gt; category-selective regions.</li>
-  <li><b>Every region's best model still predicts V1 best</b> (~0.40 in the column below,
-      regardless of which region was the reward). The region-specific machinery buys only
-      modest gains on its own target — the models remain fundamentally low-level/V1-like
-      and do not yet capture high-level <b>category selectivity</b> (FFA/PPA/EBA/VWFA stay
-      ≈0.20–0.29).</li>
-  <li>The baseline chart makes the main boundary clear: untrained encoders can match or
-      beat AlexNet in early/mid visual cortex, but still trail the learned network in
-      high-level category regions where semantics matter.</li>
-</ol>
-"""
-
-
-_CSS = """
-* { box-sizing: border-box; }
-body { background:#ffffff; color:#1a1a1a; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-       margin:0; padding:0; line-height:1.5; }
-.page { max-width:1150px; margin:0 auto; padding:2rem 1.25rem 3rem; }
-h1 { margin-top:0; } h2 { border-bottom:2px solid #eee; padding-bottom:.3rem; margin-top:2.4rem; scroll-margin-top:4.5rem; }
-h3 { margin-bottom:.4rem; }
-.toc { position:sticky; top:0; z-index:10; margin:1.2rem 0 1.8rem; padding:.65rem .8rem;
-       display:flex; flex-wrap:wrap; gap:.45rem .85rem; align-items:center;
-       background:rgba(255,255,255,.96); border:1px solid #e5e7eb; border-radius:10px;
-       box-shadow:0 1px 8px rgba(15,23,42,.06); backdrop-filter:blur(6px); }
-.toc b { color:#374151; margin-right:.25rem; }
-.toc a { color:#0a58ca; text-decoration:none; font-size:.9rem; }
-.toc a:hover { text-decoration:underline; }
-.chart-card { width:100%; margin:1rem 0 1.2rem; padding:.75rem .75rem .55rem;
-       border:1px solid #e5e7eb; border-radius:10px; background:#fff;
-       box-shadow:0 1px 4px rgba(15,23,42,.04); }
-.chart-plot { width:100%; min-height:360px; }
-.chart-caption { margin:.25rem .25rem 0; color:#666; font-size:.85rem; }
-.dashboard-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:1rem; align-items:stretch; }
-.dashboard-grid .chart-card { margin:0; }
-.note-card { min-height:380px; display:flex; align-items:center; justify-content:center; text-align:center; }
-.run-block { display:block; margin:1.0rem 0 1.2rem; padding:0.9rem 1.1rem; border:1px solid #eee; border-radius:8px; background:#fafafa; }
-.run-block summary { cursor:pointer; list-style:none; }
-.run-block summary::-webkit-details-marker { display:none; }
-.run-block summary::before { content:"▸"; display:inline-block; width:1rem; color:#666; }
-.run-block[open] summary::before { content:"▾"; }
-.run-title { font-weight:700; font-size:1rem; margin-right:.4rem; }
-.fail-badge { display:inline-block; margin-left:.55rem; padding:.05rem .45rem; border-radius:999px;
-        background:#fee2e2; color:#b42318; font-weight:700; font-size:.78rem; }
-.writeup { font-size:.95rem; }
-.writeup ul { margin:.3rem 0; } .writeup code { background:#eef; padding:0 .25rem; border-radius:3px; }
-table { border-collapse:collapse; width:100%; background:#fff; table-layout:fixed; font-size:.86rem; }
-th, td { border:1px solid #e3e3e3; padding:.4rem .55rem; text-align:left; vertical-align:top;
-         overflow-wrap:anywhere; word-break:break-word; }
-th { background:#f4f4f7; user-select:none; }
-.good { color:#1a7f37; font-weight:700; } .bad { color:#b42318; font-weight:700; }
-.meta { color:#666; font-size:.85rem; }
-.findings ul, .findings ol { margin:.4rem 0 .8rem 1.2rem; } .findings li { margin:.25rem 0; }
-.card { margin:1.2rem 0; padding:1rem 1.2rem; border:1px solid #e3e3e3; border-left:4px solid #2563eb;
-        border-radius:8px; background:#fafbff; }
-.card h3 { margin:.1rem 0 .5rem; }
-.card .reward { float:right; font-size:.85rem; font-weight:600; color:#fff; background:#2563eb;
-        padding:.1rem .5rem; border-radius:999px; }
-.card p { margin:.35rem 0; }
-details.code summary { cursor:pointer; color:#0a58ca; margin-top:.5rem; }
-pre { background:#0d1117; color:#e6edf3; padding:.9rem 1rem; border-radius:6px; overflow:auto;
-      font-size:.8rem; line-height:1.45; max-height:30rem; }
-pre code { background:none; color:inherit; padding:0; white-space:pre; }
-table.principles { table-layout:auto; width:auto; min-width:28rem; max-width:46rem; font-size:.9rem; }
-table.principles th { position:static; }
-table.baseline { table-layout:auto; font-size:.9rem; margin-top:1rem; }
-table.baseline th { position:static; }
-.num { text-align:right; font-variant-numeric:tabular-nums; }
-@media (max-width: 820px) {
-  .dashboard-grid { grid-template-columns:1fr; }
-  .page { padding:1rem .75rem 2rem; }
-  .toc { position:static; }
-}
-"""
 
 
 def build_html(runs: list[Run]) -> str:
@@ -1426,8 +1548,10 @@ def build_html(runs: list[Run]) -> str:
             f"({fail_pct_run:.0f}%)</span>"
             if fail_count else ""
         )
+        accent = region_color(run.region, idx)
         run_blocks.append(
-            f'<details class="run-block"><summary>'
+            f'<details class="run-block" style="border-left:4px solid {accent}"><summary>'
+            f'<span class="run-dot" style="background:{accent}"></span>'
             f'<span class="run-title">{html.escape(label)}</span> '
             f'<span class="meta">{html.escape(run.region_label)}</span>{fail_badge}</summary>'
             f'<p class="meta">run: {html.escape(run.label)} · '
@@ -1436,41 +1560,71 @@ def build_html(runs: list[Run]) -> str:
             f'</details>'
         )
 
-    overview = (
-        f"<p class='meta'>{len(runs)} run/study file(s) · {n_attempts} attempt(s) · "
-        f"{n_failed} failed ({fail_pct:.0f}%) · {n_excluded} omitted from plots · "
-        f"datasets: {', '.join(html.escape(s) for s in studies) or '—'}</p>"
+    # Header stat cards: the numbers a reader wants before any chart.
+    winners = region_winners(runs)
+    if winners:
+        best_rg, _bl, _bn, best_val, _bi, _ba = max(winners, key=lambda r: r[3])
+        best_stat = (
+            f"<div class='stat'><span class='stat-value' style='color:{region_color(best_rg)}'>"
+            f"{best_val:.3f}</span><span class='stat-label'>best test_corr ({html.escape(best_rg)})</span></div>"
+        )
+    else:
+        bests = [float(br["test_corr"]) for r in runs
+                 if (br := best_row(r)) is not None and pd.notna(br["test_corr"])]
+        best_stat = (
+            f"<div class='stat'><span class='stat-value'>{max(bests):.3f}</span>"
+            "<span class='stat-label'>best test_corr</span></div>"
+        ) if bests else ""
+    datasets_txt = ", ".join(html.escape(s) for s in studies) or "—"
+    header = (
+        "<header class='report-header'>"
+        "<h1>neuro-autoresearch report</h1>"
+        "<p class='subtitle'>An AlphaEvolve-style search over <b>hand-written, never-trained</b> "
+        "encoding models: each proposed model is read out with ridge regression against recorded "
+        "brain activity, and held-out correlation is the reward.</p>"
+        "<div class='stat-row'>"
+        f"<div class='stat'><span class='stat-value'>{len(runs)}</span><span class='stat-label'>run/study file(s)</span></div>"
+        f"<div class='stat'><span class='stat-value'>{n_attempts}</span><span class='stat-label'>attempt(s)</span></div>"
+        f"<div class='stat'><span class='stat-value'>{n_failed} <small>({fail_pct:.0f}%)</small></span><span class='stat-label'>failed</span></div>"
+        f"<div class='stat'><span class='stat-value'>{n_excluded}</span><span class='stat-label'>omitted from plots</span></div>"
+        f"{best_stat}"
+        f"<div class='stat'><span class='stat-value stat-text'>{datasets_txt}</span><span class='stat-label'>datasets</span></div>"
+        "</div>"
+        f"{region_scoreboard(runs)}"
+        "</header>"
     )
 
-    heatmap, _, _ = cross_region_heatmap(runs)
+    heatmap, heat_takeaway = cross_region_heatmap(runs)
     cross_html = (
-        f"{heatmap}"
-        "<p class='meta'>Rows: each run's best model. Columns: the region it is scored against. "
-        "Note how the V1 column stays high across <em>every</em> run.</p>"
+        f"{heat_takeaway}{heatmap}"
         if heatmap
         else "<p class='meta'>No per-region (corr_&lt;region&gt;) columns found.</p>"
     )
 
     principle_chart, principle_table = principle_attribution(runs)
     principles_html = (
-        f'<div class="findings">{_PRINCIPLES_INTRO}</div>'
+        f'<div class="findings">{_section_intro("principles")}</div>'
         + (f"{principle_chart}{principle_table}"
            if principle_chart else "<p class='meta'>No improving steps to attribute.</p>")
     )
 
+    process_takeaway, summary_takeaway = search_takeaways(runs)
     dashboard = search_dashboard(runs)
     process_html = (
-        f'<div class="findings">{_PROCESS_INTRO}</div>'
+        process_takeaway
+        + f'<div class="findings">{_section_intro("process")}</div>'
         + (dashboard if dashboard else "<p class='meta'>Not enough data to plot the search process.</p>")
     )
 
     sections = [
+        ("recap", "Project recap"),
+        ("setup", "Current setup &amp; logged data"),
         ("findings", "What the search found"),
-        ("baselines", "Baselines"),
-        ("principles", "Computational principles"),
-        ("process", "The search process"),
-        ("cross-region", "Cross-region predictivity"),
-        ("mechanics", "Model mechanics"),
+        ("baselines", "Did it beat trained AlexNet?"),
+        ("principles", "Which computations mattered?"),
+        ("process", "How did the search behave?"),
+        ("cross-region", "Are the models region-specific?"),
+        ("mechanics", "What does each winner compute?"),
         ("summary", "Reward across all runs"),
         ("per-run", "Per-run trajectories"),
     ]
@@ -1485,33 +1639,62 @@ def build_html(runs: list[Run]) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>autoresearch report</title>
 <script>{plotly_bundle}</script>
-<style>{_CSS}</style></head>
+<style>{_load_asset("report.css")}</style></head>
 <body>
 <main class="page">
-<h1>neuro-autoresearch report</h1>
-{overview}
+{header}
 {toc}
+<div class="howto"><b>How to read this report.</b>
+<ul>
+<li>Models are <b>never trained</b> — weights are written directly in code. Only a ridge
+readout is fit against recorded brain activity, and that fit <i>is</i> the evaluation.</li>
+<li>The score, <code>test_corr</code>, is the held-out correlation between predicted and
+measured responses. Each run rewards <b>one brain region</b>; the search mutates the model
+to raise that region's score. Differences under ~0.005 are noise.</li>
+<li>The bar to clear is a <b>trained ImageNet AlexNet</b> read out the same way — the
+question throughout is where hand-written computation matches learned features.</li>
+</ul></div>
+<h2 id="recap">Project recap</h2>
+<p class="section-sub">A presentation-friendly summary of the project's arc — the previous
+hierarchical multi-agent setup, the move to a unified data interface, and the headline
+result so far.</p>
+<div class="findings">{_section_intro("recap")}</div>
+<h2 id="setup">Current setup &amp; logged data</h2>
+<p class="section-sub">What every evaluation records in the append-only database, and the
+exact columns the agent reads back as its feedback signal.</p>
+<div class="findings">{_section_intro("setup")}</div>
 <h2 id="findings">What the search found</h2>
-<div class="findings">{_FINDINGS_INTRO}</div>
-<h2 id="baselines">Baselines</h2>
+<p class="section-sub">A written synthesis of what the search converged on and why.</p>
+<div class="findings">{_section_intro("findings")}</div>
+<h2 id="baselines">Did it beat trained AlexNet?</h2>
+<p class="section-sub">Each region's best untrained model against the logged identity
+baseline and the documented trained-AlexNet reference.</p>
 {baseline_comparison(runs)}
-<h2 id="principles">Computational principles</h2>
+<h2 id="principles">Which computations mattered?</h2>
+<p class="section-sub">Hand-written computational motifs ranked by how much reward gain
+they travelled with, summed over every improving step.</p>
 {principles_html}
-<h2 id="process">The search process</h2>
+<h2 id="process">How did the search behave?</h2>
+<p class="section-sub">Search dynamics read straight from the ledger: progress, model
+size, generalization gap, and compute.</p>
 {process_html}
-<h2 id="cross-region">Cross-region predictivity</h2>
-<p class="meta">Each row is the best model found for one reward region; each column is a
-brain region scored after the same ridge readout. This makes it easier to see whether
-a model is genuinely region-specific or mostly predicts early visual cortex.</p>
+<h2 id="cross-region">Are the models region-specific?</h2>
+<p class="section-sub">Each row is the best model found for one reward region; each column is a
+brain region scored after the same ridge readout. If a model were truly region-specific,
+its ★ (best-predicted region) would sit on its own target.</p>
 {cross_html}
-<h2 id="mechanics">Model mechanics — what each run's best model computes</h2>
-<p class="meta">Cards are ordered by reward. Each card names the target brain region,
-describes the computation directly, and includes source code when the original run folder is available.</p>
+<h2 id="mechanics">What does each winner compute?</h2>
+<p class="section-sub">Cards are ordered by reward. Each card names the target brain region,
+describes the computation directly, shows the model's cross-region profile as bars, and
+includes source code when the original run folder is available.</p>
 {mechanics_section(runs)}
 <h2 id="summary">Reward across all runs</h2>
+<p class="section-sub">Every scored attempt's held-out correlation vs iteration, one trace
+per run, faceted by dataset.</p>
+{summary_takeaway}
 {summary_html}
 <h2 id="per-run">Per-run trajectories</h2>
-<p class="meta">Per run: test/train correlation and the running-max reward. Logged
+<p class="section-sub">Per run: test/train correlation and the running-max reward. Logged
 <code>n_params</code> appears only when enough positive, varying values are present to make
 the axis meaningful. Expand a run when you want its full trajectory details.</p>
 {''.join(run_blocks) if run_blocks else "<p class='meta'>No runs found.</p>"}
@@ -1524,7 +1707,7 @@ def _render_to(runs: list[Run], out: str) -> str:
     """Write the HTML report for already-discovered ``runs`` to ``out``."""
     html_text = build_html(runs)
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
-    with open(out, "w") as fh:
+    with open(out, "w", encoding="utf-8") as fh:
         fh.write(html_text)
     return out
 

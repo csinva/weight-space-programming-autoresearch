@@ -1,0 +1,45 @@
+
+<p><i>The current setup in one place: what every evaluation writes to the database, and
+the exact columns the agent reads back as feedback.</i></p>
+
+<p><b>The database is an append-only ledger.</b> Each <code>python -m harness.run</code>
+evaluates the current model <b>once</b> and appends a <b>single row</b> to a per-study CSV
+(<code>results/&lt;study&gt;.csv</code>, or <code>&lt;study&gt;__&lt;roi&gt;__&lt;run&gt;.csv</code>
+when a reward region and run tag are set). Rows are never overwritten, so the whole
+hill-climb history — every model tried, in order — is preserved. The agent reads this same
+table back as its feedback signal: it sees what it proposed, how each model scored, and
+how the score breaks down by brain region.</p>
+
+<p><b>Who fills what.</b> The agent writes three free-text fields per model —
+<code>model_name</code>, <code>idea</code> (the hypothesis), and <code>summary</code>
+(what the model computes) — and the model itself determines <code>n_params</code>.
+Everything else is filled by the <b>fixed harness</b>: the counters, the timing, and above
+all the reward (<code>test_corr</code>) and its per-region breakdown, which the agent
+cannot touch. That separation is what keeps the score honest.</p>
+
+<p><b>Columns the agent has access to.</b></p>
+<table class="schema">
+<thead><tr><th>Column</th><th>Set by</th><th>What it holds</th></tr></thead>
+<tbody>
+<tr><td><code>iteration</code></td><td>harness</td><td>1-based, append-only counter (existing rows + 1). One row = one model = one iteration.</td></tr>
+<tr><td><code>timestamp</code></td><td>harness</td><td>UTC ISO timestamp when the row was written.</td></tr>
+<tr><td><code>study</code></td><td>harness</td><td>Dataset / study the model was scored on (e.g. <code>NsdSubj01</code>).</td></tr>
+<tr><td><code>model_name</code></td><td><b>agent</b></td><td>Name of the proposed (never-trained) model.</td></tr>
+<tr><td><code>idea</code></td><td><b>agent</b></td><td>The hypothesis behind the model, ≤2 dense sentences.</td></tr>
+<tr><td><code>summary</code></td><td><b>agent</b></td><td>What the model actually computes, ≤2 dense sentences.</td></tr>
+<tr><td><code>n_params</code></td><td>model</td><td>Parameter count of the untrained feature extractor.</td></tr>
+<tr><td><code>n_train</code></td><td>harness</td><td>Number of training stimuli the ridge readout is fit on.</td></tr>
+<tr><td><code>n_test</code></td><td>harness</td><td>Number of held-out test stimuli scored.</td></tr>
+<tr><td><code>n_targets</code></td><td>harness</td><td>Number of neural targets (voxels/units) predicted.</td></tr>
+<tr><td><code>test_corr</code></td><td>harness <b>(reward)</b></td><td>The reward: mean per-target held-out Pearson r of the ridge readout.</td></tr>
+<tr><td><code>train_corr</code></td><td>harness</td><td>Same correlation on the train split — high train + low test = overfit readout.</td></tr>
+<tr><td><code>gap</code></td><td>harness</td><td><code>train_corr − test_corr</code>, the generalization gap.</td></tr>
+<tr><td><code>best_so_far</code></td><td>harness</td><td>Running maximum <code>test_corr</code> in the file (the hill-climb frontier).</td></tr>
+<tr><td><code>seconds</code></td><td>harness</td><td>Wall-clock for the evaluation.</td></tr>
+<tr><td><code>status</code></td><td>harness</td><td><code>ok</code>, or <code>error</code> (with a NaN reward) when a model raises or returns a bad shape — the loop logs it instead of crashing.</td></tr>
+<tr><td><code>corr_&lt;region&gt;</code></td><td>harness</td><td>One column per logged brain region — that region's predictivity under the same readout (e.g. <code>corr_V1</code>, <code>corr_FFA</code>). Frozen by the first row so the schema never changes mid-run.</td></tr>
+</tbody>
+</table>
+<p>The scalar reward narrows to <b>one</b> region (chosen by <code>NEURO_ROI</code>), but the
+readout still fits <b>all</b> nsdgeneral voxels, so every region's <code>corr_&lt;region&gt;</code>
+is logged on every row — that is what makes the cross-region heatmap below possible.</p>
