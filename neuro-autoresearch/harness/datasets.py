@@ -58,6 +58,12 @@ class Dataset:
                                      # the results file is suffixed with it so each run
                                      # gets its OWN unique CSV (history + best_so_far are
                                      # not shared across runs). Empty => shared per-region.
+    loader: str = "segmenter"        # data path: "segmenter" (continuous timeline ->
+                                     # ns.Segmenter, the default for fMRI/MEG/EEG) or "table"
+                                     # (a pre-averaged [electrodes x stimuli] .mat already
+                                     # aligned to its stimuli, e.g. TVSD macaque spiking).
+    subject: str = ""                # which animal/subject for a multi-subject table dataset
+                                     # (TVSD: "F" or "N"); unused by the segmenter path.
 
 
 # Three real datasets spanning both neural modalities (fMRI + MEG) and stimulus
@@ -128,6 +134,45 @@ PRESETS: dict[str, Dataset] = {
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/bel2026petitlisten_sample",
     ),
+    # The "Podcast" ECoG dataset (OpenNeuro ds005574, Zada et al. / Hasson lab), iEEG +
+    # audio stimulus -- 9 epilepsy patients with 1,330 intracranial ECoG electrodes total
+    # listened to a 30-minute spoken podcast (>5,000 words). Single-subject by necessity
+    # (each patient has different electrodes), via the Zada2025Podcast study (default
+    # subject 01). Each transcript Word triggers a 0.5 s iEEG epoch; the stimulus is the
+    # Mel spectrum of the podcast audio in that window. iEEG is near-instant, so the
+    # stimulus and neural windows coincide ([0, 0.5] s) -- no HRF decoupling (as for meg).
+    "ieeg": Dataset(
+        study="Zada2025Podcast",
+        trigger="type=='Word'",
+        neural="ieeg",
+        stimulus="audio",
+        start=0.0,
+        duration=0.5,
+        download=False,
+        path="/home/t-ymehta/Research/neuralset/data/ds005574_podcast",
+    ),
+    # TVSD -- THINGS Ventral-stream Spiking Dataset (Papale et al., Neuron 2025), image +
+    # macaque spiking. NOT a NeuralSet study: the release ships a PRE-AVERAGED normalized-MUA
+    # table (`THINGS_normMUA.mat`, 1024 electrodes x stimuli), so it uses the `loader="table"`
+    # path (`data._load_tvsd`) instead of the Segmenter. Stimulus = the THINGS image shown
+    # (RawPixels, like NSD); target = each electrode's time-windowed normalized MUA. The
+    # train/test split is the dataset's own (22248 train images / 100 repeated test images,
+    # image-disjoint by construction). `reward_roi` picks the cortical area V1/V4/IT (one
+    # area = a column-subset of the 1024 electrodes, labels hardcoded per monkey from the
+    # release's norm_MUA.m); the readout fits and scores that area's electrodes. Monkey F vs
+    # N is chosen with `subject` (NEURO_SUBJECT). Stimuli are the gated THINGS images (not
+    # bundled): stage them once (see data._tvsd_images_root) before running.
+    "tvsd": Dataset(
+        study="TvsdMonkeyF",
+        loader="table",
+        neural="spikes",
+        stimulus="image",
+        imsize=16,
+        subject="F",
+        download=False,
+        path="/home/t-ymehta/Research/neuralset/data/tvsd_normmua",
+        reward_roi="IT",
+    ),
 }
 
 _key = os.environ.get("NEURO_DATASET", "text")
@@ -150,3 +195,17 @@ if _roi:
 _run = os.environ.get("NEURO_RUN")
 if _run:
     DATASET = replace(DATASET, run_tag=_run)
+
+# Optional subject override (NEURO_SUBJECT). For the table dataset TVSD it picks the
+# monkey (F/N); for the `text` dataset (Le Petit Prince fMRI) it picks one of the 49
+# English subjects (e.g. EN058), switching to that subject's catalog class and the
+# all-subjects staging dir so each subject writes its OWN results CSV. The single-subject
+# `text` preset (EN057) is otherwise unchanged.
+_subject = os.environ.get("NEURO_SUBJECT")
+if _subject:
+    if _key == "text":
+        _en_all = os.path.join(
+            os.path.dirname(DATASET.path), "li2022petit_en_all", "Li2022PetitSubj")
+        DATASET = replace(DATASET, study=f"Li2022PetitSubj{_subject}", path=_en_all)
+    else:
+        DATASET = replace(DATASET, subject=_subject, study=f"TvsdMonkey{_subject.upper()}")

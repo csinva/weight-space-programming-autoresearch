@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Visual Brain — hierarchy, invariance & the art of seeing · The Cortex Handbook</title>
+<meta name="description" content="Chapter 04 of The Cortex Handbook: the ventral visual stream from retina to IT — retinotopy, receptive-field growth, the feature hierarchy, untangling object manifolds, and category-selective cortex (FFA/PPA/EBA/VWFA)." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* ---- scholarly light theme (shared across the handbook) ---- */
+    --paper:#f7f5f1; --paper-2:#efeae1; --card:#ffffff;
+    --ink:#1a1c22; --ink-soft:#4b4f5a; --ink-faint:#8a8f9c;
+    --line:#e4ded2; --line-soft:#efe9dd;
+
+    /* ---- page accent: 04 Visual brain — AMBER ---- */
+    --accent:#c2410c;
+    --accent-soft:#f97316;
+    --accent-deep:#7c2d12;
+    --accent-wash:rgba(194,65,12,.07);
+
+    /* visual-stream area ramp (posterior cool -> anterior warm) */
+    --v1:#3f4d8a;  --v1-wash:#e6e7f1;
+    --v4:#0f766e;  --v4-wash:#dcebe8;
+    --it:#c2410c;  --it-wash:#f6e6da;
+
+    --maxw:1180px;
+    --col:740px;
+    --bleed:1040px;
+
+    --display:"Bricolage Grotesque","Spectral",Georgia,serif;
+    --body:"Spectral",Georgia,"Times New Roman",serif;
+    --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);
+    font-size:clamp(1.02rem,.66rem + .5vw,1.16rem);
+    line-height:1.72;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+  a:hover{color:var(--accent-deep)}
+  strong{font-weight:600;color:var(--ink)}
+  em{color:var(--ink-soft)}
+
+  /* ---------- top bar + progress ---------- */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:70;background:var(--accent)}
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:60;
+    background:color-mix(in srgb,var(--paper) 88%,transparent);
+    backdrop-filter:blur(9px);border-bottom:1px solid var(--line);
+  }
+  .topbar .inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;
+    gap:1rem;padding:.6rem clamp(1rem,4vw,2.2rem)}
+  .wordmark{font-family:var(--display);font-weight:700;letter-spacing:-.01em;font-size:1rem;color:var(--ink);
+    text-decoration:none}
+  .wordmark .dot{color:var(--accent)}
+  .chcount{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+
+  /* ---------- page grid: reading column + right rail ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1rem,4vw,2.2rem);position:relative}
+  .layout{display:block}
+  @media(min-width:1080px){
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:clamp(2rem,4vw,4rem);align-items:start}
+  }
+  .col{max-width:var(--col);margin:0 auto;width:100%}
+  /* figures may bleed wider than the reading column */
+  .bleed{max-width:var(--bleed);margin-left:auto;margin-right:auto}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(5.5rem,13vh,9rem) 0 clamp(1.6rem,5vh,3rem)}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--accent);font-weight:500;margin:0 0 1.1rem}
+  .heronum{font-family:var(--display);font-weight:800;color:var(--accent);
+    font-size:clamp(4.5rem,3rem + 12vw,11rem);line-height:.82;letter-spacing:-.04em;margin:0 0 .1em;
+    font-variant-numeric:lining-nums}
+  .hero h1{font-family:var(--display);font-weight:700;letter-spacing:-.02em;
+    font-size:clamp(2.1rem,1.2rem + 3.6vw,3.7rem);line-height:1.02;margin:0 0 .5em;max-width:18ch}
+  .hero h1 em{font-style:italic;font-weight:500;color:var(--accent)}
+  .standfirst{font-size:clamp(1.16rem,.95rem + .7vw,1.42rem);color:var(--ink-soft);max-width:40ch;line-height:1.45;
+    margin:0 0 1.8rem}
+  .accent-rule{height:3px;width:84px;background:var(--accent);border:0;border-radius:3px;margin:1.8rem 0}
+  .youwill{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:1.4rem 1.6rem;max-width:46ch}
+  .youwill h4{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    margin:0 0 .8rem;font-weight:600}
+  .youwill ul{list-style:none;margin:0;padding:0}
+  .youwill li{position:relative;padding-left:1.5rem;margin:.55rem 0;font-size:.99rem;color:var(--ink-soft)}
+  .youwill li::before{content:"?";position:absolute;left:0;top:0;font-family:var(--display);font-weight:700;
+    color:var(--accent)}
+  .readtime{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;color:var(--ink-faint);margin-top:1.4rem}
+
+  /* ---------- right-rail TOC ---------- */
+  .toc{display:none}
+  @media(min-width:1080px){
+    .toc{display:block;position:sticky;top:90px;font-family:var(--mono);font-size:.74rem;line-height:1.5}
+    .toc h5{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 .9rem;font-weight:600}
+    .toc a{display:block;color:var(--ink-faint);text-decoration:none;padding:.32rem 0 .32rem .8rem;
+      border-left:2px solid var(--line);transition:.2s;letter-spacing:.01em}
+    .toc a:hover{color:var(--ink)}
+    .toc a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+  }
+
+  /* ---------- sections ---------- */
+  section{padding:clamp(2.4rem,6vh,4rem) 0;scroll-margin-top:80px}
+  .seckick{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
+    font-weight:500;margin:0 0 .7rem;display:flex;align-items:center;gap:.7rem}
+  .seckick::before{content:"";width:26px;height:1px;background:var(--accent);display:inline-block}
+  h2{font-family:var(--display);font-weight:700;letter-spacing:-.018em;line-height:1.06;
+    font-size:clamp(1.7rem,1.1rem + 1.9vw,2.6rem);margin:0 0 .5em}
+  h3{font-family:var(--display);font-weight:600;letter-spacing:-.01em;font-size:clamp(1.2rem,.95rem + .9vw,1.55rem);
+    margin:2em 0 .4em}
+  .lead{font-size:1.16em;color:var(--ink-soft)}
+  p{margin:0 0 1.1em}
+
+  ul.tidy{list-style:none;padding:0;margin:1.1rem 0}
+  ul.tidy li{position:relative;padding-left:1.5rem;margin-bottom:.65rem}
+  ul.tidy li::before{content:"";position:absolute;left:.15rem;top:.66em;width:.5rem;height:.5rem;
+    background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+
+  .term{font-weight:600;color:var(--accent-deep)}
+
+  /* area chips */
+  .chip{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;font-weight:600;
+    padding:.1em .55em;border-radius:999px;vertical-align:baseline;white-space:nowrap}
+  .chip.v1{background:var(--v1-wash);color:var(--v1)}
+  .chip.v4{background:var(--v4-wash);color:var(--v4)}
+  .chip.it{background:var(--it-wash);color:var(--it)}
+
+  /* ---------- figures ---------- */
+  figure{margin:2rem auto;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:1.3rem 1.3rem 1.1rem;box-shadow:0 1px 0 #fff inset,0 18px 40px -32px rgba(40,30,10,.55)}
+  figure svg{display:block;width:100%;height:auto}
+  figcaption{font-size:.88rem;color:var(--ink-faint);margin-top:1rem;line-height:1.55;
+    border-top:1px solid var(--line-soft);padding-top:.8rem}
+  figcaption .fignum{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent);margin-right:.5em;font-weight:600}
+  figcaption b{color:var(--ink-soft)}
+
+  /* ---------- callouts ---------- */
+  .callout{border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.5rem;margin:1.9rem 0;background:var(--card)}
+  .callout .tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+    display:block;margin-bottom:.5rem}
+  .callout p:last-child{margin-bottom:0}
+  .callout.key{border-left:4px solid var(--accent);background:linear-gradient(180deg,var(--card),var(--paper))}
+  .callout.key .tag{color:var(--accent)}
+  .callout.brain{background:var(--paper-2)}
+  .callout.brain .tag{color:var(--ink-soft)}
+  .callout.project{background:var(--accent-wash);border-color:color-mix(in srgb,var(--accent) 30%,var(--line))}
+  .callout.project .tag{color:var(--accent-deep)}
+  .callout.watch{background:#fbf3ea;border-color:#eccba8;border-left:4px solid var(--accent-soft)}
+  .callout.watch .tag{color:var(--accent-deep)}
+
+  .pull{font-family:var(--display);font-weight:500;font-style:italic;
+    font-size:clamp(1.25rem,.95rem + 1.2vw,1.7rem);line-height:1.3;color:var(--ink);
+    border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1.2rem;margin:2rem 0}
+
+  code{font-family:var(--mono);font-size:.85em;background:var(--paper-2);border:1px solid var(--line-soft);
+    border-radius:5px;padding:.07em .36em;color:var(--ink)}
+  pre{font-family:var(--mono);font-size:.82rem;line-height:1.65;background:#211c16;color:#f3ece0;border-radius:12px;
+    padding:1.1rem 1.25rem;overflow-x:auto;margin:1.5rem 0;box-shadow:0 14px 34px -26px rgba(0,0,0,.7)}
+  pre .c{color:#b8a88a} pre .k{color:#f0a868} pre .v{color:#7fc9bd}
+  pre code{background:none;border:0;padding:0;color:inherit}
+
+  /* data table */
+  table.data{width:100%;border-collapse:collapse;margin:1.4rem 0;font-family:var(--mono);font-size:.82rem}
+  table.data th,table.data td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--line)}
+  table.data th{color:var(--ink-faint);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:.68rem}
+  table.data td.num{text-align:right}
+  table.data tr.win td{color:var(--v4);font-weight:600}
+  table.data tr.lose td{color:var(--accent)}
+
+  /* key terms grid */
+  .terms{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.6rem 1.8rem;margin:1.6rem 0}
+  .terms dl{margin:0;display:grid;grid-template-columns:1fr;gap:.1rem}
+  @media(min-width:680px){.terms dl{grid-template-columns:1fr 1fr;gap:.1rem 2.4rem}}
+  .terms dt{font-family:var(--display);font-weight:600;font-size:1.02rem;color:var(--accent-deep);margin-top:1rem}
+  .terms dd{margin:.1rem 0 0;font-size:.94rem;color:var(--ink-soft);line-height:1.5}
+
+  /* ---------- footer ---------- */
+  footer{background:#211c16;color:#e9e0cf;margin-top:3.5rem;padding:clamp(2.6rem,7vh,4.5rem) 0 2.6rem}
+  footer .navcards{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:2.4rem}
+  @media(min-width:680px){footer .navcards{grid-template-columns:1fr 1fr}}
+  .navcard{display:block;text-decoration:none;border:1px solid #3a3227;border-radius:14px;padding:1.1rem 1.3rem;
+    background:#28221b;transition:.2s}
+  .navcard:hover{border-color:var(--accent-soft);background:#2f2820}
+  .navcard .dir{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#caa483;
+    margin-bottom:.4rem}
+  .navcard .ttl{font-family:var(--display);font-weight:600;font-size:1.1rem;color:#f7efe6}
+  .navcard.next{text-align:right}
+  footer .back{font-family:var(--mono);font-size:.8rem;color:#f0a868;text-decoration:none;letter-spacing:.04em}
+  footer .back:hover{color:#f7c79a}
+  footer .colophon{font-family:var(--mono);font-size:.72rem;color:#9a8c73;letter-spacing:.03em;
+    border-top:1px solid #3a322748;margin-top:2.2rem;padding-top:1.3rem;line-height:1.7}
+  footer code{background:#332b22;border-color:#4a4030;color:#f3ece0}
+  footer a{color:#f0a868}
+
+  /* ---------- quiz + quick-check + going-deeper ---------- */
+  .quiz{border:1px solid var(--line);background:var(--accent-wash);border-radius:18px;padding:1.3rem 1.5rem;margin:2.2rem 0}
+  .quiz-head h2{margin:.2rem 0 .3rem}
+  .quiz-list{list-style:none;margin:.6rem 0 0;padding:0}
+  .quiz .q{border-top:1px solid var(--line);padding:1.15rem 0}
+  .q-stem{font-weight:600;margin:0 0 .7rem}
+  .q-opts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+  .q-opts button{font:inherit;text-align:left;width:100%;padding:.6rem .85rem;border:1px solid var(--line);
+    border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s}
+  .q-opts button:hover:not(:disabled){border-color:var(--accent)}
+  .q-opts button:disabled{cursor:default;opacity:.92}
+  .q-opts button.opt-correct{border-color:#1f7a4d;background:#e7f5ec;box-shadow:inset 3px 0 #1f7a4d}
+  .q-opts button.opt-wrong{border-color:#b42318;background:#fdecea;box-shadow:inset 3px 0 #b42318}
+  .q-explain{margin:.75rem 0 0;font-size:.96rem;color:var(--ink-soft);border-left:3px solid var(--accent);padding-left:.85rem}
+  .quiz-score{font-family:var(--mono);color:var(--accent);font-weight:500}
+  .quiz-reset{font-family:var(--mono);font-size:.8rem;margin-top:1.1rem;padding:.45rem .95rem;border:1px solid var(--line);
+    border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer}
+  .qcheck{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:.5rem .9rem;margin:1.1rem 0}
+  .qcheck summary{cursor:pointer;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+  .qcheck summary::-webkit-details-marker{display:none}
+  .qcheck summary::before{content:"▸ ";color:var(--accent)} .qcheck[open] summary::before{content:"▾ "}
+  .qcheck div{margin:.6rem 0 .2rem;color:var(--ink-soft);font-size:.97rem}
+  .callout.deep{border:1px dashed var(--accent);background:transparent}
+
+  /* ---------- motion ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+  .stagger.in>*{opacity:1;transform:none}
+  .stagger.in>*:nth-child(1){transition-delay:.05s}
+  .stagger.in>*:nth-child(2){transition-delay:.13s}
+  .stagger.in>*:nth-child(3){transition-delay:.21s}
+  .stagger.in>*:nth-child(4){transition-delay:.29s}
+  .stagger.in>*:nth-child(5){transition-delay:.37s}
+  @media(prefers-reduced-motion:reduce){
+    .reveal,.stagger>*{opacity:1!important;transform:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar">
+  <div class="inner">
+    <a class="wordmark" href="index.html">The Cortex Handbook<span class="dot">.</span></a>
+    <span class="chcount">Ch. 04 / 06</span>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="col">
+      <p class="kicker reveal">The Cortex Handbook · Concept 04</p>
+      <div class="heronum reveal">04</div>
+      <h1 class="reveal">The Visual Brain — hierarchy, invariance, and the <em>art of seeing.</em></h1>
+      <p class="standfirst reveal">A grid of retinal light becomes the certain knowledge <em>"that is a face."</em> The ventral stream is the cortical machine that performs this transformation — and the reason a linear readout can ever work.</p>
+      <hr class="accent-rule reveal" />
+      <div class="youwill reveal">
+        <h4>You'll understand</h4>
+        <ul>
+          <li>How the pathway retina → LGN → V1 → V2 → V4 → IT builds objects from edges.</li>
+          <li>Why receptive fields grow and identity becomes <em>invariant</em> along the stream.</li>
+          <li>How center-surround, simple/complex cells, and the energy model build the first features.</li>
+          <li>What "untangling" means — and why it is the deep justification for linear readout.</li>
+          <li>What FFA, PPA, EBA and VWFA are, the face-patch / axis code, and the distributed counter-view.</li>
+          <li>Why divisive normalization is a canonical cortical computation.</li>
+          <li>Why early areas are easy to model and high-level category regions are hard.</li>
+        </ul>
+      </div>
+      <p class="readtime reveal">~24 min read · 9 hand-drawn figures · quiz inside</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+<div class="layout">
+<main>
+
+<!-- ===================== 1. THE PATHWAY ===================== -->
+<section id="pathway">
+  <div class="col">
+    <p class="seckick reveal">01 — The wiring</p>
+    <h2 class="reveal">The visual pathway: two streams from one eye</h2>
+    <p class="lead reveal">Vision is not a photograph delivered to a screen in your head. It is a cascade of transformations along a chain of cortical areas, each one re-describing the image in a more abstract, more useful vocabulary.</p>
+
+    <p class="reveal">Light hits the <span class="term">retina</span>, which already does real computation — center-surround cells emphasize contrast and discard absolute brightness. The optic nerve carries this to the <span class="term">LGN</span> (lateral geniculate nucleus, a thalamic relay), and from there to <span class="term">V1</span> (primary visual cortex) at the very back of the brain. From V1 the signal splits into two great highways, a distinction made famous by <a href="https://en.wikipedia.org/wiki/Two-streams_hypothesis" target="_blank" rel="noopener">Ungerleider &amp; Mishkin (1982)</a> and refined by <strong>Goodale &amp; Milner (1992)</strong>:</p>
+
+    <ul class="tidy reveal">
+      <li><strong>The ventral "what" stream</strong> — V1 → V2 → V4 → <span class="chip it">IT</span> (inferotemporal cortex), flowing forward along the temporal lobe. This is the object-recognition pathway: it answers <em>what am I looking at?</em></li>
+      <li><strong>The dorsal "where / how" stream</strong> — V1 → V2 → up into parietal cortex. It answers <em>where is it, and how do I act on it?</em> — spatial location, motion, and the visual guidance of reaching and grasping (the "how" emphasis is Goodale &amp; Milner's).</li>
+    </ul>
+    <p class="reveal">For neural encoding of object vision, the protagonist is the <strong>ventral stream</strong>. Every concept in this chapter lives on it.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 470" role="img" aria-labelledby="f1t">
+      <title id="f1t">A stylized lateral view of the brain showing the visual pathway from eye through LGN, V1, V2, V4 to IT along the ventral stream, with the dorsal stream branching up toward parietal cortex.</title>
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#c2410c"/>
+        </marker>
+        <marker id="arg" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 Z" fill="#6b7280"/>
+        </marker>
+        <linearGradient id="vgrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#3f4d8a"/><stop offset=".5" stop-color="#0f766e"/><stop offset="1" stop-color="#c2410c"/>
+        </linearGradient>
+      </defs>
+
+      <!-- brain silhouette: occipital pole at right (posterior), frontal at left -->
+      <path d="M250,250 C230,140 330,70 470,68 C600,66 720,80 800,120
+               C870,154 925,200 928,262 C930,318 890,352 832,360
+               C826,402 792,432 742,430 C700,428 672,408 660,378
+               C610,398 540,400 480,386 C420,372 372,388 320,372
+               C272,356 258,310 250,250 Z"
+            fill="var(--paper-2)" stroke="var(--line)" stroke-width="2"/>
+      <!-- a couple of sulci for texture -->
+      <path d="M470,120 C510,180 500,250 460,300" fill="none" stroke="var(--line)" stroke-width="2" opacity=".7"/>
+      <path d="M640,130 C680,190 670,250 640,300" fill="none" stroke="var(--line)" stroke-width="2" opacity=".7"/>
+
+      <!-- EYE far right outside the skull -->
+      <g transform="translate(978,262)">
+        <circle r="22" fill="#fff" stroke="var(--ink-soft)" stroke-width="2"/>
+        <circle r="9" fill="var(--ink)"/>
+        <circle cx="-3" cy="-3" r="3" fill="#fff"/>
+      </g>
+      <text x="978" y="312" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">eye / retina</text>
+
+      <!-- retina -> LGN -->
+      <path d="M952,262 C912,262 890,278 868,290" fill="none" stroke="var(--ink-soft)" stroke-width="3" marker-end="url(#ar)"/>
+      <!-- LGN node -->
+      <circle cx="855" cy="296" r="20" fill="#fff" stroke="var(--ink-soft)" stroke-width="2.5"/>
+      <text x="855" y="301" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="14" fill="var(--ink-soft)">LGN</text>
+
+      <!-- the ventral chain V1 V2 V4 IT (amber stream) -->
+      <!-- ventral path stroke -->
+      <path d="M820,300 C760,330 660,346 540,344 C430,342 360,338 320,322"
+            fill="none" stroke="url(#vgrad)" stroke-width="7" stroke-linecap="round" opacity=".9" marker-end="url(#ar)"/>
+
+      <!-- V1 -->
+      <circle cx="822" cy="262" r="30" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="3"/>
+      <text x="822" y="268" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="18" fill="var(--v1)">V1</text>
+      <!-- V2 -->
+      <circle cx="710" cy="300" r="28" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="3"/>
+      <text x="710" y="306" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="17" fill="var(--v1)">V2</text>
+      <!-- V4 -->
+      <circle cx="540" cy="320" r="28" fill="var(--v4-wash)" stroke="var(--v4)" stroke-width="3"/>
+      <text x="540" y="326" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="17" fill="var(--v4)">V4</text>
+      <!-- IT -->
+      <circle cx="350" cy="312" r="32" fill="var(--it-wash)" stroke="var(--it)" stroke-width="3.5"/>
+      <text x="350" y="318" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="18" fill="var(--it)">IT</text>
+
+      <!-- ventral stream LABEL (amber) -->
+      <rect x="430" y="392" width="240" height="34" rx="17" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="550" y="414" text-anchor="middle" font-family="var(--mono)" font-size="12.5" letter-spacing="2" fill="var(--accent-deep)">VENTRAL · "WHAT"</text>
+
+      <!-- DORSAL branch up toward parietal -->
+      <path d="M708,274 C700,210 680,168 640,150" fill="none" stroke="#9aa0ad" stroke-width="6" stroke-linecap="round"
+            stroke-dasharray="2 9" marker-end="url(#arg)" opacity=".85"/>
+      <circle cx="630" cy="138" r="26" fill="#eef0f3" stroke="#6b7280" stroke-width="3"/>
+      <text x="630" y="143" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="13" fill="#4b5563">PPC</text>
+      <rect x="500" y="86" width="262" height="30" rx="15" fill="#eef0f3" stroke="#9aa0ad" stroke-width="1.5"/>
+      <text x="631" y="106" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="1.5" fill="#4b5563">DORSAL · "WHERE / HOW"</text>
+
+      <!-- posterior -> anterior label -->
+      <text x="560" y="452" text-anchor="middle" font-family="var(--mono)" font-size="11" letter-spacing="2" fill="var(--ink-faint)">POSTERIOR  →  ANTERIOR   ·   simple → complex · small RF → large RF · view-specific → invariant</text>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.1</span>The visual pathway on a stylized lateral cortex. Light enters at the <b>eye / retina</b>, relays through the <b>LGN</b>, and reaches <b>V1</b> at the occipital pole. From there it splits: the amber <b>ventral "what" stream</b> (V1 → V2 → V4 → IT) builds object identity along the temporal lobe, while the gray <b>dorsal "where/how" stream</b> branches up toward posterior parietal cortex (PPC) for spatial location and action guidance. The cool→warm node ramp recurs throughout this chapter as the area key.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="callout brain reveal">
+      <span class="tag">In the brain</span>
+      <p style="margin:0">The two streams are not water-tight: they share early areas, talk to each other, and the "what/where" labels are a useful caricature rather than a hard wall. Goodale &amp; Milner's reframing — "perception vs. action" — came from patient <em>D.F.</em>, who could not consciously report an object's orientation yet posted a card through a matching slot flawlessly: <em>seeing for knowing</em> and <em>seeing for doing</em> dissociate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2. RETINA & LGN ===================== -->
+<section id="retina-lgn">
+  <div class="col">
+    <p class="seckick reveal">02 — Before cortex</p>
+    <h2 class="reveal">Retina &amp; LGN: where the hierarchy actually starts</h2>
+    <p class="lead reveal">The "V1 → IT" story is so dominant that it is easy to forget the first two stages. But the retina and the LGN already do non-trivial computation — they choose <em>what kind</em> of signal cortex even gets to see.</p>
+
+    <p class="reveal">The output cells of the retina — <span class="term">retinal ganglion cells</span> — and their thalamic targets in the <span class="term">LGN</span> are not simple light meters. Each has a <span class="term">center-surround receptive field</span>: a small central disc and an antagonistic annular surround. An <strong>ON-center</strong> cell is excited by light in the center and inhibited by light in the surround; an <strong>OFF-center</strong> cell does the reverse. The practical consequence is that these cells respond to <strong>local contrast</strong>, not absolute luminance — uniform illumination falls on center and surround equally and roughly cancels. This is the first act of the visual system: throw away the mean, keep the spatial derivative. Computationally it is close to a <strong>difference-of-Gaussians (DoG)</strong> or Laplacian-of-Gaussian filter, an idea that traces back to <a href="https://royalsocietypublishing.org/doi/10.1098/rspb.1966.0086" target="_blank" rel="noopener">Enroth-Cugell &amp; Robson (1966)</a> and the X/Y cell distinction.</p>
+
+    <p class="reveal">The pathway also <strong>splits into parallel channels</strong> before it ever reaches cortex. The LGN is layered, and two of those layers matter most here:</p>
+    <ul class="tidy reveal">
+      <li><strong>Magnocellular ("magno", M)</strong> — large cells, fast, transient, high <em>temporal</em> resolution, color-blind, low contrast threshold. Tuned for motion and coarse, rapid structure; feeds heavily into the dorsal stream.</li>
+      <li><strong>Parvocellular ("parvo", P)</strong> — small cells, slower, sustained, high <em>spatial</em> resolution, red–green color-opponent. Tuned for fine detail and color; feeds heavily into the ventral "what" stream.</li>
+      <li><strong>Koniocellular (K)</strong> — interlaminar cells carrying a blue–yellow color signal, the often-forgotten third channel.</li>
+    </ul>
+    <p class="reveal">So even before a single oriented edge is computed, the system has already (a) discarded absolute brightness in favor of contrast, (b) split into ON and OFF streams, and (c) factored the input into fast-coarse-achromatic vs. slow-fine-chromatic channels. V1's oriented simple cells are then built by <strong>summing aligned LGN center-surround inputs</strong> — Hubel &amp; Wiesel's original feed-forward proposal for where orientation tuning comes from.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 380" role="img" aria-labelledby="f2t">
+      <title id="f2t">Left: ON-center and OFF-center center-surround receptive fields with their difference-of-Gaussians profiles. Right: the magnocellular and parvocellular channels splitting from retina through LGN to cortex.</title>
+      <defs>
+        <radialGradient id="onc" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#c2410c" stop-opacity=".85"/><stop offset=".42" stop-color="#c2410c" stop-opacity=".18"/>
+          <stop offset=".45" stop-color="#3f4d8a" stop-opacity=".16"/><stop offset="1" stop-color="#3f4d8a" stop-opacity=".02"/>
+        </radialGradient>
+        <radialGradient id="offc" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#3f4d8a" stop-opacity=".7"/><stop offset=".42" stop-color="#3f4d8a" stop-opacity=".14"/>
+          <stop offset=".45" stop-color="#c2410c" stop-opacity=".55"/><stop offset="1" stop-color="#c2410c" stop-opacity=".04"/>
+        </radialGradient>
+      </defs>
+
+      <!-- LEFT: center-surround RFs -->
+      <text x="250" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">CENTER-SURROUND RECEPTIVE FIELDS</text>
+
+      <!-- ON-center -->
+      <g transform="translate(120,150)">
+        <circle r="64" fill="url(#onc)" stroke="var(--line)" stroke-width="1.5"/>
+        <circle r="64" fill="none" stroke="var(--v1)" stroke-width="1.5" stroke-dasharray="3 4"/>
+        <circle r="27" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text y="5" text-anchor="middle" font-family="var(--mono)" font-size="14" font-weight="600" fill="var(--accent-deep)">+</text>
+        <text x="50" y="-40" font-family="var(--mono)" font-size="13" fill="var(--v1)">−</text>
+        <text x="0" y="92" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="13" fill="var(--accent)">ON-center</text>
+        <text x="0" y="108" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">light center → fires</text>
+      </g>
+      <!-- OFF-center -->
+      <g transform="translate(120,150)">
+        <g transform="translate(260,0)">
+          <circle r="64" fill="url(#offc)" stroke="var(--line)" stroke-width="1.5"/>
+          <circle r="64" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <circle r="27" fill="none" stroke="var(--v1)" stroke-width="2"/>
+          <text y="5" text-anchor="middle" font-family="var(--mono)" font-size="14" font-weight="600" fill="var(--v1)">−</text>
+          <text x="50" y="-40" font-family="var(--mono)" font-size="13" fill="var(--accent-deep)">+</text>
+          <text x="0" y="92" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="13" fill="var(--v1)">OFF-center</text>
+          <text x="0" y="108" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">dark center → fires</text>
+        </g>
+      </g>
+      <!-- DoG profile under the ON cell -->
+      <g transform="translate(60,288)">
+        <line x1="0" y1="40" x2="380" y2="40" stroke="var(--line)" stroke-width="1.3"/>
+        <path id="dog-path" d="" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+        <text x="190" y="78" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">difference-of-Gaussians: excite center − inhibit surround (responds to contrast)</text>
+      </g>
+
+      <!-- divider -->
+      <line x1="540" y1="50" x2="540" y2="340" stroke="var(--line)" stroke-width="1.5"/>
+
+      <!-- RIGHT: magno / parvo channels -->
+      <text x="790" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">PARALLEL CHANNELS: MAGNO vs PARVO</text>
+      <!-- retina node -->
+      <circle cx="600" cy="195" r="26" fill="#fff" stroke="var(--ink-soft)" stroke-width="2.5"/>
+      <text x="600" y="200" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="12" fill="var(--ink-soft)">retina</text>
+      <!-- magno path -->
+      <path d="M624,180 C690,130 760,118 820,118" fill="none" stroke="var(--v1)" stroke-width="6" stroke-linecap="round" marker-end="url(#ar)"/>
+      <rect x="826" y="92" width="186" height="52" rx="12" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="1.5"/>
+      <text x="919" y="113" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="13" fill="var(--v1)">MAGNO (M)</text>
+      <text x="919" y="131" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">fast · motion · achromatic → dorsal</text>
+      <!-- parvo path -->
+      <path d="M624,210 C690,262 760,274 820,274" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" marker-end="url(#ar)"/>
+      <rect x="826" y="248" width="186" height="52" rx="12" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5"/>
+      <text x="919" y="269" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="13" fill="var(--accent-deep)">PARVO (P)</text>
+      <text x="919" y="287" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">fine detail · red–green → ventral</text>
+      <!-- LGN waypoint -->
+      <circle cx="720" cy="124" r="15" fill="#fff" stroke="var(--v1)" stroke-width="2"/>
+      <circle cx="720" cy="268" r="15" fill="#fff" stroke="var(--accent)" stroke-width="2"/>
+      <text x="720" y="200" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">LGN layers</text>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.2</span>The first two stages. <b>Left:</b> retinal ganglion and LGN cells have antagonistic <b>center-surround</b> receptive fields — an <b>ON-center</b> cell (amber center, indigo surround) fires for a bright spot on a dark surround; <b>OFF-center</b> reverses it. The profile is a <b>difference-of-Gaussians</b>: excite the center, subtract the surround, so the cell reports local <em>contrast</em>, not brightness. <b>Right:</b> the signal splits into parallel LGN channels — fast, achromatic <b>magno</b> (feeding the dorsal stream) and fine, color-opponent <b>parvo</b> (feeding the ventral stream) — before any cortical processing.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="callout deep reveal">
+      <span class="tag" style="color:var(--accent-deep)">Going deeper · feed-forward orientation</span>
+      <p style="margin:0">Hubel &amp; Wiesel's classic proposal for <em>where orientation tuning comes from</em>: line up several ON-center LGN cells whose centers fall along a row, and a V1 simple cell that sums them will fire best for a bar at exactly that orientation. It is a beautiful, testable wiring hypothesis — and while we now know recurrent and inhibitory circuits sharpen tuning beyond this pure feed-forward sum (the debate runs from Ferster &amp; Miller to the present), the feed-forward skeleton is why a bank of oriented filters is such a good first model of V1.</p>
+    </div>
+    <details class="qcheck reveal">
+      <summary>Quick check — why does an ON-center cell barely respond to uniform light filling its whole receptive field?</summary>
+      <div>Because center and surround are antagonistic. Uniform light excites the ON center but equally drives the inhibitory surround, and the two roughly cancel. The cell is built to report <em>contrast</em> (a spatial difference), so a flat field — which has no contrast — leaves it near baseline. This is exactly the difference-of-Gaussians behavior.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== 3. RETINOTOPY & RF GROWTH ===================== -->
+<section id="retinotopy">
+  <div class="col">
+    <p class="seckick reveal">03 — Maps &amp; windows</p>
+    <h2 class="reveal">Retinotopy and the growing receptive field</h2>
+    <p class="lead reveal">Early visual cortex is a literal map of the visual field. As you climb the stream, that map blurs — each neuron watches a larger and larger window of the world.</p>
+
+    <p class="reveal">A neuron's <span class="term">receptive field (RF)</span> is the patch of the visual world that can drive it — the region it "watches." In V1, RFs are tiny: a V1 cell near the fovea responds to a spot perhaps a fraction of a degree across. Crucially, V1 is <span class="term">retinotopic</span> — neighboring patches of retina map to neighboring patches of cortex, so V1 holds an orderly, distorted picture of the visual field.</p>
+
+    <p class="reveal">That distortion is <span class="term">cortical magnification</span>: the central <strong>fovea</strong> — where acuity is highest — claims a hugely disproportionate share of V1 surface, while the periphery is compressed. A thumbnail at the center of gaze recruits far more cortex than the same thumbnail at the edge of vision.</p>
+
+    <p class="reveal">Climb the hierarchy and RFs balloon. By <span class="chip it">IT</span>, a single neuron's RF can span much of the visual field and often includes the fovea regardless of where the object sits. This RF growth is exactly what makes <strong>position tolerance</strong> possible: a cell that watches a large window can fire for "face" whether the face is left, right, or centered.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 420" role="img" aria-labelledby="f3t">
+      <title id="f3t">Left: a retinotopic visual field showing cortical magnification of the fovea. Right: receptive fields growing from tiny in V1 to large in IT across the hierarchy.</title>
+      <defs>
+        <radialGradient id="fov" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#f6e6da"/><stop offset="1" stop-color="#f7f5f1"/>
+        </radialGradient>
+      </defs>
+
+      <!-- LEFT PANEL: retinotopy + cortical magnification -->
+      <text x="200" y="28" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">RETINOTOPY · CORTICAL MAGNIFICATION</text>
+
+      <!-- visual field as concentric eccentricity rings -->
+      <g transform="translate(200,210)">
+        <circle r="150" fill="url(#fov)" stroke="var(--line)" stroke-width="1.5"/>
+        <circle r="110" fill="none" stroke="var(--line)" stroke-width="1.3"/>
+        <circle r="72"  fill="none" stroke="var(--line)" stroke-width="1.3"/>
+        <circle r="38"  fill="none" stroke="var(--line)" stroke-width="1.3"/>
+        <!-- radial spokes -->
+        <g stroke="var(--line)" stroke-width="1">
+          <line x1="-150" y1="0" x2="150" y2="0"/><line x1="0" y1="-150" x2="0" y2="150"/>
+          <line x1="-106" y1="-106" x2="106" y2="106"/><line x1="-106" y1="106" x2="106" y2="-106"/>
+        </g>
+        <!-- fovea highlighted -->
+        <circle r="38" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="2"/>
+        <text y="5" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">fovea</text>
+        <!-- a sample of "sampling points" denser at center -->
+        <g fill="var(--v1)">
+          <circle cx="0" cy="0" r="2.4"/>
+          <circle cx="14" cy="8" r="2.2"/><circle cx="-12" cy="10" r="2.2"/><circle cx="6" cy="-15" r="2.2"/>
+          <circle cx="-16" cy="-6" r="2.2"/><circle cx="20" cy="-10" r="2.2"/><circle cx="-8" cy="22" r="2.2"/>
+          <circle cx="55" cy="20" r="2"/><circle cx="-50" cy="-30" r="2"/><circle cx="40" cy="-50" r="2"/>
+          <circle cx="-66" cy="44" r="2"/><circle cx="90" cy="-10" r="1.8"/><circle cx="-100" cy="40" r="1.8"/>
+          <circle cx="60" cy="100" r="1.8"/><circle cx="-120" cy="-60" r="1.6"/><circle cx="120" cy="60" r="1.6"/>
+        </g>
+      </g>
+      <text x="200" y="398" text-anchor="middle" font-family="var(--mono)" font-size="10.5" fill="var(--ink-faint)">sampling density falls off with eccentricity → fovea = most cortex</text>
+
+      <!-- middle arrow -->
+      <path d="M398,210 L448,210" stroke="var(--accent)" stroke-width="3" marker-end="url(#ar)"/>
+
+      <!-- RIGHT PANEL: RF growth along the hierarchy -->
+      <text x="740" y="28" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">RECEPTIVE-FIELD GROWTH ALONG THE STREAM</text>
+
+      <!-- a shared "scene" frame for each stage, with growing RF disc -->
+      <g transform="translate(480,70)">
+        <!-- stage frames -->
+        <g font-family="var(--mono)" font-size="11">
+          <!-- V1 -->
+          <g transform="translate(0,0)">
+            <rect width="120" height="120" rx="8" fill="#fff" stroke="var(--v1)" stroke-width="2"/>
+            <circle cx="78" cy="44" r="9" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="2"/>
+            <text x="60" y="146" text-anchor="middle" fill="var(--v1)" font-weight="600">V1</text>
+            <text x="60" y="164" text-anchor="middle" fill="var(--ink-faint)">~0.5°</text>
+          </g>
+          <!-- V4 -->
+          <g transform="translate(180,0)">
+            <rect width="120" height="120" rx="8" fill="#fff" stroke="var(--v4)" stroke-width="2"/>
+            <circle cx="60" cy="60" r="30" fill="var(--v4-wash)" stroke="var(--v4)" stroke-width="2"/>
+            <text x="60" y="146" text-anchor="middle" fill="var(--v4)" font-weight="600">V4</text>
+            <text x="60" y="164" text-anchor="middle" fill="var(--ink-faint)">~4–8°</text>
+          </g>
+          <!-- IT -->
+          <g transform="translate(360,0)">
+            <rect width="120" height="120" rx="8" fill="#fff" stroke="var(--it)" stroke-width="2"/>
+            <circle cx="60" cy="60" r="56" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2"/>
+            <text x="60" y="146" text-anchor="middle" fill="var(--it)" font-weight="600">IT</text>
+            <text x="60" y="164" text-anchor="middle" fill="var(--ink-faint)">tens of °</text>
+          </g>
+        </g>
+        <!-- arrows between frames -->
+        <path d="M124,60 L176,60" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar)"/>
+        <path d="M304,60 L356,60" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar)"/>
+      </g>
+      <text x="740" y="400" text-anchor="middle" font-family="var(--mono)" font-size="10.5" fill="var(--ink-faint)">small, position-specific  →  large, position-tolerant</text>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.3</span>Maps and windows. <b>Left:</b> the visual field is mapped retinotopically onto V1, but the <b>fovea</b> is hugely over-represented — cortical magnification means the center of gaze claims far more tissue per degree than the periphery (denser blue sampling points). <b>Right:</b> a neuron's receptive field — the window of the world it watches — grows from a tiny disc in V1 (~0.5°) to V4 (a few degrees) to IT (tens of degrees, often covering the object wherever it lands). RF growth is the substrate of position tolerance.</figcaption>
+  </figure>
+</section>
+
+<!-- ===================== 3. FEATURE HIERARCHY ===================== -->
+<section id="hierarchy">
+  <div class="col">
+    <p class="seckick reveal">04 — The ladder</p>
+    <h2 class="reveal">The feature hierarchy: edges to objects</h2>
+    <p class="lead reveal">Two things increase together as you climb the ventral stream: the <strong>complexity</strong> of the preferred feature, and the <strong>invariance</strong> of the response to nuisance changes. This is the central organizing idea of object vision.</p>
+
+    <p class="reveal"><strong>V1 — oriented edges.</strong> <a href="https://en.wikipedia.org/wiki/David_H._Hubel" target="_blank" rel="noopener">Hubel &amp; Wiesel</a> (Nobel 1981) discovered that V1 "simple cells" act as local, oriented edge-and-bar detectors at a specific position, orientation, and spatial frequency — strikingly well described by <span class="term">Gabor</span> filters (an oriented sinusoid under a Gaussian window). "Complex cells" pool over simple cells to gain a first taste of position tolerance.</p>
+    <p class="reveal"><strong>V2 / V4 — contours, curvature, texture, color.</strong> The next stations combine edges into <strong>angles, junctions, and curves</strong> (V2 is sensitive to illusory contours and texture statistics; V4 is tuned to <strong>curvature, shape parts, hue, and surface texture</strong>). Parts of objects begin to take form.</p>
+    <p class="reveal"><strong>IT — object parts &amp; whole objects.</strong> Inferotemporal neurons respond to complex configurations — object parts, and at the top, whole objects and faces — and do so with substantial tolerance to position, size, and pose. <strong>Increasing complexity, increasing invariance.</strong></p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 360" role="img" aria-labelledby="f4t">
+      <title id="f4t">A four-rung ladder of visual features: oriented edges, textures and curvature, object parts, and whole objects, climbing from V1 to IT.</title>
+      <!-- diagonal ladder baseline -->
+      <line x1="70" y1="320" x2="980" y2="60" stroke="var(--line)" stroke-width="2"/>
+      <!-- axis labels -->
+      <text x="64" y="345" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">simple · invariant↓</text>
+      <text x="980" y="44" text-anchor="end" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">complex · invariant↑</text>
+
+      <!-- RUNG 1: V1 edges -->
+      <g transform="translate(70,238)">
+        <rect width="150" height="92" rx="10" fill="#fff" stroke="var(--v1)" stroke-width="2"/>
+        <!-- gabor-ish oriented bars -->
+        <g stroke="var(--v1)" stroke-width="4" stroke-linecap="round">
+          <line x1="24" y1="22" x2="44" y2="70"/>
+          <line x1="58" y1="22" x2="58" y2="70"/>
+          <line x1="92" y1="22" x2="112" y2="70"/>
+          <line x1="118" y1="46" x2="138" y2="46"/>
+        </g>
+        <text x="75" y="-10" text-anchor="middle" font-family="var(--display)" font-weight="600" font-size="13" fill="var(--v1)"><tspan class="chip">V1 · oriented edges</tspan></text>
+      </g>
+      <text x="145" y="346" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--v1)">V1 · edges / Gabors</text>
+
+      <!-- RUNG 2: V2/V4 texture, curvature, color -->
+      <g transform="translate(300,178)">
+        <rect width="150" height="92" rx="10" fill="#fff" stroke="var(--v4)" stroke-width="2"/>
+        <!-- curve -->
+        <path d="M20,70 Q42,18 64,70" fill="none" stroke="var(--v4)" stroke-width="4"/>
+        <!-- corner/junction -->
+        <path d="M80,24 L80,60 L116,60" fill="none" stroke="var(--v4)" stroke-width="4"/>
+        <!-- color swatch -->
+        <rect x="122" y="22" width="16" height="48" rx="3" fill="var(--v4)" opacity=".55"/>
+        <text x="75" y="-10" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--v4)">V2/V4 · curves·texture·color</text>
+      </g>
+
+      <!-- RUNG 3: object parts -->
+      <g transform="translate(560,118)">
+        <rect width="150" height="92" rx="10" fill="#fff" stroke="var(--it)" stroke-width="2"/>
+        <!-- an "eye part" and a "wheel part" -->
+        <ellipse cx="44" cy="46" rx="22" ry="13" fill="none" stroke="var(--it)" stroke-width="3"/>
+        <circle cx="44" cy="46" r="5" fill="var(--it)"/>
+        <circle cx="108" cy="46" r="18" fill="none" stroke="var(--it)" stroke-width="3"/>
+        <g stroke="var(--it)" stroke-width="2"><line x1="108" y1="30" x2="108" y2="62"/><line x1="92" y1="46" x2="124" y2="46"/></g>
+        <text x="75" y="-10" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--it)">post.IT · object parts</text>
+      </g>
+
+      <!-- RUNG 4: whole objects -->
+      <g transform="translate(820,58)">
+        <rect width="150" height="92" rx="10" fill="#fff" stroke="var(--it)" stroke-width="2.5"/>
+        <!-- a little face glyph -->
+        <circle cx="52" cy="46" r="26" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2.5"/>
+        <circle cx="44" cy="40" r="3" fill="var(--it)"/><circle cx="60" cy="40" r="3" fill="var(--it)"/>
+        <path d="M42,54 Q52,62 62,54" fill="none" stroke="var(--it)" stroke-width="2.5"/>
+        <!-- a house glyph -->
+        <path d="M92,58 L92,38 L110,26 L128,38 L128,58 Z" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2.5"/>
+        <rect x="106" y="44" width="10" height="14" fill="var(--it)"/>
+        <text x="75" y="-10" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--it)">ant.IT · whole objects</text>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.4</span>The feature-hierarchy ladder. Each rung shows exemplar features at its level: <b>V1</b> oriented edges and Gabors; <b>V2/V4</b> curves, corners, texture, and color; <b>posterior IT</b> object parts (an eye, a wheel); <b>anterior IT</b> whole objects (a face, a house). Climbing the ladder, features grow more complex <em>and</em> the response grows more tolerant to position, size, and pose.</figcaption>
+  </figure>
+
+  <div class="col">
+    <h3 class="reveal">A closer look at V1: orientation tuning</h3>
+    <p class="reveal">Because V1 is so well characterized, it is the natural place to make "tuning" concrete. A V1 simple cell fires hardest for a bar at its preferred orientation and falls off smoothly as the bar rotates away — a bell-shaped <span class="term">tuning curve</span>. A bank of such cells, tiling orientations and spatial frequencies, is essentially a <strong>Gabor wavelet transform</strong> of the image — which is why a fixed bank of Gabor/edge filters is a surprisingly strong, learning-free model of early cortex.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 320" role="img" aria-labelledby="f5t">
+      <title id="f5t">A bank of oriented Gabor filters and a V1 orientation-tuning curve peaking at the preferred orientation.</title>
+      <!-- LEFT: gabor bank -->
+      <text x="270" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">V1 GABOR / EDGE-FILTER BANK</text>
+      <g transform="translate(40,52)">
+        <!-- 2 rows x 4 cols of oriented gabors -->
+        <!-- generate via patterns: each cell a soft sinusoid drawn as lines at an angle -->
+        <g id="gabor-bank"></g>
+      </g>
+
+      <!-- divider -->
+      <line x1="540" y1="56" x2="540" y2="280" stroke="var(--line)" stroke-width="1.5"/>
+
+      <!-- RIGHT: tuning curve -->
+      <text x="800" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">ORIENTATION-TUNING CURVE</text>
+      <g transform="translate(600,60)">
+        <!-- axes -->
+        <line x1="40" y1="200" x2="400" y2="200" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <line x1="40" y1="200" x2="40" y2="20" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <text x="220" y="232" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">stimulus orientation (°)</text>
+        <text x="-110" y="14" transform="rotate(-90)" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">firing rate</text>
+        <!-- x ticks -->
+        <g font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">
+          <text x="40" y="216" text-anchor="middle">-90</text>
+          <text x="130" y="216" text-anchor="middle">-45</text>
+          <text x="220" y="216" text-anchor="middle">0</text>
+          <text x="310" y="216" text-anchor="middle">45</text>
+          <text x="400" y="216" text-anchor="middle">90</text>
+        </g>
+        <!-- gaussian-ish tuning curve, peak at 0° (preferred) -->
+        <path id="tune-fill" d="" fill="var(--accent-wash)"/>
+        <path id="tune-path" d="" fill="none" stroke="var(--accent)" stroke-width="3"/>
+        <!-- preferred orientation marker -->
+        <line x1="220" y1="200" x2="220" y2="40" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="226" y="52" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">preferred</text>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.5</span>V1's vocabulary. <b>Left:</b> a bank of oriented <b>Gabor filters</b> — sinusoids under a Gaussian window — tiling orientation and frequency; collectively they approximate the linear receptive fields of V1 simple cells. <b>Right:</b> a single cell's <b>orientation-tuning curve</b> peaks at its preferred orientation and falls off smoothly with rotation. A fixed Gabor bank is a strong learning-free model of early visual cortex.</figcaption>
+  </figure>
+
+  <div class="col">
+    <h3 class="reveal">Simple vs. complex cells, and the energy model</h3>
+    <p class="reveal">Hubel &amp; Wiesel did not find one kind of V1 cell — they found two. A <span class="term">simple cell</span> has a receptive field with distinct, side-by-side ON and OFF subregions; it behaves like a linear oriented filter, so it cares about the exact <strong>phase</strong> (position) of an edge — slide the bar half a cycle and an excitatory response flips to suppression. A <span class="term">complex cell</span> is just as orientation-tuned but <strong>phase-invariant</strong>: it fires for its preferred orientation <em>anywhere</em> in its little window, whether the edge is light-on-dark or dark-on-light. Complex cells are the first place in the system where a feature ("there is a vertical edge here") survives a small positional nuisance.</p>
+
+    <p class="reveal">How is that invariance built? The standard answer is the <span class="term">energy model</span> of <a href="https://www.cns.nyu.edu/~david/courses/perceptionGrad/Readings/AdelsonBergen-JOSA-1985.pdf" target="_blank" rel="noopener">Adelson &amp; Bergen (1985)</a>. Take two simple-cell subunits with the <em>same</em> orientation and frequency but receptive fields in <strong>quadrature</strong> — 90° out of phase, like a sine and a cosine. Square each subunit's output and add them. Because <code>sin²θ + cos²θ = 1</code>, the squared sum no longer depends on where the edge sits within the cycle: you have computed the <strong>local Fourier energy</strong> at that orientation and frequency. That is exactly a complex cell's behavior, and the very same construction — oriented filters separated in <em>space-time</em> phase — yields a direction-selective motion detector, which is what Adelson &amp; Bergen were really after.</p>
+
+    <p class="reveal">This squaring-and-pooling motif — <strong>linear filter → nonlinearity → pool over a nuisance dimension</strong> — is the seed of every "complex" stage that follows, all the way up to the convolution-plus-pooling blocks of modern deep nets. Phase invariance in V1, position invariance in IT: same idea, different scale.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 380" role="img" aria-labelledby="f6t">
+      <title id="f6t">The energy model: two quadrature simple-cell subunits are squared and summed to produce a phase-invariant complex-cell response, shown against a flat response curve over edge position.</title>
+      <defs>
+        <marker id="ar2" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c2410c"/></marker>
+      </defs>
+      <text x="360" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">ENERGY MODEL — BUILDING A PHASE-INVARIANT COMPLEX CELL</text>
+
+      <!-- subunit 1: sin-phase simple cell -->
+      <g transform="translate(40,70)">
+        <rect width="128" height="110" rx="10" fill="#fff" stroke="var(--v1)" stroke-width="2"/>
+        <rect x="34" y="12" width="26" height="86" fill="var(--accent)" opacity=".22"/>
+        <rect x="68" y="12" width="26" height="86" fill="var(--v1)" opacity=".22"/>
+        <text x="47" y="60" text-anchor="middle" font-family="var(--mono)" font-size="14" fill="var(--accent-deep)">+</text>
+        <text x="81" y="60" text-anchor="middle" font-family="var(--mono)" font-size="14" fill="var(--v1)">−</text>
+        <text x="64" y="128" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--v1)">simple · sin (odd) phase</text>
+      </g>
+      <!-- subunit 2: cos-phase simple cell (quadrature) -->
+      <g transform="translate(40,222)">
+        <rect width="128" height="110" rx="10" fill="#fff" stroke="var(--v1)" stroke-width="2"/>
+        <rect x="20" y="12" width="22" height="86" fill="var(--v1)" opacity=".18"/>
+        <rect x="42" y="12" width="44" height="86" fill="var(--accent)" opacity=".22"/>
+        <rect x="86" y="12" width="22" height="86" fill="var(--v1)" opacity=".18"/>
+        <text x="64" y="60" text-anchor="middle" font-family="var(--mono)" font-size="14" fill="var(--accent-deep)">+</text>
+        <text x="64" y="128" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--v1)">simple · cos (even) phase</text>
+      </g>
+      <text x="104" y="208" text-anchor="middle" font-family="var(--mono)" font-size="9.5" letter-spacing="1" fill="var(--accent-deep)">90° QUADRATURE</text>
+
+      <!-- square nodes -->
+      <g transform="translate(168,125)"><path d="M0,0 L46,0" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar2)"/></g>
+      <g transform="translate(168,277)"><path d="M0,0 L46,0" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar2)"/></g>
+      <g transform="translate(244,125)">
+        <circle r="24" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="2"/>
+        <text y="5" text-anchor="middle" font-family="var(--mono)" font-size="13" font-weight="600" fill="var(--accent-deep)">( )²</text>
+      </g>
+      <g transform="translate(244,277)">
+        <circle r="24" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="2"/>
+        <text y="5" text-anchor="middle" font-family="var(--mono)" font-size="13" font-weight="600" fill="var(--accent-deep)">( )²</text>
+      </g>
+
+      <!-- sum node -->
+      <path d="M268,125 C320,125 320,201 350,201" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <path d="M268,277 C320,277 320,201 350,201" fill="none" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar2)"/>
+      <g transform="translate(380,201)">
+        <circle r="28" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2.5"/>
+        <text y="6" text-anchor="middle" font-family="var(--display)" font-size="20" font-weight="700" fill="var(--it)">Σ</text>
+        <text y="50" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--it)">complex cell</text>
+      </g>
+      <path d="M408,201 L452,201" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#ar2)"/>
+
+      <!-- divider -->
+      <line x1="475" y1="56" x2="475" y2="350" stroke="var(--line)" stroke-width="1.5"/>
+
+      <!-- RIGHT: response vs edge position -->
+      <text x="775" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">RESPONSE vs EDGE POSITION (PHASE)</text>
+      <g transform="translate(540,60)">
+        <line x1="40" y1="240" x2="460" y2="240" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <line x1="40" y1="240" x2="40" y2="40" stroke="var(--ink-soft)" stroke-width="1.5"/>
+        <text x="250" y="272" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">edge position within RF (phase) →</text>
+        <text x="-140" y="14" transform="rotate(-90)" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--ink-faint)">response</text>
+        <!-- simple-cell rectified responses (oscillate with phase) -->
+        <path id="simp1-path" d="" fill="none" stroke="var(--v1)" stroke-width="2" opacity=".7" stroke-dasharray="5 4"/>
+        <path id="simp2-path" d="" fill="none" stroke="var(--accent)" stroke-width="2" opacity=".55" stroke-dasharray="5 4"/>
+        <!-- complex-cell flat (energy) response -->
+        <path id="complex-path" d="" fill="none" stroke="var(--it)" stroke-width="3"/>
+        <g font-family="var(--mono)" font-size="10">
+          <rect x="300" y="48" width="12" height="3" fill="var(--it)"/><text x="318" y="53" fill="var(--it)">complex (flat)</text>
+          <line x1="300" y1="70" x2="312" y2="70" stroke="var(--v1)" stroke-width="2" stroke-dasharray="5 4"/><text x="318" y="74" fill="var(--ink-faint)">simple (phase-dependent)</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.6</span>The energy model (Adelson &amp; Bergen, 1985). Two oriented simple-cell subunits in <b>quadrature</b> (sine- and cosine-phase, 90° apart) are each <b>squared</b> and <b>summed</b>. Because the squared quadrature pair sums to a phase-independent quantity, the resulting <b>complex cell</b> stays tuned to orientation while becoming <b>invariant to the edge's exact position</b> within its receptive field. This "filter → square → pool" motif recurs at every level of the hierarchy.</figcaption>
+  </figure>
+
+  <div class="col">
+    <details class="qcheck reveal">
+      <summary>Quick check — what is the single most important difference between a simple and a complex cell?</summary>
+      <div>Phase invariance. Both are tuned to orientation (and spatial frequency), but a <strong>simple cell</strong> has segregated ON/OFF subregions and so is sensitive to the exact position/polarity (phase) of an edge, whereas a <strong>complex cell</strong> responds to its preferred orientation regardless of phase or exact location within its RF. The energy model builds that invariance by squaring and summing two quadrature simple-cell subunits.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== 4. UNTANGLING ===================== -->
+<section id="untangling">
+  <div class="col">
+    <p class="seckick reveal">05 — The core idea</p>
+    <h2 class="reveal">Invariance &amp; "untangling": why a line can read identity</h2>
+    <p class="lead reveal">This is the conceptual heart of the chapter, and the deep link back to Chapter&nbsp;01's linear-readout idea. The ventral stream's job is to make object identity <em>linearly separable</em>.</p>
+
+    <p class="reveal">Think of every image as a single point in a very high-dimensional space — one axis per pixel. Now take all the images of a particular cat, photographed under every pose, size, lighting, and position, and trace out the set of points they occupy. That set is a curved surface — an <span class="term">object manifold</span>. The manifold for a cat and the manifold for a dog are each smooth, but in <strong>pixel space they are hopelessly tangled</strong>, folded through one another like two sheets of crumpled paper. No straight cut (no linear classifier) can separate them.</p>
+
+    <p class="reveal"><a href="https://www.sciencedirect.com/science/article/pii/S0166223607000136" target="_blank" rel="noopener">DiCarlo &amp; Cox (2007)</a> framed object recognition as exactly this problem of <strong>untangling</strong>, and <a href="https://www.cell.com/neuron/fulltext/S0896-6273(12)00092-X" target="_blank" rel="noopener">DiCarlo, Zoccolan &amp; Rust (2012)</a> made it the organizing principle of the ventral stream. Each stage applies a transformation that gently flattens and straightens these manifolds. By the time the representation reaches <span class="chip it">IT</span>, the cat and dog manifolds have been pulled apart into compact, near-flat blobs — and now a <strong>simple linear readout</strong> (a hyperplane, a weighted sum) can cleanly separate them. Identity has become explicit.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 380" role="img" aria-labelledby="f7t">
+      <title id="f7t">Two object manifolds tangled together in pixel space on the left, becoming two separable blobs split by a straight line in IT representational space on the right.</title>
+      <!-- LEFT: tangled in pixel space -->
+      <text x="250" y="30" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">PIXEL / V1 SPACE — TANGLED</text>
+      <g transform="translate(40,52)">
+        <rect width="420" height="290" rx="12" fill="#fff" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- two intertwined ribbons -->
+        <path d="M40,60 C140,20 180,120 280,90 C360,66 360,170 270,180 C170,192 150,250 60,240"
+              fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" opacity=".18"/>
+        <path d="M50,200 C150,240 180,150 280,170 C360,186 360,90 270,80 C180,70 160,30 70,40"
+              fill="none" stroke="var(--v1)" stroke-width="14" stroke-linecap="round" opacity=".18"/>
+        <!-- class A points (amber) -->
+        <g fill="var(--accent)" id="tangleA"></g>
+        <!-- class B points (indigo) -->
+        <g fill="var(--v1)" id="tangleB"></g>
+        <!-- a failed straight cut -->
+        <line x1="60" y1="40" x2="360" y2="250" stroke="var(--ink-soft)" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="210" y="278" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">no straight line can split them</text>
+      </g>
+
+      <!-- middle: the stream as an arrow doing the work -->
+      <g transform="translate(470,197)">
+        <path d="M0,0 L96,0" stroke="var(--accent)" stroke-width="3" marker-end="url(#ar)"/>
+        <text x="50" y="-14" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">ventral</text>
+        <text x="50" y="22" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">stream</text>
+      </g>
+
+      <!-- RIGHT: untangled in IT space -->
+      <text x="790" y="30" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">IT REPRESENTATIONAL SPACE — UNTANGLED</text>
+      <g transform="translate(580,52)">
+        <rect width="420" height="290" rx="12" fill="#fff" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- two compact blobs -->
+        <ellipse cx="135" cy="120" rx="78" ry="60" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.5" opacity=".7"/>
+        <ellipse cx="295" cy="200" rx="78" ry="60" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="1.5" opacity=".8"/>
+        <g fill="var(--accent)" id="blobA"></g>
+        <g fill="var(--v1)" id="blobB"></g>
+        <!-- the separating hyperplane (line) -->
+        <line x1="60" y1="248" x2="380" y2="60" stroke="var(--ink)" stroke-width="2.5"/>
+        <text x="356" y="76" text-anchor="end" font-family="var(--mono)" font-size="10" fill="var(--ink)">linear readout ✓</text>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.7</span>Untangling. <b>Left:</b> in pixel/V1 space, two object classes (amber, indigo) trace out intertwined <b>manifolds</b> — the dashed straight cut fails. <b>Right:</b> after the ventral-stream transformation, the same two classes occupy compact, near-flat regions of IT representational space, and a single <b>linear readout</b> (the solid line / hyperplane) separates them cleanly. This is why ridge regression on IT-like features works — and the cortical version of Chapter 01's linear-readout principle.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="callout key reveal">
+      <span class="tag">Key idea</span>
+      <p style="margin:0">Object recognition is not about <em>finding</em> a clever boundary in pixel space — none exists. It is about <strong>re-formatting the representation</strong> until a trivial boundary works. The ventral stream is a sequence of transformations engineered (by evolution and development) to make identity <strong>linearly decodable</strong>. A linear encoding model that predicts IT well is, in effect, measuring how far that untangling has gone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. BEYOND V1: V2/V4/IT ===================== -->
+<section id="midlevel">
+  <div class="col">
+    <p class="seckick reveal">06 — Mid &amp; high vision</p>
+    <h2 class="reveal">Beyond V1: textures in V2, curvature in V4, faces in IT</h2>
+    <p class="lead reveal">The middle of the ventral stream is where the story gets specific. V2, V4 and IT each have a signature computation that has been pinned down with real experiments — and IT hides one of the most elegant codes in all of neuroscience.</p>
+
+    <p class="reveal"><strong>V2 — higher-order texture statistics.</strong> What does V2 compute that V1 cannot? <a href="https://www.nature.com/articles/nn.3402" target="_blank" rel="noopener">Freeman, Ziemba, Movshon, Simoncelli &amp; Heeger (2013)</a> gave a sharp answer. They built two kinds of stimuli: "noise" textures matched to an image only in its V1-level (spectral) statistics, and "naturalistic" textures that additionally matched the <strong>higher-order correlations</strong> across orientation and scale that the Portilla–Simoncelli model captures. V1 neurons could not tell them apart; <strong>V2 neurons responded more to the naturalistic textures</strong>, and human fMRI showed the same V2-but-not-V1 preference. V2's job, then, is the <em>statistics of how edges co-occur</em> — the texture of surfaces.</p>
+
+    <p class="reveal"><strong>V4 — curvature and shape parts.</strong> <a href="https://journals.physiology.org/doi/full/10.1152/jn.2001.86.5.2505" target="_blank" rel="noopener">Pasupathy &amp; Connor (2001, 2002)</a> showed that V4 neurons are tuned to <strong>boundary curvature at a particular angular position relative to the object's center</strong> — e.g., "a sharp convexity pointing to the upper right." A handful of such curvature-and-position parts can compose a remarkable range of closed shapes. V4 is where a contour stops being a generic edge and becomes a <em>described shape fragment</em>; it is also strongly color- and surface-tuned.</p>
+
+    <p class="reveal"><strong>IT — columns, face patches, and an axis code.</strong> Inferotemporal cortex is organized into <strong>columns</strong> of neurons that share a complex object-feature preference. Within it sits the macaque <span class="term">face-patch system</span>: a network of discrete, fMRI-localizable patches (ML/MF, AL, AM…) that <a href="https://www.science.org/doi/10.1126/science.1119983" target="_blank" rel="noopener">Tsao &amp; Freiwald (2006)</a> showed are almost entirely face-selective and are wired together as a processing hierarchy — posterior patches tolerate less view change, anterior patch <strong>AM</strong> codes face <em>identity</em> nearly invariant to viewpoint. The human <strong>FFA</strong> is widely read as the homolog of this system.</p>
+
+    <p class="reveal">And how does a face patch encode a face? Not as a lookup table of templates. <a href="https://www.cell.com/cell/fulltext/S0092-8674(17)30538-X" target="_blank" rel="noopener">Chang &amp; Tsao (2017)</a> found that face-patch neurons implement an <span class="term">axis code</span>: each cell computes a <strong>linear projection of the face onto one axis</strong> of a ~50-dimensional face space (shape + appearance features). A given cell is tuned to a direction, not a specific face, and is flat (unselective) along the orthogonal directions. The stunning payoff: from the responses of only ~200 cells they could <strong>reconstruct the actual face the monkey was viewing</strong> — and predict a cell's response to any face from its projection onto that cell's axis. This is a linear, geometric code, and it is precisely the kind of representation a ridge readout is built to exploit.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 400" role="img" aria-labelledby="f8t">
+      <title id="f8t">Axis coding in the face-patch system: a face is a point in a low-dimensional face space, and each neuron reports the face's projection onto its own tuning axis; cells are flat along orthogonal directions.</title>
+      <defs>
+        <marker id="ar3" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c2410c"/></marker>
+      </defs>
+      <text x="300" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">A FACE IS A POINT IN FACE SPACE</text>
+
+      <!-- LEFT: face space with axes and a projected face -->
+      <g transform="translate(60,60)">
+        <rect width="430" height="300" rx="12" fill="#fff" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- two illustrative axes of a high-D space -->
+        <line x1="40" y1="260" x2="400" y2="260" stroke="var(--ink-soft)" stroke-width="1.3" marker-end="url(#ar3)"/>
+        <line x1="40" y1="260" x2="40" y2="30" stroke="var(--ink-soft)" stroke-width="1.3" marker-end="url(#ar3)"/>
+        <text x="408" y="264" font-family="var(--mono)" font-size="9.5" fill="var(--ink-faint)">feature dim i</text>
+        <text x="40" y="22" text-anchor="middle" font-family="var(--mono)" font-size="9.5" fill="var(--ink-faint)">dim j</text>
+        <text x="220" y="288" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">(~50-D shape + appearance space; 2 shown)</text>
+
+        <!-- the neuron's preferred AXIS (a ray through the space) -->
+        <line x1="40" y1="260" x2="330" y2="70" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="2 6"/>
+        <text x="338" y="66" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">neuron's axis</text>
+
+        <!-- a specific face as a point -->
+        <g transform="translate(250,150)">
+          <circle r="22" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2"/>
+          <circle cx="-7" cy="-5" r="2.6" fill="var(--it)"/><circle cx="7" cy="-5" r="2.6" fill="var(--it)"/>
+          <path d="M-8,7 Q0,13 8,7" fill="none" stroke="var(--it)" stroke-width="2"/>
+        </g>
+        <!-- projection (foot of perpendicular onto the axis) -->
+        <line x1="250" y1="150" x2="196" y2="115" stroke="var(--ink-faint)" stroke-width="1.3" stroke-dasharray="3 3"/>
+        <circle cx="196" cy="115" r="4.5" fill="var(--accent)"/>
+        <text x="150" y="108" font-family="var(--mono)" font-size="9.5" fill="var(--accent-deep)">projection = response</text>
+      </g>
+
+      <!-- divider -->
+      <line x1="540" y1="50" x2="540" y2="360" stroke="var(--line)" stroke-width="1.5"/>
+
+      <!-- RIGHT: ramp tuning along axis, flat orthogonal -->
+      <text x="790" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">TUNING: RAMP ALONG AXIS · FLAT ORTHOGONAL</text>
+      <g transform="translate(560,70)">
+        <!-- along-axis: ramp -->
+        <text x="120" y="6" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--accent-deep)">move ALONG the axis</text>
+        <line x1="20" y1="120" x2="240" y2="120" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <line x1="20" y1="120" x2="20" y2="22" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <path d="M20,118 L240,34" fill="none" stroke="var(--accent)" stroke-width="3"/>
+        <text x="130" y="140" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">position along axis</text>
+
+        <!-- orthogonal: flat -->
+        <text x="120" y="186" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--v1)">move ORTHOGONAL</text>
+        <line x1="20" y1="300" x2="240" y2="300" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <line x1="20" y1="300" x2="20" y2="202" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <path d="M20,250 L240,250" fill="none" stroke="var(--v1)" stroke-width="3"/>
+        <text x="130" y="320" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">position orthogonal to axis</text>
+        <!-- reconstruction note -->
+        <g transform="translate(300,40)">
+          <rect width="150" height="230" rx="10" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.3"/>
+          <text x="75" y="26" text-anchor="middle" font-family="var(--mono)" font-size="9.5" letter-spacing="1" fill="var(--accent-deep)">DECODE</text>
+          <text x="75" y="58" text-anchor="middle" font-family="var(--display)" font-size="12" fill="var(--ink-soft)">~200 cells</text>
+          <text x="75" y="78" text-anchor="middle" font-family="var(--display)" font-size="12" fill="var(--ink-soft)">→ axes</text>
+          <g transform="translate(75,128)">
+            <circle r="30" fill="#fff" stroke="var(--it)" stroke-width="2"/>
+            <circle cx="-10" cy="-7" r="3.4" fill="var(--it)"/><circle cx="10" cy="-7" r="3.4" fill="var(--it)"/>
+            <path d="M-11,10 Q0,18 11,10" fill="none" stroke="var(--it)" stroke-width="2.2"/>
+          </g>
+          <text x="75" y="200" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">reconstruct the</text>
+          <text x="75" y="214" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">viewed face</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.8</span>Axis coding in the face-patch system (Chang &amp; Tsao, 2017). <b>Left:</b> a face is a single point in a low-dimensional <b>face space</b>; a neuron computes the face's <b>projection onto its own tuning axis</b> (amber). <b>Right:</b> the cell ramps linearly as the face moves <em>along</em> that axis but stays flat for changes <em>orthogonal</em> to it — a linear, geometric code. Because the code is linear, the responses of only ~200 such cells suffice to reconstruct the actual face being viewed. This is the most literal "linear readout works" result in the chapter.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="callout deep reveal">
+      <span class="tag" style="color:var(--accent-deep)">Going deeper · norm-based face space</span>
+      <p style="margin:0">The axis code is the neural realization of an old psychological idea — Valentine's (1991) <em>norm-based face space</em>, where faces are encoded as deviations from an average face. It also dovetails with <strong>untangling</strong>: if identity lives along explicit linear axes, then identity is, by construction, linearly decodable — the manifold has been straightened into a coordinate system. Note the contrast with V1's bell-shaped tuning: face cells are <em>ramp-tuned</em> (monotonic along their axis), which is exactly what makes a weighted-sum readout so effective.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. DIVISIVE NORMALIZATION ===================== -->
+<section id="normalization">
+  <div class="col">
+    <p class="seckick reveal">07 — A canonical computation</p>
+    <h2 class="reveal">Divisive normalization: the cortex's repeated motif</h2>
+    <p class="lead reveal">One operation shows up again and again across areas, modalities, and species — so often that <a href="https://www.nature.com/articles/nrn3136" target="_blank" rel="noopener">Carandini &amp; Heeger (2012)</a> called it a <strong>canonical neural computation</strong>: divisive normalization.</p>
+
+    <p class="reveal">The idea is simple. A neuron's driven response is not reported on its own; it is <strong>divided by the pooled activity of a surrounding population</strong> of neurons (the "normalization pool"). Formally, the response is roughly <code>R = D / (σ + Σ pool)</code> — a numerator that is the cell's own drive, over a denominator that grows with how active its neighbors are. Turn up the whole population and every individual response is scaled down.</p>
+
+    <p class="reveal">This one operation explains a startling range of phenomena with the same equation: V1 <strong>contrast saturation</strong> and <strong>cross-orientation suppression</strong> (a mask at a different orientation suppresses the response even though it drives the cell little on its own), <strong>surround suppression</strong>, light adaptation in the retina, the effects of <strong>attention</strong>, and the <strong>winner-take-all</strong> sharpening of population codes. Functionally it does several useful things at once: it keeps responses within a usable dynamic range (gain control), it <strong>decorrelates / whitens</strong> the population (improving efficiency, à la Barlow), and it makes responses more <em>invariant</em> to overall contrast. Modern deep nets rediscovered close cousins of it — local response normalization, batch/layer norm, and the squaring-and-pooling of complex cells is itself a normalization-adjacent motif.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 360" role="img" aria-labelledby="f9t">
+      <title id="f9t">Divisive normalization: a target neuron's raw drive is divided by the pooled activity of its neighbors, shown with response curves that saturate with contrast.</title>
+      <defs>
+        <marker id="ar4" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c2410c"/></marker>
+      </defs>
+      <text x="300" y="26" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">RESPONSE = DRIVE ÷ POOLED NEIGHBOR ACTIVITY</text>
+
+      <!-- LEFT: target + normalization pool -->
+      <g transform="translate(60,60)">
+        <rect width="430" height="290" rx="12" fill="#fff" stroke="var(--line)" stroke-width="1.5"/>
+        <!-- normalization pool: ring of neighbor neurons -->
+        <g fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="1.6">
+          <circle cx="120" cy="70" r="16"/><circle cx="215" cy="55" r="16"/><circle cx="310" cy="80" r="16"/>
+          <circle cx="95" cy="160" r="16"/><circle cx="335" cy="160" r="16"/>
+          <circle cx="130" cy="245" r="16"/><circle cx="225" cy="255" r="16"/><circle cx="320" cy="240" r="16"/>
+        </g>
+        <!-- target neuron at center -->
+        <circle cx="215" cy="155" r="30" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="2.5"/>
+        <text x="215" y="160" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="14" fill="var(--accent-deep)">R</text>
+        <!-- suppressive arrows from pool to target -->
+        <g stroke="var(--v1)" stroke-width="1.6" opacity=".75">
+          <line x1="135" y1="84" x2="192" y2="138"/><line x1="215" y1="71" x2="215" y2="123"/>
+          <line x1="296" y1="93" x2="240" y2="138"/><line x1="111" y1="160" x2="183" y2="156"/>
+          <line x1="319" y1="160" x2="247" y2="156"/><line x1="142" y1="232" x2="194" y2="176"/>
+          <line x1="225" y1="239" x2="216" y2="187"/><line x1="306" y1="227" x2="240" y2="174"/>
+        </g>
+        <text x="215" y="318" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">neighbors (indigo) divide down the target's response</text>
+        <text x="68" y="50" font-family="var(--mono)" font-size="9.5" fill="var(--v1)">normalization pool</text>
+      </g>
+
+      <!-- formula -->
+      <g transform="translate(540,200)">
+        <rect x="-10" y="-44" width="230" height="88" rx="12" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="1.3"/>
+        <text x="105" y="-6" text-anchor="middle" font-family="var(--mono)" font-size="15" fill="var(--ink)">R =  D</text>
+        <line x1="55" y1="2" x2="170" y2="2" stroke="var(--ink)" stroke-width="1.4"/>
+        <text x="112" y="26" text-anchor="middle" font-family="var(--mono)" font-size="13" fill="var(--ink)">σ + Σ pool</text>
+      </g>
+
+      <!-- RIGHT: contrast saturation curves -->
+      <text x="850" y="80" text-anchor="middle" font-family="var(--mono)" font-size="11" letter-spacing="1" fill="var(--ink-faint)">CONTRAST SATURATION</text>
+      <g transform="translate(720,100)">
+        <line x1="20" y1="200" x2="240" y2="200" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <line x1="20" y1="200" x2="20" y2="20" stroke="var(--ink-soft)" stroke-width="1.3"/>
+        <text x="130" y="226" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">contrast →</text>
+        <text x="-110" y="12" transform="rotate(-90)" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">response</text>
+        <!-- saturating (normalized) curve -->
+        <path id="norm-sat" d="" fill="none" stroke="var(--accent)" stroke-width="3"/>
+        <!-- linear (un-normalized) for contrast -->
+        <path d="M20,200 L210,40" fill="none" stroke="var(--v1)" stroke-width="2" opacity=".5" stroke-dasharray="5 4"/>
+        <g font-family="var(--mono)" font-size="9">
+          <text x="120" y="60" fill="var(--accent-deep)">normalized → saturates</text>
+          <text x="150" y="150" fill="var(--ink-faint)">linear drive</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.9</span>Divisive normalization (Carandini &amp; Heeger, 2012). A target neuron's raw drive <b>D</b> is divided by a constant plus the <b>pooled activity of its neighbors</b> (the normalization pool, indigo), giving <code>R = D/(σ + Σ pool)</code>. The same equation produces contrast saturation (right), cross-orientation and surround suppression, gain control, and decorrelation — which is why it is called a <em>canonical</em> cortical computation rather than a V1-specific quirk.</figcaption>
+  </figure>
+
+  <div class="col">
+    <details class="qcheck reveal">
+      <summary>Quick check — cross-orientation suppression: a mask at the orthogonal orientation barely drives a V1 cell on its own, yet adding it suppresses the cell's response to its preferred grating. How does normalization explain this?</summary>
+      <div>The orthogonal mask contributes little to the <em>numerator</em> (the cell's own drive), but it <strong>does</strong> activate other cells in the normalization pool, so it inflates the <em>denominator</em>. A bigger denominator divides the response down. Suppression without much direct drive is the signature prediction of divisive normalization — and a reason a purely linear filter model of V1 systematically over-predicts at high contrast.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== 8. CATEGORY-SELECTIVE CORTEX ===================== -->
+<section id="categories">
+  <div class="col">
+    <p class="seckick reveal">08 — Neighborhoods</p>
+    <h2 class="reveal">Category-selective cortex — and the distributed counter-view</h2>
+    <p class="lead reveal">High-level ventral cortex is not a uniform sheet. Certain patches respond far more strongly to one category than to others — yet object identity is <em>also</em> carried by activity spread across the whole region. Both views are true.</p>
+
+    <p class="reveal">Functional MRI revealed several reliable, category-selective patches on the ventral surface of the temporal and occipital lobes:</p>
+    <ul class="tidy reveal">
+      <li><span class="term">FFA</span> — <strong>fusiform face area</strong>; responds preferentially to <strong>faces</strong> (<a href="https://www.jneurosci.org/content/17/11/4302" target="_blank" rel="noopener">Kanwisher, McDermott &amp; Chun, 1997</a>).</li>
+      <li><span class="term">PPA</span> — <strong>parahippocampal place area</strong>; <strong>scenes &amp; places</strong>, spatial layout (<a href="https://www.nature.com/articles/33402" target="_blank" rel="noopener">Epstein &amp; Kanwisher, 1998</a>).</li>
+      <li><span class="term">EBA</span> — <strong>extrastriate body area</strong>; <strong>bodies &amp; body parts</strong> (Downing et&nbsp;al., 2001).</li>
+      <li><span class="term">VWFA</span> — <strong>visual word form area</strong>; <strong>letter strings &amp; words</strong> (left occipitotemporal; Cohen &amp; Dehaene).</li>
+      <li><span class="term">LOC</span> — <strong>lateral occipital complex</strong>; objects/shape in general, the more domain-general object responder.</li>
+    </ul>
+
+    <p class="reveal">But selectivity is not the whole story. <a href="https://www.science.org/doi/10.1126/science.1063736" target="_blank" rel="noopener">Haxby et&nbsp;al. (2001)</a> showed that the identity of a viewed category can be decoded from the <strong>distributed pattern</strong> of activity across ventral temporal cortex — <em>including the voxels outside</em> a category's "preferred" region, and even after excluding the peak region entirely. So the same cortex supports two readings: <strong>modular</strong> (dedicated patches for special categories) and <strong>distributed</strong> (a population code where every object is a pattern across the whole map). Present both fairly: the patches are real and robust, and the distributed code is real and robust.</p>
+  </div>
+
+  <figure class="bleed reveal">
+    <svg viewBox="0 0 1040 430" role="img" aria-labelledby="f10t">
+      <title id="f10t">A ventral view of the brain locating FFA, PPA, EBA and VWFA, each marked with an icon of its preferred category, over a faint distributed-code background.</title>
+      <defs>
+        <pattern id="dist" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="4" cy="4" r="1.6" fill="var(--ink-faint)" opacity=".35"/>
+        </pattern>
+      </defs>
+
+      <!-- ventral (bottom-up) view: two temporal lobes -->
+      <text x="520" y="30" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing="2" fill="var(--ink-faint)">VENTRAL SURFACE · CATEGORY-SELECTIVE PATCHES (over a distributed code)</text>
+
+      <!-- left & right ventral temporal surfaces -->
+      <g>
+        <!-- right hemisphere lobe (viewer's left) -->
+        <path d="M120,90 C90,170 100,300 200,360 C300,420 470,400 500,330
+                 C520,280 510,150 470,110 C400,60 220,50 120,90 Z"
+              fill="url(#dist)" stroke="var(--line)" stroke-width="2"/>
+        <path d="M120,90 C90,170 100,300 200,360 C300,420 470,400 500,330
+                 C520,280 510,150 470,110 C400,60 220,50 120,90 Z"
+              fill="var(--paper-2)" opacity=".35"/>
+        <!-- left hemisphere lobe (viewer's right) -->
+        <path d="M920,90 C950,170 940,300 840,360 C740,420 570,400 540,330
+                 C520,280 530,150 570,110 C640,60 820,50 920,90 Z"
+              fill="url(#dist)" stroke="var(--line)" stroke-width="2"/>
+        <path d="M920,90 C950,170 940,300 840,360 C740,420 570,400 540,330
+                 C520,280 530,150 570,110 C640,60 820,50 920,90 Z"
+              fill="var(--paper-2)" opacity=".35"/>
+      </g>
+      <text x="300" y="408" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">right hemisphere</text>
+      <text x="740" y="408" text-anchor="middle" font-family="var(--mono)" font-size="10" fill="var(--ink-faint)">left hemisphere</text>
+      <text x="520" y="244" text-anchor="middle" font-family="var(--mono)" font-size="9.5" letter-spacing="2" fill="var(--ink-faint)">ANTERIOR ↑</text>
+      <text x="520" y="376" text-anchor="middle" font-family="var(--mono)" font-size="9.5" letter-spacing="2" fill="var(--ink-faint)">POSTERIOR ↓</text>
+
+      <!-- PATCH: FFA (face) — right fusiform, lateral-ish -->
+      <g transform="translate(245,250)">
+        <ellipse rx="46" ry="32" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2.5"/>
+        <!-- face icon -->
+        <circle r="16" cy="-2" fill="#fff" stroke="var(--it)" stroke-width="2"/>
+        <circle cx="-6" cy="-5" r="2.4" fill="var(--it)"/><circle cx="6" cy="-5" r="2.4" fill="var(--it)"/>
+        <path d="M-7,4 Q0,10 7,4" fill="none" stroke="var(--it)" stroke-width="2"/>
+        <text x="0" y="48" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="14" fill="var(--it)">FFA</text>
+        <text x="0" y="64" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">faces</text>
+      </g>
+
+      <!-- PATCH: PPA (place) — medial, more anterior -->
+      <g transform="translate(400,160)">
+        <ellipse rx="44" ry="30" fill="var(--v4-wash)" stroke="var(--v4)" stroke-width="2.5"/>
+        <!-- house/place icon -->
+        <path d="M-14,8 L-14,-4 L0,-14 L14,-4 L14,8 Z" fill="#fff" stroke="var(--v4)" stroke-width="2"/>
+        <rect x="-4" y="-2" width="8" height="10" fill="var(--v4)"/>
+        <text x="0" y="46" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="14" fill="var(--v4)">PPA</text>
+        <text x="0" y="62" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">places / scenes</text>
+      </g>
+
+      <!-- PATCH: EBA (body) — lateral occipitotemporal -->
+      <g transform="translate(170,140)">
+        <ellipse rx="40" ry="28" fill="var(--accent-wash)" stroke="var(--accent)" stroke-width="2.5"/>
+        <!-- body/figure icon -->
+        <circle cx="0" cy="-9" r="5" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="0" y1="-4" x2="0" y2="8" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="-9" y1="0" x2="9" y2="0" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="0" y1="8" x2="-7" y2="16" stroke="var(--accent)" stroke-width="2"/>
+        <line x1="0" y1="8" x2="7" y2="16" stroke="var(--accent)" stroke-width="2"/>
+        <text x="0" y="42" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="14" fill="var(--accent)">EBA</text>
+        <text x="0" y="58" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">bodies</text>
+      </g>
+
+      <!-- PATCH: VWFA (word) — LEFT hemisphere only -->
+      <g transform="translate(760,250)">
+        <ellipse rx="46" ry="30" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="2.5"/>
+        <!-- word icon -->
+        <g font-family="var(--mono)" font-weight="600" font-size="15" fill="var(--v1)">
+          <text x="0" y="2" text-anchor="middle">A B C</text>
+        </g>
+        <text x="0" y="46" text-anchor="middle" font-family="var(--display)" font-weight="700" font-size="14" fill="var(--v1)">VWFA</text>
+        <text x="0" y="62" text-anchor="middle" font-family="var(--mono)" font-size="9" fill="var(--ink-faint)">words (left only)</text>
+      </g>
+    </svg>
+    <figcaption><span class="fignum">Figure 04.10</span>The category map on the ventral surface (viewed from below). Robust, replicable patches sit over a faint <b>distributed code</b> (dotted field): <b>FFA</b> for faces, <b>PPA</b> for places/scenes, <b>EBA</b> for bodies, and the left-lateralized <b>VWFA</b> for visual word forms. The patches are real — but so is Haxby's finding that category identity is also decodable from the distributed pattern <em>between and beyond</em> them.</figcaption>
+  </figure>
+
+  <div class="col">
+    <div class="callout watch reveal">
+      <span class="tag">Watch out</span>
+      <p style="margin:0">"FFA = the face module" is a useful shorthand, not a literal claim that faces live in one spot and nowhere else. FFA responds <em>most</em> to faces, but it carries graded information about many categories, and face information is also present elsewhere. Modular and distributed coding are two lenses on the same tissue — don't read either as the whole truth.</p>
+    </div>
+
+    <div class="callout deep reveal">
+      <span class="tag" style="color:var(--accent-deep)">Going deeper · modular vs distributed, and the reverse hierarchy</span>
+      <p>The honest summary of the <strong>Kanwisher</strong> (modular: dedicated, possibly innate patches for special, evolutionarily important categories) vs. <strong>Haxby</strong> (distributed: object identity is a graded pattern across all of ventral temporal cortex) debate is that <em>both effects are real and reproducible</em>, and the modern view holds them together — strong category peaks superimposed on a continuous, topographically smooth feature map (the "what" map of Grill-Spector &amp; Weiner). The disagreement is mostly about emphasis and what counts as the unit of analysis, not about the data.</p>
+      <p style="margin:0">A third nuance complicates the strict "feed-forward only" reading of the hierarchy: the <strong>reverse-hierarchy theory</strong> of <a href="https://www.cell.com/neuron/fulltext/S0896-6273(02)01091-7" target="_blank" rel="noopener">Hochstein &amp; Ahissar (2002)</a>. Conscious perception, they argue, starts at the <em>top</em> — fast, gist-level "vision at a glance" read out from high areas with large RFs — and only descends to early areas (with their fine spatial detail) when the task demands "vision with scrutiny." Recurrent and feedback connections, not just the bottom-up sweep, shape what you actually see. A purely feed-forward encoding model is a first approximation, not the last word.</p>
+    </div>
+
+    <details class="qcheck reveal">
+      <summary>Quick check — Haxby showed category identity is decodable even after removing a category's peak region. Why does that not refute the existence of the FFA?</summary>
+      <div>Because "there is extra, distributed information outside region X" and "region X is strongly and reliably selective" are <em>both</em> true — they are not contradictory. Removing the FFA still leaves a usable distributed pattern, but that does not make the FFA's face preference disappear or unreliable. The lesson is that selectivity (a peak) and a population code (spread information) coexist in the same cortex; the debate is about emphasis, not about whether either effect is real.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== 6. EASY VS HARD ===================== -->
+<section id="easyhard">
+  <div class="col">
+    <p class="seckick reveal">09 — The modeling gradient</p>
+    <h2 class="reveal">Why early areas are "easy" and category regions are "hard"</h2>
+    <p class="lead reveal">Everything above predicts a clean experimental signature — one this project measures directly.</p>
+
+    <p class="reveal">Early visual areas (<span class="chip v1">V1</span> <span class="chip v1">V2</span> <span class="chip v1">V3</span>) compute relatively <strong>low-level, generic features</strong>: oriented edges, local contrast, spatial frequency, simple color and texture statistics. These are exactly the features you can <em>write down by hand</em> — a Gabor bank, a few color-opponent channels, some local-energy pooling. So a <strong>fixed, untrained model</strong> built from such primitives can explain early cortex well, because early cortex is doing something close to those primitives.</p>
+
+    <p class="reveal">High-level category regions (<span class="chip it">FFA</span> <span class="chip it">PPA</span> <span class="chip it">EBA</span> <span class="chip it">VWFA</span>) compute <strong>learned, abstract, category-tuned features</strong> — the product of the full untangling cascade. You cannot guess the right basis for "face-ness" or "place-ness" by hand; it has to be <em>learned</em> from experience with objects. That is precisely where untrained models stumble and a network <em>trained</em> on object recognition pulls ahead — making the high-level ventral stream a clean probe of <strong>"architecture vs. learning."</strong></p>
+  </div>
+
+  <div class="col">
+    <div class="callout project reveal">
+      <span class="tag">In this project</span>
+      <p><strong>neuro-autoresearch</strong> stages this exact contest on the <strong>NSD</strong> human-fMRI vision dataset (<code>NEURO_DATASET=nsd</code>). An agent proposes a <strong>fixed, never-trained</strong> model — a plain callable <code>X (N,D_in) → activations</code> with weights written directly in code, no optimizer, no backprop. A <strong>ridge readout</strong> is fit from those activations to recorded voxel responses, and held-out <code>test_corr</code> (mean per-voxel Pearson r on the image-disjoint <em>shared-1000</em> test split) is the reward.</p>
+      <p>The scalar reward narrows to <strong>one region</strong> chosen by <code>NEURO_ROI</code> from the menu — <code>V1 · V2 · V3 · hV4 · FFA · PPA · EBA · VWFA · early · ventral</code> — while every region's predictivity is still logged as <code>corr_&lt;name&gt;</code>. The bar to beat is a <strong>trained ImageNet AlexNet</strong> (fc7) read out with the same ridge:</p>
+      <table class="data">
+        <thead><tr><th>Region</th><th class="num">AlexNet r</th><th>Untrained hand-designed models…</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>V1</td><td class="num">0.342</td><td>match / beat (low-level features suffice)</td></tr>
+          <tr class="win"><td>V2</td><td class="num">0.299</td><td>match / beat</td></tr>
+          <tr class="win"><td>V3</td><td class="num">0.321</td><td>match / beat</td></tr>
+          <tr><td>hV4</td><td class="num">0.289</td><td>borderline</td></tr>
+          <tr class="lose"><td>FFA</td><td class="num">0.396</td><td>fall short (needs learned features)</td></tr>
+          <tr class="lose"><td>PPA</td><td class="num">0.403</td><td>fall short</td></tr>
+          <tr class="lose"><td>EBA</td><td class="num">0.436</td><td>fall short</td></tr>
+          <tr class="lose"><td>VWFA</td><td class="num">0.321</td><td>fall short</td></tr>
+          <tr><td>ventral</td><td class="num">0.284</td><td>the headline mixed region</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-bottom:0">The empirical pattern is exactly what the hierarchy predicts: hand-designed untrained models <strong>match or beat AlexNet in early/mid visual cortex (V1–V3)</strong> but <strong>fall short in the high-level category regions</strong>. Early cortex is hand-writable; category-selective cortex needs learning. Run it with, e.g., <code>NEURO_DATASET=nsd NEURO_ROI=FFA python -m harness.run</code>.</p>
+    </div>
+
+    <div class="callout brain reveal">
+      <span class="tag">In the brain · cross-reference</span>
+      <p style="margin:0">The same ventral hierarchy exists in the <strong>macaque</strong>, where it can be recorded one spike at a time through V1 → V4 → IT — the direct homolog of this human pathway. See the dataset guide <a href="../tvsd-macaque-spiking.html">TVSD — reading the monkey's visual cortex, spike by spike</a> for the spiking view of everything on this page. And <strong>Chapter 06 — Brains &amp; deep nets</strong> closes the loop: how goal-driven deep networks became the best predictive models of IT, and why "architecture vs. learning" is the question this whole handbook circles.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KEY PAPERS ===================== -->
+<section id="papers">
+  <div class="col">
+    <p class="seckick reveal">10 — Reading list</p>
+    <h2 class="reveal">Key papers</h2>
+    <p class="lead reveal">The primary sources behind this chapter — the experiments that turned each idea from a story into a measurement.</p>
+    <ul class="tidy reveal">
+      <li><strong>Hubel &amp; Wiesel (1962, 1968)</strong> — "Receptive fields, binocular interaction and functional architecture in the cat's visual cortex" (<em>J. Physiol.</em>) and "Receptive fields and functional architecture of monkey striate cortex" (<em>J. Physiol.</em>). Simple vs. complex cells, orientation columns; Nobel 1981.</li>
+      <li><strong>Enroth-Cugell &amp; Robson (1966)</strong> — "The contrast sensitivity of retinal ganglion cells of the cat" (<em>J. Physiol.</em>). The linear center-surround / X-Y account of retinal RFs. <a href="https://royalsocietypublishing.org/doi/10.1098/rspb.1966.0086" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Ungerleider &amp; Mishkin (1982)</strong> — "Two cortical visual systems," in <em>Analysis of Visual Behavior</em>. The ventral "what" vs. dorsal "where" split.</li>
+      <li><strong>Adelson &amp; Bergen (1985)</strong> — "Spatiotemporal energy models for the perception of motion" (<em>JOSA A</em>). The energy model: quadrature filters squared and summed → phase/position invariance. <a href="https://www.cns.nyu.edu/~david/courses/perceptionGrad/Readings/AdelsonBergen-JOSA-1985.pdf" target="_blank" rel="noopener">pdf</a></li>
+      <li><strong>Kanwisher, McDermott &amp; Chun (1997)</strong> — "The fusiform face area: a module in human extrastriate cortex specialized for face perception" (<em>J. Neurosci.</em>). <a href="https://www.jneurosci.org/content/17/11/4302" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Epstein &amp; Kanwisher (1998)</strong> — "A cortical representation of the local visual environment" (<em>Nature</em>) — the PPA. <a href="https://www.nature.com/articles/33402" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Pasupathy &amp; Connor (2001/2002)</strong> — curvature- and shape-part tuning in V4 (<em>J. Neurophysiol.</em>; <em>Nat. Neurosci.</em>). <a href="https://journals.physiology.org/doi/full/10.1152/jn.2001.86.5.2505" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Tsao &amp; Freiwald (2006)</strong> — "A cortical region consisting entirely of face-selective cells" (<em>Science</em>); the macaque face-patch system. <a href="https://www.science.org/doi/10.1126/science.1119983" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Hochstein &amp; Ahissar (2002)</strong> — "View from the top: hierarchies and reverse hierarchies in the visual system" (<em>Neuron</em>). <a href="https://www.cell.com/neuron/fulltext/S0896-6273(02)01091-7" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Haxby et al. (2001)</strong> — "Distributed and overlapping representations of faces and objects in ventral temporal cortex" (<em>Science</em>). <a href="https://www.science.org/doi/10.1126/science.1063736" target="_blank" rel="noopener">link</a></li>
+      <li><strong>DiCarlo, Zoccolan &amp; Rust (2012)</strong> — "How does the brain solve visual object recognition?" (<em>Neuron</em>). The untangling framework. <a href="https://www.cell.com/neuron/fulltext/S0896-6273(12)00092-X" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Carandini &amp; Heeger (2012)</strong> — "Normalization as a canonical neural computation" (<em>Nat. Rev. Neurosci.</em>). <a href="https://www.nature.com/articles/nrn3136" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Freeman, Ziemba, Heeger, Simoncelli &amp; Movshon (2013)</strong> — "A functional and perceptual signature of the second visual area in primates" (<em>Nat. Neurosci.</em>); V2 texture statistics. <a href="https://www.nature.com/articles/nn.3402" target="_blank" rel="noopener">link</a></li>
+      <li><strong>Chang &amp; Tsao (2017)</strong> — "The code for facial identity in the primate brain" (<em>Cell</em>); axis coding. <a href="https://www.cell.com/cell/fulltext/S0092-8674(17)30538-X" target="_blank" rel="noopener">link</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz" class="quiz reveal">
+  <div class="quiz-head">
+    <span class="kicker">Test yourself</span>
+    <h2>Check your understanding</h2>
+    <p>Pick an answer to see why it's right or wrong. Score: <span class="quiz-score" data-score>0 / 8</span></p>
+  </div>
+  <ol class="quiz-list">
+    <li class="q" data-answer="b">
+      <p class="q-stem">1. A patient can correctly post a card through a tilted slot but cannot verbally report the slot's orientation. This dissociation is the clearest evidence for which distinction?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Magnocellular vs. parvocellular channels</button></li>
+        <li><button data-opt="b">A ventral "vision for perception" vs. a dorsal "vision for action" stream</button></li>
+        <li><button data-opt="c">Simple vs. complex cells in V1</button></li>
+        <li><button data-opt="d">Modular vs. distributed coding in IT</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> This is patient D.F. and Goodale &amp; Milner's reframing of the two streams as <em>perception</em> (ventral, conscious "what") vs. <em>action</em> (dorsal, "how"). She lacks conscious form perception yet her dorsal action system computes the orientation needed to guide the hand. The other options are real distinctions but not what this behavioral dissociation demonstrates.</div>
+    </li>
+    <li class="q" data-answer="c">
+      <p class="q-stem">2. As you ascend retina → V1 → V4 → IT, what is the most accurate description of how receptive fields change?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">They stay the same size but shift toward the periphery</button></li>
+        <li><button data-opt="b">They shrink, so each neuron sees a finer patch of the world</button></li>
+        <li><button data-opt="c">They grow, so a single neuron pools over a larger region — enabling position tolerance</button></li>
+        <li><button data-opt="d">They become retinotopically sharper while staying the same size</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> RFs grow dramatically — from a fraction of a degree in V1 to tens of degrees in IT. That pooling over a large window is precisely the substrate of position tolerance: an IT cell can signal "face" wherever the face lands. Retinotopy correspondingly coarsens, not sharpens.</div>
+    </li>
+    <li class="q" data-answer="d">
+      <p class="q-stem">3. The energy model (Adelson &amp; Bergen) builds a phase-invariant complex cell by…</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Averaging the outputs of many differently-oriented simple cells</button></li>
+        <li><button data-opt="b">Thresholding a single linear filter at a high level</button></li>
+        <li><button data-opt="c">Subtracting an OFF-center cell from an ON-center cell</button></li>
+        <li><button data-opt="d">Squaring two quadrature (90°-apart) simple-cell subunits and summing them</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Two same-orientation filters in quadrature (sine and cosine phase), each squared and added, give a response independent of the edge's exact phase (because sin²+cos² is constant) while preserving orientation tuning. That is the local energy / complex-cell computation. Averaging across orientations would destroy orientation tuning; thresholding one linear filter stays phase-sensitive.</div>
+    </li>
+    <li class="q" data-answer="a">
+      <p class="q-stem">4. "Untangling" the ventral stream means, most precisely, that…</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Object manifolds are re-formatted so identity becomes linearly separable in IT</button></li>
+        <li><button data-opt="b">A nonlinear classifier finds a clever curved boundary already present in pixel space</button></li>
+        <li><button data-opt="c">Each image is compressed to fewer pixels without losing detail</button></li>
+        <li><button data-opt="d">Neurons remove all information about position, size and pose from the signal</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> In pixel space the manifolds for two objects are smooth but hopelessly interleaved — no hyperplane separates them. The stream applies transformations that flatten and pull them apart so that in IT a <em>linear</em> readout suffices. It is not about finding a curved boundary (none works in pixel space) and not about discarding all nuisance info — IT still carries position, just in a format where identity is explicit.</div>
+    </li>
+    <li class="q" data-answer="c">
+      <p class="q-stem">5. Chang &amp; Tsao's "axis code" for faces implies that a single face-patch neuron…</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Fires only for one specific, familiar individual (a "grandmother cell")</button></li>
+        <li><button data-opt="b">Responds equally to every face it has ever seen</button></li>
+        <li><button data-opt="c">Reports the face's projection onto one axis of face space, and is flat along orthogonal axes</button></li>
+        <li><button data-opt="d">Encodes faces only as discrete category labels, not continuous features</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Each cell computes a linear projection onto its preferred axis and ramps with position along that axis while ignoring orthogonal changes. It is tuned to a <em>direction</em> in face space, not a particular face — the opposite of a grandmother cell. Because the code is linear, ~200 cells suffice to reconstruct the viewed face.</div>
+    </li>
+    <li class="q" data-answer="b">
+      <p class="q-stem">6. The PPA (parahippocampal place area) responds most strongly to which of the following?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Isolated human faces</button></li>
+        <li><button data-opt="b">Scenes, places, and spatial layout (e.g., rooms, landscapes, buildings)</button></li>
+        <li><button data-opt="c">Letter strings and written words</button></li>
+        <li><button data-opt="d">Headless human bodies and body parts</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Epstein &amp; Kanwisher (1998) showed the PPA prefers scenes and the geometry of local space. Faces → FFA, words → VWFA (left-lateralized), bodies → EBA. Keeping these four mappings straight is core to reading the ventral category map.</div>
+    </li>
+    <li class="q" data-answer="d">
+      <p class="q-stem">7. A V1 cell is driven by a vertical grating. Adding a superimposed horizontal mask — which barely drives the cell on its own — suppresses its response. Divisive normalization explains this because the mask…</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Directly inhibits the cell through its classical receptive field</button></li>
+        <li><button data-opt="b">Lowers the stimulus contrast at the preferred orientation</button></li>
+        <li><button data-opt="c">Shifts the cell's preferred orientation toward horizontal</button></li>
+        <li><button data-opt="d">Activates the normalization pool, inflating the denominator that divides the response</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Cross-orientation suppression is the signature of normalization: the orthogonal mask adds little to the numerator (own drive) but activates other cells in the pool, enlarging the denominator in <code>R = D/(σ + Σ pool)</code>, so the response divides down. It is not classical (within-RF) inhibition and it does not change the cell's preferred orientation.</div>
+    </li>
+    <li class="q" data-answer="a">
+      <p class="q-stem">8. Why do fixed, untrained hand-designed models predict V1–V3 well but fall short in FFA/PPA?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Early areas compute generic low-level features you can write down by hand; category regions compute learned, abstract features that must be acquired from experience</button></li>
+        <li><button data-opt="b">High-level regions have lower signal-to-noise, so no model can predict them</button></li>
+        <li><button data-opt="c">FFA and PPA are not actually visual, so visual features cannot predict them</button></li>
+        <li><button data-opt="d">Early areas are larger, giving more voxels and therefore higher correlations</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Gabors, color-opponent channels and local energy pooling <em>are</em> roughly what early cortex computes, so a hand-written model matches it. "Face-ness" or "place-ness" is the product of the full untangling cascade and cannot be guessed by hand — it has to be learned, which is exactly where a network <em>trained</em> on object recognition pulls ahead. That contrast is the "architecture vs. learning" probe this project runs.</div>
+    </li>
+  </ol>
+  <button class="quiz-reset" type="button">Reset quiz</button>
+</section>
+
+<!-- ===================== KEY TERMS ===================== -->
+<section id="terms">
+  <div class="col">
+    <p class="seckick reveal">11 — Glossary</p>
+    <h2 class="reveal">Key terms</h2>
+    <div class="terms reveal">
+      <dl>
+        <dt>Ventral stream</dt>
+        <dd>The "what" pathway V1 → V2 → V4 → IT; builds invariant object identity.</dd>
+        <dt>Dorsal stream</dt>
+        <dd>The "where / how" pathway toward parietal cortex; spatial location and visually guided action.</dd>
+        <dt>Retinotopy</dt>
+        <dd>The orderly map of the visual field onto cortex; the fovea is magnified (over-represented).</dd>
+        <dt>Receptive field (RF)</dt>
+        <dd>The region of the visual world that can drive a neuron; grows from tiny (V1) to large (IT).</dd>
+        <dt>V1 / V4 / IT</dt>
+        <dd>Early (edges), mid (curves·color·texture), and high (objects·faces·identity) stages of the stream.</dd>
+        <dt>Invariance</dt>
+        <dd>A response that holds across nuisance changes — position, size, pose, lighting.</dd>
+        <dt>Untangling</dt>
+        <dd>Re-formatting tangled object manifolds so identity becomes linearly separable in IT (DiCarlo &amp; Cox).</dd>
+        <dt>FFA / PPA / EBA / VWFA</dt>
+        <dd>Category-selective patches for faces / places / bodies / visual word forms.</dd>
+        <dt>Category selectivity</dt>
+        <dd>A region responding far more to one category than others — coexisting with a distributed population code.</dd>
+        <dt>Cortical magnification</dt>
+        <dd>The disproportionate cortical area devoted to the high-acuity foveal center of gaze.</dd>
+        <dt>Center-surround / DoG</dt>
+        <dd>Retinal/LGN RFs with an antagonistic center and surround; report local contrast, not brightness (difference-of-Gaussians).</dd>
+        <dt>Magno / parvo</dt>
+        <dd>Parallel LGN channels: fast achromatic magno (→ dorsal) vs. fine color-opponent parvo (→ ventral).</dd>
+        <dt>Simple / complex cell</dt>
+        <dd>V1 cells: simple = phase-sensitive oriented filter; complex = phase-invariant via energy pooling.</dd>
+        <dt>Energy model</dt>
+        <dd>Square two quadrature simple-cell subunits and sum → phase-invariant complex cell (Adelson &amp; Bergen 1985).</dd>
+        <dt>Axis code</dt>
+        <dd>Face-patch neurons report a face's linear projection onto a tuning axis of face space (Chang &amp; Tsao 2017).</dd>
+        <dt>Face-patch system</dt>
+        <dd>Networked, near-purely face-selective patches in macaque IT (Tsao &amp; Freiwald); FFA is the likely human homolog.</dd>
+        <dt>Divisive normalization</dt>
+        <dd>A canonical computation: response = own drive ÷ pooled neighbor activity; explains saturation, suppression, gain control.</dd>
+        <dt>Reverse hierarchy</dt>
+        <dd>Conscious perception begins at high areas (gist) and descends to early areas for detail (Hochstein &amp; Ahissar 2002).</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== RIGHT-RAIL TOC ===================== -->
+<aside class="toc" aria-label="On this page">
+  <h5>On this page</h5>
+  <nav>
+    <a href="#pathway">01 · The pathway</a>
+    <a href="#retina-lgn">02 · Retina &amp; LGN</a>
+    <a href="#retinotopy">03 · Retinotopy &amp; RFs</a>
+    <a href="#hierarchy">04 · Feature hierarchy</a>
+    <a href="#untangling">05 · Untangling</a>
+    <a href="#midlevel">06 · V2 · V4 · IT faces</a>
+    <a href="#normalization">07 · Normalization</a>
+    <a href="#categories">08 · Category cortex</a>
+    <a href="#easyhard">09 · Easy vs. hard</a>
+    <a href="#papers">10 · Key papers</a>
+    <a href="#quiz">Test yourself</a>
+    <a href="#terms">11 · Key terms</a>
+  </nav>
+</aside>
+
+</div><!-- /layout -->
+</div><!-- /wrap -->
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="col" style="max-width:var(--bleed)">
+      <div class="navcards">
+        <a class="navcard prev" href="03-measuring-the-brain.html">
+          <div class="dir">← Previous · Ch. 03</div>
+          <div class="ttl">Measuring the Brain</div>
+        </a>
+        <a class="navcard next" href="05-language-brain.html">
+          <div class="dir">Next · Ch. 05 →</div>
+          <div class="ttl">The Language Brain</div>
+        </a>
+      </div>
+      <a class="back" href="index.html">↑ Back to the Handbook</a>
+      <p class="colophon">
+        <strong style="color:#f3ece0">The Cortex Handbook</strong> · Concept 04 — The Visual Brain. Part of
+        <strong style="color:#f3ece0">neuro-autoresearch</strong>, an AlphaEvolve-style autoresearch loop for neural encoding:
+        an agent proposes a fixed, never-trained model; the harness reads it out with ridge regression against recorded
+        brain activity; held-out <code>test_corr</code> is the reward.<br/>
+        Findings synthesized from established systems-neuroscience literature (Hubel &amp; Wiesel; Ungerleider &amp; Mishkin 1982;
+        Goodale &amp; Milner 1992; Kanwisher 1997; Epstein &amp; Kanwisher 1998; Downing 2001; Haxby 2001;
+        DiCarlo &amp; Cox 2007; DiCarlo, Zoccolan &amp; Rust 2012). No results invented.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function svgEl(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    return e;
+  }
+  // deterministic pseudo-random so layout is stable across loads
+  function rng(seed){ return function(){ seed = (seed*1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }; }
+
+  /* ---- Fig 4a: Gabor / edge-filter bank (2 rows x 4 cols, oriented sinusoids) ---- */
+  (function(){
+    var g = document.getElementById("gabor-bank");
+    if(!g) return;
+    var cols=4, rows=2, cell=110, gap=18, x0=0, y0=0;
+    var angles = [0, 45, 90, 135, 22, 67, 112, 157]; // degrees
+    var k = 0;
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        var bx = x0 + c*(cell+gap), by = y0 + r*(cell+gap);
+        // frame
+        g.appendChild(svgEl("rect",{x:bx, y:by, width:cell, height:cell, rx:8,
+          fill:"#fbf8f3", stroke:"#3f4d8a", "stroke-width":1.6}));
+        // clip via a group; draw oriented stripes (a Gabor's sinusoid) under a soft circular mask look
+        var ang = angles[k] * Math.PI/180;
+        var cx = bx+cell/2, cy = by+cell/2;
+        var dx = Math.cos(ang), dy = Math.sin(ang);     // stripe normal -> we draw lines perpendicular
+        var px = -dy, py = dx;                            // along-stripe direction
+        // draw 7 stripes with cosine-modulated width/opacity to evoke a gabor
+        for(var s=-3;s<=3;s++){
+          var off = s*11;
+          var ox = cx + dx*off, oy = cy + dy*off;
+          var w = 7 - Math.abs(s)*1.4;
+          var op = (1 - Math.abs(s)/4) * 0.85;
+          // line spans the cell along (px,py)
+          var L = 46;
+          g.appendChild(svgEl("line",{
+            x1:(ox-px*L).toFixed(1), y1:(oy-py*L).toFixed(1),
+            x2:(ox+px*L).toFixed(1), y2:(oy+py*L).toFixed(1),
+            stroke: (s%2===0? "#3f4d8a":"#c2410c"),
+            "stroke-width": Math.max(1.5,w).toFixed(1),
+            "stroke-linecap":"round",
+            opacity: op.toFixed(2)
+          }));
+        }
+        // soft vignette circle to suggest the gaussian window
+        g.appendChild(svgEl("circle",{cx:cx, cy:cy, r:cell/2-3, fill:"none",
+          stroke:"#fbf8f3", "stroke-width":10, opacity:.55}));
+        g.appendChild(svgEl("text",{x:bx+8, y:by+cell-9,
+          "font-family":"var(--mono)","font-size":9, fill:"#8a8f9c"}));
+        g.lastChild.textContent = angles[k]+"°";
+        k++;
+      }
+    }
+  })();
+
+  /* ---- Fig 4b: orientation tuning curve (gaussian peaked at 0°) ---- */
+  (function(){
+    var path = document.getElementById("tune-path");
+    var fill = document.getElementById("tune-fill");
+    if(!path) return;
+    var x0=40, x1=400, yBase=200, amp=150, sigma=26; // x maps -90..90 over [x0,x1]
+    var d="", df="M"+x0+","+yBase;
+    for(var px=0; px<=360; px+=6){
+      var x = x0 + px;
+      var deg = -90 + (px/360)*180;
+      var y = yBase - amp*Math.exp(-(deg*deg)/(2*sigma*sigma));
+      d += (px===0? "M":"L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+      df += " L"+x.toFixed(1)+","+y.toFixed(1);
+    }
+    df += " L"+x1+","+yBase+" Z";
+    path.setAttribute("d", d);
+    if(fill) fill.setAttribute("d", df);
+  })();
+
+  /* ---- Fig 4.2: difference-of-Gaussians profile (center-surround) ---- */
+  (function(){
+    var p = document.getElementById("dog-path");
+    if(!p) return;
+    var x0=0, w=380, mid=190, base=40, d="";
+    // DoG = narrow positive gaussian minus wider negative gaussian
+    for(var i=0;i<=w;i+=4){
+      var x = (i-mid)/26;
+      var center = Math.exp(-x*x);                 // narrow excite
+      var surround = 0.55*Math.exp(-((i-mid)*(i-mid))/(2*52*52)); // wide inhibit
+      var v = center - surround;
+      var y = base - v*30;                          // up = positive
+      d += (i===0? "M":"L") + i.toFixed(1) + "," + y.toFixed(1) + " ";
+    }
+    p.setAttribute("d", d);
+  })();
+
+  /* ---- Fig 4.6: simple (phase-dependent) vs complex (flat) response ---- */
+  (function(){
+    var s1 = document.getElementById("simp1-path");
+    var s2 = document.getElementById("simp2-path");
+    var cx = document.getElementById("complex-path");
+    if(!cx) return;
+    var x0=20, x1=240, yBase=120, amp=78;
+    var d1="", d2="", dc="";
+    for(var i=0;i<=220;i+=4){
+      var x = x0 + i;
+      var ph = (i/220)*Math.PI*4;                 // 2 cycles across the axis
+      // rectified simple cells (half-wave) at sin and cos phase
+      var v1 = Math.max(0, Math.sin(ph));
+      var v2 = Math.max(0, Math.cos(ph));
+      var y1 = yBase - amp*v1;
+      var y2 = yBase - amp*v2;
+      // complex = sqrt(sin^2+cos^2)=1 -> flat (slightly below top)
+      var yc = yBase - amp*0.82;
+      d1 += (i===0?"M":"L") + x.toFixed(1) + "," + y1.toFixed(1) + " ";
+      d2 += (i===0?"M":"L") + x.toFixed(1) + "," + y2.toFixed(1) + " ";
+      dc += (i===0?"M":"L") + x.toFixed(1) + "," + yc.toFixed(1) + " ";
+    }
+    if(s1) s1.setAttribute("d", d1);
+    if(s2) s2.setAttribute("d", d2);
+    cx.setAttribute("d", dc);
+  })();
+
+  /* ---- Fig 4.9: contrast-saturation (normalized) curve ---- */
+  (function(){
+    var p = document.getElementById("norm-sat");
+    if(!p) return;
+    var x0=20, w=210, yBase=200, h=160, d="";
+    for(var i=0;i<=w;i+=4){
+      var c = i/w;                                 // contrast 0..1
+      var r = (c*c) / (0.08 + c*c);                // Naka-Rushton saturation
+      var x = x0 + i, y = yBase - r*h;
+      d += (i===0?"M":"L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+    }
+    p.setAttribute("d", d);
+  })();
+
+  /* ---- Fig 5: tangled vs untangled point clouds ---- */
+  (function(){
+    // tangled: two interleaved sinuous bands
+    var A = document.getElementById("tangleA"), B = document.getElementById("tangleB");
+    if(A){
+      var ra = rng(31);
+      for(var i=0;i<46;i++){
+        var t = i/45;
+        // band A weaves high-low
+        var x = 50 + t*320 + (ra()-.5)*16;
+        var y = 140 + 90*Math.sin(t*6.0) + (ra()-.5)*18;
+        A.appendChild(svgEl("circle",{cx:x.toFixed(1), cy:y.toFixed(1), r:3.4}));
+        // band B interleaved (phase shifted) -> tangled
+        var xb = 50 + t*320 + (ra()-.5)*16;
+        var yb = 140 + 90*Math.sin(t*6.0 + Math.PI) + (ra()-.5)*18;
+        B.appendChild(svgEl("circle",{cx:xb.toFixed(1), cy:yb.toFixed(1), r:3.4}));
+      }
+    }
+    // untangled: two compact gaussian blobs
+    var bA = document.getElementById("blobA"), bB = document.getElementById("blobB");
+    if(bA){
+      var rb = rng(57);
+      function blob(g, cx, cy){
+        for(var i=0;i<42;i++){
+          var ang = rb()*6.283, rad = Math.sqrt(rb())*54;
+          var x = cx + Math.cos(ang)*rad*1.15;
+          var y = cy + Math.sin(ang)*rad*0.85;
+          g.appendChild(svgEl("circle",{cx:x.toFixed(1), cy:y.toFixed(1), r:3.4}));
+        }
+      }
+      blob(bA,135,120); blob(bB,295,200);
+    }
+  })();
+
+  /* ---- interactive quiz ---- */
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var qs=[].slice.call(quiz.querySelectorAll('.q'));
+    var scoreEl=quiz.querySelector('[data-score]');
+    function update(){ if(scoreEl) scoreEl.textContent=qs.filter(function(q){return q.dataset.state==='right';}).length+' / '+qs.length; }
+    qs.forEach(function(q){
+      var correct=q.dataset.answer;
+      q.querySelectorAll('button[data-opt]').forEach(function(btn){ btn.addEventListener('click',function(){
+        if(q.dataset.state) return;
+        q.dataset.state = btn.dataset.opt===correct ? 'right' : 'wrong';
+        q.querySelectorAll('button[data-opt]').forEach(function(b){ b.disabled=true;
+          if(b.dataset.opt===correct) b.classList.add('opt-correct');
+          else if(b===btn) b.classList.add('opt-wrong'); });
+        var ex=q.querySelector('.q-explain'); if(ex) ex.hidden=false; update();
+      }); });
+    });
+    var reset=quiz.querySelector('.quiz-reset');
+    if(reset) reset.addEventListener('click',function(){ qs.forEach(function(q){ delete q.dataset.state;
+      q.querySelectorAll('button[data-opt]').forEach(function(b){b.disabled=false;b.classList.remove('opt-correct','opt-wrong');});
+      var ex=q.querySelector('.q-explain'); if(ex) ex.hidden=true; }); update(); });
+    update();
+  });
+
+  /* ---- scroll reveal ---- */
+  if("IntersectionObserver" in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".reveal, .stagger").forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal, .stagger").forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---- progress bar ---- */
+  var bar = document.getElementById("progress");
+  function onScroll(){
+    var st = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h>0 ? (st/h)*100 : 0;
+    if(bar) bar.style.width = p.toFixed(2)+"%";
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+
+  /* ---- active section in right-rail TOC ---- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  var sections = navLinks.map(function(a){ return document.querySelector(a.getAttribute("href")); });
+  if("IntersectionObserver" in window){
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id = "#"+en.target.id;
+          navLinks.forEach(function(a){ a.classList.toggle("active", a.getAttribute("href")===id); });
+        }
+      });
+    }, {rootMargin:"-40% 0px -55% 0px", threshold:0});
+    sections.forEach(function(s){ if(s) spy.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

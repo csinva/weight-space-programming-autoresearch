@@ -9,4 +9,5 @@ from . import (  # noqa: F401  (import = registration)
     nsd_subj01,
     nsd_subj02,
     nsd_subj03,
+    zada2025podcast,
 )

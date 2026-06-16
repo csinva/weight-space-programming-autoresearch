@@ -258,7 +258,14 @@ def _effective_slices(dataset, slices, study):
 
 
 def _study_for(d: Dataset):
-    """Construct the (no-download) NeuralSet study used to resolve slice names."""
+    """Construct the (no-download) NeuralSet study used to resolve slice names.
+
+    Table-loader datasets (e.g. TVSD) are not NeuralSet studies and carry their region
+    labels in the loader, not an ns.Study ROI resolver -- return None so the reward
+    averages over the targets the loader already selected (no per-region voxel masking).
+    """
+    if getattr(d, "loader", "segmenter") == "table":
+        return None
     path = d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
     return ns.Study(name=d.study, path=path)
 

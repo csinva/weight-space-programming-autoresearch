@@ -77,6 +77,54 @@ neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`*
 - **Sliceable metadata:** **none yet** — leave `LOG_SLICES = []`.
 - **Reward:** held-out mean per-target Pearson r (`test_corr`).
 
+## `ieeg` — "Podcast" ECoG, natural story listening (`Zada2025Podcast`)
+
+- **Modalities:** stimulus = **audio** · neural = **iEEG/ECoG** (intracranial; the
+  loop's first intracranial electrophysiology). 9 epilepsy patients, 1,330 ECoG
+  electrodes total; restricted to ONE subject (default sub-01) because each patient has
+  a different electrode set. Each spoken **Word** (from the aligned transcript) triggers
+  a 0.5 s epoch.
+- **Stimulus X:** the **Mel spectrum** of the podcast audio in that `[0, 0.5] s` window,
+  time-averaged (`MelSpectrum`). iEEG is near-instant, so stimulus and neural windows
+  **coincide** (no HRF decoupling) — exactly as for `meg`.
+- **Target Y:** the subject's ECoG electrode responses over the epoch (ECOG channels at
+  100 Hz; ECG/MISC channels dropped, bad channels marked from `channels.tsv`;
+  constant-on-train columns dropped). `n_targets` logged per run.
+- **Split:** **contiguous temporal hold-out** (latest `test_frac` of words by onset), as
+  for `text`/`meg`.
+- **Sliceable metadata:** **none yet** — leave `LOG_SLICES = []`.
+- **Reward:** held-out mean per-target Pearson r (`test_corr`).
+
+## `tvsd` — THINGS Ventral-stream Spiking Dataset, macaque (`TvsdMonkeyF`/`TvsdMonkeyN`)
+
+- **Modalities:** stimulus = **image** · neural = **macaque spiking (MUA)** — the loop's
+  first *electrophysiology in monkey* and first non-human, non-fMRI/MEG target. Each
+  THINGS image shown evokes a response; the released data is already a **pre-averaged
+  `[electrodes × stimuli]` normalized-MUA table** (no timeline to segment), so it uses the
+  `loader="table"` path, not the Segmenter.
+- **Stimulus X:** the shown **THINGS image**, resized to `imsize×imsize` (default 16) and
+  flattened to `[0,1]` RGB → **`16·16·3 = 768` dims** (`RawPixels`, identical to `nsd`, so
+  image models port over directly; raise `imsize` for more high-level detail).
+- **Target Y:** each electrode's **time-windowed normalized MUA** (one value per electrode
+  per image), for the chosen cortical **area**. 1024 electrodes/monkey across **V1, V4, IT**;
+  per-area counts — monkey **F**: V1 512 · IT 320 · V4 192; monkey **N**: V1 512 · V4 256 ·
+  IT 256. Constant-on-train electrodes dropped.
+- **Split:** the dataset's **own** fixed split — **22,248 train images / 100 test images**
+  (the test images are repeated many times; **image-disjoint** by construction). No temporal
+  or shared-1000 logic applies.
+- **Reward region (`NEURO_ROI`):** the scalar reward is the mean `test_corr` over ONE area,
+  chosen per run with `NEURO_ROI` ∈ **`V1` / `V4` / `IT`** (default `IT`). Unlike NSD, the
+  readout fits **only** that area's electrodes (per-target ridge ⇒ identical to fit-all);
+  there is **no `corr_<area>` panel** — run one loop per area. Pick the **monkey** with
+  `NEURO_SUBJECT` (`F`/`N`); each `(monkey, area)` writes its own
+  `results/TvsdMonkey<F|N>__<area>.csv`.
+- **Noise ceiling:** the release ships an `oracle` (split-half) correlation per electrode —
+  the explainable-variance ceiling is high (mean ≈ 0.55–0.63), so strong `test_corr` is
+  attainable. (No trained-AlexNet baseline is computed for `tvsd` yet.)
+- **Stimuli:** the THINGS images are **gated** (license + ~12 GB) and **not bundled** with
+  the spiking data — they must be staged once (see `data._tvsd_images_root`) before running.
+- **Reward:** held-out mean per-electrode Pearson r (`test_corr`) over the chosen area.
+
 ---
 
 ## Hard rules (all datasets)

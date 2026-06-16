@@ -1,0 +1,1616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brains &amp; Deep Networks — and why an untrained model can predict cortex · The Cortex Handbook</title>
+<meta name="description" content="Chapter 6 of The Cortex Handbook: how convolutional nets converged with the ventral stream, why goal-driven deep networks are the leading models of visual cortex, the encoding-model bridge, and the twist that even untrained random-weight networks yield brain-like features — the premise of the neuro-autoresearch beat-AlexNet project." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* ---- scholarly paper palette ---- */
+    --paper:#f7f5f1; --paper-2:#efeae1; --card:#ffffff;
+    --ink:#1a1c22; --ink-soft:#4b4f5a; --ink-faint:#8a8f9c;
+    --line:#e4ded2; --line-soft:#efe9dd;
+
+    /* ---- chapter 06 accent: emerald ---- */
+    --accent:#047857; --accent-soft:#34d399; --accent-deep:#064e3b;
+    --accent-wash:rgba(4,120,87,.08);
+
+    /* ---- type ---- */
+    --display:"Bricolage Grotesque","Familjen Grotesk",ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+    --body:"Spectral",Georgia,"Times New Roman",serif;
+    --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code","Liberation Mono",monospace;
+
+    /* ---- spacing ---- */
+    --s1:.4rem; --s2:.75rem; --s3:1.1rem; --s4:1.75rem; --s5:2.6rem; --s6:4rem; --s7:6rem;
+    --readw:752px; --bleedw:1040px; --radius:14px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--body); font-weight:400; line-height:1.7;
+    font-size:clamp(16px,.4vw + 15px,18px); letter-spacing:.002em;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  body::before{ /* faint paper texture / warm vignette */
+    content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    background:
+      radial-gradient(1100px 600px at 88% -6%, var(--accent-wash), transparent 60%),
+      radial-gradient(800px 520px at 2% 4%, rgba(4,120,87,.04), transparent 55%),
+      linear-gradient(180deg, #faf8f4, var(--paper) 30%);
+  }
+
+  a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(4,120,87,.28); transition:color .18s,border-color .18s,background .18s}
+  a:hover{color:var(--accent-deep); border-color:var(--accent)}
+
+  /* ---------- top bar + progress ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:60;
+    display:flex; align-items:center; gap:1rem;
+    padding:.7rem clamp(1rem,4vw,2.2rem);
+    background:rgba(247,245,241,.82); backdrop-filter:blur(10px) saturate(1.2);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .wm{
+    font-family:var(--display); font-weight:800; font-size:1rem; letter-spacing:-.01em;
+    color:var(--ink); border:none; display:inline-flex; align-items:center; gap:.55rem;
+  }
+  .topbar .wm:hover{color:var(--accent)}
+  .topbar .wm .mark{
+    width:18px; height:18px; border-radius:5px; flex:none;
+    background:conic-gradient(from 220deg, var(--accent), var(--accent-soft), var(--accent-deep), var(--accent));
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.55);
+  }
+  .topbar .chap{margin-left:auto; font:500 12px/1 var(--mono); letter-spacing:.12em; color:var(--accent); text-transform:uppercase}
+  #progress{position:absolute; left:0; bottom:-1px; height:2px; width:0%; background:var(--accent); box-shadow:0 0 8px rgba(4,120,87,.5)}
+
+  /* ---------- TOC right rail ---------- */
+  nav.toc{
+    position:fixed; top:50%; right:max(14px,calc(50vw - 620px)); transform:translateY(-50%);
+    z-index:40; display:flex; flex-direction:column; gap:.2rem;
+    padding:.35rem; border-radius:14px;
+    background:rgba(255,255,255,.6); border:1px solid var(--line); backdrop-filter:blur(6px);
+  }
+  nav.toc a{
+    display:flex; align-items:center; gap:.55rem; border:none; padding:.34rem .5rem; border-radius:8px;
+    font:500 11px/1.1 var(--mono); letter-spacing:.04em; color:var(--ink-faint);
+    text-transform:uppercase; white-space:nowrap; transition:color .18s,background .18s;
+  }
+  nav.toc a .dot{width:7px; height:7px; border-radius:50%; background:var(--line); flex:none; transition:background .2s,transform .2s}
+  nav.toc a:hover{color:var(--ink-soft); background:var(--accent-wash)}
+  nav.toc a.active{color:var(--accent)}
+  nav.toc a.active .dot{background:var(--accent); transform:scale(1.5)}
+  @media (max-width:1180px){ nav.toc{display:none} }
+
+  /* ---------- layout ---------- */
+  main{max-width:var(--bleedw); margin:0 auto; padding:0 clamp(1.1rem,4vw,2.2rem)}
+  section{padding:var(--s6) 0; max-width:var(--readw); margin:0 auto; border-top:1px solid transparent}
+  section + section{border-top:1px solid var(--line)}
+  .bleed{max-width:var(--bleedw); margin-left:50%; transform:translateX(-50%); width:100vw; max-width:min(var(--bleedw),100%)}
+  figure.figure.bleed{width:auto}
+
+  .kicker{
+    font:500 12px/1 var(--mono); letter-spacing:.2em; text-transform:uppercase;
+    color:var(--accent); display:inline-flex; align-items:center; gap:.6rem; margin-bottom:1rem;
+  }
+  .kicker::before{content:""; width:26px; height:1px; background:linear-gradient(90deg,var(--accent),transparent)}
+
+  h1,h2,h3{font-family:var(--display); line-height:1.05; letter-spacing:-.018em; color:var(--ink)}
+  h1{font-weight:800; font-size:clamp(2.3rem,5.6vw,4.1rem); margin:0 0 1rem}
+  h2{font-weight:800; font-size:clamp(1.7rem,3.4vw,2.55rem); margin:0 0 .9rem}
+  h3{font-weight:600; font-size:clamp(1.1rem,1.7vw,1.32rem); margin:1.6rem 0 .5rem; color:var(--ink)}
+  p{margin:0 0 1.1rem; color:var(--ink-soft)}
+  p.lede{color:var(--ink); font-size:1.1em}
+  strong{color:var(--ink); font-weight:600}
+  em.term{font-style:normal; color:var(--accent-deep); font-weight:600; border-bottom:1.5px dotted var(--accent-soft)}
+  .num-accent{color:var(--accent); font-weight:600}
+
+  ul.clean{list-style:none; padding:0; margin:0 0 1.1rem; display:grid; gap:.6rem}
+  ul.clean li{position:relative; padding-left:1.5rem; color:var(--ink-soft)}
+  ul.clean li::before{content:"▸"; position:absolute; left:0; color:var(--accent); top:.05em}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:var(--s6); padding-bottom:var(--s5)}
+  .hero .heronum{
+    font:800 clamp(5rem,17vw,12rem)/.82 var(--display); letter-spacing:-.04em;
+    color:transparent; -webkit-text-stroke:2px var(--accent-soft);
+    background:linear-gradient(160deg,var(--accent),var(--accent-deep)); -webkit-background-clip:text; background-clip:text;
+    margin:0 0 .2rem; display:block;
+  }
+  .hero .standfirst{max-width:60ch; font-size:1.22em; color:var(--ink); margin-top:.4rem}
+  .accentrule{height:3px; width:74px; background:var(--accent); border-radius:3px; margin:1.6rem 0}
+  .youll{
+    border:1px solid var(--line); border-radius:var(--radius); background:var(--card);
+    padding:var(--s4); margin-top:var(--s4);
+  }
+  .youll h4{font:500 11.5px/1 var(--mono); letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin:0 0 1rem}
+  .youll ol{margin:0; padding-left:0; list-style:none; counter-reset:q; display:grid; gap:.7rem}
+  .youll li{counter-increment:q; position:relative; padding-left:2.1rem; color:var(--ink-soft)}
+  .youll li::before{
+    content:counter(q); position:absolute; left:0; top:.05em;
+    width:1.4rem; height:1.4rem; border-radius:50%; background:var(--accent-wash); color:var(--accent);
+    font:600 12px/1.4rem var(--mono); text-align:center;
+  }
+  .readtime{font:500 11.5px/1 var(--mono); letter-spacing:.1em; color:var(--ink-faint); margin-top:1.4rem; display:inline-flex; align-items:center; gap:.5rem}
+  .readtime::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--accent-soft)}
+
+  /* ---------- figures ---------- */
+  figure.figure{
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--card);
+    margin:var(--s4) 0; box-shadow:0 12px 30px -22px rgba(4,120,87,.35);
+  }
+  figure.figure svg{display:block; width:100%; height:auto}
+  figure.figure figcaption{
+    padding:.85rem 1.2rem; border-top:1px solid var(--line); background:#fcfbf8;
+    font:400 13.5px/1.6 var(--body); color:var(--ink-soft);
+  }
+  figure.figure figcaption b{color:var(--accent); font-weight:600; font-family:var(--mono); font-size:.92em}
+
+  /* ---------- callouts ---------- */
+  .callout{border-radius:var(--radius); padding:var(--s3) var(--s4); margin:var(--s4) 0; border:1px solid var(--line)}
+  .callout .k{font:600 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; display:inline-flex; align-items:center; gap:.5rem; margin-bottom:.6rem}
+  .callout p:last-child{margin-bottom:0}
+  .callout.key{border:none; border-left:4px solid var(--accent); background:var(--card); border-radius:0 var(--radius) var(--radius) 0; box-shadow:0 6px 20px -16px rgba(4,120,87,.4)}
+  .callout.key .k{color:var(--accent)}
+  .callout.brain{background:#fbfaf6}
+  .callout.brain .k{color:var(--ink-soft)}
+  .callout.brain .k::before{content:""; width:9px; height:9px; border-radius:50%; border:2px solid var(--ink-faint)}
+  .callout.project{background:var(--accent-wash); border-color:rgba(4,120,87,.22)}
+  .callout.project .k{color:var(--accent-deep)}
+  .callout.project .k::before{content:"◆"; color:var(--accent)}
+  .callout.watch{background:#fdf6ec; border-color:#f0d9b8}
+  .callout.watch .k{color:#b45309}
+  .callout.watch .k::before{content:"!"; width:15px; height:15px; border-radius:4px; background:#f59e0b; color:#fff; font:700 11px/15px var(--mono); text-align:center}
+
+  /* ---------- grids / cards ---------- */
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:var(--s4)}
+  @media (max-width:680px){ .grid2{grid-template-columns:1fr} }
+  .minicard{border:1px solid var(--line); border-radius:12px; padding:var(--s3) var(--s4); background:var(--card)}
+  .minicard h3{margin-top:0}
+
+  code,.code{font-family:var(--mono); font-size:.84em; color:var(--accent-deep); background:var(--accent-wash); padding:.08em .35em; border-radius:5px}
+
+  /* ---------- timeline ---------- */
+  .timeline{list-style:none; margin:var(--s4) 0; padding:0; position:relative}
+  .timeline::before{content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:linear-gradient(180deg,var(--accent-soft),var(--accent))}
+  .timeline li{position:relative; padding:0 0 1.2rem 2rem}
+  .timeline li::before{content:""; position:absolute; left:0; top:.35em; width:16px; height:16px; border-radius:50%; background:var(--card); border:3px solid var(--accent)}
+  .timeline .yr{font:600 12px/1 var(--mono); color:var(--accent); letter-spacing:.05em}
+  .timeline b{display:block; font-family:var(--display); font-weight:600; color:var(--ink); margin:.15rem 0}
+
+  /* ---------- key terms ---------- */
+  .terms{border:1px solid var(--line); border-radius:var(--radius); background:var(--card); padding:var(--s4); margin-top:var(--s4)}
+  .terms h3{margin-top:0; font:500 11.5px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+  .terms dl{margin:0; display:grid; gap:.85rem}
+  .terms dt{font-family:var(--display); font-weight:600; color:var(--accent-deep); font-size:1.02rem}
+  .terms dd{margin:.1rem 0 0; color:var(--ink-soft); font-size:.95em}
+
+  /* ---------- footer ---------- */
+  footer{max-width:var(--bleedw); margin:0 auto; padding:var(--s6) clamp(1.1rem,4vw,2.2rem) var(--s5); border-top:1px solid var(--line)}
+  .navcards{display:grid; grid-template-columns:1fr 1fr; gap:var(--s3); margin-bottom:var(--s4)}
+  @media (max-width:680px){ .navcards{grid-template-columns:1fr} }
+  .navcard{
+    border:1px solid var(--line); border-radius:var(--radius); padding:var(--s3) var(--s4); background:var(--card);
+    display:block; border-bottom:1px solid var(--line); transition:border-color .18s,transform .18s,box-shadow .18s;
+  }
+  .navcard:hover{border-color:var(--accent); transform:translateY(-2px); box-shadow:0 14px 30px -22px rgba(4,120,87,.5)}
+  .navcard .dir{font:500 11px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+  .navcard .ti{font-family:var(--display); font-weight:600; font-size:1.08rem; color:var(--ink); margin-top:.4rem}
+  .navcard.next{text-align:right}
+  .crosslinks{border:1px solid var(--line); border-radius:var(--radius); background:#fbfaf6; padding:var(--s4); margin-bottom:var(--s4)}
+  .crosslinks h4{font:500 11.5px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 1rem}
+  .crosslinks .cols{display:grid; grid-template-columns:1fr 1fr; gap:var(--s3) var(--s5)}
+  @media (max-width:680px){ .crosslinks .cols{grid-template-columns:1fr} }
+  .crosslinks ul{list-style:none; margin:0; padding:0; display:grid; gap:.5rem; font-size:.95em}
+  .backhub{display:inline-flex; align-items:center; gap:.5rem; font:500 12px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; border:none}
+  .credit{margin-top:var(--s4); padding-top:var(--s3); border-top:1px solid var(--line); font:400 12.5px/1.6 var(--mono); color:var(--ink-faint); display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between}
+
+  /* ---------- reveal motion ---------- */
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1; transform:none}
+  .stagger > *{opacity:0; transform:translateY(18px); animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
+  .stagger > *:nth-child(1){animation-delay:.05s}
+  .stagger > *:nth-child(2){animation-delay:.16s}
+  .stagger > *:nth-child(3){animation-delay:.27s}
+  .stagger > *:nth-child(4){animation-delay:.38s}
+  .stagger > *:nth-child(5){animation-delay:.49s}
+  .stagger > *:nth-child(6){animation-delay:.6s}
+  @keyframes rise{to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .reveal,.stagger>*{opacity:1 !important; transform:none !important; animation:none !important}
+    *{scroll-behavior:auto !important}
+    svg animate,svg animateTransform{display:none}
+  }
+
+  /* ---------- svg text helpers ---------- */
+  .svg-lab{font:500 12px var(--mono); fill:var(--ink-faint); letter-spacing:.02em}
+  .svg-lab-s{font:500 10.5px var(--mono); fill:var(--ink-faint)}
+  .svg-node{font:600 13px var(--display); fill:var(--ink)}
+  .svg-node-s{font:400 11px var(--mono); fill:var(--ink-faint)}
+  .svg-title{font:600 12px var(--mono); fill:var(--accent); letter-spacing:.06em; text-transform:uppercase}
+
+  /* ---------- going-deeper aside (dashed accent) ---------- */
+  .callout.deep{border:1px dashed var(--accent); background:transparent}
+  .callout.deep .k{color:var(--accent-deep)}
+  .callout.deep .k::before{content:"⤇"; color:var(--accent); font-weight:700}
+
+  /* ---------- quick-check (active recall) ---------- */
+  .qcheck{border:1px solid var(--line); border-radius:12px; background:var(--card); padding:.5rem .9rem; margin:1.1rem 0}
+  .qcheck summary{cursor:pointer; font-family:var(--mono); font-size:.82rem; color:var(--accent); font-weight:500}
+  .qcheck summary::-webkit-details-marker{display:none}
+  .qcheck summary::before{content:"▸ "; color:var(--accent)} .qcheck[open] summary::before{content:"▾ "}
+  .qcheck div{margin:.6rem 0 .2rem; color:var(--ink-soft); font-size:.97rem}
+
+  /* ---------- end-of-chapter quiz ---------- */
+  .quiz{border:1px solid var(--line); background:var(--accent-wash); border-radius:18px; padding:1.3rem 1.5rem; margin:2.2rem 0}
+  .quiz-head h2{margin:.2rem 0 .3rem}
+  .quiz-list{list-style:none; margin:.6rem 0 0; padding:0}
+  .quiz .q{border-top:1px solid var(--line); padding:1.15rem 0}
+  .q-stem{font-weight:600; margin:0 0 .7rem}
+  .q-opts{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.5rem}
+  .q-opts button{font:inherit; text-align:left; width:100%; padding:.6rem .85rem; border:1px solid var(--line);
+    border-radius:10px; background:var(--card); color:var(--ink); cursor:pointer; transition:border-color .2s,background .2s}
+  .q-opts button:hover:not(:disabled){border-color:var(--accent)}
+  .q-opts button:disabled{cursor:default; opacity:.92}
+  .q-opts button.opt-correct{border-color:#1f7a4d; background:#e7f5ec; box-shadow:inset 3px 0 #1f7a4d}
+  .q-opts button.opt-wrong{border-color:#b42318; background:#fdecea; box-shadow:inset 3px 0 #b42318}
+  .q-explain{margin:.75rem 0 0; font-size:.96rem; color:var(--ink-soft); border-left:3px solid var(--accent); padding-left:.85rem}
+  .quiz-score{font-family:var(--mono); color:var(--accent); font-weight:500}
+  .quiz-reset{font-family:var(--mono); font-size:.8rem; margin-top:1.1rem; padding:.45rem .95rem; border:1px solid var(--line);
+    border-radius:8px; background:var(--card); color:var(--ink); cursor:pointer}
+
+  /* ---------- key papers list ---------- */
+  .papers{border:1px solid var(--line); border-radius:var(--radius); background:var(--card); padding:var(--s4)}
+  .papers h3{margin-top:0; font:500 11.5px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+  .papers ol{margin:.4rem 0 0; padding:0; list-style:none; counter-reset:pp; display:grid; gap:.95rem}
+  .papers li{position:relative; padding-left:2.4rem; color:var(--ink-soft); font-size:.97em; line-height:1.5}
+  .papers li::before{counter-increment:pp; content:counter(pp); position:absolute; left:0; top:.05em;
+    font:700 11px/1.6 var(--mono); color:var(--accent); background:var(--accent-wash); border-radius:6px; padding:.1em .5em}
+  .papers li b{color:var(--ink); font-weight:600}
+  .papers li .yr{font-family:var(--mono); font-size:.86em; color:var(--ink-faint)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="wm" href="index.html"><span class="mark" aria-hidden="true"></span>The Cortex Handbook</a>
+  <span class="chap">Ch. 06 / 06</span>
+  <div id="progress"></div>
+</header>
+
+<nav class="toc" aria-label="Section navigation">
+  <a href="#hero"><span class="dot"></span>Top</a>
+  <a href="#converge"><span class="dot"></span>Convergence</a>
+  <a href="#bridge"><span class="dot"></span>Encoding bridge</a>
+  <a href="#twist"><span class="dot"></span>The twist</a>
+  <a href="#zoo"><span class="dot"></span>Untrained zoo</a>
+  <a href="#dial"><span class="dot"></span>Architecture vs learning</a>
+  <a href="#thesis"><span class="dot"></span>The thesis</a>
+  <a href="#loop"><span class="dot"></span>Autoresearch loop</a>
+  <a href="#caveats"><span class="dot"></span>Caveats</a>
+  <a href="#identif"><span class="dot"></span>Identifiability</a>
+  <a href="#close"><span class="dot"></span>Closing</a>
+  <a href="#quiz"><span class="dot"></span>Test yourself</a>
+  <a href="#papers"><span class="dot"></span>Key papers</a>
+</nav>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="stagger">
+    <span class="kicker">Chapter 06 · Synthesis</span>
+    <span class="heronum">06</span>
+    <h1>Brains &amp; Deep Networks</h1>
+    <p class="standfirst">The leading predictive models of the visual brain are deep neural networks. The strangest part of the story is that you can throw away the training — and an <strong>untrained</strong>, hand-built model still predicts cortex. This final chapter ties the whole handbook to the thesis of <a href="../overview.html">neuro&#8209;autoresearch</a>: design a fixed, never-trained model that beats a trained AlexNet.</p>
+    <div class="accentrule"></div>
+    <div class="youll">
+      <h4>You'll understand</h4>
+      <ol>
+        <li>How convolutional nets converged with the ventral visual stream — and why <em class="term">goal-driven DNNs</em> became the best models of cortex.</li>
+        <li>The encoding-model bridge: layer activations → linear readout → predicted voxels, and the <strong>hierarchical correspondence</strong> early↔early, deep↔high.</li>
+        <li>The twist: why even <strong>random-weight</strong> networks yield brain-like features — and exactly where they fall short.</li>
+        <li>The <em class="term">untrained model zoo</em> you can hand-design — random conv features, Gabor/steerable pyramids, scattering transforms, HMAX — and why they are natural early-visual baselines.</li>
+        <li>"Architecture vs learning" as a dial — what wiring fixes for free, and what experience (shape vs texture bias) must sculpt.</li>
+        <li>Why "predicts well" is not "works the same," the <strong>identifiability problem</strong>, and how to compare models to brains honestly.</li>
+      </ol>
+    </div>
+    <span class="readtime">~20 min read · 10 figures · the chapter that closes the handbook</span>
+  </div>
+</section>
+
+
+<!-- ===================== 1. CONVERGENCE ===================== -->
+<section id="converge">
+  <div class="reveal">
+    <span class="kicker">01 — The convergence</span>
+    <h2>Two histories that turned out to be one</h2>
+    <p class="lede">Deep convolutional networks were not reverse-engineered from the brain by accident. Their core ideas were lifted, generation by generation, straight out of visual neuroscience. The remarkable payoff came decades later: those same networks, trained only to recognize objects, turned out to be the best predictive models we have of the primate visual cortex.</p>
+    <p>In the 1960s <strong>Hubel &amp; Wiesel</strong> recorded from cat and monkey primary visual cortex (V1) and found two cell types: <em class="term">simple cells</em> tuned to oriented edges at a specific position, and <em class="term">complex cells</em> tuned to the same orientation but tolerant to its exact location. A "detect-an-oriented-feature, then pool over position" motif — local filtering followed by spatial pooling — was the seed of everything that followed.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc1">
+    <svg viewBox="0 0 1040 470" role="img" aria-labelledby="figc1-t">
+      <title id="figc1-t">A convolutional network's layers aligned with the ventral visual stream, from oriented-edge detectors in conv1 and V1 through textures and object parts to whole-object representations in deep layers and inferotemporal cortex.</title>
+      <defs>
+        <marker id="ar-em" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#047857"/></marker>
+        <linearGradient id="rail" x1="0" x2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#064e3b"/></linearGradient>
+      </defs>
+
+      <!-- top rail: DNN layers -->
+      <text class="svg-title" x="30" y="40">Deep network</text>
+      <line x1="30" y1="62" x2="1010" y2="62" stroke="url(#rail)" stroke-width="2"/>
+      <!-- bottom rail: ventral stream -->
+      <text class="svg-title" x="30" y="448" fill="#4b4f5a">Ventral visual stream</text>
+      <line x1="30" y1="408" x2="1010" y2="408" stroke="#cdbfa6" stroke-width="2"/>
+
+      <!-- column helper: 5 stages -->
+      <!-- stage centers: 150, 360, 570, 780, 940 -->
+      <g font-family="var(--mono)">
+        <!-- vertical correspondence ties -->
+        <g stroke="#9fb8ab" stroke-width="1.2" stroke-dasharray="4 5">
+          <line x1="150" y1="150" x2="150" y2="330"/>
+          <line x1="360" y1="150" x2="360" y2="330"/>
+          <line x1="570" y1="150" x2="570" y2="330"/>
+          <line x1="780" y1="150" x2="780" y2="330"/>
+          <line x1="940" y1="150" x2="940" y2="330"/>
+        </g>
+      </g>
+
+      <!-- DNN layer boxes (top) with feature glyphs -->
+      <!-- conv1: gabors -->
+      <g transform="translate(150,105)">
+        <rect x="-58" y="0" width="116" height="70" rx="9" fill="#fff" stroke="#047857" stroke-width="1.5"/>
+        <text class="svg-node" x="0" y="-12" text-anchor="middle">conv1</text>
+        <g transform="translate(-44,10)">
+          <g stroke="#1a1c22" stroke-width="2"><line x1="6" y1="2" x2="20" y2="16"/></g>
+          <g stroke="#1a1c22" stroke-width="2"><line x1="35" y1="9" x2="35" y2="9"/><line x1="30" y1="2" x2="40" y2="16"/></g>
+          <g stroke="#1a1c22" stroke-width="2"><line x1="56" y1="9" x2="70" y2="9"/></g>
+          <g stroke="#1a1c22" stroke-width="2"><line x1="86" y1="16" x2="100" y2="2"/></g>
+          <g transform="translate(0,30)" stroke="#1a1c22" stroke-width="2"><line x1="6" y1="2" x2="20" y2="16"/><line x1="30" y1="9" x2="44" y2="9"/><line x1="56" y1="16" x2="70" y2="2"/><line x1="80" y1="2" x2="80" y2="16"/></g>
+        </g>
+      </g>
+      <!-- conv2-3: textures -->
+      <g transform="translate(360,105)">
+        <rect x="-58" y="0" width="116" height="70" rx="9" fill="#fff" stroke="#047857" stroke-width="1.5"/>
+        <text class="svg-node" x="0" y="-12" text-anchor="middle">conv2–3</text>
+        <g transform="translate(-44,8)" fill="none" stroke="#0d9488" stroke-width="1.6">
+          <path d="M2,30 q8,-22 16,0 t16,0 t16,0 t16,0 t16,0"/>
+          <path d="M2,46 q8,-22 16,0 t16,0 t16,0 t16,0 t16,0" stroke="#34d399"/>
+          <circle cx="14" cy="14" r="4"/><circle cx="40" cy="16" r="4"/><circle cx="66" cy="13" r="4"/><circle cx="90" cy="16" r="4"/>
+        </g>
+      </g>
+      <!-- conv4-5: object parts -->
+      <g transform="translate(570,105)">
+        <rect x="-58" y="0" width="116" height="70" rx="9" fill="#fff" stroke="#047857" stroke-width="1.5"/>
+        <text class="svg-node" x="0" y="-12" text-anchor="middle">conv4–5</text>
+        <g transform="translate(-40,12)" fill="none" stroke="#047857" stroke-width="1.8">
+          <circle cx="14" cy="20" r="11"/><circle cx="14" cy="20" r="3" fill="#047857"/>
+          <path d="M44,32 q12,-26 24,0"/><path d="M50,28 l6,-8 l6,8"/>
+          <path d="M84,8 q10,4 0,14 q-10,4 0,12" stroke="#34d399"/>
+        </g>
+      </g>
+      <!-- fc6: whole objects -->
+      <g transform="translate(780,105)">
+        <rect x="-58" y="0" width="116" height="70" rx="9" fill="#fff" stroke="#047857" stroke-width="1.5"/>
+        <text class="svg-node" x="0" y="-12" text-anchor="middle">fc6</text>
+        <g transform="translate(-40,8)" fill="none" stroke="#064e3b" stroke-width="1.8">
+          <!-- little face glyph -->
+          <circle cx="20" cy="28" r="18"/><circle cx="13" cy="24" r="2.5" fill="#064e3b"/><circle cx="27" cy="24" r="2.5" fill="#064e3b"/><path d="M12,34 q8,7 16,0"/>
+          <!-- little house glyph -->
+          <path d="M60,30 l16,-13 l16,13 v18 h-32 z"/><rect x="70" y="38" width="12" height="10" fill="#34d399" stroke="none"/>
+        </g>
+      </g>
+      <!-- fc7/fc8: category readout -->
+      <g transform="translate(940,105)">
+        <rect x="-50" y="0" width="100" height="70" rx="9" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+        <text class="svg-node" x="0" y="-12" text-anchor="middle">fc7 → fc8</text>
+        <g transform="translate(-34,12)">
+          <rect x="0" y="4" width="68" height="5" rx="2.5" fill="#047857"/>
+          <rect x="0" y="16" width="50" height="5" rx="2.5" fill="#34d399"/>
+          <rect x="0" y="28" width="60" height="5" rx="2.5" fill="#047857"/>
+          <rect x="0" y="40" width="40" height="5" rx="2.5" fill="#34d399"/>
+        </g>
+        <text class="svg-node-s" x="0" y="86" text-anchor="middle">categories</text>
+      </g>
+
+      <!-- feedforward arrows top -->
+      <g stroke="#047857" stroke-width="2" marker-end="url(#ar-em)">
+        <line x1="210" y1="140" x2="300" y2="140"/>
+        <line x1="420" y1="140" x2="510" y2="140"/>
+        <line x1="630" y1="140" x2="720" y2="140"/>
+        <line x1="840" y1="140" x2="888" y2="140"/>
+      </g>
+
+      <!-- ventral stream nodes (bottom) -->
+      <g>
+        <g transform="translate(150,330)"><circle r="30" fill="#faf6ee" stroke="#b59a6a" stroke-width="2"/><text class="svg-node" x="0" y="5" text-anchor="middle">V1</text></g>
+        <g transform="translate(360,330)"><circle r="30" fill="#faf6ee" stroke="#b59a6a" stroke-width="2"/><text class="svg-node" x="0" y="5" text-anchor="middle">V2</text></g>
+        <g transform="translate(570,330)"><circle r="30" fill="#faf6ee" stroke="#b59a6a" stroke-width="2"/><text class="svg-node" x="0" y="5" text-anchor="middle">V4</text></g>
+        <g transform="translate(780,330)"><circle r="34" fill="#f3ead9" stroke="#a4894f" stroke-width="2"/><text class="svg-node" x="0" y="5" text-anchor="middle">IT</text></g>
+        <g transform="translate(940,330)"><circle r="30" fill="#f3ead9" stroke="#a4894f" stroke-width="2"/><text class="svg-node-s" x="0" y="-2" text-anchor="middle">behavior</text><text class="svg-node-s" x="0" y="14" text-anchor="middle">/ choice</text></g>
+      </g>
+      <g stroke="#b59a6a" stroke-width="2" marker-end="url(#ar-em)" opacity=".75">
+        <line x1="186" y1="370" x2="324" y2="370"/>
+        <line x1="396" y1="370" x2="534" y2="370"/>
+        <line x1="606" y1="370" x2="742" y2="370"/>
+        <line x1="818" y1="370" x2="906" y2="370"/>
+      </g>
+
+      <!-- captions under glyph row -->
+      <text class="svg-lab-s" x="150" y="205" text-anchor="middle">oriented edges</text>
+      <text class="svg-lab-s" x="360" y="205" text-anchor="middle">textures · contours</text>
+      <text class="svg-lab-s" x="570" y="205" text-anchor="middle">object parts</text>
+      <text class="svg-lab-s" x="780" y="205" text-anchor="middle">whole objects</text>
+    </svg>
+    <figcaption id="figc1"><b>Figure 06.1</b> — Layer-by-layer correspondence. As you go deeper in a convolutional net (top), receptive fields grow and features climb from oriented Gabor-like edges to textures, object parts, and whole objects — mirroring the <b>V1 → V2 → V4 → IT</b> hierarchy of the ventral stream (bottom). Early layers best predict early areas; deep layers best predict high-level areas. The vertical ties are the empirical correspondence, not a claim of identical wiring.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <p>That motif was made explicit in <strong>Fukushima's Neocognitron (1980)</strong>, which stacked "S-cells" (simple, feature-detecting) and "C-cells" (complex, pooling) into a deep hierarchy. <strong>LeCun's convolutional networks</strong> (late 1980s–1990s) added gradient learning and weight-shared convolutions, giving us LeNet. Then in <strong>2012 Krizhevsky, Sutskever &amp; Hinton's <em class="term">AlexNet</em></strong> — five convolutional layers, three fully-connected layers, ReLU, dropout, trained on ImageNet with GPUs — cut the ImageNet error roughly in half and started the deep-learning era.</p>
+  </div>
+
+  <ul class="timeline reveal">
+    <li><span class="yr">1962</span><b>Hubel &amp; Wiesel</b>Simple &amp; complex cells in V1 — oriented filtering, then position-tolerant pooling.</li>
+    <li><span class="yr">1980</span><b>Fukushima · Neocognitron</b>S-cell / C-cell hierarchy: the architecture of a CNN, before backprop.</li>
+    <li><span class="yr">1989–98</span><b>LeCun · ConvNets / LeNet</b>Weight-shared convolutions trained by gradient descent.</li>
+    <li><span class="yr">2012</span><b>Krizhevsky et&nbsp;al. · AlexNet</b>Deep CNN + ReLU + GPUs wins ImageNet; the modern era begins.</li>
+    <li><span class="yr">2014</span><b>Yamins, Khaligh-Razavi &amp; Kriegeskorte</b>Goal-driven DNNs become the best predictive models of IT and the ventral stream.</li>
+    <li><span class="yr">2018–20</span><b>Schrimpf et&nbsp;al. · Brain-Score</b>A standardized benchmark to rank models against primate visual cortex.</li>
+  </ul>
+
+  <div class="reveal">
+    <p>The scientific turn came in <strong>2014</strong>. <strong>Yamins, Hong, Cadieu, Solomon, Seibert &amp; DiCarlo (PNAS 2014)</strong> showed that networks <em>optimized for the goal of object recognition</em> — not fit to neural data — automatically produced the best available predictions of single-unit responses in monkey IT cortex. In parallel, <strong>Khaligh-Razavi &amp; Kriegeskorte (2014)</strong> showed (via representational similarity analysis) that a supervised deep net explained the representational geometry of human and monkey IT far better than dozens of earlier models. The phrase that stuck was <em class="term">goal-driven deep network</em>: train for a task, and brain-like representations fall out as a by-product. The community later built <strong>Brain-Score</strong> (Schrimpf et&nbsp;al. 2018/2020) to rank models against cortex on a common yardstick.</p>
+  </div>
+
+  <div class="callout brain">
+    <span class="k">In the brain</span>
+    <p>The ventral stream — <strong>V1 → V2 → V4 → inferotemporal (IT) cortex</strong> — is the "what" pathway (Chapter 04). It is largely <em>feedforward</em> on the first sweep, builds increasingly abstract and position-tolerant representations, and culminates in IT, where neurons respond to object categories and where you can linearly read out object identity. That feedforward, increasingly-invariant hierarchy is exactly what a deep CNN approximates.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 2. ENCODING BRIDGE ===================== -->
+<section id="bridge">
+  <div class="reveal">
+    <span class="kicker">02 — The bridge</span>
+    <h2>The encoding model, applied to a deep net</h2>
+    <p class="lede">Chapter 01 built the <em class="term">encoding model</em>: take features of a stimulus, fit a linear map from those features to each voxel or neuron, and score how well it predicts held-out responses. Chapter 06's whole idea is to make those features the <strong>activations of a layer in a deep network</strong>. The model supplies the representation; a ridge regression supplies the (only) learned mapping into the brain.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc2">
+    <svg viewBox="0 0 1040 320" role="img" aria-labelledby="figc2-t">
+      <title id="figc2-t">The DNN encoding-model pipeline: an image is pushed through a deep network, one layer's activations are selected as the feature vector, a ridge regression maps that vector to each voxel's response, and the held-out correlation between predicted and recorded responses is the score.</title>
+      <defs>
+        <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#047857"/></marker>
+      </defs>
+
+      <!-- stimulus -->
+      <g transform="translate(20,110)">
+        <rect x="0" y="0" width="96" height="96" rx="10" fill="#fff" stroke="#cdbfa6" stroke-width="1.5"/>
+        <!-- tiny scene: house + sky -->
+        <rect x="8" y="8" width="80" height="44" fill="#cfe8e0"/>
+        <circle cx="74" cy="22" r="9" fill="#34d399"/>
+        <path d="M16,68 l24,-22 l24,22 z" fill="#047857"/><rect x="16" y="68" width="48" height="20" fill="#0d9488"/>
+        <rect x="34" y="74" width="12" height="14" fill="#ecfdf5"/>
+        <text class="svg-node-s" x="48" y="-10" text-anchor="middle">image</text>
+      </g>
+
+      <!-- DNN stack -->
+      <g transform="translate(170,70)">
+        <text class="svg-node-s" x="120" y="-22" text-anchor="middle">fixed deep network</text>
+        <!-- shrinking conv blocks -->
+        <rect x="0" y="20" width="34" height="140" rx="5" fill="#ecfdf5" stroke="#047857"/>
+        <rect x="44" y="38" width="30" height="104" rx="5" fill="#ecfdf5" stroke="#047857"/>
+        <rect x="84" y="54" width="26" height="72" rx="5" fill="#ecfdf5" stroke="#047857"/>
+        <rect x="120" y="64" width="22" height="52" rx="5" fill="#ecfdf5" stroke="#047857"/>
+        <!-- the SELECTED fc layer -->
+        <rect x="158" y="40" width="20" height="100" rx="4" fill="#34d399" stroke="#064e3b" stroke-width="2"/>
+        <rect x="186" y="40" width="20" height="100" rx="4" fill="#047857" stroke="#064e3b" stroke-width="2"/>
+        <text class="svg-node-s" x="17" y="178" text-anchor="middle">conv1</text>
+        <text class="svg-node-s" x="196" y="178" text-anchor="middle" fill="#047857" font-weight="700">fc7 ★</text>
+      </g>
+
+      <!-- pick a layer -> feature vector -->
+      <g transform="translate(420,80)">
+        <text class="svg-node-s" x="40" y="-32" text-anchor="middle" fill="#047857">activations</text>
+        <text class="svg-lab-s" x="40" y="-16" text-anchor="middle">X (N × D)</text>
+        <g fill="#047857">
+          <rect x="0" y="0" width="80" height="12" rx="2" opacity=".95"/>
+          <rect x="0" y="18" width="58" height="12" rx="2" opacity=".7"/>
+          <rect x="0" y="36" width="72" height="12" rx="2" opacity=".85"/>
+          <rect x="0" y="54" width="44" height="12" rx="2" opacity=".55"/>
+          <rect x="0" y="72" width="66" height="12" rx="2" opacity=".8"/>
+          <rect x="0" y="90" width="52" height="12" rx="2" opacity=".65"/>
+          <rect x="0" y="108" width="76" height="12" rx="2" opacity=".9"/>
+        </g>
+      </g>
+
+      <!-- ridge box -->
+      <g transform="translate(580,108)">
+        <rect x="0" y="0" width="150" height="104" rx="12" fill="#fff" stroke="#047857" stroke-width="2"/>
+        <text class="svg-node" x="75" y="34" text-anchor="middle">ridge</text>
+        <text class="svg-node" x="75" y="56" text-anchor="middle">regression</text>
+        <text class="svg-node-s" x="75" y="80" text-anchor="middle" fill="#047857">the only fit</text>
+        <text class="svg-lab-s" x="75" y="96" text-anchor="middle">Ŷ = X·W</text>
+      </g>
+
+      <!-- predicted voxels -->
+      <g transform="translate(780,90)">
+        <text class="svg-node-s" x="55" y="-14" text-anchor="middle">predicted voxels Ŷ</text>
+        <g>
+          <!-- 6x4 grid of voxels -->
+          <g>
+            <rect x="0" y="0" width="20" height="20" rx="3" fill="#047857"/><rect x="24" y="0" width="20" height="20" rx="3" fill="#a7e8d3"/><rect x="48" y="0" width="20" height="20" rx="3" fill="#34d399"/><rect x="72" y="0" width="20" height="20" rx="3" fill="#0d9488"/>
+            <rect x="0" y="24" width="20" height="20" rx="3" fill="#a7e8d3"/><rect x="24" y="24" width="20" height="20" rx="3" fill="#047857"/><rect x="48" y="24" width="20" height="20" rx="3" fill="#0d9488"/><rect x="72" y="24" width="20" height="20" rx="3" fill="#34d399"/>
+            <rect x="0" y="48" width="20" height="20" rx="3" fill="#34d399"/><rect x="24" y="48" width="20" height="20" rx="3" fill="#0d9488"/><rect x="48" y="48" width="20" height="20" rx="3" fill="#a7e8d3"/><rect x="72" y="48" width="20" height="20" rx="3" fill="#047857"/>
+            <rect x="0" y="72" width="20" height="20" rx="3" fill="#0d9488"/><rect x="24" y="72" width="20" height="20" rx="3" fill="#34d399"/><rect x="48" y="72" width="20" height="20" rx="3" fill="#047857"/><rect x="72" y="72" width="20" height="20" rx="3" fill="#a7e8d3"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- score -->
+      <g transform="translate(920,108)">
+        <circle cx="48" cy="52" r="48" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+        <text x="48" y="44" text-anchor="middle" style="font:700 14px var(--mono); fill:#064e3b">test</text>
+        <text x="48" y="66" text-anchor="middle" style="font:700 16px var(--mono); fill:#047857">corr&nbsp;r</text>
+      </g>
+
+      <!-- arrows -->
+      <g stroke="#047857" stroke-width="2" marker-end="url(#ar2)">
+        <line x1="120" y1="158" x2="164" y2="140"/>
+        <line x1="384" y1="140" x2="414" y2="140"/>
+        <line x1="506" y1="140" x2="574" y2="158"/>
+        <line x1="736" y1="160" x2="772" y2="150"/>
+        <line x1="880" y1="150" x2="914" y2="155"/>
+      </g>
+    </svg>
+    <figcaption id="figc2"><b>Figure 06.2</b> — The DNN encoding-model bridge. An image flows through a <b>fixed</b> network; one layer's activations become the feature matrix X; a <b>ridge regression</b> — the only thing ever fit — maps X to recorded voxels Ŷ; the held-out Pearson correlation r is the score. Swap the layer, swap the network, even strip the training: the bridge is unchanged. In neuro-autoresearch this <code>test_corr</code> is the reward.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <h3>Hierarchical correspondence: the signature result</h3>
+    <p>Fit the encoding readout from <em>each</em> layer to <em>each</em> brain area and a clean diagonal appears: <strong>early layers best predict early visual areas (V1/V2), middle layers best predict V4, and deep layers best predict IT / high-level regions</strong>. The depth of the layer that best predicts a region tracks that region's position in the cortical hierarchy. This is the single most reproduced finding in the field — and it is the reason the encoding bridge counts as evidence, not coincidence.</p>
+    <h3>Why AlexNet fc7 is a strong visual-cortex feature space</h3>
+    <p>AlexNet's penultimate fully-connected layer, <strong>fc7</strong>, is a 4096-dimensional vector summarizing "what object-ish content is in this image" just before the final category decision. It is abstract enough to carry semantic, category-level structure, yet not collapsed to 1000 class logits. Empirically it reads out well across mid- and high-level visual cortex, which is why a <strong>frozen ImageNet AlexNet (fc7)</strong> is the per-region <em>bar</em> our project tries to beat.</p>
+  </div>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>neuro-autoresearch is exactly this bridge, run as a search. A proposed model is a plain callable <code>X (N, D_in) → activations (N, D_out)</code>; the harness fits a ridge readout from those activations to recorded brain activity and reports <code>test_corr</code> = mean per-target Pearson r on a held-out split. On <a href="../tvsd-macaque-spiking.html">TVSD macaque spiking</a> the target is IT neurons; on NSD it is human fMRI voxels in a chosen region (V1…ventral). The <strong>only</strong> thing trained is that ridge — which <em>is</em> the evaluation.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 3. THE TWIST ===================== -->
+<section id="twist">
+  <div class="reveal">
+    <span class="kicker">03 — The twist</span>
+    <h2>Untrained networks already see a little</h2>
+    <p class="lede">Here is the result that makes this project possible. Take a convolutional network and <strong>do not train it</strong> — leave the weights at random initialization. Push images through. The activations are still useful: read them out with the same ridge and they predict visual cortex surprisingly well, especially in early and mid-level areas. The <em>architecture itself</em> — local convolution, nonlinearity, pooling, normalization — is doing a lot of the work, before any learning happens.</p>
+  </div>
+
+  <div class="reveal">
+    <p>Why should random weights help at all? Because a convolution with random filters is, in effect, a bank of <strong>random local feature detectors</strong> applied identically everywhere, and a random projection of a structured input preserves a lot of its structure. This is the <em class="term">random features</em> idea: <strong>Rahimi &amp; Recht (2007)</strong> showed random projections can approximate powerful kernels; <strong>Jarrett, Kavukcuoglu, Ranzato &amp; LeCun (2009)</strong> asked "what is the best multi-stage architecture for object recognition?" and found that with the right nonlinearity and pooling, <em>random-filter</em> stages were shockingly competitive. The architectural priors of a CNN are strong enough that even at initialization the network computes Gabor-like, edge-sensitive, locally-pooled features — the very things V1 and V2 care about. Later work (e.g. <strong>Cadena et&nbsp;al.</strong>, <strong>Geiger</strong> and colleagues) sharpened where untrained features do and do not hold up.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc3">
+    <svg viewBox="0 0 1040 440" role="img" aria-labelledby="figc3-t">
+      <title id="figc3-t">Left: a panel of Gabor-like oriented filters that emerge in the first convolutional layer even at random initialization. Right: a schematic bar chart showing trained and untrained network predictivity both rising from early to high-level visual regions, overlapping in early and mid areas but with the trained network pulling ahead in high-level regions.</title>
+      <defs>
+        <marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f9c"/></marker>
+      </defs>
+
+      <!-- ===== LEFT: gabor filter bank ===== -->
+      <text class="svg-title" x="40" y="36">First-layer filters at random init</text>
+      <g transform="translate(40,56)">
+        <!-- 4x4 grid of mini gabor patches -->
+        <g>
+          <!-- each cell: gradient stripes simulating a gabor -->
+          <!-- row builder: vary orientation -->
+          <!-- cell helper drawn manually -->
+          <!-- r0 -->
+          <g transform="translate(0,0)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#9fe7cf" stroke-width="3" opacity=".9"><line x1="6" y1="12" x2="58" y2="40"/><line x1="6" y1="28" x2="58" y2="56"/><line x1="6" y1="-4" x2="58" y2="24" opacity=".5"/></g>
+          </g>
+          <g transform="translate(76,0)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#9fe7cf" stroke-width="3"><line x1="32" y1="6" x2="32" y2="58"/><line x1="16" y1="6" x2="16" y2="58" opacity=".6"/><line x1="48" y1="6" x2="48" y2="58" opacity=".6"/></g>
+          </g>
+          <g transform="translate(152,0)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#9fe7cf" stroke-width="3"><line x1="58" y1="12" x2="6" y2="40"/><line x1="58" y1="28" x2="6" y2="56"/></g>
+          </g>
+          <g transform="translate(228,0)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#9fe7cf" stroke-width="3"><line x1="6" y1="22" x2="58" y2="22"/><line x1="6" y1="40" x2="58" y2="40"/><line x1="6" y1="58" x2="58" y2="58" opacity=".6"/></g>
+          </g>
+          <!-- r1 -->
+          <g transform="translate(0,76)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#7fd8bb" stroke-width="3"><line x1="6" y1="48" x2="58" y2="20"/><line x1="6" y1="64" x2="58" y2="36"/></g>
+          </g>
+          <g transform="translate(76,76)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#7fd8bb" stroke-width="3"><circle cx="32" cy="32" r="14" fill="none"/><circle cx="32" cy="32" r="5" fill="#7fd8bb"/></g>
+          </g>
+          <g transform="translate(152,76)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#7fd8bb" stroke-width="3"><line x1="20" y1="6" x2="44" y2="58"/><line x1="6" y1="6" x2="30" y2="58" opacity=".55"/></g>
+          </g>
+          <g transform="translate(228,76)">
+            <rect width="64" height="64" rx="6" fill="#0f1720"/>
+            <g stroke="#7fd8bb" stroke-width="3"><line x1="6" y1="6" x2="58" y2="58"/><line x1="6" y1="22" x2="42" y2="58" opacity=".6"/><line x1="22" y1="6" x2="58" y2="42" opacity=".6"/></g>
+          </g>
+        </g>
+        <text class="svg-lab-s" x="0" y="166">random-weight conv1 → already Gabor-like, oriented, edge-tuned</text>
+      </g>
+
+      <!-- ===== RIGHT: schematic bar chart ===== -->
+      <g transform="translate(560,40)">
+        <text class="svg-title" x="0" y="-4">Predictivity (schematic)</text>
+        <!-- axes -->
+        <line x1="0" y1="20" x2="0" y2="300" stroke="#cdbfa6" stroke-width="1.5"/>
+        <line x1="0" y1="300" x2="430" y2="300" stroke="#cdbfa6" stroke-width="1.5"/>
+        <text class="svg-lab-s" transform="translate(-30,200) rotate(-90)" text-anchor="middle">readout r →</text>
+
+        <!-- region groups: V1 V2/V4 IT/FFA  -->
+        <!-- baseline y=300; bar heights scaled. trained (solid emerald) vs untrained (hatched) -->
+        <!-- group centers: 70, 200, 340 -->
+        <g font-family="var(--mono)">
+          <!-- V1 -->
+          <rect x="48" y="180" width="26" height="120" fill="#cbe9dd" stroke="#0d9488"/>
+          <rect x="78" y="186" width="26" height="114" fill="#047857"/>
+          <text class="svg-lab-s" x="76" y="320" text-anchor="middle">V1</text>
+          <!-- V4 -->
+          <rect x="178" y="146" width="26" height="154" fill="#cbe9dd" stroke="#0d9488"/>
+          <rect x="208" y="138" width="26" height="162" fill="#047857"/>
+          <text class="svg-lab-s" x="206" y="320" text-anchor="middle">V4 / mid</text>
+          <!-- IT / FFA -->
+          <rect x="318" y="190" width="26" height="110" fill="#cbe9dd" stroke="#0d9488"/>
+          <rect x="348" y="78" width="26" height="222" fill="#047857"/>
+          <text class="svg-lab-s" x="346" y="320" text-anchor="middle">IT / FFA</text>
+
+          <!-- divergence marker -->
+          <path d="M361,72 q40,-6 56,30" fill="none" stroke="#8a8f9c" stroke-width="1.3" stroke-dasharray="4 4" marker-end="url(#ar3)"/>
+          <text class="svg-lab-s" x="395" y="56" text-anchor="start" fill="#4b4f5a">trained pulls ahead</text>
+        </g>
+
+        <!-- legend -->
+        <g transform="translate(0,348)">
+          <rect x="0" y="0" width="16" height="14" fill="#047857"/><text class="svg-lab-s" x="22" y="11">trained DNN</text>
+          <rect x="150" y="0" width="16" height="14" fill="#cbe9dd" stroke="#0d9488"/><text class="svg-lab-s" x="172" y="11">untrained (random)</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption id="figc3"><b>Figure 06.3</b> — The twist, in two panels. <b>Left:</b> oriented, Gabor-like filters arise in the first conv layer <em>at random initialization</em> — the architecture, not the data, produces them. <b>Right (schematic):</b> both trained and untrained networks rise from early → high-level regions and overlap closely in <b>early/mid</b> areas, but the <b>trained</b> network pulls decisively ahead in <b>high-level</b> regions (IT / FFA). Bar heights are illustrative; the message is the pattern, not the values.</figcaption>
+  </figure>
+
+  <div class="callout watch">
+    <span class="k">Watch out</span>
+    <p>"Untrained networks predict the brain" is true but easy to over-read. The honest statement: untrained / random-weight nets are <strong>competitive in early and mid-level visual areas</strong>, where representations are dominated by local image statistics that the architecture already captures. In <strong>high-level, category-selective areas</strong> (IT, FFA, PPA, EBA, VWFA) <strong>trained</strong> networks pull clearly ahead — those semantic, category-tuned representations are <em>learned</em>, not handed over by wiring alone.</p>
+  </div>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>This is the entire premise. Because architecture alone buys you early vision, a <strong>hand-designed, never-trained</strong> model can plausibly match or beat a trained AlexNet in V1–V3 — and empirically it does. The high-level regions are the open frontier: can you write, by hand, the right priors to capture FFA/PPA-style selectivity without any backprop? That is what the search is for.</p>
+  </div>
+
+  <details class="qcheck reveal">
+    <summary>Quick check — why do oriented, Gabor-like filters appear in conv1 <em>before any training</em>?</summary>
+    <div>Because the <strong>architecture</strong>, not the data, produces them. A convolution is a bank of small local filters applied identically everywhere (translation equivariance + locality), so a random filter is already a localized, oriented, band-pass detector — exactly the kind of edge/orientation tuning V1 simple cells have. Training <em>tidies and selects</em> these filters, but the qualitative Gabor-like structure is handed over for free by the wiring. This is why random-weight nets predict V1/V2 well but need <em>learning</em> to capture category-selective IT/FFA.</div>
+  </details>
+</section>
+
+
+<!-- ===================== 3b. THE UNTRAINED ZOO ===================== -->
+<section id="zoo">
+  <div class="reveal">
+    <span class="kicker">04 — The untrained zoo</span>
+    <h2>A toolbox of training-free feature hierarchies</h2>
+    <p class="lede">If architecture alone carries early vision, the question becomes practical: <strong>which</strong> training-free architectures should you hand-design? Decades of work — much of it predating deep learning — built feature hierarchies that capture early/mid visual cortex with <em>no</em> fitted weights at all. These are the natural baselines a model in this project can write down directly in code, and several were biologically inspired from the start.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc8">
+    <svg viewBox="0 0 1040 360" role="img" aria-labelledby="figc8-t">
+      <title id="figc8-t">A training-free hierarchy of the scattering-transform and HMAX type: an image passes through a bank of fixed oriented wavelet or Gabor filters, then a pointwise nonlinearity (modulus or max), then spatial pooling, and the same filter to nonlinearity to pool block repeats at a coarser scale, producing translation-invariant brain-like features with no learned weights.</title>
+      <defs>
+        <marker id="ar8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#047857"/></marker>
+        <linearGradient id="zoorail" x1="0" x2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#064e3b"/></linearGradient>
+      </defs>
+
+      <text class="svg-title" x="30" y="34">One training-free stage, repeated</text>
+
+      <!-- input image -->
+      <g transform="translate(30,120)">
+        <rect width="80" height="80" rx="9" fill="#fff" stroke="#cdbfa6" stroke-width="1.5"/>
+        <rect x="9" y="9" width="62" height="34" fill="#cfe8e0"/><circle cx="58" cy="20" r="7" fill="#34d399"/>
+        <path d="M14,62 l20,-16 l20,16z" fill="#047857"/><rect x="14" y="62" width="40" height="10" fill="#0d9488"/>
+        <text class="svg-node-s" x="40" y="-10" text-anchor="middle">image</text>
+      </g>
+
+      <!-- STAGE 1 block -->
+      <g transform="translate(150,86)">
+        <rect x="0" y="0" width="360" height="150" rx="14" fill="#f6fbf9" stroke="#34d399" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text class="svg-node-s" x="180" y="-12" text-anchor="middle" fill="#047857">stage 1 (fine scale)</text>
+
+        <!-- filter bank glyph -->
+        <g transform="translate(20,26)">
+          <text class="svg-lab-s" x="44" y="-6" text-anchor="middle">fixed filters</text>
+          <g>
+            <rect width="40" height="40" rx="4" fill="#0f1720"/><g stroke="#9fe7cf" stroke-width="2.4"><line x1="4" y1="10" x2="36" y2="26"/><line x1="4" y1="22" x2="36" y2="38"/></g>
+            <g transform="translate(0,48)"><rect width="40" height="40" rx="4" fill="#0f1720"/><g stroke="#9fe7cf" stroke-width="2.4"><line x1="20" y1="4" x2="20" y2="36"/><line x1="10" y1="4" x2="10" y2="36" opacity=".6"/></g></g>
+            <g transform="translate(48,0)"><rect width="40" height="40" rx="4" fill="#0f1720"/><g stroke="#9fe7cf" stroke-width="2.4"><line x1="36" y1="10" x2="4" y2="26"/><line x1="36" y1="22" x2="4" y2="38"/></g></g>
+            <g transform="translate(48,48)"><rect width="40" height="40" rx="4" fill="#0f1720"/><g stroke="#9fe7cf" stroke-width="2.4"><line x1="4" y1="20" x2="36" y2="20"/><line x1="4" y1="32" x2="36" y2="32" opacity=".6"/></g></g>
+          </g>
+          <text class="svg-lab-s" x="44" y="110" text-anchor="middle">Gabor / wavelet</text>
+        </g>
+
+        <!-- nonlinearity -->
+        <g transform="translate(150,48)">
+          <rect width="78" height="56" rx="9" fill="#fff" stroke="#047857"/>
+          <text class="svg-node-s" x="39" y="24" text-anchor="middle">nonlinearity</text>
+          <text class="svg-lab-s" x="39" y="42" text-anchor="middle">|·| · max · rect</text>
+        </g>
+
+        <!-- pooling -->
+        <g transform="translate(252,48)">
+          <rect width="88" height="56" rx="9" fill="#ecfdf5" stroke="#047857"/>
+          <text class="svg-node-s" x="44" y="24" text-anchor="middle">spatial pool</text>
+          <text class="svg-lab-s" x="44" y="42" text-anchor="middle">avg / max ↓</text>
+        </g>
+        <g stroke="#047857" stroke-width="2" marker-end="url(#ar8)">
+          <line x1="112" y1="76" x2="146" y2="76"/>
+          <line x1="230" y1="76" x2="248" y2="76"/>
+        </g>
+      </g>
+
+      <!-- STAGE 2 block (coarser, shrunk) -->
+      <g transform="translate(556,108)">
+        <rect x="0" y="0" width="300" height="108" rx="14" fill="#f6fbf9" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text class="svg-node-s" x="150" y="-12" text-anchor="middle" fill="#0a6b4f">stage 2 (coarser scale)</text>
+        <g transform="translate(16,24)">
+          <rect width="30" height="30" rx="3" fill="#0f1720"/><g stroke="#7fd8bb" stroke-width="2"><line x1="4" y1="8" x2="26" y2="20"/></g>
+          <g transform="translate(0,34)"><rect width="30" height="30" rx="3" fill="#0f1720"/><g stroke="#7fd8bb" stroke-width="2"><line x1="15" y1="4" x2="15" y2="26"/></g></g>
+        </g>
+        <g transform="translate(70,30)"><rect width="64" height="48" rx="8" fill="#fff" stroke="#0d9488"/><text class="svg-lab-s" x="32" y="22" text-anchor="middle">|·|</text><text class="svg-lab-s" x="32" y="38" text-anchor="middle">nonlin.</text></g>
+        <g transform="translate(148,30)"><rect width="72" height="48" rx="8" fill="#ecfdf5" stroke="#0d9488"/><text class="svg-lab-s" x="36" y="22" text-anchor="middle">pool ↓</text><text class="svg-lab-s" x="36" y="38" text-anchor="middle">invariance</text></g>
+        <g transform="translate(232,40)"><rect width="52" height="30" rx="6" fill="#047857"/><text x="26" y="20" text-anchor="middle" style="font:600 11px var(--mono); fill:#ecfdf5">features</text></g>
+        <g stroke="#0d9488" stroke-width="1.8" marker-end="url(#ar8)">
+          <line x1="48" y1="54" x2="66" y2="54"/>
+          <line x1="136" y1="54" x2="144" y2="54"/>
+          <line x1="222" y1="54" x2="228" y2="54"/>
+        </g>
+      </g>
+
+      <!-- big arrows between image, stage1, stage2 -->
+      <g stroke="#047857" stroke-width="2.4" marker-end="url(#ar8)">
+        <line x1="114" y1="160" x2="146" y2="160"/>
+        <line x1="514" y1="160" x2="552" y2="162"/>
+      </g>
+
+      <!-- recurrence loop label -->
+      <path d="M330,236 q0,40 -90,40 q-90,0 -90,-30" fill="none" stroke="#8a8f9c" stroke-width="1.4" stroke-dasharray="4 5" marker-end="url(#ar8)"/>
+      <text class="svg-lab-s" x="240" y="298" text-anchor="middle" fill="#4b4f5a">same filter → nonlinearity → pool block, repeated at coarser scales</text>
+      <text class="svg-lab-s" x="700" y="252" text-anchor="middle" fill="#0a6b4f">no weights are ever fit — invariance comes from pooling, not learning</text>
+    </svg>
+    <figcaption id="figc8"><b>Figure 06.8</b> — A training-free hierarchy (the scattering / HMAX recipe). A fixed bank of oriented <b>Gabor or wavelet</b> filters → a pointwise <b>nonlinearity</b> (modulus, max, or rectification) → <b>spatial pooling</b> for position tolerance — and the <em>same</em> block repeats at coarser scales. No weights are ever learned; the translation invariance that makes the features brain-like comes from <b>pooling</b>, not from backprop. This is exactly the filter→nonlinearity→pool motif of Hubel &amp; Wiesel's simple/complex cells, generalized to a deep stack.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <h3>Four members of the zoo</h3>
+    <p>Each of these is a deep, fixed feature hierarchy you can write down without a training set — and each captures a real chunk of early/mid visual cortex.</p>
+  </div>
+
+  <div class="grid2 reveal">
+    <div class="minicard">
+      <h3>Random convolutional features</h3>
+      <p>Convolution + nonlinearity + pooling with <strong>random filters</strong>. <strong>Jarrett et&nbsp;al. (2009)</strong> found that with the right rectification and local normalization, random-filter stages were startlingly competitive at recognition; <strong>Saxe et&nbsp;al. (2011)</strong> showed random-weight CNNs already have strong object-classification structure, isolating the contribution of <em>architecture</em>. The lesson: convolution + pooling is most of the prior.</p>
+    </div>
+    <div class="minicard">
+      <h3>Gabor &amp; steerable pyramids</h3>
+      <p>A multi-scale, multi-orientation bank of <strong>Gabor</strong> filters (Daugman 1985) or a <strong>steerable pyramid</strong> (Simoncelli &amp; Freeman 1995) is a direct model of V1 simple-cell tuning. Gabor-wavelet pyramids underlie classic fMRI V1 encoding models (Kay et&nbsp;al. 2008) and remain a strong, fully hand-specified early-visual baseline.</p>
+    </div>
+    <div class="minicard">
+      <h3>Scattering transforms</h3>
+      <p>The <strong>wavelet scattering transform</strong> (Bruna &amp; Mallat 2013) cascades wavelet convolutions, a modulus nonlinearity, and averaging — a <em>training-free</em> deep network that is provably stable to deformations and translation-invariant. It is the cleanest example of a hierarchy whose invariances are <em>designed</em>, not learned, and it gives brain-like early/mid features for free.</p>
+    </div>
+    <div class="minicard">
+      <h3>HMAX</h3>
+      <p><strong>HMAX</strong> (Riesenhuber &amp; Poggio 1999; Serre et&nbsp;al. 2007) alternates <em class="term">S</em> (template-matching, tuning) and <em class="term">C</em> (max-pooling, invariance) layers — a direct computational reading of simple/complex cells. It was a leading model of rapid object recognition and the ventral stream for a decade <em>before</em> trained deep nets, with most of its filters fixed by design.</p>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <p>Why are these the <em>natural</em> baselines? Because all four share the same skeleton — <strong>localized filtering → nonlinearity → pooling, stacked</strong> — which is precisely the Hubel-&amp;-Wiesel motif and precisely what an untrained CNN computes. They make explicit the structure of natural-image statistics (orientation, scale, local energy, position tolerance) that <em>dominates</em> early and mid visual cortex, so they predict V1–V4 well with zero fitting. What they cannot supply is the <em>semantic, category-selective</em> content of IT/FFA/PPA — that is the part learning has to install.</p>
+  </div>
+
+  <div class="callout deep reveal">
+    <span class="k">Going deeper</span>
+    <p>There is a precise reason scattering and HMAX work without training: <strong>invariance can be engineered rather than learned.</strong> Translation invariance falls out of spatial pooling/averaging; scale and small-deformation stability fall out of the wavelet cascade (Mallat's deformation-stability theorem). A trained CNN <em>discovers</em> similar invariances by optimizing a task, but they are not free lunches the architecture forbids — they are properties you can also <em>build in</em>. That is why "untrained" early vision is not "assumption-free": the convolutional + pooling prior already encodes locality, translation equivariance, and multi-scale structure. The open question this project pushes on is how far up the hierarchy hand-designed invariances and priors can substitute for learned ones.</p>
+  </div>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>Every member of this zoo is a legal <code>model.py</code>: a plain callable <code>X (N, D_in) → activations (N, D_out)</code> with weights written directly in code and <em>no</em> optimizer or backprop. A Gabor pyramid, a steerable-pyramid energy model, a one- or two-layer scattering transform, or an HMAX-style S/C stack are all things you can hand-design and hand to the ridge. They are the project's strongest known untrained baselines for V1–V3 — the launch pad for trying to beat trained AlexNet there, and the raw material to extend toward the high-level frontier.</p>
+  </div>
+
+  <details class="qcheck reveal">
+    <summary>Quick check — the scattering transform and HMAX are both called "untrained." What part of each is genuinely fixed, and where does their invariance come from?</summary>
+    <div>Their <strong>filters/templates</strong> are fixed by design (oriented wavelets in scattering; Gabor-like S1 templates in HMAX), and crucially their <strong>invariance is built in by pooling</strong> — modulus + averaging in scattering, max-pooling in HMAX's C layers — not discovered by gradient descent. A trained CNN would <em>learn</em> comparable invariances; these models <em>engineer</em> them. That is exactly why they capture early/mid cortex (dominated by local statistics + position tolerance) for free, but still fall short of learned category-selective IT representations.</div>
+  </details>
+</section>
+
+
+<!-- ===================== 4. THE DIAL ===================== -->
+<section id="dial">
+  <div class="reveal">
+    <span class="kicker">04 — Architecture vs learning</span>
+    <h2>A dial, not a switch</h2>
+    <p class="lede">The twist sharpens into a real scientific question: <strong>how much of a cortical representation is fixed by wiring and architecture, and how much is sculpted by experience and learning?</strong> The encoding results suggest the answer is not the same everywhere along the visual hierarchy — it is a dial that slides from "architecture suffices" to "learning required" as you climb from V1 to IT.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc4">
+    <svg viewBox="0 0 1040 320" role="img" aria-labelledby="figc4-t">
+      <title id="figc4-t">A dial sliding from architecture-dominated early vision to learning-dominated high-level vision, with V1 at the architecture end and IT, FFA and PPA at the learning end.</title>
+      <defs>
+        <linearGradient id="dialgrad" x1="0" x2="1">
+          <stop offset="0" stop-color="#34d399"/><stop offset=".5" stop-color="#0d9488"/><stop offset="1" stop-color="#064e3b"/>
+        </linearGradient>
+      </defs>
+
+      <!-- track -->
+      <rect x="120" y="120" width="800" height="26" rx="13" fill="url(#dialgrad)"/>
+      <!-- end labels -->
+      <text x="120" y="92" class="svg-node" text-anchor="start">ARCHITECTURE</text>
+      <text x="120" y="112" class="svg-node-s" text-anchor="start">wiring · convolution · pooling · statistics</text>
+      <text x="920" y="92" class="svg-node" text-anchor="end">LEARNING</text>
+      <text x="920" y="112" class="svg-node-s" text-anchor="end">task optimization · experience · category tuning</text>
+
+      <!-- region pins along the track -->
+      <g>
+        <!-- V1 -->
+        <g transform="translate(190,133)">
+          <circle r="9" fill="#fff" stroke="#047857" stroke-width="3"/>
+          <line x1="0" y1="9" x2="0" y2="56" stroke="#9fb8ab" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text class="svg-node" x="0" y="80" text-anchor="middle">V1</text>
+          <text class="svg-lab-s" x="0" y="98" text-anchor="middle">edges · statistics</text>
+        </g>
+        <!-- V2/V4 -->
+        <g transform="translate(420,133)">
+          <circle r="9" fill="#fff" stroke="#0d9488" stroke-width="3"/>
+          <line x1="0" y1="9" x2="0" y2="56" stroke="#9fb8ab" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text class="svg-node" x="0" y="80" text-anchor="middle">V2 · V4</text>
+          <text class="svg-lab-s" x="0" y="98" text-anchor="middle">textures · parts</text>
+        </g>
+        <!-- IT -->
+        <g transform="translate(700,133)">
+          <circle r="9" fill="#fff" stroke="#0a6b4f" stroke-width="3"/>
+          <line x1="0" y1="9" x2="0" y2="56" stroke="#9fb8ab" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text class="svg-node" x="0" y="80" text-anchor="middle">IT</text>
+          <text class="svg-lab-s" x="0" y="98" text-anchor="middle">objects</text>
+        </g>
+        <!-- FFA/PPA -->
+        <g transform="translate(860,133)">
+          <circle r="11" fill="#064e3b" stroke="#064e3b" stroke-width="3"/>
+          <line x1="0" y1="11" x2="0" y2="56" stroke="#9fb8ab" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text class="svg-node" x="0" y="80" text-anchor="middle">FFA · PPA</text>
+          <text class="svg-lab-s" x="0" y="98" text-anchor="middle">category-selective</text>
+        </g>
+      </g>
+
+      <!-- shading bands under -->
+      <g opacity=".5">
+        <text class="svg-lab-s" x="230" y="232" text-anchor="middle" fill="#0d9488">untrained ≈ trained</text>
+        <text class="svg-lab-s" x="780" y="232" text-anchor="middle" fill="#064e3b">learning makes the difference</text>
+      </g>
+      <line x1="120" y1="248" x2="500" y2="248" stroke="#34d399" stroke-width="3" opacity=".55"/>
+      <line x1="520" y1="248" x2="920" y2="248" stroke="#064e3b" stroke-width="3" opacity=".55"/>
+
+      <text class="svg-lab" x="520" y="290" text-anchor="middle">slide right ⇒ more of the representation must be <tspan font-style="italic">learned</tspan></text>
+    </svg>
+    <figcaption id="figc4"><b>Figure 06.4</b> — The architecture-vs-learning dial. Early vision (V1) sits at the <b>architecture</b> end: local convolution, pooling and image statistics largely determine the representation, so an untrained net already matches a trained one. As you climb to <b>category-selective</b> regions (FFA, PPA, …) the dial slides toward <b>learning</b>: those representations are shaped by task optimization and experience, and trained nets win. This is the deep question the project probes.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <p>Two caveats keep this honest. First, "architecture" here smuggles in a lot: the convolutional prior <em>is</em> a strong, evolved-and-engineered assumption about natural images (translation equivariance, locality, multi-scale pooling). Calling early vision "untrained" does not mean "assumption-free" — it means the assumptions live in the wiring rather than in fitted weights. Second, the dividing line is gradual and depends on the readout, the dataset, and the network; treat the dial as a robust qualitative trend, not a sharp boundary.</p>
+  </div>
+
+  <div class="reveal">
+    <h3>What learning actually installs: shape vs texture</h3>
+    <p>If architecture gives you edges and pooling for free, what does <em>training</em> add? A sharp, controlled answer comes from <strong>Geirhos et&nbsp;al. (2019)</strong>. They built cue-conflict images — a cat's <em>shape</em> rendered in an elephant's <em>texture</em> — and asked what an ImageNet-trained CNN reports. Humans overwhelmingly say "cat" (they classify by <strong>shape</strong>); standard CNNs say "elephant" (they classify by <strong>texture</strong>). Texture bias is a <em>learned</em> property — a consequence of what ImageNet training rewards — and retraining on a stylized dataset shifts the network toward human-like shape bias and improves robustness. The point for us: the <em>content</em> of high-level representations, the very thing that distinguishes a trained net from an untrained one, is exactly the part shaped by the training objective and data — and it is not always brain-like by default.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc9">
+    <svg viewBox="0 0 1040 320" role="img" aria-labelledby="figc9-t">
+      <title id="figc9-t">A cue-conflict image showing a cat's shape filled with elephant skin texture. A human classifies it by shape and says cat, while a standard ImageNet-trained convolutional network classifies it by texture and says elephant, illustrating that texture bias is a learned property.</title>
+      <defs>
+        <pattern id="elehide" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+          <rect width="14" height="14" fill="#cdbfa6"/>
+          <path d="M0,7 h14 M7,0 v14" stroke="#9c8a6a" stroke-width="1.4"/>
+          <circle cx="3.5" cy="3.5" r="1.1" fill="#7d6e52"/><circle cx="10.5" cy="10.5" r="1.1" fill="#7d6e52"/>
+        </pattern>
+        <marker id="ar9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f9c"/></marker>
+      </defs>
+
+      <!-- center: cue-conflict cat-shape with elephant texture -->
+      <g transform="translate(420,40)">
+        <text class="svg-node-s" x="100" y="-8" text-anchor="middle">cue-conflict stimulus</text>
+        <rect x="0" y="0" width="200" height="200" rx="12" fill="#fbfaf6" stroke="#cdbfa6"/>
+        <!-- cat silhouette filled with elephant texture -->
+        <path d="M55,168 q-8,-58 12,-86 q-18,-8 -16,-30 q14,8 24,8 q14,-18 36,-18 q22,0 36,18 q10,0 24,-8 q2,22 -16,30 q20,28 12,86 q-56,16 -112,0 z"
+              fill="url(#elehide)" stroke="#6f6044" stroke-width="2"/>
+        <!-- ears -->
+        <path d="M59,60 l-6,-26 l22,12 z" fill="url(#elehide)" stroke="#6f6044" stroke-width="1.6"/>
+        <path d="M141,60 l6,-26 l-22,12 z" fill="url(#elehide)" stroke="#6f6044" stroke-width="1.6"/>
+        <!-- eyes + whiskers to make shape obviously a cat -->
+        <circle cx="84" cy="92" r="4" fill="#1a1c22"/><circle cx="116" cy="92" r="4" fill="#1a1c22"/>
+        <path d="M100,104 l-4,7 h8 z" fill="#1a1c22"/>
+        <g stroke="#3a3326" stroke-width="1.2"><line x1="72" y1="110" x2="40" y2="104"/><line x1="72" y1="114" x2="40" y2="118"/><line x1="128" y1="110" x2="160" y2="104"/><line x1="128" y1="114" x2="160" y2="118"/></g>
+        <text class="svg-lab-s" x="100" y="220" text-anchor="middle" fill="#6f6044">cat shape · elephant texture</text>
+      </g>
+
+      <!-- left: human reads shape -->
+      <g transform="translate(40,90)">
+        <rect width="300" height="64" rx="12" fill="#fff" stroke="#b59a6a" stroke-width="1.8"/>
+        <text class="svg-node" x="18" y="30">HUMAN</text>
+        <text class="svg-node-s" x="18" y="50">classifies by shape →</text>
+        <text x="250" y="40" text-anchor="middle" style="font:700 18px var(--display); fill:#0a6b4f">"cat"</text>
+      </g>
+      <line x1="340" y1="120" x2="416" y2="130" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar9)"/>
+
+      <!-- right: CNN reads texture -->
+      <g transform="translate(700,90)">
+        <rect width="300" height="64" rx="12" fill="#ecfdf5" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="18" y="30">CNN (ImageNet)</text>
+        <text class="svg-node-s" x="18" y="50">classifies by texture →</text>
+        <text x="250" y="40" text-anchor="middle" style="font:700 16px var(--display); fill:#b45309">"elephant"</text>
+      </g>
+      <line x1="624" y1="130" x2="696" y2="120" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar9)"/>
+
+      <!-- bottom verdict -->
+      <g transform="translate(360,266)">
+        <rect width="320" height="40" rx="10" fill="#fdf6ec" stroke="#f0d9b8"/>
+        <text x="160" y="25" text-anchor="middle" style="font:600 13px var(--display); fill:#92400e">texture bias is <tspan font-style="italic">learned</tspan>, not architectural</text>
+      </g>
+    </svg>
+    <figcaption id="figc9"><b>Figure 06.9</b> — Shape vs texture bias (Geirhos et&nbsp;al. 2019). A cat's <b>shape</b> filled with elephant <b>texture</b>: humans answer "cat" (shape), a standard ImageNet-trained CNN answers "elephant" (texture). Texture bias is a property of the <em>training objective and data</em>, not of the convolutional architecture — concrete evidence that what <b>learning installs</b> (the content of high-level representations) can diverge from human/brain-like processing, and can be re-shaped by changing the training diet.</figcaption>
+  </figure>
+
+  <div class="callout key">
+    <span class="k">Key idea</span>
+    <p><strong>Architecture and learning are complementary sources of the same representation.</strong> Early visual cortex is well-approximated by the <em>structure</em> of a convolutional net; high-level, semantic, category-selective cortex additionally needs the <em>content</em> that task learning installs — and that content (e.g. shape vs texture bias) is contingent on the objective and data, not guaranteed to be brain-like. Where exactly the hand-off happens — and how much of "learning" can be replaced by smarter hand-designed priors — is an empirical question you can actually run.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 5. THE THESIS ===================== -->
+<section id="thesis">
+  <div class="reveal">
+    <span class="kicker">05 — The project's thesis</span>
+    <h2>Hand-design a model that beats trained AlexNet</h2>
+    <p class="lede">Everything above sets up one concrete, falsifiable goal. Take a <strong>fixed, never-trained</strong> model — weights written directly in code, no optimizer, no backprop — and, read out with the same ridge regression, make its held-out <code>test_corr</code> <strong>exceed that of a frozen, ImageNet-trained AlexNet (fc7)</strong> on a given brain region. If architecture really carries early vision, this should be achievable in V1–V3. In high-level regions, it is an open challenge.</p>
+  </div>
+
+  <div class="reveal">
+    <p>The bar is concrete. A trained AlexNet's fc7, read out with this exact ridge, gives these per-region Pearson correlations on NSD (the numbers your model must beat):</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc5b">
+    <svg viewBox="0 0 1040 300" role="img" aria-labelledby="figc5b-t">
+      <title id="figc5b-t">The trained AlexNet fc7 per-region baseline bar chart: V1 0.342, V2 0.299, V3 0.321, hV4 0.289, FFA 0.396, PPA 0.403, EBA 0.436, VWFA 0.321, ventral 0.284, overall 0.324.</title>
+      <!-- y axis 0..0.45 mapped to y 250..40 -->
+      <line x1="70" y1="40" x2="70" y2="250" stroke="#cdbfa6" stroke-width="1.5"/>
+      <line x1="70" y1="250" x2="1000" y2="250" stroke="#cdbfa6" stroke-width="1.5"/>
+      <g class="svg-lab-s" text-anchor="end" fill="#8a8f9c">
+        <text x="60" y="254">0</text><text x="60" y="207">0.1</text><text x="60" y="161">0.2</text><text x="60" y="114">0.3</text><text x="60" y="68">0.4</text>
+      </g>
+      <g stroke="#efe9dd"><line x1="70" y1="203.4" x2="1000" y2="203.4"/><line x1="70" y1="156.7" x2="1000" y2="156.7"/><line x1="70" y1="110" x2="1000" y2="110"/><line x1="70" y1="63.3" x2="1000" y2="63.3"/></g>
+      <text class="svg-lab-s" transform="translate(34,145) rotate(-90)" text-anchor="middle" fill="#4b4f5a">test_corr (Pearson r)</text>
+
+      <!-- bars: x start 110, step ~92, width 56. height = r/0.45 * 210 -->
+      <!-- helper: y = 250 - r/0.45*210 ; r=0.342 -> 250-159.6=90.4 -->
+      <g font-family="var(--mono)">
+        <!-- V1 .342 -->
+        <rect x="100" y="90.4" width="56" height="159.6" rx="3" fill="#047857"/><text class="svg-lab-s" x="128" y="268" text-anchor="middle">V1</text><text class="svg-lab-s" x="128" y="82" text-anchor="middle" fill="#047857">.342</text>
+        <!-- V2 .299 -->
+        <rect x="192" y="110.5" width="56" height="139.5" rx="3" fill="#0d9488"/><text class="svg-lab-s" x="220" y="268" text-anchor="middle">V2</text><text class="svg-lab-s" x="220" y="102" text-anchor="middle" fill="#0d9488">.299</text>
+        <!-- V3 .321 -->
+        <rect x="284" y="100.2" width="56" height="149.8" rx="3" fill="#047857"/><text class="svg-lab-s" x="312" y="268" text-anchor="middle">V3</text><text class="svg-lab-s" x="312" y="92" text-anchor="middle" fill="#047857">.321</text>
+        <!-- hV4 .289 -->
+        <rect x="376" y="115.1" width="56" height="134.9" rx="3" fill="#0d9488"/><text class="svg-lab-s" x="404" y="268" text-anchor="middle">hV4</text><text class="svg-lab-s" x="404" y="107" text-anchor="middle" fill="#0d9488">.289</text>
+        <!-- FFA .396 -->
+        <rect x="468" y="65.2" width="56" height="184.8" rx="3" fill="#064e3b"/><text class="svg-lab-s" x="496" y="268" text-anchor="middle">FFA</text><text class="svg-lab-s" x="496" y="57" text-anchor="middle" fill="#064e3b">.396</text>
+        <!-- PPA .403 -->
+        <rect x="560" y="61.9" width="56" height="188.1" rx="3" fill="#064e3b"/><text class="svg-lab-s" x="588" y="268" text-anchor="middle">PPA</text><text class="svg-lab-s" x="588" y="54" text-anchor="middle" fill="#064e3b">.403</text>
+        <!-- EBA .436 -->
+        <rect x="652" y="46.5" width="56" height="203.5" rx="3" fill="#064e3b"/><text class="svg-lab-s" x="680" y="268" text-anchor="middle">EBA</text><text class="svg-lab-s" x="680" y="38" text-anchor="middle" fill="#064e3b">.436</text>
+        <!-- VWFA .321 -->
+        <rect x="744" y="100.2" width="56" height="149.8" rx="3" fill="#064e3b"/><text class="svg-lab-s" x="772" y="268" text-anchor="middle">VWFA</text><text class="svg-lab-s" x="772" y="92" text-anchor="middle" fill="#064e3b">.321</text>
+        <!-- ventral .284 -->
+        <rect x="836" y="117.5" width="56" height="132.5" rx="3" fill="#0d9488"/><text class="svg-lab-s" x="864" y="268" text-anchor="middle">ventral</text><text class="svg-lab-s" x="864" y="109" text-anchor="middle" fill="#0d9488">.284</text>
+        <!-- overall .324 -->
+        <rect x="928" y="98.8" width="56" height="151.2" rx="3" fill="#34d399"/><text class="svg-lab-s" x="956" y="268" text-anchor="middle">overall</text><text class="svg-lab-s" x="956" y="90" text-anchor="middle" fill="#0d9488">.324</text>
+      </g>
+      <!-- early vs high band labels -->
+      <text class="svg-lab-s" x="266" y="22" text-anchor="middle" fill="#0d9488">early / mid — untrained models can WIN</text>
+      <text class="svg-lab-s" x="640" y="22" text-anchor="middle" fill="#064e3b">high-level — trained pulls ahead (open challenge)</text>
+      <line x1="100" y1="28" x2="432" y2="28" stroke="#34d399" stroke-width="2" opacity=".6"/>
+      <line x1="468" y1="28" x2="800" y2="28" stroke="#064e3b" stroke-width="2" opacity=".6"/>
+    </svg>
+    <figcaption id="figc5b"><b>Figure 06.5</b> — The trained-AlexNet bar (real numbers). Per-region <code>test_corr</code> for a frozen ImageNet AlexNet fc7 read out with the project's ridge: V1 .342 · V2 .299 · V3 .321 · hV4 .289 · FFA .396 · PPA .403 · EBA .436 · VWFA .321 · ventral .284 · overall .324. Hand-designed <b>untrained</b> models match or beat this in <b>early/mid</b> cortex (left band) but fall short in <b>high-level</b> regions (right band) — the architecture-vs-learning pattern made quantitative.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <p>Two rules keep the comparison meaningful and the result interpretable. <strong>The model is never trained:</strong> no gradient ever touches its parameters; if you want a weight, you write it. And <strong>only the ridge readout is fit</strong> — the same readout for every model — so any change in <code>test_corr</code> is attributable to the model's representation, not to extra fitting. A high <code>train_corr</code> with low <code>test_corr</code> just means the readout overfit; the held-out number is what counts (and small differences, below ~0.005, are noise).</p>
+  </div>
+
+  <div class="callout brain">
+    <span class="k">In the brain</span>
+    <p>The NSD target is not the raw image-evoked signal but the <strong>HRF-peak fMRI response</strong>: the blood-oxygen response peaks several seconds after a stimulus, so the harness averages the peak TRs in a window around ~5&nbsp;s post-onset into one value per voxel. Aligning to that lag is what turns noise into signal — a trained AlexNet scores ~0.006 at zero offset and ~0.32 at the HRF peak.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 6. THE LOOP ===================== -->
+<section id="loop">
+  <div class="reveal">
+    <span class="kicker">06 — The autoresearch loop</span>
+    <h2>Searching the space of fixed models</h2>
+    <p class="lede">You don't have to hand-tune one model forever. neuro-autoresearch runs an <strong>AlphaEvolve-style</strong> loop: an agent proposes a <code>model.py</code>, the fixed harness evaluates it once and logs a single row, and the agent reads the score and the history to propose a better model — hill-climbing toward (and past) the AlexNet bar, using <code>test_corr</code> as the reward.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc6">
+    <svg viewBox="0 0 1040 470" role="img" aria-labelledby="figc6-t">
+      <title id="figc6-t">A cyclic autoresearch loop: the agent proposes a fixed model.py, the harness fits a ridge readout, computes held-out test_corr, compares it to the trained-AlexNet baseline of 0.324 overall, logs a row, and the agent iterates.</title>
+      <defs>
+        <marker id="ar6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#047857"/></marker>
+      </defs>
+
+      <!-- center: target line -->
+      <g transform="translate(520,235)">
+        <circle r="92" fill="#ecfdf5" stroke="#34d399" stroke-width="1.5"/>
+        <text x="0" y="-18" text-anchor="middle" style="font:600 12px var(--mono); fill:#064e3b">TARGET: beat</text>
+        <text x="0" y="4" text-anchor="middle" style="font:700 17px var(--display); fill:#047857">trained AlexNet</text>
+        <text x="0" y="28" text-anchor="middle" style="font:700 22px var(--mono); fill:#047857">r = 0.324</text>
+        <text x="0" y="48" text-anchor="middle" style="font:500 10px var(--mono); fill:#0d9488">overall · per-region V1 .342 … ventral .284</text>
+      </g>
+
+      <!-- four loop stages around the circle -->
+      <!-- 1 propose (top) -->
+      <g transform="translate(420,40)">
+        <rect x="0" y="0" width="200" height="74" rx="12" fill="#fff" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="100" y="30" text-anchor="middle">1 · propose</text>
+        <text class="svg-node-s" x="100" y="52" text-anchor="middle">agent writes fixed model.py</text>
+      </g>
+      <!-- 2 readout (right) -->
+      <g transform="translate(800,200)">
+        <rect x="0" y="0" width="200" height="74" rx="12" fill="#fff" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="100" y="30" text-anchor="middle">2 · ridge readout</text>
+        <text class="svg-node-s" x="100" y="52" text-anchor="middle">fit X → brain (the only fit)</text>
+      </g>
+      <!-- 3 score (bottom) -->
+      <g transform="translate(420,396)">
+        <rect x="0" y="0" width="200" height="74" rx="12" fill="#fff" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="100" y="30" text-anchor="middle">3 · score</text>
+        <text class="svg-node-s" x="100" y="52" text-anchor="middle">held-out test_corr → reward</text>
+      </g>
+      <!-- 4 compare+log (left) -->
+      <g transform="translate(40,200)">
+        <rect x="0" y="0" width="200" height="74" rx="12" fill="#fff" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="100" y="26" text-anchor="middle">4 · compare &amp; log</text>
+        <text class="svg-node-s" x="100" y="46" text-anchor="middle">vs AlexNet bar · append row</text>
+        <text class="svg-node-s" x="100" y="62" text-anchor="middle" fill="#047857">iteration++</text>
+      </g>
+
+      <!-- curved arrows clockwise -->
+      <g fill="none" stroke="#047857" stroke-width="2.4" marker-end="url(#ar6)">
+        <path d="M624,86 C720,110 770,150 808,196"/>
+        <path d="M900,278 C900,330 770,392 624,420"/>
+        <path d="M416,432 C300,420 200,360 158,278"/>
+        <path d="M150,196 C190,150 300,98 416,80"/>
+      </g>
+    </svg>
+    <figcaption id="figc6"><b>Figure 06.6</b> — The autoresearch cycle. (1) the agent proposes a fixed <code>model.py</code>; (2) the harness fits the ridge readout — the only thing trained; (3) it computes held-out <code>test_corr</code>, the reward; (4) it compares against the trained-AlexNet bar (overall r ≈ 0.324; per-region V1 .342 … ventral .284) and appends one row, then the agent iterates. One run = one model = one <code>iteration</code>; a model that errors is logged, not crashed.</figcaption>
+  </figure>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>Each <code>python -m harness.run</code> evaluates the current model once and appends a single row (<code>iteration, model_name, idea, summary, test_corr, train_corr, gap, best_so_far, …, corr_&lt;region&gt;</code>) to the study CSV — an append-only history of every model tried. The reward narrows to one region via <code>NEURO_ROI</code> (default <code>ventral</code>), while every region's predictivity is still logged. For unattended hill-climbing the loop runs nonstop under a launcher, bounded by a wall-clock timeout. The same fixed harness scores image models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and language models on the <a href="../ecog-podcast.html">Podcast ECoG</a> and <a href="../le-petit-prince.html">Le Petit Prince</a> targets.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 7. CAVEATS ===================== -->
+<section id="caveats">
+  <div class="reveal">
+    <span class="kicker">07 — Epistemology</span>
+    <h2>Prediction is not mechanism</h2>
+    <p class="lede">A model that predicts cortex well has earned something real — but not the right to claim it works the way the brain works. The most important habit in this whole enterprise is keeping "predicts the responses" and "implements the same computation" firmly apart.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc7">
+    <svg viewBox="0 0 1040 280" role="img" aria-labelledby="figc7-t">
+      <title id="figc7-t">Two black boxes, a brain and a model, produce nearly identical outputs for the same input, illustrating that matching outputs does not prove the internal mechanisms match.</title>
+      <defs>
+        <marker id="ar7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f9c"/></marker>
+      </defs>
+      <!-- shared input -->
+      <g transform="translate(40,110)">
+        <rect width="80" height="80" rx="10" fill="#fff" stroke="#cdbfa6"/>
+        <rect x="10" y="10" width="60" height="34" fill="#cfe8e0"/><path d="M16,64 l24,-20 l24,20z" fill="#047857"/>
+        <text class="svg-node-s" x="40" y="-12" text-anchor="middle">same input</text>
+      </g>
+      <line x1="124" y1="150" x2="170" y2="100" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+      <line x1="124" y1="150" x2="170" y2="200" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+
+      <!-- brain box -->
+      <g transform="translate(190,40)">
+        <rect width="300" height="92" rx="12" fill="#fbfaf6" stroke="#b59a6a" stroke-width="1.8"/>
+        <text class="svg-node" x="20" y="40">BRAIN</text>
+        <text class="svg-node-s" x="20" y="62">spikes · dendrites · feedback ·</text>
+        <text class="svg-node-s" x="20" y="78">neuromodulation · recurrence</text>
+        <text x="270" y="58" text-anchor="middle" style="font:700 26px var(--mono); fill:#b59a6a">?</text>
+      </g>
+      <!-- model box -->
+      <g transform="translate(190,148)">
+        <rect width="300" height="92" rx="12" fill="#ecfdf5" stroke="#047857" stroke-width="1.8"/>
+        <text class="svg-node" x="20" y="40">MODEL</text>
+        <text class="svg-node-s" x="20" y="62">conv · ReLU · pool · matmul ·</text>
+        <text class="svg-node-s" x="20" y="78">one feedforward sweep</text>
+        <text x="270" y="58" text-anchor="middle" style="font:700 26px var(--mono); fill:#047857">?</text>
+      </g>
+
+      <!-- outputs nearly identical -->
+      <g transform="translate(560,70)">
+        <text class="svg-node-s" x="60" y="-16" text-anchor="middle">responses (brain)</text>
+        <polyline points="0,30 16,10 28,34 44,8 60,28 76,14 96,30 116,18" fill="none" stroke="#b59a6a" stroke-width="2.5"/>
+      </g>
+      <g transform="translate(560,178)">
+        <text class="svg-node-s" x="60" y="-16" text-anchor="middle">responses (model)</text>
+        <polyline points="0,30 16,12 28,32 44,10 60,26 76,16 96,30 116,17" fill="none" stroke="#047857" stroke-width="2.5"/>
+      </g>
+      <line x1="500" y1="86" x2="556" y2="86" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+      <line x1="500" y1="194" x2="556" y2="194" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+
+      <!-- verdict -->
+      <g transform="translate(720,118)">
+        <rect width="300" height="70" rx="12" fill="#fdf6ec" stroke="#f0d9b8"/>
+        <text x="150" y="30" text-anchor="middle" style="font:700 15px var(--display); fill:#b45309">r ≈ high</text>
+        <text class="svg-lab-s" x="150" y="52" text-anchor="middle" fill="#92400e">same output ≠ same mechanism</text>
+      </g>
+      <line x1="690" y1="86" x2="716" y2="120" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+      <line x1="690" y1="194" x2="716" y2="156" stroke="#8a8f9c" stroke-width="2" marker-end="url(#ar7)"/>
+    </svg>
+    <figcaption id="figc7"><b>Figure 06.7</b> — Prediction ≠ mechanism. Two very different internal systems — biological cortex and a feedforward matmul — can produce nearly identical responses to the same input, yielding a high correlation r. A strong encoding score constrains hypotheses about the brain; it does not certify that the model's internal computation matches the brain's.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <p>A few guardrails worth keeping. <strong>Encoding vs RSA:</strong> the encoding model fits a linear map from model features to each unit and scores prediction; <em class="term">representational similarity analysis</em> (RSA) instead compares the geometry of representations (the matrix of pairwise stimulus distances) without fitting a mapping. They probe related but distinct things; agreement across both is stronger evidence than either alone. <strong>The readout matters:</strong> a flexible linear readout can mask differences — "linearly decodable from the model" is a weaker claim than "represented the same way." <strong>Goals and limits:</strong> model–brain comparison is most useful for adjudicating between competing hypotheses, not for declaring a model "correct."</p>
+    <p>The honest framing for this research program is <em class="term">neuroconnectionism</em> (Doerig et&nbsp;al., 2023): treat deep networks as <strong>explicit, testable hypotheses</strong> about brain computation — to be probed, compared, and falsified — rather than as finished theories. Good prediction is the start of an explanation, not its end. The danger to avoid is over-claiming: that a high <code>test_corr</code> means the brain "is" the model.</p>
+  </div>
+
+  <div class="callout watch">
+    <span class="k">Watch out</span>
+    <p>Resist three over-reads: (1) "untrained nets predict cortex, so learning doesn't matter" — false; learning dominates high-level vision. (2) "high r, so the model is the brain's algorithm" — prediction ≠ mechanism. (3) "more parameters / a fancier readout, so a better model" — a flexible readout can launder representational differences into a good score. Keep the readout fixed and the held-out metric honest, exactly as the harness does.</p>
+  </div>
+</section>
+
+
+<!-- ===================== 7b. IDENTIFIABILITY ===================== -->
+<section id="identif">
+  <div class="reveal">
+    <span class="kicker">08 — The identifiability problem</span>
+    <h2>Many models, near-identical predictions</h2>
+    <p class="lede">Prediction-is-not-mechanism has a quantitative twin that bites even harder: the data are often <strong>underdetermined</strong>. A whole family of genuinely different models can predict the same recordings to within noise, so the encoding score alone cannot tell them apart. This is the <em class="term">identifiability problem</em>, and it is the reason metrics and benchmarks have to be chosen — and read — with care.</p>
+  </div>
+
+  <figure class="figure reveal bleed" aria-labelledby="figc10">
+    <svg viewBox="0 0 1040 340" role="img" aria-labelledby="figc10-t">
+      <title id="figc10-t">Several distinct models — a trained CNN, a random-weight CNN, a Gabor scattering model, and a transformer — all produce near-identical predictivity scores against the same brain data, all landing inside a noise band, illustrating that the data are underdetermined and cannot single out the true mechanism.</title>
+      <defs>
+        <marker id="ar10" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f9c"/></marker>
+      </defs>
+
+      <!-- four distinct models on the left -->
+      <text class="svg-title" x="30" y="30">Distinct models</text>
+      <g font-family="var(--mono)">
+        <g transform="translate(30,52)"><rect width="200" height="44" rx="9" fill="#fff" stroke="#047857" stroke-width="1.6"/><text class="svg-node-s" x="14" y="20" fill="#047857">trained CNN</text><text class="svg-lab-s" x="14" y="36">conv·ReLU·pool, learned</text></g>
+        <g transform="translate(30,108)"><rect width="200" height="44" rx="9" fill="#fff" stroke="#0d9488" stroke-width="1.6"/><text class="svg-node-s" x="14" y="20" fill="#0a6b4f">random-weight CNN</text><text class="svg-lab-s" x="14" y="36">same wiring, no training</text></g>
+        <g transform="translate(30,164)"><rect width="200" height="44" rx="9" fill="#fff" stroke="#0d9488" stroke-width="1.6"/><text class="svg-node-s" x="14" y="20" fill="#0a6b4f">Gabor / scattering</text><text class="svg-lab-s" x="14" y="36">hand-built, training-free</text></g>
+        <g transform="translate(30,220)"><rect width="200" height="44" rx="9" fill="#fff" stroke="#064e3b" stroke-width="1.6"/><text class="svg-node-s" x="14" y="20" fill="#064e3b">vision transformer</text><text class="svg-lab-s" x="14" y="36">no convolution at all</text></g>
+      </g>
+
+      <!-- arrows converging to a noise band -->
+      <g stroke="#8a8f9c" stroke-width="1.8" marker-end="url(#ar10)">
+        <line x1="232" y1="74" x2="560" y2="150"/>
+        <line x1="232" y1="130" x2="560" y2="158"/>
+        <line x1="232" y1="186" x2="560" y2="170"/>
+        <line x1="232" y1="242" x2="560" y2="178"/>
+      </g>
+
+      <!-- predictivity axis with a noise band -->
+      <g transform="translate(580,40)">
+        <text class="svg-title" x="0" y="-10">Predictivity vs the same brain data</text>
+        <line x1="0" y1="20" x2="0" y2="250" stroke="#cdbfa6" stroke-width="1.5"/>
+        <line x1="0" y1="250" x2="380" y2="250" stroke="#cdbfa6" stroke-width="1.5"/>
+        <text class="svg-lab-s" transform="translate(-30,135) rotate(-90)" text-anchor="middle">readout r →</text>
+
+        <!-- noise band -->
+        <rect x="0" y="92" width="380" height="40" fill="#34d399" opacity=".16"/>
+        <line x1="0" y1="92" x2="380" y2="92" stroke="#0d9488" stroke-dasharray="5 5" stroke-width="1.2"/>
+        <line x1="0" y1="132" x2="380" y2="132" stroke="#0d9488" stroke-dasharray="5 5" stroke-width="1.2"/>
+        <text class="svg-lab-s" x="372" y="86" text-anchor="end" fill="#0a6b4f">noise ceiling band (≈ ±0.005)</text>
+
+        <!-- four near-identical dots inside the band -->
+        <g>
+          <circle cx="70" cy="108" r="8" fill="#047857"/><text class="svg-lab-s" x="70" y="150" text-anchor="middle">.318</text>
+          <circle cx="160" cy="116" r="8" fill="#0d9488"/><text class="svg-lab-s" x="160" y="150" text-anchor="middle">.314</text>
+          <circle cx="250" cy="112" r="8" fill="#0d9488"/><text class="svg-lab-s" x="250" y="150" text-anchor="middle">.316</text>
+          <circle cx="340" cy="118" r="8" fill="#064e3b"/><text class="svg-lab-s" x="340" y="150" text-anchor="middle">.313</text>
+        </g>
+        <text class="svg-lab-s" x="190" y="232" text-anchor="middle" fill="#4b4f5a">all four land inside the noise band — the score can't pick the mechanism</text>
+      </g>
+    </svg>
+    <figcaption id="figc10"><b>Figure 06.10</b> — The identifiability problem. Four <em>mechanistically distinct</em> models — a trained CNN, the same CNN untrained, a hand-built Gabor/scattering model, and a convolution-free transformer — can all land inside the <b>noise band</b> of the same encoding score. When competing hypotheses are statistically indistinguishable on the metric, prediction is <b>underdetermined</b>: a high (or tied) <code>test_corr</code> constrains hypotheses but does not single out the brain's actual computation.</figcaption>
+  </figure>
+
+  <div class="reveal">
+    <h3>Metrics matter: encoding r vs RSA vs CKA</h3>
+    <p>Because no single number settles a mechanistic claim, the field uses several model–brain comparison metrics, and they can disagree:</p>
+    <ul class="clean">
+      <li><strong>Encoding correlation (r)</strong> — fit a linear map from model features to each unit and score held-out prediction (this project's <code>test_corr</code>). Sensitive to which features are <em>linearly</em> present; depends on the readout's flexibility.</li>
+      <li><strong>Representational similarity analysis (RSA)</strong> — compare the <em>geometry</em> of representations (the matrix of pairwise stimulus distances) with no fitted mapping (Kriegeskorte et&nbsp;al. 2008). Mapping-free, but coarse.</li>
+      <li><strong>Centered kernel alignment (CKA)</strong> — a similarity index between two representations that is invariant to rotation and isotropic scaling (Kornblith et&nbsp;al. 2019). Popular for layer-to-layer and model-to-brain comparison, but itself sensitive to choices (e.g. linear vs RBF kernel) and known to be gameable.</li>
+    </ul>
+    <p>Two representations can look aligned under one metric and divergent under another. Agreement <em>across</em> metrics is far stronger evidence than a single high number — and any one metric, optimized hard enough, invites <strong>benchmark-gaming</strong>: a model can climb a leaderboard by exploiting the metric's blind spots rather than by becoming more brain-like. Standardized benchmarks like <strong>Brain-Score</strong> (Schrimpf et&nbsp;al. 2018/2020) make models comparable, but a ranking is a measurement under a fixed metric, not a proof of mechanism.</p>
+  </div>
+
+  <div class="callout deep reveal">
+    <span class="k">Going deeper</span>
+    <p>Identifiability is why <strong>neuroconnectionism</strong> (Doerig et&nbsp;al. 2023) frames deep nets as <em>hypotheses to be falsified</em>, not theories to be confirmed. The productive move is not "find the model with the highest r" but <strong>design experiments and metrics that separate models that the encoding score ties</strong> — stimuli that two candidate models predict to <em>disagree</em> on, lesion/perturbation tests, cross-metric agreement (encoding ∧ RSA ∧ CKA), and out-of-distribution generalization. A tie band (small differences below ~0.005 are noise) is not a nuisance to round away; it is the honest statement that the data, as collected, cannot yet adjudicate.</p>
+  </div>
+
+  <div class="reveal">
+    <h3>Beyond vision: the same logic in language cortex</h3>
+    <p>None of this is vision-specific. <strong>Chapter 05</strong> ran the identical bridge in the language domain: take the internal activations of a <em>large language model</em> as it reads text, fit a linear readout to recorded language-cortex responses, and score held-out prediction. The striking parallel result — that next-word-prediction-trained LLMs are among the best predictors of language regions (e.g. Schrimpf et&nbsp;al. 2021; Goldstein et&nbsp;al. 2022; Caucheteux &amp; King 2022) — is the same goal-driven story as vision: optimize a network for a competence (recognition, prediction) and brain-aligned representations emerge as a by-product. And the <em>same</em> caveats apply unchanged — prediction ≠ mechanism, metrics matter, the data are underdetermined.</p>
+  </div>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>The harness builds identifiability discipline in directly. Only the ridge is fit, the readout is fixed across models, the held-out split is honest, and <strong>small differences (below ~0.005) are treated as noise</strong> — a tie band, not a verdict. The append-only history logs every model's <code>idea</code> and <code>summary</code> so ties are visible rather than silently resolved. And the same fixed bridge scores <em>vision</em> models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and <em>language</em> models on <a href="../ecog-podcast.html">Podcast ECoG</a> / <a href="../le-petit-prince.html">Le Petit Prince</a> — one encoding-model logic across modalities.</p>
+  </div>
+
+  <details class="qcheck reveal">
+    <summary>Quick check — your hand-built scattering model and a frozen AlexNet both score r = 0.32 on V1, within the noise band. What can you, and can you <em>not</em>, conclude?</summary>
+    <div>You <strong>can</strong> conclude that V1's image-evoked responses are largely captured by local, oriented, multi-scale, pooled features — both models supply those, which is consistent with architecture/statistics carrying early vision. You <strong>cannot</strong> conclude that V1 "is" either model, nor that learning is irrelevant <em>in general</em> (it dominates higher up), nor that the two compute V1 the same way: the tie is an identifiability statement — the encoding score does not separate them. Separating them needs a different probe (RSA/CKA agreement, perturbations, stimuli on which the two models <em>predict different things</em>).</div>
+  </details>
+</section>
+
+
+<!-- ===================== 9. CLOSING ===================== -->
+<section id="close">
+  <div class="reveal">
+    <span class="kicker">09 — Closing the handbook</span>
+    <h2>Where the six chapters meet</h2>
+    <p class="lede">This chapter is the knot that ties the handbook together. Each earlier chapter supplies a piece of the machine that makes "beat a trained AlexNet" a precise, runnable question.</p>
+  </div>
+
+  <div class="grid2 reveal">
+    <div class="minicard">
+      <h3><a href="01-encoding-models.html">Ch. 01 — Encoding models</a></h3>
+      <p>The features → linear readout → predict-responses recipe. Chapter 06 makes the features a DNN layer and the readout a ridge — the exact bridge the project scores.</p>
+    </div>
+    <div class="minicard">
+      <h3><a href="02-neural-code.html">Ch. 02 — The neural code</a></h3>
+      <p>What a "response" is — firing rates, population codes, what the readout is actually predicting target by target.</p>
+    </div>
+    <div class="minicard">
+      <h3><a href="03-measuring-the-brain.html">Ch. 03 — Measuring the brain</a></h3>
+      <p>fMRI vs spiking vs iEEG/MEG — why the HRF lag, the voxel, and the electrode each shape what counts as the target Y.</p>
+    </div>
+    <div class="minicard">
+      <h3><a href="04-visual-brain.html">Ch. 04 — The visual brain</a></h3>
+      <p>The ventral stream and its regions (V1–V4, FFA, PPA, EBA, VWFA) — the very hierarchy the layers of a CNN line up against.</p>
+    </div>
+    <div class="minicard">
+      <h3><a href="05-language-brain.html">Ch. 05 — The language brain</a></h3>
+      <p>The other modality: the same encoding bridge run on language models against ECoG / MEG / fMRI language targets.</p>
+    </div>
+    <div class="minicard">
+      <h3><a href="../overview.html">Project overview →</a></h3>
+      <p>The outward-facing tour of neuro-autoresearch: the loop, the datasets, the beat-AlexNet goal, and how to run it.</p>
+    </div>
+  </div>
+
+  <div class="callout project">
+    <span class="k">In this project</span>
+    <p>The thesis, stated once more, plainly: <strong>architecture buys you early vision; learning buys you high-level vision.</strong> Hand-designed untrained models reliably match or beat trained AlexNet in <strong>V1–V3</strong>; <strong>FFA / PPA / EBA / VWFA</strong> remain the open frontier where task-learned, category-selective structure is hard to write by hand. The autoresearch loop searches for the priors that close that gap — see the dataset guides for each target: <a href="../ecog-podcast.html">Podcast ECoG</a>, <a href="../tvsd-macaque-spiking.html">TVSD macaque spiking</a>, <a href="../le-petit-prince.html">Le Petit Prince</a>, and the <a href="../overview.html">overview</a>.</p>
+  </div>
+
+  <div class="terms reveal">
+    <h3>Key terms</h3>
+    <dl>
+      <dt>Goal-driven DNN</dt><dd>A deep network optimized for a task (e.g. object recognition), <em>not</em> fit to neural data — yet whose representations end up being the best available predictors of cortex (Yamins &amp; DiCarlo, 2014).</dd>
+      <dt>Brain-Score</dt><dd>A standardized benchmark (Schrimpf et&nbsp;al., 2018/2020) that scores and ranks models on how well they predict primate visual cortex across regions.</dd>
+      <dt>AlexNet fc7</dt><dd>The 4096-dimensional penultimate fully-connected layer of AlexNet — a strong, semantic visual-cortex feature space and the per-region bar this project tries to beat.</dd>
+      <dt>Random features</dt><dd>Features from random (untrained) projections or filters; surprisingly powerful because architecture imposes structure even without learning (Rahimi &amp; Recht, 2007; Jarrett et&nbsp;al., 2009).</dd>
+      <dt>Architectural prior</dt><dd>The assumptions baked into a network's wiring — local convolution, nonlinearity, pooling, normalization — that yield Gabor-like, brain-like early features before any training.</dd>
+      <dt>Task optimization</dt><dd>Learning driven by a behavioral goal; what installs the semantic, category-selective representations that dominate high-level visual cortex.</dd>
+      <dt>Architecture-vs-learning</dt><dd>The dial from "wiring suffices" (early vision) to "learning required" (high-level, category-selective vision) — the scientific question the project probes.</dd>
+      <dt>Prediction vs mechanism</dt><dd>A high encoding score (good prediction) does not prove the model computes the way the brain does (same mechanism); models are testable hypotheses, not finished theories (neuroconnectionism; Doerig et&nbsp;al., 2023).</dd>
+      <dt>Untrained model zoo</dt><dd>Training-free feature hierarchies you can hand-design — random conv features, Gabor/steerable pyramids, wavelet scattering, HMAX — natural baselines for early/mid visual cortex (Jarrett 2009; Saxe 2011; Bruna &amp; Mallat 2013; Riesenhuber &amp; Poggio 1999).</dd>
+      <dt>Shape vs texture bias</dt><dd>ImageNet-trained CNNs classify by texture where humans use shape (Geirhos et&nbsp;al. 2019) — a <em>learned</em>, objective-dependent property, evidence that what training installs need not be brain-like.</dd>
+      <dt>Identifiability</dt><dd>Many mechanistically distinct models can predict the same data within noise, so the encoding score is underdetermined; cross-metric agreement (encoding r, RSA, CKA) is stronger evidence than any single number.</dd>
+    </dl>
+  </div>
+</section>
+
+
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz" class="quiz reveal">
+  <div class="quiz-head">
+    <span class="kicker">Test yourself</span>
+    <h2>Check your understanding</h2>
+    <p>Pick an answer to see why it's right or wrong. Score: <span class="quiz-score" data-score>0 / 8</span></p>
+  </div>
+  <ol class="quiz-list">
+    <li class="q" data-answer="c">
+      <p class="q-stem">1. Yamins et&nbsp;al. (2014) found that the best predictors of monkey IT responses were networks <em>optimized for object recognition</em> — not networks fit to neural data. Why is "optimized for the task, not the brain" the load-bearing phrase?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Because fitting to neural data is computationally infeasible at IT scale.</button></li>
+        <li><button data-opt="b">Because the networks were trained directly on IT recordings, which guarantees a good fit.</button></li>
+        <li><button data-opt="c">Because brain-like representations emerge as a by-product of solving the task — evidence that the task constraint, not curve-fitting to neurons, shapes the representation.</button></li>
+        <li><button data-opt="d">Because object recognition and IT prediction are mathematically the same objective.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> The "goal-driven" claim is exactly that you never fit to neural data, yet brain-like representations fall out of optimizing a behavioral goal. If the net had been fit to IT directly, a good score would be unsurprising and uninformative; the surprise (and the science) is that a task objective alone produces the best IT predictions.</div>
+    </li>
+
+    <li class="q" data-answer="b">
+      <p class="q-stem">2. The most reproduced result of the DNN-encoding program is a "diagonal" between layers and areas. What is it?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Every layer predicts every area equally well, proving the brain is a single uniform stage.</button></li>
+        <li><button data-opt="b">Early layers best predict early areas (V1/V2), middle layers best predict V4, and deep layers best predict IT — layer depth tracks cortical position.</button></li>
+        <li><button data-opt="c">Deep layers best predict V1 because they contain the most information.</button></li>
+        <li><button data-opt="d">The correspondence only holds for untrained networks.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> The signature finding is a hierarchical correspondence: the depth of the layer that <em>best</em> predicts a region tracks that region's position in the ventral hierarchy (V1→V2→V4→IT). It is what turns "a net predicts cortex" from coincidence into structured evidence. It holds (with shifts) for trained nets especially; untrained nets reproduce the early end of it.</div>
+    </li>
+
+    <li class="q" data-answer="d">
+      <p class="q-stem">3. Untrained, random-weight networks predict visual cortex surprisingly well. Where do they win, and where do they lose?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">They win everywhere — training is essentially irrelevant for encoding.</button></li>
+        <li><button data-opt="b">They lose everywhere — random weights carry no useful structure.</button></li>
+        <li><button data-opt="c">They win in high-level category-selective regions but lose in V1.</button></li>
+        <li><button data-opt="d">They are competitive in early/mid areas (V1–V4), but trained nets pull clearly ahead in high-level, category-selective regions (IT/FFA/PPA).</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> The honest statement: architecture (convolution + nonlinearity + pooling) already produces Gabor-like, locally-pooled features that dominate early/mid vision, so random-weight nets are competitive there. Semantic, category-selective representations in IT/FFA/PPA are <em>learned</em>; trained nets win those. Option (a) and (c) are the classic over-reads.</div>
+    </li>
+
+    <li class="q" data-answer="a">
+      <p class="q-stem">4. Why are wavelet scattering transforms (Bruna &amp; Mallat 2013) and HMAX (Riesenhuber &amp; Poggio 1999) natural <em>untrained</em> baselines for early/mid cortex?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">They stack fixed filtering → nonlinearity → pooling (the Hubel-&amp;-Wiesel motif), so their invariances are engineered by design rather than learned by backprop.</button></li>
+        <li><button data-opt="b">They are small CNNs that are pre-trained on ImageNet and then frozen.</button></li>
+        <li><button data-opt="c">They require fitting millions of parameters, just like AlexNet, but on a different dataset.</button></li>
+        <li><button data-opt="d">They only model the retina, not cortex.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Both are deep, fixed hierarchies: oriented wavelet/Gabor filters → a modulus/max nonlinearity → pooling, repeated. Translation invariance comes from pooling/averaging and deformation stability from the wavelet cascade — <em>built in</em>, not learned. That is precisely why they capture the local-statistics-dominated early/mid stream with zero training. They are not pre-trained CNNs (b) and fit no weights (c).</div>
+    </li>
+
+    <li class="q" data-answer="c">
+      <p class="q-stem">5. Geirhos et&nbsp;al. (2019) showed standard ImageNet CNNs classify cue-conflict images by <em>texture</em> while humans use <em>shape</em>. What does this reveal about "architecture vs learning"?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Texture bias is forced by the convolutional architecture and cannot be changed.</button></li>
+        <li><button data-opt="b">CNNs and humans are identical, so the experiment is uninformative.</button></li>
+        <li><button data-opt="c">Texture bias is a <em>learned</em>, objective-and-data-dependent property — so what training installs in high-level representations is contingent and not guaranteed to be brain-like.</button></li>
+        <li><button data-opt="d">It proves untrained networks are more human-like than trained ones at every level.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Retraining on stylized images shifts the network toward shape bias, so the bias is a property of the <em>training diet</em>, not the wiring (ruling out a). It illustrates the dial's high-level end: learning supplies the <em>content</em> of high-level representations, and that content depends on the objective — it can diverge from human/brain processing.</div>
+    </li>
+
+    <li class="q" data-answer="b">
+      <p class="q-stem">6. Two mechanistically different models (a trained CNN and a hand-built scattering model) both score r ≈ 0.32 on V1, within the noise band. This is an example of the identifiability problem. What follows?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">The higher-parameter model is automatically the better scientific theory.</button></li>
+        <li><button data-opt="b">The encoding score is underdetermined here — it constrains hypotheses but cannot single out V1's actual computation; separating them needs a different probe.</button></li>
+        <li><button data-opt="c">The tie proves both models implement V1 by the same mechanism.</button></li>
+        <li><button data-opt="d">One of the two scores must be a measurement error.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> When competing models are statistically indistinguishable on the metric, prediction is underdetermined: a tie (or high r) constrains but does not identify the mechanism. Distinguishing them needs stimuli on which they <em>predict different things</em>, cross-metric agreement (RSA/CKA), or perturbation tests — not a bigger model (a) and not the conclusion of identical mechanism (c).</div>
+    </li>
+
+    <li class="q" data-answer="d">
+      <p class="q-stem">7. Encoding correlation, RSA, and CKA can disagree about how aligned a model and a brain region are. What is the right methodological response?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Pick the metric that gives your model the highest number and report only that.</button></li>
+        <li><button data-opt="b">Average the three numbers into a single grand score and rank models by it.</button></li>
+        <li><button data-opt="c">Discard RSA and CKA; encoding r is the only valid metric.</button></li>
+        <li><button data-opt="d">Treat agreement <em>across</em> metrics as stronger evidence than any single number, and beware benchmark-gaming of any one metric.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Each metric has blind spots (a flexible linear readout can launder differences; CKA is sensitive to kernel choice and is gameable). Optimizing one metric hard invites gaming. Cross-metric agreement (encoding ∧ RSA ∧ CKA) is the honest, more robust signal — not cherry-picking (a) or naive averaging (b).</div>
+    </li>
+
+    <li class="q" data-answer="a">
+      <p class="q-stem">8. The project's thesis is "beat a trained AlexNet." Given the architecture-vs-learning dial, where is this most achievable and where is it the open challenge?</p>
+      <ul class="q-opts">
+        <li><button data-opt="a">Achievable for hand-designed untrained models in early/mid cortex (V1–V3), where architecture/statistics dominate; the open frontier is high-level regions (FFA/PPA/EBA/VWFA), where category-selectivity is learned.</button></li>
+        <li><button data-opt="b">Achievable everywhere equally, since untrained models always match trained ones.</button></li>
+        <li><button data-opt="c">Only achievable in high-level regions; early vision is where trained nets are unbeatable.</button></li>
+        <li><button data-opt="d">Impossible anywhere without training the model with backprop.</button></li>
+      </ul>
+      <div class="q-explain" hidden><b>Why:</b> Empirically, hand-designed untrained models match or beat trained AlexNet's per-region <code>test_corr</code> in V1–V3 (architecture carries early vision), but fall short in high-level category-selective regions, where the learned semantic content is hard to hand-write — exactly the inverse of (c) and the realistic version of (b)/(d).</div>
+    </li>
+  </ol>
+  <button class="quiz-reset" type="button">Reset quiz</button>
+</section>
+
+
+<!-- ===================== KEY PAPERS ===================== -->
+<section id="papers">
+  <div class="reveal">
+    <span class="kicker">Reading list</span>
+    <h2>Key papers</h2>
+    <div class="papers">
+      <h3>Foundational &amp; further reading</h3>
+      <ol>
+        <li><b>Yamins, Hong, Cadieu, Solomon, Seibert &amp; DiCarlo</b> <span class="yr">(2014)</span> — "Performance-optimized hierarchical models predict neural responses in higher visual cortex." <i>PNAS</i> 111(23):8619–8624. <a href="https://doi.org/10.1073/pnas.1403112111">doi:10.1073/pnas.1403112111</a></li>
+        <li><b>Khaligh-Razavi &amp; Kriegeskorte</b> <span class="yr">(2014)</span> — "Deep supervised, but not unsupervised, models may explain IT cortical representation." <i>PLOS Computational Biology</i> 10(11):e1003915. <a href="https://doi.org/10.1371/journal.pcbi.1003915">doi:10.1371/journal.pcbi.1003915</a></li>
+        <li><b>Schrimpf et&nbsp;al.</b> <span class="yr">(2018/2020)</span> — "Brain-Score: which artificial neural network for object recognition is most brain-like?" <i>bioRxiv</i> / Neuron (2020). <a href="https://doi.org/10.1101/407007">doi:10.1101/407007</a></li>
+        <li><b>Jarrett, Kavukcuoglu, Ranzato &amp; LeCun</b> <span class="yr">(2009)</span> — "What is the best multi-stage architecture for object recognition?" <i>ICCV</i>. <a href="https://doi.org/10.1109/ICCV.2009.5459469">doi:10.1109/ICCV.2009.5459469</a></li>
+        <li><b>Saxe, Koh, Chen, Bhand, Suresh &amp; Ng</b> <span class="yr">(2011)</span> — "On random weights and unsupervised feature learning." <i>ICML</i>. <a href="https://icml.cc/2011/papers/551_icmlpaper.pdf">icml.cc/2011</a></li>
+        <li><b>Bruna &amp; Mallat</b> <span class="yr">(2013)</span> — "Invariant scattering convolution networks." <i>IEEE TPAMI</i> 35(8):1872–1886. <a href="https://doi.org/10.1109/TPAMI.2012.230">doi:10.1109/TPAMI.2012.230</a></li>
+        <li><b>Riesenhuber &amp; Poggio</b> <span class="yr">(1999)</span> — "Hierarchical models of object recognition in cortex" (HMAX). <i>Nature Neuroscience</i> 2(11):1019–1025. <a href="https://doi.org/10.1038/14819">doi:10.1038/14819</a></li>
+        <li><b>Geirhos, Rubisch, Michaelis, Bethge, Wichmann &amp; Brendel</b> <span class="yr">(2019)</span> — "ImageNet-trained CNNs are biased towards texture; increasing shape bias improves accuracy and robustness." <i>ICLR</i>. <a href="https://arxiv.org/abs/1811.12231">arXiv:1811.12231</a></li>
+        <li><b>Doerig et&nbsp;al.</b> <span class="yr">(2023)</span> — "The neuroconnectionist research programme." <i>Nature Reviews Neuroscience</i> 24:431–450. <a href="https://doi.org/10.1038/s41583-023-00705-w">doi:10.1038/s41583-023-00705-w</a></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="navcards">
+    <a class="navcard prev" href="05-language-brain.html">
+      <div class="dir">← Previous</div>
+      <div class="ti">Ch. 05 · The Language Brain</div>
+    </a>
+    <a class="navcard next" href="index.html">
+      <div class="dir">Finish · The Handbook hub →</div>
+      <div class="ti">Back to all six chapters</div>
+    </a>
+  </div>
+
+  <div class="crosslinks">
+    <h4>Keep exploring</h4>
+    <div class="cols">
+      <div>
+        <strong style="font-family:var(--display); color:var(--ink)">Concept chapters</strong>
+        <ul style="margin-top:.6rem">
+          <li><a href="01-encoding-models.html">01 · Encoding models</a></li>
+          <li><a href="02-neural-code.html">02 · The neural code</a></li>
+          <li><a href="03-measuring-the-brain.html">03 · Measuring the brain</a></li>
+          <li><a href="04-visual-brain.html">04 · The visual brain</a></li>
+          <li><a href="05-language-brain.html">05 · The language brain</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong style="font-family:var(--display); color:var(--ink)">Dataset guides &amp; overview</strong>
+        <ul style="margin-top:.6rem">
+          <li><a href="../overview.html">Project overview</a></li>
+          <li><a href="../ecog-podcast.html">"Podcast" ECoG (iEEG, language)</a></li>
+          <li><a href="../tvsd-macaque-spiking.html">TVSD macaque spiking (vision)</a></li>
+          <li><a href="../le-petit-prince.html">Le Petit Prince (fMRI + MEG)</a></li>
+          <li><a href="../index.html">Dataset hub</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <a class="backhub" href="index.html">↑ Back to the Handbook</a>
+
+  <div class="credit">
+    <span>The Cortex Handbook · Ch. 06 / 06 — Brains &amp; Deep Networks</span>
+    <span style="color:var(--accent)">neuro-autoresearch · beat trained AlexNet · 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- reading-progress bar ----
+  var bar = document.getElementById("progress");
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+    if (bar) bar.style.width = pct + "%";
+  }
+  document.addEventListener("scroll", onScroll, {passive:true});
+  window.addEventListener("resize", onScroll, {passive:true});
+  onScroll();
+
+  // ---- scroll-reveal ----
+  var reveals = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduce){
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add("in"); ro.unobserve(e.target); }
+      });
+    }, {rootMargin:"0px 0px -10% 0px", threshold:0.08});
+    reveals.forEach(function(el){ ro.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add("in"); });
+  }
+
+  // ---- TOC active-section highlighting ----
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute("href").slice(1);
+    var sec = document.getElementById(id);
+    if(sec) map[id] = a;
+  });
+  if ("IntersectionObserver" in window){
+    var so = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          links.forEach(function(l){ l.classList.remove("active"); });
+          var a = map[e.target.id];
+          if(a) a.classList.add("active");
+        }
+      });
+    }, {rootMargin:"-45% 0px -45% 0px", threshold:0});
+    Object.keys(map).forEach(function(id){
+      var sec = document.getElementById(id);
+      if(sec) so.observe(sec);
+    });
+  }
+
+  // ---- end-of-chapter quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var qs = Array.prototype.slice.call(quiz.querySelectorAll('.q'));
+    var scoreEl = quiz.querySelector('[data-score]');
+    var update = function(){
+      if(scoreEl) scoreEl.textContent = qs.filter(function(q){return q.dataset.state==='right';}).length + ' / ' + qs.length;
+    };
+    qs.forEach(function(q){
+      var correct = q.dataset.answer;
+      q.querySelectorAll('button[data-opt]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          if(q.dataset.state) return;
+          q.dataset.state = btn.dataset.opt===correct ? 'right' : 'wrong';
+          q.querySelectorAll('button[data-opt]').forEach(function(b){
+            b.disabled = true;
+            if(b.dataset.opt===correct) b.classList.add('opt-correct');
+            else if(b===btn) b.classList.add('opt-wrong');
+          });
+          var ex = q.querySelector('.q-explain'); if(ex) ex.hidden = false; update();
+        });
+      });
+    });
+    var reset = quiz.querySelector('.quiz-reset');
+    if(reset) reset.addEventListener('click', function(){
+      qs.forEach(function(q){
+        delete q.dataset.state;
+        q.querySelectorAll('button[data-opt]').forEach(function(b){ b.disabled=false; b.classList.remove('opt-correct','opt-wrong'); });
+        var ex = q.querySelector('.q-explain'); if(ex) ex.hidden = true;
+      });
+      update();
+    });
+    update();
+  });
+})();
+</script>
+</body>
+</html>

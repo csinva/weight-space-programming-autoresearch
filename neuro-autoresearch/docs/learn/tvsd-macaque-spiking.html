@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TVSD — Reading the Monkey's Visual Cortex, Spike by Spike</title>
+<meta name="description" content="A field-guide to the THINGS Ventral-stream Spiking Dataset (TVSD): macaque intracranial spiking through V1, V4, and IT during natural image viewing, and how the neuro-autoresearch encoding harness uses it." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* palette — warm archival field-guide */
+    --paper:#f6f1e7;
+    --paper-2:#f3ece0;
+    --paper-3:#efe6d6;
+    --ink:#1c1917;
+    --ink-soft:#433b32;
+    --ink-faint:#6b6051;
+    --rule:#d9cdb6;
+    --rule-soft:#e6dcc8;
+    --accent:#b45309;       /* rust / amber */
+    --accent-2:#c2410c;     /* deeper rust */
+    --accent-wash:#f0e3cf;
+    /* V1 -> V4 -> IT ramp: cool indigo -> teal -> warm rust */
+    --v1:#3f4d8a;           /* indigo */
+    --v4:#0f766e;           /* teal */
+    --it:#b4480f;           /* warm rust */
+    --v1-wash:#e4e3ef;
+    --v4-wash:#dcebe8;
+    --it-wash:#f1e2d3;
+    /* spacing scale */
+    --s-1:.5rem; --s-2:.75rem; --s-3:1rem; --s-4:1.5rem; --s-5:2.5rem;
+    --s-6:4rem; --s-7:6rem;
+    --maxw:1080px;
+    --serif:"Fraunces", "Spectral", Georgia, "Times New Roman", serif;
+    --body:"Newsreader", "Spectral", Georgia, serif;
+    --mono:"IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:clamp(1.02rem,.62rem + .55vw,1.18rem);
+    line-height:1.66;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  /* paper grain overlay */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/></svg>");
+    opacity:.05;
+    mix-blend-mode:multiply;
+  }
+
+  a{color:var(--accent-2);text-underline-offset:3px;text-decoration-thickness:1px}
+  a:hover{color:var(--accent)}
+
+  /* ---------- layout shells ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1.1rem,4vw,2.4rem);position:relative;z-index:2}
+  section{position:relative;z-index:2}
+
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;line-height:1.08;color:var(--ink);letter-spacing:-.01em}
+  h2{font-size:clamp(1.9rem,1.1rem + 2.4vw,3rem);font-weight:600;margin:0 0 .35em}
+  h3{font-size:clamp(1.3rem,.95rem + 1.1vw,1.7rem);margin:2.2em 0 .5em;font-weight:600}
+  h4{font-size:1.06rem;letter-spacing:.02em;text-transform:uppercase;font-weight:600;color:var(--accent-2)}
+  p{margin:0 0 1.05em}
+  .lead{font-size:1.18em;color:var(--ink-soft)}
+  strong{font-weight:600;color:var(--ink)}
+  em{color:var(--ink-soft)}
+
+  .kicker{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--accent-2);margin:0 0 1.1rem;font-weight:500;
+  }
+  .rule{height:1px;background:var(--rule);border:0;margin:0}
+  .rule-thick{height:2px;background:linear-gradient(90deg,var(--v1),var(--v4),var(--it));border:0;border-radius:2px}
+
+  /* ---------- top progress + nav ---------- */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:60;
+    background:linear-gradient(90deg,var(--v1),var(--v4),var(--it))}
+  nav#toc{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule-soft);
+    transform:translateY(-110%);transition:transform .35s ease;
+  }
+  nav#toc.show{transform:translateY(0)}
+  nav#toc .inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:.4rem;
+    padding:.5rem clamp(1.1rem,4vw,2.4rem);overflow-x:auto;scrollbar-width:none}
+  nav#toc .inner::-webkit-scrollbar{display:none}
+  nav#toc .brand{font-family:var(--mono);font-size:.74rem;letter-spacing:.18em;color:var(--accent-2);
+    text-transform:uppercase;white-space:nowrap;margin-right:.6rem;font-weight:600}
+  nav#toc a{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-decoration:none;
+    color:var(--ink-faint);white-space:nowrap;padding:.28rem .55rem;border-radius:999px;transition:.2s}
+  nav#toc a:hover{color:var(--ink);background:var(--paper-3)}
+  nav#toc a.active{color:var(--accent-2);background:var(--accent-wash)}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(4rem,11vh,8rem) 0 clamp(2.2rem,7vh,4.5rem);position:relative;overflow:hidden}
+  .hero .eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--accent-2);margin-bottom:1.4rem}
+  .hero h1{font-family:var(--serif);font-weight:900;
+    font-size:clamp(2.7rem,1.2rem + 6.6vw,6rem);line-height:.96;letter-spacing:-.022em;margin:0 0 .5em;
+    font-optical-sizing:auto;}
+  .hero h1 .accent{color:var(--accent-2);font-style:italic;font-weight:500}
+  .hero .standfirst{font-size:clamp(1.18rem,.9rem + 1vw,1.55rem);max-width:34ch;color:var(--ink-soft);
+    line-height:1.4;margin:0 0 2rem}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:1.4rem 2.2rem;font-family:var(--mono);font-size:.78rem;
+    color:var(--ink-faint);letter-spacing:.02em}
+  .hero .meta b{display:block;color:var(--ink);font-size:1.05rem;letter-spacing:0;font-weight:600;margin-top:.15rem}
+  .hero-raster{margin:2.6rem 0 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:1.1rem 0}
+  .hero-raster svg{display:block;width:100%;height:auto}
+
+  /* ---------- generic section ---------- */
+  .section-pad{padding:clamp(3rem,8vh,5.5rem) 0}
+  .divider-raster{padding:clamp(1.6rem,4vh,2.6rem) 0}
+  .divider-raster svg{display:block;width:100%;height:auto;opacity:.9}
+
+  .twocol{display:grid;grid-template-columns:1fr;gap:clamp(1.4rem,3vw,2.6rem);align-items:start}
+  @media(min-width:820px){.twocol{grid-template-columns:1.05fr .95fr}}
+  .twocol.flip{direction:rtl}.twocol.flip>*{direction:ltr}
+
+  /* figure frame */
+  figure{margin:1.8rem 0;background:var(--paper-2);border:1px solid var(--rule);border-radius:10px;
+    padding:1.2rem 1.2rem 1rem;box-shadow:0 1px 0 #fff inset, 0 12px 30px -24px rgba(40,30,10,.5)}
+  figure svg{display:block;width:100%;height:auto}
+  figcaption{font-size:.86rem;color:var(--ink-faint);margin-top:.85rem;line-height:1.5;
+    border-top:1px dashed var(--rule);padding-top:.7rem}
+  figcaption .fignum{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;color:var(--accent-2);
+    text-transform:uppercase;margin-right:.5em;font-weight:600}
+
+  /* stat blocks */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);
+    border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:2rem 0}
+  @media(min-width:680px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stat{background:var(--paper-2);padding:1.4rem 1.1rem}
+  .stat .num{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,1.2rem + 2.2vw,2.9rem);
+    line-height:1;color:var(--accent-2);letter-spacing:-.02em}
+  .stat .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-faint);margin-top:.55rem;line-height:1.4}
+
+  /* area chips */
+  .chip{display:inline-block;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;font-weight:600;
+    padding:.16em .6em;border-radius:999px;vertical-align:baseline}
+  .chip.v1{background:var(--v1-wash);color:var(--v1)}
+  .chip.v4{background:var(--v4-wash);color:var(--v4)}
+  .chip.it{background:var(--it-wash);color:var(--it)}
+
+  /* glossary aside */
+  .glossary{background:var(--paper-3);border:1px solid var(--rule);border-left:4px solid var(--accent);
+    border-radius:8px;padding:1.3rem 1.5rem;margin:2rem 0}
+  .glossary h4{margin:0 0 .8rem}
+  .glossary dl{margin:0}
+  .glossary dt{font-family:var(--serif);font-weight:600;font-size:1.04rem;color:var(--ink);margin-top:.85rem}
+  .glossary dt:first-of-type{margin-top:0}
+  .glossary dd{margin:.15rem 0 0;font-size:.95rem;color:var(--ink-soft);line-height:1.55}
+
+  /* callout */
+  .callout{border:1px solid var(--rule);background:
+    linear-gradient(180deg,var(--paper-2),var(--paper-3));border-radius:10px;padding:1.3rem 1.5rem;margin:1.8rem 0}
+  .callout .tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent-2);font-weight:600;display:block;margin-bottom:.4rem}
+
+  /* code */
+  code{font-family:var(--mono);font-size:.86em;background:var(--paper-3);border:1px solid var(--rule-soft);
+    border-radius:5px;padding:.08em .38em;color:var(--ink)}
+  pre{font-family:var(--mono);font-size:.82rem;line-height:1.7;background:#211c16;color:#f3ece0;
+    border-radius:10px;padding:1.1rem 1.25rem;overflow-x:auto;margin:1.6rem 0;
+    box-shadow:0 14px 34px -24px rgba(0,0,0,.7)}
+  pre .c{color:#b8a88a}
+  pre .k{color:#f0a868}
+  pre .v{color:#7fc9bd}
+  pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+
+  ul.tidy{list-style:none;padding:0;margin:1.1rem 0}
+  ul.tidy li{position:relative;padding-left:1.5rem;margin-bottom:.7rem}
+  ul.tidy li::before{content:"";position:absolute;left:.1rem;top:.62em;width:.5rem;height:.5rem;
+    background:var(--accent);border-radius:1px;transform:rotate(45deg)}
+
+  .pull{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(1.3rem,.95rem + 1.4vw,1.9rem);
+    line-height:1.3;color:var(--ink);border-left:3px solid var(--accent);padding:.2rem 0 .2rem 1.3rem;margin:2.2rem 0}
+
+  /* footer */
+  footer{background:#211c16;color:#e9e0cf;margin-top:4rem;padding:clamp(3rem,7vh,5rem) 0 3rem;position:relative;z-index:2}
+  footer h2{color:#fbf6ec}
+  footer a{color:#f0a868}
+  footer a:hover{color:#f7c79a}
+  footer .grid{display:grid;grid-template-columns:1fr;gap:2rem;margin-top:2rem}
+  @media(min-width:760px){footer .grid{grid-template-columns:1.2fr 1fr}}
+  footer .src{font-size:.93rem;line-height:1.6;color:#cdbfa6}
+  footer .src h4{color:#f0a868;margin-bottom:.6rem}
+  footer .src p{margin-bottom:.9rem}
+  footer .colophon{font-family:var(--mono);font-size:.72rem;color:#9a8c73;letter-spacing:.04em;
+    border-top:1px solid #3a322748;margin-top:2.4rem;padding-top:1.4rem;line-height:1.7}
+
+  /* reveal animation */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .55s ease}
+  .stagger.in>*{opacity:1;transform:none}
+  .stagger.in>*:nth-child(1){transition-delay:.05s}
+  .stagger.in>*:nth-child(2){transition-delay:.13s}
+  .stagger.in>*:nth-child(3){transition-delay:.21s}
+  .stagger.in>*:nth-child(4){transition-delay:.29s}
+  .stagger.in>*:nth-child(5){transition-delay:.37s}
+  @media(prefers-reduced-motion:reduce){
+    .reveal,.stagger>*{opacity:1!important;transform:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+    .spk{animation:none!important}
+  }
+
+  /* animated spike ticks (hero) */
+  .spk{animation:spkrise .9s ease both}
+  @keyframes spkrise{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1);opacity:1}}
+
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<nav id="toc" aria-label="Section navigation">
+  <div class="inner">
+    <span class="brand">TVSD</span>
+    <a href="#stream">Ventral stream</a>
+    <a href="#signal">The signal</a>
+    <a href="#experiment">The experiment</a>
+    <a href="#why">Why it matters</a>
+    <a href="#harness">In the harness</a>
+    <a href="#sources">Sources</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow reveal">THINGS Ventral-stream Spiking Dataset &nbsp;·&nbsp; Macaque · V1 → V4 → IT</div>
+    <h1 class="reveal">Reading the monkey's<br />visual cortex,<br /><span class="accent">spike by spike.</span></h1>
+    <p class="standfirst reveal">Thousands of natural images. Two macaques. 1,024 electrodes apiece, threaded straight into the brain's object-recognition pathway — and a single firing-rate number for every electrode, every picture.</p>
+    <div class="meta reveal">
+      <div>Source<b>Papale et al., Neuron 2025</b></div>
+      <div>Stimuli<b>THINGS image database</b></div>
+      <div>Signal<b>Normalized multi-unit activity</b></div>
+      <div>In this harness<b>NEURO_DATASET=tvsd</b></div>
+    </div>
+
+    <div class="hero-raster reveal" aria-hidden="true">
+      <!-- decorative spike raster: rows of vertical ticks -->
+      <svg viewBox="0 0 1000 150" preserveAspectRatio="none" role="img" aria-label="Decorative spike raster">
+        <g id="raster-rows"></g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ INTRO ============ -->
+<section class="section-pad" id="intro">
+  <div class="wrap">
+    <div class="twocol">
+      <div class="reveal">
+        <p class="kicker">Field note 00 — Orientation</p>
+        <p class="lead">When a monkey looks at a photograph of a cup, electricity ripples through a chain of cortical areas — <span class="chip v1">V1</span> <span class="chip v4">V4</span> <span class="chip it">IT</span> — and somewhere in that cascade the abstract idea <em>"cup"</em> becomes legible. The <strong>THINGS Ventral-stream Spiking Dataset (TVSD)</strong> is a rare, direct window onto that cascade: not a blood-flow shadow, but the firing of neurons themselves.</p>
+        <p>This page is a field-guide to three things. First, the <strong>primate ventral visual stream</strong>, the brain's core object-recognition pathway. Second, the <strong>signal</strong> — what spikes and multi-unit activity recorded from <strong>Utah microelectrode arrays</strong> actually are. And third, how our <code>neuro-autoresearch</code> harness turns this dataset into a benchmark for fixed, <em>never-trained</em> encoding models.</p>
+      </div>
+      <div class="reveal">
+        <div class="glossary">
+          <h4>Key terms</h4>
+          <dl>
+            <dt>Ventral stream</dt>
+            <dd>The "what" pathway — the occipito-temporal sequence V1 → V2 → V4 → IT that builds invariant object identity.</dd>
+            <dt>Spike</dt>
+            <dd>A neuron's action potential: the ~1&nbsp;ms all-or-nothing voltage event that is the cortex's unit of communication.</dd>
+            <dt>MUA</dt>
+            <dd>Multi-unit activity — the pooled spiking of the small population of neurons near one electrode tip.</dd>
+            <dt>Encoding model</dt>
+            <dd>A function from stimulus → predicted neural response. The better it predicts held-out responses, the more brain-like it is.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-raster" aria-hidden="true">
+  <div class="wrap">
+    <svg viewBox="0 0 1000 36" preserveAspectRatio="none" role="img" aria-label="Spike raster divider">
+      <g id="div-1"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ 1. VENTRAL STREAM ============ -->
+<section class="section-pad" id="stream">
+  <div class="wrap">
+    <p class="kicker reveal">Field note 01 — Anatomy</p>
+    <h2 class="reveal">The primate ventral <span style="font-style:italic;color:var(--accent-2)">“what”</span> stream</h2>
+    <p class="lead reveal">Vision is not a snapshot. It is a hierarchy of transformations that turns a grid of retinal light into the knowledge that you are looking at a particular object.</p>
+
+    <p class="reveal">Light from the eye reaches primary visual cortex — <strong>V1</strong> — at the back of the brain, and from there flows forward and downward along the temporal lobe. Each step abstracts a little more. The receptive field (the patch of the visual world a neuron "watches") grows larger; the features a neuron prefers grow more complex; and, crucially, the representation grows more <strong>invariant</strong> — a face stays a face whether it is near or far, left or right, large or small.</p>
+
+    <figure class="reveal">
+      <!-- macaque ventral stream diagram -->
+      <svg viewBox="0 0 900 460" role="img" aria-labelledby="brainlbl">
+        <title id="brainlbl">Stylized macaque occipito-temporal cortex showing the ventral stream V1 to V4 to IT with receptive-field and complexity insets</title>
+        <defs>
+          <linearGradient id="streamgrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#3f4d8a"/>
+            <stop offset="0.5" stop-color="#0f766e"/>
+            <stop offset="1" stop-color="#b4480f"/>
+          </linearGradient>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#b45309"/>
+          </marker>
+        </defs>
+
+        <!-- brain silhouette (lateral view, snout to the left) -->
+        <path d="M70,250 C60,170 130,95 250,90 C360,86 470,92 560,110
+                 C640,126 705,150 760,170 C815,190 845,225 838,260
+                 C830,300 770,318 700,322 C690,360 660,392 610,396
+                 C560,400 520,378 505,344 C470,360 420,366 380,356
+                 C300,392 200,388 140,352 C92,322 78,292 70,250 Z"
+              fill="var(--paper-3)" stroke="var(--rule)" stroke-width="2"/>
+        <!-- a few sulci -->
+        <path d="M250,150 C300,200 290,250 250,300" fill="none" stroke="var(--rule)" stroke-width="2" opacity=".7"/>
+        <path d="M430,140 C470,190 460,250 420,300" fill="none" stroke="var(--rule)" stroke-width="2" opacity=".7"/>
+        <path d="M600,150 C640,200 630,250 600,300" fill="none" stroke="var(--rule)" stroke-width="2" opacity=".7"/>
+
+        <!-- the stream arrow -->
+        <path d="M740,250 C660,310 560,330 440,330 C320,330 240,322 175,300"
+              fill="none" stroke="url(#streamgrad)" stroke-width="6" stroke-linecap="round"
+              marker-end="url(#arrow)" opacity=".9"/>
+
+        <!-- area nodes: V1 (right/posterior) -> V4 -> IT (left/anterior temporal) -->
+        <!-- V1 -->
+        <circle cx="745" cy="248" r="34" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="3"/>
+        <text x="745" y="254" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="22" fill="var(--v1)">V1</text>
+        <text x="745" y="300" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-faint)">primary visual</text>
+        <!-- V4 -->
+        <circle cx="470" cy="316" r="34" fill="var(--v4-wash)" stroke="var(--v4)" stroke-width="3"/>
+        <text x="470" y="322" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="22" fill="var(--v4)">V4</text>
+        <text x="470" y="368" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-faint)">mid-level</text>
+        <!-- IT -->
+        <circle cx="195" cy="300" r="34" fill="var(--it-wash)" stroke="var(--it)" stroke-width="3"/>
+        <text x="195" y="306" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="22" fill="var(--it)">IT</text>
+        <text x="195" y="352" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-faint)">inferotemporal</text>
+
+        <!-- direction label -->
+        <text x="455" y="120" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" letter-spacing="2" fill="var(--ink-faint)">POSTERIOR  →  ANTERIOR   ·   simple → complex · small RF → large RF · invariant identity</text>
+
+        <!-- INSET row: receptive field size (circles) + feature complexity -->
+        <g transform="translate(0,400)">
+          <!-- V1 inset -->
+          <rect x="690" y="-2" width="110" height="56" rx="8" fill="#fff" stroke="var(--v1)" stroke-width="1.5" opacity=".95"/>
+          <circle cx="715" cy="26" r="8" fill="none" stroke="var(--v1)" stroke-width="2"/>
+          <line x1="711" y1="26" x2="719" y2="26" stroke="var(--v1)" stroke-width="2"/>
+          <text x="745" y="22" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">oriented</text>
+          <text x="745" y="34" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">edges</text>
+          <!-- V4 inset -->
+          <rect x="415" y="-2" width="110" height="56" rx="8" fill="#fff" stroke="var(--v4)" stroke-width="1.5" opacity=".95"/>
+          <circle cx="440" cy="26" r="13" fill="none" stroke="var(--v4)" stroke-width="2"/>
+          <path d="M433,30 Q440,16 447,30" fill="none" stroke="var(--v4)" stroke-width="2"/>
+          <text x="470" y="22" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">curves,</text>
+          <text x="470" y="34" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">color, texture</text>
+          <!-- IT inset -->
+          <rect x="140" y="-2" width="110" height="56" rx="8" fill="#fff" stroke="var(--it)" stroke-width="1.5" opacity=".95"/>
+          <circle cx="165" cy="26" r="19" fill="none" stroke="var(--it)" stroke-width="2"/>
+          <circle cx="160" cy="22" r="2.2" fill="var(--it)"/><circle cx="171" cy="22" r="2.2" fill="var(--it)"/>
+          <path d="M159,30 Q165,35 172,30" fill="none" stroke="var(--it)" stroke-width="2"/>
+          <text x="195" y="22" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">whole objects,</text>
+          <text x="195" y="34" font-family="IBM Plex Mono,monospace" font-size="9" fill="var(--ink-faint)">faces, identity</text>
+        </g>
+      </svg>
+      <figcaption><span class="fignum">Fig. 1</span>The ventral stream across a stylized macaque cortex. Information flows from posterior <span class="chip v1">V1</span> forward into the temporal lobe — <span class="chip v4">V4</span>, then <span class="chip it">IT</span>. The insets sketch the parallel climb: receptive fields enlarge (small to large circle) while the preferred feature advances from oriented edges, to curves / color / texture, to whole, position- and size-invariant objects. The cool-to-warm ramp recurs throughout this guide as the area key.</figcaption>
+    </figure>
+
+    <div class="twocol">
+      <div class="reveal">
+        <h3>The climb, one stage at a time</h3>
+        <ul class="tidy">
+          <li><strong><span class="chip v1">V1</span> — oriented edges.</strong> Neurons act like small, local edge-and-bar detectors at specific orientations and spatial frequencies. Receptive fields are tiny.</li>
+          <li><strong><span class="chip v4">V4</span> — contours, texture, color.</strong> A mid-level station tuned to curvature, surface texture and hue. Receptive fields are larger; parts begin to combine into shapes.</li>
+          <li><strong><span class="chip it">IT</span> — objects &amp; identity.</strong> Inferotemporal cortex hosts neurons selective for complex objects and faces, and — the headline property — for identity that <em>holds across</em> changes in position, size, and pose.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <p class="pull">Untangling identity: IT makes the "cup" of a cup explicit in a way the raw pixels never were.</p>
+        <p>Researchers describe IT as producing an <strong>untangled</strong> representation — one where simple linear readouts can separate object categories that were hopelessly interleaved at the pixel and V1 level. That is precisely the property an encoding-model benchmark can probe: how much of each area's response can a fixed model explain?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-raster" aria-hidden="true">
+  <div class="wrap">
+    <svg viewBox="0 0 1000 36" preserveAspectRatio="none" role="img" aria-label="Spike raster divider">
+      <g id="div-2"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ 2. THE SIGNAL ============ -->
+<section class="section-pad" id="signal">
+  <div class="wrap">
+    <p class="kicker reveal">Field note 02 — Instrumentation</p>
+    <h2 class="reveal">The signal: spikes, MUA &amp; Utah arrays</h2>
+    <p class="lead reveal">A neuron speaks in spikes — brief, stereotyped voltage pulses. An electrode in the cortex overhears them. The trick is turning that overheard chatter into one clean number per image.</p>
+
+    <div class="twocol">
+      <div class="reveal">
+        <p>When a neuron fires, it produces an <strong>action potential</strong> (a "spike"): an all-or-nothing electrical event lasting about a millisecond. The pattern and rate of spikes is the cortex's code. A microelectrode placed near a neuron picks up the tiny extracellular signature of that spike.</p>
+        <p>If a recording is clean enough to attribute every spike to one identified neuron, you have <strong>single-unit activity</strong>. More often, an electrode hears a handful of nearby cells at once — that pooled signal is <strong>multi-unit activity (MUA)</strong>. MUA is robust and stable over long chronic recordings, which is exactly what you want when you intend to show a monkey tens of thousands of images.</p>
+        <p>TVSD ships <strong>normalized MUA</strong>: for each electrode, the windowed envelope of multi-unit spiking evoked by an image is collapsed to a <em>single value</em> — one number per electrode, per image. That table, <code>[electrodes × images]</code>, is the target our harness predicts.</p>
+      </div>
+      <div class="reveal">
+        <div class="glossary">
+          <h4>Single vs. multi unit</h4>
+          <dl>
+            <dt>Single-unit (SUA)</dt>
+            <dd>Spikes sorted to one isolated neuron. High specificity, harder to maintain over months.</dd>
+            <dt>Multi-unit (MUA)</dt>
+            <dd>The pooled spiking of the local neuron cluster near the electrode tip — what TVSD records.</dd>
+            <dt>Normalized MUA</dt>
+            <dd>The MUA response envelope in a fixed time window, baseline-corrected and scaled, reduced to one value per image.</dd>
+            <dt>Chronic array</dt>
+            <dd>An electrode grid implanted to stay in place, enabling stable recordings across many sessions.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <figure class="reveal">
+      <!-- Utah array grid + spikes -> envelope -> one number -->
+      <svg viewBox="0 0 900 360" role="img" aria-labelledby="utahlbl">
+        <title id="utahlbl">A Utah microelectrode array grid and a schematic of spikes becoming a multi-unit activity envelope and then one number per image</title>
+
+        <!-- LEFT: Utah array, 8x8 grid on a base -->
+        <g transform="translate(40,40)">
+          <text x="130" y="-12" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" letter-spacing="2" fill="var(--ink-faint)">UTAH ARRAY · 8 × 8 ELECTRODES</text>
+          <!-- base -->
+          <rect x="0" y="0" width="260" height="220" rx="10" fill="var(--paper-3)" stroke="var(--rule)" stroke-width="2"/>
+          <!-- electrode shanks rendered as a perspective grid of pins -->
+          <g id="utah-grid"></g>
+          <!-- bracket showing one shank -->
+          <path d="M236,150 l16,0 l0,-70 l-16,0" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="258" y="118" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--accent-2)">~1 mm</text>
+          <text x="258" y="132" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--accent-2)">shank</text>
+        </g>
+
+        <!-- arrow to right -->
+        <path d="M330,150 L378,150" stroke="var(--accent)" stroke-width="3" marker-end="url(#arrow)" fill="none"/>
+
+        <!-- RIGHT: raw spikes -> envelope -> number -->
+        <g transform="translate(400,40)">
+          <text x="230" y="-12" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" letter-spacing="2" fill="var(--ink-faint)">ONE ELECTRODE, ONE IMAGE</text>
+
+          <!-- raw spike train -->
+          <text x="0" y="22" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-faint)">raw spikes</text>
+          <line x1="0" y1="55" x2="460" y2="55" stroke="var(--rule)" stroke-width="1"/>
+          <g id="spk-train" stroke="var(--ink)" stroke-width="1.6"></g>
+
+          <!-- envelope -->
+          <text x="0" y="112" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-faint)">MUA envelope</text>
+          <path id="env-path" d="" fill="none" stroke="var(--accent-2)" stroke-width="2.5"/>
+          <line x1="0" y1="190" x2="460" y2="190" stroke="var(--rule)" stroke-width="1"/>
+          <!-- shaded area under envelope -->
+          <path id="env-fill" d="" fill="var(--accent-wash)" opacity=".7"/>
+
+          <!-- collapse to one number -->
+          <text x="0" y="230" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-faint)">→ one value</text>
+          <rect x="120" y="212" width="220" height="48" rx="8" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2"/>
+          <text x="230" y="243" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="22" fill="var(--it)">MUA = 0.84</text>
+        </g>
+      </svg>
+      <figcaption><span class="fignum">Fig. 2</span>From silicon to scalar. A Utah array is an 8×8 grid of microelectrode shanks chronically implanted in cortex (each monkey carries enough of them to total <strong>1,024 electrodes</strong>). For each electrode and each image, the train of spikes is converted into an evoked <strong>MUA envelope</strong>, which is then averaged within a response window into a <strong>single normalized value</strong> — the entry the encoding model learns to predict.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="divider-raster" aria-hidden="true">
+  <div class="wrap">
+    <svg viewBox="0 0 1000 36" preserveAspectRatio="none" role="img" aria-label="Spike raster divider">
+      <g id="div-3"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ 3. THE EXPERIMENT ============ -->
+<section class="section-pad" id="experiment">
+  <div class="wrap">
+    <p class="kicker reveal">Field note 03 — The recording</p>
+    <h2 class="reveal">The experiment</h2>
+    <p class="lead reveal">Two macaques watched a flood of natural images while every implanted electrode logged its evoked firing. The result is one of the largest ventral-stream spiking datasets ever released.</p>
+
+    <div class="stats stagger reveal">
+      <div class="stat"><div class="num">2</div><div class="lbl">Macaques<br/>(monkey F &amp; monkey N)</div></div>
+      <div class="stat"><div class="num">1,024</div><div class="lbl">Electrodes<br/>per monkey</div></div>
+      <div class="stat"><div class="num">22,248</div><div class="lbl">Train images<br/>(seen once)</div></div>
+      <div class="stat"><div class="num">100</div><div class="lbl">Test images<br/>(repeated many times)</div></div>
+    </div>
+
+    <div class="twocol">
+      <div class="reveal">
+        <h3>Where the electrodes sit</h3>
+        <p>Each monkey's 1,024 electrodes are distributed across the three sampled areas — <span class="chip v1">V1</span>, <span class="chip v4">V4</span>, <span class="chip it">IT</span> — but the split differs by animal:</p>
+        <ul class="tidy">
+          <li><strong>Monkey F</strong> — <span class="chip v1">V1 512</span> · <span class="chip it">IT 320</span> · <span class="chip v4">V4 192</span></li>
+          <li><strong>Monkey N</strong> — <span class="chip v1">V1 512</span> · <span class="chip v4">V4 256</span> · <span class="chip it">IT 256</span></li>
+        </ul>
+        <p>Both animals devote half their channels to V1, but they trade off the remainder between V4 and IT — so each monkey gives a slightly different vantage on the high-level end of the stream.</p>
+      </div>
+      <div class="reveal">
+        <!-- electrode distribution bars -->
+        <figure style="margin-top:0">
+          <svg viewBox="0 0 420 250" role="img" aria-labelledby="distlbl">
+            <title id="distlbl">Per-monkey electrode counts across V1, V4 and IT</title>
+            <!-- axis -->
+            <line x1="60" y1="20" x2="60" y2="210" stroke="var(--rule)" stroke-width="1.5"/>
+            <line x1="60" y1="210" x2="410" y2="210" stroke="var(--rule)" stroke-width="1.5"/>
+            <!-- scale: 512 px? use 512 -> 170px tall.  factor = 170/512 -->
+            <!-- Monkey F group -->
+            <text x="135" y="232" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="var(--ink-soft)">Monkey F</text>
+            <rect x="78"  y="40"  width="30" height="170" fill="var(--v1)"/>
+            <rect x="112" y="104" width="30" height="106" fill="var(--it)"/>
+            <rect x="146" y="146" width="30" height="64"  fill="var(--v4)"/>
+            <text x="93"  y="33"  text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--v1)">512</text>
+            <text x="127" y="97"  text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--it)">320</text>
+            <text x="161" y="139" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--v4)">192</text>
+            <!-- Monkey N group -->
+            <text x="300" y="232" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="var(--ink-soft)">Monkey N</text>
+            <rect x="243" y="40"  width="30" height="170" fill="var(--v1)"/>
+            <rect x="277" y="125" width="30" height="85"  fill="var(--v4)"/>
+            <rect x="311" y="125" width="30" height="85"  fill="var(--it)"/>
+            <text x="258" y="33"  text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--v1)">512</text>
+            <text x="292" y="118" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--v4)">256</text>
+            <text x="326" y="118" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--it)">256</text>
+            <!-- legend -->
+            <g font-family="IBM Plex Mono,monospace" font-size="10">
+              <rect x="60" y="6" width="10" height="10" fill="var(--v1)"/><text x="74" y="15" fill="var(--ink-faint)">V1</text>
+              <rect x="110" y="6" width="10" height="10" fill="var(--v4)"/><text x="124" y="15" fill="var(--ink-faint)">V4</text>
+              <rect x="160" y="6" width="10" height="10" fill="var(--it)"/><text x="174" y="15" fill="var(--ink-faint)">IT</text>
+            </g>
+          </svg>
+          <figcaption><span class="fignum">Fig. 3</span>Electrode budget per monkey. Both animals split V1 evenly; monkey F leans toward IT, monkey N toward V4.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h3 class="reveal">The stimuli &amp; the split</h3>
+    <p class="reveal">The images come from the <strong>THINGS database</strong> (Hebart et al.) — a large, systematically sampled collection of naturalistic photographs of everyday objects, built to span the breadth of nameable things. Each image is shown and the evoked response logged; the dataset then arrives pre-averaged as the <code>[electrodes × images]</code> table, with its <strong>own fixed split</strong>: <strong>22,248 training images</strong> seen once each, and <strong>100 test images</strong> repeated many times so their responses can be averaged into a stable estimate. The split is <strong>image-disjoint by construction</strong> — no test picture appears in training.</p>
+
+    <div class="callout reveal">
+      <span class="tag">Noise ceiling — why high scores are reachable</span>
+      <p style="margin:0">Because the 100 test images are repeated, the release can ship an <code>oracle</code> <strong>split-half correlation</strong> per electrode: split the repeats in two, correlate the two halves, and you get the ceiling on how predictable that electrode <em>could</em> be given its own trial-to-trial noise. Across electrodes this oracle averages roughly <strong>0.55–0.63</strong> — so an excellent encoding model has real headroom, and a high <code>test_corr</code> is genuinely attainable rather than capped near zero by noise.</p>
+    </div>
+
+    <p class="reveal">The data come from <a href="https://www.cell.com/neuron/abstract/S0896-6273(24)00881-X" target="_blank" rel="noopener">Papale et&nbsp;al., <em>Neuron</em> (2025)</a>, out of the <strong>Roelfsema lab at the Netherlands Institute for Neuroscience</strong>. The THINGS images themselves are <strong>gated</strong> (a license plus roughly <strong>12&nbsp;GB</strong> of pixels) and are <em>not</em> bundled with the spiking table — they are staged separately before any run.</p>
+  </div>
+</section>
+
+<div class="divider-raster" aria-hidden="true">
+  <div class="wrap">
+    <svg viewBox="0 0 1000 36" preserveAspectRatio="none" role="img" aria-label="Spike raster divider">
+      <g id="div-4"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ 4. WHY IT MATTERS ============ -->
+<section class="section-pad" id="why">
+  <div class="wrap">
+    <p class="kicker reveal">Field note 04 — Brains &amp; machines</p>
+    <h2 class="reveal">Why this matters — for brains <em>and</em> AI</h2>
+    <p class="lead reveal">The ventral stream and the convolutional neural network grew up entangled. Measuring real cortex against models closes the loop.</p>
+
+    <div class="twocol">
+      <div class="reveal">
+        <p>The architecture that defines modern computer vision — stacked layers of local filters, pooling, and increasing abstraction — was directly inspired by the visual cortex's hierarchy. The intellectual lineage runs from Hubel &amp; Wiesel's edge detectors in V1, through Fukushima's Neocognitron, to today's deep convolutional networks.</p>
+        <p>The loop then closed the other way. Work from <strong>Yamins, DiCarlo and colleagues</strong> (2014, 2016) showed that <strong>goal-driven deep networks</strong> — trained to recognize objects — became the best available predictive models of <strong>IT</strong>: the more a network's task performance improved, the better its internal activations predicted real IT neurons. That insight powers the community <a href="https://www.brain-score.org/" target="_blank" rel="noopener">Brain-Score</a> effort, which ranks models by how well they match primate ventral-stream data.</p>
+      </div>
+      <div class="reveal">
+        <p class="pull">A model that predicts a neuron is, in a real sense, a theory of what that neuron computes.</p>
+        <p>TVSD lets you put any candidate model — even an <strong>untrained</strong> one — directly up against real primate cortical firing. That is rare and valuable: unlike fMRI or MEG, which measure blood flow or scalp magnetic fields, this is the firing of cortex itself. The benchmark question becomes sharp and honest: <em>how much of V1, V4, or IT can your fixed model explain?</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-raster" aria-hidden="true">
+  <div class="wrap">
+    <svg viewBox="0 0 1000 36" preserveAspectRatio="none" role="img" aria-label="Spike raster divider">
+      <g id="div-5"></g>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ 5. THE HARNESS ============ -->
+<section class="section-pad" id="harness">
+  <div class="wrap">
+    <p class="kicker reveal">Field note 05 — In this codebase</p>
+    <h2 class="reveal">How <span style="font-style:italic;color:var(--accent-2)">neuro-autoresearch</span> uses it</h2>
+    <p class="lead reveal">The harness frames every dataset the same way: an <strong>encoding model</strong>. A fixed, never-trained model turns the stimulus into activations; a ridge regression reads those out to predict recorded neural activity; held-out correlation is the reward.</p>
+
+    <figure class="reveal">
+      <!-- pipeline diagram -->
+      <svg viewBox="0 0 920 250" role="img" aria-labelledby="pipelbl">
+        <title id="pipelbl">Encoding pipeline: image to fixed model to ridge regression to per-electrode MUA prediction to correlation</title>
+        <defs>
+          <marker id="parrow" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent-2)"/>
+          </marker>
+        </defs>
+
+        <!-- 1 stimulus -->
+        <g transform="translate(20,80)">
+          <rect width="120" height="90" rx="10" fill="var(--paper-3)" stroke="var(--rule)" stroke-width="2"/>
+          <!-- tiny 4x4 pixel grid -->
+          <g transform="translate(34,16)">
+            <rect width="52" height="52" rx="3" fill="#fff" stroke="var(--rule)"/>
+            <g>
+              <rect x="0"  y="0"  width="13" height="13" fill="#b4480f"/><rect x="13" y="0"  width="13" height="13" fill="#d6a25f"/>
+              <rect x="26" y="0"  width="13" height="13" fill="#3f4d8a"/><rect x="39" y="0"  width="13" height="13" fill="#0f766e"/>
+              <rect x="0"  y="13" width="13" height="13" fill="#0f766e"/><rect x="26" y="13" width="13" height="13" fill="#b4480f"/>
+              <rect x="13" y="26" width="13" height="13" fill="#3f4d8a"/><rect x="39" y="26" width="13" height="13" fill="#d6a25f"/>
+              <rect x="0"  y="39" width="13" height="13" fill="#d6a25f"/><rect x="26" y="39" width="13" height="13" fill="#0f766e"/>
+            </g>
+          </g>
+          <text x="60" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-faint)">X · 16×16 RGB · 768</text>
+        </g>
+        <path d="M146,125 L186,125" stroke="var(--accent-2)" stroke-width="2.5" marker-end="url(#parrow)"/>
+
+        <!-- 2 fixed model -->
+        <g transform="translate(192,80)">
+          <rect width="150" height="90" rx="10" fill="var(--v1-wash)" stroke="var(--v1)" stroke-width="2"/>
+          <text x="75" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="16" fill="var(--v1)">fixed model</text>
+          <text x="75" y="58" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-soft)">never trained</text>
+          <text x="75" y="74" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-faint)">X → activations</text>
+        </g>
+        <path d="M348,125 L388,125" stroke="var(--accent-2)" stroke-width="2.5" marker-end="url(#parrow)"/>
+
+        <!-- 3 ridge -->
+        <g transform="translate(394,80)">
+          <rect width="150" height="90" rx="10" fill="var(--v4-wash)" stroke="var(--v4)" stroke-width="2"/>
+          <text x="75" y="38" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="16" fill="var(--v4)">ridge readout</text>
+          <text x="75" y="58" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-soft)">the ONLY fit step</text>
+          <text x="75" y="74" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-faint)">activations → Ŷ</text>
+        </g>
+        <path d="M550,125 L590,125" stroke="var(--accent-2)" stroke-width="2.5" marker-end="url(#parrow)"/>
+
+        <!-- 4 predicted MUA per electrode -->
+        <g transform="translate(596,80)">
+          <rect width="150" height="90" rx="10" fill="var(--it-wash)" stroke="var(--it)" stroke-width="2"/>
+          <text x="75" y="34" text-anchor="middle" font-family="Fraunces,serif" font-weight="600" font-size="15" fill="var(--it)">predicted MUA</text>
+          <!-- mini electrode dots -->
+          <g transform="translate(28,46)" fill="var(--it)">
+            <circle cx="0" cy="0" r="3"/><circle cx="16" cy="0" r="3"/><circle cx="32" cy="0" r="3"/>
+            <circle cx="48" cy="0" r="3"/><circle cx="64" cy="0" r="3"/><circle cx="80" cy="0" r="3"/>
+            <circle cx="0" cy="14" r="3"/><circle cx="16" cy="14" r="3"/><circle cx="32" cy="14" r="3"/>
+            <circle cx="48" cy="14" r="3"/><circle cx="64" cy="14" r="3"/><circle cx="80" cy="14" r="3"/>
+          </g>
+          <text x="75" y="84" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="var(--ink-faint)">per electrode</text>
+        </g>
+
+        <!-- correlation node below -->
+        <path d="M671,172 L671,196" stroke="var(--accent-2)" stroke-width="2.5" marker-end="url(#parrow)"/>
+        <g transform="translate(556,198)">
+          <rect width="230" height="44" rx="22" fill="#211c16"/>
+          <text x="115" y="28" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="13" fill="#f0a868">test_corr = mean Pearson r</text>
+        </g>
+
+        <!-- recorded Y feeding the correlation (truth) -->
+        <g transform="translate(20,196)">
+          <rect width="210" height="44" rx="10" fill="var(--paper-3)" stroke="var(--rule)" stroke-width="1.5"/>
+          <text x="105" y="20" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-soft)">recorded Y — real MUA</text>
+          <text x="105" y="35" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-faint)">100 held-out test images</text>
+        </g>
+        <path d="M232,220 L300,220 L300,220" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+        <path d="M300,220 L548,220" stroke="var(--accent-2)" stroke-width="2" stroke-dasharray="4 4" fill="none" marker-end="url(#parrow)"/>
+      </svg>
+      <figcaption><span class="fignum">Fig. 4</span>The encoding pipeline. The THINGS image is the stimulus <code>X</code> (resized to 16×16 RGB and flattened to 768 dims — the <code>RawPixels</code> input, identical to the NSD study, so image models port over directly). A fixed model maps it to activations; a ridge regression — the <em>only</em> fitted component, and the eval itself — reads them out into a predicted MUA value per electrode. Correlating the prediction against the real recorded response on the 100 held-out test images gives <code>test_corr</code>, the reward.</figcaption>
+    </figure>
+
+    <div class="twocol">
+      <div class="reveal">
+        <h3>The concrete contract</h3>
+        <ul class="tidy">
+          <li><strong>Stimulus X.</strong> The shown THINGS image, resized to <code>16×16</code> RGB and flattened to <code>[0,1]</code> → <code>16·16·3 = 768</code> dims (<code>RawPixels</code>).</li>
+          <li><strong>Target Y.</strong> Each electrode's normalized MUA for the chosen area — one value per electrode per image.</li>
+          <li><strong>Reward area.</strong> One of <span class="chip v1">V1</span> <span class="chip v4">V4</span> <span class="chip it">IT</span> via <code>NEURO_ROI</code> (default <code>IT</code>); the ridge fits only that area's electrodes.</li>
+          <li><strong>Monkey.</strong> <code>F</code> or <code>N</code> via <code>NEURO_SUBJECT</code>; each <code>(monkey, area)</code> writes its own CSV.</li>
+          <li><strong>Score.</strong> <code>test_corr</code> = mean per-electrode Pearson r over the 100 held-out test images.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <p class="pull">Near-perfect ground truth: this is the firing of cortex itself, not a blood-flow shadow.</p>
+        <p>Because the target is spiking activity rather than an indirect, sluggish proxy like fMRI's BOLD signal, an encoding model here is judged against an unusually direct measurement of what neurons actually did. The noise ceiling above (~0.55–0.63) says how good a model could ever be — and how much room there still is to climb.</p>
+      </div>
+    </div>
+
+    <h3 class="reveal">Run it</h3>
+    <pre class="reveal" aria-label="Run command"><code><span class="c"># reward = IT in monkey F, scored over the 100 held-out THINGS test images</span>
+<span class="k">NEURO_DATASET</span>=<span class="v">tvsd</span> <span class="k">NEURO_ROI</span>=<span class="v">IT</span> <span class="k">NEURO_SUBJECT</span>=<span class="v">F</span> python -m harness.run
+
+<span class="c"># swap the reward area / monkey freely</span>
+<span class="k">NEURO_DATASET</span>=<span class="v">tvsd</span> <span class="k">NEURO_ROI</span>=<span class="v">V1</span> <span class="k">NEURO_SUBJECT</span>=<span class="v">N</span> python -m harness.run</code></pre>
+    <p class="reveal" style="color:var(--ink-faint);font-size:.95rem">Each run evaluates the current <code>model.py</code> once and appends a single row to <code>results/TvsdMonkey&lt;F|N&gt;__&lt;area&gt;.csv</code>. Run one loop per area — unlike NSD, there is no multi-region <code>corr_&lt;area&gt;</code> panel. (No trained-AlexNet baseline is computed for <code>tvsd</code> yet, so the noise ceiling is the bar to chase.)</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer id="sources">
+  <div class="wrap">
+    <div class="rule-thick" style="margin-bottom:2.4rem"></div>
+    <p class="kicker" style="color:#f0a868">Credits &amp; sources</p>
+    <h2>The provenance</h2>
+    <div class="grid">
+      <div class="src">
+        <p style="color:#cdbfa6;max-width:48ch">Every number on this page traces to the dataset release and the project's own dataset notes. Standard systems-neuroscience background is synthesized from the established literature; no results were invented.</p>
+        <p><a href="../datasets/" rel="noopener">↳ Project dataset notes — <code style="background:#332b22;border-color:#4a4030;color:#f3ece0">prompts/datasets.md</code></a></p>
+      </div>
+      <div class="src">
+        <h4>Primary sources</h4>
+        <p><strong>TVSD.</strong> Papale, Wang, Self &amp; Roelfsema. <em>An extensive dataset of spiking activity to reveal the syntax of the ventral stream.</em> <a href="https://www.cell.com/neuron/abstract/S0896-6273(24)00881-X" target="_blank" rel="noopener">Neuron, 2025</a>. Netherlands Institute for Neuroscience (Roelfsema lab). Data: <a href="https://doi.gin.g-node.org/10.12751/g-node.hc7zlv/" target="_blank" rel="noopener">G-Node TVSD</a>.</p>
+        <p><strong>THINGS images.</strong> Hebart et&nbsp;al. <em>THINGS: a database of 1,854 object concepts and more than 26,000 naturalistic object images.</em> <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0223792" target="_blank" rel="noopener">PLOS ONE, 2019</a>; THINGS-data multimodal collection, <a href="https://elifesciences.org/articles/82580" target="_blank" rel="noopener">eLife, 2023</a>.</p>
+        <p><strong>Goal-driven models of IT.</strong> Yamins &amp; DiCarlo and colleagues (2014, 2016); the community <a href="https://www.brain-score.org/" target="_blank" rel="noopener">Brain-Score</a> benchmark.</p>
+      </div>
+    </div>
+    <p class="colophon">
+      Part of <strong style="color:#f3ece0">neuro-autoresearch</strong> — an AlphaEvolve-style autoresearch loop for neural encoding: an agent proposes a fixed, never-trained model; the harness reads it out with ridge regression against recorded brain activity; held-out <code style="background:#332b22;border-color:#4a4030;color:#f3ece0">test_corr</code> is the reward.<br/>
+      Field-guide for the <code style="background:#332b22;border-color:#4a4030;color:#f3ece0">tvsd</code> dataset · macaque intracranial spiking · V1 → V4 → IT.
+    </p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- helpers ---------- */
+  function svgEl(tag, attrs){
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for(var k in attrs){ e.setAttribute(k, attrs[k]); }
+    return e;
+  }
+  // deterministic pseudo-random so layout is stable
+  function rng(seed){ return function(){ seed = (seed*1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }; }
+
+  /* ---------- HERO raster (rows of ticks, area-colored, staggered animation) ---------- */
+  (function(){
+    var g = document.getElementById("raster-rows");
+    if(!g) return;
+    var rows = 7, W = 1000, H = 150, pad = 6;
+    var ramp = ["#3f4d8a","#3f4d8a","#0f766e","#0f766e","#0f766e","#b4480f","#b4480f"];
+    var rnd = rng(7);
+    var idx = 0;
+    for(var r=0;r<rows;r++){
+      var y = pad + r*(H-2*pad)/(rows-1);
+      var density = 0.55 + 0.05*r;
+      var x = 10;
+      while(x < W-10){
+        x += 4 + rnd()*22*(1.2-density);
+        var h = 9 + rnd()*16;
+        var ln = svgEl("line", {
+          x1:x.toFixed(1), y1:(y-h/2).toFixed(1),
+          x2:x.toFixed(1), y2:(y+h/2).toFixed(1),
+          stroke: ramp[r], "stroke-width":1.7, "stroke-linecap":"round",
+          opacity: 0.32 + rnd()*0.5
+        });
+        if(!reduce){
+          ln.setAttribute("class","spk");
+          ln.style.transformOrigin = x.toFixed(1)+"px "+y.toFixed(1)+"px";
+          ln.style.animationDelay = (idx*0.004).toFixed(3)+"s";
+        }
+        g.appendChild(ln); idx++;
+      }
+    }
+  })();
+
+  /* ---------- divider rasters (subtle, area ramp) ---------- */
+  ["div-1","div-2","div-3","div-4","div-5"].forEach(function(id, di){
+    var g = document.getElementById(id);
+    if(!g) return;
+    var W=1000, H=36, rnd=rng(13+di*5);
+    var ramp=["#3f4d8a","#0f766e","#b4480f"];
+    var x=6;
+    while(x<W-6){
+      x += 3 + rnd()*14;
+      var h = 8 + rnd()*18;
+      var col = ramp[Math.min(2, Math.floor((x/W)*3))];
+      g.appendChild(svgEl("line",{
+        x1:x.toFixed(1), y1:((H-h)/2).toFixed(1),
+        x2:x.toFixed(1), y2:((H+h)/2).toFixed(1),
+        stroke:col, "stroke-width":1.4, "stroke-linecap":"round",
+        opacity:(0.25+rnd()*0.45).toFixed(2)
+      }));
+    }
+  });
+
+  /* ---------- Utah array grid (8x8 pins) ---------- */
+  (function(){
+    var g = document.getElementById("utah-grid");
+    if(!g) return;
+    var n=8, x0=30, y0=30, step=26;
+    for(var r=0;r<n;r++){
+      for(var c=0;c<n;c++){
+        var cx = x0 + c*step, cy = y0 + r*step;
+        // shadow base
+        g.appendChild(svgEl("circle",{cx:cx, cy:cy+2, r:4.4, fill:"#cbbd9f"}));
+        g.appendChild(svgEl("circle",{cx:cx, cy:cy, r:4.0,
+          fill:"#fbf7ee", stroke:"#9c8c6e", "stroke-width":1.1}));
+        g.appendChild(svgEl("circle",{cx:cx, cy:cy, r:1.5, fill:"#b45309"}));
+      }
+    }
+  })();
+
+  /* ---------- spike train + MUA envelope in Fig 2 ---------- */
+  (function(){
+    var g = document.getElementById("spk-train");
+    if(!g) return;
+    var rnd = rng(91);
+    // spike density modulated by a gaussian "evoked" bump
+    var W=460, cx=200, sigma=90;
+    var spikeX = [];
+    var x=4;
+    while(x<W-4){
+      var bump = Math.exp(-Math.pow(x-cx,2)/(2*sigma*sigma)); // 0..1
+      var gap = 4 + (1-bump)*26 + rnd()*6;
+      x += gap;
+      if(x<W-4){ spikeX.push(x); }
+    }
+    spikeX.forEach(function(sx){
+      g.appendChild(svgEl("line",{x1:sx.toFixed(1), y1:38, x2:sx.toFixed(1), y2:55}));
+    });
+    // envelope = smoothed density -> draw the same gaussian-ish curve
+    var env = document.getElementById("env-path");
+    var fill = document.getElementById("env-fill");
+    var baseY=190, topAmp=70;
+    var d="M0,"+baseY, df="M0,"+baseY;
+    for(var px=0; px<=W; px+=8){
+      var b = Math.exp(-Math.pow(px-cx,2)/(2*sigma*sigma));
+      // add a little secondary lobe + noise for realism
+      var b2 = 0.25*Math.exp(-Math.pow(px-(cx+150),2)/(2*40*40));
+      var yy = baseY - (b+b2)*topAmp;
+      d += " L"+px+","+yy.toFixed(1);
+      df += " L"+px+","+yy.toFixed(1);
+    }
+    df += " L"+W+","+baseY+" Z";
+    if(env) env.setAttribute("d", d);
+    if(fill) fill.setAttribute("d", df);
+  })();
+
+  /* ---------- scroll reveal ---------- */
+  if("IntersectionObserver" in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".reveal, .stagger").forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal, .stagger").forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---------- progress bar ---------- */
+  var bar = document.getElementById("progress");
+  function onScroll(){
+    var st = window.scrollY || document.documentElement.scrollTop;
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h>0 ? (st/h)*100 : 0;
+    if(bar) bar.style.width = p.toFixed(2)+"%";
+    // show TOC after hero
+    var toc = document.getElementById("toc");
+    if(toc){ if(st > window.innerHeight*0.7){ toc.classList.add("show"); } else { toc.classList.remove("show"); } }
+  }
+  window.addEventListener("scroll", onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- active section in TOC ---------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
+  var sections = navLinks.map(function(a){ return document.querySelector(a.getAttribute("href")); });
+  if("IntersectionObserver" in window){
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id = "#"+en.target.id;
+          navLinks.forEach(function(a){ a.classList.toggle("active", a.getAttribute("href")===id); });
+        }
+      });
+    }, {rootMargin:"-45% 0px -50% 0px", threshold:0});
+    sections.forEach(function(s){ if(s) spy.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ch. 05 — The Language Brain · The Cortex Handbook</title>
+<meta name="description" content="The language network and the comprehension hierarchy — from acoustic waveform through phonemes, words, syntax and meaning. Cortical timescales, surprisal and the N400, predictive processing, and how contextual LLM embeddings linearly predict brain responses to language." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* shared scholarly tokens */
+    --paper:#f7f5f1; --paper-2:#efeae1; --card:#ffffff;
+    --ink:#1a1c22; --ink-soft:#4b4f5a; --ink-faint:#8a8f9c;
+    --line:#e4ded2; --line-soft:#efe9dd;
+    /* page accent — 05 Language brain · violet */
+    --accent:#7c3aed; --accent-soft:#a78bfa; --accent-deep:#5b21b6; --accent-wash:rgba(124,58,237,.07);
+    /* spacing */
+    --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2.5rem; --s5:4rem; --s6:6rem;
+    --maxw:1180px; --col:740px; --bleed:1040px;
+    --radius:16px;
+    /* fonts */
+    --display:"Bricolage Grotesque","Bricolage Grotesque Fallback",Georgia,serif;
+    --body:"Spectral","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:19px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(124,58,237,.32);transition:color .18s,border-color .18s}
+  a:hover{color:var(--accent-deep);border-color:var(--accent)}
+
+  /* ---------- typography ---------- */
+  h1,h2,h3,h4{font-family:var(--display);font-weight:700;line-height:1.08;letter-spacing:-.01em;margin:0;color:var(--ink)}
+  p{margin:0 0 1.15rem}
+  strong{font-weight:600;color:var(--ink)}
+  em{font-style:italic}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  /* ---------- top bar ---------- */
+  header.topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(247,245,241,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{max-width:var(--maxw);margin:0 auto;display:flex;align-items:center;gap:1rem;padding:.72rem clamp(1.1rem,4vw,2.4rem)}
+  .wordmark{font-family:var(--display);font-size:1.06rem;font-weight:700;letter-spacing:-.01em;color:var(--ink);border:0}
+  .wordmark .dot{color:var(--accent)}
+  .chap{margin-left:auto;font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;color:var(--ink-faint)}
+  .progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--accent);transition:width .1s linear}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1.1rem,4vw,2.4rem)}
+
+  /* ---------- layout: reading column + right TOC rail ---------- */
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+  @media(max-width:1000px){.layout{grid-template-columns:1fr}}
+  main{min-width:0}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(2.6rem,7vh,5.5rem) 0 clamp(2rem,5vh,3.5rem);border-bottom:1px solid var(--line)}
+  .hero .num{font-family:var(--display);font-weight:800;font-size:clamp(4.4rem,17vw,9.5rem);line-height:.82;color:var(--accent);letter-spacing:-.04em}
+  .hero h1{font-size:clamp(2.2rem,5.6vw,3.7rem);font-weight:700;margin:.7rem 0 0;max-width:18ch}
+  .hero h1 .accent{color:var(--accent-deep);font-style:italic;font-weight:600}
+  .standfirst{font-size:clamp(1.16rem,2.3vw,1.4rem);color:var(--ink-soft);max-width:46ch;margin:1.3rem 0 0;line-height:1.5}
+  .accent-rule{height:3px;width:84px;background:var(--accent);border-radius:3px;margin:1.8rem 0}
+  .youll{max-width:600px}
+  .youll .lab{font-family:var(--mono);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.7rem}
+  .youll ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+  .youll li{position:relative;padding-left:1.7rem;color:var(--ink-soft);font-size:1rem;line-height:1.45}
+  .youll li::before{content:"→";position:absolute;left:0;top:0;color:var(--accent);font-family:var(--mono)}
+  .readmin{margin-top:1.8rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;color:var(--ink-faint)}
+
+  /* ---------- TOC rail ---------- */
+  nav.rail{position:sticky;top:84px;align-self:start;font-family:var(--mono);font-size:.7rem;line-height:1.4}
+  nav.rail .lab{letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.9rem;font-size:.66rem}
+  nav.rail a{display:block;color:var(--ink-faint);border:0;padding:.32rem 0 .32rem .8rem;border-left:2px solid var(--line);letter-spacing:.04em;transition:color .18s,border-color .18s}
+  nav.rail a:hover{color:var(--ink-soft)}
+  nav.rail a.active{color:var(--accent);border-left-color:var(--accent);font-weight:500}
+  @media(max-width:1000px){nav.rail{display:none}}
+
+  /* ---------- sections ---------- */
+  section{padding:clamp(2.6rem,6vh,4.2rem) 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:0}
+  .sec-head{max-width:var(--col);margin-bottom:1.6rem}
+  .sec-head h2{font-size:clamp(1.7rem,4vw,2.6rem);margin:.5rem 0 0}
+  .prose{max-width:var(--col)}
+  .prose p{color:var(--ink-soft)}
+  .prose h3{font-family:var(--display);font-size:1.32rem;font-weight:600;color:var(--ink);margin:2.1rem 0 .55rem}
+  .lede{font-size:1.2rem;line-height:1.55;color:var(--ink)!important}
+  .term{font-weight:600;color:var(--accent-deep)}
+
+  /* ---------- figures ---------- */
+  figure{margin:2.4rem 0;max-width:var(--bleed);border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:1.5rem 1.5rem 1.15rem;overflow:hidden}
+  figure.bleed{margin-left:calc((var(--col) - var(--bleed)) / 2);margin-right:auto}
+  @media(max-width:1080px){figure.bleed{margin-left:0;max-width:100%}}
+  figure svg{display:block;width:100%;height:auto}
+  .fig-title{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;font-weight:500}
+  figcaption{margin-top:1rem;font-size:.9rem;color:var(--ink-soft);line-height:1.55;border-top:1px solid var(--line-soft);padding-top:.8rem}
+  figcaption b{color:var(--ink);font-weight:600}
+  figcaption .n{font-family:var(--mono);color:var(--accent);font-weight:500}
+
+  /* svg helpers */
+  .svg-lab{font-family:"JetBrains Mono",monospace;fill:var(--ink-faint);font-size:11px}
+  .svg-lab-d{font-family:"JetBrains Mono",monospace;fill:var(--ink-soft);font-size:12px}
+  .svg-h{font-family:"Bricolage Grotesque",serif;fill:var(--ink);font-weight:600}
+  .svg-ac{fill:var(--accent)}
+
+  /* ---------- callouts ---------- */
+  .call{margin:2rem 0;border-radius:var(--radius);padding:1.3rem 1.5rem;font-size:.98rem;line-height:1.55;max-width:var(--col)}
+  .call .h{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}
+  .call p{margin:0 0 .6rem;color:var(--ink-soft)}.call p:last-child{margin-bottom:0}
+  .call.key{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent)}
+  .call.key .h{color:var(--accent)}
+  .call.brain{background:var(--paper-2);border:1px solid var(--line)}
+  .call.brain .h{color:var(--ink-soft)}
+  .call.project{background:var(--accent-wash);border:1px solid rgba(124,58,237,.2)}
+  .call.project .h{color:var(--accent-deep)}
+  .call.watch{background:#fbf1e9;border:1px solid #f0d9c4}
+  .call.watch .h{color:#b45309}
+
+  /* ---------- inline data chips ---------- */
+  .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:1.8rem 0;max-width:var(--col)}
+  .chip{background:var(--card);padding:1.2rem 1.2rem}
+  .chip .big{font-family:var(--mono);font-weight:700;font-size:1.5rem;color:var(--accent);line-height:1}
+  .chip .lab{margin-top:.5rem;font-size:.9rem;color:var(--ink-soft);line-height:1.4}
+
+  code{font-family:var(--mono);font-size:.84em;background:var(--paper-2);padding:.1em .4em;border-radius:5px;color:var(--accent-deep)}
+
+  /* ---------- key terms ---------- */
+  .keyterms{max-width:var(--col)}
+  .keyterms dl{display:grid;gap:.1rem;margin:0}
+  .keyterms div{padding:.85rem 0;border-bottom:1px solid var(--line-soft);display:grid;grid-template-columns:200px 1fr;gap:1.2rem}
+  @media(max-width:640px){.keyterms div{grid-template-columns:1fr;gap:.2rem}}
+  .keyterms dt{font-family:var(--display);font-weight:600;color:var(--accent-deep);font-size:1.02rem}
+  .keyterms dd{margin:0;color:var(--ink-soft);font-size:.95rem;line-height:1.5}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:clamp(2.6rem,6vh,4rem) 0 4rem;background:var(--paper-2)}
+  .navcards{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:var(--maxw)}
+  @media(max-width:680px){.navcards{grid-template-columns:1fr}}
+  .navcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:1.3rem 1.5rem;border-bottom:0;transition:border-color .18s,transform .18s}
+  .navcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .navcard .dir{font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+  .navcard .t{font-family:var(--display);font-weight:600;font-size:1.18rem;color:var(--ink)}
+  .navcard.next{text-align:right}
+  .back{margin-top:2rem;font-family:var(--mono);font-size:.76rem;letter-spacing:.08em}
+
+  /* ---------- quick check + quiz + going-deeper ---------- */
+  .callout.deep{border:1px dashed var(--accent);background:transparent}
+  .qcheck{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:.5rem .9rem;margin:1.1rem 0;max-width:var(--col)}
+  .qcheck summary{cursor:pointer;font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500}
+  .qcheck summary::-webkit-details-marker{display:none}
+  .qcheck summary::before{content:"▸ ";color:var(--accent)} .qcheck[open] summary::before{content:"▾ "}
+  .qcheck div{margin:.6rem 0 .2rem;color:var(--ink-soft);font-size:.97rem}
+
+  .quiz{border:1px solid var(--line);background:var(--accent-wash);border-radius:18px;padding:1.3rem 1.5rem;margin:2.2rem 0;max-width:var(--col)}
+  .quiz-head h2{margin:.2rem 0 .3rem}
+  .quiz-list{list-style:none;margin:.6rem 0 0;padding:0}
+  .quiz .q{border-top:1px solid var(--line);padding:1.15rem 0}
+  .q-stem{font-weight:600;margin:0 0 .7rem}
+  .q-opts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+  .q-opts button{font:inherit;text-align:left;width:100%;padding:.6rem .85rem;border:1px solid var(--line);
+    border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s}
+  .q-opts button:hover:not(:disabled){border-color:var(--accent)}
+  .q-opts button:disabled{cursor:default;opacity:.92}
+  .q-opts button.opt-correct{border-color:#1f7a4d;background:#e7f5ec;box-shadow:inset 3px 0 #1f7a4d}
+  .q-opts button.opt-wrong{border-color:#b42318;background:#fdecea;box-shadow:inset 3px 0 #b42318}
+  .q-explain{margin:.75rem 0 0;font-size:.96rem;color:var(--ink-soft);border-left:3px solid var(--accent);padding-left:.85rem}
+  .quiz-score{font-family:var(--mono);color:var(--accent);font-weight:500}
+  .quiz-reset{font-family:var(--mono);font-size:.8rem;margin-top:1.1rem;padding:.45rem .95rem;border:1px solid var(--line);
+    border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer}
+
+  /* ---------- key papers ---------- */
+  .papers{max-width:var(--col);list-style:none;margin:1.2rem 0 0;padding:0;display:grid;gap:.1rem}
+  .papers li{padding:.85rem 0;border-bottom:1px solid var(--line-soft)}
+  .papers .yr{font-family:var(--mono);font-size:.74rem;color:var(--accent);font-weight:500;letter-spacing:.04em}
+  .papers .ti{display:block;margin-top:.15rem;color:var(--ink-soft);font-size:.96rem;line-height:1.5}
+  .papers .ti b{color:var(--ink);font-weight:600}
+
+  /* ---------- reveal motion ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .hero .reveal.d1{transition-delay:.05s}.hero .reveal.d2{transition-delay:.14s}.hero .reveal.d3{transition-delay:.24s}
+  .hero .reveal.d4{transition-delay:.34s}.hero .reveal.d5{transition-delay:.44s}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none}*{scroll-behavior:auto!important}}
+
+  ::selection{background:rgba(124,58,237,.2)}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOP BAR ===================== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="index.html">The Cortex Handbook<span class="dot">.</span></a>
+    <span class="chap">Ch. 05 / 06</span>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<div class="wrap">
+<div class="layout">
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="top" aria-label="Chapter introduction">
+    <div class="num reveal d1">05</div>
+    <div class="kicker reveal d2" style="margin-top:1rem">The Cortex Handbook · Concept chapter</div>
+    <h1 class="reveal d2">The Language Brain — <span class="accent">comprehension in context.</span></h1>
+    <p class="standfirst reveal d3">How a stream of air pressure becomes meaning: a left-lateralized fronto-temporal network climbs from sound to syntax to sense, predicting each word before it arrives — and modern language models turn out to speak its dialect.</p>
+    <div class="accent-rule reveal d4"></div>
+    <div class="youll reveal d4">
+      <div class="lab">You'll understand</div>
+      <ul>
+        <li>What the <strong>language network</strong> is — and why it is selective, not just "Broca + Wernicke."</li>
+        <li>The comprehension hierarchy from <strong>waveform → phonemes → words → syntax → meaning</strong>.</li>
+        <li>Why cortex integrates over a ladder of <strong>timescales</strong>, from phonemes to narrative.</li>
+        <li>The <strong>dual-stream model</strong> of speech — a ventral "sound→meaning" and dorsal "sound→articulation" route.</li>
+        <li>What <strong>surprisal</strong> is (vs <strong>entropy</strong>), and the ERP signatures it drives — the <strong>N400</strong> and <strong>P600</strong>.</li>
+        <li>Why <strong>contextual LLM embeddings linearly predict</strong> brain responses — the shared next-word objective.</li>
+      </ul>
+    </div>
+    <div class="readmin reveal d5">~20 min read · 9 figures · violet accent · prev <a href="04-visual-brain.html">04 Visual brain</a> · next <a href="06-brains-and-deep-nets.html">06 Brains &amp; deep nets</a></div>
+  </section>
+
+  <!-- ===================== 1. THE LANGUAGE NETWORK ===================== -->
+  <section id="network" aria-label="The language network">
+    <div class="sec-head reveal">
+      <div class="kicker">01 · The system</div>
+      <h2>A network built for language</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">There is a system in the human brain that lights up for <em>language</em> — and stays remarkably quiet for arithmetic, music, faces, or working-memory puzzles. It is not a single "speech area." It is a distributed, left-lateralized <span class="term">language network</span>.</p>
+
+      <p class="reveal">The classical story is the one every textbook tells: in the 1860s Paul Broca linked damaged left <em>inferior frontal gyrus (IFG)</em> to halting, effortful speech; a decade later Carl Wernicke tied posterior <em>superior temporal</em> damage to fluent-but-meaningless output. Two regions, one wire (the arcuate fasciculus) between them. It is a beautiful map — and too simple. The modern picture, built largely from functional MRI with individually-localized regions, is a <em>set</em> of interconnected patches that behave as one functional unit.</p>
+
+      <p class="reveal">The decisive move came from <a href="https://journals.physiology.org/doi/full/10.1152/jn.00032.2011" target="_blank" rel="noopener">Fedorenko, Behr &amp; Kanwisher (2011)</a>: by contrasting sentences against pronounceable nonword lists <em>within each individual subject</em>, they isolated a network that responds to the demands of <strong>linguistic structure and meaning</strong> — and showed it is <span class="term">selective</span>. The same voxels that fire for language barely budge for hard non-linguistic tasks (mental arithmetic, spatial reasoning, music). Language is dissociable from general-purpose cognition; it has its own real estate.</p>
+
+      <div class="chips reveal">
+        <div class="chip"><div class="big">IFG</div><div class="lab">Inferior frontal gyrus — the region around classical <strong>Broca's area</strong>; structure &amp; combinatorics.</div></div>
+        <div class="chip"><div class="big">pSTS/MTG</div><div class="lab">Posterior superior/middle temporal — lexical access &amp; meaning (classical <strong>Wernicke</strong> territory).</div></div>
+        <div class="chip"><div class="big">ATL</div><div class="lab">Anterior temporal lobe — a hub for combining word meanings into phrases.</div></div>
+      </div>
+
+      <p class="reveal">Anatomically the network spans the <strong>left frontal and temporal lobes</strong>, connected by two great fiber bundles: a <strong>dorsal pathway</strong> (arcuate / superior longitudinal fasciculus) carrying sound-to-articulation and structural information, and a <strong>ventral pathway</strong> (extreme capsule / inferior fronto-occipital fasciculus) carrying sound-to-meaning. Think dorsal = "how to say it / how it's built," ventral = "what it means."</p>
+    </div>
+
+    <!-- FIGURE 1: the language network on a left hemisphere -->
+    <figure class="bleed reveal" aria-label="The language network drawn on a left-hemisphere brain">
+      <div class="fig-title">Figure 05.1 — The language network on a left hemisphere</div>
+      <svg viewBox="0 0 1000 480" role="img" aria-labelledby="f1t">
+        <title id="f1t">A schematic left-hemisphere brain with the inferior frontal gyrus, posterior superior/middle temporal cortex, and anterior temporal lobe highlighted, plus dorsal and ventral language pathways.</title>
+        <defs>
+          <radialGradient id="patch" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="rgba(124,58,237,.34)"/><stop offset="100%" stop-color="rgba(124,58,237,.06)"/></radialGradient>
+          <marker id="ar1" markerWidth="10" markerHeight="10" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#7c3aed"/></marker>
+          <marker id="ar2" markerWidth="10" markerHeight="10" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#a78bfa"/></marker>
+        </defs>
+
+        <!-- orientation key -->
+        <text class="svg-lab" x="40" y="38">ANTERIOR ←</text>
+        <text class="svg-lab" x="900" y="38" text-anchor="end">→ POSTERIOR</text>
+
+        <!-- brain outline (left lateral view, frontal pole to the left) -->
+        <path d="M120,250
+                 C110,170 170,108 270,92
+                 C360,78 470,80 560,96
+                 C690,118 800,140 868,210
+                 C905,250 905,300 858,330
+                 C840,342 815,344 800,360
+                 C770,392 740,392 700,378
+                 C680,402 642,406 612,388
+                 C596,406 560,406 540,386
+                 C512,400 478,398 462,374
+                 C430,398 388,392 372,362
+                 C300,372 220,360 168,322
+                 C128,294 124,272 120,250 Z"
+              fill="#faf8f4" stroke="#cfc7b8" stroke-width="2"/>
+        <!-- a couple of sulci for texture -->
+        <path d="M250,150 C320,180 360,150 430,178" fill="none" stroke="#e0d9cb" stroke-width="2"/>
+        <path d="M500,140 C560,176 620,156 690,190" fill="none" stroke="#e0d9cb" stroke-width="2"/>
+        <path d="M300,300 C380,278 470,300 560,282" fill="none" stroke="#e0d9cb" stroke-width="2"/>
+        <!-- the Sylvian fissure (the key landmark) -->
+        <path d="M210,272 C360,232 560,236 760,266" fill="none" stroke="#c9bfae" stroke-width="3" stroke-dasharray="2 6"/>
+        <text class="svg-lab" x="455" y="252" text-anchor="middle" style="fill:#b9af9c">Sylvian fissure</text>
+
+        <!-- IFG patch (Broca) -->
+        <ellipse cx="232" cy="300" rx="62" ry="44" fill="url(#patch)"/>
+        <ellipse cx="232" cy="300" rx="62" ry="44" fill="none" stroke="#7c3aed" stroke-width="2"/>
+        <text class="svg-h" x="232" y="298" text-anchor="middle" style="font-size:16px">IFG</text>
+        <text class="svg-lab" x="232" y="316" text-anchor="middle" style="fill:#5b21b6">Broca's · structure</text>
+
+        <!-- posterior STS/MTG patch (Wernicke) -->
+        <ellipse cx="668" cy="300" rx="74" ry="46" fill="url(#patch)"/>
+        <ellipse cx="668" cy="300" rx="74" ry="46" fill="none" stroke="#7c3aed" stroke-width="2"/>
+        <text class="svg-h" x="668" y="298" text-anchor="middle" style="font-size:15px">post. STS / MTG</text>
+        <text class="svg-lab" x="668" y="316" text-anchor="middle" style="fill:#5b21b6">Wernicke · meaning</text>
+
+        <!-- anterior temporal lobe -->
+        <ellipse cx="470" cy="356" rx="66" ry="34" fill="url(#patch)"/>
+        <ellipse cx="470" cy="356" rx="66" ry="34" fill="none" stroke="#7c3aed" stroke-width="2"/>
+        <text class="svg-h" x="470" y="354" text-anchor="middle" style="font-size:15px">ATL</text>
+        <text class="svg-lab" x="470" y="370" text-anchor="middle" style="fill:#5b21b6">combine meanings</text>
+
+        <!-- auditory cortex / STG entry, on the Sylvian bank -->
+        <circle cx="560" cy="264" r="9" fill="#a78bfa"/>
+        <text class="svg-lab" x="560" y="244" text-anchor="middle" style="fill:#7c3aed">auditory cortex / STG (speech enters)</text>
+
+        <!-- DORSAL pathway: arch over the Sylvian fissure, IFG <-> pSTS -->
+        <path d="M250,262 C360,150 580,150 650,260" fill="none" stroke="#7c3aed" stroke-width="3" marker-end="url(#ar1)"/>
+        <text class="svg-lab-d" x="450" y="150" text-anchor="middle" style="fill:#7c3aed">dorsal pathway — sound → articulation / structure</text>
+
+        <!-- VENTRAL pathway: low arc, pSTS/ATL <-> IFG under the fissure -->
+        <path d="M250,338 C400,408 560,408 642,338" fill="none" stroke="#a78bfa" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#ar2)"/>
+        <text class="svg-lab-d" x="446" y="424" text-anchor="middle" style="fill:#7c3aed">ventral pathway — sound → meaning</text>
+
+        <!-- selectivity sidebar -->
+        <g transform="translate(770,388)">
+          <rect x="-2" y="0" width="232" height="74" rx="9" fill="#ffffff" stroke="#e4ded2"/>
+          <text class="svg-lab" x="14" y="22" style="fill:#5b21b6;letter-spacing:.12em">SELECTIVE</text>
+          <text class="svg-lab" x="14" y="42" style="font-size:10.5px">responds to language —</text>
+          <text class="svg-lab" x="14" y="58" style="font-size:10.5px">not arithmetic, music, faces.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.1.</b> The left-hemisphere language network: <span class="svg-ac" style="color:var(--accent)">IFG</span> (around Broca's), posterior <span class="svg-ac" style="color:var(--accent)">STS/MTG</span> (Wernicke territory), and the <span class="svg-ac" style="color:var(--accent)">ATL</span> hub, with <b>dorsal</b> (sound→structure) and <b>ventral</b> (sound→meaning) pathways linking them. Speech enters at auditory cortex / STG on the Sylvian bank. Anatomy is schematic. The defining property — established by <a href="https://journals.physiology.org/doi/full/10.1152/jn.00032.2011" target="_blank" rel="noopener">Fedorenko, Behr &amp; Kanwisher (2011)</a> — is <b>selectivity</b>: this network tracks language, not effortful cognition in general.</figcaption>
+    </figure>
+
+    <div class="call brain reveal">
+      <div class="h">◆ In the brain</div>
+      <p>Localizing the network <strong>per individual</strong> matters. Anatomy varies enough between people that group-averaged maps blur the network into nearby regions. The "sentences &gt; nonwords" localizer recovers the same functional system in each subject — which is exactly why its selectivity could be measured cleanly.</p>
+    </div>
+
+    <div class="prose">
+      <h3 class="reveal">Selective — and dissociable from the executive system</h3>
+      <p class="reveal">Selectivity is more than a curiosity; it is a <em>dissociation</em>. The language network sits right next to, but is functionally distinct from, the brain's domain-general <span class="term">multiple-demand (MD) system</span> — the fronto-parietal machinery that ramps up for <em>any</em> hard task (arithmetic, working memory, spatial reasoning). Within the same individuals, the two systems can be cleanly separated: a task that taxes general cognition lights the MD network and barely touches the language network, and vice versa. The cleanest converging evidence is clinical: people with <span class="term">global aphasia</span> — a devastated language network — can still play chess, do arithmetic, solve non-verbal puzzles, and reason about others' intentions. Conversely, severe executive impairment can spare grammatical comprehension. Language is not "general intelligence applied to words"; it is its own organ.</p>
+
+      <div class="callout deep call reveal" style="border-radius:var(--radius);padding:1.3rem 1.5rem">
+        <div class="h" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:.6rem;color:var(--accent-deep)">⟐ Going deeper · the selectivity argument</div>
+        <p style="margin:0 0 .6rem;color:var(--ink-soft)">Why does selectivity matter so much? Because it constrains theory. A common intuition is that language is just thought "read aloud" — that to comprehend a sentence is to run general reasoning over words. But if the language network is robustly <strong>doubly dissociated</strong> from the multiple-demand system (Fedorenko and colleagues), then the computations that map sound to meaning are not the same computations that solve a logic puzzle. This is why a sentences-&gt;-nonwords localizer, run per subject, has become the field's gold standard: it pins the system functionally rather than anatomically, so claims about "the language network" survive the wide variation in where these regions sit between brains.</p>
+      </div>
+
+      <h3 class="reveal">The dual-stream model of speech</h3>
+      <p class="reveal">The dorsal and ventral pathways in Figure 05.1 are not incidental wiring — they are the backbone of the modern replacement for the Broca/Wernicke picture: the <span class="term">dual-stream model</span> of <a href="https://www.nature.com/articles/nrn2113" target="_blank" rel="noopener">Hickok &amp; Poeppel (2007)</a>. Early cortical speech processing in the superior temporal cortex is <em>bilateral</em> (both hemispheres parse the acoustic signal), and it then forks into two streams. The <strong>ventral stream</strong> — running forward through middle and inferior temporal cortex — maps <em>sound onto meaning</em>: it is the comprehension route, and it is largely bilateral. The <strong>dorsal stream</strong> — running back and up through the temporo-parietal junction (area Spt) to premotor and inferior-frontal cortex — maps <em>sound onto articulation</em>: it is a sensorimotor interface for speech production, and it is strongly <em>left-lateralized</em>.</p>
+      <p class="reveal">This reframes the classics. "Broca's area" is not a speech-output box and "Wernicke's area" is not a comprehension box; rather, the dorsal stream provides the <em>auditory-motor mapping</em> needed to learn and produce speech, and the ventral stream carries comprehension. It explains why pure articulatory deficits and pure comprehension deficits dissociate, and why damage along the dorsal route impairs <em>repetition</em> (you can understand a word but not echo it) — a pattern the single-arc arcuate story never explained cleanly.</p>
+    </div>
+
+    <!-- FIGURE 7: dual-stream model -->
+    <figure class="bleed reveal" aria-label="The dual-stream model of speech processing">
+      <div class="fig-title">Figure 05.7 — The dual-stream model: sound→meaning vs sound→articulation</div>
+      <svg viewBox="0 0 1000 470" role="img" aria-labelledby="f7t">
+        <title id="f7t">Spectrotemporal speech analysis in bilateral superior temporal cortex forks into a ventral stream mapping sound to meaning and a dorsal stream mapping sound to articulation.</title>
+        <defs>
+          <radialGradient id="patch7" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="rgba(124,58,237,.30)"/><stop offset="100%" stop-color="rgba(124,58,237,.05)"/></radialGradient>
+          <marker id="ar7d" markerWidth="10" markerHeight="10" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#5b21b6"/></marker>
+          <marker id="ar7v" markerWidth="10" markerHeight="10" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#a78bfa"/></marker>
+        </defs>
+
+        <text class="svg-lab" x="40" y="34">ANTERIOR ←</text>
+        <text class="svg-lab" x="900" y="34" text-anchor="end">→ POSTERIOR</text>
+
+        <!-- brain outline (reuse the lateral silhouette) -->
+        <path d="M120,250
+                 C110,170 170,108 270,92
+                 C360,78 470,80 560,96
+                 C690,118 800,140 868,210
+                 C905,250 905,300 858,330
+                 C840,342 815,344 800,360
+                 C770,392 740,392 700,378
+                 C680,402 642,406 612,388
+                 C596,406 560,406 540,386
+                 C512,400 478,398 462,374
+                 C430,398 388,392 372,362
+                 C300,372 220,360 168,322
+                 C128,294 124,272 120,250 Z"
+              fill="#faf8f4" stroke="#cfc7b8" stroke-width="2"/>
+
+        <!-- spectrotemporal analysis (bilateral STG entry) -->
+        <ellipse cx="540" cy="270" rx="80" ry="40" fill="url(#patch7)"/>
+        <ellipse cx="540" cy="270" rx="80" ry="40" fill="none" stroke="#7c3aed" stroke-width="2"/>
+        <text class="svg-h" x="540" y="266" text-anchor="middle" style="font-size:13px">spectrotemporal</text>
+        <text class="svg-lab" x="540" y="284" text-anchor="middle" style="fill:#5b21b6">STG · bilateral · "the sound"</text>
+
+        <!-- DORSAL: up to Spt then premotor/IFG -->
+        <circle cx="700" cy="232" r="9" fill="#5b21b6"/>
+        <text class="svg-lab" x="700" y="214" text-anchor="middle" style="fill:#5b21b6">area Spt (Sylvian-parietal-temporal)</text>
+        <ellipse cx="250" cy="232" rx="62" ry="36" fill="url(#patch7)"/>
+        <ellipse cx="250" cy="232" rx="62" ry="36" fill="none" stroke="#5b21b6" stroke-width="2"/>
+        <text class="svg-h" x="250" y="228" text-anchor="middle" style="font-size:12px">premotor / pIFG</text>
+        <text class="svg-lab" x="250" y="246" text-anchor="middle" style="fill:#5b21b6">articulatory network</text>
+        <path d="M620,250 C660,200 690,200 700,224" fill="none" stroke="#5b21b6" stroke-width="3"/>
+        <path d="M695,222 C560,150 360,150 300,212" fill="none" stroke="#5b21b6" stroke-width="3" marker-end="url(#ar7d)"/>
+        <text class="svg-lab-d" x="470" y="150" text-anchor="middle" style="fill:#5b21b6">DORSAL — sound → articulation (strongly left-lateralized)</text>
+
+        <!-- VENTRAL: forward to mid/inferior temporal -->
+        <ellipse cx="380" cy="356" rx="78" ry="34" fill="url(#patch7)"/>
+        <ellipse cx="380" cy="356" rx="78" ry="34" fill="none" stroke="#a78bfa" stroke-width="2"/>
+        <text class="svg-h" x="380" y="352" text-anchor="middle" style="font-size:12px">mid / inf. temporal</text>
+        <text class="svg-lab" x="380" y="370" text-anchor="middle" style="fill:#7c3aed">lexical–semantic interface</text>
+        <path d="M500,300 C460,344 440,348 458,350" fill="none" stroke="#a78bfa" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#ar7v)"/>
+        <text class="svg-lab-d" x="430" y="424" text-anchor="middle" style="fill:#7c3aed">VENTRAL — sound → meaning (largely bilateral)</text>
+
+        <!-- legend -->
+        <g transform="translate(744,392)">
+          <rect x="-2" y="0" width="244" height="62" rx="9" fill="#ffffff" stroke="#e4ded2"/>
+          <line x1="12" y1="20" x2="40" y2="20" stroke="#5b21b6" stroke-width="3"/>
+          <text class="svg-lab" x="48" y="24" style="font-size:10.5px">dorsal · sensorimotor / repetition</text>
+          <line x1="12" y1="44" x2="40" y2="44" stroke="#a78bfa" stroke-width="3" stroke-dasharray="7 5"/>
+          <text class="svg-lab" x="48" y="48" style="font-size:10.5px">ventral · comprehension</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.7.</b> The dual-stream model (<a href="https://www.nature.com/articles/nrn2113" target="_blank" rel="noopener">Hickok &amp; Poeppel 2007</a>). Bilateral spectrotemporal analysis in STG forks into a <span class="svg-ac" style="color:var(--accent)">ventral</span> stream — sound→meaning, largely bilateral — and a <span style="color:#5b21b6">dorsal</span> stream — sound→articulation, via area Spt to premotor/posterior-IFG, strongly left-lateralized. It replaces the box-and-arrow Broca/Wernicke map and explains why repetition (a dorsal function) dissociates from comprehension.</figcaption>
+    </figure>
+
+    <details class="qcheck reveal">
+      <summary>Quick check — why is "selective" a stronger claim than "active during language"?</summary>
+      <div>Lots of regions are <em>active</em> while you read. "Selective" means the language network responds to linguistic structure and meaning but <em>not</em> to equally hard non-linguistic tasks (arithmetic, spatial working memory, music) — so it is dissociated from the domain-general multiple-demand system. Activity alone could be a generic difficulty signal; a double dissociation (sparing in aphasia vs sparing of language under executive load) is what shows language has its own dedicated machinery.</div>
+    </details>
+  </section>
+
+  <!-- ===================== 2. THE COMPREHENSION HIERARCHY ===================== -->
+  <section id="hierarchy" aria-label="The comprehension hierarchy">
+    <div class="sec-head reveal">
+      <div class="kicker">02 · Sound to sense</div>
+      <h2>The comprehension hierarchy</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">A spoken sentence enters the ear as nothing but fluctuating air pressure. By the time it reaches understanding, the brain has climbed a whole ladder of representation — each rung a different transformation.</p>
+
+      <p class="reveal">Speech first reaches <span class="term">auditory cortex</span> on the upper bank of the temporal lobe, then spreads along the <span class="term">superior temporal gyrus (STG)</span>. A landmark result from <a href="https://www.science.org/doi/10.1126/science.1245994" target="_blank" rel="noopener">Mesgarani et al. (2014)</a>, recording directly from human STG with electrodes, showed that local populations are tuned not to whole phonemes but to <span class="term">phonetic features</span> — clusters like plosives (/p/, /t/, /k/), fricatives (/s/, /f/), and vowels organized by where and how they are produced. The STG is, in effect, a phonetic-feature detector bank: the first place where the continuous waveform is carved into the discrete contrasts of speech.</p>
+
+      <p class="reveal">From features the cascade continues: features assemble into <strong>phonemes</strong>, phonemes into <strong>words</strong> (a lexical lookup that retrieves a stored meaning), words bind under <strong>syntax</strong> into phrases and clauses — <em>who did what to whom</em> — and structure resolves into <strong>semantics and discourse</strong>: a coherent, evolving model of the situation being described. Higher rungs lean more on the frontal and anterior-temporal parts of the network; lower rungs on auditory/STG. No rung is a clean module — they overlap and talk to each other constantly — but the gradient from acoustic to abstract is real.</p>
+    </div>
+
+    <!-- FIGURE 2: comprehension ladder -->
+    <figure class="bleed reveal" aria-label="The comprehension hierarchy from waveform to meaning">
+      <div class="fig-title">Figure 05.2 — From waveform to meaning: the comprehension ladder</div>
+      <svg viewBox="0 0 1000 430" role="img" aria-labelledby="f2t">
+        <title id="f2t">Six stages: acoustic waveform, spectrogram, phonetic features, words, a small syntax tree, and meaning.</title>
+        <defs>
+          <marker id="lar" markerWidth="11" markerHeight="11" refX="6" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#a78bfa"/></marker>
+        </defs>
+        <!-- shared layout: 6 panels left→right -->
+        <!-- panel frame helper drawn inline -->
+
+        <!-- 1 WAVEFORM -->
+        <g transform="translate(20,70)">
+          <rect width="142" height="120" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="71" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">01 · ACOUSTICS</text>
+          <path d="M12,60 q6,-34 12,0 q6,30 12,0 q6,-44 12,0 q6,38 12,0 q6,-26 12,0 q6,40 12,0 q6,-30 12,0 q6,22 12,0 q6,-36 12,0 q6,28 12,0"
+                fill="none" stroke="#7c3aed" stroke-width="2"/>
+          <text class="svg-lab" x="71" y="104" text-anchor="middle">air pressure(t)</text>
+        </g>
+        <line x1="166" y1="130" x2="190" y2="130" stroke="#a78bfa" stroke-width="2" marker-end="url(#lar)"/>
+
+        <!-- 2 SPECTROGRAM -->
+        <g transform="translate(192,70)">
+          <rect width="142" height="120" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="71" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">02 · SPECTROGRAM</text>
+          <g transform="translate(14,18)">
+            <rect width="114" height="80" fill="#f1ecf9" stroke="#d9cef0"/>
+            <!-- frequency bands as varying-intensity rects -->
+            <rect x="2"  y="2"  width="12" height="76" fill="#7c3aed" opacity=".25"/>
+            <rect x="16" y="14" width="12" height="64" fill="#7c3aed" opacity=".55"/>
+            <rect x="30" y="6"  width="12" height="72" fill="#7c3aed" opacity=".75"/>
+            <rect x="44" y="22" width="12" height="56" fill="#7c3aed" opacity=".45"/>
+            <rect x="58" y="2"  width="12" height="76" fill="#7c3aed" opacity=".85"/>
+            <rect x="72" y="30" width="12" height="48" fill="#7c3aed" opacity=".4"/>
+            <rect x="86" y="10" width="12" height="68" fill="#7c3aed" opacity=".65"/>
+            <rect x="100" y="20" width="12" height="58" fill="#7c3aed" opacity=".5"/>
+          </g>
+          <text class="svg-lab" x="71" y="112" text-anchor="middle">freq × time energy</text>
+        </g>
+        <line x1="338" y1="130" x2="362" y2="130" stroke="#a78bfa" stroke-width="2" marker-end="url(#lar)"/>
+
+        <!-- 3 PHONETIC FEATURES -->
+        <g transform="translate(364,70)">
+          <rect width="142" height="120" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="71" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">03 · PHONEMES</text>
+          <g style="font-family:'JetBrains Mono',monospace;font-size:14px" fill="#5b21b6" text-anchor="middle">
+            <text x="38" y="40">/b/</text><text x="104" y="40">/oʊ/</text>
+            <text x="38" y="74">/ɑː/</text><text x="104" y="74">/k/</text>
+          </g>
+          <text class="svg-lab" x="71" y="100" text-anchor="middle">plosive · fricative · vowel</text>
+          <text class="svg-lab" x="71" y="114" text-anchor="middle" style="fill:#b9af9c">STG feature tuning</text>
+        </g>
+        <line x1="510" y1="130" x2="534" y2="130" stroke="#a78bfa" stroke-width="2" marker-end="url(#lar)"/>
+
+        <!-- 4 WORDS -->
+        <g transform="translate(536,70)">
+          <rect width="142" height="120" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="71" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">04 · WORDS</text>
+          <g style="font-family:'Bricolage Grotesque',serif;font-weight:600" fill="#1a1c22" text-anchor="middle">
+            <text x="71" y="44" style="font-size:20px">"boa"</text>
+          </g>
+          <rect x="26" y="62" width="90" height="22" rx="5" fill="#ede6fb" stroke="#d9cef0"/>
+          <text class="svg-lab" x="71" y="77" text-anchor="middle" style="fill:#5b21b6">→ a large snake</text>
+          <text class="svg-lab" x="71" y="106" text-anchor="middle">lexical lookup</text>
+        </g>
+        <line x1="682" y1="130" x2="706" y2="130" stroke="#a78bfa" stroke-width="2" marker-end="url(#lar)"/>
+
+        <!-- 5 SYNTAX TREE -->
+        <g transform="translate(708,70)">
+          <rect width="142" height="120" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="71" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">05 · SYNTAX</text>
+          <!-- tiny S → NP VP tree -->
+          <g stroke="#7c3aed" stroke-width="1.6" fill="none">
+            <line x1="71" y1="24" x2="42" y2="52"/><line x1="71" y1="24" x2="100" y2="52"/>
+            <line x1="100" y1="60" x2="80" y2="88"/><line x1="100" y1="60" x2="120" y2="88"/>
+          </g>
+          <g style="font-family:'JetBrains Mono',monospace;font-size:11px" fill="#5b21b6" text-anchor="middle">
+            <text x="71" y="22">S</text>
+            <text x="40" y="60">NP</text><text x="100" y="58">VP</text>
+            <text x="78" y="102">V</text><text x="122" y="102">NP</text>
+          </g>
+          <text class="svg-lab" x="71" y="116" text-anchor="middle">who did what</text>
+        </g>
+        <line x1="854" y1="130" x2="878" y2="130" stroke="#a78bfa" stroke-width="2" marker-end="url(#lar)"/>
+
+        <!-- 6 MEANING -->
+        <g transform="translate(848,70)">
+          <rect x="32" width="120" height="120" rx="10" fill="#7c3aed"/>
+          <text class="svg-lab" x="92" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">06 · MEANING</text>
+          <text x="92" y="64" text-anchor="middle" style="font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:15px;fill:#fff">discourse</text>
+          <text x="92" y="92" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:#e9deff">a model of the</text>
+          <text x="92" y="106" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9.5px;fill:#e9deff">unfolding story</text>
+        </g>
+
+        <!-- gradient bar beneath -->
+        <g transform="translate(20,260)">
+          <text class="svg-lab" x="0" y="-8" style="letter-spacing:.14em">CORTICAL GRADIENT</text>
+          <rect x="0" y="0" width="960" height="14" rx="7" fill="url(#grad6)"/>
+          <defs>
+            <linearGradient id="grad6" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#5b21b6"/>
+            </linearGradient>
+          </defs>
+          <text class="svg-lab-d" x="2" y="40" style="fill:#7c3aed">auditory cortex / STG</text>
+          <text class="svg-lab-d" x="958" y="40" text-anchor="end" style="fill:#5b21b6">frontal &amp; anterior-temporal network</text>
+          <text class="svg-lab" x="480" y="40" text-anchor="middle">lower / more acoustic ———→ higher / more abstract</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.2.</b> The comprehension ladder. The continuous <b>waveform</b> becomes a <b>spectrogram</b>, gets carved into <b>phonetic features</b> in STG (<a href="https://www.science.org/doi/10.1126/science.1245994" target="_blank" rel="noopener">Mesgarani et al. 2014</a>), retrieved as <b>words</b>, bound by <b>syntax</b>, and resolved into <b>meaning</b>. The rungs map roughly onto a cortical gradient from auditory cortex up into the frontal/anterior-temporal network.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== 3. TIMESCALES ===================== -->
+  <section id="timescales" aria-label="Cortical hierarchy of timescales">
+    <div class="sec-head reveal">
+      <div class="kicker">03 · Nested clocks</div>
+      <h2>A hierarchy of timescales</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">The same ladder shows up in <em>time</em>. Different cortical areas integrate information over different durations — a property called the <span class="term">temporal receptive window (TRW)</span>: the length of past input a region's current response depends on.</p>
+
+      <p class="reveal">Hasson, Lerner, Honey and colleagues demonstrated this with a clever manipulation: take a real spoken story and scramble it at different grain sizes — shuffle the words, the sentences, or the paragraphs — then ask which brain regions still respond reliably. Early <strong>auditory areas</strong> respond identically no matter how you scramble: they only care about the last few hundred milliseconds, the scale of <strong>phonemes and syllables</strong>. Higher areas in the temporal and frontal lobes care about <strong>word and sentence</strong> context. And the highest areas — precuneus, angular gyrus, prefrontal cortex — only respond coherently when whole <strong>paragraphs of narrative</strong> are intact. They are accumulating meaning over <em>tens of seconds</em>.</p>
+
+      <p class="reveal">So the cortex is a stack of nested integrators: short windows feeding longer ones feeding longer ones still. This is exactly the temporal counterpart of the spatial hierarchy in the visual system from Chapter 4 — and it is why a <em>continuous story</em>, not a list of isolated words, is needed to engage the long-window regions at all.</p>
+    </div>
+
+    <!-- FIGURE 3: temporal receptive windows -->
+    <figure class="bleed reveal" aria-label="Temporal receptive windows nested across the cortical hierarchy">
+      <div class="fig-title">Figure 05.3 — Temporal receptive windows: nested integration</div>
+      <svg viewBox="0 0 1000 360" role="img" aria-labelledby="f3t">
+        <title id="f3t">Three cortical levels with increasingly long temporal receptive windows: early auditory (phonemes, ~tens to hundreds of ms), mid temporal/frontal (words to sentences, seconds), and high-level default-mode regions (narrative, tens of seconds).</title>
+        <!-- shared time axis -->
+        <line x1="60" y1="318" x2="960" y2="318" stroke="#cfc7b8" stroke-width="1.5"/>
+        <g class="svg-lab" text-anchor="middle">
+          <text x="120" y="338">0.1 s</text><text x="300" y="338">1 s</text>
+          <text x="540" y="338">5 s</text><text x="780" y="338">15 s</text><text x="930" y="338">30 s</text>
+        </g>
+        <text class="svg-lab" x="510" y="356" text-anchor="middle" style="letter-spacing:.12em">how far back the current response depends on the input  →</text>
+
+        <!-- level 1: early auditory — short window -->
+        <g transform="translate(0,40)">
+          <text class="svg-h" x="60" y="14" style="font-size:14px">Early auditory cortex</text>
+          <text class="svg-lab" x="60" y="32">phonemes · syllables — integrates over a short window</text>
+          <rect x="100" y="44" width="56" height="24" rx="6" fill="#7c3aed" opacity=".9"/>
+          <text class="svg-lab" x="128" y="84" text-anchor="middle" style="fill:#7c3aed">~100–300 ms</text>
+        </g>
+
+        <!-- level 2: mid temporal/frontal — medium window -->
+        <g transform="translate(0,140)">
+          <text class="svg-h" x="60" y="14" style="font-size:14px">Mid temporal &amp; frontal (STG → IFG)</text>
+          <text class="svg-lab" x="60" y="32">words · sentences — integrates over seconds</text>
+          <rect x="100" y="44" width="320" height="24" rx="6" fill="#7c3aed" opacity=".6"/>
+          <text class="svg-lab" x="260" y="84" text-anchor="middle" style="fill:#7c3aed">~1–5 s</text>
+        </g>
+
+        <!-- level 3: high-level / DMN — long window -->
+        <g transform="translate(0,236)">
+          <text class="svg-h" x="60" y="14" style="font-size:14px">High-level (angular gyrus · precuneus · PFC)</text>
+          <text class="svg-lab" x="60" y="32">narrative · discourse — integrates over tens of seconds</text>
+          <rect x="100" y="44" width="820" height="24" rx="6" fill="#7c3aed" opacity=".32"/>
+          <text class="svg-lab" x="510" y="60" text-anchor="middle" style="fill:#5b21b6">~tens of seconds — the whole paragraph</text>
+        </g>
+
+        <!-- nesting brackets on the left -->
+        <path d="M86,84 L86,304" stroke="#a78bfa" stroke-width="2" fill="none"/>
+        <text class="svg-lab" x="40" y="196" text-anchor="middle" transform="rotate(-90 40 196)" style="fill:#7c3aed;letter-spacing:.14em">NESTED · short feeds long</text>
+      </svg>
+      <figcaption><b>Figure 05.3.</b> Temporal receptive windows grow up the hierarchy. Scramble a story at word, sentence, or paragraph grain and early auditory cortex is unmoved (short window) while high-level regions only respond when long-range narrative structure survives (Hasson, Lerner, Honey et&nbsp;al.). The bars show roughly how far back each level's response reaches.</figcaption>
+    </figure>
+
+    <div class="call key reveal">
+      <div class="h">★ Key idea</div>
+      <p>There is one hierarchy, read two ways. <strong>Spatially</strong> it runs acoustic → lexical → semantic up the cortex; <strong>temporally</strong> it runs short windows → long windows. The brain represents <em>"now"</em> at every scale at once.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 4. SURPRISAL ===================== -->
+  <section id="surprisal" aria-label="Lexical features, prediction and surprisal">
+    <div class="sec-head reveal">
+      <div class="kicker">04 · Information &amp; cost</div>
+      <h2>Surprisal: the cost of a word</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">Not all words cost the brain the same. Three lexical properties reliably move neural and behavioral responses: <strong>length</strong> (longer words demand more processing), <strong>frequency</strong> (rare words are slower and costlier to retrieve), and — most powerfully — <strong>predictability</strong> in context.</p>
+
+      <p class="reveal">Predictability is made precise by Claude Shannon's information theory. The <span class="term">surprisal</span> of a word is the negative log of its probability given everything that came before:</p>
+
+      <div class="call brain reveal" style="background:var(--card);border-left:4px solid var(--accent-soft)">
+        <div class="h" style="color:var(--accent)">Definition · surprisal</div>
+        <p style="font-family:var(--mono);font-size:1.04rem;color:var(--ink);text-align:center;margin:.4rem 0">surprisal(w) = &minus;log&nbsp;P(w | context)</p>
+        <p>A word the context makes <strong>certain</strong> carries little information and little surprisal; a word that is improbable carries a lot. Take the sentence <em>"I take my coffee with milk and ___"</em>. If <code>P(sugar) = 0.5</code>, then surprisal = &minus;log₂(0.5) = <strong>1 bit</strong> — barely a ripple. If a listener hears the unlikely <code>P(plutonium) = 1/1024</code>, surprisal = &minus;log₂(1/1024) = <strong>10 bits</strong> — a jolt.</p>
+      </div>
+
+      <p class="reveal">The brain's response <strong>scales with surprisal</strong>. The classic electrophysiological signature is the <span class="term">N400</span> — a negative-going EEG/MEG deflection peaking around 400&nbsp;ms after word onset whose amplitude grows the harder the word is to integrate with its context. <a href="https://aclanthology.org/N01-1021/" target="_blank" rel="noopener">Hale's (2001) surprisal theory</a> gave the linking hypothesis — processing difficulty ∝ surprisal — and a line of work since (Frank et al.; Willems et al.; <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">Goldstein et al. 2022</a>) has shown that surprisal estimated by language models predicts graded N400-like and BOLD responses to natural text. The brain is not passively waiting for each word; it is constantly betting on what comes next, and it pays in proportion to how wrong the bet was.</p>
+    </div>
+
+    <!-- FIGURE 4: surprisal -->
+    <figure class="bleed reveal" aria-label="Surprisal: predictable versus surprising next word and the size of the neural response">
+      <div class="fig-title">Figure 05.4 — Surprisal: a predictable word vs a surprising one</div>
+      <svg viewBox="0 0 1000 420" role="img" aria-labelledby="f4t">
+        <title id="f4t">A next-word probability distribution over candidate words; a high-probability word yields low surprisal and a small neural response, a low-probability word yields high surprisal and a large response.</title>
+        <!-- context -->
+        <text x="40" y="40" style="font-family:'Spectral',serif;font-style:italic;font-size:18px;fill:#1a1c22">context:  "I take my coffee with milk and ___"</text>
+
+        <!-- probability distribution bars (left block) -->
+        <g transform="translate(60,90)">
+          <text class="svg-lab" x="0" y="-8" style="letter-spacing:.12em">P( next word | context )</text>
+          <!-- axis -->
+          <line x1="0" y1="210" x2="360" y2="210" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="0" y1="40" x2="0" y2="210" stroke="#cfc7b8" stroke-width="1.5"/>
+          <!-- bars: sugar high, then low ones -->
+          <g>
+            <rect x="22"  y="70"  width="46" height="140" fill="#7c3aed"/>
+            <rect x="86"  y="150" width="46" height="60"  fill="#a78bfa"/>
+            <rect x="150" y="172" width="46" height="38"  fill="#a78bfa"/>
+            <rect x="214" y="186" width="46" height="24"  fill="#cbb8f4"/>
+            <rect x="278" y="202" width="46" height="8"   fill="#cbb8f4"/>
+          </g>
+          <g class="svg-lab" text-anchor="middle">
+            <text x="45"  y="228">sugar</text>
+            <text x="109" y="228">cream</text>
+            <text x="173" y="228">honey</text>
+            <text x="237" y="228">nothing</text>
+            <text x="301" y="228" style="fill:#5b21b6">plutonium</text>
+          </g>
+          <text class="svg-lab" x="45" y="62" text-anchor="middle" style="fill:#7c3aed">0.50</text>
+          <text class="svg-lab" x="301" y="196" text-anchor="middle" style="fill:#5b21b6">1/1024</text>
+        </g>
+
+        <!-- two outcomes (right block) -->
+        <g transform="translate(470,80)">
+          <!-- LOW SURPRISAL -->
+          <rect x="0" y="0" width="470" height="140" rx="10" fill="#faf8f4" stroke="#e4ded2"/>
+          <text class="svg-lab" x="18" y="26" style="fill:#7c3aed;letter-spacing:.12em">PREDICTABLE → LOW SURPRISAL</text>
+          <text x="18" y="56" style="font-family:'Spectral',serif;font-style:italic;font-size:17px;fill:#1a1c22">"…milk and <tspan font-weight="700" font-style="normal">sugar</tspan>"</text>
+          <text class="svg-lab-d" x="18" y="80" style="fill:#7c3aed">&minus;log₂(0.5) = 1 bit</text>
+          <!-- small response wave -->
+          <path d="M250,70 q12,-10 24,0 q12,10 24,0 q12,-6 24,0" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+          <text class="svg-lab" x="386" y="74" style="fill:#7c3aed">small response</text>
+
+          <!-- HIGH SURPRISAL -->
+          <rect x="0" y="160" width="470" height="140" rx="10" fill="#f6f0ff" stroke="#d9cef0"/>
+          <text class="svg-lab" x="18" y="186" style="fill:#5b21b6;letter-spacing:.12em">SURPRISING → HIGH SURPRISAL</text>
+          <text x="18" y="216" style="font-family:'Spectral',serif;font-style:italic;font-size:17px;fill:#1a1c22">"…milk and <tspan font-weight="700" font-style="normal" fill="#5b21b6">plutonium</tspan>"</text>
+          <text class="svg-lab-d" x="18" y="240" style="fill:#5b21b6">&minus;log₂(1/1024) = 10 bits</text>
+          <!-- large response wave (N400-ish dip) -->
+          <path d="M250,232 q10,-30 22,0 q12,52 26,0 q12,-30 24,0" fill="none" stroke="#5b21b6" stroke-width="3"/>
+          <text class="svg-lab" x="392" y="232" style="fill:#5b21b6">large response</text>
+          <text class="svg-lab" x="392" y="248" style="fill:#5b21b6">(N400 ↑)</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.4.</b> The context defines a probability distribution over the next word. A high-probability word (<b>sugar</b>, P≈0.5) is <b>1 bit</b> of surprisal and a small neural response; an improbable word (<b>plutonium</b>) is <b>10 bits</b> and a large one. Surprisal = &minus;log&nbsp;P(word&nbsp;|&nbsp;context); the brain's N400 grows with it (<a href="https://aclanthology.org/N01-1021/" target="_blank" rel="noopener">Hale 2001</a>; Frank, Willems; <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">Goldstein et&nbsp;al. 2022</a>).</figcaption>
+    </figure>
+
+    <div class="call watch reveal">
+      <div class="h">⚠ Watch out</div>
+      <p>Surprisal is about <em>context-conditional</em> probability, not raw frequency. A common word can be highly surprising in the wrong context ("milk and <em>the</em>…" is frequent but ungrammatical here), and a rare word can be perfectly predictable ("the speed of <em>light</em>"). The N400 tracks the conditional bet, not the dictionary count.</p>
+    </div>
+
+    <div class="prose">
+      <h3 class="reveal">Two ERP signatures: the N400 and the P600</h3>
+      <p class="reveal">The N400 is one of two famous <span class="term">event-related potentials (ERPs)</span> evoked by an unexpected word, and the contrast between them is one of the cleanest dissociations in the psycholinguistic literature. The <span class="term">N400</span> — a centro-parietal negativity peaking near 400&nbsp;ms — indexes <strong>semantic fit / predictability</strong>: it grows when a word is hard to integrate with the meaning built so far. In <em>"He spread his warm bread with socks,"</em> the word <em>socks</em> is semantically anomalous, and it elicits a large N400 (<a href="https://www.annualreviews.org/doi/10.1146/annurev.psych.093008.131123" target="_blank" rel="noopener">Kutas &amp; Federmeier 2011</a>). Crucially, the N400 is graded by <em>cloze</em> probability — the same continuum as surprisal — so it is the canonical neural readout of "how expected was this word."</p>
+      <p class="reveal">The <span class="term">P600</span> — a later, posterior <em>positivity</em> around 600&nbsp;ms — is a different animal. It indexes <strong>syntactic reanalysis / structural repair</strong>, not semantic fit. In <em>"The cats won't eating the food,"</em> nothing is semantically odd — you know exactly what is meant — but the grammar is broken, and the brain mounts a P600 as it tries to reparse. The two can even pull apart on the <em>same</em> word: a sentence like <em>"The hearty meal was devouring the kids"</em> is semantically reversed but syntactically fine, and (famously) elicits a P600 rather than the expected N400 — a "semantic illusion" suggesting structure-building and meaning-fit are partly separate processes. N400 ≈ <em>"does this word make sense here?"</em>; P600 ≈ <em>"can I still build a legal structure?"</em></p>
+    </div>
+
+    <!-- FIGURE 8: N400 vs P600 ERPs -->
+    <figure class="bleed reveal" aria-label="N400 versus P600 event-related potential waveforms">
+      <div class="fig-title">Figure 05.8 — N400 (semantic) vs P600 (syntactic) ERP signatures</div>
+      <svg viewBox="0 0 1000 380" role="img" aria-labelledby="f8t">
+        <title id="f8t">Two ERP plots. Left: a semantically anomalous word produces an enlarged negativity around 400 ms (N400) relative to an expected word. Right: a syntactic violation produces an enlarged positivity around 600 ms (P600).</title>
+        <defs>
+          <marker id="ar8" markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto"><path d="M0,0 L9,5 L0,10 Z" fill="#a78bfa"/></marker>
+        </defs>
+        <!-- NOTE: ERP convention here is negative-UP (common in the literature) -->
+
+        <!-- LEFT PANEL: N400 -->
+        <g transform="translate(40,40)">
+          <text class="svg-lab" x="0" y="-6" style="fill:#7c3aed;letter-spacing:.12em">SEMANTIC FIT → N400</text>
+          <!-- axes: baseline at y=150, negative plotted upward -->
+          <line x1="20" y1="40" x2="20" y2="270" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="20" y1="150" x2="430" y2="150" stroke="#cfc7b8" stroke-width="1.5"/>
+          <text class="svg-lab" x="6" y="56" text-anchor="end" transform="rotate(-90 6 56)" style="fill:#b9af9c">− amplitude (µV) up</text>
+          <!-- time ticks -->
+          <g class="svg-lab" text-anchor="middle">
+            <text x="110" y="290">200</text><text x="210" y="290">400</text>
+            <text x="310" y="290">600</text><text x="410" y="290">800 ms</text>
+          </g>
+          <line x1="210" y1="150" x2="210" y2="60" stroke="#ede6fb" stroke-width="1"/>
+          <!-- expected word: small wiggle around baseline -->
+          <path d="M20,150 C60,150 90,146 120,150 C160,156 190,152 210,150 C260,148 320,152 410,150"
+                fill="none" stroke="#a78bfa" stroke-width="2"/>
+          <!-- anomalous word: large negativity (upward) peaking ~400ms -->
+          <path d="M20,150 C60,150 90,150 120,148 C160,140 185,78 210,72 C245,66 280,128 330,148 C370,154 390,150 410,150"
+                fill="none" stroke="#5b21b6" stroke-width="2.8"/>
+          <text class="svg-h" x="210" y="56" text-anchor="middle" style="font-size:13px;fill:#5b21b6">N400</text>
+          <text class="svg-lab" x="218" y="92" style="fill:#5b21b6">peak ≈ 400 ms</text>
+          <!-- legend -->
+          <g transform="translate(248,178)">
+            <line x1="0" y1="0" x2="26" y2="0" stroke="#a78bfa" stroke-width="2"/><text class="svg-lab" x="32" y="4">expected: "…with butter"</text>
+            <line x1="0" y1="20" x2="26" y2="20" stroke="#5b21b6" stroke-width="2.8"/><text class="svg-lab" x="32" y="24" style="fill:#5b21b6">anomaly: "…with socks"</text>
+          </g>
+        </g>
+
+        <!-- RIGHT PANEL: P600 -->
+        <g transform="translate(540,40)">
+          <text class="svg-lab" x="0" y="-6" style="fill:#5b21b6;letter-spacing:.12em">SYNTAX REPAIR → P600</text>
+          <line x1="20" y1="40" x2="20" y2="270" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="20" y1="150" x2="430" y2="150" stroke="#cfc7b8" stroke-width="1.5"/>
+          <text class="svg-lab" x="6" y="244" text-anchor="end" transform="rotate(-90 6 244)" style="fill:#b9af9c">+ amplitude (µV) down</text>
+          <g class="svg-lab" text-anchor="middle">
+            <text x="110" y="290">200</text><text x="210" y="290">400</text>
+            <text x="310" y="290">600</text><text x="410" y="290">800 ms</text>
+          </g>
+          <line x1="310" y1="150" x2="310" y2="240" stroke="#ede6fb" stroke-width="1"/>
+          <!-- grammatical word: flat -->
+          <path d="M20,150 C60,150 90,150 120,150 C160,150 190,150 210,150 C260,150 320,150 410,150"
+                fill="none" stroke="#a78bfa" stroke-width="2"/>
+          <!-- violation: large positivity (downward) peaking ~600ms -->
+          <path d="M20,150 C70,150 110,150 150,152 C200,156 250,200 310,224 C355,236 385,158 410,150"
+                fill="none" stroke="#5b21b6" stroke-width="2.8"/>
+          <text class="svg-h" x="312" y="262" text-anchor="middle" style="font-size:13px;fill:#5b21b6">P600</text>
+          <text class="svg-lab" x="322" y="206" style="fill:#5b21b6">peak ≈ 600 ms</text>
+          <g transform="translate(40,64)">
+            <line x1="0" y1="0" x2="26" y2="0" stroke="#a78bfa" stroke-width="2"/><text class="svg-lab" x="32" y="4">legal: "…won't eat the food"</text>
+            <line x1="0" y1="20" x2="26" y2="20" stroke="#5b21b6" stroke-width="2.8"/><text class="svg-lab" x="32" y="24" style="fill:#5b21b6">violation: "…won't eating…"</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.8.</b> Two dissociable ERPs (by convention, negativity is plotted upward in each panel relative to that panel's effect). <b>Left — N400:</b> a semantically anomalous word enlarges a negativity peaking near 400&nbsp;ms; its amplitude scales with how unexpected the word is (<a href="https://www.annualreviews.org/doi/10.1146/annurev.psych.093008.131123" target="_blank" rel="noopener">Kutas &amp; Federmeier 2011</a>). <b>Right — P600:</b> a grammatically illegal word enlarges a later positivity near 600&nbsp;ms, indexing syntactic reanalysis rather than semantic fit. The two can dissociate on the very same word.</figcaption>
+    </figure>
+
+    <details class="qcheck reveal">
+      <summary>Quick check — a sentence is grammatical but ends with a bizarre word. Which ERP grows?</summary>
+      <div>The <strong>N400</strong>. It indexes semantic fit / predictability, so a meaning-violating-but-grammatical word (e.g. "…spread his bread with <em>socks</em>") enlarges the ~400 ms negativity. A <strong>P600</strong> is the signature of a <em>grammatical</em> violation that forces structural reanalysis — different process, later, posterior, positive-going.</div>
+    </details>
+  </section>
+
+  <!-- ===================== 5. PREDICTIVE PROCESSING ===================== -->
+  <section id="prediction" aria-label="Predictive processing and next-word prediction">
+    <div class="sec-head reveal">
+      <div class="kicker">05 · The predicting brain</div>
+      <h2>The brain predicts the next word</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">If the response scales with surprisal, the brain must already hold an expectation to be surprised <em>against</em>. The strong claim of <span class="term">predictive processing</span> is that comprehension is fundamentally anticipatory: the language system continuously forecasts upcoming input and treats the actual word as a confirmation or a correction.</p>
+
+      <p class="reveal">The most striking direct evidence comes from <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">Goldstein et al. (2022, Nature Neuroscience)</a>, using intracranial recordings during natural story listening. They found neural signatures of the predicted word <strong>before it was spoken</strong> — a pre-onset prediction signal — followed, after the word arrived, by a response scaling with how surprising it turned out to be. The brain runs the same predict-then-update loop that powers an autoregressive language model: guess the next token, hear it, register the error, move on.</p>
+    </div>
+
+    <div class="chips reveal">
+      <div class="chip"><div class="big">pre-onset</div><div class="lab">A prediction signal appears <strong>before</strong> the word is heard — the brain commits to a guess.</div></div>
+      <div class="chip"><div class="big">on-onset</div><div class="lab">When the word arrives, the response scales with <strong>surprisal</strong> — prediction error.</div></div>
+      <div class="chip"><div class="big">update</div><div class="lab">Context is revised and the next prediction is issued — the loop continues.</div></div>
+    </div>
+
+    <div class="prose">
+      <h3 class="reveal">Surprisal vs entropy: cost looking back, uncertainty looking ahead</h3>
+      <p class="reveal">Surprisal is computed <em>after</em> the word arrives — it is &minus;log P(<em>actual word</em> | context), the cost of the bet you just paid out. But the same probability distribution supports a second, forward-looking quantity. Before the next word arrives, the context defines a whole distribution P(·&nbsp;|&nbsp;context), and its <span class="term">entropy</span> — H = &minus;Σ P(w)&nbsp;log&nbsp;P(w) — measures how <em>uncertain</em> the upcoming word is. A sharply <strong>peaked</strong> distribution ("the speed of ___" → almost surely <em>light</em>) has <strong>low entropy</strong>: little lookahead uncertainty. A <strong>flat</strong> distribution ("she picked up the ___" → dozens of plausible objects) has <strong>high entropy</strong>: the brain is hedging across many candidates.</p>
+      <p class="reveal">The distinction matters because the two are dissociable and both modulate neural responses. Surprisal is the <em>retrospective</em> processing cost of the word you got; entropy is the <em>prospective</em> uncertainty about the word you're waiting for (sometimes split further into next-word vs multi-step "entropy reduction"). The idea traces to <a href="https://aclanthology.org/N01-1021/" target="_blank" rel="noopener">Hale's (2001)</a> information-theoretic parsing, and studies using model-derived estimates (Willems et al.; <a href="https://www.sciencedirect.com/science/article/pii/S0028393217301124" target="_blank" rel="noopener">Lopopolo et al.</a>; Frank) report that entropy and surprisal explain <em>separable</em> variance in brain activity during natural reading and listening — anticipatory engagement (entropy) on top of integration cost (surprisal).</p>
+
+      <div class="callout deep call reveal" style="border-radius:var(--radius);padding:1.3rem 1.5rem">
+        <div class="h" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:.6rem;color:var(--accent-deep)">⟐ Going deeper · why both, intuitively</div>
+        <p style="margin:0 0 .6rem;color:var(--ink-soft)">Think of the brain as placing bets. <strong>Entropy</strong> is how spread out your chips are <em>before the card is turned</em> — when the field is wide open you must prepare more alternatives, which is itself effortful. <strong>Surprisal</strong> is how badly you lost <em>after the card is turned</em> — the prediction error you must correct. They can move oppositely: a context can be high-entropy (many plausible nouns) yet yield <em>low</em> surprisal if the actual word was one of the likely ones; or low-entropy yet <em>high</em> surprisal if the near-certain continuation fails to appear ("the speed of <em>darkness</em>"). Disentangling them is exactly why model-derived probability estimates — and LLMs in particular — became indispensable tools for psycholinguistics.</p>
+      </div>
+    </div>
+
+    <!-- FIGURE 9: surprisal vs entropy -->
+    <figure class="bleed reveal" aria-label="Surprisal versus entropy: peaked versus flat next-word distributions and predicted responses">
+      <div class="fig-title">Figure 05.9 — Surprisal vs entropy: looking back vs looking ahead</div>
+      <svg viewBox="0 0 1000 420" role="img" aria-labelledby="f9t">
+        <title id="f9t">Two contexts. A peaked low-entropy next-word distribution versus a flat high-entropy one, with surprisal as the height of the bar of the actually-occurring word and entropy as the spread of the whole distribution.</title>
+        <!-- LEFT: peaked / low entropy -->
+        <g transform="translate(40,60)">
+          <text x="0" y="0" style="font-family:'Spectral',serif;font-style:italic;font-size:16px;fill:#1a1c22">context: "the speed of ___"</text>
+          <text class="svg-lab" x="0" y="22" style="fill:#7c3aed;letter-spacing:.1em">PEAKED → LOW ENTROPY (low lookahead uncertainty)</text>
+          <!-- axes -->
+          <line x1="10" y1="220" x2="400" y2="220" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="10" y1="50" x2="10" y2="220" stroke="#cfc7b8" stroke-width="1.5"/>
+          <!-- bars: one tall (light), rest tiny -->
+          <rect x="34"  y="64"  width="40" height="156" fill="#7c3aed"/>
+          <rect x="92"  y="200" width="40" height="20"  fill="#cbb8f4"/>
+          <rect x="150" y="206" width="40" height="14"  fill="#cbb8f4"/>
+          <rect x="208" y="210" width="40" height="10"  fill="#cbb8f4"/>
+          <rect x="266" y="214" width="40" height="6"   fill="#cbb8f4"/>
+          <rect x="324" y="216" width="40" height="4"   fill="#cbb8f4"/>
+          <g class="svg-lab" text-anchor="middle">
+            <text x="54" y="238" style="fill:#5b21b6">light</text><text x="112" y="238">sound</text>
+            <text x="170" y="238">thought</text><text x="228" y="238">…</text>
+          </g>
+          <text class="svg-lab" x="54" y="56" text-anchor="middle" style="fill:#7c3aed">P≈.9</text>
+          <text class="svg-lab-d" x="205" y="280" text-anchor="middle" style="fill:#7c3aed">H small — the brain commits to one guess</text>
+          <text class="svg-lab-d" x="205" y="300" text-anchor="middle">if "light" arrives → surprisal also small (good bet)</text>
+        </g>
+
+        <!-- divider -->
+        <line x1="500" y1="50" x2="500" y2="320" stroke="#e4ded2" stroke-width="1.5" stroke-dasharray="4 5"/>
+
+        <!-- RIGHT: flat / high entropy -->
+        <g transform="translate(560,60)">
+          <text x="0" y="0" style="font-family:'Spectral',serif;font-style:italic;font-size:16px;fill:#1a1c22">context: "she picked up the ___"</text>
+          <text class="svg-lab" x="0" y="22" style="fill:#5b21b6;letter-spacing:.1em">FLAT → HIGH ENTROPY (high lookahead uncertainty)</text>
+          <line x1="10" y1="220" x2="400" y2="220" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="10" y1="50" x2="10" y2="220" stroke="#cfc7b8" stroke-width="1.5"/>
+          <!-- bars: roughly even -->
+          <rect x="34"  y="150" width="40" height="70" fill="#a78bfa"/>
+          <rect x="92"  y="160" width="40" height="60" fill="#a78bfa"/>
+          <rect x="150" y="146" width="40" height="74" fill="#a78bfa"/>
+          <rect x="208" y="158" width="40" height="62" fill="#a78bfa"/>
+          <rect x="266" y="152" width="40" height="68" fill="#a78bfa"/>
+          <rect x="324" y="164" width="40" height="56" fill="#a78bfa"/>
+          <g class="svg-lab" text-anchor="middle">
+            <text x="54" y="238">phone</text><text x="112" y="238">cup</text>
+            <text x="170" y="238">book</text><text x="228" y="238">keys</text>
+            <text x="286" y="238">bag</text><text x="344" y="238">pen</text>
+          </g>
+          <text class="svg-lab-d" x="205" y="280" text-anchor="middle" style="fill:#5b21b6">H large — many candidates held open</text>
+          <text class="svg-lab-d" x="205" y="300" text-anchor="middle">anticipatory load up; surprisal of any one word modest</text>
+        </g>
+
+        <!-- bottom summary strip -->
+        <g transform="translate(40,340)">
+          <rect x="0" y="0" width="920" height="58" rx="10" fill="#f6f0ff" stroke="#d9cef0"/>
+          <text x="20" y="26" style="font-family:'JetBrains Mono',monospace;font-size:12px;fill:#5b21b6;font-weight:700">surprisal = −log P(actual word | context)</text>
+          <text x="20" y="44" style="font-family:'JetBrains Mono',monospace;font-size:11px;fill:#4b4f5a">height of the realized word's bar · LOOK BACK · integration cost</text>
+          <text x="520" y="26" style="font-family:'JetBrains Mono',monospace;font-size:12px;fill:#5b21b6;font-weight:700">entropy = −Σ P(w) log P(w)</text>
+          <text x="520" y="44" style="font-family:'JetBrains Mono',monospace;font-size:11px;fill:#4b4f5a">spread of the whole distribution · LOOK AHEAD · uncertainty</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.9.</b> Two information-theoretic quantities from one distribution. <b>Surprisal</b> = &minus;log P(actual word | context) is the height of the realized word's bar — a <i>retrospective</i> integration cost. <b>Entropy</b> = &minus;Σ P(w) log P(w) is the spread of the whole distribution — <i>prospective</i> uncertainty about what comes next. A peaked context (left) is low-entropy; a flat one (right) is high-entropy. Both modulate brain responses and explain separable variance (<a href="https://aclanthology.org/N01-1021/" target="_blank" rel="noopener">Hale 2001</a>; Willems; <a href="https://www.sciencedirect.com/science/article/pii/S0028393217301124" target="_blank" rel="noopener">Lopopolo et&nbsp;al.</a>).</figcaption>
+    </figure>
+
+    <details class="qcheck reveal">
+      <summary>Quick check — "the speed of darkness" — is that high surprisal, high entropy, or both?</summary>
+      <div>High <strong>surprisal</strong>, low <strong>entropy</strong>. The context "the speed of ___" is sharply peaked on <em>light</em> (low entropy — little lookahead uncertainty), so the brain confidently expects one word. When <em>darkness</em> arrives instead, the realized word had tiny probability, so &minus;log P is large — a big surprisal / prediction error. Low entropy plus high surprisal is exactly the "confident-but-wrong" case.</div>
+    </details>
+  </section>
+
+  <!-- ===================== 6. BRAIN-TO-LLM ALIGNMENT ===================== -->
+  <section id="alignment" aria-label="Brain-to-LLM alignment">
+    <div class="sec-head reveal">
+      <div class="kicker">06 · The encoding model, applied</div>
+      <h2>Brains and language models, aligned</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">Here Chapter 1's encoding-model logic returns, now pointed at language. Take the <span class="term">contextual embedding</span> a GPT-style model assigns to each word — the high-dimensional vector that captures the word <em>in its specific context</em> — and fit a single <strong>linear map</strong> from that vector to the recorded brain response. The result, found again and again, is that <strong>contextual embeddings linearly predict brain activity</strong> for the same words.</p>
+
+      <p class="reveal">And the relationship is graded in a remarkable way: <a href="https://www.pnas.org/doi/10.1073/pnas.2105646118" target="_blank" rel="noopener">Schrimpf et al. (2021, PNAS)</a> showed that the <strong>better a language model is at next-word prediction, the better its embeddings predict the brain</strong> — the same architectures that win at language modeling win at brain modeling. <a href="https://www.nature.com/articles/s41562-022-01516-2" target="_blank" rel="noopener">Caucheteux &amp; King (2022)</a> reinforced the result across fMRI and MEG; <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">Goldstein et al. (2022)</a> and <a href="https://www.cell.com/neuron/fulltext/S0896-6273(24)00460-4" target="_blank" rel="noopener">Zada et al. (2024)</a> showed brains and LLMs share a model-based linguistic geometry during natural comprehension. A linear readout — exactly the move this whole handbook is built on — is enough to translate between an LLM's representation and a brain's.</p>
+
+      <h3 class="reveal">Why should an LLM speak the brain's dialect?</h3>
+      <p class="reveal">The convergence is not a coincidence of scale — it follows from a <strong>shared objective</strong>. Both systems are optimized (the brain by evolution and experience, the model by gradient descent) to <em>predict the next word from context</em>. Two predictors that are both good at the same prediction problem, trained on the same statistics of language, tend to arrive at similar internal representations — so a linear map suffices to read one out from the other. This is the predictive-processing reading of the alignment: the N400, the pre-onset prediction signals of <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">Goldstein et al. (2022)</a>, and the LLM's logits are three windows onto the <em>same</em> next-word forecast.</p>
+
+      <div class="callout deep call reveal" style="border-radius:var(--radius);padding:1.3rem 1.5rem">
+        <div class="h" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:.6rem;color:var(--accent-deep)">⟐ Going deeper · scale, and where the analogy strains</div>
+        <p style="margin:0 0 .6rem;color:var(--ink-soft)">The "better LM → better fit" curve is real but not unbounded. <a href="https://www.nature.com/articles/s41467-024-46631-y" target="_blank" rel="noopener">Antonello, Vaidya &amp; Huth (2024)</a> found brain-prediction keeps improving roughly <em>log-linearly</em> as model size grows across orders of magnitude — yet the most predictive layers are typically the <em>middle</em> ones, not the final next-word head, and gains eventually saturate well below the noise ceiling. So the shared objective explains <em>why</em> the representations align, but the fit is partial: LLMs capture much of the contextual-semantic variance a Mel spectrogram cannot, while leaving residual structure (and a debate about whether "next-word prediction" is the brain's objective or merely a <em>good proxy</em> for it). Caution: correlation between two predictors is evidence of shared computation, not proof the brain <em>is</em> a transformer.</p>
+      </div>
+    </div>
+
+    <!-- FIGURE 5: brain<->LLM alignment -->
+    <figure class="bleed reveal" aria-label="The language encoding model from word in context to predicted brain response, and the better-LM-better-fit relationship">
+      <div class="fig-title">Figure 05.5 — The language encoding model</div>
+      <svg viewBox="0 0 1000 420" role="img" aria-labelledby="f5t">
+        <title id="f5t">A word in context is embedded by a language model into a contextual vector; a fitted linear map projects that vector to a predicted brain response, compared against the recording. An inset shows that better language models predict the brain better.</title>
+        <defs>
+          <marker id="bar" markerWidth="11" markerHeight="11" refX="6" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7c3aed"/></marker>
+        </defs>
+
+        <!-- 1 word in context -->
+        <g transform="translate(20,60)">
+          <rect width="160" height="96" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="80" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">WORD IN CONTEXT</text>
+          <text x="80" y="40" text-anchor="middle" style="font-family:'Spectral',serif;font-style:italic;font-size:13px;fill:#8a8f9c">"…digesting an</text>
+          <text x="80" y="64" text-anchor="middle" style="font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:20px;fill:#1a1c22">elephant"</text>
+          <text class="svg-lab" x="80" y="86" text-anchor="middle">context matters</text>
+        </g>
+        <line x1="182" y1="108" x2="212" y2="108" stroke="#7c3aed" stroke-width="2" marker-end="url(#bar)"/>
+
+        <!-- 2 LLM -->
+        <g transform="translate(214,60)">
+          <rect width="150" height="96" rx="10" fill="#7c3aed"/>
+          <text class="svg-lab" x="75" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">LANGUAGE MODEL</text>
+          <text x="75" y="44" text-anchor="middle" style="font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:16px;fill:#fff">GPT-style</text>
+          <text x="75" y="68" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#e9deff">transformer layers</text>
+          <text class="svg-lab" x="75" y="118" text-anchor="middle" style="fill:#b9af9c">frozen · pretrained</text>
+        </g>
+        <line x1="366" y1="108" x2="396" y2="108" stroke="#7c3aed" stroke-width="2" marker-end="url(#bar)"/>
+
+        <!-- 3 contextual embedding -->
+        <g transform="translate(398,60)">
+          <rect width="150" height="96" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="75" y="-12" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">CONTEXTUAL EMBEDDING</text>
+          <!-- vector cells -->
+          <g transform="translate(28,30)">
+            <rect width="18" height="18" fill="#7c3aed" opacity=".85"/>
+            <rect x="20" width="18" height="18" fill="#a78bfa" opacity=".6"/>
+            <rect x="40" width="18" height="18" fill="#7c3aed" opacity=".4"/>
+            <rect x="60" width="18" height="18" fill="#a78bfa" opacity=".9"/>
+            <rect x="80" width="18" height="18" fill="#7c3aed" opacity=".55"/>
+          </g>
+          <text class="svg-lab" x="75" y="78" text-anchor="middle">a vector in ℝ^d</text>
+          <text class="svg-lab" x="75" y="118" text-anchor="middle">the word, in situ</text>
+        </g>
+        <!-- linear map arrow -->
+        <line x1="550" y1="108" x2="592" y2="108" stroke="#7c3aed" stroke-width="2" marker-end="url(#bar)"/>
+        <text class="svg-lab" x="571" y="96" text-anchor="middle" style="fill:#5b21b6">W·x</text>
+        <text class="svg-lab" x="571" y="132" text-anchor="middle" style="fill:#5b21b6">fitted linear map</text>
+
+        <!-- 4 predicted brain -->
+        <g transform="translate(594,52)">
+          <rect width="170" height="112" rx="10" fill="#f6f0ff" stroke="#d9cef0"/>
+          <text class="svg-lab" x="85" y="-8" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">PREDICTED RESPONSE</text>
+          <!-- small brain glyph -->
+          <path d="M58,72 q-16,-20 4,-30 q5,-15 24,-9 q18,-9 27,7 q16,5 7,24 q4,16 -14,20 q-13,12 -29,2 q-20,3 -19,-15Z" fill="none" stroke="#7c3aed" stroke-width="1.8"/>
+          <circle cx="118" cy="60" r="3" fill="#7c3aed"/><circle cx="100" cy="84" r="3" fill="#a78bfa"/><circle cx="80" cy="50" r="3" fill="#5b21b6"/>
+          <text class="svg-lab" x="85" y="104" text-anchor="middle">ŷ — per-channel</text>
+        </g>
+        <!-- compare to recorded -->
+        <line x1="679" y1="166" x2="679" y2="196" stroke="#a78bfa" stroke-width="2" marker-end="url(#bar)"/>
+        <g transform="translate(594,198)">
+          <rect width="170" height="58" rx="10" fill="#fbfaf7" stroke="#e4ded2"/>
+          <text class="svg-lab" x="85" y="22" text-anchor="middle" style="fill:#7c3aed;letter-spacing:.1em">RECORDED BRAIN y</text>
+          <text class="svg-lab" x="85" y="42" text-anchor="middle">correlate ŷ vs y → fit</text>
+        </g>
+
+        <!-- INSET: better LM -> better brain prediction -->
+        <g transform="translate(40,250)">
+          <rect width="500" height="150" rx="12" fill="#ffffff" stroke="#e4ded2"/>
+          <text class="svg-lab" x="20" y="28" style="fill:#5b21b6;letter-spacing:.12em">BETTER LANGUAGE MODEL → BETTER BRAIN PREDICTION</text>
+          <!-- axes -->
+          <line x1="60" y1="120" x2="470" y2="120" stroke="#cfc7b8" stroke-width="1.5"/>
+          <line x1="60" y1="50" x2="60" y2="120" stroke="#cfc7b8" stroke-width="1.5"/>
+          <text class="svg-lab" x="265" y="142" text-anchor="middle">language-model quality (next-word accuracy) →</text>
+          <text class="svg-lab" x="34" y="86" text-anchor="middle" transform="rotate(-90 34 86)">brain fit ↑</text>
+          <!-- rising scatter -->
+          <g fill="#7c3aed">
+            <circle cx="92"  cy="112" r="4"/><circle cx="138" cy="106" r="4"/><circle cx="190" cy="98" r="4"/>
+            <circle cx="246" cy="86" r="4"/><circle cx="306" cy="78" r="4"/><circle cx="368" cy="66" r="4"/>
+            <circle cx="430" cy="58" r="4"/>
+          </g>
+          <line x1="84" y1="116" x2="436" y2="56" stroke="#5b21b6" stroke-width="2" stroke-dasharray="6 4"/>
+        </g>
+
+        <!-- caption-ish pointer text -->
+        <text class="svg-lab-d" x="780" y="300" style="fill:#7c3aed">This is the</text>
+        <text class="svg-h" x="780" y="324" style="font-size:18px;fill:#5b21b6">encoding model</text>
+        <text class="svg-lab-d" x="780" y="348" style="fill:#4b4f5a">of Chapter 1 —</text>
+        <text class="svg-lab-d" x="780" y="368" style="fill:#4b4f5a">now from an LLM</text>
+        <text class="svg-lab-d" x="780" y="388" style="fill:#4b4f5a">to a brain.</text>
+      </svg>
+      <figcaption><b>Figure 05.5.</b> The language encoding model. A frozen LLM maps a <b>word in context</b> to a <b>contextual embedding</b>; a single fitted <b>linear map</b> projects it to a <b>predicted brain response</b> scored against the recording. Inset: across models, <b>better next-word prediction → better brain fit</b> (<a href="https://www.pnas.org/doi/10.1073/pnas.2105646118" target="_blank" rel="noopener">Schrimpf et&nbsp;al. 2021</a>; <a href="https://www.nature.com/articles/s41562-022-01516-2" target="_blank" rel="noopener">Caucheteux &amp; King 2022</a>; <a href="https://www.cell.com/neuron/fulltext/S0896-6273(24)00460-4" target="_blank" rel="noopener">Zada et&nbsp;al. 2024</a>).</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== 7. NATURALISTIC NEUROSCIENCE ===================== -->
+  <section id="naturalistic" aria-label="Naturalistic neuroscience">
+    <div class="sec-head reveal">
+      <div class="kicker">07 · The continuous story</div>
+      <h2>Why a story, not a word list</h2>
+    </div>
+
+    <div class="prose">
+      <p class="lede reveal">Everything above — the long timescales, the running prediction, the contextual embedding — depends on <em>context</em>. An isolated word has none. This is the case for the <span class="term">naturalistic paradigm</span>: studying the brain with continuous, ecologically valid stimuli like a spoken story.</p>
+
+      <p class="reveal">A real narrative engages the <em>full</em> language network in its natural mode: it drives every rung of the comprehension hierarchy at once, lets long-window regions accumulate meaning, and gives the predictive machinery a genuine context to predict against. It is also reproducible in a powerful way. <a href="https://www.science.org/doi/10.1126/science.1089506" target="_blank" rel="noopener">Hasson et al. (2004)</a> introduced <span class="term">inter-subject correlation (ISC)</span>: play the same story (or film) to many people and correlate their brain time-courses with one another. Where responses are reliably shared across listeners, the stimulus — not idiosyncratic wandering thought — is driving the brain. ISC turns "is this region tracking the narrative?" into a measurable quantity, and it is high throughout the language network during story listening.</p>
+    </div>
+
+    <!-- FIGURE 6: inter-subject correlation -->
+    <figure class="bleed reveal" aria-label="Inter-subject correlation: many listeners' brain time-courses track the same story">
+      <div class="fig-title">Figure 05.6 — Naturalistic listening &amp; inter-subject correlation</div>
+      <svg viewBox="0 0 1000 350" role="img" aria-labelledby="f6t">
+        <title id="f6t">One spoken story drives several listeners; their language-network time-courses rise and fall together, yielding high inter-subject correlation, while a control region does not.</title>
+        <!-- the shared stimulus -->
+        <g transform="translate(20,30)">
+          <rect width="150" height="290" rx="12" fill="#7c3aed"/>
+          <text x="75" y="40" text-anchor="middle" style="font-family:'Bricolage Grotesque',serif;font-weight:700;font-size:16px;fill:#fff">one story</text>
+          <text x="75" y="64" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#e9deff">played to all</text>
+          <!-- waveform -->
+          <path d="M22,150 q5,-28 10,0 q5,24 10,0 q5,-36 10,0 q5,30 10,0 q5,-20 10,0 q5,32 10,0 q5,-24 10,0 q5,18 10,0 q5,-30 10,0"
+                fill="none" stroke="#e9deff" stroke-width="2"/>
+          <text x="75" y="250" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#e9deff">"…boa constrictor</text>
+          <text x="75" y="266" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:10px;fill:#e9deff">digesting an elephant…"</text>
+        </g>
+        <!-- fan-out arrows -->
+        <g stroke="#a78bfa" stroke-width="2" fill="none">
+          <path d="M172,90 C220,90 230,80 270,80"/>
+          <path d="M172,175 C220,175 230,175 270,175"/>
+          <path d="M172,260 C220,260 230,270 270,270"/>
+        </g>
+
+        <!-- three listeners' language-network time courses (aligned) -->
+        <g transform="translate(280,40)">
+          <text class="svg-lab" x="0" y="-2" style="fill:#7c3aed;letter-spacing:.1em">LANGUAGE NETWORK — time-courses track together (high ISC)</text>
+          <!-- listener 1 -->
+          <path d="M0,40 C40,10 70,60 110,30 C150,5 190,55 230,28 C280,8 330,52 380,30 C440,12 500,48 560,32"
+                fill="none" stroke="#7c3aed" stroke-width="2.4"/>
+          <!-- listener 2 (offset slightly) -->
+          <path d="M0,48 C40,18 70,66 110,38 C150,14 190,62 230,36 C280,16 330,58 380,38 C440,20 500,54 560,40"
+                fill="none" stroke="#a78bfa" stroke-width="2.4"/>
+          <!-- listener 3 -->
+          <path d="M0,34 C40,6 70,54 110,24 C150,2 190,50 230,22 C280,4 330,46 380,26 C440,8 500,44 560,28"
+                fill="none" stroke="#5b21b6" stroke-width="2.4"/>
+          <g style="font-family:'JetBrains Mono',monospace;font-size:10px">
+            <text x="566" y="32" fill="#7c3aed">L1</text><text x="566" y="42" fill="#a78bfa">L2</text><text x="566" y="22" fill="#5b21b6">L3</text>
+          </g>
+          <text class="svg-lab" x="280" y="92" text-anchor="middle" style="fill:#5b21b6">→ correlate across people = ISC ≈ high</text>
+        </g>
+
+        <!-- control region: uncorrelated -->
+        <g transform="translate(280,200)">
+          <text class="svg-lab" x="0" y="-2" style="letter-spacing:.1em">CONTROL REGION — drifts independently (low ISC)</text>
+          <path d="M0,40 C40,60 70,20 110,52 C150,18 190,48 230,22 C280,58 330,18 380,50 C440,24 500,52 560,30"
+                fill="none" stroke="#c8bfae" stroke-width="2"/>
+          <path d="M0,28 C40,46 70,58 110,24 C150,50 190,22 230,54 C280,20 330,52 380,26 C440,54 500,24 560,48"
+                fill="none" stroke="#ddd5c6" stroke-width="2"/>
+          <path d="M0,52 C40,22 70,48 110,28 C150,56 190,26 230,46 C280,52 330,24 380,56 C440,28 500,46 560,22"
+                fill="none" stroke="#cfc7b8" stroke-width="2"/>
+          <text class="svg-lab" x="280" y="84" text-anchor="middle">→ ISC ≈ low (no shared signal)</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 05.6.</b> Inter-subject correlation. The same story drives many listeners; in the <b>language network</b> their time-courses rise and fall together (high ISC), so the stimulus is provably driving the response — while a <b>control region</b> drifts independently (low ISC). <a href="https://www.science.org/doi/10.1126/science.1089506" target="_blank" rel="noopener">Hasson et&nbsp;al. (2004)</a> made this a workhorse of naturalistic neuroscience.</figcaption>
+    </figure>
+
+    <!-- IN THIS PROJECT -->
+    <div class="call project reveal">
+      <div class="h">◈ In this project</div>
+      <p>Two of <strong>neuro-autoresearch</strong>'s datasets are exactly this naturalistic story-listening paradigm: <a href="../le-petit-prince.html">Le Petit Prince</a> (the same audiobook recorded in <strong>fMRI and MEG</strong>) and the <a href="../ecog-podcast.html">"Podcast" ECoG</a> recording (intracranial iEEG while patients listened to a 30-minute story). In both, the harness triggers on each spoken <code>Word</code> and the held-out <code>test_corr</code> of a ridge readout is the reward.</p>
+      <p>But here is the honest catch — and the bridge to the next chapter. The stimulus feature the harness currently hands the model is the <strong>Mel spectrogram at the word</strong>: a low-level <em>acoustic</em> snapshot. That captures the bottom rungs of the ladder (the spectro-temporal energy, the cues to phonetic structure) but carries <strong>no lexical semantics and no context</strong> — exactly the information surprisal and contextual embeddings encode. So a Mel-only model can do well on acoustic/phonetic variance and will hit a ceiling on the meaning-driven, predictive responses that dominate the higher language network.</p>
+      <p>That gap is the opening for richer features — most pointedly the <strong>contextual LLM embeddings</strong> of Figure 05.5. Swapping or augmenting the acoustic stimulus with model-based linguistic features is precisely how an encoding model climbs from sound into meaning. <a href="06-brains-and-deep-nets.html">Chapter 6</a> takes up that thread directly.</p>
+    </div>
+  </section>
+
+  <!-- ===================== KEY PAPERS ===================== -->
+  <section id="papers" aria-label="Key papers">
+    <div class="sec-head reveal">
+      <div class="kicker">Reading</div>
+      <h2>Key papers</h2>
+    </div>
+    <div class="prose">
+      <p class="reveal">The primary sources behind this chapter — selectivity and the dual stream, the comprehension hierarchy, ERPs, information-theoretic accounts, and brain↔LLM alignment.</p>
+    </div>
+    <ul class="papers reveal">
+      <li><span class="yr">2007</span><span class="ti"><b>Hickok &amp; Poeppel.</b> The cortical organization of speech processing. <i>Nature Reviews Neuroscience</i>. <a href="https://www.nature.com/articles/nrn2113" target="_blank" rel="noopener">nrn2113</a> — the dual-stream model.</span></li>
+      <li><span class="yr">2011</span><span class="ti"><b>Fedorenko, Behr &amp; Kanwisher.</b> Functional specificity for high-level linguistic processing in the human brain. <i>PNAS</i> 108(39):16428–16433. <a href="https://www.pnas.org/doi/10.1073/pnas.1112937108" target="_blank" rel="noopener">10.1073/pnas.1112937108</a> — language-network selectivity / dissociation.</span></li>
+      <li><span class="yr">2011</span><span class="ti"><b>Kutas &amp; Federmeier.</b> Thirty years and counting: finding meaning in the N400 component of the ERP. <i>Annual Review of Psychology</i> 62:621–647. <a href="https://www.annualreviews.org/doi/10.1146/annurev.psych.093008.131123" target="_blank" rel="noopener">10.1146/annurev.psych.093008.131123</a> — the N400.</span></li>
+      <li><span class="yr">2014</span><span class="ti"><b>Mesgarani, Cheung, Johnson &amp; Chang.</b> Phonetic feature encoding in human superior temporal gyrus. <i>Science</i> 343(6174):1006–1010. <a href="https://www.science.org/doi/10.1126/science.1245994" target="_blank" rel="noopener">10.1126/science.1245994</a>.</span></li>
+      <li><span class="yr">2001</span><span class="ti"><b>Hale.</b> A probabilistic Earley parser as a psycholinguistic model. <i>NAACL</i>. <a href="https://aclanthology.org/N01-1021/" target="_blank" rel="noopener">N01-1021</a> — surprisal &amp; entropy as processing-cost theory.</span></li>
+      <li><span class="yr">2004</span><span class="ti"><b>Hasson, Nir, Levy, Fuhrmann &amp; Malach.</b> Intersubject synchronization of cortical activity during natural vision. <i>Science</i> 303(5664):1634–1640. <a href="https://www.science.org/doi/10.1126/science.1089506" target="_blank" rel="noopener">10.1126/science.1089506</a> — inter-subject correlation.</span></li>
+      <li><span class="yr">2021</span><span class="ti"><b>Schrimpf et&nbsp;al.</b> The neural architecture of language: Integrative modeling converges on predictive processing. <i>PNAS</i> 118(45). <a href="https://www.pnas.org/doi/10.1073/pnas.2105646118" target="_blank" rel="noopener">10.1073/pnas.2105646118</a> — better LM → better brain fit.</span></li>
+      <li><span class="yr">2022</span><span class="ti"><b>Caucheteux &amp; King.</b> Brains and algorithms partially converge in natural language processing. <i>Communications Biology</i> 5:134. <a href="https://www.nature.com/articles/s42003-022-03036-1" target="_blank" rel="noopener">10.1038/s42003-022-03036-1</a>.</span></li>
+      <li><span class="yr">2022</span><span class="ti"><b>Goldstein et&nbsp;al.</b> Shared computational principles for language processing in humans and deep language models. <i>Nature Neuroscience</i> 25:369–380. <a href="https://www.nature.com/articles/s41593-022-01026-4" target="_blank" rel="noopener">10.1038/s41593-022-01026-4</a> — pre-onset prediction signals.</span></li>
+    </ul>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="quiz" class="quiz" aria-label="Test yourself">
+    <div class="quiz-head reveal">
+      <span class="kicker">Test yourself</span>
+      <h2>Check your understanding</h2>
+      <p>Pick an answer to see why it's right or wrong. Score: <span class="quiz-score" data-score>0 / 8</span></p>
+    </div>
+    <ol class="quiz-list">
+      <li class="q reveal" data-answer="b">
+        <p class="q-stem">1. In what sense is the human language network "selective"?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">It is active only in the left hemisphere and silent on the right.</button></li>
+          <li><button data-opt="b">It responds to linguistic structure/meaning but not to equally hard non-linguistic tasks (arithmetic, spatial WM, music).</button></li>
+          <li><button data-opt="c">It responds to any sufficiently effortful cognitive task, language or not.</button></li>
+          <li><button data-opt="d">It is selective for spoken speech but never engages during reading.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> Selectivity (Fedorenko, Behr &amp; Kanwisher 2011) means a <i>dissociation</i> from the domain-general multiple-demand system: the network tracks language specifically, not difficulty in general. (c) is the trap — being "active during hard tasks" is exactly what the MD system, not the language network, does.</div>
+      </li>
+      <li class="q reveal" data-answer="c">
+        <p class="q-stem">2. The surprisal of a word is defined as:</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">Its raw corpus frequency, −log P(word).</button></li>
+          <li><button data-opt="b">The entropy of the next-word distribution, −Σ P(w) log P(w).</button></li>
+          <li><button data-opt="c">−log P(word | context) — its negative log probability given the preceding context.</button></li>
+          <li><button data-opt="d">The number of letters in the word.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> Surprisal is <i>context-conditional</i>: −log P(word | context). (a) drops the context (that's unconditional frequency); (b) is entropy, a forward-looking property of the whole distribution, not of the realized word.</div>
+      </li>
+      <li class="q reveal" data-answer="a">
+        <p class="q-stem">3. How do surprisal and entropy differ?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">Surprisal is the retrospective cost of the word that arrived; entropy is the prospective uncertainty over the whole upcoming-word distribution.</button></li>
+          <li><button data-opt="b">They are the same quantity under different names.</button></li>
+          <li><button data-opt="c">Entropy applies to the realized word; surprisal applies to the distribution.</button></li>
+          <li><button data-opt="d">Surprisal is computed before the word, entropy after it.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> Surprisal looks <i>back</i> (−log P of the actual word — an integration cost paid after it arrives); entropy looks <i>ahead</i> (the spread of P(·|context) — uncertainty before it arrives). They dissociate: "the speed of darkness" is low-entropy yet high-surprisal.</div>
+      </li>
+      <li class="q reveal" data-answer="d">
+        <p class="q-stem">4. A sentence is grammatically broken ("The cats won't eating…") but its meaning is obvious. Which ERP is enlarged?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">The N400, because any anomaly enlarges it.</button></li>
+          <li><button data-opt="b">No ERP changes, since the meaning is clear.</button></li>
+          <li><button data-opt="c">An early sensory N100 to the sound of the word.</button></li>
+          <li><button data-opt="d">The P600 — a later positivity indexing syntactic reanalysis.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> The N400 indexes <i>semantic</i> fit; here meaning is fine but grammar is violated, so the brain mounts a <b>P600</b> (~600 ms posterior positivity) to reparse. The N400/P600 dissociation is the point — different processes, sometimes on the same word.</div>
+      </li>
+      <li class="q reveal" data-answer="b">
+        <p class="q-stem">5. What is the strongest evidence that comprehension is <i>predictive</i> rather than purely reactive?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">Rare words are read more slowly than common words.</button></li>
+          <li><button data-opt="b">Intracranial recordings show a prediction signal <i>before</i> a word is heard, then a post-onset response scaling with surprisal (Goldstein et al. 2022).</button></li>
+          <li><button data-opt="c">The language network is left-lateralized.</button></li>
+          <li><button data-opt="d">Longer words evoke larger auditory responses.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> A <i>pre-onset</i> prediction signal is the smoking gun: the brain commits to a guess before the input, then registers prediction error. (a) and (d) are real effects but consistent with a purely reactive system; (c) is anatomy, not prediction.</div>
+      </li>
+      <li class="q reveal" data-answer="c">
+        <p class="q-stem">6. Why do contextual LLM embeddings linearly predict language-evoked brain responses, and predict better as the model gets better?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">Because transformers are biologically wired like cortical columns.</button></li>
+          <li><button data-opt="b">Because the brain literally implements gradient descent during reading.</button></li>
+          <li><button data-opt="c">Because both are optimized for the same next-word-prediction problem, so good predictors converge on similar representations a linear map can relate.</button></li>
+          <li><button data-opt="d">Because the embeddings contain the brain-recording data.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> The shared <i>objective</i> (next-word prediction) drives convergence: better language models reach representations closer to the brain's, so a fitted linear map suffices (Schrimpf 2021; Caucheteux &amp; King 2022). (a)/(b) overclaim mechanism; correlation of two predictors ≠ identical hardware.</div>
+      </li>
+      <li class="q reveal" data-answer="a">
+        <p class="q-stem">7. In the dual-stream model (Hickok &amp; Poeppel 2007), the <i>dorsal</i> stream primarily supports:</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">Mapping sound onto articulation (a sensorimotor interface; strongly left-lateralized), supporting repetition.</button></li>
+          <li><button data-opt="b">Mapping sound onto meaning (comprehension), largely bilaterally.</button></li>
+          <li><button data-opt="c">Low-level spectrotemporal analysis of the waveform.</button></li>
+          <li><button data-opt="d">Storing long-term semantic memory.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> Dorsal = sound→articulation (via area Spt to premotor/posterior-IFG), strongly left-lateralized, and damage there impairs repetition. The <i>ventral</i> stream (b) carries sound→meaning. This replaces the simple Broca-output / Wernicke-input picture.</div>
+      </li>
+      <li class="q reveal" data-answer="d">
+        <p class="q-stem">8. Scramble a spoken story at the word, sentence, or paragraph grain. Which prediction follows from the temporal-receptive-window (TRW) hierarchy and motivates the naturalistic paradigm?</p>
+        <ul class="q-opts">
+          <li><button data-opt="a">All regions respond identically regardless of scramble grain.</button></li>
+          <li><button data-opt="b">Early auditory cortex needs intact paragraphs to respond.</button></li>
+          <li><button data-opt="c">High-level regions are unaffected by scrambling.</button></li>
+          <li><button data-opt="d">Early auditory cortex is unmoved by long-range scrambling (short window), while high-level regions respond reliably only when paragraph-scale narrative survives — so only a continuous story engages the long-window regions and yields high inter-subject correlation.</button></li>
+        </ul>
+        <div class="q-explain" hidden><b>Why:</b> TRWs grow up the hierarchy (Hasson, Lerner, Honey et al.): short windows in early auditory cortex, tens of seconds in high-level regions. A word list cannot drive the long-window regions; a continuous story can — which is why ISC (Hasson et al. 2004) is high across listeners during natural narrative.</div>
+      </li>
+    </ol>
+    <button class="quiz-reset" type="button">Reset quiz</button>
+  </section>
+
+  <!-- ===================== KEY TERMS ===================== -->
+  <section id="terms" aria-label="Key terms">
+    <div class="sec-head reveal">
+      <div class="kicker">Reference</div>
+      <h2>Key terms</h2>
+    </div>
+    <div class="keyterms reveal">
+      <dl>
+        <div><dt>Language network</dt><dd>A left-lateralized, fronto-temporal system (IFG, posterior STS/MTG, ATL) that responds selectively to linguistic structure and meaning — dissociable from general-purpose cognition.</dd></div>
+        <div><dt>Multiple-demand system</dt><dd>A domain-general fronto-parietal network that ramps up for any hard task; doubly dissociated from the language network (Fedorenko).</dd></div>
+        <div><dt>Dual-stream model</dt><dd>Hickok &amp; Poeppel's account: a bilateral ventral stream (sound→meaning) and a left-lateralized dorsal stream (sound→articulation), replacing the box-and-arrow Broca/Wernicke map.</dd></div>
+        <div><dt>STG</dt><dd>Superior temporal gyrus — auditory/speech cortex where the waveform is carved into phonetic features; the entry point of the comprehension hierarchy.</dd></div>
+        <div><dt>Phonetic features</dt><dd>Sub-phonemic dimensions (plosive, fricative, vowel, place/manner of articulation) to which STG populations are tuned (Mesgarani et al. 2014).</dd></div>
+        <div><dt>Temporal receptive window</dt><dd>The duration of past input a region's current response depends on — short in early auditory cortex, tens of seconds in high-level narrative regions.</dd></div>
+        <div><dt>Surprisal</dt><dd>The information content of a word, −log P(word | context); the brain's response scales with it.</dd></div>
+        <div><dt>Entropy</dt><dd>−Σ P(w) log P(w) of the next-word distribution — prospective uncertainty (how spread-out the upcoming-word bets are), distinct from and complementary to surprisal.</dd></div>
+        <div><dt>N400</dt><dd>A negative EEG/MEG deflection ~400 ms after word onset whose amplitude grows with semantic surprisal / integration difficulty.</dd></div>
+        <div><dt>P600</dt><dd>A later posterior positivity (~600 ms) indexing syntactic reanalysis / structural repair — dissociable from the semantic N400.</dd></div>
+        <div><dt>Predictive processing</dt><dd>The view that comprehension is anticipatory — the brain forecasts upcoming words and treats input as confirmation or prediction error (pre-onset signals; Goldstein et al. 2022).</dd></div>
+        <div><dt>Contextual embedding</dt><dd>A language model's high-dimensional vector for a word <em>in its context</em>; these linearly predict brain responses, and better LMs predict better.</dd></div>
+        <div><dt>Naturalistic paradigm</dt><dd>Studying the brain with continuous, ecologically valid stimuli (a spoken story) rather than isolated, decontextualized probes.</dd></div>
+        <div><dt>Inter-subject correlation</dt><dd>Correlating different listeners' brain time-courses to the same stimulus; high ISC means the stimulus is reliably driving the response (Hasson et al. 2004).</dd></div>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== TOC RAIL ===================== -->
+<nav class="rail" aria-label="On this page">
+  <div class="lab">On this page</div>
+  <a href="#network">01 · The network</a>
+  <a href="#hierarchy">02 · Hierarchy</a>
+  <a href="#timescales">03 · Timescales</a>
+  <a href="#surprisal">04 · Surprisal</a>
+  <a href="#prediction">05 · Prediction</a>
+  <a href="#alignment">06 · Brain ↔ LLM</a>
+  <a href="#naturalistic">07 · Naturalistic</a>
+  <a href="#papers">Key papers</a>
+  <a href="#quiz">Test yourself</a>
+  <a href="#terms">Key terms</a>
+</nav>
+
+</div><!-- /layout -->
+</div><!-- /wrap -->
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="navcards">
+      <a class="navcard prev" href="04-visual-brain.html">
+        <div class="dir">← Previous</div>
+        <div class="t">04 · The Visual Brain</div>
+      </a>
+      <a class="navcard next" href="06-brains-and-deep-nets.html">
+        <div class="dir">Next →</div>
+        <div class="t">06 · Brains &amp; Deep Nets</div>
+      </a>
+    </div>
+    <div class="back"><a href="index.html">↑ Back to the Handbook</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // reading-progress bar
+  var bar = document.getElementById('progress');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // scroll-reveal
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revs = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)){
+    revs.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.06});
+    revs.forEach(function(el){ ro.observe(el); });
+    // ensure hero reveals fire on load even if already in view
+    requestAnimationFrame(function(){
+      document.querySelectorAll('.hero .reveal').forEach(function(el){ el.classList.add('in'); });
+    });
+  }
+
+  // TOC active-section highlighting
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.rail a'));
+  var map = {};
+  links.forEach(function(a){
+    var id = a.getAttribute('href').slice(1);
+    var sec = document.getElementById(id);
+    if (sec) map[id] = a;
+  });
+  var secs = Object.keys(map).map(function(id){ return document.getElementById(id); });
+  if ('IntersectionObserver' in window && secs.length){
+    var so = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          links.forEach(function(a){ a.classList.remove('active'); });
+          var a = map[e.target.id];
+          if (a) a.classList.add('active');
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    secs.forEach(function(s){ so.observe(s); });
+  }
+
+  // interactive quiz
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var qs = [].slice.call(quiz.querySelectorAll('.q'));
+    var scoreEl = quiz.querySelector('[data-score]');
+    var update = function(){ if(scoreEl) scoreEl.textContent = qs.filter(function(q){return q.dataset.state==='right';}).length + ' / ' + qs.length; };
+    qs.forEach(function(q){
+      var correct = q.dataset.answer;
+      q.querySelectorAll('button[data-opt]').forEach(function(btn){ btn.addEventListener('click', function(){
+        if(q.dataset.state) return;
+        q.dataset.state = btn.dataset.opt===correct ? 'right' : 'wrong';
+        q.querySelectorAll('button[data-opt]').forEach(function(b){ b.disabled=true;
+          if(b.dataset.opt===correct) b.classList.add('opt-correct');
+          else if(b===btn) b.classList.add('opt-wrong'); });
+        var ex = q.querySelector('.q-explain'); if(ex) ex.hidden=false; update();
+      }); });
+    });
+    var reset = quiz.querySelector('.quiz-reset');
+    if(reset) reset.addEventListener('click', function(){ qs.forEach(function(q){ delete q.dataset.state;
+      q.querySelectorAll('button[data-opt]').forEach(function(b){ b.disabled=false; b.classList.remove('opt-correct','opt-wrong'); });
+      var ex = q.querySelector('.q-explain'); if(ex) ex.hidden=true; }); update(); });
+    update();
+  });
+})();
+</script>
+
+</body>
+</html>
