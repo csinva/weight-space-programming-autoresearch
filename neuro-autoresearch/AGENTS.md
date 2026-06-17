@@ -31,9 +31,12 @@ low test = overfit readout). Raise `test_corr`; small diffs (<~0.005) are noise.
 
 **The goal is to BEAT a trained AlexNet.** A frozen ImageNet AlexNet (fc7) read out
 with this same ridge is the per-region bar (logged in `prompts/datasets.md`: e.g.
-V1 0.342 · V2 0.299 · V3 0.321 · FFA 0.396 · PPA 0.403 · ventral 0.284). Empirically
-hand-designed untrained models match/beat it in early/mid visual cortex (V1/V2/V3) but
-fall short in high-level regions (FFA/PPA/EBA/VWFA).
+V1 0.342 · V2 0.299 · V3 0.321 · FFA 0.396 · PPA 0.403 · ventral 0.284). Untrained
+hand-designed models already match/beat it in early/mid visual cortex (V1/V2/V3); the
+open frontier — and the point of this project — is to beat it in the high-level regions
+(ventral/FFA/PPA/EBA/VWFA) too. Treat that as an unsolved, achievable target, not a
+ceiling: the right mechanistic, untrained computational model is expected to clear the
+AlexNet bar there. Do not assume any region is out of reach.
 
 NSD neural target: the HRF-peak response (FmriExtractor `offset=5.0s`, peak TRs in a
 4s window averaged to one value per voxel) — the offset is what makes the signal real

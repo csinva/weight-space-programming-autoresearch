@@ -159,6 +159,15 @@ for _env, _field in (("NEURO_ROI", "reward_roi"), ("NEURO_RUN", "run_tag")):
     if _val:
         DATASET = replace(DATASET, **{_field: _val})
 
+# Input-resolution override (NEURO_IMSIZE): the operator-chosen pixel size for image
+# stimuli (RawPixels imsize). It only enriches the model INPUT X -- the neural target
+# Y, the readout, the split and the reward region are untouched -- so the reward stays
+# trustworthy; it just stops starving untrained models of resolution (AlexNet reads
+# full-res). Changes the build-cache key -> a one-time re-build at the new resolution.
+_imsize = os.environ.get("NEURO_IMSIZE")
+if _imsize:
+    DATASET = replace(DATASET, imsize=int(_imsize))
+
 # Optional subject override (NEURO_SUBJECT). For the table dataset TVSD it picks the
 # monkey (F/N); for the `text` dataset (Le Petit Prince fMRI) it picks one of the 49
 # English subjects (e.g. EN058), switching to that subject's catalog class and the
