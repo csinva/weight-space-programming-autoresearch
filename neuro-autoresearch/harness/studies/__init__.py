@@ -6,8 +6,6 @@ resolves. ``harness.data`` imports it for that side effect.
 """
 from . import (  # noqa: F401  (import = registration)
     li2022_subj,
-    nsd_subj01,
-    nsd_subj02,
-    nsd_subj03,
+    nsd_subjects,
     zada2025podcast,
 )

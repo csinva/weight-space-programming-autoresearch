@@ -266,8 +266,8 @@ def _study_for(d: Dataset):
     """
     if getattr(d, "loader", "segmenter") == "table":
         return None
-    path = d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
-    return ns.Study(name=d.study, path=path)
+    from harness.data import _study_path
+    return ns.Study(name=d.study, path=_study_path(d))
 
 
 def _slice_target_mask(study, name: str, n_targets: int):

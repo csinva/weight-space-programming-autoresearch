@@ -31,8 +31,7 @@ mne.set_log_level(False)
 class Zada2025Podcast(study.Study):
     """OpenNeuro Podcast ECoG (ds005574) restricted to one subject (sub-01)."""
 
-    # One subject only -- different subjects have different electrodes, so the
-    # study is intentionally single-subject (concatenating subjects is invalid).
+    # See module docstring for why this is single-subject.
     SUBJECT: tp.ClassVar[str] = "01"
 
     _info: tp.ClassVar[study.StudyInfo] = study.StudyInfo(
@@ -101,10 +100,3 @@ class Zada2025Podcast(study.Study):
         ieeg_event = dict(type="Ieeg", filepath=info, start=0)
 
         return pd.DataFrame([ieeg_event, audio_event, *word_events])
-
-    def _download(self) -> None:
-        # Offline-safe thin downloader; not called in normal runs (the preset sets
-        # download=False), but provided for completeness.
-        import openneuro
-
-        openneuro.download(dataset="ds005574", target_dir=str(self.path))

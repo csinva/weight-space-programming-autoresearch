@@ -2,26 +2,24 @@
 
 A thin subclass of NeuralFetch's ``Li2022Petit`` (OpenNeuro ds003643) that keeps
 only ONE English subject (``SUBJECT``, default EN057) and all 9 of its story
-sections. Importing this module registers the subclass in
-``neuralset.Study.catalog()`` under the name ``Li2022PetitSubj`` so it can be loaded
-with ``ns.Study(name="Li2022PetitSubj", ...)``.
+sections. Importing this module registers it (and the siblings below) in
+``neuralset.Study.catalog()``, e.g. as ``Li2022PetitSubj``, loadable with
+``ns.Study(name="Li2022PetitSubj", ...)``.
 
-For the cross-subject generalization study, importing this module ALSO registers one
-thin sibling per English subject -- ``Li2022PetitSubj<ID>`` (e.g. ``Li2022PetitSubjEN058``)
-for every id in ``EN_SUBJECTS`` -- each only overriding ``SUBJECT``. Every subject
-heard the SAME story, so a model found on one subject can be re-fit and scored on any
-other (the ridge readout is re-fit per subject -- that re-fit IS the eval), exactly as
-NSD's ``NsdSubj01/02/03`` siblings enable. See ``scripts/generalization_text.py``.
+For the cross-subject generalization study it also registers one sibling per English
+subject -- ``Li2022PetitSubj<ID>`` (e.g. ``Li2022PetitSubjEN058``) for every id in
+``EN_SUBJECTS`` -- each overriding only ``SUBJECT``. Every subject heard the SAME story,
+so a model found on one can be re-fit and scored on any other (the ridge re-fit IS the
+eval), exactly as NSD's ``NsdSubj01/02/03`` siblings enable. See
+``scripts/generalization_text.py``.
 
 The parent yields each fMRI run as a path to a full-brain volume (73x90x74 ~ 486k
-voxels). For a single subject's 9 sections that is ~15k word segments x ~1M
-target values => a ~60 GB target matrix that the ridge readout cannot hold. So,
-exactly as ``Allen2022Massive`` (NSD) does for its ROI, we apply the spatial
-reduction AT THE STUDY LEVEL: the Fmri event carries a ``SpecialLoader`` that
-loads the volume, 2x-downsamples it onto a fixed grid and keeps only MNI brain
-voxels, yielding pre-reduced inline data (~29k voxels) so the full volume is
-never materialised. All run->file mapping and word/text parsing is reused from
-the parent unchanged.
+voxels); a single subject's 9 sections would be a ~60 GB target matrix the ridge
+readout cannot hold. So, exactly as ``Allen2022Massive`` (NSD) does for its ROI, we
+apply the spatial reduction AT THE STUDY LEVEL: the Fmri event carries a
+``SpecialLoader`` that 2x-downsamples each volume onto a fixed grid and keeps only MNI
+brain voxels (~29k), so the full volume is never materialised. Run->file mapping and
+word/text parsing are reused from the parent unchanged.
 """
 from __future__ import annotations
 
@@ -32,8 +30,7 @@ import nibabel
 from neuralfetch.studies.li2022petit import Li2022Petit
 from neuralset.events import study
 
-# Spatial coarsening factor: keeps whole-brain coverage while shrinking the
-# target matrix ~8x, so the ridge readout (which upcasts to float64) stays small.
+# Spatial coarsening factor (per axis); shrinks the target matrix ~8x.
 _DOWNSAMPLE = 2
 
 # Per-process caches (deterministic, so per-process recomputation is harmless):
@@ -63,7 +60,7 @@ def _grid_and_mask(ref: nibabel.Nifti1Image) -> dict[str, tp.Any]:
                 load_mni152_brain_mask(), grid, interpolation="nearest"
             ).get_fdata()
         ) > 0
-        _GRID.update(affine=affine, shape=shape, mask=mask, n=int(mask.sum()))
+        _GRID.update(affine=affine, shape=shape, mask=mask)
     return _GRID
 
 
@@ -102,7 +99,6 @@ class Li2022PetitSubj(Li2022Petit):
                 interpolation="continuous",
             )
             data = ds.get_fdata(dtype="float32")[g["mask"]]
-            assert data.shape[0] == g["n"], (data.shape, g["n"])
             _VOLS[niifile] = data
         return nibabel.Nifti2Image(data, np.eye(4))
 
@@ -128,11 +124,9 @@ EN_SUBJECTS: tuple[str, ...] = tuple(
 )
 
 # Generate one thin ``Li2022PetitSubj<ID>`` subclass per English subject, each only
-# overriding ``SUBJECT``. Creating the class auto-registers it in the NeuralSet catalog
-# (via ``Study.__init_subclass__``), so it gets its own cache key + results file and can
-# be loaded with ``ns.Study(name="Li2022PetitSubj<ID>", path=...)`` -- mirroring
-# NsdSubj01/02/03. Pydantic requires the overridden ClassVar to be annotated, hence the
-# explicit ``__annotations__``.
+# overriding ``SUBJECT``. Creating the class auto-registers it in the catalog (via
+# ``Study.__init_subclass__``), giving it its own cache key + results file. Pydantic
+# requires the overridden ClassVar to be annotated, hence the explicit ``__annotations__``.
 for _sub in EN_SUBJECTS:
     _name = f"Li2022PetitSubj{_sub}"
     if _name not in globals():

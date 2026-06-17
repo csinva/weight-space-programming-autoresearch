@@ -38,10 +38,15 @@ class RawPixels(BaseClassicImageExtractor):
         return (image.astype("float32") / 255.0).reshape(-1)
 
 
+def _study_path(d):
+    """Resolve the NeuralSet study path: explicit ``d.path`` if set, else ``None`` to
+    download-from-scratch when ``d.download``, else the shared ``ns.CACHE_FOLDER``."""
+    return d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
+
+
 _NEURAL = {
     # Bel2026 raw .fif is Elekta MaxShield -> allow_maxshield or it raises.
     "meg": lambda d: ns.extractors.MegExtractor(frequency=100.0, allow_maxshield=True),
-    "eeg": lambda d: ns.extractors.EegExtractor(frequency=100.0),
     # iEEG/ECoG: like MEG, a fast electrophysiology signal. IeegExtractor picks the
     # ECOG/SEEG channels (dropping ECG/MISC) and read_raw_bids marks bads from channels.tsv.
     "ieeg": lambda d: ns.extractors.IeegExtractor(frequency=100.0),
@@ -332,16 +337,18 @@ def _collapse_repeats(X, Y, onsets, stim_ids):
     inv = inv.reshape(-1)
     inv_t = torch.as_tensor(inv, dtype=torch.long)
     g = len(uniq)
-    counts = torch.bincount(inv_t, minlength=g).clamp(min=1).unsqueeze(1).float()
+    # Per-group sizes, computed ONCE; both averages divide by the clamped (>=1) count.
+    counts_t = torch.bincount(inv_t, minlength=g).clamp(min=1)
+    counts = counts_t.unsqueeze(1).float()
+    counts_np = counts_t.numpy()
 
     # Y is averaged over repeats (this is what reduces trial noise).
     Y_g = torch.zeros(g, Y.shape[1], dtype=torch.float32).index_add_(0, inv_t, Y.float()) / counts
     # X is identical across a stimulus's repeats, so gather one row instead of
     # averaging the (wide) stimulus tensor.
     X_g = X[torch.as_tensor(first_idx, dtype=torch.long)]
-    # Mean onset per group (used only by non-canonical splits); one bincount.
-    counts_np = np.bincount(inv, minlength=g)
-    onsets_g = np.bincount(inv, weights=onsets, minlength=g) / np.maximum(counts_np, 1)
+    # Mean onset per group (used only by non-canonical splits).
+    onsets_g = np.bincount(inv, weights=onsets, minlength=g) / counts_np
     return X_g, Y_g, onsets_g, uniq
 
 
@@ -427,9 +434,9 @@ def _tvsd_image_relpaths(things_imgs_mat: str, key: str) -> list[str]:
         return [decode(r).replace("\\", "/") for r in refs]
 
 
-def _tvsd_build_X(d: Dataset, things_imgs_mat: str):
+def _tvsd_build_X(d: Dataset, subject: str, things_imgs_mat: str):
     """(X_train, X_test) RawPixels features of the THINGS images, cached by (subject, imsize)."""
-    cache = os.path.join(_cache_dir(), f"tvsd_X_{(d.subject or 'F').upper()}_im{d.imsize}.pt")
+    cache = os.path.join(_cache_dir(), f"tvsd_X_{subject}_im{d.imsize}.pt")
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     if use_cache and os.path.exists(cache):
         blob = torch.load(cache, weights_only=False)   # cache holds numpy arrays
@@ -467,17 +474,19 @@ def _load_tvsd(d: Dataset):
     Y_test = _tvsd_targets(mat["test_MUA"])             # [100 x 1024]
 
     region = d.reward_roi
-    cols = (_tvsd_area_labels(subject) == region) if region in _TVSD_REGIONS \
+    known_region = region in _TVSD_REGIONS
+    region_label = region if known_region else "all"
+    cols = (_tvsd_area_labels(subject) == region) if known_region \
         else np.ones(_TVSD_N_ELEC, dtype=bool)          # unknown / "all" -> every electrode
     Y_train, Y_test = Y_train[:, cols], Y_test[:, cols]
 
-    X_train, X_test = _tvsd_build_X(d, os.path.join(mdir, "things_imgs.mat"))
+    X_train, X_test = _tvsd_build_X(d, subject, os.path.join(mdir, "things_imgs.mat"))
 
     keep = Y_train.std(0) > 0                            # drop electrodes constant on train
     Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
     Ytr, Yte = torch.as_tensor(Y_train[:, keep]), torch.as_tensor(Y_test[:, keep])
     print(f"  TVSD monkey{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
-          f"region={region if region in _TVSD_REGIONS else 'all'} -> "
+          f"region={region_label} -> "
           f"{Ytr.shape[1]} electrodes ({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte
 
@@ -512,8 +521,7 @@ def load_split(d: Dataset):
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     build_path = os.path.join(_cache_dir(), _build_cache_key(d))
 
-    path = d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
-    study = ns.Study(name=d.study, path=path)
+    study = ns.Study(name=d.study, path=_study_path(d))
 
     if use_cache and os.path.exists(build_path):
         X, Y, onsets, stim_ids = _build_cache_load(build_path)   # full voxels, all trials
