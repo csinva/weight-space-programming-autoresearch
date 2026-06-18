@@ -75,7 +75,7 @@ def migrate(csv_path, path=DB):
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "init"
     if cmd == "init":
-        print("init", init())
+        print("init", init(sys.argv[2] if len(sys.argv) > 2 else DB))
     elif cmd == "migrate":
         csv_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO, "search", "state", "results.csv")
         db_path = sys.argv[3] if len(sys.argv) > 3 else DB
