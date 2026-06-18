@@ -3,7 +3,7 @@
 Context the autoresearch agent reads **every run**. The active dataset is chosen
 by `NEURO_DATASET` (default `text`); the harness loads it and you propose a
 never-trained model in `model.py` whose ridge-readout `test_corr` is the
-reward. Three presets (`nsd`, `text`, `meg`) live in `harness/datasets.py`.
+reward. Presets (`nsd`, `text`, `meg`, `ieeg`, `tvsd`, `nnn`) live in `harness/datasets.py`.
 
 Each run lives in its own isolated folder (`python scripts/setup_run.py <tag>`,
 then `cd runs/<tag>`): `harness/` is symlinked there (FIXED), and you edit the
@@ -124,6 +124,38 @@ neural target `Y` and scores held-out **mean per-target Pearson r = `test_corr`*
 - **Stimuli:** the THINGS images are **gated** (license + ~12 GB) and **not bundled** with
   the spiking data — they must be staged once (see `data._tvsd_images_root`) before running.
 - **Reward:** held-out mean per-electrode Pearson r (`test_corr`) over the chosen area.
+
+## `nnn` — Triple-N macaque visual-cortex spiking to the NSD-1000 (`NnnV1`)
+
+- **Modalities:** stimulus = **image** · neural = **macaque spiking** — the spiking
+  sibling of `tvsd`, but on the **same NSD shared-1000** natural scenes the `nsd` fMRI
+  preset uses, so an untrained model's predictivity is directly comparable across
+  species/modalities within this repo. Like `tvsd` the release is a **pre-averaged
+  `[units × images]` table** (`response_best`), so it uses the `loader="table"` path
+  (`data._load_nnn`), not the Segmenter.
+- **Stimulus X:** the shown **NSD-1000 image**, read straight from the bundled
+  `img_pool.mat`, resized to `imsize×imsize` (default 16) and flattened to `[0,1]` RGB
+  → **`16·16·3 = 768` dims** (`RawPixels`, identical to `nsd`/`tvsd`, so image models
+  port over directly; raise `imsize` for more high-level detail). **Self-contained** —
+  no NSD staging or id-mapping needed (contrast `tvsd`, whose images are gated).
+- **Target Y:** each **reliable unit's** mean firing rate (one value per unit per image),
+  **pooled across all 90 sessions** and narrowed by the reward area. Units kept if
+  `reliability_best > NNN_MIN_RELIABILITY` (default 0.4): **35,494 of 47,503 pass**
+  (EVC 8,740 · IT 21,214). Constant-on-train units dropped.
+- **Split:** deterministic **strided hold-out of the 1000 images** — every
+  `round(1/test_frac)`-th image → test (**800 train / 200 test** at the default
+  `test_frac=0.2`); fixed and **image-disjoint**. No shared-1000/temporal logic applies.
+- **Reward region (`NEURO_ROI`):** the scalar reward is the mean `test_corr` over ONE
+  area, chosen per run. Menu: `all` · stream `EVC` / `IT` · patch family
+  `MB/AB/MF/AF/MO/AO/LPP/PITP/CLC/AMC/PF` · exact label `V1/V2/V4/MB1/…` (default `IT`).
+  Area comes from each unit's shank position via `exclude_area.xls`. Like `tvsd`, the
+  readout fits **only** that area's units (per-target ridge ⇒ identical to fit-all) and
+  there is **no `corr_<area>` panel** — run one loop per area; each writes its own
+  `results/NnnV1__<roi>.csv`.
+- **Baselines (measured, untrained champion):** EVC 0.280 (8,740 units) · IT 0.233
+  (21,214) · LPP 0.232 (407); load ≈ 0.6 s after first cache build. (No trained-AlexNet
+  baseline is computed for `nnn` yet.)
+- **Reward:** held-out mean per-unit Pearson r (`test_corr`) over the chosen area.
 
 ---
 

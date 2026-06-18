@@ -140,6 +140,24 @@ PRESETS: dict[str, Dataset] = {
         path="/home/t-ymehta/Research/neuralset/data/tvsd_normmua",
         reward_roi="IT",
     ),
+    # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
+    # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
+    # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
+    # images), so loader="table" (data._load_nnn). Y pools reliable units (reliability>0.4,
+    # ~35k of 47.5k) across all sessions; reward_roi picks a cortical area as a column subset
+    # -- coarse EVC/IT, a patch family (MB/AB/MF/AF/MO/AO/LPP/PITP/CLC/AMC/PF), or an exact
+    # label (V1/V2/V4/MB1...). The 1000 NSD images split deterministically (every 5th held out).
+    # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.
+    "nnn": Dataset(
+        study="NnnV1",
+        loader="table",
+        neural="spikes",
+        stimulus="image",
+        imsize=16,
+        download=False,
+        path="/home/t-ymehta/Research/neuralset/data/nnn_processed",
+        reward_roi="IT",
+    ),
 }
 
 _key = os.environ.get("NEURO_DATASET", "text")

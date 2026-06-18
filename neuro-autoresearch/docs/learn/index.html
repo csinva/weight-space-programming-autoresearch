@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Three windows on the brain — neuro-autoresearch field notes</title>
+<title>Four windows on the brain — neuro-autoresearch field notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
   --ink:#e9e9ee; --mut:#9aa0ad; --dim:#6b7180;
   --ecog:#7c5cff; --ecog-soft:#a690ff;
   --tvsd:#e8843f; --tvsd-soft:#f3a96f;
+  --nnn:#b483f0; --nnn-soft:#cdb0f7;
   --lpp:#e3b341; --lpp-soft:#f1ce7e;
   --maxw:1140px;
   --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
@@ -46,8 +47,9 @@ h1 em{font-style:italic;color:var(--lpp-soft)}
 .flow .arw{color:var(--dim)}
 
 /* ---- cards ---- */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;
   padding:clamp(1rem,3vw,2rem) 0 1.4rem}
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr)}}
 .card{position:relative;display:flex;flex-direction:column;text-decoration:none;
   background:linear-gradient(180deg,var(--panel),var(--bg2));
   border:1px solid var(--line);border-radius:18px;padding:1.5rem 1.45rem 1.35rem;
@@ -60,6 +62,7 @@ h1 em{font-style:italic;color:var(--lpp-soft)}
 .card:hover::after{opacity:.9}
 .c-ecog{--ac:var(--ecog);--glow:rgba(124,92,255,.42)}
 .c-tvsd{--ac:var(--tvsd);--glow:rgba(232,132,63,.40)}
+.c-nnn{--ac:var(--nnn);--glow:rgba(180,131,240,.42)}
 .c-lpp{--ac:var(--lpp);--glow:rgba(227,179,65,.38)}
 .c-idx{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--dim)}
 .c-mod{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
@@ -87,8 +90,8 @@ thead th{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-tran
 tbody tr:last-child td{border-bottom:none}
 td:first-child{font-family:var(--serif);font-size:1.18rem}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.5rem;vertical-align:middle}
-.t-ecog .dot{background:var(--ecog)} .t-tvsd .dot{background:var(--tvsd)} .t-lpp .dot{background:var(--lpp)}
-.t-ecog td:first-child{color:var(--ecog-soft)} .t-tvsd td:first-child{color:var(--tvsd-soft)} .t-lpp td:first-child{color:var(--lpp-soft)}
+.t-ecog .dot{background:var(--ecog)} .t-tvsd .dot{background:var(--tvsd)} .t-nnn .dot{background:var(--nnn)} .t-lpp .dot{background:var(--lpp)}
+.t-ecog td:first-child{color:var(--ecog-soft)} .t-tvsd td:first-child{color:var(--tvsd-soft)} .t-nnn td:first-child{color:var(--nnn-soft)} .t-lpp td:first-child{color:var(--lpp-soft)}
 code{font-family:var(--mono);font-size:.82em;background:rgba(255,255,255,.05);
   border:1px solid var(--line);border-radius:5px;padding:.08rem .38rem;color:var(--ink)}
 .note{color:var(--mut);font-size:.93rem;max-width:74ch;margin:1.3rem 0 0}
@@ -103,18 +106,18 @@ footer .mono{font-family:var(--mono);font-size:.76rem}
 .rv{opacity:0;transform:translateY(14px);animation:rv .8s cubic-bezier(.2,.7,.2,1) forwards}
 @keyframes rv{to{opacity:1;transform:none}}
 .d1{animation-delay:.05s}.d2{animation-delay:.13s}.d3{animation-delay:.21s}
-.d4{animation-delay:.29s}.d5{animation-delay:.37s}.d6{animation-delay:.45s}
+.d4{animation-delay:.29s}.d5{animation-delay:.37s}.d6{animation-delay:.45s}.d7{animation-delay:.53s}
 </style></head>
 <body>
 <div class="wrap">
 
   <header class="top">
     <div class="kicker rv d1">neuro-autoresearch · field notes</div>
-    <h1 class="rv d2">Three windows<br>on the <em>living brain</em></h1>
+    <h1 class="rv d2">Four windows<br>on the <em>living brain</em></h1>
     <p class="stand rv d3">We teach machines to predict recorded brain activity. A stimulus is pushed through a
       <b>fixed, never-trained model</b>; a ridge regression reads those activations out against real neural
       recordings; the held-out correlation — <b>test_corr</b> — is the score. The same loop runs across wildly
-      different ways of <i>listening to the brain</i>. These three guides explain the neuroscience behind each.</p>
+      different ways of <i>listening to the brain</i>. These four guides explain the neuroscience behind each.</p>
     <div class="flow rv d4">
       <span>stimulus</span><span class="arw">→</span><i>fixed model</i><span class="arw">→</span>
       <span>ridge readout</span><span class="arw">→</span><span>predicted neural activity</span>
@@ -152,8 +155,22 @@ footer .mono{font-family:var(--mono);font-size:.76rem}
         <div class="c-go"><span>Read the guide</span><span class="arrow">→</span></div>
       </a>
 
-      <a class="card c-lpp rv d6" href="le-petit-prince.html">
-        <div class="c-idx">03 — naturalistic language</div>
+      <a class="card c-nnn rv d6" href="triple-n-macaque-nsd.html">
+        <div class="c-idx">03 — macaque spiking</div>
+        <div class="c-mod">spikes · NSD-1000</div>
+        <div class="c-title">Triple-N<br>NSD &amp; the patches</div>
+        <p class="c-ess">The 1,000 images human brains were scanned on in NSD, replayed to macaques — tens of thousands of
+          units across EVC and the IT face/body/object/place/colour patches. A cross-species bridge on identical pixels.</p>
+        <div class="c-stats">
+          <div><b>47.5k</b><small>units recorded</small></div>
+          <div><b>EVC·IT</b><small>+ patches</small></div>
+          <div><b>1,000</b><small>NSD scenes</small></div>
+        </div>
+        <div class="c-go"><span>Read the guide</span><span class="arrow">→</span></div>
+      </a>
+
+      <a class="card c-lpp rv d7" href="le-petit-prince.html">
+        <div class="c-idx">04 — naturalistic language</div>
         <div class="c-mod">fMRI · MEG</div>
         <div class="c-title">Le Petit<br>Prince</div>
         <p class="c-ess">One children's book, two complementary windows: fMRI maps <em>where</em> language lives,
@@ -192,6 +209,15 @@ footer .mono{font-family:var(--mono);font-size:.76rem}
             <td>2 macaque monkeys</td>
             <td>THINGS natural object images</td>
             <td><code>NEURO_DATASET=tvsd</code></td>
+          </tr>
+          <tr class="t-nnn">
+            <td><span class="dot"></span>Triple-N</td>
+            <td>Spiking — extracellular firing rate</td>
+            <td>Mean firing, one value/unit/image; EVC + IT patches</td>
+            <td>µm · ms <em>(near ground truth)</em></td>
+            <td>Macaque monkeys (90 sessions)</td>
+            <td>NSD shared-1000 natural scenes</td>
+            <td><code>NEURO_DATASET=nnn</code></td>
           </tr>
           <tr class="t-lpp">
             <td><span class="dot"></span>Le Petit Prince</td>

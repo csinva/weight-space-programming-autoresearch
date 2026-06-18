@@ -443,6 +443,11 @@
       <!-- Utah array grid + spikes -> envelope -> one number -->
       <svg viewBox="0 0 900 360" role="img" aria-labelledby="utahlbl">
         <title id="utahlbl">A Utah microelectrode array grid and a schematic of spikes becoming a multi-unit activity envelope and then one number per image</title>
+        <defs>
+          <marker id="arrow2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#b45309"/>
+          </marker>
+        </defs>
 
         <!-- LEFT: Utah array, 8x8 grid on a base -->
         <g transform="translate(40,40)">
@@ -458,7 +463,7 @@
         </g>
 
         <!-- arrow to right -->
-        <path d="M330,150 L378,150" stroke="var(--accent)" stroke-width="3" marker-end="url(#arrow)" fill="none"/>
+        <path d="M330,150 L378,150" stroke="var(--accent)" stroke-width="3" marker-end="url(#arrow2)" fill="none"/>
 
         <!-- RIGHT: raw spikes -> envelope -> number -->
         <g transform="translate(400,40)">
@@ -561,7 +566,35 @@
 
     <div class="callout reveal">
       <span class="tag">Noise ceiling — why high scores are reachable</span>
-      <p style="margin:0">Because the 100 test images are repeated, the release can ship an <code>oracle</code> <strong>split-half correlation</strong> per electrode: split the repeats in two, correlate the two halves, and you get the ceiling on how predictable that electrode <em>could</em> be given its own trial-to-trial noise. Across electrodes this oracle averages roughly <strong>0.55–0.63</strong> — so an excellent encoding model has real headroom, and a high <code>test_corr</code> is genuinely attainable rather than capped near zero by noise.</p>
+      <p style="margin:0 0 1.1rem">Because the 100 test images are repeated, the release can ship an <code>oracle</code> <strong>split-half correlation</strong> per electrode: split the repeats in two, correlate the two halves, and you get the ceiling on how predictable that electrode <em>could</em> be given its own trial-to-trial noise. Across electrodes this oracle averages roughly <strong>0.55–0.63</strong> — so an excellent encoding model has real headroom, and a high <code>test_corr</code> is genuinely attainable rather than capped near zero by noise.</p>
+      <!-- headroom gauge: 0..1 Pearson r axis with the oracle ceiling band shaded -->
+      <svg viewBox="0 0 820 86" role="img" aria-labelledby="ceillbl" style="display:block;width:100%;height:auto">
+        <title id="ceillbl">A correlation axis from 0 to 1 with the split-half oracle ceiling band shaded between 0.55 and 0.63</title>
+        <defs>
+          <linearGradient id="ceilgrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#3f4d8a"/>
+            <stop offset="0.5" stop-color="#0f766e"/>
+            <stop offset="1" stop-color="#b4480f"/>
+          </linearGradient>
+        </defs>
+        <!-- track -->
+        <rect x="20" y="30" width="780" height="20" rx="10" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <!-- explainable region up to the ceiling band -->
+        <rect x="20" y="30" width="429" height="20" rx="10" fill="var(--accent-wash)"/>
+        <!-- ceiling band 0.55 -> 0.63 (x = 20 + r*780) -->
+        <rect x="449" y="26" width="62" height="28" rx="6" fill="url(#ceilgrad)" opacity=".85"/>
+        <text x="480" y="18" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="var(--accent-2)">oracle ceiling ≈ 0.55–0.63</text>
+        <!-- ticks -->
+        <g font-family="IBM Plex Mono,monospace" font-size="10" fill="var(--ink-faint)" text-anchor="middle">
+          <line x1="20"  y1="50" x2="20"  y2="66" stroke="var(--rule)"/><text x="20"  y="80">0.0</text>
+          <line x1="176" y1="50" x2="176" y2="66" stroke="var(--rule)"/><text x="176" y="80">0.2</text>
+          <line x1="332" y1="50" x2="332" y2="66" stroke="var(--rule)"/><text x="332" y="80">0.4</text>
+          <line x1="488" y1="50" x2="488" y2="66" stroke="var(--rule)"/><text x="488" y="80">0.6</text>
+          <line x1="644" y1="50" x2="644" y2="66" stroke="var(--rule)"/><text x="644" y="80">0.8</text>
+          <line x1="800" y1="50" x2="800" y2="66" stroke="var(--rule)"/><text x="800" y="80">1.0</text>
+        </g>
+        <text x="234" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="var(--accent-2)" font-weight="600">explainable headroom</text>
+      </svg>
     </div>
 
     <p class="reveal">The data come from <a href="https://www.cell.com/neuron/abstract/S0896-6273(24)00881-X" target="_blank" rel="noopener">Papale et&nbsp;al., <em>Neuron</em> (2025)</a>, out of the <strong>Roelfsema lab at the Netherlands Institute for Neuroscience</strong>. The THINGS images themselves are <strong>gated</strong> (a license plus roughly <strong>12&nbsp;GB</strong> of pixels) and are <em>not</em> bundled with the spiking table — they are staged separately before any run.</p>
