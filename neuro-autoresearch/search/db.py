@@ -48,6 +48,7 @@ def _num(v):
 
 
 def insert(row: dict, path=DB):
+    init(path)   # ensure the namespace db + table exist (idempotent; first insert of a new dataset)
     r = {c: row.get(c) for c in COLS}
     for c in NUM:
         r[c] = _num(r[c])
@@ -76,6 +77,8 @@ if __name__ == "__main__":
     if cmd == "init":
         print("init", init())
     elif cmd == "migrate":
-        migrate(sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO, "search", "state", "results.csv"))
+        csv_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO, "search", "state", "results.csv")
+        db_path = sys.argv[3] if len(sys.argv) > 3 else DB
+        migrate(csv_path, db_path)
     else:
         sys.exit(f"unknown cmd {cmd!r} (use: init | migrate <csv>)")

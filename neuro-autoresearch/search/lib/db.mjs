@@ -8,10 +8,14 @@ const round4 = (x) => Math.round(x * 1e4) / 1e4;
 
 export function openDb(dbPath) { return new DatabaseSync(dbPath); }
 
-// All rows WITHOUT code (light) — for ranking / sampling / digest.
+// All rows WITHOUT code (light) — for ranking / sampling / digest. Returns [] for a fresh
+// namespace whose db/table doesn't exist yet (cold start of a new dataset).
 export function readDb(dbPath) {
   const db = openDb(dbPath);
-  const rows = db.prepare(`SELECT id, idea, dataset, roi, status, ${NUM.join(', ')} FROM models`).all();
+  let rows = [];
+  try {
+    rows = db.prepare(`SELECT id, idea, dataset, roi, status, ${NUM.join(', ')} FROM models`).all();
+  } catch { /* no models table yet */ }
   db.close();
   return rows;
 }
@@ -20,7 +24,10 @@ export function readDb(dbPath) {
 export function getCode(dbPath, ids) {
   if (!ids.length) return new Map();
   const db = openDb(dbPath);
-  const rows = db.prepare(`SELECT id, code FROM models WHERE id IN (${ids.map(() => '?').join(',')})`).all(...ids);
+  let rows = [];
+  try {
+    rows = db.prepare(`SELECT id, code FROM models WHERE id IN (${ids.map(() => '?').join(',')})`).all(...ids);
+  } catch { /* no models table yet */ }
   db.close();
   return new Map(rows.map((r) => [r.id, r.code]));
 }

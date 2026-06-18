@@ -69,10 +69,11 @@ GPU one model at a time, and records every model into the SQLite DB
 `search/state/results.db`. Launch it with:
 
 ```bash
-search/search.sh 8     # 8-hour budget; conductor + per-round driver, all state on disk
+search/search.sh <dataset> <roi> [imsize] [hours]   # e.g. search/search.sh tvsd IT 128 8
 ```
 
-Full design in `docs/copilot-search-migration.md`.
+Each search is isolated in its own namespace `search/state/<study>__<roi>/` (its own SQLite
+DB, notebook, queue) so datasets never mix. Full design in `docs/copilot-search-migration.md`.
 
 ## Datasets (staged offline, switch = `NEURO_DATASET`; never `download=True` unattended)
 

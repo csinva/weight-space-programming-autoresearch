@@ -103,7 +103,8 @@ def _tvsd_build_X(d: Dataset, subject: str, things_imgs_mat: str):
     X_train, X_test = build("train_imgs"), build("test_imgs")
     if use_cache:
         os.makedirs(_cache_dir(), exist_ok=True)
-        torch.save({"X_train": X_train, "X_test": X_test}, cache)
+        # protocol 4: at imsize 128 X_train is ~4.4 GB, over the 4 GB limit of pickle proto <=3.
+        torch.save({"X_train": X_train, "X_test": X_test}, cache, pickle_protocol=4)
     return X_train, X_test
 
 
