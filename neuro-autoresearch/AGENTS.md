@@ -87,8 +87,10 @@ subclasses exist for the cross-subject generalization study. Under gitignored
 
 ## Layout
 
-`model.py` + `experiment.py` (editable) · `harness/{datasets,data,reward,results,run}.py`
-+ `harness/studies/` (fixed) · `search/` the open-ended search loop (`conductor.md`,
+`model.py` + `experiment.py` (editable) · `harness/{datasets,reward,results,run}.py` +
+`harness/loaders/` (the data loaders, one module per family: `core`/`neuralset`/`tvsd`/`nnn`;
+`harness/data.py` is a thin back-compat facade) + `harness/studies/` (fixed) · `search/` the
+open-ended search loop (`conductor.md`,
 `search.sh`, `round.mjs`, `lib/`, `db.py`, `evaluate.sh`, `record.py`; machine-written state
 + the SQLite DB under gitignored `search/state/`) · `prompts/{program,datasets}.md` (agent
 reads) · `scripts/{setup_run.py,generalization.py,…}` (standalone tools) · `docs/` (humans:
