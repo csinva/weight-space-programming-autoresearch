@@ -226,10 +226,11 @@ def load_neuralset(d: Dataset):
     if canonical:                       # image-disjoint shared-1000 held-out test
         shared = _canonical_test_ids(study)
         is_test = np.array([_image_id(s) in shared for s in stim_ids])
-        tr = torch.as_tensor(np.flatnonzero(~is_test), dtype=torch.long)
-        te = torch.as_tensor(np.flatnonzero(is_test), dtype=torch.long)
-        train_ids = set(stim_ids[np.flatnonzero(~is_test)].tolist())
-        test_ids = set(stim_ids[np.flatnonzero(is_test)].tolist())
+        tr_idx, te_idx = np.flatnonzero(~is_test), np.flatnonzero(is_test)
+        tr = torch.as_tensor(tr_idx, dtype=torch.long)
+        te = torch.as_tensor(te_idx, dtype=torch.long)
+        train_ids = set(stim_ids[tr_idx].tolist())
+        test_ids = set(stim_ids[te_idx].tolist())
         assert train_ids.isdisjoint(test_ids), "train/test share images -> leakage"
         assert te.numel() and tr.numel(), "empty train or test split"
     else:                               # contiguous temporal split by trigger onset

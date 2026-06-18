@@ -153,8 +153,9 @@ def load_nnn(d: Dataset):
     tr = torch.as_tensor(np.flatnonzero(~is_test), dtype=torch.long)
     te = torch.as_tensor(np.flatnonzero(is_test), dtype=torch.long)
 
-    Xtr, Xte = torch.as_tensor(X)[tr], torch.as_tensor(X)[te]
-    Ytr, Yte = torch.as_tensor(Y)[tr], torch.as_tensor(Y)[te]
+    Xt, Yt = torch.as_tensor(X), torch.as_tensor(Y)
+    Xtr, Xte = Xt[tr], Xt[te]
+    Ytr, Yte = Yt[tr], Yt[te]
     keepc = Ytr.std(0) > 0                             # drop units constant on train
     Ytr, Yte = Ytr[:, keepc], Yte[:, keepc]
     print(f"  NNN: {len(sessions)} sessions; reward_roi={roi} (reliability>{min_rel}) -> "
