@@ -60,29 +60,40 @@ NEURO_DATASET=meg python -m harness.run
 ```
 
 Run from repo root (results land in `results/`). Split loads once (cached in seconds;
-first NSD build re-reads the timeseries, ~2 min). For unattended hill-climbing use the
-launcher, which runs the agent **nonstop** via `copilot-keepgoing` (Opus, the only knob
-is `--effort`); always bound it with `timeout` since keepgoing never self-stops:
+first NSD build re-reads the timeseries, ~2 min).
+
+**Open-ended search** (the unattended hill-climb) lives in `search/` and runs on Copilot:
+a persistent conductor (`search/conductor.md`) drives a per-round Node driver
+(`search/round.mjs`) that fans out ~10 parallel proposer agents, evaluates the queue on the
+GPU one model at a time, and records every model into the SQLite DB
+`search/state/results.db`. Launch it with:
 
 ```bash
-NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 120m scripts/autoresearch.sh high
-WORKDIR=runs/<tag> ... scripts/autoresearch.sh   # point at an isolated run folder for parallel runs
+search/search.sh 8     # 8-hour budget; conductor + per-round driver, all state on disk
 ```
+
+Full design in `docs/copilot-search-migration.md`.
 
 ## Datasets (staged offline, switch = `NEURO_DATASET`; never `download=True` unattended)
 
-`Li2022PetitSubj` fmri/audio (active, `text`) · `NsdSubj01` fmri/image (`nsd`) ·
-`Bel2026PetitListenSample` meg/audio (`meg`). `NsdSubj02`/`NsdSubj03` subclasses exist
-for the cross-subject generalization study (their data is staged separately).
-Under gitignored `~/Research/neuralset/data/`. Notes live in `docs/datasets/`.
+`NsdSubj01` fmri/image (`nsd`) · `Li2022PetitSubj` fmri/audio (`text`) ·
+`Bel2026PetitListenSample` meg/audio (`meg`) · `Zada2025Podcast` iEEG/audio (`ieeg`) ·
+`TvsdMonkeyF`/`TvsdMonkeyN` macaque spiking/image on THINGS (`tvsd`) · `NnnV1` macaque
+spiking/image on the NSD-1000 — Triple-N (`nnn`). (`tvsd`/`nnn` ship pre-averaged tables, so
+they use `loader="table"` in `harness/data.py`, not a NeuralSet study.) `NsdSubj02`/`NsdSubj03`
+subclasses exist for the cross-subject generalization study. Under gitignored
+`~/Research/neuralset/data/`. Per-dataset notes in `docs/datasets/`; agent-read context
+(incl. baselines) in `prompts/datasets.md`; human field-guides in `docs/learn/`.
 
 ## Layout
 
 `model.py` + `experiment.py` (editable) · `harness/{datasets,data,reward,results,run}.py`
-+ `harness/studies/` (fixed) · `prompts/{program,datasets}.md` (agent reads) ·
-`scripts/{autoresearch.sh,setup_run.py,generalization.py}` · `docs/` (humans) ·
-`results/<study>.csv` (or `<study>__<roi>__<run>.csv` per reward region/run;
-machine writes, gitignored).
++ `harness/studies/` (fixed) · `search/` the open-ended search loop (`conductor.md`,
+`search.sh`, `round.mjs`, `lib/`, `db.py`, `evaluate.sh`, `record.py`; machine-written state
++ the SQLite DB under gitignored `search/state/`) · `prompts/{program,datasets}.md` (agent
+reads) · `scripts/{setup_run.py,generalization.py,…}` (standalone tools) · `docs/` (humans:
+`codebase-overview.html`, dataset notes, `learn/` field-guides) · `results/<study>.csv` (or
+`<study>__<roi>__<run>.csv` per reward region/run; machine writes, gitignored).
 
 ## Generalization study (`scripts/generalization.py`)
 
@@ -94,6 +105,6 @@ fixed harness wholesale. Needs subj02/03 data staged (`NSD_SUBJ02_PATH`/`NSD_SUB
 ## Open items (see `docs/overnight-readiness.md`)
 
 Append-only single-row history, the `idea`/`summary` columns, the `status` error net
-(`evaluate_on_split_safe`), the trained-AlexNet baseline + beat-AlexNet goal, the
-nonstop keepgoing launcher, and V2/V3 in the ROI menu have all landed; the main
-remaining item is a more stable reward (multi-seed/k-fold or a tie band).
+(`evaluate_on_split_safe`), the trained-AlexNet baseline + beat-AlexNet goal, the structured
+Copilot open-ended search (`search/`, SQLite DB), and V2/V3 in the ROI menu have all landed;
+the main remaining item is a more stable reward (multi-seed/k-fold or a tie band).

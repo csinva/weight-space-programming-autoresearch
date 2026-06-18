@@ -594,10 +594,11 @@ NEURO_DATASET=nsd NEURO_ROI=PPA \
     </div>
     <div class="callout warm" style="margin-top:16px">
       <h4>⚠ The one gotcha</h4>
-      <p>The unattended launcher <code>scripts/autoresearch.sh</code> runs the agent <em>nonstop</em> via
-        <code>copilot-keepgoing</code>, which never self-terminates. <strong>Always wrap it in
+      <p>The unattended launcher <code>search/search.sh</code> runs the open-ended loop <em>nonstop</em> —
+        each round, <code>search/round.mjs</code> proposes and evaluates models under the persistent
+        <code>search/conductor.md</code> prompt — and it never self-terminates. <strong>Always wrap it in
         <code>timeout</code></strong> — the script doesn't enforce this itself.
-        e.g. <code>… NEURO_RUN=$(date +%s) timeout 120m scripts/autoresearch.sh high</code></p>
+        e.g. <code>… NEURO_RUN=$(date +%s) timeout 120m search/search.sh</code></p>
     </div>
   </div>
 
@@ -729,9 +730,14 @@ const FILEMAP = [
   {g:'Agent-facing prompts'},
   {p:'prompts/program.md', t:'prompt', r:'The task spec handed to the agent: rules, the loop, beat-AlexNet goal.'},
   {p:'prompts/datasets.md', t:'prompt', r:'Per-dataset context the agent reads every run (dims, split, baselines).'},
+  {g:'Search loop — the open-ended driver'},
+  {p:'search/search.sh', t:'live', r:'The launcher: run the open-ended search loop (nonstop). Wrap in timeout!'},
+  {p:'search/round.mjs', t:'live', r:'Per-round driver: propose models, evaluate each, record the result.'},
+  {p:'search/conductor.md', t:'prompt', r:'The persistent conductor prompt that steers the loop across rounds.'},
+  {p:'search/db.py · search/lib/db.mjs', t:'live', r:'SQLite ledger: Python writer + Node reader for search/state/results.db.'},
+  {p:'search/{evaluate.sh,record.py}', t:'live', r:'Evaluate one model and record its score into the results DB.'},
   {g:'Scripts'},
   {p:'scripts/setup_run.py', t:'live', r:'Scaffold an isolated runs/<tag>/ (symlinked harness + local model.py).'},
-  {p:'scripts/autoresearch.sh', t:'live', r:'Nonstop launcher: Opus via copilot-keepgoing. Wrap in timeout!'},
   {p:'scripts/generalization.py', t:'live', r:'Cross-subject transfer: re-score each region’s best model on subj 1/2/3.'},
   {p:'scripts/{bench,sweep,ref}…', t:'once', r:'One-off offline tooling that derived the AlexNet baseline + HRF offset.'},
   {g:'Analysis & docs'},
@@ -739,7 +745,7 @@ const FILEMAP = [
   {p:'docs/, README, AGENTS.md', t:'fixed', r:'Human docs. CLAUDE.md is a symlink to AGENTS.md. Some notes are stale.'},
   {g:'Tests & machine-written data (gitignored)'},
   {p:'tests/test_readout_equivalence.py', t:'test', r:'Pins the GCV ridge == sklearn RidgeCV (max|Δ|≈1e-14).'},
-  {p:'results/ · runs/<tag>/', t:'data', r:'Append-only CSVs + per-run model.py snapshots. Never committed.'},
+  {p:'search/state/ · results/ · runs/<tag>/', t:'data', r:'SQLite/CSV ledgers + queue/done + per-run model.py snapshots. Never committed.'},
 ];
 
 const MODEL_CODE =
@@ -792,7 +798,7 @@ const QA = [
 {cat:'skeptic', q:'The ridge readout is fit per model and re-fit per subject — doesn’t that count as training?', a:'No, and the distinction is deliberate. The readout is a single linear map (per-target ridge) that is part of the <em>evaluation</em>, not the model — the standard neuroscience "encoding model" probe asking how linearly decodable the brain target is from a fixed representation. The model’s weights never change. In the generalization study the same image→activation model is applied unchanged to each subject and only the linear readout is re-fit, because it maps a shared feature space onto each subject’s idiosyncratic voxel layout. Re-fitting a linear probe is the measurement, not learning the representation.'},
 {cat:'skeptic', q:'Is a test_corr around 0.4 actually good, or does it sound low?', a:'For single-subject natural-image fMRI it is strong. The reference is a frozen ImageNet AlexNet (fc7) read out with the identical ridge: V1 0.342, FFA 0.396, PPA 0.403, EBA 0.436, ventral 0.284. Beating 0.342 in V1 with a hand-written Gabor model (0.428) is meaningful against a serious baseline, not an identity floor. fMRI has a noise ceiling well below 1.0 from trial-to-trial variability, so per-voxel correlations of 0.3–0.4 in early cortex are competitive — and the harness warns that differences under ~0.005 are noise.'},
 {cat:'howto', q:'How do I run a single evaluation against a specific brain region?', a:'From the repo root: <code>NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run</code>. This loads the NSD subject-1 split (cached after the first build), evaluates the current <code>model.py</code>, narrows the scalar reward to PPA, and appends a row to <code>results/NsdSubj01__PPA.csv</code> (still logging every region as <code>corr_&lt;name&gt;</code>). Swap <code>NEURO_ROI</code> for any menu entry — V1/V2/V3/hV4/FFA/PPA/EBA/VWFA/early/ventral; default is ventral.'},
-{cat:'howto', q:'How do I launch an unattended overnight hill-climb, and what’s the one gotcha?', a:'Use the launcher, bounded by timeout: <code>NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 120m scripts/autoresearch.sh high</code>. It execs <code>copilot-keepgoing</code>, which runs the Opus agent nonstop and re-nudges it whenever it falls idle. The critical gotcha: keepgoing never self-terminates, so you <strong>must</strong> wrap it in <code>timeout</code> or it runs forever — the script doesn’t enforce this. Point <code>WORKDIR</code> at an isolated <code>runs/&lt;tag&gt;</code> to run several region searches in parallel.'},
+{cat:'howto', q:'How do I launch an unattended overnight hill-climb, and what’s the one gotcha?', a:'Use the launcher, bounded by timeout: <code>NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 120m search/search.sh</code>. It runs the open-ended search loop nonstop: each round <code>search/round.mjs</code> proposes a batch of models, evaluates each, and records the result into the SQLite ledger at <code>search/state/results.db</code>, all steered by the persistent <code>search/conductor.md</code> prompt. The critical gotcha: the loop never self-terminates, so you <strong>must</strong> wrap it in <code>timeout</code> or it runs forever — the script doesn’t enforce this. Point <code>WORKDIR</code> at an isolated <code>runs/&lt;tag&gt;</code> to run several region searches in parallel.'},
 ];
 const CAT_LABEL = {concept:'Concept', method:'Method', results:'Results', codebase:'Codebase', skeptic:'Skeptic', howto:'How-to'};
 const CAT_KEY   = {concept:'concept', method:'method', results:'results', codebase:'codebase', skeptic:'skeptic', 'how-to':'howto', howto:'howto'};
