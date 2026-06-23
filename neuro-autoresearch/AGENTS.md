@@ -62,18 +62,21 @@ NEURO_DATASET=meg python -m harness.run
 Run from repo root (results land in `results/`). Split loads once (cached in seconds;
 first NSD build re-reads the timeseries, ~2 min).
 
-**Open-ended search** (the unattended hill-climb) lives in `search/` and runs on Copilot:
-a persistent conductor (`search/conductor.md`) drives a per-round Node driver
-(`search/round.mjs`) that fans out ~10 parallel proposer agents, evaluates the queue on the
-GPU one model at a time, and records every model into the SQLite DB
-`search/state/results.db`. Launch it with:
+**Open-ended search** (the unattended hill-climb) lives in `search/` and runs on Copilot as
+two always-on, fully decentralized loops against one namespace: an N-proposer pool
+(`search/propose.sh`) invents untrained models and the single evaluator
+(`search/evaluate.sh`) scores them one at a time on the GPU. There is no conductor and no
+notebook — the per-namespace SQLite DB `search/state/<study>__<roi>/results.db` (one `models`
+row per model, doubling as the queue via a `queued → running → ok|error` status) is the only
+shared memory, and each proposer self-directs from the ranked DB. `search/search.sh` launches
+and supervises both loops until a wall-clock budget. Launch it with:
 
 ```bash
-search/search.sh <dataset> <roi> [imsize] [hours]   # e.g. search/search.sh tvsd IT 128 8
+search/search.sh <dataset> <roi> [imsize] [--hours H] [--fleet N]   # e.g. search/search.sh tvsd IT 128 --hours 12
 ```
 
 Each search is isolated in its own namespace `search/state/<study>__<roi>/` (its own SQLite
-DB, notebook, queue) so datasets never mix. Full design in `docs/copilot-search-migration.md`.
+DB) so datasets never mix; killing the launcher leaves the DB consistent and resumes losslessly.
 
 ## Datasets (staged offline, switch = `NEURO_DATASET`; never `download=True` unattended)
 
@@ -91,9 +94,9 @@ subclasses exist for the cross-subject generalization study. Under gitignored
 `model.py` + `experiment.py` (editable) · `harness/{datasets,reward,results,run}.py` +
 `harness/loaders/` (the data loaders, one module per family: `core`/`neuralset`/`tvsd`/`nnn`;
 `harness/data.py` is a thin back-compat facade) + `harness/studies/` (fixed) · `search/` the
-open-ended search loop (`conductor.md`,
-`search.sh`, `round.mjs`, `lib/`, `db.py`, `evaluate.sh`, `record.py`; machine-written state
-+ the SQLite DB under gitignored `search/state/`) · `prompts/{program,datasets}.md` (agent
+open-ended search (launcher `search.sh` supervising two always-on loops — the proposer pool
+`propose.sh` + the evaluator `evaluate.sh`; plus `lib/`, `db.py`, `record.py`; machine-written
+state + the SQLite DB under gitignored `search/state/`) · `prompts/{program,datasets}.md` (agent
 reads) · `scripts/{setup_run.py,generalization.py,…}` (standalone tools) · `docs/` (humans:
 `codebase-overview.html`, dataset notes, `learn/` field-guides) · `results/<study>.csv` (or
 `<study>__<roi>__<run>.csv` per reward region/run; machine writes, gitignored).

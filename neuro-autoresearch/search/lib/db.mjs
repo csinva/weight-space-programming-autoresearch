@@ -38,7 +38,7 @@ export function rank(rows) {
              .sort((a, b) => b.test_corr - a.test_corr);
 }
 
-// Compact summary for result.json / notebook bootstrap.
+// Compact champion + best-by-region summary over the ranked rows (e.g. for a status readout).
 export function digest(rows, { roi = 'ventral' } = {}) {
   const ok = rank(rows);
   const champion = ok[0] ? { id: ok[0].id, corr: round4(ok[0].test_corr) } : null;
