@@ -1,38 +1,12 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.eggs/
-build/
-dist/
+# Specs and local agent/search state
+specs/
+.local/
 
-# Project data / caches (downloaded datasets are large)
+# Machine-written outputs and caches (never commit)
 data/
-*.nii.gz
-.pytest_cache/
-
-# Copilot orchestration worktrees
-.copilot-worktrees/
-
-# Per-turn dispatch scratch (orchestration runtime, not project content)
-.dispatch/
-
-# Local Copilot agent instructions (not part of the published project)
-.github/
-
-# Generated run outputs (the machine writes these)
 results/
-
-# Isolated per-run folders created by scripts/setup_run.py (never committed)
 runs/
-
-# Open-ended search workspace -- source (search/*.{py,sh,mjs}, search/lib/) is tracked; ALL
-# machine-written state lives under search/state/ and is not
-# (results.db, results.csv, queue/, done/, *.json, *.log).
 search/state/
-
-# Generated analysis report (built on demand by analyze/build_report.py)
+logs/
 analyze/report.html
-
-# Relocated model snapshots (disposable; every model's full code is in search/state/results.db)
-docs/model-snapshots/
+__pycache__/
