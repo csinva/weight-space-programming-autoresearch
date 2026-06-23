@@ -17,13 +17,13 @@ export function targetSpec(dataset, roi, imsize) {
   }[dataset] || ``;
   // TVSD has ~22,248 train images; the GPU ridge SVD fails above ~48k output features at
   // that row count, so cap the model output for tvsd (nsd ~9000 / nnn 800 rows stay under it).
-  const cap = dataset === 'tvsd' ? 40000 : null;
+  const cap = dataset === 'tvsd' ? 30000 : null;
   return { dataset, roi, label, ceiling, imsize, cap };
 }
 
 function modelContract(t) {
   const capNote = t.cap
-    ? `\n\nDATASET LIMIT: keep the model's OUTPUT dimension D_out under ~${t.cap}. This dataset has many training rows, and the harness ridge readout's GPU SVD fails above ~48k features at that row count -- a larger D_out is scored as an error, not a result.`
+    ? `\n\nDATASET LIMIT: keep the model's OUTPUT dimension D_out under ~${t.cap}. This dataset has many training rows, and the harness ridge readout's GPU SVD fails above ~33k features at that row count -- a larger D_out is scored as an error, not a result.`
     : ``;
   return `You are an explorer in an OPEN-ENDED search for an UNTRAINED model that maximises held-out ${t.label} test_corr (mean per-target Pearson r of a fixed ridge readout). cwd = the repo root. For reference, ${t.ceiling}.
 

@@ -1,6 +1,7 @@
 // search/lib/db.mjs — read the search DB (search/state/results.db) via Node's built-in node:sqlite.
 // Writes are owned by Python (search/db.py); this module only SELECTs.
 import { DatabaseSync } from 'node:sqlite';
+import { readFileSync } from 'node:fs';
 
 const NUM = ['test_corr', 'corr_V1', 'corr_hV4', 'corr_early', 'corr_ventral', 'corr_FFA',
              'corr_PPA', 'corr_EBA', 'corr_VWFA', 'train_corr', 'gap'];
@@ -20,16 +21,22 @@ export function readDb(dbPath) {
   return rows;
 }
 
-// Full source for a set of ids -> Map(id -> code).
+// Full source for a set of ids -> Map(id -> code). Each row stores a `path` pointer to its
+// model.py on disk (not inlined source); read the file to recover the source.
 export function getCode(dbPath, ids) {
   if (!ids.length) return new Map();
   const db = openDb(dbPath);
   let rows = [];
   try {
-    rows = db.prepare(`SELECT id, code FROM models WHERE id IN (${ids.map(() => '?').join(',')})`).all(...ids);
+    rows = db.prepare(`SELECT id, path FROM models WHERE id IN (${ids.map(() => '?').join(',')})`).all(...ids);
   } catch { /* no models table yet */ }
   db.close();
-  return new Map(rows.map((r) => [r.id, r.code]));
+  const out = new Map();
+  for (const r of rows) {
+    if (!r.path) continue;
+    try { out.set(r.id, readFileSync(r.path, 'utf8')); } catch { /* file moved/missing */ }
+  }
+  return out;
 }
 
 // ok rows, best reward first.
