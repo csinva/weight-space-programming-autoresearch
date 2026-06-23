@@ -26,9 +26,9 @@ results/
 # Isolated per-run folders created by scripts/setup_run.py (never committed)
 runs/
 
-# Open-ended search workspace -- source (search/*.{py,sh,mjs,md}, search/lib/) and the
-# strategy seed are tracked; ALL machine-written state lives under search/state/ and is not
-# (results.db, results.csv, notebook.md, queue/, done/, *.json, ITER, *.log).
+# Open-ended search workspace -- source (search/*.{py,sh,mjs}, search/lib/) is tracked; ALL
+# machine-written state lives under search/state/ and is not
+# (results.db, results.csv, queue/, done/, *.json, *.log).
 search/state/
 
 # Generated analysis report (built on demand by analyze/build_report.py)

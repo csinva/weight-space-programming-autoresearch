@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Sequentially evaluate every model in the per-dataset queue via the Copilot CLI, repairing
 # small errors, and insert the results into that namespace's SQLite db (via search/record.py).
-# The GPU is used one model at a time. Called by search/round.mjs each round; exits when the
-# queue is drained. Parameterized by env: NEURO_DATASET / NEURO_ROI / NEURO_IMSIZE / NEURO_STUDY.
+# The GPU is used one model at a time. Launched and supervised by search/search.sh; exits when
+# the queue is drained. Parameterized by env: NEURO_DATASET / NEURO_ROI / NEURO_IMSIZE / NEURO_STUDY.
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
