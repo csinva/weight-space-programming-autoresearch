@@ -42,7 +42,10 @@ def main() -> None:
         "corr_V1": g("corr_V1"), "corr_hV4": g("corr_hV4"), "corr_early": g("corr_early"),
         "corr_ventral": g("corr_ventral"), "corr_FFA": g("corr_FFA"), "corr_PPA": g("corr_PPA"),
         "corr_EBA": g("corr_EBA"), "corr_VWFA": g("corr_VWFA"),
-        "status": g("status") or "error", "code": code,
+        "status": g("status") or "error",
+        # store a pointer to where the model file persists (evaluate.sh moves queue/<id>.py
+        # -> done/<id>.py right after recording); the row keeps a path, never inlined source.
+        "path": os.path.join(STATE, "done", f"{mid}.py"),
     }, path=os.path.join(STATE, "results.db"))
     print(f"[record] {mid}: test_corr={g('test_corr') or '-'} status={g('status') or '-'}")
 
