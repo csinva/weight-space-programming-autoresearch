@@ -1,6 +1,7 @@
-# Specs and local agent/search state
+# Specs and local-only state
 specs/
 .local/
+scripts/cross_subject/
 
 # Machine-written outputs and caches (never commit)
 data/
