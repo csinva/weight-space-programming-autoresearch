@@ -17,7 +17,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.core import RawPixels, _cache_dir
+from harness.loaders.common import RawPixels, _cache_dir
 
 _NNN_N_NSD_IMAGES = 1000
 

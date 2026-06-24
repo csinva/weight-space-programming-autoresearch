@@ -20,7 +20,7 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.core import _cache_dir
+from harness.loaders.common import _cache_dir
 
 
 def _subject(d: Dataset) -> str:

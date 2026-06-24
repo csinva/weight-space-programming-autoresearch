@@ -42,21 +42,6 @@ def _readout_device() -> torch.device:
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def _as_f64(a, device: torch.device) -> torch.Tensor:
-    """Model activations / targets -> a contiguous float64 tensor on ``device``."""
-    if not torch.is_tensor(a):
-        a = torch.as_tensor(np.asarray(a))
-    return a.to(device=device, dtype=torch.float64)
-
-
-def _corr_per_column_t(y_hat: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-    """Per-column Pearson r on the GPU (torch mirror of ``_corr_per_column``)."""
-    a = y_hat - y_hat.mean(0)
-    b = y - y.mean(0)
-    den = torch.sqrt((a * a).sum(0) * (b * b).sum(0))
-    return torch.where(den > 0, (a * b).sum(0) / den, torch.zeros_like(den))
-
-
 def _to_np(a) -> np.ndarray:
     """Any tensor/array -> a float64 numpy array (for the Pearson scoring)."""
     if torch.is_tensor(a):
@@ -214,21 +199,21 @@ def _study_for(d: Dataset):
     """
     if getattr(d, "loader", "segmenter") != "segmenter":
         return None
-    from harness.data import _study_path
+    from harness.loaders.common import _study_path
     return ns.Study(name=d.study, path=_study_path(d))
 
 
 def _slice_target_mask(study, name: str, n_targets: int):
     """Boolean mask (length ``n_targets``) selecting region ``name``'s target columns.
 
-    NSD: ``name`` is an ROI resolved by ``data._roi_voxel_keep`` to a per-voxel keep mask over the
+    NSD: ``name`` is an ROI resolved by ``common._roi_voxel_keep`` to a per-voxel keep mask over the
     nsdgeneral voxels; the eval targets are those voxels (voxel-major if multi-TR), so the per-voxel
     mask is repeated across the TRs. Returns ``None`` (the clean extension point) when the study has
     no ROI resolver, the name is unknown, or the targets do not map cleanly onto the voxels.
     """
     if not hasattr(study, "_roi_path"):      # non-volumetric studies (text/meg): no resolver
         return None
-    from harness.data import _roi_voxel_keep
+    from harness.loaders.common import _roi_voxel_keep
 
     try:
         keep, n_voxels = _roi_voxel_keep(study, name)
@@ -248,7 +233,7 @@ def evaluate(model, dataset: Dataset, slices=()) -> dict:
     :func:`evaluate_on_split` to reuse a pre-loaded split and time only the readout.
     """
     t0 = time.time()
-    from harness.data import load_split  # lazy: keeps score-only callers off the data/study stack
+    from harness.loaders import load_split  # lazy: keeps score-only callers off the data/study stack
     row = evaluate_on_split(model, load_split(dataset), dataset, slices)
     row["seconds"] = round(time.time() - t0, 2)
     return row

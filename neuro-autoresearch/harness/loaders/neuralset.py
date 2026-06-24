@@ -13,6 +13,9 @@ Stimulus extractors are OFFLINE-friendly (no model-weight downloads):
 """
 from __future__ import annotations
 
+import dataclasses
+import hashlib
+import json
 import os
 
 import numpy as np
@@ -20,12 +23,93 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
-from harness import studies  # noqa: F401  (registers NsdSubj01 / Li2022PetitSubj / ...)
-from harness.loaders.core import (
-    RawPixels, _study_path, _load_workers, _cache_dir, _build_cache_key,
-    _build_cache_load, _build_cache_save, _apply_roi, _collapse_repeats,
-    _image_id, _canonical_test_ids,
-)
+from harness.loaders import studies  # noqa: F401  (registers NsdSubj01 / Li2022PetitSubj / ...)
+from harness.loaders.common import RawPixels, _study_path, _cache_dir, _apply_roi
+
+
+def _load_workers() -> int:
+    """DataLoader workers for the per-segment neural reads (env NEURO_LOAD_WORKERS).
+
+    The per-segment fMRI/MEG reads are I/O-bound, so parallel workers cut the load
+    by ~10x (e.g. the NSD subj01 load drops from ~25 min to a few min). Defaults to
+    16; override via NEURO_LOAD_WORKERS.
+    """
+    return int(os.environ.get("NEURO_LOAD_WORKERS", "16"))
+
+
+# --- on-disk build cache --------------------------------------------------------
+# The slow thing is _build_xy: minutes of per-segment neural reads to assemble the
+# full (X, Y) over ALL loaded voxels. That output is independent of the cheap,
+# downstream choices -- the target region (``roi``, a column subset) and the split
+# fraction -- so it is cached keyed by every field EXCEPT those. The first call
+# builds and saves it; later calls (including a DIFFERENT roi) load it from disk in
+# seconds and just re-subset/re-split, never re-reading the timeseries.
+_CACHE_VERSION = "v2"
+
+# Fields that only affect post-build (cheap) steps, so they are excluded from the
+# build-cache key: ``roi`` subsets columns; ``test_frac`` only sizes a temporal tail;
+# ``reward_roi`` only selects which targets the scalar reward averages over; ``run_tag``
+# only names the output CSV. All region/run loops therefore share ONE build (the
+# timeseries is read only once).
+_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac", "reward_roi", "run_tag")
+
+
+def _build_cache_key(d: Dataset) -> str:
+    """A hash over the Dataset fields that affect _build_xy (all but roi/test_frac)."""
+    fields = {k: v for k, v in dataclasses.asdict(d).items()
+              if k not in _BUILD_AGNOSTIC_FIELDS}
+    payload = json.dumps(fields, sort_keys=True, default=str)
+    digest = hashlib.sha256(f"{_CACHE_VERSION}:{payload}".encode()).hexdigest()[:16]
+    return f"{d.study}_build_{digest}.pt"
+
+
+def _build_cache_load(path: str):
+    blob = torch.load(path, weights_only=False)
+    return blob["X"], blob["Y"], blob["onsets"], blob["stim_ids"]
+
+
+def _build_cache_save(path: str, X, Y, onsets, stim_ids) -> None:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = f"{path}.tmp.{os.getpid()}"
+    torch.save({"X": X, "Y": Y, "onsets": onsets, "stim_ids": stim_ids}, tmp)
+    os.replace(tmp, path)
+
+
+# --- unique-stimulus collapse + canonical held-out split ------------------------
+def _collapse_repeats(X, Y, onsets, stim_ids):
+    """Average the neural target over the repeats of each unique stimulus.
+
+    NSD shows each image ~3x; the stimulus X is identical across a repeat, so its
+    group mean is unchanged, while averaging Y reduces trial noise. Returns one row
+    per unique stimulus (X, Y, onsets, stim_ids), ordered by stimulus id.
+    """
+    uniq, first_idx, inv = np.unique(stim_ids, return_index=True, return_inverse=True)
+    inv = inv.reshape(-1)
+    inv_t = torch.as_tensor(inv, dtype=torch.long)
+    g = len(uniq)
+    # Per-group sizes, computed ONCE; both averages divide by the clamped (>=1) count.
+    counts_t = torch.bincount(inv_t, minlength=g).clamp(min=1)
+    counts = counts_t.unsqueeze(1).float()
+    counts_np = counts_t.numpy()
+
+    # Y is averaged over repeats (this is what reduces trial noise).
+    Y_g = torch.zeros(g, Y.shape[1], dtype=torch.float32).index_add_(0, inv_t, Y.float()) / counts
+    # X is identical across a stimulus's repeats, so gather one row instead of
+    # averaging the (wide) stimulus tensor.
+    X_g = X[torch.as_tensor(first_idx, dtype=torch.long)]
+    # Mean onset per group (used only by non-canonical splits).
+    onsets_g = np.bincount(inv, weights=onsets, minlength=g) / counts_np
+    return X_g, Y_g, onsets_g, uniq
+
+
+def _image_id(filepath: str) -> int:
+    """NSD 1-based image id from a stimulus path (``.../{id-1}.png``)."""
+    return int(os.path.splitext(os.path.basename(filepath))[0]) + 1
+
+
+def _canonical_test_ids(study) -> set[int]:
+    """The NSD shared-1000 image ids (``sharedix``), via the study's data interface."""
+    return {int(x) for x in np.asarray(study._get_test_image_ids()).reshape(-1).tolist()}
 
 
 _NEURAL = {

@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.core import RawPixels, _cache_dir
+from harness.loaders.common import RawPixels, _cache_dir
 
 _TVSD_N_ELEC = 1024
 # Per-monkey electrode -> cortical area, hardcoded from the release's _code/norm_MUA.m (the
