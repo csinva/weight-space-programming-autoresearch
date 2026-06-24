@@ -2,12 +2,23 @@
 from __future__ import annotations
 
 import argparse
+import socket
 from pathlib import Path
 
 import uvicorn
 
 from . import _db
 from .app import create_app
+
+
+def _free_port(host: str, port: int, tries: int = 20) -> int:
+    """Return ``port`` if free, else the next free port (so launches never crash)."""
+    for p in range(port, port + tries):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            if s.connect_ex((host, p)) != 0:  # nothing listening -> free
+                return p
+    return port
 
 
 def main() -> None:
@@ -26,8 +37,11 @@ def main() -> None:
         )
 
     task, run = _db.split_run_name(run_dir)
-    print(f"serving {task}/{run}  ->  http://{args.host}:{args.port}")
-    uvicorn.run(create_app(run_dir), host=args.host, port=args.port, log_level="warning")
+    port = _free_port(args.host, args.port)
+    if port != args.port:
+        print(f"port {args.port} busy -> using {port}")
+    print(f"serving {task}/{run}  ->  http://{args.host}:{port}")
+    uvicorn.run(create_app(run_dir), host=args.host, port=port, log_level="warning")
 
 
 if __name__ == "__main__":
