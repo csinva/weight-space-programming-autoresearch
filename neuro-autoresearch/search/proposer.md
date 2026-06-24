@@ -43,6 +43,16 @@ pass over `N` under `torch.no_grad()` to bound GPU memory. **Keep the output wid
 -- a wider representation is rejected by the ridge readout (recorded as an error). Make the FIRST
 line `# idea: <label>`.
 
+**Compute budget (design to it).** Your forward pass runs on a shared GPU: budget **~20 GB VRAM**
+and a HARD **7-minute (420s) wall-clock cap** per eval -- exceed either and the model is killed and
+recorded as an `error` (wasted attempt, no score). Reference costs on this dataset (~10k images):
+the ridge readout + a light model finishes in **~10-30s**; a typical model **~75s**; dense
+full-resolution multi-orientation Gabor/scattering pyramids reach **250-320s** and are the slow
+tail. The GPU is shared by ~3 concurrent evaluators, so your wall-time is ~3x your solo compute --
+keep solo compute well under ~2 min. SPEED COMES FROM ALGORITHM, NOT PARAM COUNT: a 60M-param fixed
+random AlexNet is fast (small kernels, early striding/downsampling); 192 large-kernel convs at full
+128px resolution is slow. Downsample early, stride, and avoid huge kernels on full-res maps.
+
 Two complexity fields travel with YOUR model into the shared DB -- set them HONESTLY so the pool
 (and the analysis) can see what each idea costs:
 - `n_params` -- your model's own count of hard-coded / random-but-fixed weights (the size of every
