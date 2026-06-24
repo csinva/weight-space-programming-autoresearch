@@ -56,6 +56,9 @@ is entirely YOUR call. There is no mandated sequence of discovery steps.
    interrogate it any way you like -- `champions`, `sample`, `get`, arbitrary `query`, or your own
    `import lab` helpers in `scratch/` -- and use any tool you have to learn the dataset, the harness,
    or what the pool is currently trying. Pull as much or as little context as YOU judge useful.
+   FIRST run `cat direction.txt 2>/dev/null`: if it prints a non-empty line, a conductor has
+   given you a BROAD standing direction for this round -- treat it as your mandate and explore WITHIN
+   it (you choose all the specifics). If it is blank, you are free to go wherever the DB leads you.
 2. EDIT `model.py` -- exactly ONE new idea per turn (build on a leader, fix what stalled, or invent
    something new). You own the whole computation.
 3. PROPOSE: `id=$(python lab.py propose model.py --idea "...")`. Do NOT run/score it yourself.

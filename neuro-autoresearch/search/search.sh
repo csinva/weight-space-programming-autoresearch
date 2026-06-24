@@ -1,25 +1,29 @@
 #!/usr/bin/env bash
 # search/search.sh -- LAUNCHER for the always-on open-ended search.
 #
-# Scaffolds one dated run and supervises the two decentralized loops against it:
-#   - the N-proposer pool  (search/propose.sh)   -- 10 Copilot CLIs invent models, queue them
-#   - the single evaluator (search/evaluate.sh)  -- scores queued models one at a time on the GPU
+# Scaffolds one dated run and supervises the decentralized loops against it:
+#   - the N-proposer pool  (search/propose.sh)   -- N Copilot CLIs invent models, queue them
+#   - the GPU evaluator    (search/evaluate.sh)  -- scores queued models concurrently on the GPU
+#   - the conductor        (search/conduct.sh)   -- OPTIONAL steering overlay: every --epoch-mins a
+#                                                   Copilot pass reads the DB and writes one BROAD
+#                                                   standing direction per proposer (advisory only)
 #
-# There is NO conductor and NO wave barrier: the run's SQLite DB
-# (runs/<dataset>__<date>/search.db) is the ONLY shared memory. Each proposer is self-paced --
-# it waits only for its OWN model's score, then proposes again. The launcher owns just three
-# things: scaffolding, the wall-clock STOP CONDITION (--hours), and graceful shutdown that leaves
-# the DB consistent (orphaned `running` rows reset to `queued`).
+# The run's SQLite DB (runs/<dataset>__<date>/search.db) is the ONLY shared memory. Each proposer is
+# self-paced -- it waits only for its OWN model's score, then proposes again; the conductor never
+# gates the pool (proposers just read their direction and bias toward it). The launcher owns:
+# scaffolding, the wall-clock STOP CONDITION (--hours), and graceful shutdown that leaves the DB
+# consistent (orphaned `running` rows reset to `queued`).
 #
-#   search/search.sh <dataset> [--hours H] [--fleet N] [--date YYYY-MM-DD]
-#   e.g.  search/search.sh nsd --hours 12               # NSD, 12h, 10 proposers
-#         search/search.sh tvsd --hours 6 --fleet 6
+#   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--date YYYY-MM-DD]
+#   e.g.  search/search.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 30m
+#         search/search.sh nsd --hours 8 --epoch-mins 15  # steer every 15 minutes
+#         search/search.sh tvsd --hours 6 --fleet 6 --epoch-mins 0   # conductor OFF (decentralized)
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
 
-DATASET=""; HOURS=""; FLEET=""; DATE=""; pos=0
+DATASET=""; HOURS=""; FLEET=""; DATE=""; EPOCH=""; pos=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --hours)   HOURS="${2:?--hours needs a value}"; shift 2;;
@@ -28,23 +32,26 @@ while [ $# -gt 0 ]; do
     --fleet=*) FLEET="${1#*=}"; shift;;
     --date)    DATE="${2:?--date needs a value}"; shift 2;;
     --date=*)  DATE="${1#*=}"; shift;;
-    -h|--help) sed -n '2,16p' "$0"; exit 0;;
+    --epoch-mins)   EPOCH="${2:?--epoch-mins needs a value}"; shift 2;;
+    --epoch-mins=*) EPOCH="${1#*=}"; shift;;
+    -h|--help) sed -n '2,20p' "$0"; exit 0;;
     --*)       echo "[search] unknown flag: $1" >&2; exit 2;;
     *) case "$pos" in 0) DATASET="$1";; *) echo "[search] unexpected arg: $1" >&2; exit 2;; esac; pos=$((pos+1)); shift;;
   esac
 done
-DATASET="${DATASET:-nsd}"; HOURS="${HOURS:-12}"; FLEET="${FLEET:-10}"
+DATASET="${DATASET:-nsd}"; HOURS="${HOURS:-12}"; FLEET="${FLEET:-10}"; EPOCH="${EPOCH:-30}"
 DATE="${DATE:-$(date -u +%Y-%m-%d)}"
 
 case "$HOURS" in ''|*[!0-9.]*|*.*.*) echo "[search] --hours must be a positive number (got '$HOURS')" >&2; exit 2;; esac
 awk -v h="$HOURS" 'BEGIN { exit !(h + 0 > 0) }' || { echo "[search] --hours must be > 0" >&2; exit 2; }
+case "$EPOCH" in ''|*[!0-9.]*|*.*.*) echo "[search] --epoch-mins must be a number >= 0 (got '$EPOCH'; 0 disables the conductor)" >&2; exit 2;; esac
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
 RUN="$REPO/runs/${DATASET}__${DATE}"
 python scripts/setup_run.py "$DATASET" --date "$DATE" --n "$FLEET" >/dev/null
 KEY="${DATASET}__${DATE}"
-export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET"
+export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_MINS="$EPOCH"
 
 # --- DB consistency (delegated to the lab CLI; LAB_RUN targets this run) ------------------------
 # reconcile: reset any orphaned `running` row back to `queued` (startup + shutdown).
@@ -75,24 +82,29 @@ write_costs() {
 }
 reconcile
 
-PROPOSE="$REPO/search/propose.sh"; EVALUATE="$REPO/search/evaluate.sh"
+PROPOSE="$REPO/search/propose.sh"; EVALUATE="$REPO/search/evaluate.sh"; CONDUCT="$REPO/search/conduct.sh"
 for s in "$PROPOSE" "$EVALUATE"; do [ -f "$s" ] || { echo "[search] missing loop script: $s" >&2; exit 1; }; done
+# The conductor is OPTIONAL: --epoch-mins 0 (or a missing conduct.sh) runs the pure decentralized
+# pool with no steering overlay.
+USE_CONDUCT=0
+awk -v m="$EPOCH" 'BEGIN { exit !(m + 0 > 0) }' && [ -f "$CONDUCT" ] && USE_CONDUCT=1
 
 deadline=$(deadline_in "$HOURS")
 export NEURO_DEADLINE="$deadline"
 
 set -m
-PROP_PID=0; EVAL_PID=0
+PROP_PID=0; EVAL_PID=0; CONDUCT_PID=0
 start_propose()  { bash "$PROPOSE"  & PROP_PID=$!; echo "[search] proposer pool up (pid $PROP_PID, fleet $FLEET)"; }
 start_evaluate() { bash "$EVALUATE" & EVAL_PID=$!; echo "[search] evaluator up (pid $EVAL_PID)"; }
+start_conduct()  { bash "$CONDUCT"  & CONDUCT_PID=$!; echo "[search] conductor up (pid $CONDUCT_PID, epoch ${EPOCH}m)"; }
 
 shutdown() {
   trap '' INT TERM
   echo "[search] $KEY -- stopping loops..."
-  term_group "$PROP_PID"; term_group "$EVAL_PID"
-  for _ in $(seq 1 "${GRACE:-20}"); do alive "$PROP_PID" || alive "$EVAL_PID" || break; sleep 1; done
-  kill_group "$PROP_PID"; kill_group "$EVAL_PID"
-  wait "$PROP_PID" "$EVAL_PID" 2>/dev/null || true
+  term_group "$PROP_PID"; term_group "$EVAL_PID"; term_group "$CONDUCT_PID"
+  for _ in $(seq 1 "${GRACE:-20}"); do alive "$PROP_PID" || alive "$EVAL_PID" || alive "$CONDUCT_PID" || break; sleep 1; done
+  kill_group "$PROP_PID"; kill_group "$EVAL_PID"; kill_group "$CONDUCT_PID"
+  wait "$PROP_PID" "$EVAL_PID" "$CONDUCT_PID" 2>/dev/null || true
   reconcile; log_summary; write_costs
   echo "[search] $KEY -- done."
 }
@@ -102,12 +114,14 @@ echo "[search] $KEY -- always-on search (dataset=$DATASET fleet=$FLEET) for ${HO
 echo "[search] run dir: $RUN"
 start_propose
 start_evaluate
+[ "$USE_CONDUCT" -eq 1 ] && start_conduct || echo "[search] conductor disabled (--epoch-mins $EPOCH); pure decentralized pool"
 
 CHECK=5
 while :; do
   now=$(date +%s); [ "$now" -ge "$deadline" ] && break
   alive "$PROP_PID" || { kill_group "$PROP_PID"; wait "$PROP_PID" 2>/dev/null || true; echo "[search] proposer pool exited; restarting" >&2; start_propose; }
   alive "$EVAL_PID" || { kill_group "$EVAL_PID"; wait "$EVAL_PID" 2>/dev/null || true; echo "[search] evaluator exited; restarting" >&2; start_evaluate; }
+  [ "$USE_CONDUCT" -eq 1 ] && { alive "$CONDUCT_PID" || { kill_group "$CONDUCT_PID"; wait "$CONDUCT_PID" 2>/dev/null || true; echo "[search] conductor exited; restarting" >&2; start_conduct; }; }
   rem=$(( deadline - now )); s=$CHECK; [ "$rem" -lt "$s" ] && s="$rem"; [ "$s" -lt 1 ] && s=1
   sleep "$s"
 done
