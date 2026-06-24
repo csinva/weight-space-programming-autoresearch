@@ -11,8 +11,9 @@ A run lives at ``runs/<dataset>__<date>/`` and is the unit of one open-ended sea
 
 Each *sandbox* is a runnable workspace: relative symlinks to the FIXED ``harness/`` package and
 ``lab.py`` (so ``import harness`` / ``import lab`` resolve), a local editable ``model.py`` seeded
-from the repo-root baseline model.py, and a ``scratch/`` for the agent. Nothing is copied that
-should be shared -- the DB and the model archive live once at the run root.
+from the repo-root baseline model.py, a ``CLAUDE.md`` (symlink to ``search/proposer.CLAUDE.md``, the
+agent's ambient orientation), and a ``scratch/`` for the agent. Nothing is copied that should be
+shared -- the DB and the model archive live once at the run root.
 
     python scripts/setup_run.py <dataset> [--date YYYY-MM-DD] [--n 10]
 """
@@ -43,6 +44,12 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
     model_py = os.path.join(path, "model.py")
     if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
         shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
+    # ambient orientation for the proposer agent (Copilot auto-loads CLAUDE.md from the cwd):
+    # the lab.py DB interface, the model contract, and the loop. Symlinked so it stays in sync.
+    claude_src = os.path.join(repo_root, "search", "proposer.CLAUDE.md")
+    claude_link = os.path.join(path, "CLAUDE.md")
+    if os.path.exists(claude_src) and not os.path.islink(claude_link) and not os.path.exists(claude_link):
+        os.symlink(os.path.relpath(claude_src, path), claude_link)
     os.makedirs(os.path.join(path, "scratch"), exist_ok=True)
     return path
 
