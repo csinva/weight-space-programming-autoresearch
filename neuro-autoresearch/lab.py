@@ -33,10 +33,10 @@ CLI (what a headless agent calls without writing Python)::
 
     python lab.py propose-model <model_file> --idea "..."  # -> prints the new id
     python lab.py wait-for-score <id>                       # block; prints the scored row as JSON
-    python lab.py top-models [-n 5]                         # ranked best, WITH source
-    python lab.py random-models [-n 5] [--seed S]           # random prior models
-    python lab.py get-model <id>                            # one model: row + source as JSON
-    python lab.py get-code  <id>                            # just that model's raw model.py source
+    python lab.py top-models [-n 5]                         # public scoreboard: scores + ideas (NO source)
+    python lab.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
+    python lab.py my-best [--no-code]                       # YOUR island's best model (+source) to build on
+    python lab.py peek-island [--no-code]                   # best of ONE random OTHER island (+source); once/iter
     python lab.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
     python lab.py summary                                   # launcher: one-line tally + champion
     python lab.py requeue                                   # evaluator startup crash recovery
@@ -284,8 +284,11 @@ def wait_for_result(mid: str, poll: float = _POLL, timeout: float | None = None,
 
 
 # --------------------------------------------------------------------------- proposer: read / learn
-def champions(k: int = 5, with_code: bool = True, run: str | None = None) -> list[dict]:
-    """The ``ok`` models with the highest reward, best first -- WITH source so you can build on them."""
+def champions(k: int = 5, with_code: bool = False, run: str | None = None) -> list[dict]:
+    """The pool's public scoreboard: the ``ok`` models with the highest reward, best first, as
+    scores + ideas (NO source by default). Source is deliberately withheld -- a proposer builds on
+    its OWN island (``get_best_model``) or one random other island (``get_best_model_from_other_island``),
+    never a copy of the global champion. Pass ``with_code=True`` only for a non-island consumer."""
     with connect(_ensure(run)) as con:
         rows = _rows(con, "SELECT * FROM models WHERE status='ok' AND test_corr IS NOT NULL "
                           "ORDER BY test_corr DESC LIMIT ?", (int(k),))
@@ -305,22 +308,46 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     return rows
 
 
-def get_model(mid: str, run: str | None = None) -> dict | None:
-    """One model's full row + on-disk source, by id, or ``None`` if unknown."""
+def get_best_model(with_code: bool = True, run: str | None = None) -> dict | None:
+    """The CALLING proposer's OWN island (``$LAB_PROPOSER``) best ``ok`` model -- the thing to build
+    on -- with its source unless ``with_code=False``. Each proposer is its own ISLAND: this never
+    returns another proposer's work, so backbones don't all collapse onto one global champion.
+    ``None`` if your island has no scored model yet (then just evolve your current ``model.py``)."""
+    proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
-        r = con.execute("SELECT * FROM models WHERE id=?", (mid,)).fetchone()
+        r = con.execute(
+            "SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+            "ORDER BY test_corr DESC LIMIT 1", (proposer,)).fetchone()
     if r is None:
         return None
     row = dict(r)
-    row["code"] = _read_source(row.get("path"))
+    if with_code:
+        row["code"] = _read_source(row.get("path"))
     return row
 
 
-def get_source(mid: str, run: str | None = None) -> str:
-    """Just the model's ``model.py`` source by id (empty string if unknown) -- the raw code to build
-    on, without the surrounding row JSON. Saves agents the get + JSON-extract dance."""
-    row = get_model(mid, run)
-    return row["code"] if row else ""
+def get_best_model_from_other_island(with_code: bool = True, run: str | None = None) -> dict | None:
+    """Cross-pollination: the best ``ok`` model of ONE RANDOMLY chosen OTHER proposer (island), with
+    source unless ``with_code=False``. You do NOT get to aim it -- the island is auto-picked at
+    random, so it is never just the global champion. ``None`` if no other island has scored yet.
+    Use at most ONCE per iteration (before your next propose)."""
+    proposer = os.environ.get("LAB_PROPOSER", "")
+    with connect(_ensure(run)) as con:
+        isl = con.execute(
+            "SELECT proposer FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+            "AND proposer<>? AND proposer<>'' GROUP BY proposer ORDER BY RANDOM() LIMIT 1",
+            (proposer,)).fetchone()
+        if isl is None:
+            return None
+        r = con.execute(
+            "SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+            "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
+    row = dict(r)
+    if with_code:
+        row["code"] = _read_source(row.get("path"))
+    row["note"] = ("You have used your ONE cross-pollination for this iteration. Do NOT call "
+                   "peek-island again before you propose your next model.")
+    return row
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
@@ -486,8 +513,10 @@ def main(argv=None):
     sp = add("top-models", lambda a: champions(a.n), json_out=True); sp.add_argument("-n", type=int, default=5)
     sp = add("random-models", lambda a: sample(a.n, a.seed), json_out=True)
     sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
-    add("get-model", lambda a: get_model(a.id), json_out=True).add_argument("id")
-    add("get-code", lambda a: get_source(a.id)).add_argument("id")
+    sp = add("my-best", lambda a: get_best_model(not a.no_code), json_out=True)
+    sp.add_argument("--no-code", action="store_true", help="return the row only, without source")
+    sp = add("peek-island", lambda a: get_best_model_from_other_island(not a.no_code), json_out=True)
+    sp.add_argument("--no-code", action="store_true", help="return the row only, without source")
     add("query-db", lambda a: query(a.sql), json_out=True).add_argument("sql")
     add("requeue", lambda a: requeue_orphans())
     add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")

@@ -122,13 +122,17 @@ Agents never touch the DB, GPU, or dataset directly — they go through `lab.py`
 ```bash
 python lab.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
 python lab.py wait-for-score <id>              # block until the evaluator scores it
-python lab.py top-models -n 5                  # ranked best models, with source
+python lab.py top-models -n 5                  # public scoreboard: scores + ideas (no source)
 python lab.py random-models -n 5               # random prior models (diversity)
-python lab.py get-model <id>                   # one model: full row + source (JSON)
-python lab.py get-code <id>                    # just that model's raw model.py source
+python lab.py my-best [--no-code]              # YOUR island's best model (+source) to build on
+python lab.py peek-island [--no-code]          # best of one RANDOM other island (+source); once/iter
 python lab.py query-db "SELECT ..."            # arbitrary read-only SQL
 python lab.py summary                          # one-line DB tally + current champion
 ```
+
+Each proposer is its own **island**: it can read source only from `my-best` (its own lineage) and
+`peek-island` (one random other island), never the global champion -- so backbones diverge instead
+of all grafting onto one recipe.
 
 (`next` / `record` / `requeue` are the evaluator-side verbs.)
 

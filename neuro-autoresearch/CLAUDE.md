@@ -21,8 +21,11 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   & `studies.py` NeuralSet subclasses) · `reward.py` (himalaya ridge → the region `test_corr`) ·
   `results.py` / `run.py` (the manual single-eval path).
 - **`lab.py`** — the ONE importable API + CLI over a run's `search.db`
-  (`propose` / `wait_for_result` / `champions` / `sample` / `get_model` / `query` +
-  `get_next_model` / `record` / `score`). Hides the DB, GPU, and dataset from agents.
+  (`propose` / `wait_for_result` / `champions` / `sample` / `get_best_model` /
+  `get_best_model_from_other_island` / `query` + `get_next_model` / `record` / `score`). Hides the
+  DB, GPU, and dataset from agents. Each proposer is an ISLAND: it reads source only from its own
+  best (`get_best_model`) or one random other island (`get_best_model_from_other_island`), never the
+  global champion, so backbones stay diverse.
 - **`search/`** — the open-ended loop: `search.sh` scaffolds a dated run and supervises two
   always-on, decentralized loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via
   `proposer.sh`, each confined to its own sandbox) + the single GPU evaluator

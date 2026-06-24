@@ -24,19 +24,27 @@ GPU. Your whole job: evolve `model.py` from the raw-pixel baseline floor so its 
 `test_corr` climbs. **The final representation width `D_out` must be under 10,000.**
 
 ## The `lab` API (run every command from this sandbox)
-Learn from shared history:
-  `python lab.py top-models -n 5`      # ranked best models, WITH full source -- build on them
-  `python lab.py random-models -n 5`   # random prior models (idea + score) -- a diversity spark
-  `python lab.py get-model <id>`       # any model's full row + source as JSON
-  `python lab.py get-code <id>`        # JUST that model's raw model.py source (re-read YOUR last here)
+You are your OWN ISLAND: you evolve your own lineage. There is NO global champion to read or copy --
+that is deliberate, so the pool grows genuinely different backbones instead of all grafting onto one
+recipe. The shared DB shows you the SCOREBOARD (scores + ideas, no code), and you can pull SOURCE
+from only two places: your own island, and one random other island.
+
+See the landscape (scores + ideas, NO source):
+  `python lab.py top-models -n 5`      # the pool's best scores + idea labels -- what's working, not how
+  `python lab.py random-models -n 5`   # random prior ideas + scores -- a diversity spark
   `python lab.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
-You have total latitude: write your own Python in `scratch/` that does `import lab` and calls
-`lab.query(...)` / `lab.champions(...)` to build whatever custom lens on the DB you want.
+Build on real code:
+  `python lab.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
+  `python lab.py peek-island`          # best of ONE RANDOM OTHER island, WITH source -- cross-pollination.
+                                       # You do NOT choose which; use at most ONCE before your next propose.
+  (both take `--no-code` for the row only, no source.)
 
 Propose + get your score:
   `id=$(python lab.py propose-model model.py --idea "<short label>")`  # snapshots + queues YOUR model.py
   `python lab.py wait-for-score $id`  # BLOCKS until the GPU evaluator scores YOUR model; prints the
                                      # row (test_corr = reward, status). One call parks; don't busy-poll.
+Grow YOUR OWN backbone -- improve `my-best`, optionally fold in one `peek-island` idea per round. Never
+try to reconstruct the global champion.
 
 ## The model contract (so the harness can score it)
 A self-contained `model.py` defining `class Model` with attributes `name`, `idea`, `summary`,
@@ -73,14 +81,15 @@ The ONLY fixed mechanic is: write a model into `model.py`, `propose` it, then `w
 Everything else -- what you look at, how you mine the shared DB, how you decide what to build next --
 is entirely YOUR call. There is no mandated sequence of discovery steps.
 1. ORIENT however you see fit. The DB is live and shared by all the proposers running alongside you;
-   interrogate it any way you like -- `champions`, `sample`, `get`, arbitrary `query`, or your own
-   `import lab` helpers in `scratch/` -- and use any tool you have to learn the dataset, the harness,
-   or what the pool is currently trying. Pull as much or as little context as YOU judge useful.
+   interrogate it any way you like -- `top-models`, `random-models`, `my-best`, `peek-island`, arbitrary
+   `query-db`, or your own `import lab` helpers in `scratch/` -- and use any tool you have to learn the
+   dataset, the harness, or what the pool is currently trying. Pull as much or as little context as YOU
+   judge useful.
    FIRST run `cat direction.txt 2>/dev/null`: if it prints a non-empty line, a conductor has
    given you a BROAD standing direction for this round -- treat it as your mandate and explore WITHIN
    it (you choose all the specifics). If it is blank, you are free to go wherever the DB leads you.
-2. EDIT `model.py` -- exactly ONE new idea per turn (build on a leader, fix what stalled, or invent
-   something new). You own the whole computation.
+2. EDIT `model.py` -- exactly ONE new idea per turn (improve YOUR island's `my-best`, fold in a
+   `peek-island` idea, fix what stalled, or invent something new). You own the whole computation.
 3. PROPOSE: `id=$(python lab.py propose-model model.py --idea "...")`. Do NOT run/score it yourself.
 4. WAIT: `python lab.py wait-for-score $id` -> blocks until YOUR model is scored, then read its test_corr.
 5. Reflect on whether it improved, then GO BACK to step 1. Never stop.
