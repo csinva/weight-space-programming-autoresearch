@@ -28,7 +28,9 @@ esac
 CAPNOTE=""
 [ -n "$CAP" ] && CAPNOTE="DATASET LIMIT: keep the model OUTPUT dim D_out under ~${CAP} -- the ridge readout's GPU SVD fails above that at this dataset's row count (scored as an error). "
 
-PREAMBLE="THIS RUN -- dataset=${DATASET}. You are proposer ${PNAME}. Reward =
+PREAMBLE="THIS RUN -- dataset=${DATASET}. You are proposer ${PNAME}, ONE of ${NEURO_FLEET:-several}
+proposers running CONCURRENTLY right now -- all of you read from and write models into the SAME
+search.db at the same time, with no coordinator. Reward =
 held-out ${LABEL} test_corr (mean per-target Pearson r of a fixed ridge readout). For reference,
 ${CEIL}. ${CAPNOTE}The shared brain is search.db in your run; reach it ONLY through \`python lab.py\`
 (run from this sandbox)."
