@@ -18,7 +18,7 @@ overridden with ``LPP_EN_ALL_PATH``. Run from the repo root::
 
     python scripts/generalization_text.py                       # current model.py, all subjects
     python scripts/generalization_text.py --subjects EN057,EN058
-    python scripts/generalization_text.py --model runs/<tag>/models_lib/07_foo.py
+    python scripts/generalization_text.py --model runs/<dataset>__<date>/models/<id>.py
 """
 from __future__ import annotations
 
