@@ -11,7 +11,6 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PNAME="${1:?usage: proposer.sh <pNN> (LAB_RUN + NEURO_DATASET in env)}"
 RUN="${LAB_RUN:?LAB_RUN must point at the run dir}"
 DATASET="${NEURO_DATASET:-nsd}"
-IMSIZE="${NEURO_IMSIZE:-128}"
 MODEL="${NEURO_PROPOSER_MODEL:-claude-opus-4.8}"
 EFFORT="${NEURO_PROPOSER_EFFORT:-high}"
 SANDBOX="$RUN/proposers/$PNAME"
@@ -20,15 +19,15 @@ SANDBOX="$RUN/proposers/$PNAME"
 # Per-dataset framing: the reward target + any output-dim cap (the ridge SVD limit at this dataset).
 case "$DATASET" in
   nsd)  LABEL="NSD subject-1 ventral visual-stream fMRI (prepared GLMdenoise betas)";
-        CEIL="the reward is the FINE-GRAINED ventral stream of NSD's prepared GLMdenoise betas (the standard NSD encoding target, ~8.6k voxels). The raw-pixel identity floor is ~0.08; the TARGET for this search is test_corr >= 0.40. A strong UNTRAINED computational model of the high-level ventral representation is the open frontier"; CAP="";;
-  tvsd) LABEL="TVSD macaque IT spiking (monkey F)";  CEIL="split-half noise ceiling ~0.55-0.63; real headroom"; CAP="30000";;
+        CEIL="the reward is the FINE-GRAINED ventral stream of NSD's prepared GLMdenoise betas (the standard NSD encoding target, ~8.6k voxels). The random-projection baseline floor is ~0.08; the TARGET for this search is test_corr >= 0.40. A strong UNTRAINED computational model of the high-level ventral representation is the open frontier"; CAP="";;
+  tvsd) LABEL="TVSD macaque IT spiking (monkey F)";  CEIL="split-half noise ceiling ~0.55-0.63; real headroom"; CAP="";;
   nnn)  LABEL="Triple-N macaque IT spiking";         CEIL="an untrained model already reaches ~0.23 on IT"; CAP="";;
   *)    LABEL="$DATASET";                             CEIL=""; CAP="";;
 esac
 CAPNOTE=""
 [ -n "$CAP" ] && CAPNOTE="DATASET LIMIT: keep the model OUTPUT dim D_out under ~${CAP} -- the ridge readout's GPU SVD fails above that at this dataset's row count (scored as an error). "
 
-PREAMBLE="THIS RUN -- dataset=${DATASET} imsize=${IMSIZE}px. You are proposer ${PNAME}. Reward =
+PREAMBLE="THIS RUN -- dataset=${DATASET}. You are proposer ${PNAME}. Reward =
 held-out ${LABEL} test_corr (mean per-target Pearson r of a fixed ridge readout). For reference,
 ${CEIL}. ${CAPNOTE}The shared brain is search.db in your run; reach it ONLY through \`python lab.py\`
 (run from this sandbox)."
@@ -37,7 +36,7 @@ PROMPT="${PREAMBLE}
 
 $(cat "$REPO/search/proposer.md")"
 
-export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET" NEURO_IMSIZE="$IMSIZE"
+export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET"
 cd "$SANDBOX"
 # No wall-clock here: the proposer stays alive for the whole run; the launcher owns the stop.
 # Confined to its OWN sandbox: --add-dir is ONLY the sandbox, so the agent cannot browse the repo

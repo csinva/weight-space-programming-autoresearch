@@ -14,7 +14,7 @@ loop down). There is no queue directory and no wave barrier.
         on error/timeout: low-effort repair Copilot edits the model in place, rerun (<= 2x)
         lab.record(id, res, status)                  # running -> ok | error
 
-    LAB_RUN=runs/nsd__2026-06-24 python search/evaluator.py --dataset nsd [--imsize 128]
+    LAB_RUN=runs/nsd__2026-06-24 python search/evaluator.py --dataset nsd
 """
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ def repair(model_file, log_file, rmodel, reffort, timeout=300):
         print(f"[evaluator]   repair timed out after {timeout}s; recording as-is")
 
 
-def process_model(row, log_dir, dataset, imsize, timeout, max_repairs, rmodel, reffort):
+def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
     mid, src = row["id"], row.get("path")
     if not src or not os.path.exists(src):
         print(f"[evaluator] {mid}: model file missing ({src!r}) -> error")
@@ -52,7 +52,7 @@ def process_model(row, log_dir, dataset, imsize, timeout, max_repairs, rmodel, r
     log_file = os.path.join(log_dir, "last_eval.log")
     repairs = 0
     while True:
-        res = lab.score(src, dataset, imsize, timeout)        # subprocess-isolated; never raises
+        res = lab.score(src, dataset, timeout)                # subprocess-isolated; never raises
         with open(log_file, "w") as f:
             f.write(res.get("log", "") or "")
         if _is_ok(res) or repairs >= max_repairs:
@@ -68,7 +68,6 @@ def process_model(row, log_dir, dataset, imsize, timeout, max_repairs, rmodel, r
 def main(argv=None):
     p = argparse.ArgumentParser(description="Single GPU evaluator (lab-backed).")
     p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "nsd"))
-    p.add_argument("--imsize", type=int, default=int(os.environ.get("NEURO_IMSIZE", "128")))
     p.add_argument("--poll", type=float, default=5.0, help="empty-queue sleep (seconds)")
     p.add_argument("--timeout", type=int, default=int(os.environ.get("NEURO_EVAL_TIMEOUT", "420")))
     p.add_argument("--max-repairs", type=int, default=2)
@@ -80,7 +79,7 @@ def main(argv=None):
     log_dir = os.path.join(run, "eval")
     os.makedirs(log_dir, exist_ok=True)
     os.environ["NEURO_DATASET"] = a.dataset
-    print(f"[evaluator] run={run} dataset={a.dataset} imsize={a.imsize}")
+    print(f"[evaluator] run={run} dataset={a.dataset}")
     recovered = lab.requeue_orphans(run)
     if recovered:
         print(f"[evaluator] crash recovery: requeued {recovered} orphaned 'running' row(s)")
@@ -92,7 +91,7 @@ def main(argv=None):
             if row is None:
                 time.sleep(a.poll)
                 continue
-            process_model(row, log_dir, a.dataset, a.imsize, a.timeout, a.max_repairs,
+            process_model(row, log_dir, a.dataset, a.timeout, a.max_repairs,
                           a.repair_model, a.repair_effort)
         except KeyboardInterrupt:
             print("\n[evaluator] stopped (any in-flight 'running' row requeues on restart)")

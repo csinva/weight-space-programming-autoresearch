@@ -11,6 +11,7 @@
 #   LAB_RUN=... NEURO_DATASET=... NEURO_FLEET=10 NEURO_DEADLINE=<epoch> search/propose.sh
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$REPO/search/lib.sh"
 WORKER="$REPO/search/proposer.sh"
 FLEET="${NEURO_FLEET:-10}"
 DEADLINE="${NEURO_DEADLINE:-0}"
@@ -32,18 +33,15 @@ start_slot() {
   PIDS[$i]=$!
   echo "[propose] $(printf 'p%02d' "$i") up (pid ${PIDS[$i]}, $m/$e)"
 }
-alive() { kill -0 "$1" 2>/dev/null; }
-past_deadline() { [ "$DEADLINE" -gt 0 ] && [ "$(date +%s)" -ge "$DEADLINE" ]; }
-shutdown() { trap '' INT TERM; echo "[propose] stopping ${#PIDS[@]} workers..."; for pid in "${PIDS[@]:-}"; do [ -n "${pid:-}" ] && kill -TERM "$pid" 2>/dev/null; done; wait 2>/dev/null || true; }
-trap 'exit 130' INT TERM
-trap shutdown EXIT
+shutdown() { trap '' INT TERM; echo "[propose] stopping ${#PIDS[@]} workers..."; for pid in "${PIDS[@]:-}"; do term "$pid"; done; wait 2>/dev/null || true; }
+install_shutdown_trap shutdown
 
 for i in $(seq 0 $((FLEET - 1))); do start_slot "$i"; done
-while ! past_deadline; do
+while ! past_deadline "$DEADLINE"; do
   for i in $(seq 0 $((FLEET - 1))); do
     if ! alive "${PIDS[$i]:-0}"; then
       wait "${PIDS[$i]:-0}" 2>/dev/null || true
-      past_deadline && break
+      past_deadline "$DEADLINE" && break
       echo "[propose] $(printf 'p%02d' "$i") exited; restarting" >&2
       start_slot "$i"
     fi

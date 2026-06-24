@@ -303,9 +303,22 @@ def requeue_orphans(run: str | None = None) -> int:
         return con.execute("UPDATE models SET status='queued' WHERE status='running'").rowcount
 
 
+# --------------------------------------------------------------------------- launcher: DB summary
+def summary(run: str | None = None) -> str:
+    """One-line DB tally + current champion, for the launcher's startup/shutdown log."""
+    with connect(run) as con:
+        tally = dict(con.execute(
+            "SELECT COALESCE(status,'?'), COUNT(*) FROM models GROUP BY 1").fetchall())
+        best = con.execute(
+            "SELECT id, test_corr FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+            "ORDER BY test_corr DESC LIMIT 1").fetchone()
+    t = " ".join(f"{k}={v}" for k, v in sorted(tally.items())) or "(empty)"
+    champ = f"{best['id']} @ {best['test_corr']:.4f}" if best else "(none)"
+    return f"DB: {t} | champion: {champ}"
+
+
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
-def score(model_file: str, dataset: str | None = None, imsize: int | None = None,
-          timeout: int = 420) -> dict:
+def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> dict:
     """Score one model file with the FIXED harness, in a subprocess (isolation against CUDA
     faults). Returns ``{status, test_corr, train_corr, gap, n_params, seconds}``. Never raises on
     a model fault -- a crash/timeout becomes ``status='error'``.
@@ -319,8 +332,6 @@ def score(model_file: str, dataset: str | None = None, imsize: int | None = None
     dataset = dataset or os.environ.get("NEURO_DATASET", "nsd")
     env = {**os.environ, "NEURO_DATASET": dataset}
     env.pop("NEURO_ROI", None)                # no ROI knob: reward = the preset's fixed region (NSD: ventral)
-    if imsize is not None:
-        env["NEURO_IMSIZE"] = str(imsize)
     # A throwaway out-file the child writes the JSON result to.
     with tempfile.NamedTemporaryFile("r", suffix=".json", delete=False) as tf:
         out = tf.name
@@ -351,7 +362,7 @@ def _score_child(model_file: str) -> None:
     res = {"status": "error: unknown"}
     try:
         from harness.datasets import DATASET
-        from harness.data import load_split
+        from harness.loaders import load_split
         from harness.reward import evaluate_on_split_safe
         spec = importlib.util.spec_from_file_location("model", model_file)
         mod = importlib.util.module_from_spec(spec)
@@ -387,6 +398,7 @@ def main(argv=None):
     sub.add_parser("newid")
     sub.add_parser("next")
     sub.add_parser("requeue")
+    sub.add_parser("summary")
     sp = sub.add_parser("record"); sp.add_argument("id"); sp.add_argument("--status", default="ok")
     for f in NUM:
         sp.add_argument(f"--{f.replace('_', '-')}", default=None)
@@ -413,6 +425,8 @@ def main(argv=None):
         _print(get_next_model())
     elif a.cmd == "requeue":
         print(requeue_orphans())
+    elif a.cmd == "summary":
+        print(summary())
     elif a.cmd == "record":
         scores = {f: getattr(a, f) for f in NUM if getattr(a, f) is not None}
         print(record(a.id, scores, a.status))
