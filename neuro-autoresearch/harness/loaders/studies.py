@@ -12,12 +12,12 @@ sections. Importing this module registers it (and the siblings below) in
 ``neuralset.Study.catalog()``, e.g. as ``Li2022PetitSubj``, loadable with
 ``ns.Study(name="Li2022PetitSubj", ...)``.
 
-For the cross-subject generalization study it also registers one sibling per English
-subject -- ``Li2022PetitSubj<ID>`` (e.g. ``Li2022PetitSubjEN058``) for every id in
-``EN_SUBJECTS`` -- each overriding only ``SUBJECT``. Every subject heard the SAME story,
-so a model found on one can be re-fit and scored on any other (the ridge re-fit IS the
-eval), exactly as NSD's ``NsdSubj01/02/03`` siblings enable. See
-``scripts/generalization_text.py``.
+It also registers one sibling per English subject -- ``Li2022PetitSubj<ID>``
+(e.g. ``Li2022PetitSubjEN058``) for every id in ``EN_SUBJECTS`` -- each overriding only
+``SUBJECT``. Every subject heard the SAME story, so a model found on one can be re-fit
+and scored on any other (the ridge re-fit IS the eval), exactly as NSD's
+``NsdSubj01/02/03`` siblings enable. Select one via ``NEURO_SUBJECT`` (see
+``harness/datasets.py``).
 
 The parent yields each fMRI run as a path to a full-brain volume (73x90x74 ~ 486k
 voxels); a single subject's 9 sections would be a ~60 GB target matrix the ridge
@@ -35,7 +35,7 @@ subject and all of its sessions. Importing this module registers each subclass i
 ``ns.Study(name="NsdSubj01", ...)``; the parent's nsdgeneral / visual-cortex ROI is
 inherited unchanged.
 
-Subjects 2 and 3 exist for the cross-subject generalization study: the same
+Subjects 2 and 3 are the multi-subject ``NEURO_SUBJECT`` siblings: the same
 shared-1000 images are shown to every NSD subject, so a model found on subject 1 can
 be re-fit and scored on them unchanged.
 
@@ -161,7 +161,7 @@ class Li2022PetitSubj(Li2022Petit):
         return events
 
 
-# # # # # Per-subject siblings (cross-subject generalization) # # # # #
+# # # # # Per-subject siblings (multi-subject NEURO_SUBJECT) # # # # #
 
 # The English arm of ds003643 has 49 subjects: EN057-EN115 with these gaps.
 _EN_MISSING: frozenset[int] = frozenset({60, 66, 71, 80, 85, 90, 102, 107, 111, 112})
