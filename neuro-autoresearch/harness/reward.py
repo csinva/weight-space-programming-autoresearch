@@ -21,7 +21,7 @@ from harness.datasets import Dataset
 # via k-fold CV). A fixed alpha massively overfits small samples; per-target CV closes that gap.
 _ALPHAS = np.logspace(-3, 6, 10)
 _CV = 5                       # himalaya RidgeCV folds for per-target alpha selection
-MAX_DOUT = 50_000             # hard cap on a model's representation width D_out (ridge feasibility)
+MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 
 
 def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:

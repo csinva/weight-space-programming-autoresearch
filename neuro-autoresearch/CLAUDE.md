@@ -12,12 +12,13 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
 - **Never trained:** weights are analytic / random-but-fixed in code; only the ridge readout
   (`harness/reward.py`, himalaya `RidgeCV` on GPU) is fit — that *is* the eval. The model only ever
   receives `X`, never the neural target `Y`.
-- **Per-sample** activations (no statistic across the batch); representation `D_out < 50000`.
+- **Per-sample** activations (no statistic across the batch); representation `D_out < 10000`.
 - Raw file/network I/O is confined to `harness/loaders/`; never in `model.py`.
 
 ## Architecture
-- **`harness/`** (fixed eval): `datasets.py` (presets; pick via `NEURO_DATASET`) · `loaders/` (one
-  reader per dataset family) · `reward.py` (himalaya ridge → the region `test_corr`) ·
+- **`harness/`** (fixed eval): `datasets.py` (presets; pick via `NEURO_DATASET`) · `loaders/`
+  (`load_split` dispatch in `__init__`; one reader per dataset family + `common.py` shared helpers
+  & `studies.py` NeuralSet subclasses) · `reward.py` (himalaya ridge → the region `test_corr`) ·
   `results.py` / `run.py` (the manual single-eval path).
 - **`lab.py`** — the ONE importable API + CLI over a run's `search.db`
   (`propose` / `wait_for_result` / `champions` / `sample` / `get_model` / `query` +
@@ -26,17 +27,17 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   always-on, decentralized loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via
   `proposer.sh`, each confined to its own sandbox) + the single GPU evaluator
   (`evaluate.sh` / `evaluator.py`). Self-paced (each proposer waits only for its OWN score); no
-  conductor, no barrier. `proposer.md` is the task; `repair.sh` auto-fixes small model bugs.
+  conductor, no barrier. `proposer.md` is the task; `repair.sh` auto-fixes small model bugs;
+  `lib.sh` holds the supervisor primitives shared by `search.sh` + `propose.sh`.
 - **`runs/<dataset>__<date>/`** (gitignored) — one search: `search.db` (the only shared memory +
   queue) + `models/<id>.py` (immutable archive) + `proposers/pNN/` sandboxes (seeded from the
-  IDENTITY model) + `eval/`. Same date resumes losslessly; a new date starts fresh.
-- **`scripts/`** — standalone tools (`setup_run.py` scaffolds runs; `generalization.py` re-scores a
-  champion across all 8 NSD subjects; baseline/analysis one-offs). **`docs/`** — human docs.
+  random-projection baseline `model.py`) + `eval/`. Same date resumes losslessly; a new date starts fresh.
+- **`model.py`** — the root random-projection baseline (the manual-path model + the proposer seed). **`docs/`** — human docs.
 
 ## Run
 ```bash
 python -m harness.run                   # evaluate the current model.py once (manual)
-search/search.sh nsd 128 --hours 12     # launch the unattended search (10 proposers + 1 evaluator)
+search/search.sh nsd --hours 12         # launch the unattended search (10 proposers + 1 evaluator)
 ```
 
 ## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)

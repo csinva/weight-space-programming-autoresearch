@@ -2,265 +2,170 @@
 
 **Can an AI discover better models of the brain — without ever training one?**
 
-`neuro-autoresearch` is a self-improving research loop for **neural encoding**:
-the task of predicting recorded brain activity from the stimulus a person saw or
-heard. An agent writes a small, **fixed** computational model in code, the harness
-scores how well that model's activations predict real neural recordings, and the
-agent iterates to push the score up. No gradient descent, no optimizer — the model
-is *designed*, not trained.
+`neuro-autoresearch` is a self-improving research loop for **neural encoding**: the
+task of predicting recorded brain activity from the stimulus a person (or animal) saw
+or heard. An agent writes a small, **fixed** computational model in code, the harness
+scores how well that model's activations predict real neural recordings, and the agent
+iterates to push the score up. No gradient descent, no optimizer — the model is
+*designed*, not trained.
 
-The result is a tight, verifiable loop where the unit of progress is a single file
-(`model.py`) and the unit of truth is a single number (`test_corr`).
+The unit of progress is a single file (`model.py`) and the unit of truth is a single
+number (`test_corr`).
 
 ## Why this is interesting
 
-In computational neuroscience, the standard way to test a theory of how the brain
-represents a stimulus is **encoding**: extract features from the stimulus, fit a
-linear readout to neural activity, and measure how well it predicts held-out data.
-The features *are* the hypothesis. Here we let an agent author those features
-directly — as plain Python that maps a stimulus to activations — and use the
-held-out predictivity as an honest, automatically-computed reward. That turns
-"propose a better representation of the brain" into a closed optimization loop the
-agent can run on its own.
+In computational neuroscience the standard way to test a theory of how the brain
+represents a stimulus is **encoding**: extract features from the stimulus, fit a linear
+readout to neural activity, and measure how well it predicts held-out data. The
+features *are* the hypothesis. Here an agent authors those features directly — as plain
+Python mapping a stimulus to activations — and the held-out predictivity is an honest,
+automatically-computed reward. That turns "propose a better representation of the brain"
+into a closed optimization loop the agent can run on its own.
 
-Crucially, **the proposed model is never trained.** Its weights are written
-straight into the code. The only thing that gets fit is a ridge-regression readout,
-which *is* the evaluation — so the score can't be gamed by memorizing the data.
+Crucially, **the proposed model is never trained.** Its weights are written straight
+into the code (analytic or random-but-fixed). The only thing that gets fit is the
+ridge-regression readout, which *is* the evaluation — so the score can't be gamed by
+memorizing the data, and the model never sees the neural target `Y`.
 
 ## The loop (3 steps)
 
-1. **Propose.** The agent writes a model in `model.py` — a callable mapping
-   a batch of stimuli `X (N, D_in)` to activations `(N, D_out)`. Weights are
-   hard-coded; nothing is trained.
-2. **Activate.** The fixed harness runs the stimulus through the model to get
-   activations.
-3. **Read out & score.** A ridge regression linearly predicts the recorded neural
-   activity from those activations. The reward is **`test_corr`** — the mean
-   per-target Pearson correlation on a held-out split. Only the ridge readout is
-   fit; the model is frozen.
+1. **Propose.** A model in `model.py` — a callable mapping a batch of stimuli
+   `X (N, D_in)` to activations `(N, D_out)`. Weights are hard-coded; nothing is
+   trained; a sample's activations depend only on that sample.
+2. **Activate.** The fixed harness runs the stimulus through the model.
+3. **Read out & score.** A himalaya `RidgeCV` readout (fit on GPU) linearly predicts the
+   recorded neural activity from those activations. The reward is **`test_corr`** — the
+   mean per-target Pearson correlation on a held-out split. Only the readout is fit; the
+   model is frozen.
 
-`model.py` is the evolved artifact; `test_corr` is the verifiable reward. A high
-`train_corr` with a low `test_corr` means the readout overfit, not that the model
+A high `train_corr` with a low `test_corr` means the readout overfit, not that the model
 is good.
 
-## One data interface for every dataset
+## The model contract
 
-Every dataset, neural modality, and stimulus type flows through a single unified
-interface (**NeuralSet / NeuralFetch**). There is **no raw file or network I/O**
-anywhere in `harness/` or `scripts/` — adding a new dataset is pure
-configuration, never bespoke parsing. This is what lets the same loop run, untouched,
-across fMRI and MEG, and across image, text, and audio stimuli.
+A self-contained `model.py` defining `class Model` with attributes `name` / `idea` /
+`summary` / `n_params` and `__call__(self, X)` mapping `(N, D_in) -> (N, D_out)`, ending
+with `MODEL = Model()`. For image datasets `X` is flattened RGB pixels of a square image
+(`side = round(sqrt(D_in/3))`). Two hard rules keep the reward real:
 
-The loop is **modality-agnostic**: neither the model (`stimulus X -> activations`)
-nor the reward ever assumes a modality. Each dataset declares a `stimulus` type and
-the harness dispatches the matching offline feature extractor:
+1. **Untrained** — every weight is analytic or random-but-fixed (fixed seeds); never fit
+   to data, never read the neural target `Y`.
+2. **Per-sample** — a sample's activations depend only on that sample (no statistic
+   across the batch); keep the output width `D_out < 10000`.
 
-| `stimulus` | Stimulus → X | extractor |
-| --- | --- | --- |
-| `image` | flattened `imsize×imsize×3` RGB pixels | `RawPixels` |
-| `text` | the trigger word's `[length, zipf-frequency]` | `WordLength` + `WordFrequency` |
-| `audio` | time-averaged Mel bands | `MelSpectrum` |
-
-The neural side (`fmri` / `meg` / `eeg`) is dispatched the same way.
+The repo-root `model.py` is the **random-projection baseline** (a fixed random linear
+projection of the raw pixels) — the floor every proposed model should beat, and the seed each
+search proposer starts from.
 
 ## What you edit vs. what's fixed
 
 ```
-model.py               EDITABLE: the one evolving model (seed: identity)
-experiment.py          EDITABLE: run-config — LOG_SLICES
-prompts/program.md     the task description handed to the agent
-prompts/datasets.md    the active-dataset context the agent reads each run
-harness/datasets.py    FIXED: the Dataset registry (pick one via NEURO_DATASET)
-harness/studies/       FIXED: per-study NeuralSet subclasses (NSD subj1/2/3, LPP subj)
-harness/data.py        FIXED: stimulus extractors + aligned, split (X, Y) tensors
-harness/reward.py      FIXED: the predictivity reward; evaluate() + evaluate_on_split_safe()
-harness/results.py     FIXED: append-only result ledger, save_results()
-harness/run.py         FIXED: the driver — `python -m harness.run`
-scripts/setup_run.py   FIXED: `python scripts/setup_run.py <tag>` — make an isolated run folder
-scripts/autoresearch.sh FIXED: nonstop launcher (Opus + copilot-keepgoing)
-scripts/generalization.py FIXED: cross-subject transfer study
-results/               <study>.csv, one appended row per model evaluated (gitignored)
-runs/<tag>/            isolated per-run folder (symlinked harness + local model.py; gitignored)
+model.py             EVOLVED: the one model (seed: random-projection baseline)
+lab.py               the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
+search/              the open-ended search loop (launcher + proposer pool + evaluator)
+  proposer.md          the task description handed to each proposer
+harness/             FIXED evaluation harness — must not be edited
+  datasets.py          the Dataset registry (pick one via NEURO_DATASET)
+  loaders/             one reader per dataset family (the only file/network I/O)
+  reward.py            the predictivity reward (himalaya ridge → test_corr)
+  run.py               the manual single-eval driver — `python -m harness.run`
+scripts/setup_run.py scaffolds an isolated run folder + proposer sandboxes
+runs/<dataset>__<date>/  one search: search.db + models/ + proposers/ + eval/ (gitignored)
 ```
 
-`model.py` (and `experiment.py`) are the **only** files the agent edits. `harness/`
-is the fixed evaluation harness and must not be touched — that fixedness is what
-makes the reward trustworthy.
+`model.py` is the only artifact that evolves; the fixed harness is what makes the reward
+trustworthy.
 
 ## Install
 
 ```bash
-pip install .   # core deps + copilot-keepgoing (the nonstop agent wrapper)
+pip install .
 ```
 
 ## Run (offline, no downloads)
 
-There are two ways to run, and both work.
-
-### Single tree (quick, from the repo root)
+### Manual single eval (from the repo root)
 
 ```bash
-python -m harness.run                    # evaluate the current model on the active dataset
-NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg)
-NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run  # NSD: reward = the PPA region
-NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=run1 python -m harness.run  # unique CSV per run
+python -m harness.run                    # score the current model.py on the active dataset
+NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg | ieeg | tvsd | nnn)
 ```
 
-Run from the repo root so results land in `results/`. A run loads the data split
-once and evaluates the model in `model.py` exactly once, printing `train_corr`,
-`test_corr`, and timing. Each run **appends** one row to
-`results/<study>.csv` — or `results/<study>__<roi>.csv` for a per-region NSD reward,
-or `results/<study>__<roi>__<run>.csv` when `NEURO_RUN` is set so **each run gets its
-own unique CSV**. The history is append-only (keyed by a monotonic `iteration`) and
-`results/` is **gitignored** — runs never write to git, only to their CSV.
+Loads the data split once, evaluates `model.py` exactly once, prints `train_corr` /
+`test_corr` / timing, and appends one row to `results/<study>.csv` (gitignored).
 
-### Isolated run folder (recommended for autoresearch)
-
-For an unattended hill-climb, give each run its own **isolated folder** so its
-`model.py`, attempt snapshots, and results never collide with another run — no git
-branch, no commits, everything local to the folder:
+### Open-ended search (unattended)
 
 ```bash
-python scripts/setup_run.py demo-run1    # create runs/demo-run1/
-cd runs/demo-run1
-NEURO_DATASET=nsd python -m harness.run  # evaluate one model -> one row in results/<study>.csv here
+search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator
+search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
 ```
 
-`scripts/setup_run.py <tag>` creates `runs/<tag>/` containing:
+`search.sh` scaffolds a dated run and supervises two always-on, **decentralized** loops
+against it — there is no conductor and no synchronization barrier:
 
+- **An N-proposer pool** (`propose.sh` → N headless Copilot CLIs via `proposer.sh`). Each
+  proposer is confined to its own sandbox, queries shared history, edits its own
+  `model.py`, proposes it, blocks on *its own* score, and repeats — self-paced.
+- **A single GPU evaluator** (`evaluate.sh` / `evaluator.py`) that claims queued models
+  one at a time, scores each with the fixed harness in an isolated subprocess, and writes
+  the result back. `repair.sh` auto-fixes small mechanical model faults (≤2 attempts).
+
+Everything shared lives in one SQLite file, `runs/<dataset>__<date>/search.db` — the
+queue, the full history, and the scores. Re-launching the same date **resumes** the run
+losslessly; a new date starts fresh.
+
+### The `lab` API/CLI
+
+Agents never touch the DB, GPU, or dataset directly — they go through `lab.py`:
+
+```bash
+python lab.py propose model.py --idea "..."   # snapshot + queue this model -> prints its id
+python lab.py wait <id>                        # block until the evaluator scores it
+python lab.py champions -n 5                   # ranked best models, with source
+python lab.py sample -n 5                       # random prior models (diversity)
+python lab.py get <id> | query "SELECT ..."    # one model / arbitrary read-only SQL
+python lab.py summary                           # one-line DB tally + current champion
 ```
-harness/      -> relative symlink to the repo's harness/ (FIXED; do not edit through it)
-prompts/      -> relative symlink to the repo's prompts/ (FIXED)
-model.py        local copy — EDIT this one (the evolving model)
-experiment.py   local copy — EDIT this one (LOG_SLICES)
-results/        empty — the run-local <study>.csv lands here
-models_lib/     empty — drop a snapshot of model.py per attempt here
-```
 
-The loop inside a run folder: edit the local `model.py`, snapshot each attempt
-into `models_lib/` (e.g. `cp model.py models_lib/attempt-NN.py`), run
-`python -m harness.run`, and read the appended row from the run-local
-`results/<study>.csv`. Because `harness` is symlinked, `import harness.run` and the
-local `model.py`/`experiment.py` all resolve, and `harness.results.save_results`
-writes to the cwd-relative `results/` — i.e. into `runs/<tag>/results/`. The whole
-`runs/` tree is gitignored.
-
+(`next` / `record` / `requeue` are the evaluator-side verbs.)
 
 ## Datasets
 
-Three real studies are registered in `harness/datasets.py` and selected by the
-`NEURO_DATASET` environment variable (default `text`) — no source edit, so parallel
-runs never collide:
+Presets are registered in `harness/datasets.py` and selected by the `NEURO_DATASET`
+environment variable — no source edit, so parallel runs never collide. All are
+pre-staged locally and loaded with `download=False`, so they run **fully offline**.
 
-| `NEURO_DATASET` | Study | neural | stimulus | window (`start` / `duration`) |
+| `NEURO_DATASET` | study | neural | stimulus | reward |
 | --- | --- | --- | --- | --- |
-| `text` (default) | `Li2022Petit` (Le Petit Prince) | fMRI | audio | neural 2.0 / 4.0 s · stim 0.0 / 0.5 s |
-| `nsd` | `NsdSubj01` (Natural Scenes Dataset, subj 1) | fMRI | image | neural HRF offset 5.0 / 4.0 s, TR-mean |
-| `meg` | `Bel2026PetitListen` (LPP-Listen) | MEG | audio | 0.0 / 0.5 s |
+| `text` (default) | Le Petit Prince (LPP) | fMRI | audio | whole-study |
+| `nsd` | Natural Scenes Dataset | fMRI | image | **ventral** stream |
+| `meg` | LPP-Listen | MEG | audio | whole-study |
+| `ieeg` | LPP iEEG | iEEG | audio | whole-study |
+| `tvsd` / `nnn` | macaque IT | spiking | image | whole-study |
 
-- **`text`** — the **Le Petit Prince** narrative-listening study. Each spoken word
-  triggers a segment; X is the Mel spectrum of the audio at the word and the target
-  is the fMRI volume. The neural window is offset to capture the delayed (HRF) BOLD
-  response while the audio is read from a short window at the word, so the stimulus
-  and neural windows are decoupled (`stim_start` / `stim_duration`).
-- **`nsd`** — the **Natural Scenes Dataset**, subject 1. Each shown image triggers a
-  segment; X is the resized image. The target is the **HRF-peak** fMRI response: the
-  window is shifted forward (`neural_offset=5.0 s`, since BOLD peaks ~5 s after onset)
-  and the peak TRs in a 4 s window are averaged into one value per voxel — without
-  this offset even a trained AlexNet scores ~0.006; with it, ~0.32. Subject 1's 10,000
-  images are each shown ~3×, so the loader collapses repeats to one sample per unique
-  image (averaging the neural target) and holds out the canonical **shared-1000**
-  images as an image-disjoint test set (fit on the other ~9000).
-  - **Per-region reward (`NEURO_ROI`).** The scalar `test_corr` is computed over ONE
-    brain region, chosen per run (default `ventral`); menu: `V1`, `V2`, `V3`, `hV4`,
-    `FFA`, `PPA`, `EBA`, `VWFA` + visual streams `early`, `ventral`. The ridge readout
-    still fits **all** nsdgeneral voxels and every region's predictivity is logged as a
-    `corr_<name>` column — only the headline reward narrows. Each region writes its own
-    `results/<study>__<roi>.csv`, so parallel per-region hill-climbs never collide.
-  - **The bar to beat is a trained AlexNet.** A frozen ImageNet AlexNet (fc7) read out
-    with the same ridge gives a per-region reference baseline (`prompts/datasets.md`):
-    e.g. `V1 0.342 · V2 0.299 · V3 0.321 · hV4 0.289 · FFA 0.396 · PPA 0.403 · EBA 0.436
-    · VWFA 0.321 · ventral 0.284`. The never-trained models match/beat it in early/mid
-    visual cortex (V1–V3) but trail in the high-level regions.
-- **`meg`** — **Le Petit Prince MEG** (LPP-Listen), the loop's electrophysiological
-  modality. Each spoken word triggers a 0.5 s MEG epoch; X is the Mel spectrum of the
-  audio in that same window (MEG is near-instant, so stimulus and neural windows
-  coincide).
-
-All presets are pre-staged locally and loaded with `download=False`, so they run
-**fully offline**. (`NsdSubj02`/`NsdSubj03` subclasses are also registered for the
-cross-subject generalization study below; their data is staged separately.)
+- **`nsd`** uses the prepared single-trial **GLMdenoise betas**
+  (`betas_fithrf_GLMdenoise_RR`, Algonauts-2023 style: z-scored per session, 3-rep
+  averaged). The reward is the fine-grained **ventral visual stream** (~8.6k voxels). The
+  canonical **shared-1000** images are held out as an image-disjoint test set. All 8
+  subjects are available via `NEURO_SUBJECT=1..8`.
+- The reward region is a fixed **per-dataset** attribute, not an operator knob — there is
+  no per-region ROI menu and no way to point the readout at the target.
 
 ### How the split avoids leakage
 
-By default the train/test split is a **contiguous temporal hold-out** (the latest
-`test_frac` of triggers by onset), so time-adjacent samples that share a neural
-window can't leak across the split. For NSD, where stimuli repeat, the split is
-instead **image-disjoint** (the shared-1000 set), asserting zero train/test image
-overlap. Targets that are constant across the training set (e.g. non-brain voxels)
-are dropped, since they carry no signal and only dilute the mean correlation.
-
-The resulting split is **cached on disk**, keyed by the full dataset identity, so
-every rerun loads in seconds instead of repaying the multi-minute build. The cache
-lives outside the repo at `~/.cache/neuro-autoresearch/splits` (override with
-`NEURO_SPLIT_CACHE`, bypass with `NEURO_NO_CACHE`).
+By default the train/test split is a **contiguous temporal hold-out** so time-adjacent
+samples that share a neural window can't leak across the split. For NSD (where stimuli
+repeat) the split is instead **image-disjoint** (the shared-1000 set). Constant targets
+(e.g. non-brain voxels) are dropped. The split is cached on disk, keyed by the full
+dataset identity, so reruns load in seconds.
 
 ### Adding a dataset
 
-Name a study from `neuralset.Study.catalog()` and append a `Dataset(...)` entry to
-`PRESETS` in `harness/datasets.py`. Dataset specifics live only in `datasets.py`; the
-harness and models need no changes. Keep unattended runs pointed at a staged local
-path — **never** point an unattended run at a gated `download=True` study.
-
-## Drive the loop
-
-Launch an autoresearch loop with `scripts/autoresearch.sh`. It **always** runs the
-Copilot CLI with the **Opus** model; the **only configurable knob is the reasoning
-effort** (default `medium`). The experiment is chosen by the `NEURO_*` env vars:
-
-```bash
-# NSD, reward = FFA region, its own results CSV, default (medium) effort:
-NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) scripts/autoresearch.sh
-
-# higher reasoning effort (none|low|medium|high|xhigh|max):
-NEURO_DATASET=nsd NEURO_ROI=PPA scripts/autoresearch.sh high
-```
-
-The launcher runs the **interactive** Copilot CLI under `copilot-keepgoing`
-(`copilot-keepgoing --idle 90 --message "<task>" -- copilot --model claude-opus-4.8
---effort <effort> --autopilot --allow-all -C <workdir>`). keepgoing runs the agent in
-a pty and **re-nudges it to keep going whenever it falls idle**, so a run fills its
-whole budget instead of stopping the moment the agent thinks a turn is done. Because
-it never stops on its own, **always bound a run with `timeout`**:
-
-```bash
-NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=$(date +%s) timeout 90m scripts/autoresearch.sh
-```
-
-Point the agent at an isolated run folder with `WORKDIR` (so parallel runs never
-collide), and tune the nudge cadence with `KEEPGOING_IDLE` (seconds, default 90):
-
-```bash
-WORKDIR=runs/nsd-ffa-1 NEURO_DATASET=nsd NEURO_ROI=FFA NEURO_RUN=ffa-1 \
-  timeout 90m scripts/autoresearch.sh high
-```
-
-## Cross-subject generalization
-
-`scripts/generalization.py` asks whether a model discovered on **subject 1** also
-predicts the **same region in other subjects**. The NSD shared-1000 test images are
-shown to every subject, so each region's best subject-1 model transfers unchanged —
-only the ridge readout is re-fit per subject (it is part of eval, not the model). The
-script reuses the fixed harness wholesale: for each `(region, subject)` it loads that
-subject's split and scores the model with `evaluate_on_split_safe`, appending one row
-to `results/generalization.csv` (idempotent/resumable).
-
-```bash
-# subjects 2/3 data must be staged first (subject 1 already is)
-NSD_SUBJ02_PATH=/path/to/subj02 NSD_SUBJ03_PATH=/path/to/subj03 \
-  python scripts/generalization.py                 # all regions × subjects 1,2,3
-python scripts/generalization.py --regions V1,V2,V3 --subjects 1,2
-```
+Append a `Dataset(...)` entry to `PRESETS` in `harness/datasets.py` (and a loader under
+`harness/loaders/` if it's a new family). Dataset specifics live only there; the harness
+and models need no changes. Never point an unattended run at a gated `download=True`
+study.
 
 ---
 

@@ -6,16 +6,16 @@ FOREVER; never stop on your own.**
 
 ## Your sandbox
 You are `cd`'d into your own proposer folder. It contains:
-- `model.py`   -- YOUR mutable working model. It **starts as the IDENTITY baseline** (the
-  representation is the raw input pixels). You evolve it from there; it is yours alone.
+- `model.py`   -- YOUR mutable working model. It **starts as the RANDOM-PROJECTION baseline** (a
+  fixed random linear projection of the raw input pixels). You evolve it from there; it is yours alone.
 - `scratch/`   -- free space: write notes, experiments, or your OWN custom DB-query helpers here.
 - `lab.py`, `harness/` -- symlinked fixed code you can `import`. You never edit these.
 
 `model.py` is ONLY a mapping from stimulus -> representation. How the representation is loaded,
 scored (a fixed ridge readout's held-out predictivity on the **ventral visual stream**) and
 recorded is ALL abstracted away behind `lab` -- you never touch data loading, the readout, or the
-GPU. Your whole job: evolve `model.py` from the raw-pixel identity floor so its ventral
-`test_corr` climbs.
+GPU. Your whole job: evolve `model.py` from the raw-pixel baseline floor so its ventral
+`test_corr` climbs. **The final representation width `D_out` must be under 10,000.**
 
 ## The `lab` API (run every command from this sandbox)
 Learn from shared history:
@@ -36,7 +36,7 @@ A self-contained `model.py` defining `class Model` with attributes `name`, `idea
 `n_params`, and `__call__(self, X)` mapping a stimulus batch `X` of shape `(N, D_in)` to
 activations `(N, D_out)`; end the file with `MODEL = Model()`. For image datasets `X` is flattened
 RGB pixels of a square image -- infer `side = round(sqrt(D_in/3))` and reshape. Chunk the forward
-pass over `N` under `torch.no_grad()` to bound GPU memory. **Keep the output width `D_out` < 50,000**
+pass over `N` under `torch.no_grad()` to bound GPU memory. **Keep the output width `D_out` < 10,000**
 -- a wider representation is rejected by the ridge readout (recorded as an error). Make the FIRST
 line `# idea: <label>`.
 
