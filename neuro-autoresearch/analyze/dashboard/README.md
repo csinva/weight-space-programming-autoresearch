@@ -19,12 +19,12 @@ Overview chart, leaderboard, and header stats update on their own via SSE.
 
 ## What you get
 
-- **Overview** — the search trajectory (every scored model, coloured by proposer, with the
-  running-best line), the leaderboard, and per-proposer activity. Click a row to see its idea,
-  metrics, and never-trained `model.py` source.
+- **Overview** — a prominent current **best score**, the search trajectory (every scored model,
+  coloured by proposer, with the running-best line), the leaderboard, and per-proposer activity.
+  Click a row to see its idea, metrics, and never-trained `model.py` source.
+- **Knowledge** — Skills = each proposer's `direction.txt` (its self-chosen front); Notes = the
+  champion models, each expandable to its full `model.py` source.
 - **Logs** — each proposer's full agent transcript (reasoning + the commands it ran).
-- **Lineage / Knowledge** — present but mostly empty: our search keeps no parent links and no
-  notes/skills, so these CORAL features are stubbed.
 - Header **run selector** — switch between `runs/*__*` without restarting.
 
 ## How it maps (CORAL `Attempt` ⟵ our `models` row)
@@ -54,6 +54,14 @@ Overview chart, leaderboard, and header stats update on their own via SSE.
 
 ## Updating the vendored frontend
 
-`static/` is a prebuilt copy of CORAL's `coral/web/static/`. To refresh it, rebuild CORAL's
-`web/` (`npm run build`) and copy its `coral/web/static/*` here. We add no API endpoints beyond
-the ones CORAL's frontend already calls, so a newer bundle should keep working.
+`static/` is a **prebuilt** copy of CORAL's React frontend with a few small source edits of ours:
+
+- removed the **Lineage** tab (`App.tsx`, `Header.tsx`) — our search keeps no parent lineage;
+- a prominent **best-score** banner on Overview (`pages/Overview.tsx`);
+- **smaller** chart point markers (`components/ScoreChart.tsx`);
+- dropped the always-zero **token in/out** line on agent cards (`pages/Overview.tsx`);
+- rebranded the header + page title to **neuro-autoresearch** (`Header.tsx`, `index.html`).
+
+To refresh: clone CORAL, re-apply the edits above in its `web/src`, run `npm run build` in
+`web/`, and copy the resulting `coral/web/static/*` into this `static/` dir. We add no API
+endpoints beyond the ones the frontend already calls.
