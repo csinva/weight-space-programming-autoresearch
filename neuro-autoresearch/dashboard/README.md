@@ -1,4 +1,4 @@
-# `analyze/dashboard/` — live search dashboard
+# `dashboard/` — live search dashboard
 
 A real-time web dashboard for a search run, reusing the
 [CORAL](https://github.com/Human-Agent-Society/CORAL) project's React frontend **unchanged**
@@ -10,8 +10,8 @@ does not care where the data comes from — so we keep their prebuilt frontend (
 
 ```bash
 pip install -e ".[dashboard]"               # one-time: starlette + uvicorn
-python -m analyze.dashboard                  # serve the latest run
-python -m analyze.dashboard --run runs/nsd__2026-06-24 --port 8080
+python -m dashboard                  # serve the latest run
+python -m dashboard --run runs/nsd__2026-06-24 --port 8080
 ```
 
 Open the printed URL. It is **read-only**, so it is safe to run while a search is live; the
@@ -49,7 +49,7 @@ Overview chart, leaderboard, and header stats update on their own via SSE.
 | `events.py`   | SSE: polls `search.db` ~2s, emits `attempt:new` / `:update` / `eval:update` |
 | `logs.py`     | parses `proposers/<pNN>/proposer.log` into the log-viewer shape       |
 | `app.py`      | Starlette wiring + serves `static/` (the vendored CORAL frontend)    |
-| `__main__.py` | `python -m analyze.dashboard` launcher                                |
+| `__main__.py` | `python -m dashboard` launcher                                |
 | `static/`     | CORAL's prebuilt React bundle (vendored as-is)                       |
 
 ## Updating the vendored frontend

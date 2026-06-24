@@ -1,4 +1,4 @@
-"""``python -m analyze.dashboard`` — serve the live dashboard for a search run."""
+"""``python -m dashboard`` — serve the live dashboard for a search run."""
 from __future__ import annotations
 
 import argparse

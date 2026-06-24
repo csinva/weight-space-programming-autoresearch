@@ -6,8 +6,8 @@ instead of a ``.coral/`` directory. The same prebuilt React frontend (vendored u
 
 Run it with::
 
-    python -m analyze.dashboard --run runs/nsd__2026-06-24   # serve one run
-    python -m analyze.dashboard                              # serve the latest run
+    python -m dashboard --run runs/nsd__2026-06-24   # serve one run
+    python -m dashboard                              # serve the latest run
 
 The current run can be switched live from the UI (the run selector); everything is
 read-only, so it is safe to run alongside an active search.
@@ -73,7 +73,7 @@ def create_app(run_dir: Path | None = None) -> Starlette:
         index = STATIC_DIR / "index.html"
         if index.exists():
             return FileResponse(index)
-        return Response("Dashboard bundle missing under analyze/dashboard/static/.", status_code=404)
+        return Response("Dashboard bundle missing under dashboard/static/.", status_code=404)
 
     routes = [
         Route("/api/config", get_config),
