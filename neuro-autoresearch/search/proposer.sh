@@ -15,6 +15,7 @@ MODEL="${NEURO_PROPOSER_MODEL:-claude-opus-4.8}"
 EFFORT="${NEURO_PROPOSER_EFFORT:-high}"
 SANDBOX="$RUN/proposers/$PNAME"
 [ -d "$SANDBOX" ] || { echo "[proposer] missing sandbox: $SANDBOX" >&2; exit 1; }
+LOG="$SANDBOX/proposer.log"   # this worker's OWN log -> per-proposer AI-credit attribution at run end
 
 # Per-dataset framing: the reward target + any output-dim cap (the ridge SVD limit at this dataset).
 case "$DATASET" in
@@ -42,5 +43,9 @@ cd "$SANDBOX"
 # Confined to its OWN sandbox: --add-dir is ONLY the sandbox, so the agent cannot browse the repo
 # (docs/, harness source, other proposers). It still RUNS `python lab.py` / `import harness` via the
 # symlinks (OS resolves those for subprocesses regardless of the agent's path allow-list).
+# Output is APPENDED to this proposer's OWN log (kept across restarts) so the launcher can sum this
+# session's "AI Credits" at shutdown. `exec` is preserved so a TERM still reaches copilot directly
+# and it flushes its final credit summary.
+echo "[proposer] $PNAME session start $(date -u +%FT%TZ) ($MODEL/$EFFORT)" >> "$LOG"
 exec copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
-     --add-dir "$SANDBOX" -C "$SANDBOX"
+     --add-dir "$SANDBOX" -C "$SANDBOX" >> "$LOG" 2>&1

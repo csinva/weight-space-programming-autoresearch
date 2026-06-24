@@ -50,6 +50,29 @@ export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET"
 # reconcile: reset any orphaned `running` row back to `queued` (startup + shutdown).
 reconcile() { local n; n="$(python lab.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
 log_summary() { echo "[search] $(python lab.py summary)"; }
+
+# Per-proposer API cost: sum every "AI Credits <n>" line in each proposer's own log (one line per
+# copilot session, so restarts accumulate), convert to USD (credits / 100), and write a costs table
+# into the run dir. Called once at shutdown, when every proposer has flushed its final credit line.
+write_costs() {
+  local out="$RUN/costs.txt" total=0 pn log c usd
+  { printf '# per-proposer API cost for %s (USD = AI Credits / 100)\n' "$KEY"
+    printf '# written %s\n' "$(date -u +%FT%TZ)"
+    printf '%-8s %12s %12s\n' "proposer" "credits" "usd"; } > "$out"
+  for d in "$RUN"/proposers/p*/; do
+    [ -d "$d" ] || continue
+    pn="$(basename "$d")"; log="$d/proposer.log"
+    [ -f "$log" ] || continue
+    c="$(grep -oE 'AI Credits[[:space:]]+[0-9.]+' "$log" | grep -oE '[0-9.]+$' \
+         | awk '{s+=$1} END{printf "%.1f", s+0}')"
+    usd="$(awk -v x="$c" 'BEGIN{printf "%.4f", x/100}')"
+    printf '%-8s %12s %12s\n' "$pn" "$c" "$usd" >> "$out"
+    total="$(awk -v t="$total" -v x="$c" 'BEGIN{printf "%.1f", t+x}')"
+  done
+  printf '%-8s %12s %12s\n' "TOTAL" "$total" \
+    "$(awk -v x="$total" 'BEGIN{printf "%.4f", x/100}')" >> "$out"
+  echo "[search] per-proposer costs -> $out (total ${total} credits = \$$(awk -v x="$total" 'BEGIN{printf "%.2f", x/100}'))"
+}
 reconcile
 
 PROPOSE="$REPO/search/propose.sh"; EVALUATE="$REPO/search/evaluate.sh"
@@ -70,7 +93,7 @@ shutdown() {
   for _ in $(seq 1 "${GRACE:-20}"); do alive "$PROP_PID" || alive "$EVAL_PID" || break; sleep 1; done
   kill_group "$PROP_PID"; kill_group "$EVAL_PID"
   wait "$PROP_PID" "$EVAL_PID" 2>/dev/null || true
-  reconcile; log_summary
+  reconcile; log_summary; write_costs
   echo "[search] $KEY -- done."
 }
 install_shutdown_trap shutdown
