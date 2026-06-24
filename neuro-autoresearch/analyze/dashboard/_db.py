@@ -107,7 +107,7 @@ def model_to_attempt(row: dict[str, Any], status: str) -> dict[str, Any]:
         "commit_hash": row["id"],
         "agent_id": row.get("proposer") or "?",
         "title": summary or idea or row["id"],
-        "score": row.get("test_corr"),
+        "score": round(row["test_corr"], 5) if row.get("test_corr") is not None else None,
         "status": status,
         "parent_hash": None,  # our search keeps no lineage
         "timestamp": row.get("created_at") or "",
