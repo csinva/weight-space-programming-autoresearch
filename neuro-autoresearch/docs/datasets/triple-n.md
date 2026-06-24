@@ -44,8 +44,8 @@ logged-in browser; the tokenized URLs then download headlessly:
 
 1. Log into https://www.scidb.cn/detail?dataSetId=413ba7ddcb694bb2a534270caa90be36
    and use **Download → "all URLs"** to obtain the manifest of direct download links.
-2. `scripts/fetch_triple_n.sh` pulls **Processed only** from that manifest
-   (or use the curated `data/nnn_processed/manifest_processed.txt` already staged):
+2. Pull **Processed only** using the curated `manifest_processed.txt` already staged
+   under `data/nnn_processed/` (the tokenized direct URLs download headlessly):
 
 ```bash
 cd ~/Research/neuralset/data/nnn_processed
