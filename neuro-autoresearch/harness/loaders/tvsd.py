@@ -113,7 +113,7 @@ def load_tvsd(d: Dataset):
 
     Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors -- the same contract as
     the Segmenter path. The split is the dataset's own (22248 train / 100 repeated test
-    images); ``reward_roi`` (NEURO_ROI) picks the area V1/V4/IT as a column-subset of the
+    images); ``reward_roi`` (the preset field) picks the area V1/V4/IT as a column-subset of the
     1024 electrodes (the readout then fits and scores exactly that area's electrodes).
     """
     subject = (d.subject or "F").upper()

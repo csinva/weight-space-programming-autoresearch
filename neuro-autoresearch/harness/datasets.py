@@ -41,9 +41,8 @@ class Dataset:
     roi: str = "nsdgeneral"          # neural-target region as a column-subset of loaded
                                      # voxels: "nsdgeneral" (all) or a sub-ROI from the
                                      # fixed menu (V1/hV4/FFA/PPA/EBA/VWFA/early/ventral).
-    reward_roi: str = "nsdgeneral"   # region the scalar reward (test_corr) narrows to;
-                                     # readout still fits ALL voxels and logs every region
-                                     # (corr_<name>). Set per run via NEURO_ROI. See CLAUDE.md.
+    reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
+                                     # per-dataset value (NSD = "ventral"), NOT an operator knob.
     run_tag: str = ""                # per-run id (set by NEURO_RUN): suffixes the results
                                      # CSV so each run gets its own. Empty => shared.
     loader: str = "segmenter"        # "segmenter" (continuous timeline -> ns.Segmenter,
@@ -74,12 +73,12 @@ PRESETS: dict[str, Dataset] = {
         path="/home/t-ymehta/Research/neuralset/data/li2022petit_en057",
     ),
     # NSD (Natural Scenes Dataset), fMRI + image, subject 1 (NsdSubj01 subclass in
-    # harness/nsd_subj01.py). Repeats of the 10k unique images collapse to one sample
+    # harness/studies/nsd_subjects.py). Repeats of the 10k unique images collapse to one sample
     # each; the canonical shared-1000 images are held out as an image-disjoint test set.
     # Target = HRF-PEAK response: neural_offset=5.0s shifts the window to the ~5s BOLD
     # peak and the TRs in a 4s window are averaged to one value/voxel ("mean"); this
     # offset is what makes the signal real (offset=0 -> trained AlexNet ~0.006 vs ~0.32).
-    # Pick a sub-region per run via NEURO_ROI (reward_roi). See docs/datasets/ & CLAUDE.md.
+    # Reward = the VENTRAL visual stream (a fixed per-dataset region; not an operator knob).
     "nsd": Dataset(
         study="NsdSubj01",
         trigger="type=='Image'",
@@ -170,9 +169,9 @@ if _key not in PRESETS:
 # The one active dataset, chosen by NEURO_DATASET (default "text").
 DATASET = PRESETS[_key]
 
-# Trivial single-field overrides: NEURO_ROI picks the reward region (one loop per
-# brain region) and NEURO_RUN tags the results CSV (one per run). Both no-source-edit.
-for _env, _field in (("NEURO_ROI", "reward_roi"), ("NEURO_RUN", "run_tag")):
+# Trivial single-field override: NEURO_RUN tags the results CSV (one per run). The reward is
+# always the WHOLE-dataset test_corr (each preset's built-in reward_roi); there is no ROI knob.
+for _env, _field in (("NEURO_RUN", "run_tag"),):
     _val = os.environ.get(_env)
     if _val:
         DATASET = replace(DATASET, **{_field: _val})

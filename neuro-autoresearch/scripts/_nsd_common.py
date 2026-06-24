@@ -18,7 +18,7 @@ import numpy as np
 import torch
 
 from harness.data import _cache_dir, _canonical_test_ids, _image_id, _roi_voxel_keep
-from harness.reward import _as_f64, _corr_per_column_t, _ridge_gcv_coef
+from harness.reward import _as_f64, _corr_per_column, _ridge_predict
 
 # The famous functional regions reported alongside the overall + ventral scores.
 ROIS = ["V1", "hV4", "FFA", "PPA", "EBA", "VWFA"]
@@ -159,12 +159,11 @@ class Readout:
 
 
 def fit_readout(A: np.ndarray, Y, tr, te, device, n_tr: int) -> Readout:
-    """Fit the harness GCV ridge readout of features ``A`` onto targets ``Y``.
+    """Fit the harness himalaya RidgeCV readout of features ``A`` onto targets ``Y``.
 
-    Centres, drops train-constant targets, fits per-target leave-one-out GCV ridge
-    on ALL voxels jointly, and returns per-target train/test correlations -- the
-    exact readout ``harness.reward.evaluate_on_split`` runs, so the score matches
-    the loop's reward.
+    Drops train-constant targets, fits per-target ``RidgeCV`` (GPU) on ALL voxels jointly, and
+    returns per-target train/test correlations -- the exact readout
+    ``harness.reward.evaluate_on_split`` runs, so the score matches the loop's reward.
     """
     A_t = _as_f64(torch.as_tensor(A), device)
     Y_t = _as_f64(Y, device)
@@ -175,8 +174,7 @@ def fit_readout(A: np.ndarray, Y, tr, te, device, n_tr: int) -> Readout:
     keep_t = torch.from_numpy(kept).to(device)
     Y_tr, Y_te = Y_tr[:, keep_t], Y_te[:, keep_t]
 
-    x_off, y_off = A_tr.mean(0), Y_tr.mean(0)
-    coef = _ridge_gcv_coef(A_tr - x_off, Y_tr - y_off)
-    test_vec = _corr_per_column_t((A_te - x_off) @ coef + y_off, Y_te).cpu().numpy()
-    train_corr = float(_corr_per_column_t((A_tr - x_off) @ coef + y_off, Y_tr).mean())
+    pred_tr, pred_te = _ridge_predict(A_tr, A_te, Y_tr, device)
+    test_vec = _corr_per_column(pred_te, Y_te.cpu().numpy())
+    train_corr = float(_corr_per_column(pred_tr, Y_tr.cpu().numpy()).mean())
     return Readout(test_vec, train_corr, kept, n_tr, A_tr, A_te, Y_tr, Y_te)

@@ -99,8 +99,8 @@ def _build_cache_save(path: str, X, Y, onsets, stim_ids) -> None:
 # the requested labels. Voxels outside nsdgeneral are not available (clipped).
 #
 # Each name maps to (NSD ROI label file, the label values within it to keep). The menu
-# is the famous specific functional regions + the early/ventral visual streams; these
-# are the reward targets (pick one per loop with NEURO_ROI) and the logged feedback panel.
+# is the famous specific functional regions + the early/ventral visual streams. The NSD
+# reward covers the "ventral" stream (a fixed per-dataset region); the rest aid analysis.
 _ROI_DEFS: dict[str, tuple[str, tuple[int, ...]]] = {
     "V1": ("prf-visualrois", (1, 2)),    # primary visual cortex (V1v + V1d)
     "V2": ("prf-visualrois", (3, 4)),    # secondary visual cortex (V2v + V2d)
