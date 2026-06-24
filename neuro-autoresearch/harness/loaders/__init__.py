@@ -23,6 +23,9 @@ def load_split(d: Dataset):
     self-contained readers; everything else goes through the NeuralSet/Segmenter timeline
     path (``neuralset``). See those modules for the per-family split logic.
     """
+    if d.loader == "nsd_betas":
+        from harness.loaders.nsd_betas import load_nsd_betas
+        return load_nsd_betas(d)
     if d.loader == "table":
         return load_nnn(d) if d.study.startswith("Nnn") else load_tvsd(d)
     return load_neuralset(d)

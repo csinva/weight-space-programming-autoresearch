@@ -72,27 +72,21 @@ PRESETS: dict[str, Dataset] = {
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/li2022petit_en057",
     ),
-    # NSD (Natural Scenes Dataset), fMRI + image, subject 1 (NsdSubj01 subclass in
-    # harness/studies/nsd_subjects.py). Repeats of the 10k unique images collapse to one sample
-    # each; the canonical shared-1000 images are held out as an image-disjoint test set.
-    # Target = HRF-PEAK response: neural_offset=5.0s shifts the window to the ~5s BOLD
-    # peak and the TRs in a 4s window are averaged to one value/voxel ("mean"); this
-    # offset is what makes the signal real (offset=0 -> trained AlexNet ~0.006 vs ~0.32).
-    # Reward = the VENTRAL visual stream (a fixed per-dataset region; not an operator knob).
+    # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
+    # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
+    # NOT the coarse raw-timeseries HRF-peak average. Y is the per-ROI betas from
+    # nsd_betas/per_subject/subjNN.pkl; X is the NSD images (shared-1000 image-disjoint hold-out).
+    # Reward = the fine-grained VENTRAL stream (~8.6k voxels). Subject via NEURO_SUBJECT (1-8).
     "nsd": Dataset(
-        study="NsdSubj01",
-        trigger="type=='Image'",
+        study="NsdBetasSubj01",
+        loader="nsd_betas",
         neural="fmri",
         stimulus="image",
-        imsize=16,
-        start=0.0,
-        duration=4.0,
-        neural_offset=5.0,
-        neural_aggregation="mean",
+        imsize=128,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/nsd_subj01_full",
-        roi="nsdgeneral",
+        path="/home/t-ymehta/Research/neuralset/data/nsd_betas",
         reward_roi="ventral",
+        subject="01",
     ),
     # Bel2026PetitListen (LPP-Listen MEG, OpenNeuro ds007523), MEG + audio. Each
     # spoken Word triggers a 0.5s epoch; MEG is near-instant so stimulus and neural
@@ -185,16 +179,17 @@ _imsize = os.environ.get("NEURO_IMSIZE")
 if _imsize:
     DATASET = replace(DATASET, imsize=int(_imsize))
 
-# Optional subject override (NEURO_SUBJECT). For the table dataset TVSD it picks the
-# monkey (F/N); for the `text` dataset (Le Petit Prince fMRI) it picks one of the 49
-# English subjects (e.g. EN058), switching to that subject's catalog class and the
-# all-subjects staging dir so each subject writes its OWN results CSV. The single-subject
-# `text` preset (EN057) is otherwise unchanged.
+# Optional subject override (NEURO_SUBJECT). NSD: one of the 8 subjects (1-8) -> its betas pickle
+# + a per-subject study name (own results CSV). TVSD: the monkey (F/N). text: one of the 49
+# English subjects (e.g. EN058), switching to that subject's catalog class + the all-subjects dir.
 _subject = os.environ.get("NEURO_SUBJECT")
 if _subject:
     if _key == "text":
         _en_all = os.path.join(
             os.path.dirname(DATASET.path), "li2022petit_en_all", "Li2022PetitSubj")
         DATASET = replace(DATASET, study=f"Li2022PetitSubj{_subject}", path=_en_all)
+    elif _key == "nsd":
+        _sid = f"{int(_subject):02d}"
+        DATASET = replace(DATASET, subject=_sid, study=f"NsdBetasSubj{_sid}")
     else:
         DATASET = replace(DATASET, subject=_subject, study=f"TvsdMonkey{_subject.upper()}")

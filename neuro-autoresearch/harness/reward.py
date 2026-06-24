@@ -208,11 +208,11 @@ def _free_gpu(exc: BaseException | None = None) -> None:
 def _study_for(d: Dataset):
     """Construct the (no-download) NeuralSet study used to resolve the reward region.
 
-    Table-loader datasets (e.g. TVSD) are not NeuralSet studies and carry their region labels in
-    the loader, not an ns.Study ROI resolver -- return None so the reward averages over the targets
-    the loader already selected (no per-region voxel masking).
+    Table-loader and prepared-betas datasets are not NeuralSet studies and carry their region
+    labels in the loader (TVSD) or as a per-ROI betas key (NSD-betas), not an ns.Study ROI
+    resolver -- return None so the reward averages over the targets the loader already selected.
     """
-    if getattr(d, "loader", "segmenter") == "table":
+    if getattr(d, "loader", "segmenter") != "segmenter":
         return None
     from harness.data import _study_path
     return ns.Study(name=d.study, path=_study_path(d))
