@@ -490,16 +490,16 @@ a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
         <h4>✎ Editable — the agent's whole world</h4>
         <p><span class="filebadge">model.py</span> &nbsp;the one evolving model: a callable
           <code>X → activations</code>, weights written in code. Seeded as the identity.</p>
-        <p><span class="filebadge">experiment.py</span> &nbsp;run-config: <code>LOG_SLICES</code> (extra
-          feedback columns for non-NSD studies).</p>
-        <p class="small" style="margin-top:10px">+ two env-var dials, the <em>only</em> harness knobs:
-          <code>NEURO_DATASET</code> (which preset) and <code>NEURO_ROI</code> (which reward region).</p>
+        <p><span class="filebadge">experiment.py</span> &nbsp;vestigial stub (<code>LOG_SLICES=[]</code>);
+          the search no longer uses it.</p>
+        <p class="small" style="margin-top:10px">+ one env-var dial, the <em>only</em> harness knob:
+          <code>NEURO_DATASET</code> (which preset). The reward is the dataset's fixed region (NSD: ventral) — no ROI knob.</p>
       </div>
       <div class="card fixed">
         <h4>🔒 Fixed — the trustworthy core</h4>
         <p>All of <code>harness/</code>: the dataset registry, the NeuralSet data layer, the ridge readout,
           the scoring, the append-only ledger, and the per-study Study subclasses.</p>
-        <p>Plus the agent-facing <code>prompts/</code>. None of it is touched between iterations.</p>
+        <p>Plus the agent-facing prompt <code>search/proposer.md</code>. None of it is touched between iterations.</p>
         <p class="small" style="margin-top:10px">Verified: the GCV ridge reproduces sklearn's
           <code>RidgeCV</code> to ~1e-13, and all three tests pass with no skips.</p>
       </div>
@@ -544,7 +544,7 @@ a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
       weights; nothing is learned from data.</p>
     <div class="codewrap">
       <div class="cbar">
-        <span>runs/nsd-v1-…/models_lib/attempt-13-gabor-lum-surround.py</span>
+        <span>runs/nsd__2026-06-24/models/a3f9k.py</span>
         <span class="win">test_corr 0.428 · AlexNet 0.342</span>
       </div>
       <pre id="modelcode"></pre>
@@ -580,24 +580,27 @@ a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
       <div class="card">
         <h4>Single tree — a quick look</h4>
         <pre style="font-size:12.3px; background:transparent; padding:6px 0">python -m harness.run
-NEURO_DATASET=nsd NEURO_ROI=PPA \
+NEURO_DATASET=meg \
   python -m harness.run</pre>
-        <p class="small">Run from the repo root; the row lands in <code>results/&lt;study&gt;__&lt;roi&gt;.csv</code>.</p>
+        <p class="small">Run from the repo root; the row lands in <code>results/&lt;study&gt;.csv</code> (reward = ventral for NSD).</p>
       </div>
       <div class="card">
         <h4>Isolated run folder — for parallel search</h4>
-        <pre style="font-size:12.3px; background:transparent; padding:6px 0">python scripts/setup_run.py demo
-# harness/ symlinked in (fixed),
-# local model.py + models_lib/ snapshots</pre>
-        <p class="small">Ten <code>runs/nsd-*</code> folders on disk are exactly these parallel per-region hill-climbs.</p>
+        <pre style="font-size:12.3px; background:transparent; padding:6px 0">python scripts/setup_run.py nsd
+# search.db + models/ + proposers/pNN/
+# each sandbox: own model.py + symlinked harness/lab</pre>
+        <p class="small">A <code>runs/&lt;dataset&gt;__&lt;date&gt;/</code> folder holds one search: 10 proposer sandboxes sharing one DB + model archive.</p>
       </div>
     </div>
     <div class="callout warm" style="margin-top:16px">
       <h4>⚠ The one gotcha</h4>
-      <p>The unattended launcher <code>search/search.sh</code> supervises two always-on loops — the
-        N-proposer pool <code>search/propose.sh</code> invents untrained models and the single evaluator
-        <code>search/evaluate.sh</code> scores them one at a time on the GPU — coordinating only through
-        the per-namespace SQLite DB. It <strong>self-terminates</strong> at the <code>--hours</code>
+      <p>The unattended launcher <code>search/search.sh</code> scaffolds <code>runs/&lt;dataset&gt;__&lt;date&gt;/</code>
+        then supervises two always-on loops — the N-proposer pool <code>search/propose.sh</code> (10 headless
+        Copilot CLIs, each editing its OWN sandbox <code>model.py</code> and queueing it) and the single
+        evaluator <code>search/evaluate.sh</code> that scores them one at a time on the GPU — coordinating only
+        through the run's SQLite DB <code>search.db</code> (reached via the <code>lab</code> API). Proposers are
+        <strong>self-paced</strong> (each waits only for its OWN model's score), so there is no wave barrier. It
+        <strong>self-terminates</strong> at the <code>--hours</code>
         deadline, and on shutdown (or a Ctrl-C) it resets any orphaned <code>running</code> rows so a
         kill resumes losslessly — no external <code>timeout</code> wrapper needed.
         e.g. <code>search/search.sh nsd FFA 128 --hours 12</code></p>
@@ -616,17 +619,14 @@ NEURO_DATASET=nsd NEURO_ROI=PPA \
         <ul>
           <li>The per-target GCV ridge in <code>reward.py</code> <b>reproduces sklearn <code>RidgeCV</code> to ~1e-13</b>, and a test pins it (<code>max|Δ|≈1e-14</code>).</li>
           <li>All three tests pass; <b>no skips or xfails</b>. Every declared dependency is used; the NeuralSet "no raw I/O" invariant holds across <code>scripts/</code>.</li>
-          <li>The build cache is elegantly keyed by <b>every field except <code>roi/test_frac/reward_roi/run_tag</code></b> — one expensive timeseries build is reused across all 9 regions.</li>
+          <li>The build cache is elegantly keyed by <b>every field except <code>roi/test_frac/reward_roi/run_tag</code></b> — one expensive timeseries build is reused across re-evaluations of the same dataset.</li>
           <li>The fixedness of <code>harness/</code> is the whole basis of an un-gameable reward. By design, not dead code.</li>
         </ul>
       </div>
       <div class="rbox stale">
         <h4><span class="ic">⚠</span> Stale — safe to prune / update</h4>
         <ul>
-          <li><code>README.md</code> claims "no I/O in <code>harness/</code>, <b><code>evolve/</code></b>, or <code>scripts/</code>" — but <b><code>evolve/</code> doesn't exist</b> (long renamed to repo-root <code>model.py</code>).</li>
-          <li><code>docs/overnight-readiness.md</code>, <code>nsd-trial.md</code> &amp; the download notes reference removed files (<code>harness/eval.py</code>, <code>harness/config.py</code>, <code>evolve/</code>) and the old seeded 200/50 split — historical, not current.</li>
-          <li><code>datasets.py</code> comments point at <code>harness/nsd_subj01.py</code>; the subclasses actually live under <code>harness/studies/</code>.</li>
-          <li>Committed <code>docs/index.html</code> is a <b>pre-Plotly build</b>; nothing auto-refreshes it. <code>results/NsdSubj01.pre-hrf.csv</code> is a pre-HRF-fix artifact with no signal.</li>
+          <li>Committed <code>docs/index.html</code> is a <b>pre-Plotly build</b>; nothing auto-refreshes it — regenerate it from the current CSV ledgers with <code>analyze/build_report.py</code>.</li>
         </ul>
       </div>
       <div class="rbox minor">
@@ -729,24 +729,23 @@ const FILEMAP = [
   {p:'harness/reward.py', t:'fixed', r:'Per-target GCV ridge readout + Pearson scoring — the reward. Error net.'},
   {p:'harness/results.py', t:'fixed', r:'Append-only CSV ledger; iteration / best_so_far / frozen corr_ columns.'},
   {p:'harness/studies/', t:'fixed', r:'NeuralSet Study subclasses: NsdSubj01/02/03, Li2022PetitSubj.'},
-  {g:'Agent-facing prompts'},
-  {p:'prompts/program.md', t:'prompt', r:'The task spec handed to the agent: rules, the loop, beat-AlexNet goal.'},
-  {p:'prompts/datasets.md', t:'prompt', r:'Per-dataset context the agent reads every run (dims, split, baselines).'},
+  {g:'Agent-facing prompt'},
+  {p:'search/proposer.md', t:'prompt', r:'The self-contained task handed to each proposer CLI: sandbox + lab API, the two hard rules, the loop. Per-dataset framing (the AlexNet ventral bar) is added by search/proposer.sh.'},
   {g:'Search loop — the open-ended driver'},
-  {p:'search/search.sh', t:'live', r:'The launcher: supervises the proposer pool + evaluator until the --hours deadline; self-terminating.'},
-  {p:'search/propose.sh', t:'live', r:'Always-on N-proposer pool: invents untrained models and queues them in the DB.'},
-  {p:'search/db.py · search/lib/db.mjs', t:'live', r:'SQLite ledger: Python writer + Node reader for search/state/&lt;study&gt;__&lt;roi&gt;/results.db.'},
-  {p:'search/{evaluate.sh,record.py}', t:'live', r:'Evaluate one queued model at a time on the GPU and record its score into the DB.'},
+  {p:'search/search.sh', t:'live', r:'The launcher: scaffolds runs/<dataset>__<date>/ then supervises the proposer pool + evaluator until the --hours deadline; self-terminating.'},
+  {p:'search/propose.sh · search/proposer.sh', t:'live', r:'Always-on N-proposer pool: launches N headless Copilot CLIs (default 5 Opus 4.8 + 5 GPT-5.5), each editing its own sandbox model.py and queueing it via lab.'},
+  {p:'lab.py', t:'live', r:'The ONE importable API + CLI over a run\u2019s search.db: propose/wait_for_result/champions/sample/get_model/query (proposers) + get_next_model/record/score (evaluator). No SQL leaks to agents.'},
+  {p:'search/evaluate.sh · search/evaluator.py', t:'live', r:'Always-on single evaluator: claim one queued model (queued→running→ok|error), score it on the GPU via lab.score, write the result back. Self-paced proposers, no wave barrier.'},
   {g:'Scripts'},
   {p:'scripts/setup_run.py', t:'live', r:'Scaffold an isolated runs/<tag>/ (symlinked harness + local model.py).'},
   {p:'scripts/generalization.py', t:'live', r:'Cross-subject transfer: re-score each region’s best model on subj 1/2/3.'},
   {p:'scripts/{bench,sweep,ref}…', t:'once', r:'One-off offline tooling that derived the AlexNet baseline + HRF offset.'},
   {g:'Analysis & docs'},
   {p:'analyze/build_report.py', t:'gen', r:'CSV ledgers → interactive HTML results dashboard (offline Plotly).'},
-  {p:'docs/, README, CLAUDE.md', t:'fixed', r:'Human docs. CLAUDE.md holds the agent instructions. Some notes are stale.'},
+  {p:'docs/, README, CLAUDE.md', t:'fixed', r:'Human docs. CLAUDE.md holds the agent instructions.'},
   {g:'Tests & machine-written data (gitignored)'},
   {p:'tests/test_readout_equivalence.py', t:'test', r:'Pins the GCV ridge == sklearn RidgeCV (max|Δ|≈1e-14).'},
-  {p:'search/state/ · results/ · runs/<tag>/', t:'data', r:'SQLite/CSV ledgers + queue/done + per-run model.py snapshots. Never committed.'},
+  {p:'runs/<dataset>__<date>/', t:'data', r:'One search run: search.db (the shared brain + queue) + models/<id>.py (immutable archive) + proposers/pNN/ sandboxes + eval/. Never committed.'},
 ];
 
 const MODEL_CODE =
@@ -786,20 +785,20 @@ const QA = [
 {cat:'method', q:'What is the HRF offset and why does it matter so much for the NSD reward?', a:'The BOLD fMRI signal lags neural activity by several seconds, so the harness shifts the read window forward by <code>neural_offset=5.0s</code> and averages the peak TRs in a 4 s window into one value per voxel. This is the difference between measuring real evoked response versus pre-response baseline: at offset 0 even a trained AlexNet scores ~0.006, while the HRF-aligned target lifts that to ~0.32. The offset is literally what makes the encoding signal exist.'},
 {cat:'method', q:'How is the NSD train/test split built, and why image-disjoint shared-1000?', a:'Subject 1 saw ~10,000 unique images, each shown ~3× (~30,000 trials). The harness collapses repeats to one sample per image, averaging the neural target to denoise it while leaving the identical stimulus unchanged. The held-out test is the canonical NSD <em>shared-1000</em> images (~1000 test / ~9000 train), and the code asserts the train and test image sets are disjoint — preventing the most insidious leak, the same image in both splits.'},
 {cat:'method', q:'What is "per-target GCV ridge" and why not a single fixed alpha?', a:'The readout reproduces sklearn’s <code>RidgeCV(alphas=logspace(-3,6,10), alpha_per_target=True)</code>: one SVD of the centered design is reused to score each target’s leave-one-out error in closed form across all 10 alphas, and each voxel keeps its own best penalty. A fixed alpha=1.0 massively overfit small samples (train ≫ test); per-target cross-validated regularization closes that gap, and searching 10 alphas costs about one fit, not 10×. Verified to match sklearn to ~1e-13.'},
-{cat:'method', q:'How does the per-region reward work when the readout fits all voxels?', a:'For NSD the readout always fits all ~15,724 nsdgeneral voxels, but the scalar reward narrows to one region chosen by <code>NEURO_ROI</code> (default ventral). A per-voxel keep-mask selects that region’s columns and averages <code>test_corr</code> only over them, while every region in the fixed menu (V1/V2/V3/hV4/FFA/PPA/EBA/VWFA/early/ventral) is still logged as a <code>corr_&lt;name&gt;</code> column. So one run yields one headline number plus full per-region feedback.'},
+{cat:'method', q:'How does the ventral-stream reward work when the readout fits all voxels?', a:'For NSD the readout always fits all ~15,724 nsdgeneral voxels, but the scalar reward narrows to the <strong>ventral visual stream</strong> — a fixed per-dataset region, not an operator knob. A per-voxel keep-mask selects the ventral columns and averages <code>test_corr</code> only over them. So one run yields one headline number, the ventral-stream predictivity.'},
 {cat:'results', q:'Which regions did never-trained models BEAT a trained AlexNet in, and by how much?', a:'Early visual cortex, cleanly: V1 reached <strong>0.428</strong> vs 0.342 (+0.086, gabor-lum-surround), V2 <strong>0.371</strong> vs 0.299 (+0.072), and V3 <strong>0.350</strong> vs 0.321 (+0.029). The winning models are all Gabor / oriented-energy designs — exactly the kind of feature an untrained network can hand-specify. These numbers come straight from the best <code>status="ok"</code> rows in the per-region run folders.'},
 {cat:'results', q:'Which regions did the never-trained models TRAIL the trained AlexNet in?', a:'Every high-level, category-selective region: FFA 0.261 vs 0.396 (−0.135), PPA 0.267 vs 0.403 (−0.136), EBA 0.290 vs 0.436 (−0.146, biggest gap), VWFA 0.195 vs 0.321 (−0.126, lowest absolute). hV4 (0.282 vs 0.289) and ventral (0.259 vs 0.284) are near-ties just short of parity. Clean dividing line: untrained wins early, approaches parity mid-stream, loses decisively in face/place/body/word areas.'},
 {cat:'results', q:'What is the scientific interpretation of that early-vs-high-level dividing line?', a:'It supports the long-standing view that early visual cortex computes simple, hand-specifiable operations — oriented Gabor/energy filters, luminance and colour-opponent contrasts — that a never-trained model can write down and even out-predict a trained network. High-level regions encode learned semantic categories that emerge only from experience, so no fixed filter bank captures them and the trained network keeps its advantage. Exactly the pattern the project predicted in advance.'},
 {cat:'results', q:'Were the text and MEG datasets actually searched, and how good is the generalization study?', a:'No — both are essentially un-run: the best text (fMRI) result is 0.0007 and the best MEG is −0.0037, both from the identity model only. The cross-subject generalization study contains exactly one data row (V1, subject 1), because that requires subject-2/3 NSD data to be staged. The substantive results so far are entirely the NSD subject-1 per-region hill-climbs.'},
-{cat:'codebase', q:'What is editable versus fixed, and why is the harness intentionally frozen?', a:'Only <code>model.py</code> and <code>experiment.py</code> are editable; everything under <code>harness/</code> is fixed, with two exceptions — the env vars <code>NEURO_DATASET</code> and <code>NEURO_ROI</code>. The fixedness is the basis of trust: if the agent could edit <code>reward.py</code> it could redefine the metric and the reward would be meaningless. Because the data loading, readout, and scoring are immutable and shared across every proposal, a higher <code>test_corr</code> is a real, comparable improvement.'},
+{cat:'codebase', q:'What is editable versus fixed, and why is the harness intentionally frozen?', a:'Only <code>model.py</code> is editable (a callable input→representation map); everything under <code>harness/</code> is fixed, with one exception — the env var <code>NEURO_DATASET</code> (which preset). The fixedness is the basis of trust: if the agent could edit <code>reward.py</code> it could redefine the metric and the reward would be meaningless. Because the data loading, readout, and scoring are immutable and shared across every proposal, a higher <code>test_corr</code> is a real, comparable improvement.'},
 {cat:'codebase', q:'What happens, step by step, when you run a single evaluation?', a:'<code>python -m harness.run</code> loads the active split once via <code>load_split</code> (minutes on a cold NSD build, seconds when cached), then calls <code>evaluate_on_split_safe</code> on your model. That fits the per-target GCV ridge from train activations to train targets, predicts the held-out test split, computes per-voxel Pearson r, narrows to the reward region, and returns a row. <code>save_results</code> appends that single row. One run = one model = one row = one iteration.'},
-{cat:'codebase', q:'How does run-folder isolation let multiple region searches run in parallel without colliding?', a:'<code>scripts/setup_run.py</code> scaffolds <code>runs/&lt;tag&gt;/</code> with <code>harness/</code> symlinked in and local copies of <code>model.py</code>/<code>experiment.py</code>. Each run sets <code>NEURO_ROI</code> (and optionally <code>NEURO_RUN</code>) so its results land in a region-specific CSV, and the build cache is keyed by every Dataset field <em>except</em> roi/test_frac/reward_roi/run_tag — so different regions reuse one expensive timeseries build but never mix results.'},
+{cat:'codebase', q:'How does run-folder isolation let the proposers work in parallel without colliding?', a:'<code>scripts/setup_run.py</code> scaffolds <code>runs/&lt;dataset&gt;__&lt;date&gt;/</code> with one shared <code>search.db</code> + <code>models/</code> archive and N <code>proposers/pNN/</code> sandboxes, each with <code>harness/</code>+<code>lab.py</code> symlinked in and its OWN local <code>model.py</code>. The 10 Copilot CLIs edit their own model.py independently and coordinate only through the shared DB via <code>lab</code>; a single GPU evaluator scores the queue one at a time, so they never collide.'},
 {cat:'codebase', q:'What does the CSV ledger record, and how are failed models handled?', a:'Each run appends one row with core columns (iteration, timestamp, study, model_name, idea, summary, n_params, n_train, n_test, n_targets, test_corr, train_corr, gap, best_so_far, seconds, status) plus a <code>corr_&lt;region&gt;</code> column per region. The ledger is append-only, so iteration counts every model ever tried. A model that raises or returns a bad shape is caught and written as a <code>status="error"</code> row with NaN reward; the analyzer excludes non-"ok" rows from the best-so-far curve.'},
 {cat:'skeptic', q:'Isn’t this just feature engineering dressed up as neuroscience?', a:'It is hand-designed feature engineering — and that’s precisely what makes it a hypothesis test rather than a black box. Each model encodes an explicit, falsifiable claim about how a region computes (e.g. "V1 is oriented-energy filtering"), and the fixed ridge-and-score pipeline grades that claim on a level field. The payoff is interpretability: when gabor-lum-surround beats a trained AlexNet in V1 (0.428 vs 0.342) you learn that V1’s response is essentially captured by oriented luminance contrast — a statement about the brain.'},
 {cat:'skeptic', q:'The ridge readout is fit per model and re-fit per subject — doesn’t that count as training?', a:'No, and the distinction is deliberate. The readout is a single linear map (per-target ridge) that is part of the <em>evaluation</em>, not the model — the standard neuroscience "encoding model" probe asking how linearly decodable the brain target is from a fixed representation. The model’s weights never change. In the generalization study the same image→activation model is applied unchanged to each subject and only the linear readout is re-fit, because it maps a shared feature space onto each subject’s idiosyncratic voxel layout. Re-fitting a linear probe is the measurement, not learning the representation.'},
 {cat:'skeptic', q:'Is a test_corr around 0.4 actually good, or does it sound low?', a:'For single-subject natural-image fMRI it is strong. The reference is a frozen ImageNet AlexNet (fc7) read out with the identical ridge: V1 0.342, FFA 0.396, PPA 0.403, EBA 0.436, ventral 0.284. Beating 0.342 in V1 with a hand-written Gabor model (0.428) is meaningful against a serious baseline, not an identity floor. fMRI has a noise ceiling well below 1.0 from trial-to-trial variability, so per-voxel correlations of 0.3–0.4 in early cortex are competitive — and the harness warns that differences under ~0.005 are noise.'},
-{cat:'howto', q:'How do I run a single evaluation against a specific brain region?', a:'From the repo root: <code>NEURO_DATASET=nsd NEURO_ROI=PPA python -m harness.run</code>. This loads the NSD subject-1 split (cached after the first build), evaluates the current <code>model.py</code>, narrows the scalar reward to PPA, and appends a row to <code>results/NsdSubj01__PPA.csv</code> (still logging every region as <code>corr_&lt;name&gt;</code>). Swap <code>NEURO_ROI</code> for any menu entry — V1/V2/V3/hV4/FFA/PPA/EBA/VWFA/early/ventral; default is ventral.'},
-{cat:'howto', q:'How do I launch an unattended overnight hill-climb, and what’s the one gotcha?', a:'Run the launcher with a time budget: <code>search/search.sh nsd FFA 128 --hours 12</code>. It supervises two always-on loops — the proposer pool <code>search/propose.sh</code> invents untrained models and queues them, while the single evaluator <code>search/evaluate.sh</code> scores them one at a time on the GPU — coordinating only through the per-namespace SQLite ledger at <code>search/state/&lt;study&gt;__&lt;roi&gt;/results.db</code>. There is no conductor and no notebook. The gotcha is now handled for you: the launcher <strong>self-terminates</strong> at the <code>--hours</code> deadline and, on shutdown or a kill, resets any orphaned <code>running</code> rows so the run resumes losslessly — no <code>timeout</code> wrapper needed. Each <code>&lt;dataset&gt; &lt;roi&gt;</code> is its own namespace, so several region searches never mix.'},
+{cat:'howto', q:'How do I run a single evaluation manually?', a:'From the repo root: <code>NEURO_DATASET=nsd python -m harness.run</code>. This loads the NSD subject-1 split (cached after the first build), evaluates the current <code>model.py</code>, scores the reward on the ventral stream, and appends a row to <code>results/NsdSubj01.csv</code>. Swap <code>NEURO_DATASET</code> for any preset (text/meg/ieeg/tvsd/nnn).'},
+{cat:'howto', q:'How do I launch an unattended overnight hill-climb, and what’s the one gotcha?', a:'Run the launcher with a time budget: <code>search/search.sh nsd 128 --hours 12</code>. It scaffolds <code>runs/nsd__&lt;date&gt;/</code> and supervises two always-on loops — the proposer pool <code>search/propose.sh</code> (10 headless Copilot CLIs, by default 5 on Opus 4.8 + 5 on GPT-5.5, each editing its own sandbox model.py and queueing it) and the single evaluator <code>search/evaluate.sh</code> that scores them one at a time on the GPU — coordinating only through the run\u2019s SQLite DB <code>search.db</code> via the <code>lab</code> API. Proposers are self-paced (each waits for its OWN score), so there is no wave barrier. The gotcha is handled for you: the launcher <strong>self-terminates</strong> at the <code>--hours</code> deadline and, on shutdown or a kill, resets any orphaned <code>running</code> rows so the run resumes losslessly. A new date starts a fresh pool; the same date resumes.'},
 ];
 const CAT_LABEL = {concept:'Concept', method:'Method', results:'Results', codebase:'Codebase', skeptic:'Skeptic', howto:'How-to'};
 const CAT_KEY   = {concept:'concept', method:'method', results:'results', codebase:'codebase', skeptic:'skeptic', 'how-to':'howto', howto:'howto'};

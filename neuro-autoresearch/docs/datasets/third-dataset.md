@@ -1,12 +1,11 @@
 # Third Dataset — Le Petit Prince MEG (LPP-Listen)
 
-> **Historical planning note.** The chosen study (`Bel2026PetitListenSample`) did
-> land and is the live `meg` preset in `harness/datasets.py`. Any ready-to-paste
-> `Dataset(...)` config and `Allen2022MassiveSample`/`harness/config.py` references
-> below are pre-rework; the current registry is `PRESETS` in `harness/datasets.py`.
+> The chosen study (`Bel2026PetitListenSample`) landed and is the live `meg` preset
+> in `PRESETS` in `harness/datasets.py`. This doc records why it was picked and how
+> it loads (download steps + MaxShield gotchas), all still current.
 
 A third famous dataset of a **genuinely different neural modality** so the
-autoresearch loop spans modalities. NSD (`Allen2022MassiveSample`) is fMRI/vision
+autoresearch loop spans modalities. NSD (`NsdSubj01`) is fMRI/vision
 and Li2022Petit is fMRI/language; this adds **MEG**.
 
 ## Chosen study: `Bel2026PetitListenSample`
@@ -114,26 +113,24 @@ Resulting shapes (verified):
    `Word` events needs `aggregation="sum"` (or `"mean"`); the default `"single"`
    raises on colliding static slots.
 
-## Ready-to-paste `Dataset(...)` config line for `harness/config.py`
+## Live preset (`harness/datasets.py`)
 
 This dataset's stimulus is **text, not image**, so `imsize` is irrelevant and the
-(separately-generalized) harness must select a **text** stimulus extractor
-(e.g. `WordLength(aggregation="sum")`) and pass `allow_maxshield=True` to the MEG
-extractor for the `meg` branch.
+harness selects a **text** stimulus extractor (e.g. `WordLength(aggregation="sum")`)
+and passes `allow_maxshield=True` to the MEG extractor for the `meg` branch. It is
+wired up as the `meg` entry in `PRESETS`:
 
 ```python
-DATASET = Dataset(
+"meg": Dataset(
     study="Bel2026PetitListenSample",   # Le Petit Prince MEG (LPP-Listen), OpenNeuro ds007523
     trigger="type=='Word'",             # one segment per spoken word onset
     neural="meg",                       # 306-ch MEG (MaxShield raw -> allow_maxshield=True)
-    imsize=16,                          # unused: stimulus is text, not image
+    stimulus="audio",
     start=0.0,
     duration=0.5,                       # 0.5 s epoch -> 50 samples @ 100 Hz
     download=False,                     # pre-downloaded at the path below (CC0, no gate)
     path="/home/t-ymehta/Research/neuralset/data/bel2026petitlisten_sample",
-    test_frac=0.2,
-    seed=0,
-)
+),
 ```
 
 > Stimulus = **text/audio** (language); neural = **MEG**. With NSD (fMRI/vision)
