@@ -19,8 +19,8 @@ SANDBOX="$RUN/proposers/$PNAME"
 
 # Per-dataset framing: the reward target + any output-dim cap (the ridge SVD limit at this dataset).
 case "$DATASET" in
-  nsd)  LABEL="NSD subject-1 ventral visual-stream fMRI";
-        CEIL="a trained ImageNet AlexNet (fc7) read out the same way scores ~0.284 on ventral; the noise ceiling is ~0.50. The TARGET for this search is test_corr >= 0.40 on the ventral stream -- well above AlexNet. Untrained models already match AlexNet in early/mid visual cortex; the open frontier is this high-level ventral stream"; CAP="";;
+  nsd)  LABEL="NSD subject-1 ventral visual-stream fMRI (prepared GLMdenoise betas)";
+        CEIL="the reward is the FINE-GRAINED ventral stream of NSD's prepared GLMdenoise betas (the standard NSD encoding target, ~8.6k voxels). The raw-pixel identity floor is ~0.08; the TARGET for this search is test_corr >= 0.40. A strong UNTRAINED computational model of the high-level ventral representation is the open frontier"; CAP="";;
   tvsd) LABEL="TVSD macaque IT spiking (monkey F)";  CEIL="split-half noise ceiling ~0.55-0.63; real headroom"; CAP="30000";;
   nnn)  LABEL="Triple-N macaque IT spiking";         CEIL="an untrained model already reaches ~0.23 on IT"; CAP="";;
   *)    LABEL="$DATASET";                             CEIL=""; CAP="";;
@@ -40,5 +40,8 @@ $(cat "$REPO/search/proposer.md")"
 export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET" NEURO_IMSIZE="$IMSIZE"
 cd "$SANDBOX"
 # No wall-clock here: the proposer stays alive for the whole run; the launcher owns the stop.
+# Confined to its OWN sandbox: --add-dir is ONLY the sandbox, so the agent cannot browse the repo
+# (docs/, harness source, other proposers). It still RUNS `python lab.py` / `import harness` via the
+# symlinks (OS resolves those for subprocesses regardless of the agent's path allow-list).
 exec copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
-     --add-dir "$SANDBOX" --add-dir "$REPO" -C "$SANDBOX"
+     --add-dir "$SANDBOX" -C "$SANDBOX"
