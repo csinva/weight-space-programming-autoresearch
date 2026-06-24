@@ -22,10 +22,10 @@ RUNS_ROOT = REPO_ROOT / "runs"
 
 # A proposer/run counts as "alive" if something happened this recently (seconds).
 ALIVE_WINDOW = 180.0
-# A proposer is "active" if it wrote to its log this recently (it writes constantly
-# while reasoning / running commands); in-flight models cover the GPU-eval wait, during
-# which the log can briefly go quiet (a single eval can take a few minutes).
-LOG_ACTIVE_WINDOW = 300.0
+# A proposer is "active" only while actively composing a proposal (it appends to its log
+# on every reasoning step / tool call). Once it submits a model it blocks waiting on the
+# evaluator -> idle. This window guards against brief pauses (e.g. a slow local command).
+LOG_ACTIVE_WINDOW = 180.0
 
 # our model.status -> CORAL StatusBadge vocabulary (improved is set per-row below)
 _STATUS_MAP = {"error": "crashed", "running": "active", "queued": "idle"}
@@ -227,14 +227,20 @@ def inflight_proposers(rd: Path) -> set[str]:
 def agent_activity(rd: Path, pid: str, run_alive: bool, inflight: set[str]) -> tuple[str, float]:
     """Accurate ``(status, last_activity_epoch)`` for one proposer.
 
-    ``active`` = currently working: it has an in-flight model (mid GPU-eval) OR it wrote to
-    its log within ``LOG_ACTIVE_WINDOW``. ``idle`` = alive run but this proposer looks
-    stalled (no in-flight model, log gone quiet). ``stopped`` = the whole search is down.
+    A proposer's loop is: compose a model -> submit it -> *block* waiting for its score ->
+    repeat. So:
+      - ``idle``   = blocked waiting on the evaluator (it has a queued/running model), or
+                     its log has gone quiet (stalled) — it is not doing work right now;
+      - ``active`` = actively composing its next proposal (no in-flight model and it wrote
+                     to its log within ``LOG_ACTIVE_WINDOW``);
+      - ``stopped``= the whole search is down.
     """
     log_mtime = proposer_log_mtime(rd, pid)
     if not run_alive:
         return "stopped", log_mtime
-    if pid in inflight or (log_mtime > 0 and (now() - log_mtime) < LOG_ACTIVE_WINDOW):
+    if pid in inflight:
+        return "idle", log_mtime  # submitted a model, waiting on its evaluation
+    if log_mtime > 0 and (now() - log_mtime) < LOG_ACTIVE_WINDOW:
         return "active", log_mtime
     return "idle", log_mtime
 
