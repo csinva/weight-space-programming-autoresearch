@@ -16,6 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
+dashboard = ["starlette>=0.37", "uvicorn>=0.30"]
 
 [tool.setuptools]
 py-modules = []
