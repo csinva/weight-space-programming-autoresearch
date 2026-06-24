@@ -101,6 +101,10 @@ class DBWatcher:
                     self._broadcast(
                         {"event": "eval:update", "data": {"count": new["scored"]}}
                     )
+                    # champions (Knowledge > Notes) change only when a model is scored
+                    self._broadcast(
+                        {"event": "note:update", "data": {"count": new["scored"]}}
+                    )
                 self._state = new
             except Exception:
                 pass  # transient DB error — keep the loop alive

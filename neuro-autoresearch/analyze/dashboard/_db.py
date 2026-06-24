@@ -140,6 +140,30 @@ def attempts_for(rd: Path) -> list[dict[str, Any]]:
     return out
 
 
+def list_proposers(rd: Path) -> list[str]:
+    """Proposer ids (``p00``, ``p01``, …) that have a sandbox in this run."""
+    pdir = rd / "proposers"
+    if not pdir.exists():
+        return []
+    return sorted(p.name for p in pdir.iterdir() if p.is_dir() and p.name.startswith("p"))
+
+
+def proposer_direction(rd: Path, pid: str) -> str:
+    """A proposer's self-chosen specialization (``direction.txt``), or ""."""
+    try:
+        return (rd / "proposers" / pid / "direction.txt").read_text().strip()
+    except OSError:
+        return ""
+
+
+def read_model_source(rd: Path, model_id: str) -> str:
+    """The never-trained ``models/<id>.py`` source, or "" if missing."""
+    try:
+        return (rd / "models" / f"{model_id}.py").read_text(errors="replace")
+    except OSError:
+        return ""
+
+
 def run_is_alive(rd: Path) -> bool:
     """Heuristic: a queued/running model, or any activity within ALIVE_WINDOW."""
     rows = fetch_models(rd)

@@ -209,11 +209,50 @@ async def switch_run(request: Request) -> JSONResponse:
 # --------------------------------------------------------------------------- stubs
 
 async def get_notes(request: Request) -> JSONResponse:
-    return JSONResponse([])
+    """Knowledge > Notes: the champion models (top by score), with their source."""
+    rd = _rd(request)
+    if rd is None:
+        return JSONResponse([])
+    scored = [a for a in _safe_attempts(rd) if a["score"] is not None]
+    scored.sort(key=lambda a: a["score"], reverse=True)
+    top = scored[:15]
+    top.reverse()  # frontend reverses within a category -> this shows best first
+    notes = []
+    for i, a in enumerate(top):
+        body = a["feedback"]
+        src = _db.read_model_source(rd, a["commit_hash"])
+        if src:
+            body += f"\n\n--- model.py ---\n{src}"
+        notes.append({
+            "date": (a["timestamp"] or "")[:10],
+            "title": a["title"],
+            "body": body,
+            "creator": a["agent_id"],
+            "relative_path": f"models/{a['commit_hash']}.py",
+            "category": "experiments",
+            "index": i,
+        })
+    return JSONResponse(notes)
 
 
 async def get_skills(request: Request) -> JSONResponse:
-    return JSONResponse([])
+    """Knowledge > Skills: each proposer's self-chosen search direction."""
+    rd = _rd(request)
+    if rd is None:
+        return JSONResponse([])
+    skills = []
+    for pid in _db.list_proposers(rd):
+        direction = _db.proposer_direction(rd, pid)
+        if not direction:
+            continue
+        skills.append({
+            "name": pid,
+            "description": direction,
+            "creator": pid,
+            "created": "",
+            "path": "",
+        })
+    return JSONResponse(skills)
 
 
 async def get_skill_detail(request: Request) -> JSONResponse:
