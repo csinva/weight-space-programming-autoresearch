@@ -11,6 +11,7 @@ the queue flag (queued -> running -> ok / error).
 """
 from __future__ import annotations
 
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -162,6 +163,37 @@ def read_model_source(rd: Path, model_id: str) -> str:
         return (rd / "models" / f"{model_id}.py").read_text(errors="replace")
     except OSError:
         return ""
+
+
+def direction_history(rd: Path) -> dict[str, list[str]]:
+    """Per-proposer history of standing directions, oldest first.
+
+    The conductor rewrites each ``direction.txt`` every epoch via
+    ``echo "<dir>" > .../pNN/direction.txt``; ``conductor.log`` is the only record of the
+    earlier ones. We reconstruct the rendered command lines and pull out each clean
+    (fully-quoted) direction; truncated log entries are simply skipped.
+    """
+    try:
+        log = (rd / "conductor.log").read_text(errors="replace")
+    except OSError:
+        return {}
+    # rejoin the rendered "  │ " command-body wrap so each echo is on one logical line
+    cleaned = re.sub(r"\n\s*│\s?", " ", log)
+    hist: dict[str, list[str]] = {}
+    for m in re.finditer(
+        r'echo "(.*?)"\s*>\s*"?\$?[^"]*?/(p\d\d)/direction\.txt', cleaned
+    ):
+        hist.setdefault(m.group(2), []).append(m.group(1).strip())
+    return hist
+
+
+def previous_direction(history: list[str], current: str) -> str:
+    """The most recent direction that differs from ``current`` (the prior front), or ""."""
+    cur = current.strip()
+    for d in reversed(history):
+        if d.strip() != cur:
+            return d
+    return ""
 
 
 def run_is_alive(rd: Path) -> bool:

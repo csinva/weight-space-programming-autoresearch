@@ -127,6 +127,7 @@ async def get_status(request: Request) -> JSONResponse:
     for a in attempts:
         by_agent[a["agent_id"]].append(a)
 
+    history = _db.direction_history(rd) if rd else {}
     agent_statuses = []
     for aid, agent_attempts in sorted(by_agent.items()):
         last_ts = max(_db.parse_ts(a["timestamp"]) for a in agent_attempts)
@@ -137,6 +138,7 @@ async def get_status(request: Request) -> JSONResponse:
             status = "active"
         else:
             status = "idle"
+        direction = _db.proposer_direction(rd, aid) if rd else ""
         agent_statuses.append({
             "agent_id": aid,
             "status": status,
@@ -144,6 +146,8 @@ async def get_status(request: Request) -> JSONResponse:
             "last_activity": last_ts,
             "attempts": len(agent_attempts),
             "best_score": max(agent_scored) if agent_scored else None,
+            "direction": direction,
+            "prev_direction": _db.previous_direction(history.get(aid, []), direction),
         })
 
     return JSONResponse({
