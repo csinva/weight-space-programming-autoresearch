@@ -22,6 +22,10 @@ RUNS_ROOT = REPO_ROOT / "runs"
 
 # A proposer/run counts as "alive" if something happened this recently (seconds).
 ALIVE_WINDOW = 180.0
+# A proposer is "active" if it wrote to its log this recently (it writes constantly
+# while reasoning / running commands); in-flight models cover the GPU-eval wait, during
+# which the log can briefly go quiet (a single eval can take a few minutes).
+LOG_ACTIVE_WINDOW = 300.0
 
 # our model.status -> CORAL StatusBadge vocabulary (improved is set per-row below)
 _STATUS_MAP = {"error": "crashed", "running": "active", "queued": "idle"}
@@ -196,10 +200,62 @@ def previous_direction(history: list[str], current: str) -> str:
     return ""
 
 
+def proposer_log_mtime(rd: Path, pid: str) -> float:
+    """Epoch mtime of a proposer's ``proposer.log`` (how recently it did anything); 0 if none.
+
+    This is the ground-truth activity signal: a running proposer appends to its log on
+    every reasoning step and tool call, so a fresh mtime means the process is working.
+    """
+    try:
+        return (rd / "proposers" / pid / "proposer.log").stat().st_mtime
+    except OSError:
+        return 0.0
+
+
+def inflight_proposers(rd: Path) -> set[str]:
+    """Proposers that have a model queued or running (i.e. waiting on the GPU evaluator)."""
+    try:
+        with connect(rd) as c:
+            rows = c.execute(
+                "SELECT DISTINCT proposer FROM models WHERE status IN ('queued', 'running')"
+            ).fetchall()
+        return {r[0] for r in rows if r[0]}
+    except Exception:
+        return set()
+
+
+def agent_activity(rd: Path, pid: str, run_alive: bool, inflight: set[str]) -> tuple[str, float]:
+    """Accurate ``(status, last_activity_epoch)`` for one proposer.
+
+    ``active`` = currently working: it has an in-flight model (mid GPU-eval) OR it wrote to
+    its log within ``LOG_ACTIVE_WINDOW``. ``idle`` = alive run but this proposer looks
+    stalled (no in-flight model, log gone quiet). ``stopped`` = the whole search is down.
+    """
+    log_mtime = proposer_log_mtime(rd, pid)
+    if not run_alive:
+        return "stopped", log_mtime
+    if pid in inflight or (log_mtime > 0 and (now() - log_mtime) < LOG_ACTIVE_WINDOW):
+        return "active", log_mtime
+    return "idle", log_mtime
+
+
 def run_is_alive(rd: Path) -> bool:
-    """Heuristic: a queued/running model, or any activity within ALIVE_WINDOW."""
-    rows = fetch_models(rd)
+    """Alive if a model is in-flight, a model was scored recently, or any proposer log is fresh."""
+    try:
+        rows = fetch_models(rd)
+    except Exception:
+        rows = []
     if any((r.get("status") or "") in ("queued", "running") for r in rows):
         return True
-    latest = max((parse_ts(r.get("created_at")) for r in rows), default=0.0)
-    return latest > 0 and (now() - latest) < ALIVE_WINDOW
+    latest_model = max((parse_ts(r.get("created_at")) for r in rows), default=0.0)
+    if latest_model and (now() - latest_model) < ALIVE_WINDOW:
+        return True
+    pdir = rd / "proposers"
+    if pdir.exists():
+        for p in pdir.iterdir():
+            try:
+                if (now() - (p / "proposer.log").stat().st_mtime) < LOG_ACTIVE_WINDOW:
+                    return True
+            except OSError:
+                pass
+    return False

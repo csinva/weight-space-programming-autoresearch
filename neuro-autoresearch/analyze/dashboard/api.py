@@ -128,22 +128,17 @@ async def get_status(request: Request) -> JSONResponse:
         by_agent[a["agent_id"]].append(a)
 
     history = _db.direction_history(rd) if rd else {}
+    inflight = _db.inflight_proposers(rd) if rd else set()
     agent_statuses = []
     for aid, agent_attempts in sorted(by_agent.items()):
-        last_ts = max(_db.parse_ts(a["timestamp"]) for a in agent_attempts)
         agent_scored = [a["score"] for a in agent_attempts if a["score"] is not None]
-        if not alive:
-            status = "stopped"
-        elif (_db.now() - last_ts) < _db.ALIVE_WINDOW:
-            status = "active"
-        else:
-            status = "idle"
+        status, last_activity = _db.agent_activity(rd, aid, alive, inflight)
         direction = _db.proposer_direction(rd, aid) if rd else ""
         agent_statuses.append({
             "agent_id": aid,
             "status": status,
             "sessions": 1,
-            "last_activity": last_ts,
+            "last_activity": last_activity,
             "attempts": len(agent_attempts),
             "best_score": max(agent_scored) if agent_scored else None,
             "direction": direction,
