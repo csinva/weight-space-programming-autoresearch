@@ -10,10 +10,9 @@ A run lives at ``runs/<dataset>__<date>/`` and is the unit of one open-ended sea
         eval/                # the single GPU evaluator's sandbox
 
 Each *sandbox* is a runnable workspace: relative symlinks to the FIXED ``harness/`` package and
-``lab.py`` (so ``import harness`` / ``import lab`` resolve), a local editable ``model.py`` +
-``experiment.py``, a ``scratch/`` for the agent, and a ``results/`` dir (where ``harness.run``
-writes its per-eval CSV). Nothing is copied that should be shared -- the DB and the model archive
-live once at the run root.
+``lab.py`` (so ``import harness`` / ``import lab`` resolve), a local editable ``model.py`` seeded
+from the repo-root baseline model.py, and a ``scratch/`` for the agent. Nothing is copied that
+should be shared -- the DB and the model archive live once at the run root.
 
     python scripts/setup_run.py <dataset> [--date YYYY-MM-DD] [--n 10]
 """
@@ -27,39 +26,12 @@ from datetime import datetime, timezone
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SANDBOX_SYMLINKS = ["harness", "lab.py"]          # FIXED code, imported (never copied)
-SANDBOX_DIRS = ["scratch", "results"]             # agent scratch + harness.run's CSV output
-
-# Each proposer sandbox starts from this IDENTITY model -- the representation IS the raw
-# flattened stimulus -- so every proposer begins at the raw-pixel floor and diverges on its own
-# (they do NOT inherit a champion). The agent rewrites this file each iteration.
-IDENTITY_MODEL = '''# idea: identity baseline (raw pixels)
-"""Identity seed: the representation IS the raw flattened stimulus. Every proposer starts here
-and diverges -- the raw-pixel floor the search must climb above (toward the ventral stream)."""
-from __future__ import annotations
-
-import torch
-
-
-class Model:
-    name = "identity"
-    idea = "Identity baseline: the representation is the raw input pixels, no transform."
-    summary = ("Returns the stimulus X unchanged as the representation -- the untrained, "
-               "per-sample starting point each proposer evolves away from.")
-    n_params = 0
-
-    @torch.no_grad()
-    def __call__(self, X):
-        if not torch.is_tensor(X):
-            X = torch.as_tensor(X)
-        return X.float()
-
-
-MODEL = Model()
-'''
 
 
 def make_sandbox(path: str, repo_root: str = REPO) -> str:
-    """Create one runnable sandbox at ``path`` (symlinked harness/lab + an IDENTITY model.py)."""
+    """Create one runnable sandbox at ``path``: symlinked harness/lab, a seed ``model.py`` copied
+    from the repo-root baseline model.py, and a ``scratch/`` dir. Idempotent (a resumed run keeps
+    each proposer's evolved model.py)."""
     os.makedirs(path, exist_ok=True)
     for name in SANDBOX_SYMLINKS:
         src = os.path.join(repo_root, name)
@@ -69,14 +41,9 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
         if not os.path.islink(link) and not os.path.exists(link):
             os.symlink(os.path.relpath(src, path), link)
     model_py = os.path.join(path, "model.py")
-    if not os.path.exists(model_py):                       # seed identity (don't clobber a resumed run)
-        with open(model_py, "w") as f:
-            f.write(IDENTITY_MODEL)
-    exp = os.path.join(path, "experiment.py")              # harness.run imports it (vestigial stub)
-    if not os.path.exists(exp):
-        shutil.copy2(os.path.join(repo_root, "experiment.py"), exp)
-    for name in SANDBOX_DIRS:
-        os.makedirs(os.path.join(path, name), exist_ok=True)
+    if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
+        shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
+    os.makedirs(os.path.join(path, "scratch"), exist_ok=True)
     return path
 
 

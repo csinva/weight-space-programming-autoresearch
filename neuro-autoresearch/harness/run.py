@@ -9,18 +9,16 @@ Loads the active dataset split ONCE (the slow step), then evaluates the model in
 run = one model = one iteration (the append-only ``iteration`` column counts the
 models tried across runs). A model that raises or returns a bad shape does not crash
 the run: it is recorded as a ``status='error'`` row (NaN reward) and the run exits
-cleanly. The active dataset is chosen by ``NEURO_DATASET`` (see
-``harness/datasets.py``); the run-config (``LOG_SLICES``) lives in ``experiment.py``.
+cleanly. The active dataset is chosen by ``NEURO_DATASET`` (see ``harness/datasets.py``).
 The agent should NOT edit this file.
 """
 from __future__ import annotations
 
 import time
 
-from experiment import LOG_SLICES
 from model import MODEL
 from harness.datasets import DATASET
-from harness.data import load_split
+from harness.loaders import load_split
 from harness.reward import evaluate_on_split_safe
 from harness.results import save_results
 
@@ -45,7 +43,7 @@ def main() -> None:
               f"{'test_corr':>9}  {'sec':>5}")
     print(header)
     print("-" * len(header))
-    row = evaluate_on_split_safe(MODEL, split, DATASET, LOG_SLICES)
+    row = evaluate_on_split_safe(MODEL, split, DATASET)
     save_results(row)
     _print_row(row)
     if row["status"] != "ok":
