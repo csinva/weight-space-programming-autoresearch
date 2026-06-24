@@ -17,18 +17,18 @@ Skim, don't dump. Form a quick read of: where the pool is clustered, which APPRO
 idea) are crowded vs untried, and whether scores are stalling.
 
 ## Then steer -- BROAD directions, not recipes
-Write each proposer's direction as ONE line into its sandbox file:
+Steer EVERY proposer slot in the fleet (p00..pNN). Write each one's direction as ONE line into its
+sandbox file:
   `echo "<one short broad direction>" > "$LAB_RUN/proposers/p00/direction.txt"`
 Rules that keep this useful:
-- BROAD, not specific. Name a DIRECTION or family to explore, NOT an architecture, layer count,
-  kernel size, or feature list. Good: "push multi-scale wavelet / scattering fronts". Bad: "use a
-  3-layer conv with k=7 and divnorm sigma 1.2". The proposer invents the details.
+- BROAD and VAGUE, never specific. Name only a DIRECTION or family to explore -- NOT an
+  architecture, layer count, kernel size, normalization, or feature list. Good: "push multi-scale
+  wavelet / scattering fronts". Bad: "use a 3-layer conv with k=7 and divnorm sigma 1.2". The
+  proposer invents ALL the details; you only point at a region of the space.
 - DIVERSE across slots. Spread the pool over DIFFERENT families so they stop crowding one recipe.
   If everyone is on the same idea, deliberately scatter them.
 - A few words each. One line. If a direction is working, you may keep it; if a family is exhausted,
   redirect it elsewhere.
-- Leave the LAST TWO slots (`p08`, `p09`) UNSTEERED -- do not write their files; they are a free
-  exploration reservoir. (Adjust the count to the fleet: always leave ~2 slots free.)
 
 Finally, print ONE short paragraph: where the pool stands and the gist of how you redirected it.
 Then exit -- the loop will wake you again next epoch.
