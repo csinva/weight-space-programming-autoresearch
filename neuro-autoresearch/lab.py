@@ -40,6 +40,7 @@ CLI (what a headless agent calls without writing Python)::
     python lab.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
     python lab.py summary                                   # launcher: one-line tally + champion
     python lab.py requeue                                   # evaluator startup crash recovery
+    python lab.py migrate                                   # bring an old search.db to the current schema
 
 The evaluator and setup use the Python API directly (``init`` / ``get_next_model`` / ``record`` /
 ``score``); those are not exposed as CLI verbs.
@@ -49,6 +50,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import re
 import secrets
 import shutil
 import sqlite3
@@ -60,9 +63,13 @@ from datetime import datetime, timezone
 # --------------------------------------------------------------------------- schema
 # One row per model; it is BOTH the full history AND the live queue. No ROI, no per-region
 # corr_* columns, no wave/iter -- the reward is a single dataset-level ``test_corr``.
+# Two proposer-owned complexity fields travel with each model: ``n_params`` (the model's declared
+# count of hard-coded / random-but-fixed weights) and ``model_loc`` (lines of code defining the
+# model -- a proxy for how elaborate it is). Both are captured from the proposed model.py at propose
+# time; ``n_params`` is also refreshed from the live model attribute when the evaluator scores it.
 NUM = ("test_corr", "train_corr", "gap", "n_params", "seconds")
 COLS = ("id", "idea", "summary", "proposer", "dataset", "status",
-        "test_corr", "train_corr", "gap", "n_params", "seconds", "created_at", "path")
+        "test_corr", "train_corr", "gap", "n_params", "model_loc", "seconds", "created_at", "path")
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
@@ -107,9 +114,64 @@ def connect(run: str | None = None) -> sqlite3.Connection:
 
 
 def _coltype(c: str) -> str:
-    if c == "n_params":
+    if c in ("n_params", "model_loc"):
         return "INTEGER"
     return "REAL" if c in NUM else "TEXT"
+
+
+def _count_loc(text: str) -> int:
+    """Lines of code in a model source: non-blank, non-comment lines."""
+    n = 0
+    for line in text.splitlines():
+        s = line.strip()
+        if s and not s.startswith("#"):
+            n += 1
+    return n
+
+
+_ATTR_RE = {
+    "n_params": re.compile(r"^\s*n_params\s*=\s*([0-9_]+)\s*(?:#.*)?$", re.M),
+    "model_loc": re.compile(r"^\s*model_loc\s*=\s*([0-9_]+)\s*(?:#.*)?$", re.M),
+}
+
+
+def model_complexity(path: str) -> dict:
+    """The proposer-owned complexity fields for a proposed model, read from its source:
+
+    - ``n_params``  -- the model's declared ``n_params = <int>`` class attribute (the agent's honest
+      count of hard-coded / random-but-fixed weights), or ``None`` if not a plain literal (the
+      evaluator will still capture the live ``model.n_params`` when it scores it);
+    - ``model_loc`` -- the model's declared ``model_loc = <int>`` if present, else the objective
+      line count of the source (so the field is always populated).
+
+    This is a static read (no import / no torch), keeping ``propose`` light."""
+    try:
+        with open(path, encoding="utf-8", errors="replace") as f:
+            text = f.read()
+    except (OSError, TypeError):
+        return {"n_params": None, "model_loc": None}
+
+    def declared(name):
+        m = _ATTR_RE[name].search(text)
+        return int(m.group(1).replace("_", "")) if m else None
+
+    return {"n_params": declared("n_params"),
+            "model_loc": declared("model_loc") if declared("model_loc") is not None else _count_loc(text)}
+
+
+def _migrate(con: sqlite3.Connection) -> None:
+    """Bring an older ``models`` table to the current schema (idempotent). Renames the legacy
+    ``sloc`` column to ``model_loc`` if present (preserving its data), then adds any still-missing
+    columns from ``COLS``."""
+    existing = {r[1] for r in con.execute("PRAGMA table_info(models)")}
+    if not existing:
+        return
+    if "sloc" in existing and "model_loc" not in existing:
+        con.execute("ALTER TABLE models RENAME COLUMN sloc TO model_loc")
+        existing.discard("sloc"); existing.add("model_loc")
+    for c in COLS:
+        if c not in existing:
+            con.execute(f"ALTER TABLE models ADD COLUMN {c} {_coltype(c)}")
 
 
 def init(run: str | None = None) -> str:
@@ -119,6 +181,7 @@ def init(run: str | None = None) -> str:
     defs = ", ".join(("id TEXT PRIMARY KEY" if c == "id" else f"{c} {_coltype(c)}") for c in COLS)
     with connect(run) as con:
         con.execute(f"CREATE TABLE IF NOT EXISTS models ({defs})")
+        _migrate(con)
     return run
 
 
@@ -180,14 +243,17 @@ def propose(model_file: str, idea: str = "", summary: str = "",
         mid = newid(run)
         dst = os.path.join(models_dir(run), f"{mid}.py")
         shutil.copyfile(model_file, dst)
+        cx = model_complexity(dst)            # proposer-owned complexity, read from the model source
         row = {
             "id": mid, "idea": (idea or "")[:500], "summary": (summary or "")[:1000],
             "proposer": proposer, "dataset": dataset, "status": "queued",
-            "test_corr": None, "train_corr": None, "gap": None, "n_params": None,
+            "test_corr": None, "train_corr": None, "gap": None,
+            "n_params": cx["n_params"], "model_loc": cx["model_loc"],
             "seconds": None, "created_at": _now(), "path": os.path.abspath(dst),
         }
         try:
             with connect(run) as con:
+                _migrate(con)                 # self-heal an older DB missing newer columns
                 con.execute(f"INSERT INTO models ({','.join(COLS)}) "
                             f"VALUES ({','.join('?' * len(COLS))})", [row[c] for c in COLS])
             return mid
@@ -301,6 +367,31 @@ def requeue_orphans(run: str | None = None) -> int:
         return con.execute("UPDATE models SET status='queued' WHERE status='running'").rowcount
 
 
+def migrate(run: str | None = None) -> int:
+    """Bring an older ``search.db`` up to the current schema: add missing columns, then BACKFILL
+    the proposer-owned complexity fields (``model_loc`` always; ``n_params`` where the archived
+    model.py declares one) for rows that predate them. Returns the number of rows touched. Safe to
+    re-run (only fills rows still missing the value)."""
+    run = _ensure(run)
+    with connect(run) as con:
+        _migrate(con)
+        touched = 0
+        rows = con.execute(
+            "SELECT id, path, n_params, model_loc FROM models WHERE path IS NOT NULL "
+            "AND (model_loc IS NULL OR n_params IS NULL)").fetchall()
+        for r in rows:
+            cx = model_complexity(r["path"])
+            sets, vals = [], []
+            if r["model_loc"] is None and cx["model_loc"] is not None:
+                sets.append("model_loc=?"); vals.append(cx["model_loc"])
+            if r["n_params"] is None and cx["n_params"] is not None:
+                sets.append("n_params=?"); vals.append(cx["n_params"])
+            if sets:
+                con.execute(f"UPDATE models SET {', '.join(sets)} WHERE id=?", vals + [r["id"]])
+                touched += 1
+    return touched
+
+
 # --------------------------------------------------------------------------- launcher: DB summary
 def summary(run: str | None = None) -> str:
     """One-line DB tally + current champion, for the launcher's startup/shutdown log."""
@@ -399,6 +490,7 @@ def main(argv=None):
     add("get-code", lambda a: get_source(a.id)).add_argument("id")
     add("query-db", lambda a: query(a.sql), json_out=True).add_argument("sql")
     add("requeue", lambda a: requeue_orphans())
+    add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")
     add("summary", lambda a: summary())
     sub.add_parser("_score_child").add_argument("model_file")  # internal: scores in a subprocess
 

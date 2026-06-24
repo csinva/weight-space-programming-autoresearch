@@ -1,88 +1,72 @@
-# `analyze/` — run report builder
+# `analyze/` — search report builder
 
-Turns autoresearch run outputs into a single self-contained, interactive,
-white-background HTML report. Inspired by the `analyze/` layer in
-[csinva/circuit-building-autoresearch](https://github.com/csinva).
+Turns the proposer-pool search DBs into a single self-contained, interactive,
+white-background HTML report.
 
 ## Usage
 
 ```bash
-python analyze/build_report.py [--runs-dir runs] [--repo-root .] [--out analyze/report.html]
-python analyze/build_report.py --runs-only --out docs/index.html   # the hosted page
+python analyze/report.py                       # every runs/*/search.db -> analyze/report.html
+python analyze/report.py --run runs/nsd__2026-06-24   # just one run
+python analyze/report.py --out docs/index.html -k 6 --top-src 5
 ```
 
-Open the resulting HTML in any browser — it has no external dependencies (CSS, JS and
-the vendored Plotly cartesian bundle are inlined once, and every chart is rendered
-from inline Plotly specs). `--runs-only` ignores the stray repo-root `results/`
-ledger so the page shows only the per-run search under `runs/`.
+`-k` sets how many champion cards to render per run; `--top-src` sets how many of each proposer's
+top models embed expandable source in the explorer (the rest list idea + score only, to keep the
+file small).
+
+The output HTML has no external dependencies — the shared CSS (`assets/report.css`) and the
+vendored Plotly cartesian bundle (`vendor/plotly-cartesian.min.js`) are inlined, every chart is an
+inline Plotly spec, and the only scripting is a few lines of vanilla JS for the explorer tabs and
+the log filter. Open it in any browser; the gitignored `runs/` data is not needed to view it.
 
 ## What it reads
 
-- Per-study append-only CSVs at `runs/<tag>/results/<study>.csv` and the repo-root
-  `results/<study>.csv`. The schema is the harness ledger:
+Each search run is a `runs/<dataset>__<date>/` directory:
 
-  ```
-  iteration,timestamp,study,model_name,idea,summary,n_params,n_train,n_test,n_targets,
-  test_corr,train_corr,gap,best_so_far,seconds,status
-  ```
+```
+search.db                      one row per model: id, idea, summary, proposer, dataset,
+                               status, test_corr, train_corr, gap, n_params, model_loc,
+                               seconds, created_at, path
+models/<id>.py                 the immutable, never-trained source for each row
+proposers/pNN/direction.txt    that proposer's self-chosen specialization (one line)
+proposers/pNN/proposer.log     its full agent trace — reasoning + the commands it ran
+```
 
-  followed by any optional `corr_<slice>` columns.
-- Optional `runs/<tag>/metadata.json` (e.g. `{"dataset","model","effort","note"}`)
-  used to label a run; otherwise the report falls back to the tag and the `study`
-  column.
+`status='ok'` rows with a `test_corr` are the scored models (the reward is the dataset's
+fixed-region held-out `test_corr`). Rows that are `queued`/`running`/`error` are excluded from the
+plots but counted in the header. Two **proposer-owned complexity fields** travel with each model and
+are written to the DB at propose time (this report only reads them — it does not recompute):
+`n_params` (the model's declared count of hard-coded / random-but-fixed weights, 0 for a genuinely
+parameter-free transform) and `model_loc` (lines of code defining the model, a proxy for how
+elaborate it is). The live dimension is `proposer`: ten headless agents searching the SAME space in
+parallel, each chasing a different front.
 
 ## What it produces
 
-- **What the search found** — a written synthesis: the early-visual front-end the search
-  rediscovered in every region (Gabor complex-cell energy + colour opponency + log
-  compression + divisive normalization), the region-specific elaborations, and the key
-  findings (V1 is most predictable; every region's best model still predicts V1 best;
-  parity with frozen AlexNet on early areas).
-- **Computational principles** — a bar chart attributing the cumulative `best_so_far`
-  gain to each principle family (Gabor energy, divisive norm, opponency, multiscale,
-  scattering, texture stats, random features, pooling), with prose on what each computes.
-- **The search process** — a four-panel dashboard from `iteration` / `seconds` /
-  `n_params` / gap: reward vs wall-clock (efficiency), reward vs model size (complexity
-  rarely pays), the train–test gap, and compute spent per run.
-- **Cross-region predictivity** — a heatmap of each run's best model scored against every
-  NSD region (`corr_<region>`), exposing how V1-like the learned features remain.
-- **Model mechanics** — one card per run for the model it found: its idea, what it
-  computes, its cross-region profile, and the full (untrained) source, ordered by reward.
-- **Top summary** — every run's reward (`test_corr`) vs iteration, one line per run,
-  faceted by dataset (`study`).
-- **Per-run trajectories** — `test_corr` and `train_corr` vs iteration with a
-  running-max line and `n_params` on a secondary axis, plus a writeup of which ideas
-  raised `best_so_far` (each annotated with its gain, wall-clock, and parameter count).
-- The large append-only attempts table is intentionally omitted from the human report;
-  failures and exclusions are summarized in the overview and per-run blocks.
+For each run:
+
+- **Header** — the run tally (proposed / scored / errors), proposer count, and the champion.
+- **The search trajectory** — every scored model in proposal order, coloured by the agent that
+  proposed it, with the running-best line. Click a proposer in the legend to isolate it.
+- **What each proposer is exploring** — a roster card per agent: its `direction`, its best/mean/
+  count, and a running-best sparkline. Click a card to jump into that agent below.
+- **When the search happened** — an activity timeline: every scored model as a dot on its agent's
+  lane over wall-clock, coloured by reward, so you can watch the parallel pool unfold.
+- **Does complexity or overfit pay?** — reward vs `model_loc` (model code size — capacity is rarely
+  the lever, but more elaborate models tend to score higher) and `train_corr` vs `test_corr` (the
+  generalization gap).
+- **Proposer explorer** — the toggle: a tab per agent. The selected panel shows the agent's
+  direction, every model it proposed (idea + score, the top few expanding to full source), and its
+  **activity log rendered as a filterable timeline** — reasoning prose interleaved with collapsible
+  tool calls — so you can read exactly what each agent did and why.
+- **Champion models** — the highest-reward models across the run, with full never-trained source.
 
 ## Hosting on GitHub Pages
 
-The page is committed to `docs/index.html` and served by GitHub Pages from the `/docs`
-folder of the default branch (Settings → Pages → *Deploy from a branch* → `main` `/docs`,
-or `gh api`). The HTML is fully self-contained, so the gitignored `runs/` data is not
-needed to view it. Regenerate and commit after new runs:
+The HTML is fully self-contained, so it can be committed and served from `/docs`:
 
 ```bash
-python analyze/build_report.py --runs-only --out docs/index.html
+python analyze/report.py --out docs/index.html
 git add docs/index.html && git commit -m "docs: refresh report"
 ```
-
-### Excluded rows
-
-Rows whose `status` is not `ok`, or whose `idea` mentions training, are **flagged and
-excluded** from the plots and the writeup — the proposed model is never trained, so
-training-based attempts are not valid scores (parity with the reference, which
-excludes trained models). Failure and exclusion counts remain visible in the overview
-and per-run blocks.
-
-## Test
-
-```bash
-python tests/test_build_report.py      # standalone
-pytest tests/test_build_report.py      # or via pytest
-```
-
-The test builds a synthetic fixture (a couple of `runs/<tag>/results/<study>.csv`,
-one with `metadata.json`, one with an excluded row) and asserts the HTML is produced
-with the expected Plotly charts and labels.

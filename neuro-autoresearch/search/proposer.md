@@ -43,6 +43,17 @@ pass over `N` under `torch.no_grad()` to bound GPU memory. **Keep the output wid
 -- a wider representation is rejected by the ridge readout (recorded as an error). Make the FIRST
 line `# idea: <label>`.
 
+Two complexity fields travel with YOUR model into the shared DB -- set them HONESTLY so the pool
+(and the analysis) can see what each idea costs:
+- `n_params` -- your model's own count of hard-coded / random-but-fixed weights (the size of every
+  fixed seeded tensor your forward pass materialises). It is **0 only for a genuinely
+  parameter-free transform**; a model that builds random conv banks or projection matrices should
+  report their real element count, not 0. (`lab` reads this attribute at propose time AND when the
+  evaluator scores your model.)
+- `model_loc` -- lines of code defining the model, a proxy for how elaborate it is. `lab` counts
+  this automatically from your `model.py` at propose time; you do not maintain it (declare an
+  explicit `model_loc = <int>` attribute only if you want to override the count).
+
 ## THE TWO HARD RULES (they make the held-out reward REAL; everything else is unconstrained)
 1. UNTRAINED: every weight is analytic or random-but-fixed (fixed seeds). NEVER fit weights to data
    and NEVER read the neural target. (Only the harness ridge readout is fit -- that is the eval.)
