@@ -7,9 +7,9 @@ explore within it. This is a single pass -- do your analysis, write the directio
 
 ## Read the board (everything is via `python lab.py`, run from the repo root)
 - `python lab.py summary`            -- tally + current champion
-- `python lab.py champions -n 8`     -- the best models, WITH source
-- `python lab.py sample -n 8`        -- random prior models (idea + score)
-- `python lab.py query "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"`
+- `python lab.py top-models -n 8`    -- the best models, WITH source
+- `python lab.py random-models -n 8` -- random prior models (idea + score)
+- `python lab.py query-db "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"`
 - `cat runs/*/proposers/p*/direction.txt` (or `$LAB_RUN/proposers/p*/direction.txt`) -- the
   directions you set last epoch
 

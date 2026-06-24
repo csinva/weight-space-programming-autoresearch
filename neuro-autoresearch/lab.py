@@ -31,17 +31,18 @@ Which run this process targets is the dir in ``$LAB_RUN`` (else: walk up from cw
 
 CLI (what a headless agent calls without writing Python)::
 
-    python lab.py init
-    python lab.py propose <model_file> --idea "..."     # -> prints the new id
-    python lab.py wait <id>                              # block; prints the scored row as JSON
-    python lab.py champions [-n 5]                       # ranked best, WITH source
-    python lab.py sample    [-n 5] [--seed S]            # random prior models
-    python lab.py get       <id>                         # one model: row + source
-    python lab.py query     "SELECT ..."                # read-only arbitrary SQL -> JSON
-    python lab.py newid
-    python lab.py next                                   # evaluator: claim next queued -> JSON
-    python lab.py record    <id> --status ok --test-corr .. [--train-corr ..] [...]
-    python lab.py requeue                                # evaluator startup crash recovery
+    python lab.py propose-model <model_file> --idea "..."  # -> prints the new id
+    python lab.py wait-for-score <id>                       # block; prints the scored row as JSON
+    python lab.py top-models [-n 5]                         # ranked best, WITH source
+    python lab.py random-models [-n 5] [--seed S]           # random prior models
+    python lab.py get-model <id>                            # one model: row + source as JSON
+    python lab.py get-code  <id>                            # just that model's raw model.py source
+    python lab.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
+    python lab.py summary                                   # launcher: one-line tally + champion
+    python lab.py requeue                                   # evaluator startup crash recovery
+
+The evaluator and setup use the Python API directly (``init`` / ``get_next_model`` / ``record`` /
+``score``); those are not exposed as CLI verbs.
 """
 from __future__ import annotations
 
@@ -167,12 +168,9 @@ def newid(run: str | None = None) -> str:
 # --------------------------------------------------------------------------- proposer: write + sync
 def propose(model_file: str, idea: str = "", summary: str = "",
             proposer: str | None = None, run: str | None = None) -> str:
-    """Register a new model: snapshot ``model_file`` into ``models/<id>.py`` (immutable) and insert
-    one ``queued`` row. Returns the new id. This is a proposer's only DB write.
-
-    The snapshot is what the evaluator scores, so the proposer is free to keep editing its own
-    working ``model.py`` for the next attempt the instant this returns.
-    """
+    """Register a new model: snapshot ``model_file`` into ``models/<id>.py`` (immutable) + insert one
+    ``queued`` row; return the id. A proposer's only DB write -- it can edit its working ``model.py``
+    for the next attempt the instant this returns (the snapshot is what gets scored)."""
     run = _ensure(run)
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
@@ -199,26 +197,19 @@ def propose(model_file: str, idea: str = "", summary: str = "",
     raise RuntimeError("could not insert a queued row (repeated id collisions)")
 
 
-def get_result(mid: str, run: str | None = None) -> dict | None:
-    """The row for ``mid``, or ``None`` if unknown. Use to check status without blocking."""
-    with connect(_ensure(run)) as con:
-        r = con.execute("SELECT * FROM models WHERE id=?", (mid,)).fetchone()
-    return dict(r) if r else None
-
-
 def wait_for_result(mid: str, poll: float = _POLL, timeout: float | None = None,
                     run: str | None = None) -> dict:
-    """BLOCK until model ``mid`` is scored (status ``ok``/``error``); return its row.
-
-    This is the proposer's self-pacing primitive: it only waits for ITS OWN model, never for the
-    pool. Raises ``KeyError`` if the id is unknown, ``TimeoutError`` if ``timeout`` elapses first.
-    """
+    """BLOCK until model ``mid`` is scored (status ``ok``/``error``); return its row. The proposer's
+    self-pacing primitive -- waits only for ITS OWN model, never the pool. Raises ``KeyError`` if the
+    id is unknown, ``TimeoutError`` if ``timeout`` elapses first."""
     run = _ensure(run)
     deadline = None if timeout is None else time.time() + timeout
     while True:
-        row = get_result(mid, run)
-        if row is None:
+        with connect(run) as con:
+            r = con.execute("SELECT * FROM models WHERE id=?", (mid,)).fetchone()
+        if r is None:
             raise KeyError(f"no such model {mid!r}")
+        row = dict(r)
         if row["status"] in ("ok", "error"):
             return row
         if deadline is not None and time.time() >= deadline:
@@ -257,6 +248,13 @@ def get_model(mid: str, run: str | None = None) -> dict | None:
     row = dict(r)
     row["code"] = _read_source(row.get("path"))
     return row
+
+
+def get_source(mid: str, run: str | None = None) -> str:
+    """Just the model's ``model.py`` source by id (empty string if unknown) -- the raw code to build
+    on, without the surrounding row JSON. Saves agents the get + JSON-extract dance."""
+    row = get_model(mid, run)
+    return row["code"] if row else ""
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
@@ -319,13 +317,10 @@ def summary(run: str | None = None) -> str:
 
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
 def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> dict:
-    """Score one model file with the FIXED harness, in a subprocess (isolation against CUDA
-    faults). Returns ``{status, test_corr, train_corr, gap, n_params, seconds}``. Never raises on
-    a model fault -- a crash/timeout becomes ``status='error'``.
-
-    Reward is the dataset's fixed-region ``test_corr`` (NSD: the ventral stream); there is no
-    operator ROI knob.
-    """
+    """Score one model file with the FIXED harness in a subprocess (isolation against CUDA faults).
+    Returns ``{status, test_corr, train_corr, gap, n_params, seconds}``; never raises on a model
+    fault -- a crash/timeout becomes ``status='error'``. Reward is the dataset's fixed-region
+    ``test_corr`` (NSD: the ventral stream); no operator ROI knob."""
     import subprocess
     import tempfile
     repo = os.path.dirname(os.path.abspath(__file__))
@@ -386,52 +381,32 @@ def _print(obj):
 def main(argv=None):
     p = argparse.ArgumentParser(description="lab -- the search-run API (see module docstring).")
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("init")
-    sp = sub.add_parser("propose"); sp.add_argument("model_file")
-    sp.add_argument("--idea", default=""); sp.add_argument("--summary", default="")
-    sp.add_argument("--proposer", default=None)
-    sp = sub.add_parser("wait"); sp.add_argument("id"); sp.add_argument("--timeout", type=float, default=None)
-    sp = sub.add_parser("champions"); sp.add_argument("-n", type=int, default=5)
-    sp = sub.add_parser("sample"); sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
-    sp = sub.add_parser("get"); sp.add_argument("id")
-    sp = sub.add_parser("query"); sp.add_argument("sql")
-    sub.add_parser("newid")
-    sub.add_parser("next")
-    sub.add_parser("requeue")
-    sub.add_parser("summary")
-    sp = sub.add_parser("record"); sp.add_argument("id"); sp.add_argument("--status", default="ok")
-    for f in NUM:
-        sp.add_argument(f"--{f.replace('_', '-')}", default=None)
-    sp = sub.add_parser("_score_child"); sp.add_argument("model_file")  # internal
-    a = p.parse_args(argv)
 
-    if a.cmd == "init":
-        print(init())
-    elif a.cmd == "propose":
-        print(propose(a.model_file, a.idea, a.summary, a.proposer))
-    elif a.cmd == "wait":
-        _print(wait_for_result(a.id, timeout=a.timeout))
-    elif a.cmd == "champions":
-        _print(champions(a.n))
-    elif a.cmd == "sample":
-        _print(sample(a.n, a.seed))
-    elif a.cmd == "get":
-        _print(get_model(a.id))
-    elif a.cmd == "query":
-        _print(query(a.sql))
-    elif a.cmd == "newid":
-        print(newid())
-    elif a.cmd == "next":
-        _print(get_next_model())
-    elif a.cmd == "requeue":
-        print(requeue_orphans())
-    elif a.cmd == "summary":
-        print(summary())
-    elif a.cmd == "record":
-        scores = {f: getattr(a, f) for f in NUM if getattr(a, f) is not None}
-        print(record(a.id, scores, a.status))
-    elif a.cmd == "_score_child":
+    # Each subcommand registers its handler (a function of the parsed args) and whether its result
+    # is printed as JSON (_print) or a bare line (print) -- so there is ONE dispatch, no if/elif.
+    def add(name, fn, json_out=False):
+        sp = sub.add_parser(name); sp.set_defaults(_fn=fn, _json=json_out); return sp
+
+    sp = add("propose-model", lambda a: propose(a.model_file, a.idea, a.summary, a.proposer))
+    sp.add_argument("model_file"); sp.add_argument("--idea", default="")
+    sp.add_argument("--summary", default=""); sp.add_argument("--proposer", default=None)
+    sp = add("wait-for-score", lambda a: wait_for_result(a.id, timeout=a.timeout), json_out=True)
+    sp.add_argument("id"); sp.add_argument("--timeout", type=float, default=None)
+    sp = add("top-models", lambda a: champions(a.n), json_out=True); sp.add_argument("-n", type=int, default=5)
+    sp = add("random-models", lambda a: sample(a.n, a.seed), json_out=True)
+    sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
+    add("get-model", lambda a: get_model(a.id), json_out=True).add_argument("id")
+    add("get-code", lambda a: get_source(a.id)).add_argument("id")
+    add("query-db", lambda a: query(a.sql), json_out=True).add_argument("sql")
+    add("requeue", lambda a: requeue_orphans())
+    add("summary", lambda a: summary())
+    sub.add_parser("_score_child").add_argument("model_file")  # internal: scores in a subprocess
+
+    a = p.parse_args(argv)
+    if a.cmd == "_score_child":
         _score_child(a.model_file)
+        return
+    (_print if a._json else print)(a._fn(a))
 
 
 if __name__ == "__main__":

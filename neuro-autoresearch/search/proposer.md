@@ -21,16 +21,17 @@ GPU. Your whole job: evolve `model.py` from the raw-pixel baseline floor so its 
 
 ## The `lab` API (run every command from this sandbox)
 Learn from shared history:
-  `python lab.py champions -n 5`     # ranked best models, WITH full source -- build on them
-  `python lab.py sample -n 5`        # random prior models (idea + score) -- a diversity spark
-  `python lab.py get <id>`           # any model's full row + source (re-read YOUR last result here)
-  `python lab.py query "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
+  `python lab.py top-models -n 5`      # ranked best models, WITH full source -- build on them
+  `python lab.py random-models -n 5`   # random prior models (idea + score) -- a diversity spark
+  `python lab.py get-model <id>`       # any model's full row + source as JSON
+  `python lab.py get-code <id>`        # JUST that model's raw model.py source (re-read YOUR last here)
+  `python lab.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
 You have total latitude: write your own Python in `scratch/` that does `import lab` and calls
 `lab.query(...)` / `lab.champions(...)` to build whatever custom lens on the DB you want.
 
 Propose + get your score:
-  `id=$(python lab.py propose model.py --idea "<short label>")`   # snapshots + queues YOUR model.py
-  `python lab.py wait $id`           # BLOCKS until the GPU evaluator scores YOUR model; prints the
+  `id=$(python lab.py propose-model model.py --idea "<short label>")`  # snapshots + queues YOUR model.py
+  `python lab.py wait-for-score $id`  # BLOCKS until the GPU evaluator scores YOUR model; prints the
                                      # row (test_corr = reward, status). One call parks; don't busy-poll.
 
 ## The model contract (so the harness can score it)
@@ -61,6 +62,6 @@ is entirely YOUR call. There is no mandated sequence of discovery steps.
    it (you choose all the specifics). If it is blank, you are free to go wherever the DB leads you.
 2. EDIT `model.py` -- exactly ONE new idea per turn (build on a leader, fix what stalled, or invent
    something new). You own the whole computation.
-3. PROPOSE: `id=$(python lab.py propose model.py --idea "...")`. Do NOT run/score it yourself.
-4. WAIT: `python lab.py wait $id` -> blocks until YOUR model is scored, then read its test_corr.
+3. PROPOSE: `id=$(python lab.py propose-model model.py --idea "...")`. Do NOT run/score it yourself.
+4. WAIT: `python lab.py wait-for-score $id` -> blocks until YOUR model is scored, then read its test_corr.
 5. Reflect on whether it improved, then GO BACK to step 1. Never stop.

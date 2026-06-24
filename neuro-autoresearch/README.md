@@ -120,12 +120,14 @@ losslessly; a new date starts fresh.
 Agents never touch the DB, GPU, or dataset directly — they go through `lab.py`:
 
 ```bash
-python lab.py propose model.py --idea "..."   # snapshot + queue this model -> prints its id
-python lab.py wait <id>                        # block until the evaluator scores it
-python lab.py champions -n 5                   # ranked best models, with source
-python lab.py sample -n 5                       # random prior models (diversity)
-python lab.py get <id> | query "SELECT ..."    # one model / arbitrary read-only SQL
-python lab.py summary                           # one-line DB tally + current champion
+python lab.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
+python lab.py wait-for-score <id>              # block until the evaluator scores it
+python lab.py top-models -n 5                  # ranked best models, with source
+python lab.py random-models -n 5               # random prior models (diversity)
+python lab.py get-model <id>                   # one model: full row + source (JSON)
+python lab.py get-code <id>                    # just that model's raw model.py source
+python lab.py query-db "SELECT ..."            # arbitrary read-only SQL
+python lab.py summary                          # one-line DB tally + current champion
 ```
 
 (`next` / `record` / `requeue` are the evaluator-side verbs.)
