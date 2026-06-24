@@ -16,13 +16,13 @@ EFFORT="${NEURO_CONDUCTOR_EFFORT:-medium}"
 MINS="${NEURO_EPOCH_MINS:-30}"
 case "$MINS" in ''|*[!0-9.]*|*.*.*) echo "[conduct] NEURO_EPOCH_MINS must be a positive number (got '$MINS')" >&2; exit 2;; esac
 LOG="$RUN/conductor.log"
-PROMPT="$(cat "$REPO/search/conductor.md")"
 export LAB_RUN="$RUN" NEURO_DATASET="$DATASET"
 echo "[conduct] conductor up (epoch ${MINS}m, $MODEL/$EFFORT, dataset=$DATASET)"
 secs="$(awk -v m="$MINS" 'BEGIN{printf "%d", m*60}')"
 while :; do
   echo "[conduct] epoch pass $(date -u +%FT%TZ)" >> "$LOG"
-  copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
+  # Re-read the prompt each epoch so edits to conductor.md go live without a restart.
+  copilot -p "$(cat "$REPO/search/conductor.md")" --allow-all --model "$MODEL" --effort "$EFFORT" \
     --add-dir "$REPO" -C "$REPO" >> "$LOG" 2>&1 || true
   sleep "$secs"
 done
