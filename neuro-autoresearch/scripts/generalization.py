@@ -1,18 +1,16 @@
 """Cross-subject generalization study (NSD ventral stream).
 
 Takes the best never-trained model discovered on subject 1 (the ventral-stream champion of a
-search run) and re-evaluates it, UNCHANGED, on subjects 1/2/3 -- re-fitting the ridge readout per
-subject (the readout is part of eval, not the model). The shared-1000 test images are identical
-across NSD subjects, so the same image->activation model transfers; only the neural target and
-its readout differ. One row per subject is appended to ``results/generalization.csv``.
+search run) and re-evaluates it, UNCHANGED, on all 8 NSD subjects -- re-fitting the ridge readout
+per subject (the readout is part of eval, not the model). The shared-1000 test images are identical
+across NSD subjects, so the same image->activation model transfers; only the neural target and its
+readout differ. One row per subject is appended to ``results/generalization.csv``.
 
-Reuses the FIXED harness wholesale (``load_split`` + ``evaluate_on_split_safe``) and reads the
-champion straight from a run's ``search.db`` via ``lab``. Reward = the ventral stream.
+Uses the prepared GLMdenoise betas loader (``nsd_betas/per_subject/subjNN.pkl``) via the dataset's
+``subject`` field, and reads the champion straight from a run's ``search.db`` via ``lab``. Reward =
+the ventral stream. Run from the repo root::
 
-Prereq: subject-2/3 NSD data staged locally (NSD_SUBJ02_PATH / NSD_SUBJ03_PATH, else a sibling-dir
-convention). Run from the repo root::
-
-    python scripts/generalization.py                       # latest nsd run, subjects 1/2/3
+    python scripts/generalization.py                       # latest nsd run, all 8 subjects
     python scripts/generalization.py --run runs/nsd__2026-06-24
     python scripts/generalization.py --subjects 1,2
 """
@@ -30,7 +28,6 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO)
 
 import lab  # noqa: E402  (champion lookup from a run's search.db)
-import harness.studies  # noqa: F401,E402  (registers NsdSubj01/02/03)
 from harness.datasets import PRESETS  # noqa: E402
 from harness.data import load_split  # noqa: E402
 from harness.reward import evaluate_on_split_safe  # noqa: E402
@@ -38,12 +35,8 @@ from harness.reward import evaluate_on_split_safe  # noqa: E402
 OUT = os.path.join(REPO, "results", "generalization.csv")
 REWARD_ROI = "ventral"
 
-_S1 = PRESETS["nsd"].path
-SUBJECTS = {
-    1: ("NsdSubj01", _S1),
-    2: ("NsdSubj02", os.environ.get("NSD_SUBJ02_PATH", _S1.replace("subj01", "subj02"))),
-    3: ("NsdSubj03", os.environ.get("NSD_SUBJ03_PATH", _S1.replace("subj01", "subj03"))),
-}
+# All 8 NSD subjects are available as prepared-betas pickles (nsd_betas/per_subject/subjNN.pkl);
+# the betas loader selects one via the dataset's `subject` field.
 COLS = ["subject", "study", "run", "champion_id", "test_corr", "train_corr", "gap",
         "n_targets", "n_train", "n_test", "seconds", "status"]
 
@@ -77,7 +70,7 @@ def append_row(row: dict) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--run", default=None, help="run dir (default: latest runs/nsd__*)")
-    ap.add_argument("--subjects", default="1,2,3", help="comma-separated subject ids")
+    ap.add_argument("--subjects", default="1,2,3,4,5,6,7,8", help="comma-separated subject ids (1-8)")
     args = ap.parse_args()
 
     run = os.path.abspath(args.run) if args.run else latest_nsd_run()
@@ -92,9 +85,10 @@ def main() -> int:
 
     base = PRESETS["nsd"]
     for subj in subjects:
-        study, path = SUBJECTS[subj]
-        d = replace(base, study=study, path=path, reward_roi=REWARD_ROI,
-                    run_tag=f"gen-subj{subj}")
+        sid = f"{subj:02d}"
+        study = f"NsdBetasSubj{sid}"
+        d = replace(base, subject=sid, study=study, reward_roi=REWARD_ROI,
+                    run_tag=f"gen-subj{sid}")
         row = evaluate_on_split_safe(model, load_split(d), d)
         append_row({
             "subject": subj, "study": study, "run": os.path.basename(run),
@@ -103,7 +97,7 @@ def main() -> int:
             "n_targets": row["n_targets"], "n_train": row["n_train"], "n_test": row["n_test"],
             "seconds": f"{row['seconds']:.1f}", "status": row["status"],
         })
-        print(f"subj{subj} {study:10} test_corr={row['test_corr']:.4f} ({row['status']})", flush=True)
+        print(f"subj{sid} {study:14} test_corr={row['test_corr']:.4f} ({row['status']})", flush=True)
     print("GENERALIZATION DONE", flush=True)
     return 0
 
