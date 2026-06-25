@@ -1,9 +1,7 @@
-"""Shared machinery for the data loaders.
-
-Stimulus extractor (``RawPixels``), the on-disk build cache, neural-target ROI
-selection, and the repeat-collapse + canonical-split helpers -- used by BOTH the
-NeuralSet/Segmenter path (``neuralset``) and the pre-averaged table loaders
-(``tvsd``/``nnn``). The autoresearch agent should NOT need to edit this file.
+"""NSD volumetric ROI resolver: maps an ROI name to a per-voxel keep mask over the
+nsdgeneral voxels. Used by harness/reward.py for the optional per-region test_corr
+slice diagnostic (not by the loaders themselves). The autoresearch agent should NOT
+edit this file.
 """
 from __future__ import annotations
 
@@ -11,33 +9,6 @@ import os
 import subprocess
 
 import numpy as np
-import torch
-import neuralset as ns
-from neuralset.extractors.image import BaseClassicImageExtractor
-
-from harness.datasets import Dataset
-
-
-class RawPixels(BaseClassicImageExtractor):
-    """Flattened, [0,1]-normalised RGB pixels of each stimulus image."""
-
-    def _get_image_features(self, image: np.ndarray) -> np.ndarray:
-        if image.ndim == 2:
-            image = np.stack([image] * 3, -1)
-        return (image.astype("float32") / 255.0).reshape(-1)
-
-
-def _study_path(d):
-    """Resolve the NeuralSet study path: explicit ``d.path`` if set, else ``None`` to
-    download-from-scratch when ``d.download``, else the shared ``ns.CACHE_FOLDER``."""
-    return d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
-
-
-def _cache_dir() -> str:
-    return os.environ.get(
-        "NEURO_SPLIT_CACHE",
-        os.path.join(os.path.expanduser("~"), ".cache", "neuro-autoresearch", "splits"),
-    )
 
 
 # --- neural-target region (ROI) selection ---------------------------------------
@@ -102,21 +73,3 @@ def _roi_voxel_keep(study, roi: str):
     label_file, wanted = _ROI_DEFS[roi]
     labels = nibabel.load(_ensure_roi_label_file(study, label_file)).get_fdata()
     return np.isin(labels[mask], wanted), n_voxels
-
-
-def _apply_roi(d: Dataset, study, Y):
-    """Column-subset Y to the dataset's ``roi`` (no-op for the default nsdgeneral)."""
-    if d.roi == "nsdgeneral":
-        return Y
-    if not hasattr(study, "_roi_path"):
-        raise ValueError(f"roi={d.roi!r} requested but study {d.study!r} has no ROI masks")
-    keep, n_voxels = _roi_voxel_keep(study, d.roi)
-    if keep is None:
-        return Y
-    n_tr = Y.shape[1] // n_voxels  # voxels are flattened voxel-major: (voxel, tr)
-    if Y.shape[1] != n_voxels * n_tr:
-        raise RuntimeError(
-            f"Y has {Y.shape[1]} columns, not a multiple of {n_voxels} nsdgeneral voxels"
-        )
-    col_keep = torch.as_tensor(np.repeat(keep, n_tr))
-    return Y[:, col_keep]

@@ -197,23 +197,23 @@ def _study_for(d: Dataset):
     labels in the loader (TVSD) or as a per-ROI betas key (NSD-betas), not an ns.Study ROI
     resolver -- return None so the reward averages over the targets the loader already selected.
     """
-    if getattr(d, "loader", "segmenter") != "segmenter":
+    if getattr(d, "loader", "neuralset") != "neuralset":
         return None
-    from harness.loaders.common import _study_path
+    from harness.loaders.shared import _study_path
     return ns.Study(name=d.study, path=_study_path(d))
 
 
 def _slice_target_mask(study, name: str, n_targets: int):
     """Boolean mask (length ``n_targets``) selecting region ``name``'s target columns.
 
-    NSD: ``name`` is an ROI resolved by ``common._roi_voxel_keep`` to a per-voxel keep mask over the
+    NSD: ``name`` is an ROI resolved by ``neuralset.roi._roi_voxel_keep`` to a per-voxel keep mask over the
     nsdgeneral voxels; the eval targets are those voxels (voxel-major if multi-TR), so the per-voxel
     mask is repeated across the TRs. Returns ``None`` (the clean extension point) when the study has
     no ROI resolver, the name is unknown, or the targets do not map cleanly onto the voxels.
     """
     if not hasattr(study, "_roi_path"):      # non-volumetric studies (text/meg): no resolver
         return None
-    from harness.loaders.common import _roi_voxel_keep
+    from harness.loaders.neuralset.roi import _roi_voxel_keep
 
     try:
         keep, n_voxels = _roi_voxel_keep(study, name)

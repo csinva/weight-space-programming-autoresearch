@@ -1,9 +1,10 @@
-"""Data loaders, grouped by dataset family. ``load_split`` is the single entry point.
+"""Data loaders, grouped by the two paradigms a dataset can take. ``load_split`` is the
+single entry point.
 
-- ``core``      -- shared machinery (RawPixels, build cache, ROI selection, repeat-collapse/split)
-- ``neuralset`` -- the NeuralSet/Segmenter timeline path (nsd, text, meg, ieeg)
-- ``tvsd``      -- THINGS macaque-spiking pre-averaged table
-- ``nnn``       -- Triple-N macaque-spiking pre-averaged table (NSD-1000)
+- **neuralset** (text/meg/ieeg) -- continuous-timeline studies aligned on the fly via the
+  NeuralSet ``Segmenter``: each trigger event cuts a stimulus + neural segment.
+- **standalone** (nsd/tvsd/nnn) -- pre-aligned response tables (prepared betas / spiking
+  MUA), read directly by a self-contained reader; no Segmenter.
 
 A model is read out by the harness against ``load_split``'s (X_train, X_test, Y_train,
 Y_test); the agent should NOT need to edit anything here.
@@ -11,21 +12,22 @@ Y_test); the agent should NOT need to edit anything here.
 from __future__ import annotations
 
 from harness.datasets import Dataset
-from harness.loaders.neuralset import load_neuralset
-from harness.loaders.tvsd import load_tvsd
-from harness.loaders.nnn import load_nnn
 
 
 def load_split(d: Dataset):
-    """Return (X_train, X_test, Y_train, Y_test) as 2-D float tensors.
-
-    Dispatches by the dataset's loader: pre-averaged tables (``tvsd``/``nnn``) take their
-    self-contained readers; everything else goes through the NeuralSet/Segmenter timeline
-    path (``neuralset``). See those modules for the per-family split logic.
-    """
-    if d.loader == "nsd_betas":
-        from harness.loaders.nsd_betas import load_nsd_betas
-        return load_nsd_betas(d)
-    if d.loader == "table":
-        return load_nnn(d) if d.study.startswith("Nnn") else load_tvsd(d)
-    return load_neuralset(d)
+    """Return (X_train, X_test, Y_train, Y_test) as 2-D float tensors. Dispatches on d.loader
+    to the neuralset (Segmenter) path or a standalone reader; imports are lazy so a score-only
+    caller never pulls a loader heavy deps."""
+    if d.loader == "neuralset":
+        from harness.loaders.neuralset import load_neuralset
+        return load_neuralset(d)
+    if d.loader == "nsd":
+        from harness.loaders.standalone.nsd import load_nsd
+        return load_nsd(d)
+    if d.loader == "tvsd":
+        from harness.loaders.standalone.tvsd import load_tvsd
+        return load_tvsd(d)
+    if d.loader == "nnn":
+        from harness.loaders.standalone.nnn import load_nnn
+        return load_nnn(d)
+    raise ValueError(f"unknown loader {d.loader!r}; expected neuralset|nsd|tvsd|nnn")

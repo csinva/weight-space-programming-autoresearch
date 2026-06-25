@@ -5,7 +5,7 @@
 > it loads (download steps + MaxShield gotchas), all still current.
 
 A third famous dataset of a **genuinely different neural modality** so the
-autoresearch loop spans modalities. NSD (`NsdSubj01`) is fMRI/vision
+autoresearch loop spans modalities. NSD (`NsdBetasSubj01`) is fMRI/vision
 and Li2022Petit is fMRI/language; this adds **MEG**.
 
 ## Chosen study: `Bel2026PetitListenSample`

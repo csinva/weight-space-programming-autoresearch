@@ -17,9 +17,11 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
 
 ## Architecture
 - **`harness/`** (fixed eval): `datasets.py` (presets; pick via `NEURO_DATASET`) · `loaders/`
-  (`load_split` dispatch in `__init__`; one reader per dataset family + `common.py` shared helpers
-  & `studies.py` NeuralSet subclasses) · `reward.py` (himalaya ridge → the region `test_corr`) ·
-  `results.py` / `run.py` (the manual single-eval path).
+  (`load_split` dispatch in `__init__`; `shared.py` (RawPixels, cache dir, study-path, constant-col
+  drop); `neuralset/` (Segmenter loader + `studies.py` Study subclasses + `roi.py` the NSD ROI
+  resolver) for text/meg/ieeg; `standalone/` (`nsd.py`, `tvsd.py`, `nnn.py`) for the pre-aligned
+  table datasets) · `reward.py` (himalaya ridge → the region `test_corr`) · `results.py` / `run.py`
+  (the manual single-eval path).
 - **`hub.py`** — the ONE importable API + CLI over a run's `search.db`
   (`propose` / `wait_for_result` / `champions` / `sample` / `get_best_model` /
   `get_best_model_from_other_island` / `query` + `get_next_model` / `record` / `score`). Hides the

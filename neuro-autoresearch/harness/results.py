@@ -23,7 +23,7 @@ CORE_COLUMNS = [
 
 def _csv_path(study, results_dir: str, reward_roi: str = "nsdgeneral",
               run_tag: str = "") -> str:
-    # Per-region loops get their own file (e.g. NsdSubj01__PPA.csv) so each region's
+    # Per-region loops get their own file (e.g. NsdBetasSubj01__PPA.csv) so each region's
     # hill-climb history and best_so_far stay separate; "nsdgeneral" keeps the bare
     # study name. A run_tag (NEURO_RUN) suffixes it further so each RUN is unique.
     stem = study if reward_roi in (None, "nsdgeneral") else f"{study}__{reward_roi}"

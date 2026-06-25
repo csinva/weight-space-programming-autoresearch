@@ -3,7 +3,7 @@
 Triple-N (Li et al., ScienceDB 10.57760/sciencedb.33556). Each session's Processed_*.mat
 holds ``response_best`` [units x 1072] (mean firing rate per image; cols 1..1000 are the NSD
 images, 1001..1072 are face/body/object localizer extras), plus per-unit ``reliability_best``,
-``pos`` and ``snr``. Like TVSD this is a PRE-AVERAGED table read directly here (loader="table"),
+``pos`` and ``snr``. Like TVSD this is a PRE-AVERAGED table read directly here (loader="nnn"),
 NOT via NeuralSet: Y = reliable units pooled across all 90 sessions; X = the 1000 NSD images
 straight from img_pool.mat; ``reward_roi`` picks a cortical area as a column subset of the units
 (the readout then fits & scores exactly that area), the analog of TVSD's V1/V4/IT and NSD's
@@ -17,7 +17,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.common import RawPixels, _cache_dir
+from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols
 
 _NNN_N_NSD_IMAGES = 1000
 
@@ -156,8 +156,7 @@ def load_nnn(d: Dataset):
     Xt, Yt = torch.as_tensor(X), torch.as_tensor(Y)
     Xtr, Xte = Xt[tr], Xt[te]
     Ytr, Yte = Yt[tr], Yt[te]
-    keepc = Ytr.std(0) > 0                             # drop units constant on train
-    Ytr, Yte = Ytr[:, keepc], Yte[:, keepc]
+    Ytr, Yte = drop_constant_cols(Ytr, Yte)
     print(f"  NNN: {len(sessions)} sessions; reward_roi={roi} (reliability>{min_rel}) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")

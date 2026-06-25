@@ -20,7 +20,7 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.common import _cache_dir
+from harness.loaders.shared import _cache_dir, drop_constant_cols
 
 
 def _subject(d: Dataset) -> str:
@@ -67,7 +67,7 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
     return X
 
 
-def load_nsd_betas(d: Dataset):
+def load_nsd(d: Dataset):
     """NSD GLMdenoise betas: Y from subjNN.pkl[reward_roi], X from the images, shared-1000 split.
 
     Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors -- the same contract as the
@@ -84,9 +84,9 @@ def load_nsd_betas(d: Dataset):
 
     X = _build_X(d, nsd_ids, subject)
     tr, te = ~shared, shared
-    keep = Y[tr].std(0) > 0                                     # drop voxels constant on train
     Xtr, Xte = torch.as_tensor(X[tr]), torch.as_tensor(X[te])
-    Ytr, Yte = torch.as_tensor(Y[tr][:, keep]), torch.as_tensor(Y[te][:, keep])
+    Ytr, Yte = torch.as_tensor(Y[tr]), torch.as_tensor(Y[te])
+    Ytr, Yte = drop_constant_cols(Ytr, Yte)
     print(f"  NSD-betas subj{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region={region} -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte

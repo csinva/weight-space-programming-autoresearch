@@ -38,16 +38,14 @@ class Dataset:
     download: bool = False           # download the study before running?
     path: str | None = None          # pre-downloaded data dir; None => shared cache
     test_frac: float = 0.2           # held-out fraction (contiguous temporal tail)
-    roi: str = "nsdgeneral"          # neural-target region as a column-subset of loaded
-                                     # voxels: "nsdgeneral" (all) or a sub-ROI from the
-                                     # fixed menu (V1/hV4/FFA/PPA/EBA/VWFA/early/ventral).
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value (NSD = "ventral"), NOT an operator knob.
     run_tag: str = ""                # per-run id (set by NEURO_RUN): suffixes the results
                                      # CSV so each run gets its own. Empty => shared.
-    loader: str = "segmenter"        # "segmenter" (continuous timeline -> ns.Segmenter,
-                                     # default for fmri/meg/ieeg) or "table" (pre-averaged
-                                     # [electrodes x stimuli] .mat, e.g. TVSD spiking).
+    loader: str = "neuralset"        # loader path: "neuralset" (text/meg/ieeg, via the NeuralSet
+                                     # Segmenter; the default) or a standalone reader
+                                     # "nsd"/"tvsd"/"nnn" (a pre-aligned response table read
+                                     # directly).
     subject: str = ""                # subject/animal for a multi-subject table dataset
                                      # (TVSD: "F" or "N"); unused by the segmenter path.
 
@@ -79,7 +77,7 @@ PRESETS: dict[str, Dataset] = {
     # Reward = the fine-grained VENTRAL stream (~8.6k voxels). Subject via NEURO_SUBJECT (1-8).
     "nsd": Dataset(
         study="NsdBetasSubj01",
-        loader="nsd_betas",
+        loader="nsd",
         neural="fmri",
         stimulus="image",
         imsize=128,
@@ -118,13 +116,13 @@ PRESETS: dict[str, Dataset] = {
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
-    # x stimuli), so loader="table" (data._load_tvsd) with the dataset's own image-disjoint
+    # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
     # split. reward_roi picks cortical area V1/V4/IT; monkey F/N via NEURO_SUBJECT. GOTCHA:
     # the THINGS stimulus images are gated (not bundled) -- stage them once (see
     # data._tvsd_images_root). See docs/datasets/.
     "tvsd": Dataset(
         study="TvsdMonkeyF",
-        loader="table",
+        loader="tvsd",
         neural="spikes",
         stimulus="image",
         imsize=16,
@@ -136,14 +134,14 @@ PRESETS: dict[str, Dataset] = {
     # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
     # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
     # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
-    # images), so loader="table" (data._load_nnn). Y pools reliable units (reliability>0.4,
+    # images), so loader="nnn" (loaders.standalone.nnn). Y pools reliable units (reliability>0.4,
     # ~35k of 47.5k) across all sessions; reward_roi picks a cortical area as a column subset
     # -- coarse EVC/IT, a patch family (MB/AB/MF/AF/MO/AO/LPP/PITP/CLC/AMC/PF), or an exact
     # label (V1/V2/V4/MB1...). The 1000 NSD images split deterministically (every 5th held out).
     # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.
     "nnn": Dataset(
         study="NnnV1",
-        loader="table",
+        loader="nnn",
         neural="spikes",
         stimulus="image",
         imsize=16,

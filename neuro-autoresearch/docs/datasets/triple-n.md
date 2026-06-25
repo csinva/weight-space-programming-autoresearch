@@ -7,8 +7,8 @@ It is the image/spiking sibling of TVSD — same shape of data (a pre-averaged
 `[units × images]` table), but on the **NSD** stimuli the rest of this repo already
 uses, which makes it directly comparable to the human NSD fMRI encoding work here.
 
-It is the live **`nnn`** preset in `harness/datasets.py` (`loader="table"`,
-`harness/data._load_nnn`).
+It is the live **`nnn`** preset in `harness/datasets.py` (`loader="nnn"`,
+`harness/loaders/standalone/nnn.py`).
 
 ## Chosen release
 
@@ -85,7 +85,7 @@ Area labels are **not** in the Processed file — they come from `exclude_area.x
 `[y1, y2)` contains its `pos`. Coarse `Area ∈ {EVC, IT}`; 27 `AREALABEL` patches
 (MB/AB body, MF/AF face, MO/AO object, LPP/PITP place, CLC/AMC colour, PF, V1/V2/V4).
 
-## Harness interface (`loader="table"`, `_load_nnn`)
+## Harness interface (`loader="nnn"`, `load_nnn`)
 
 Like TVSD, NNN is **not a NeuralSet study** — it ships a pre-averaged table, so it
 takes the self-contained table path and reads the `.mat`/`.xls`/images directly (the

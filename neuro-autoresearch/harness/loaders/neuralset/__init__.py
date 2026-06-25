@@ -1,10 +1,10 @@
-"""NeuralSet / Segmenter timeline loaders: nsd, text, meg, ieeg.
+"""NeuralSet / Segmenter timeline loader: text, meg, ieeg.
 
 Each ``Dataset`` declares a ``stimulus`` modality and a ``neural`` modality; this path
 dispatches the right NeuralSet extractor for each, aligns them per segment, and returns a
-train/test split. Datasets whose stimuli repeat (e.g. NSD) get one sample per unique
-stimulus (repeats averaged) and an image-disjoint canonical held-out test; others keep a
-contiguous temporal split.
+train/test split. The split is always a contiguous temporal hold-out (the latest
+``test_frac`` of triggers by onset): for time-continuous neural signals (fMRI/MEG/iEEG)
+nearby triggers share samples, so a random split would leak near-duplicate rows.
 
 Stimulus extractors are OFFLINE-friendly (no model-weight downloads):
   * image -> RawPixels (flattened RGB)
@@ -23,8 +23,8 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
-from harness.loaders import studies  # noqa: F401  (registers NsdSubj01 / Li2022PetitSubj / ...)
-from harness.loaders.common import RawPixels, _study_path, _cache_dir, _apply_roi
+from harness.loaders.neuralset import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
+from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_constant_cols
 
 
 def _load_workers() -> int:
@@ -47,11 +47,11 @@ def _load_workers() -> int:
 _CACHE_VERSION = "v2"
 
 # Fields that only affect post-build (cheap) steps, so they are excluded from the
-# build-cache key: ``roi`` subsets columns; ``test_frac`` only sizes a temporal tail;
-# ``reward_roi`` only selects which targets the scalar reward averages over; ``run_tag``
-# only names the output CSV. All region/run loops therefore share ONE build (the
-# timeseries is read only once).
-_BUILD_AGNOSTIC_FIELDS = ("roi", "test_frac", "reward_roi", "run_tag")
+# build-cache key: ``test_frac`` only sizes a temporal tail; ``reward_roi`` only
+# selects which targets the scalar reward averages over; ``run_tag`` only names the
+# output CSV. All region/run loops therefore share ONE build (the timeseries is read
+# only once).
+_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi", "run_tag")
 
 
 def _build_cache_key(d: Dataset) -> str:
@@ -73,43 +73,6 @@ def _build_cache_save(path: str, X, Y, onsets, stim_ids) -> None:
     tmp = f"{path}.tmp.{os.getpid()}"
     torch.save({"X": X, "Y": Y, "onsets": onsets, "stim_ids": stim_ids}, tmp)
     os.replace(tmp, path)
-
-
-# --- unique-stimulus collapse + canonical held-out split ------------------------
-def _collapse_repeats(X, Y, onsets, stim_ids):
-    """Average the neural target over the repeats of each unique stimulus.
-
-    NSD shows each image ~3x; the stimulus X is identical across a repeat, so its
-    group mean is unchanged, while averaging Y reduces trial noise. Returns one row
-    per unique stimulus (X, Y, onsets, stim_ids), ordered by stimulus id.
-    """
-    uniq, first_idx, inv = np.unique(stim_ids, return_index=True, return_inverse=True)
-    inv = inv.reshape(-1)
-    inv_t = torch.as_tensor(inv, dtype=torch.long)
-    g = len(uniq)
-    # Per-group sizes, computed ONCE; both averages divide by the clamped (>=1) count.
-    counts_t = torch.bincount(inv_t, minlength=g).clamp(min=1)
-    counts = counts_t.unsqueeze(1).float()
-    counts_np = counts_t.numpy()
-
-    # Y is averaged over repeats (this is what reduces trial noise).
-    Y_g = torch.zeros(g, Y.shape[1], dtype=torch.float32).index_add_(0, inv_t, Y.float()) / counts
-    # X is identical across a stimulus's repeats, so gather one row instead of
-    # averaging the (wide) stimulus tensor.
-    X_g = X[torch.as_tensor(first_idx, dtype=torch.long)]
-    # Mean onset per group (used only by non-canonical splits).
-    onsets_g = np.bincount(inv, weights=onsets, minlength=g) / counts_np
-    return X_g, Y_g, onsets_g, uniq
-
-
-def _image_id(filepath: str) -> int:
-    """NSD 1-based image id from a stimulus path (``.../{id-1}.png``)."""
-    return int(os.path.splitext(os.path.basename(filepath))[0]) + 1
-
-
-def _canonical_test_ids(study) -> set[int]:
-    """The NSD shared-1000 image ids (``sharedix``), via the study's data interface."""
-    return {int(x) for x in np.asarray(study._get_test_image_ids()).reshape(-1).tolist()}
 
 
 _NEURAL = {
@@ -257,26 +220,14 @@ def _build_xy(d: Dataset, events):
 
 
 def load_neuralset(d: Dataset):
-    """Timeline path: build aligned (X, Y), collapse repeats, split. 2-D float tensors.
+    """Timeline path: build aligned (X, Y) via the Segmenter, take a contiguous temporal
+    hold-out (the latest ``test_frac`` of triggers by onset), and drop train-constant target
+    columns. Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors.
 
-    Two split regimes, chosen by the data itself:
-
-    * **Repeated stimuli with a canonical held-out set** (e.g. NSD: each image is
-      shown ~3x and a fixed shared-1000 subset is the standard test). The repeats of
-      each unique stimulus are collapsed to one sample (the neural target is averaged;
-      the identical stimulus is unchanged), and the held-out test is the canonical
-      shared set -- an **image-disjoint** split (asserted), no leakage.
-    * **Otherwise** a contiguous temporal hold-out (latest ``test_frac`` of the
-      triggers by onset): for time-continuous neural signals (fMRI/MEG/EEG) nearby
-      triggers share samples, so a random split would leak near-duplicate rows.
-
-    For volumetric studies the dataset's ``roi`` further column-subsets the neural
-    target to a brain region (a fast subset of the already-loaded voxels).
-
-    The slow ``_build_xy`` output is cached on disk keyed by every field except
-    ``roi``/``test_frac`` (see ``_build_cache_key``), so a different ROI re-uses it and
-    just re-subsets/re-splits in seconds -- never re-reading the timeseries. Bypass with
-    NEURO_NO_CACHE, relocate with NEURO_SPLIT_CACHE.
+    For time-continuous neural signals (fMRI/MEG/iEEG) nearby triggers share samples, so the
+    split is temporal (not random) to avoid leaking near-duplicate rows. The slow ``_build_xy``
+    output is cached on disk keyed by every field except ``test_frac`` (see ``_build_cache_key``);
+    bypass with NEURO_NO_CACHE, relocate with NEURO_SPLIT_CACHE.
     """
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     build_path = os.path.join(_cache_dir(), _build_cache_key(d))
@@ -284,7 +235,7 @@ def load_neuralset(d: Dataset):
     study = ns.Study(name=d.study, path=_study_path(d))
 
     if use_cache and os.path.exists(build_path):
-        X, Y, onsets, stim_ids = _build_cache_load(build_path)   # full voxels, all trials
+        X, Y, onsets, stim_ids = _build_cache_load(build_path)
     else:
         if d.download:
             study.download()
@@ -298,40 +249,15 @@ def load_neuralset(d: Dataset):
             _build_cache_save(build_path, X, Y, onsets, stim_ids)
 
     n_trials = X.shape[0]
-    Y = _apply_roi(d, study, Y)         # column-subset the neural target to d.roi
 
-    # Collapse repeats of the same stimulus to one sample (no-op without repeats).
-    repeated = stim_ids is not None and len(np.unique(stim_ids)) < len(stim_ids)
-    if repeated:
-        X, Y, onsets, stim_ids = _collapse_repeats(X, Y, onsets, stim_ids)
-    n_unique = X.shape[0]
-
-    canonical = stim_ids is not None and hasattr(study, "_get_test_image_ids")
-    if canonical:                       # image-disjoint shared-1000 held-out test
-        shared = _canonical_test_ids(study)
-        is_test = np.array([_image_id(s) in shared for s in stim_ids])
-        tr_idx, te_idx = np.flatnonzero(~is_test), np.flatnonzero(is_test)
-        tr = torch.as_tensor(tr_idx, dtype=torch.long)
-        te = torch.as_tensor(te_idx, dtype=torch.long)
-        train_ids = set(stim_ids[tr_idx].tolist())
-        test_ids = set(stim_ids[te_idx].tolist())
-        assert train_ids.isdisjoint(test_ids), "train/test share images -> leakage"
-        assert te.numel() and tr.numel(), "empty train or test split"
-    else:                               # contiguous temporal split by trigger onset
-        order = torch.as_tensor(np.argsort(onsets, kind="stable"), dtype=torch.long)
-        n = order.numel()
-        n_test = max(1, int(round(n * d.test_frac)))
-        tr, te = order[: n - n_test], order[n - n_test:]
+    # Contiguous temporal hold-out: latest test_frac of the triggers by onset.
+    order = torch.as_tensor(np.argsort(onsets, kind="stable"), dtype=torch.long)
+    n = order.numel()
+    n_test = max(1, int(round(n * d.test_frac)))
+    tr, te = order[: n - n_test], order[n - n_test:]
     X_train, X_test, Y_train, Y_test = X[tr], X[te], Y[tr], Y[te]
 
-    regime = "shared-1000 held-out" if canonical else "temporal hold-out"
-    roi_note = f"; roi={d.roi}" if d.roi != "nsdgeneral" else ""
-    print(f"  {n_trials} trials -> {n_unique} unique stimuli; "
-          f"train/test = {X_train.shape[0]}/{X_test.shape[0]} samples ({regime}{roi_note}); "
-          f"{Y_train.shape[1]} target dims")
-
-    # Drop targets that are constant on the TRAIN set: they carry no signal, are
-    # unpredictable, and (e.g. non-brain fMRI voxels) only dilute the mean-r and
-    # waste compute. The mask uses train variance only (no test peeking).
-    keep = Y_train.std(0) > 0
-    return (X_train, X_test, Y_train[:, keep], Y_test[:, keep])
+    Y_train, Y_test = drop_constant_cols(Y_train, Y_test)
+    print(f"  {n_trials} trials; train/test = {X_train.shape[0]}/{X_test.shape[0]} samples "
+          f"(temporal hold-out); {Y_train.shape[1]} target dims")
+    return (X_train, X_test, Y_train, Y_test)

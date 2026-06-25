@@ -66,7 +66,8 @@ search/              the open-ended search loop (launcher + proposer pool + eval
   proposer.md          the task description handed to each proposer
 harness/             FIXED evaluation harness — must not be edited
   datasets.py          the Dataset registry (pick one via NEURO_DATASET)
-  loaders/             one reader per dataset family (the only file/network I/O)
+  loaders/             the only file/network I/O — neuralset/ (Segmenter timeline studies)
+                       vs standalone/ (pre-aligned response tables); load_split dispatch
   reward.py            the predictivity reward (himalaya ridge → test_corr)
   run.py               the manual single-eval driver — `python -m harness.run`
 scripts/setup_run.py scaffolds an isolated run folder + proposer sandboxes
@@ -175,8 +176,8 @@ dataset identity, so reruns load in seconds.
 ### Adding a dataset
 
 Append a `Dataset(...)` entry to `PRESETS` in `harness/datasets.py` (and a loader under
-`harness/loaders/` if it's a new family). Dataset specifics live only there; the harness
-and models need no changes. Never point an unattended run at a gated `download=True`
+`harness/loaders/neuralset/` if it's a NeuralSet Study, or `harness/loaders/standalone/` if it's
+read directly). Dataset specifics live only there; the harness and models need no changes. Never point an unattended run at a gated `download=True`
 study.
 
 ---
