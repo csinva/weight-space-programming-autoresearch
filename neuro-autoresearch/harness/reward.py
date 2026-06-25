@@ -144,7 +144,7 @@ def _error_status(exc: BaseException) -> str:
 def _error_row(model, split, dataset: Dataset, exc: BaseException,
                seconds: float, slices=()) -> dict:
     """A durable ``status='error'`` row for a model/readout fault (NaN scores)."""
-    _, _, Y_train, Y_test = split[0], split[1], split[2], split[3]
+    _, _, Y_train, Y_test, _ = split
     nan = float("nan")
     return {
         "study": dataset.study,

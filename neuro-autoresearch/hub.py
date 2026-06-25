@@ -381,7 +381,8 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     cols = [c for c in NUM if scores.get(c) not in (None, "")]
     vals = [_num(scores[c]) for c in cols]
     if scores.get("roi_corr"):                    # TEXT json blob, only when the breakdown is non-empty
-        cols.append("roi_corr"); vals.append(json.dumps(scores["roi_corr"]))
+        cols.append("roi_corr")
+        vals.append(json.dumps(scores["roi_corr"]))
     assignments = [f"{c}=?" for c in cols] + ["status=?"]
     vals = vals + [st, mid]
     with connect(_ensure(run)) as con:

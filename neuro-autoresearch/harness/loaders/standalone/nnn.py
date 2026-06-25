@@ -17,7 +17,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, surviving_cols
+from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols_with_rois
 
 _NNN_N_NSD_IMAGES = 1000
 
@@ -131,9 +131,7 @@ def load_nnn(d: Dataset):
     Xt, Yt = torch.as_tensor(X), torch.as_tensor(Y)
     Xtr, Xte = Xt[tr], Xt[te]
     Ytr, Yte = Yt[tr], Yt[te]
-    keep = surviving_cols(Ytr)
-    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
-    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
+    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
     print(f"  NNN: {len(sessions)} sessions; region=all (reliability>{min_rel}) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")

@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, surviving_cols
+from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols_with_rois
 
 _TVSD_N_ELEC = 1024
 # Per-monkey electrode -> cortical area, hardcoded from the release's _code/norm_MUA.m (the
@@ -127,9 +127,7 @@ def load_tvsd(d: Dataset):
 
     Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
     Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
-    keep = surviving_cols(Ytr)
-    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
-    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
+    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
     print(f"  TVSD monkey{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region=all -> {Ytr.shape[1]} electrodes ({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte, roi_masks

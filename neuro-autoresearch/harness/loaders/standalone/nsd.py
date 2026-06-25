@@ -20,7 +20,7 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.shared import _cache_dir, surviving_cols
+from harness.loaders.shared import _cache_dir, drop_constant_cols_with_rois
 
 
 def _subject(d: Dataset) -> str:
@@ -108,9 +108,7 @@ def load_nsd(d: Dataset):
     tr, te = ~shared, shared
     Xtr, Xte = torch.as_tensor(X[tr]), torch.as_tensor(X[te])
     Ytr, Yte = torch.as_tensor(Y[tr]), torch.as_tensor(Y[te])
-    keep = surviving_cols(Ytr)
-    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
-    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
+    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
     print(f"  NSD-betas subj{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region=early+ventral -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte, roi_masks
