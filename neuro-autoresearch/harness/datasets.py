@@ -1,18 +1,19 @@
-"""The dataset this proof-of-concept runs on, selected WITHOUT editing files.
+"""Runtime dataset selection for the fixed evaluation harness.
 
-A dataset declares both its **stimulus modality** (``stimulus``: image | text |
-audio) and its **neural modality** (``neural``: fmri | meg | ieeg | spikes); the
-harness (``data.py``) dispatches the right NeuralSet extractor for each. The model
-and the reward stay modality-agnostic, so the same loop runs across datasets and
-modalities.
+A ``Dataset`` declares the stimulus modality, neural modality, loader path, split
+policy inputs, and reward region. ``harness.loaders.load_split`` is the single
+entry point: it either segments a NeuralSet timeline (``loader="neuralset"``) or
+calls a standalone table reader (``loader="nsd"``, ``"tvsd"``, or ``"nnn"``).
+The model and reward stay modality-agnostic, so the same search loop can run
+across fMRI, MEG, iEEG, and spiking datasets.
 
-Presets are pre-registered in ``PRESETS``. Pick one at run time via the
-``NEURO_DATASET`` environment variable (default ``"text"``) -- no source edit
-needed, so parallel runs never collide::
+Presets are registered in ``PRESETS``. Pick one at run time via
+``NEURO_DATASET`` (default ``"text"``), without editing source files::
 
     NEURO_DATASET=meg python -m harness.run
 
-For another study, name one from ``neuralset.Study.catalog()``.
+NeuralSet presets can name any registered ``neuralset.Study.catalog()`` entry.
+Standalone presets use local readers and only need ``path`` to their staged data.
 """
 from __future__ import annotations
 
@@ -22,13 +23,13 @@ from dataclasses import dataclass, replace
 
 @dataclass(frozen=True)
 class Dataset:
-    study: str = "Fake2025Meg"       # any name in neuralset.Study.catalog()
-    trigger: str = "type=='Image'"   # which events are the stimuli
+    study: str = "Fake2025Meg"       # NeuralSet study name or descriptive standalone tag
+    trigger: str = "type=='Image'"   # NeuralSet trigger query; ignored by standalone loaders
     neural: str = "meg"              # neural modality: fmri | meg | ieeg | spikes
     stimulus: str = "image"          # stimulus modality: image | text | audio
     imsize: int = 16                 # image stimuli resized to imsize x imsize
-    start: float = 0.0               # neural segment start, seconds after trigger
-    duration: float = 0.3            # neural segment duration, seconds
+    start: float = 0.0               # NeuralSet neural segment start, seconds after trigger
+    duration: float = 0.3            # NeuralSet neural segment duration, seconds
     neural_offset: float = 0.0       # seconds to shift the neural window forward to
                                      # align the delayed (HRF) BOLD response (fMRI)
     neural_aggregation: str = "single"  # time-aggregation: "single" (keep TRs) or
@@ -37,21 +38,19 @@ class Dataset:
     stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
     download: bool = False           # download the study before running?
     path: str | None = None          # pre-downloaded data dir; None => shared cache
-    test_frac: float = 0.2           # held-out fraction (contiguous temporal tail)
+    test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value (NSD = "ventral"), NOT an operator knob.
     run_tag: str = ""                # per-run id (set by NEURO_RUN): suffixes the results
                                      # CSV so each run gets its own. Empty => shared.
-    loader: str = "neuralset"        # loader path: "neuralset" (text/meg/ieeg, via the NeuralSet
-                                     # Segmenter; the default) or a standalone reader
-                                     # "nsd"/"tvsd"/"nnn" (a pre-aligned response table read
-                                     # directly).
-    subject: str = ""                # subject/animal for a multi-subject table dataset
-                                     # (TVSD: "F" or "N"); unused by the segmenter path.
+    loader: str = "neuralset"        # "neuralset" Segmenter path, or standalone reader:
+                                     # "nsd", "tvsd", or "nnn".
+    subject: str = ""                # preset subject/animal when supported
+                                     # (text, NSD, TVSD); otherwise informational.
 
 
-# Real datasets across neural modalities (fmri/meg/ieeg/spikes) and stimulus
-# modalities (image/text/audio). Select one with NEURO_DATASET=<key>.
+# Active dataset presets across neural modalities (fMRI/MEG/iEEG/spikes) and
+# stimulus modalities (image/audio). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
     # Li2022Petit (Le Petit Prince), fMRI + audio: one full English subject (EN057)
     # via the Li2022PetitSubj subclass (harness/li2022_subj.py). Each spoken Word
@@ -89,7 +88,7 @@ PRESETS: dict[str, Dataset] = {
     # Bel2026PetitListen (LPP-Listen MEG, OpenNeuro ds007523), MEG + audio. Each
     # spoken Word triggers a 0.5s epoch; MEG is near-instant so stimulus and neural
     # windows coincide ([0,0.5]s, no HRF decoupling). GOTCHA: the raw .fif is Elekta
-    # MaxShield, loaded in data.py via allow_maxshield=True. See docs/datasets/.
+    # MaxShield, loaded by the NeuralSet loader with allow_maxshield=True.
     "meg": Dataset(
         study="Bel2026PetitListenSample",
         trigger="type=='Word'",
@@ -119,7 +118,7 @@ PRESETS: dict[str, Dataset] = {
     # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
     # split. reward_roi picks cortical area V1/V4/IT; monkey F/N via NEURO_SUBJECT. GOTCHA:
     # the THINGS stimulus images are gated (not bundled) -- stage them once (see
-    # data._tvsd_images_root). See docs/datasets/.
+    # harness.loaders.standalone.tvsd._tvsd_images_root).
     "tvsd": Dataset(
         study="TvsdMonkeyF",
         loader="tvsd",
@@ -177,17 +176,24 @@ _imsize = os.environ.get("NEURO_IMSIZE")
 if _imsize:
     DATASET = replace(DATASET, imsize=int(_imsize))
 
-# Optional subject override (NEURO_SUBJECT). NSD: one of the 8 subjects (1-8) -> its betas pickle
-# + a per-subject study name (own results CSV). TVSD: the monkey (F/N). text: one of the 49
-# English subjects (e.g. EN058), switching to that subject's catalog class + the all-subjects dir.
+# Optional subject override (NEURO_SUBJECT). Supported presets:
+#   text: one English subject (e.g. EN058), switching to that subject's registered
+#         catalog class + the all-subjects directory.
+#   nsd:  one of the 8 subjects (1-8), switching betas pickle + study/results name.
+#   tvsd: monkey F or N.
+# Other presets keep the value in DATASET.subject but do not rewrite the study name.
 _subject = os.environ.get("NEURO_SUBJECT")
 if _subject:
     if _key == "text":
         _en_all = os.path.join(
             os.path.dirname(DATASET.path), "li2022petit_en_all", "Li2022PetitSubj")
-        DATASET = replace(DATASET, study=f"Li2022PetitSubj{_subject}", path=_en_all)
+        DATASET = replace(
+            DATASET, subject=_subject, study=f"Li2022PetitSubj{_subject}", path=_en_all
+        )
     elif _key == "nsd":
         _sid = f"{int(_subject):02d}"
         DATASET = replace(DATASET, subject=_sid, study=f"NsdBetasSubj{_sid}")
-    else:
+    elif _key == "tvsd":
         DATASET = replace(DATASET, subject=_subject, study=f"TvsdMonkey{_subject.upper()}")
+    else:
+        DATASET = replace(DATASET, subject=_subject)
