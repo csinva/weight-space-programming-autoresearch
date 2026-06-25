@@ -98,8 +98,9 @@ NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg | iee
 NEURO_READOUT=himalaya python -m harness.run  # reference readout (default: the ~20× faster fast ridge)
 ```
 
-Loads the data split once, evaluates `model.py` exactly once, prints `train_corr` /
-`test_corr` / timing, and appends one row to `results/<study>.csv` (gitignored).
+Loads the data split once, evaluates `model.py` exactly once, and prints the scored row
+(`train_corr` / `test_corr` / timing). It does not persist anything — result recording lives
+only in the unattended search loop (see `hub.py`).
 
 ### Open-ended search (unattended)
 

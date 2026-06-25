@@ -4,10 +4,10 @@
 Times the EXACT path the harness runs (``harness/reward.py``) for ANY dataset (NSD/TVSD/NNN/
 text/meg/ieeg): load the split, move the stimulus to the GPU, run the (untrained) ``model.py``
 forward to activations, fit the per-target ridge readout, predict both splits, and score the mean
-per-target test correlation. The ``readout`` phase calls ``harness.reward._ridge_predict`` directly,
+per-target test correlation. The ``readout`` phase calls ``harness.ridge.ridge_predict`` directly,
 so ``--method`` selects the SAME readout the search uses:
 
-  * ``fast``     (default) -- the eigendecomposition + leave-one-out ridge (``harness.fast_ridge``),
+  * ``fast``     (default) -- the eigendecomposition + leave-one-out ridge (``harness.ridge._fast_predict``),
   * ``himalaya``           -- the reference himalaya ``RidgeCV`` (5-fold SVD; ~20x slower on GPU).
 
 To mimic the live search -- several evals sharing the single A100 with no MPS, so they time-slice --
@@ -44,9 +44,12 @@ PHASES = ["data_load", "x_to_gpu", "model_forward", "readout", "score"]
 
 def _reference_proj(X, seed: int = 0, d_out: int = 8192):
     """A correct on-device fixed random linear map to ``d_out`` (the seed baseline's intent),
-    used only when ``model.py`` can't run -- so the readout can still be benchmarked."""
+    used only when ``model.py`` can't run -- so the readout can still be benchmarked. The
+    ``seed``/``d_out`` defaults and the reshape+float deliberately MIRROR ``model.py``'s
+    ``SEED``/``D_OUT`` baseline; keep them in sync if that baseline changes."""
     import torch
 
+    X = torch.as_tensor(X).reshape(X.shape[0], -1).float()
     d_in = X.shape[1]
     if d_in <= d_out:
         return X
@@ -61,7 +64,7 @@ def _worker(dataset: str, subject: str, method: str, idx: int, out: dict) -> Non
     os.environ["NEURO_DATASET"] = dataset
     if subject:
         os.environ["NEURO_SUBJECT"] = str(subject)
-    os.environ["NEURO_READOUT"] = method                 # drives harness.reward._ridge_predict
+    os.environ["NEURO_READOUT"] = method                 # drives harness.ridge.ridge_predict
 
     import torch
 
