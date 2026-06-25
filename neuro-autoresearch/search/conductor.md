@@ -13,12 +13,15 @@ it. This is a single pass -- do your analysis, set the directions, then STOP.
 - `python hub.py summary`            -- tally + current champion
 - `python hub.py top-models -n 8`    -- the best models: scores + idea labels (what's working)
 - `python hub.py random-models -n 8` -- random prior models (idea + score)
-- `python hub.py query-db "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"`
+- `python hub.py query-db "SELECT proposer, COUNT(*) n, ROUND(MAX(test_corr),4) best, ROUND(AVG(test_corr),4) avg FROM models WHERE status='ok' GROUP BY proposer ORDER BY best DESC"` -- the PER-SLOT scoreboard: which slots are climbing vs flat
+- `python hub.py query-db "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"` -- the best models + which slot found them
 - `cat runs/*/proposers/p*/direction.txt` (or `$LAB_RUN/proposers/p*/direction.txt`) -- the
   directions you set last epoch
 
-Skim, don't dump. Form a quick read of: where the pool is clustered, which APPROACHES (families of
-idea) are crowded vs untried, and whether scores are stalling.
+Skim, don't dump. Form a read PER SLOT and across the fleet: what region each proposer is working,
+which slots are climbing vs stalled, and which families are crowded vs untried. This cross-slot
+picture is YOUR unique vantage -- no single proposer can see it, since each is an island that reads
+only its own lineage plus one random other. Steer from it.
 
 ## Then steer -- point at regions, not recipes
 Give each proposer slot (p00..pNN) ONE short line naming a broad region or family to explore:
