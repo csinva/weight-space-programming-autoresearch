@@ -15,12 +15,12 @@ from harness.datasets import Dataset
 
 
 def load_split(d: Dataset):
-    """Return (X_train, X_test, Y_train, Y_test) as 2-D float tensors. Dispatches on d.loader
-    to the neuralset (Segmenter) path or a standalone reader; imports are lazy so a score-only
-    caller never pulls a loader heavy deps."""
+    """Return (X_train, X_test, Y_train, Y_test, roi_masks) -- 2-D float tensors plus a (possibly
+    empty) ``{roi_name: bool mask}`` over the scored targets for the per-ROI breakdown. Dispatches on
+    d.loader; imports are lazy so a score-only caller never pulls a loader's heavy deps."""
     if d.loader == "neuralset":
         from harness.loaders.neuralset import load_neuralset
-        return load_neuralset(d)
+        return (*load_neuralset(d), {})            # timeline studies (text/meg/ieeg): no ROI map
     if d.loader == "nsd":
         from harness.loaders.standalone.nsd import load_nsd
         return load_nsd(d)

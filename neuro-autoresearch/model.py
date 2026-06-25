@@ -23,7 +23,7 @@ class Model:
         if d_in <= D_OUT:
             return X
         if self._W is None or self._W.shape != (d_in, D_OUT):
-            g = torch.Generator("cpu").manual_seed(SEED)
+            g = torch.Generator(device=X.device).manual_seed(SEED)
             self._W = torch.randn(d_in, D_OUT, generator=g, device=X.device) / d_in**0.5
         return X @ self._W
 

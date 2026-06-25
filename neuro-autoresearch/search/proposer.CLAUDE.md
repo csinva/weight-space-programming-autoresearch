@@ -33,7 +33,7 @@ All proposers + the evaluator share one `search.db`. Never open the DB file dire
 | `python hub.py summary` | one-line tally + current champion |
 
 `models` columns: `id, idea, summary, proposer, status (queued/running/ok/error), test_corr,
-train_corr, gap, n_params, model_loc, created_at`.
+train_corr, gap, roi_corr (JSON per-ROI {train,test}), n_params, model_loc, created_at`.
 
 **You are your own island.** Build on **`my-best`** (your backbone); optionally fold in *one*
 `peek-island` idea per round. `top-models`/`random-models` are read-only awareness — they give

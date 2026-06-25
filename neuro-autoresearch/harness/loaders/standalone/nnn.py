@@ -17,7 +17,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols
+from harness.loaders.shared import RawPixels, _cache_dir, surviving_cols
 
 _NNN_N_NSD_IMAGES = 1000
 
@@ -55,26 +55,6 @@ def _nnn_unit_area(table: dict, ses: int, pos: float) -> tuple[str, str]:
     return "Unknown", "Unknown"
 
 
-def _nnn_area_match(label: str, area: str, roi: str) -> bool:
-    """Does a unit's (patch label, stream area) satisfy the requested ``reward_roi``?
-
-    ``all``/``nsdgeneral`` keep everything; ``EVC``/``IT`` match the coarse stream;
-    an alpha-only roi (e.g. ``MB``) matches the patch FAMILY (MB1/MB2/MB3); anything
-    else is an exact label match (``V1`` matches V1 only, not V12).
-    """
-    roi_u = roi.upper()
-    if roi in ("all", "nsdgeneral"):
-        return True
-    if roi_u in ("EVC", "IT"):
-        return area.upper() == roi_u
-    import re as _re
-
-    family = _re.match(r"[A-Za-z]+", label or "")
-    if roi.isalpha() and family is not None and family.group(0).upper() == roi_u:
-        return True
-    return label.upper() == roi_u
-
-
 def _nnn_build_X(d: Dataset, img_pool) -> np.ndarray:
     """RawPixels features of the 1000 NSD images, read straight from img_pool.mat."""
     from PIL import Image
@@ -91,23 +71,20 @@ def _nnn_build_X(d: Dataset, img_pool) -> np.ndarray:
 
 
 def load_nnn(d: Dataset):
-    """Triple-N: Y from the per-session Processed tables, X from the NSD images, reward = one area.
-
-    Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors -- the same contract as
-    the Segmenter path. Y pools every reliable unit (``reliability_best`` > NNN_MIN_RELIABILITY)
-    across all 90 sessions, optionally narrowed by ``reward_roi`` to a cortical area/patch; X is
-    the 1000 NSD images. The 1000 images are split deterministically (every ``round(1/test_frac)``-th
-    image held out), so train/test are fixed and image-disjoint. The assembled units are cached by
-    (reliability, reward_roi, imsize); X by imsize. Bypass with NEURO_NO_CACHE.
+    """Triple-N: Y from the per-session Processed tables, X from the NSD images, reward = ALL
+    reliable units (EVC+IT pooled). Returns (X_train, X_test, Y_train, Y_test, roi_masks); ``roi_masks``
+    breaks the score down by stream area (EVC/IT). Y pools every reliable unit
+    (``reliability_best`` > NNN_MIN_RELIABILITY) across all 90 sessions; X is the 1000 NSD images,
+    split deterministically (every ``round(1/test_frac)``-th held out). Cached by (reliability, imsize).
     """
     import glob
     import re
     import scipy.io as sio
 
-    root, roi, min_rel = d.path, d.reward_roi, _nnn_min_reliability()
+    root, min_rel = d.path, _nnn_min_reliability()
     use_cache = not os.environ.get("NEURO_NO_CACHE")
 
-    # X: the 1000 NSD images (cached by imsize, shared across every reward_roi).
+    # X: the 1000 NSD images (cached by imsize).
     x_cache = os.path.join(_cache_dir(), f"nnn_X_im{d.imsize}.pt")
     if use_cache and os.path.exists(x_cache):
         X = torch.load(x_cache, weights_only=False)["X"]
@@ -118,34 +95,32 @@ def load_nnn(d: Dataset):
             os.makedirs(_cache_dir(), exist_ok=True)
             torch.save({"X": X}, x_cache)
 
-    # Y: reliable units (optionally one area) pooled across sessions (cached by rel/roi/imsize).
-    y_cache = os.path.join(_cache_dir(), f"nnn_Y_{roi}_rel{min_rel}.pt")
+    # Y: every reliable unit pooled across sessions, each tagged with its stream area (cached by rel/imsize).
+    y_cache = os.path.join(_cache_dir(), f"nnn_Y_all_rel{min_rel}.pt")
     sessions = sorted(glob.glob(os.path.join(root, "Processed_ses*.mat")))
     if use_cache and os.path.exists(y_cache):
-        Y = torch.load(y_cache, weights_only=False)["Y"]
+        blob = torch.load(y_cache, weights_only=False)
+        Y, areas = blob["Y"], blob["areas"]
     else:
-        table = _nnn_area_table(root) if roi not in ("all", "nsdgeneral") else None
-        cols = []
+        table = _nnn_area_table(root)
+        cols, areas = [], []
         for f in sessions:
             ses = int(re.search(r"ses(\d+)", os.path.basename(f)).group(1))
             m = sio.loadmat(f, simplify_cells=True)
             rb = np.asarray(m["response_best"], dtype="float32")[:, :_NNN_N_NSD_IMAGES]
             keep = np.asarray(m["reliability_best"]).ravel() > min_rel
-            if table is not None:
-                pos = np.asarray(m["pos"]).ravel()
-                for i in np.flatnonzero(keep):
-                    lab, area = _nnn_unit_area(table, ses, float(pos[i]))
-                    if not _nnn_area_match(lab, area, roi):
-                        keep[i] = False
-            if keep.any():
-                cols.append(rb[keep])                 # [kept_units, 1000]
+            pos = np.asarray(m["pos"]).ravel()
+            for i in np.flatnonzero(keep):
+                areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
+            cols.append(rb[keep])                     # [kept_units, 1000]
         if not cols:
-            raise RuntimeError(
-                f"NNN: no units passed reliability>{min_rel} for reward_roi={roi!r}")
+            raise RuntimeError(f"NNN: no units passed reliability>{min_rel}")
         Y = np.concatenate(cols, axis=0).T            # [1000 images, total_units]
+        areas = np.asarray(areas)
         if use_cache:
             os.makedirs(_cache_dir(), exist_ok=True)
-            torch.save({"Y": Y}, y_cache)
+            torch.save({"Y": Y, "areas": areas}, y_cache)
+    roi_masks = {a: areas == a for a in ("EVC", "IT")}
 
     # Deterministic strided split of the 1000 images (every round(1/test_frac)-th -> test).
     step = max(2, int(round(1.0 / d.test_frac)))
@@ -156,8 +131,10 @@ def load_nnn(d: Dataset):
     Xt, Yt = torch.as_tensor(X), torch.as_tensor(Y)
     Xtr, Xte = Xt[tr], Xt[te]
     Ytr, Yte = Yt[tr], Yt[te]
-    Ytr, Yte = drop_constant_cols(Ytr, Yte)
-    print(f"  NNN: {len(sessions)} sessions; reward_roi={roi} (reliability>{min_rel}) -> "
+    keep = surviving_cols(Ytr)
+    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
+    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
+    print(f"  NNN: {len(sessions)} sessions; region=all (reliability>{min_rel}) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte
+    return Xtr, Xte, Ytr, Yte, roi_masks

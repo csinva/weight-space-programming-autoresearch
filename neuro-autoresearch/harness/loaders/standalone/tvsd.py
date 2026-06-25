@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols
+from harness.loaders.shared import RawPixels, _cache_dir, surviving_cols
 
 _TVSD_N_ELEC = 1024
 # Per-monkey electrode -> cortical area, hardcoded from the release's _code/norm_MUA.m (the
@@ -109,12 +109,10 @@ def _tvsd_build_X(d: Dataset, subject: str, things_imgs_mat: str):
 
 
 def load_tvsd(d: Dataset):
-    """TVSD: Y from THINGS_normMUA.mat, X from the THINGS images, reward = one area.
+    """TVSD: Y from THINGS_normMUA.mat, X from the THINGS images, reward = ALL electrodes.
 
-    Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors -- the same contract as
-    the Segmenter path. The split is the dataset's own (22248 train / 100 repeated test
-    images); ``reward_roi`` (the preset field) picks the area V1/V4/IT as a column-subset of the
-    1024 electrodes (the readout then fits and scores exactly that area's electrodes).
+    Returns (X_train, X_test, Y_train, Y_test, roi_masks); ``roi_masks`` breaks the score down by
+    cortical area (V1/V4/IT). The split is the dataset's own (22248 train / 100 repeated test images).
     """
     subject = (d.subject or "F").upper()
     mdir = os.path.join(d.path, f"monkey{subject}")
@@ -122,19 +120,16 @@ def load_tvsd(d: Dataset):
     Y_train = _tvsd_targets(mat["train_MUA"])           # [22248 x 1024]
     Y_test = _tvsd_targets(mat["test_MUA"])             # [100 x 1024]
 
-    region = d.reward_roi
-    known_region = region in _TVSD_REGIONS
-    region_label = region if known_region else "all"
-    cols = (_tvsd_area_labels(subject) == region) if known_region \
-        else np.ones(_TVSD_N_ELEC, dtype=bool)          # unknown / "all" -> every electrode
-    Y_train, Y_test = Y_train[:, cols], Y_test[:, cols]
+    labels = _tvsd_area_labels(subject)                 # length-1024 V1/V4/IT per electrode
+    roi_masks = {a: labels == a for a in _TVSD_REGIONS}
 
     X_train, X_test = _tvsd_build_X(d, subject, os.path.join(mdir, "things_imgs.mat"))
 
     Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
     Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
-    Ytr, Yte = drop_constant_cols(Ytr, Yte)
+    keep = surviving_cols(Ytr)
+    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
+    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
     print(f"  TVSD monkey{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
-          f"region={region_label} -> "
-          f"{Ytr.shape[1]} electrodes ({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte
+          f"region=all -> {Ytr.shape[1]} electrodes ({Xtr.shape[1]} stim dims)")
+    return Xtr, Xte, Ytr, Yte, roi_masks

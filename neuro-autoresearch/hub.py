@@ -69,7 +69,8 @@ from datetime import datetime, timezone
 # time; ``n_params`` is also refreshed from the live model attribute when the evaluator scores it.
 NUM = ("test_corr", "train_corr", "gap", "n_params", "seconds")
 COLS = ("id", "idea", "summary", "proposer", "dataset", "status",
-        "test_corr", "train_corr", "gap", "n_params", "model_loc", "seconds", "created_at", "path")
+        "test_corr", "train_corr", "gap", "roi_corr", "n_params", "model_loc",
+        "seconds", "created_at", "path")
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
@@ -247,7 +248,7 @@ def propose(model_file: str, idea: str = "", summary: str = "",
         row = {
             "id": mid, "idea": (idea or "")[:500], "summary": (summary or "")[:1000],
             "proposer": proposer, "dataset": dataset, "status": "queued",
-            "test_corr": None, "train_corr": None, "gap": None,
+            "test_corr": None, "train_corr": None, "gap": None, "roi_corr": None,
             "n_params": cx["n_params"], "model_loc": cx["model_loc"],
             "seconds": None, "created_at": _now(), "path": os.path.abspath(dst),
         }
@@ -378,8 +379,11 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     st = "ok" if str(status).strip().lower().startswith("ok") else "error"
     scores = scores or {}
     cols = [c for c in NUM if scores.get(c) not in (None, "")]
+    vals = [_num(scores[c]) for c in cols]
+    if scores.get("roi_corr"):                    # TEXT json blob, only when the breakdown is non-empty
+        cols.append("roi_corr"); vals.append(json.dumps(scores["roi_corr"]))
     assignments = [f"{c}=?" for c in cols] + ["status=?"]
-    vals = [_num(scores[c]) for c in cols] + [st, mid]
+    vals = vals + [st, mid]
     with connect(_ensure(run)) as con:
         con.execute(f"UPDATE models SET {', '.join(assignments)} WHERE id=?", vals)
     return st
@@ -482,7 +486,7 @@ def _score_child(model_file: str) -> None:
         spec.loader.exec_module(mod)
         row = evaluate_on_split_safe(mod.MODEL, load_split(DATASET), DATASET, ())
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "gap",
-                                       "n_params", "seconds")}
+                                       "roi_corr", "n_params", "seconds")}
     except Exception as e:  # noqa: BLE001  -- any import/eval fault is a recorded error, not a crash
         import traceback
         traceback.print_exc()

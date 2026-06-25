@@ -37,9 +37,14 @@ def _cache_dir() -> str:
     )
 
 
+def surviving_cols(Y_train):
+    """Boolean keep-mask of TRAIN-non-constant target columns (the rest carry no signal and only
+    dilute the mean-r). Train variance only -- no test peeking. Use it to subset Y AND any per-ROI
+    masks by the same columns, so a breakdown stays aligned to the scored targets."""
+    return Y_train.std(0) > 0
+
+
 def drop_constant_cols(Y_train, *others):
-    """Drop target columns that are constant on the TRAIN split (no signal; they only
-    dilute the mean-r and waste compute). Mask uses train variance only (no test peeking).
-    Returns (Y_train, *others) each column-subset by the same keep mask."""
-    keep = Y_train.std(0) > 0
+    """(Y_train, *others) each column-subset to ``surviving_cols(Y_train)``."""
+    keep = surviving_cols(Y_train)
     return tuple(Y[:, keep] for Y in (Y_train, *others))

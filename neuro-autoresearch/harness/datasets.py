@@ -73,7 +73,8 @@ PRESETS: dict[str, Dataset] = {
     # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
     # NOT the coarse raw-timeseries HRF-peak average. Y is the per-ROI betas from
     # nsd_betas/per_subject/subjNN.pkl; X is the NSD images (shared-1000 image-disjoint hold-out).
-    # Reward = the fine-grained VENTRAL stream (~8.6k voxels). Subject via NEURO_SUBJECT (1-8).
+    # Reward = the joint EARLY+VENTRAL stream (~14.5k voxels); roi_corr breaks it down per ROI
+    # (early, ventral, V1/V2/V3/hV4/FFA/PPA/VWFA). Subject via NEURO_SUBJECT (1-8).
     "nsd": Dataset(
         study="NsdBetasSubj01",
         loader="nsd",
@@ -82,7 +83,7 @@ PRESETS: dict[str, Dataset] = {
         imsize=128,
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/nsd_betas",
-        reward_roi="ventral",
+        reward_roi="early+ventral",
         subject="01",
     ),
     # Bel2026PetitListen (LPP-Listen MEG, OpenNeuro ds007523), MEG + audio. Each
@@ -116,9 +117,9 @@ PRESETS: dict[str, Dataset] = {
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
     # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
-    # split. reward_roi picks cortical area V1/V4/IT; monkey F/N via NEURO_SUBJECT. GOTCHA:
-    # the THINGS stimulus images are gated (not bundled) -- stage them once (see
-    # harness.loaders.standalone.tvsd._tvsd_images_root).
+    # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
+    # F/N via NEURO_SUBJECT. GOTCHA: the THINGS stimulus images are gated (not bundled) -- stage
+    # them once (see harness.loaders.standalone.tvsd._tvsd_images_root).
     "tvsd": Dataset(
         study="TvsdMonkeyF",
         loader="tvsd",
@@ -128,15 +129,14 @@ PRESETS: dict[str, Dataset] = {
         subject="F",
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/tvsd_normmua",
-        reward_roi="IT",
+        reward_roi="all",
     ),
     # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
     # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
     # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
     # images), so loader="nnn" (loaders.standalone.nnn). Y pools reliable units (reliability>0.4,
-    # ~35k of 47.5k) across all sessions; reward_roi picks a cortical area as a column subset
-    # -- coarse EVC/IT, a patch family (MB/AB/MF/AF/MO/AO/LPP/PITP/CLC/AMC/PF), or an exact
-    # label (V1/V2/V4/MB1...). The 1000 NSD images split deterministically (every 5th held out).
+    # ~35k of 47.5k) across all sessions. Reward = ALL reliable units; roi_corr breaks it down by
+    # stream area (EVC/IT). The 1000 NSD images split deterministically (every 5th held out).
     # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.
     "nnn": Dataset(
         study="NnnV1",
@@ -146,7 +146,7 @@ PRESETS: dict[str, Dataset] = {
         imsize=16,
         download=False,
         path="/home/t-ymehta/Research/neuralset/data/nnn_processed",
-        reward_roi="IT",
+        reward_roi="all",
     ),
 }
 

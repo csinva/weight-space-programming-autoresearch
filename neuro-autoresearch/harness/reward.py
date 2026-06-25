@@ -16,6 +16,7 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
+from harness.roi import roi_breakdown
 
 # Ridge penalties searched per target by himalaya's RidgeCV (it picks the best alpha PER target
 # via k-fold CV). A fixed alpha massively overfits small samples; per-target CV closes that gap.
@@ -89,7 +90,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     data load). ``slices`` is accepted for back-compat and ignored. A representation wider than
     ``MAX_DOUT`` is rejected (raised -> recorded as a ``status='error'`` row by the safe wrapper).
     """
-    X_train, X_test, Y_train, Y_test = split
+    X_train, X_test, Y_train, Y_test, roi_masks = split
     device = _readout_device()
     t0 = time.time()
     # Move the stimulus to the readout device so the model's forward pass runs on the GPU too.
@@ -126,6 +127,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "test_corr": test_corr,
         "train_corr": train_corr,
         "gap": train_corr - test_corr,
+        "roi_corr": roi_breakdown(roi_masks, train_np, test_np),
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
         "reward_roi": dataset.reward_roi,
@@ -142,7 +144,7 @@ def _error_status(exc: BaseException) -> str:
 def _error_row(model, split, dataset: Dataset, exc: BaseException,
                seconds: float, slices=()) -> dict:
     """A durable ``status='error'`` row for a model/readout fault (NaN scores)."""
-    _, _, Y_train, Y_test = split
+    _, _, Y_train, Y_test = split[0], split[1], split[2], split[3]
     nan = float("nan")
     return {
         "study": dataset.study,
@@ -156,6 +158,7 @@ def _error_row(model, split, dataset: Dataset, exc: BaseException,
         "test_corr": nan,
         "train_corr": nan,
         "gap": nan,
+        "roi_corr": {},
         "seconds": round(seconds, 2),
         "status": _error_status(exc),
         "reward_roi": dataset.reward_roi,

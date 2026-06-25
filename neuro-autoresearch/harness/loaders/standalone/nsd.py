@@ -20,7 +20,7 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.shared import _cache_dir, drop_constant_cols
+from harness.loaders.shared import _cache_dir, surviving_cols
 
 
 def _subject(d: Dataset) -> str:
@@ -67,18 +67,40 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
     return X
 
 
-def load_nsd(d: Dataset):
-    """NSD GLMdenoise betas: Y from subjNN.pkl[reward_roi], X from the images, shared-1000 split.
+_NSD_FINE = ("V1", "V2", "V3", "hV4", "FFA", "PPA", "VWFA")
 
-    Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors -- the same contract as the
-    other loaders. Train-constant target voxels are dropped (mirrors the readout's own guard).
-    """
+
+def _nsd_roi_masks(rois, Y, n_early):
+    """ROI masks over the early+ventral region columns: the two streams (disjoint -> a clean split
+    at ``n_early``) plus the functional patches, byte-matched to their in-region voxels (a patch's
+    out-of-stream part is not in Y, so it is simply not scored)."""
+    n = Y.shape[1]
+    cols = np.arange(n)
+    masks = {"early": cols < n_early, "ventral": cols >= n_early}
+    index = {hash(Y[:, j].tobytes()): j for j in range(n)}
+    for name in _NSD_FINE:
+        m = np.zeros(n, dtype=bool)
+        M = np.asarray(rois[name], dtype="float32")
+        for j in range(M.shape[1]):
+            k = index.get(hash(M[:, j].tobytes()))
+            if k is not None:
+                m[k] = True
+        masks[name] = m
+    return masks
+
+
+def load_nsd(d: Dataset):
+    """NSD GLMdenoise betas: reward = the joint EARLY+VENTRAL stream; X from the images, shared-1000
+    split. Returns (X_train, X_test, Y_train, Y_test, roi_masks). ``roi_masks`` carries the per-ROI
+    breakdown (early, ventral + V1/V2/V3/hV4/FFA/PPA/VWFA). Train-constant voxels are dropped."""
     subject = _subject(d)
     pkl = os.path.join(d.path, "per_subject", f"subj{subject}.pkl")
     with open(pkl, "rb") as f:
         blob = pickle.load(f)
-    region = d.reward_roi if d.reward_roi in blob["rois"] else "ventral"
-    Y = np.asarray(blob["rois"][region], dtype="float32")      # (N_images, n_vox)
+    rois = blob["rois"]
+    early = np.asarray(rois["early"], dtype="float32")
+    Y = np.concatenate([early, np.asarray(rois["ventral"], dtype="float32")], axis=1)
+    roi_masks = _nsd_roi_masks(rois, Y, early.shape[1])
     nsd_ids = np.asarray(blob["nsd_ids"])
     shared = np.asarray(blob["shared"], dtype=bool)            # the shared-1000 test images
 
@@ -86,7 +108,9 @@ def load_nsd(d: Dataset):
     tr, te = ~shared, shared
     Xtr, Xte = torch.as_tensor(X[tr]), torch.as_tensor(X[te])
     Ytr, Yte = torch.as_tensor(Y[tr]), torch.as_tensor(Y[te])
-    Ytr, Yte = drop_constant_cols(Ytr, Yte)
+    keep = surviving_cols(Ytr)
+    Ytr, Yte = Ytr[:, keep], Yte[:, keep]
+    roi_masks = {k: v[keep.numpy()] for k, v in roi_masks.items()}
     print(f"  NSD-betas subj{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
-          f"region={region} -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte
+          f"region=early+ventral -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
+    return Xtr, Xte, Ytr, Yte, roi_masks

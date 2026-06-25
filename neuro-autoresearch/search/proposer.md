@@ -18,10 +18,12 @@ You are `cd`'d into your own proposer folder. It contains:
 - `hub.py`, `harness/` -- symlinked fixed code you can `import`. You never edit these.
 
 `model.py` is ONLY a mapping from stimulus -> representation. How the representation is loaded,
-scored (a fixed ridge readout's held-out predictivity on the **ventral visual stream**) and
-recorded is ALL abstracted away behind `hub` -- you never touch data loading, the readout, or the
-GPU. Your whole job: evolve `model.py` from the raw-pixel baseline floor so its ventral
-`test_corr` climbs. **The final representation width `D_out` must be under 10,000.**
+scored (a fixed ridge readout's held-out predictivity over the dataset's **whole reward region** --
+for NSD the joint early+ventral visual stream) and recorded is ALL abstracted away behind `hub` --
+you never touch data loading, the readout, or the GPU. Your whole job: evolve `model.py` from the
+raw-pixel baseline floor so its `test_corr` climbs. Your scored row also carries a `roi_corr`
+breakdown (per-ROI `{train, test}` r) so you can see WHERE you win and target the weak ROIs.
+**The final representation width `D_out` must be under 10,000.**
 
 ## The `hub` API (run every command from this sandbox)
 You are your OWN ISLAND: you evolve your own lineage. There is NO global champion to read or copy --
