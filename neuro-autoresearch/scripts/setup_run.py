@@ -23,7 +23,8 @@ import argparse
 import os
 import shutil
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
@@ -60,7 +61,7 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).
     """
-    date = date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    date = date or datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")  # ET-dated run
     run_dir = os.path.join(repo_root, "runs", f"{dataset}__{date}")
     sys.path.insert(0, repo_root)
     import hub
