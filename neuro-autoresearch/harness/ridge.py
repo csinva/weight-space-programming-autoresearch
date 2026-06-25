@@ -100,7 +100,7 @@ def _fast_predict(A_train, A_test, Y_train, alphas, device, eps=1e-6):
         for al in a:
             d = 1.0 / (s + al)
             yhat = (B * d) @ C
-            h = B2 @ d
+            h = B2 @ d + 1.0 / n          # +1/n: the centering-fit intercept's leverage
             resid = (Yc - yhat) / (1.0 - h).clamp_min(eps).unsqueeze(1)
             mse = (resid * resid).mean(0)
             better = mse < best_mse
@@ -119,7 +119,7 @@ def _fast_predict(A_train, A_test, Y_train, alphas, device, eps=1e-6):
         for al in a:
             d = s / (s + al)
             yhat = (U * d) @ M
-            h = U2 @ d
+            h = U2 @ d + 1.0 / n          # +1/n: the centering-fit intercept's leverage
             resid = (Yc - yhat) / (1.0 - h).clamp_min(eps).unsqueeze(1)
             mse = (resid * resid).mean(0)
             better = mse < best_mse
