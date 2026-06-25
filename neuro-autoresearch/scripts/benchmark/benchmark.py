@@ -112,9 +112,10 @@ def _worker(dataset: str, subject: str, method: str, idx: int, out: dict) -> Non
 
     # 4) Readout: the harness's per-target ridge (fast or himalaya, per NEURO_READOUT) -> predictions
     #    for BOTH splits. This is the phase the whole exercise is about.
+    from harness.ridge import ridge_predict
     sync()
     s = time.time()
-    pred_train, pred_test = R._ridge_predict(A_train, A_test, Yv_train, dev)
+    pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=dev)
     sync()
     t["readout"] = time.time() - s
 

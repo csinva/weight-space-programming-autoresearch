@@ -12,9 +12,10 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   could be edited, the reward would be meaningless.
 - **Never trained:** weights are analytic / random-but-fixed in code; only the ridge readout
   (`harness/reward.py`) is fit — that *is* the eval. The model only ever receives `X`, never the
-  neural target `Y`. The readout is `NEURO_READOUT=fast` (default; `harness/fast_ridge.py`, one
-  eigendecomposition + closed-form leave-one-out alpha selection, ~20× faster on GPU) or
-  `NEURO_READOUT=himalaya` (the reference himalaya `RidgeCV`, 5-fold SVD). Both fit per-target alpha;
+  neural target `Y`. The readout (`harness/ridge.py`, both implementations + the switch) is
+  `NEURO_READOUT=fast` (default; one eigendecomposition + closed-form leave-one-out alpha selection,
+  ~20× faster on GPU) or `NEURO_READOUT=himalaya` (the reference himalaya `RidgeCV`, 5-fold SVD).
+  Both fit per-target alpha;
   their `test_corr` agree to ~1e-4. `fast` avoids himalaya's per-fold cuSOLVER SVD (~12 s each), which
   was the entire readout cost and serialized ~3× across concurrent evals.
 - **Per-sample** activations (no statistic across the batch); representation `D_out < 10000`.

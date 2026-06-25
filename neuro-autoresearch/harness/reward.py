@@ -2,13 +2,13 @@
 
 Reward = held-out predictivity of a ridge readout from model activations to recorded neural
 activity, on the dataset's reward region (NSD: the ventral visual stream). Only the ridge readout
-is fit; the model is never trained. The readout is Gallant-lab `himalaya`'s GPU ``RidgeCV``
-(per-target alpha via k-fold CV, ``torch_cuda`` backend) -- no custom ridge math. Persisting a
-scored row to disk lives in ``harness.results``.
+is fit; the model is never trained. The readout itself (both implementations + the ``NEURO_READOUT``
+switch) lives in ``harness.ridge``; this file does the surrounding eval: pick the region's target
+columns, run the readout, score the mean per-target Pearson r, and assemble the result row.
+Persisting a scored row to disk lives in ``harness.results``.
 """
 from __future__ import annotations
 
-import os
 import time
 import traceback
 
@@ -17,12 +17,9 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
+from harness.ridge import ridge_predict, _readout_device, _to_np
 from harness.roi import roi_breakdown
 
-# Ridge penalties searched per target by himalaya's RidgeCV (it picks the best alpha PER target
-# via k-fold CV). A fixed alpha massively overfits small samples; per-target CV closes that gap.
-_ALPHAS = np.logspace(-3, 6, 10)
-_CV = 5                       # himalaya RidgeCV folds for per-target alpha selection
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 
 
@@ -39,18 +36,6 @@ def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
     return float(_corr_per_column(np.asarray(y_hat), np.asarray(y)).mean())
 
 
-def _readout_device() -> torch.device:
-    """The A100 when present, else CPU. The readout is identical on either."""
-    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-def _to_np(a) -> np.ndarray:
-    """Any tensor/array -> a float64 numpy array (for the Pearson scoring)."""
-    if torch.is_tensor(a):
-        a = a.detach().cpu().numpy()
-    return np.asarray(a, dtype=np.float64)
-
-
 def _select_targets(Y, mask):
     """Select the reward-region columns of the neural targets ``Y`` (or all if ``mask`` is None)."""
     if mask is None:
@@ -58,52 +43,10 @@ def _select_targets(Y, mask):
     return Y[:, mask]
 
 
-def _ridge_predict(A_train, A_test, Y_train, device):
-    """Fit a per-target ridge readout train->Y and predict BOTH splits.
-
-    Returns ``(pred_train, pred_test)`` as float64 numpy arrays -- the entire readout. The method is
-    chosen by ``NEURO_READOUT`` (default ``"fast"``):
-
-      * ``"fast"`` -- ``harness.fast_ridge``: one eigendecomposition + closed-form leave-one-out
-        alpha selection (sklearn's efficient-LOO scheme). ~20x faster than himalaya on a GPU because
-        it avoids himalaya's per-fold cuSOLVER SVD (~12s each); the reward ``test_corr`` agrees with
-        himalaya to ~1e-4. This is the default the search runs.
-      * ``"himalaya"`` -- the reference Gallant-lab ``RidgeCV`` (per-target alpha via 5-fold CV,
-        ``torch_cuda`` backend). Slower but the original ground truth; kept for verification.
-    """
-    if os.environ.get("NEURO_READOUT", "fast").lower() == "himalaya":
-        return _ridge_predict_himalaya(A_train, A_test, Y_train, device)
-    from harness.fast_ridge import fast_ridge_predict
-    return fast_ridge_predict(A_train, A_test, Y_train, alphas=_ALPHAS, device=device)
-
-
-def _ridge_predict_himalaya(A_train, A_test, Y_train, device):
-    """The reference himalaya ``RidgeCV`` readout (per-target alpha, 5-fold CV). See ``_ridge_predict``.
-
-    Uses the GPU ``torch_cuda`` backend (float32) when on CUDA, else the ``torch`` backend
-    (float64). Returns ``(pred_train, pred_test)`` as float64 numpy arrays -- no hand-rolled math.
-    """
-    from himalaya.backend import set_backend
-    from himalaya.ridge import RidgeCV
-
-    cuda = device.type == "cuda"
-    set_backend("torch_cuda" if cuda else "torch")
-    dtype = torch.float32 if cuda else torch.float64
-
-    def _t(x):
-        x = x if torch.is_tensor(x) else torch.as_tensor(np.asarray(x))
-        return x.to(device=device, dtype=dtype)
-
-    At, Ate, Yt = _t(A_train), _t(A_test), _t(Y_train)
-    est = RidgeCV(alphas=_ALPHAS, fit_intercept=True, cv=_CV)
-    est.fit(At, Yt)
-    return _to_np(est.predict(At)), _to_np(est.predict(Ate))
-
-
 def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     """Evaluate ``model`` on an already-loaded ``split`` (the reusable core).
 
-    Runs the model forward, then fits himalaya's GPU ``RidgeCV`` from the activations to the
+    Runs the model forward, then fits the ``harness.ridge`` readout from the activations to the
     dataset's REWARD-REGION neural targets only (NSD: the ventral stream), and returns the mean
     per-target held-out Pearson r as ``test_corr``. Times only the model + readout (not the one-off
     data load). ``slices`` is accepted for back-compat and ignored. A representation wider than
@@ -129,7 +72,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     mask = _slice_target_mask(study, dataset.reward_roi, int(Y_train.shape[1]))
     Yv_train, Yv_test = _select_targets(Y_train, mask), _select_targets(Y_test, mask)
 
-    pred_train, pred_test = _ridge_predict(A_train, A_test, Yv_train, device)
+    pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
     test_np = _corr_per_column(pred_test, _to_np(Yv_test))
     train_np = _corr_per_column(pred_train, _to_np(Yv_train))
     test_corr, train_corr = float(test_np.mean()), float(train_np.mean())
