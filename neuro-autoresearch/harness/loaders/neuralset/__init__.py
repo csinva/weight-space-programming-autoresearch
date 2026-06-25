@@ -91,10 +91,18 @@ _CACHE_VERSION = "v2"
 _BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi")
 
 
-def _build_cache_key(d: Dataset) -> str:
-    """A hash over the Dataset fields that affect _build_xy (all but roi/test_frac)."""
+def _build_cache_key(d: Dataset, processed: bool = False) -> str:
+    """A hash over the Dataset fields that affect _build_xy (all but roi/test_frac).
+
+    The raw study tree and the slim ``data/<ds>/`` processed tree produce matching
+    (X, Y) by design but are independent sources, so they get DISTINCT cache paths
+    (``source`` in the key). Otherwise a stale raw-built cache would permanently
+    shadow a freshly-generated processed tree (the cache check precedes the
+    processed branch); keying by source lets each rebuild once and reuse thereafter.
+    """
     fields = {k: v for k, v in dataclasses.asdict(d).items()
               if k not in _BUILD_AGNOSTIC_FIELDS}
+    fields["__source__"] = "processed" if processed else "raw"
     payload = json.dumps(fields, sort_keys=True, default=str)
     digest = hashlib.sha256(f"{_CACHE_VERSION}:{payload}".encode()).hexdigest()[:16]
     return f"{d.study}_build_{digest}.pt"
@@ -267,11 +275,14 @@ def load_neuralset(d: Dataset):
     bypass with NEURO_NO_CACHE, relocate with NEURO_SPLIT_CACHE.
     """
     use_cache = not os.environ.get("NEURO_NO_CACHE")
-    build_path = os.path.join(_cache_dir(), _build_cache_key(d))
 
     # Prefer the slim, raw-free data/<ds>/ tree when present (audio neural: meg/ieeg).
     out = processed_dir(_PROCESSED_KEY[d.study]) if d.study in _PROCESSED_KEY else None
     use_processed = out is not None and os.path.isdir(out)
+
+    # Key the build cache by source so a raw-built cache never shadows the processed
+    # tree (and vice versa); each source rebuilds at most once.
+    build_path = os.path.join(_cache_dir(), _build_cache_key(d, processed=use_processed))
 
     if use_cache and os.path.exists(build_path):
         X, Y, onsets, stim_ids = _build_cache_load(build_path)
