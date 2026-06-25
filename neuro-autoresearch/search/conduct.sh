@@ -2,7 +2,7 @@
 # search/conduct.sh -- the CONDUCTOR loop (optional 3rd always-on loop search.sh supervises).
 # Every NEURO_EPOCH_MINS minutes it runs ONE headless Copilot pass (search/conductor.md) that reads
 # the shared search.db and writes a BROAD standing direction per proposer slot into the `steering`
-# table (`lab.py steer`). ADVISORY only: proposers read their direction (`lab.py direction`) to bias
+# table (`hub.py steer`). ADVISORY only: proposers read their direction (`hub.py direction`) to bias
 # what they explore; nothing in the queue or scoring gates on it. Runs once at startup to seed
 # directions immediately, then sleeps between epochs.
 #   LAB_RUN=runs/nsd__2026-06-24 NEURO_DATASET=nsd NEURO_EPOCH_MINS=30 search/conduct.sh

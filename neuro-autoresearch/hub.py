@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""``lab`` -- the ONE API every proposer and the evaluator use to talk to a search run.
+"""``hub`` -- the ONE API every proposer and the evaluator use to talk to a search run.
 
 A *run* is a single open-ended search, isolated in its own directory::
 
     runs/<dataset>__<date>/
         search.db          # the shared brain: queue + full history + scores (this module owns it)
         models/<id>.py     # shared, IMMUTABLE archive -- one file per model ever tried
-        proposers/pNN/     # one sandbox per proposer (its own mutable model.py + this lab symlink)
+        proposers/pNN/     # one sandbox per proposer (its own mutable model.py + this hub symlink)
         eval/              # the single GPU evaluator's workspace
 
 There is NO conductor, NO notebook, and NO wave barrier. ``search.db`` (one ``models`` row per
@@ -22,7 +22,7 @@ model) is the only shared memory and doubles as the queue via a ``status`` flag:
 siblings. That alone caps the queue at ~one in-flight per proposer and gives each agent the
 fastest feedback on whether its last idea worked.
 
-The proposer half is pure sqlite (no torch / no harness import), so ``import lab`` is light.
+The proposer half is pure sqlite (no torch / no harness import), so ``import hub`` is light.
 Scoring (``score`` / the evaluator path) lazy-imports the FIXED harness and runs the model in a
 subprocess for isolation.
 
@@ -31,16 +31,16 @@ Which run this process targets is the dir in ``$LAB_RUN`` (else: walk up from cw
 
 CLI (what a headless agent calls without writing Python)::
 
-    python lab.py propose-model <model_file> --idea "..."  # -> prints the new id
-    python lab.py wait-for-score <id>                       # block; prints the scored row as JSON
-    python lab.py top-models [-n 5]                         # public scoreboard: scores + ideas (NO source)
-    python lab.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
-    python lab.py my-best [--no-code]                       # YOUR island's best model (+source) to build on
-    python lab.py peek-island [--no-code]                   # best of ONE random OTHER island (+source); once/iter
-    python lab.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
-    python lab.py summary                                   # launcher: one-line tally + champion
-    python lab.py requeue                                   # evaluator startup crash recovery
-    python lab.py migrate                                   # bring an old search.db to the current schema
+    python hub.py propose-model <model_file> --idea "..."  # -> prints the new id
+    python hub.py wait-for-score <id>                       # block; prints the scored row as JSON
+    python hub.py top-models [-n 5]                         # public scoreboard: scores + ideas (NO source)
+    python hub.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
+    python hub.py my-best [--no-code]                       # YOUR island's best model (+source) to build on
+    python hub.py peek-island [--no-code]                   # best of ONE random OTHER island (+source); once/iter
+    python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
+    python hub.py summary                                   # launcher: one-line tally + champion
+    python hub.py requeue                                   # evaluator startup crash recovery
+    python hub.py migrate                                   # bring an old search.db to the current schema
 
 The evaluator and setup use the Python API directly (``init`` / ``get_next_model`` / ``record`` /
 ``score``); those are not exposed as CLI verbs.
@@ -450,7 +450,7 @@ def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> di
         out = tf.name
     env["LAB_SCORE_OUT"] = out
     try:
-        proc = subprocess.run([sys.executable, "-m", "lab", "_score_child", os.path.abspath(model_file)],
+        proc = subprocess.run([sys.executable, "-m", "hub", "_score_child", os.path.abspath(model_file)],
                               cwd=repo, env=env, capture_output=True, text=True, timeout=timeout)
         log = (proc.stdout or "") + (proc.stderr or "")
         if os.path.getsize(out):
@@ -468,7 +468,7 @@ def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> di
 
 
 def _score_child(model_file: str) -> None:
-    """Child entrypoint (``python -m lab _score_child <file>``): import the harness, score the
+    """Child entrypoint (``python -m hub _score_child <file>``): import the harness, score the
     model on the active dataset (whole-dataset reward), write JSON to ``$LAB_SCORE_OUT``."""
     import importlib.util
     out = os.environ["LAB_SCORE_OUT"]
@@ -497,7 +497,7 @@ def _print(obj):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description="lab -- the search-run API (see module docstring).")
+    p = argparse.ArgumentParser(description="hub -- the search-run API (see module docstring).")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     # Each subcommand registers its handler (a function of the parsed args) and whether its result

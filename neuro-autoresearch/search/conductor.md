@@ -5,11 +5,11 @@ write models. Your ONE job: keep the pool DIVERSE and unstuck by giving each pro
 standing direction. You run once now and again every epoch; the proposers read their direction and
 explore within it. This is a single pass -- do your analysis, write the directions, then STOP.
 
-## Read the board (everything is via `python lab.py`, run from the repo root)
-- `python lab.py summary`            -- tally + current champion
-- `python lab.py top-models -n 8`    -- the best models: scores + idea labels (what's working)
-- `python lab.py random-models -n 8` -- random prior models (idea + score)
-- `python lab.py query-db "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"`
+## Read the board (everything is via `python hub.py`, run from the repo root)
+- `python hub.py summary`            -- tally + current champion
+- `python hub.py top-models -n 8`    -- the best models: scores + idea labels (what's working)
+- `python hub.py random-models -n 8` -- random prior models (idea + score)
+- `python hub.py query-db "SELECT proposer, ROUND(test_corr,4) tc, idea FROM models WHERE status='ok' ORDER BY test_corr DESC LIMIT 25"`
 - `cat runs/*/proposers/p*/direction.txt` (or `$LAB_RUN/proposers/p*/direction.txt`) -- the
   directions you set last epoch
 

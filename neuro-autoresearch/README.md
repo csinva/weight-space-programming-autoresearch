@@ -61,7 +61,7 @@ search proposer starts from.
 
 ```
 model.py             EVOLVED: the one model (seed: random-projection baseline)
-lab.py               the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
+hub.py               the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
 search/              the open-ended search loop (launcher + proposer pool + evaluator)
   proposer.md          the task description handed to each proposer
 harness/             FIXED evaluation harness — must not be edited
@@ -115,19 +115,19 @@ Everything shared lives in one SQLite file, `runs/<dataset>__<date>/search.db` �
 queue, the full history, and the scores. Re-launching the same date **resumes** the run
 losslessly; a new date starts fresh.
 
-### The `lab` API/CLI
+### The `hub` API/CLI
 
-Agents never touch the DB, GPU, or dataset directly — they go through `lab.py`:
+Agents never touch the DB, GPU, or dataset directly — they go through `hub.py`:
 
 ```bash
-python lab.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
-python lab.py wait-for-score <id>              # block until the evaluator scores it
-python lab.py top-models -n 5                  # public scoreboard: scores + ideas (no source)
-python lab.py random-models -n 5               # random prior models (diversity)
-python lab.py my-best [--no-code]              # YOUR island's best model (+source) to build on
-python lab.py peek-island [--no-code]          # best of one RANDOM other island (+source); once/iter
-python lab.py query-db "SELECT ..."            # arbitrary read-only SQL
-python lab.py summary                          # one-line DB tally + current champion
+python hub.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
+python hub.py wait-for-score <id>              # block until the evaluator scores it
+python hub.py top-models -n 5                  # public scoreboard: scores + ideas (no source)
+python hub.py random-models -n 5               # random prior models (diversity)
+python hub.py my-best [--no-code]              # YOUR island's best model (+source) to build on
+python hub.py peek-island [--no-code]          # best of one RANDOM other island (+source); once/iter
+python hub.py query-db "SELECT ..."            # arbitrary read-only SQL
+python hub.py summary                          # one-line DB tally + current champion
 ```
 
 Each proposer is its own **island**: it can read source only from `my-best` (its own lineage) and

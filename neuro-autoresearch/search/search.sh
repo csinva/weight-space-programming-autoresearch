@@ -53,10 +53,10 @@ python scripts/setup_run.py "$DATASET" --date "$DATE" --n "$FLEET" >/dev/null
 KEY="${DATASET}__${DATE}"
 export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_MINS="$EPOCH"
 
-# --- DB consistency (delegated to the lab CLI; LAB_RUN targets this run) ------------------------
+# --- DB consistency (delegated to the hub CLI; LAB_RUN targets this run) ------------------------
 # reconcile: reset any orphaned `running` row back to `queued` (startup + shutdown).
-reconcile() { local n; n="$(python lab.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
-log_summary() { echo "[search] $(python lab.py summary)"; }
+reconcile() { local n; n="$(python hub.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
+log_summary() { echo "[search] $(python hub.py summary)"; }
 
 # Per-proposer API cost: sum every "AI Credits <n>" line in each proposer's own log (one line per
 # copilot session, so restarts accumulate), convert to USD (credits / 100), and write a costs table

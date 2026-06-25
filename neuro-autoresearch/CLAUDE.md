@@ -20,7 +20,7 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   (`load_split` dispatch in `__init__`; one reader per dataset family + `common.py` shared helpers
   & `studies.py` NeuralSet subclasses) · `reward.py` (himalaya ridge → the region `test_corr`) ·
   `results.py` / `run.py` (the manual single-eval path).
-- **`lab.py`** — the ONE importable API + CLI over a run's `search.db`
+- **`hub.py`** — the ONE importable API + CLI over a run's `search.db`
   (`propose` / `wait_for_result` / `champions` / `sample` / `get_best_model` /
   `get_best_model_from_other_island` / `query` + `get_next_model` / `record` / `score`). Hides the
   DB, GPU, and dataset from agents. Each proposer is an ISLAND: it reads source only from its own

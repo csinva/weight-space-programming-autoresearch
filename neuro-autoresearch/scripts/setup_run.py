@@ -4,13 +4,13 @@
 A run lives at ``runs/<dataset>__<date>/`` and is the unit of one open-ended search::
 
     runs/<dataset>__<date>/
-        search.db            # the shared brain (created by lab.init)
-        models/              # shared immutable model archive (created by lab.init)
-        proposers/p00 … pNN/ # one sandbox per proposer (its own model.py + symlinked harness/lab)
+        search.db            # the shared brain (created by hub.init)
+        models/              # shared immutable model archive (created by hub.init)
+        proposers/p00 … pNN/ # one sandbox per proposer (its own model.py + symlinked harness/hub)
         eval/                # the single GPU evaluator's sandbox
 
 Each *sandbox* is a runnable workspace: relative symlinks to the FIXED ``harness/`` package and
-``lab.py`` (so ``import harness`` / ``import lab`` resolve), a local editable ``model.py`` seeded
+``hub.py`` (so ``import harness`` / ``import hub`` resolve), a local editable ``model.py`` seeded
 from the repo-root baseline model.py, a ``CLAUDE.md`` (symlink to ``search/proposer.CLAUDE.md``, the
 agent's ambient orientation), and a ``scratch/`` for the agent. Nothing is copied that should be
 shared -- the DB and the model archive live once at the run root.
@@ -26,11 +26,11 @@ import sys
 from datetime import datetime, timezone
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SANDBOX_SYMLINKS = ["harness", "lab.py"]          # FIXED code, imported (never copied)
+SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
 
 
 def make_sandbox(path: str, repo_root: str = REPO) -> str:
-    """Create one runnable sandbox at ``path``: symlinked harness/lab, a seed ``model.py`` copied
+    """Create one runnable sandbox at ``path``: symlinked harness/hub, a seed ``model.py`` copied
     from the repo-root baseline model.py, and a ``scratch/`` dir. Idempotent (a resumed run keeps
     each proposer's evolved model.py)."""
     os.makedirs(path, exist_ok=True)
@@ -45,7 +45,7 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
     if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
         shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
     # ambient orientation for the proposer agent (Copilot auto-loads CLAUDE.md from the cwd):
-    # the lab.py DB interface, the model contract, and the loop. Symlinked so it stays in sync.
+    # the hub.py DB interface, the model contract, and the loop. Symlinked so it stays in sync.
     claude_src = os.path.join(repo_root, "search", "proposer.CLAUDE.md")
     claude_link = os.path.join(path, "CLAUDE.md")
     if os.path.exists(claude_src) and not os.path.islink(claude_link) and not os.path.exists(claude_link):
@@ -63,11 +63,11 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
     date = date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     run_dir = os.path.join(repo_root, "runs", f"{dataset}__{date}")
     sys.path.insert(0, repo_root)
-    import lab
-    lab.init(run_dir)                              # search.db + models/
+    import hub
+    hub.init(run_dir)                              # search.db + models/
     for i in range(n_proposers):
         make_sandbox(os.path.join(run_dir, "proposers", f"p{i:02d}"), repo_root)
-    os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch (scores via lab.score in-repo)
+    os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch (scores via hub.score in-repo)
     return run_dir
 
 

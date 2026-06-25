@@ -32,7 +32,7 @@ PREAMBLE="THIS RUN -- dataset=${DATASET}. You are proposer ${PNAME}, ONE of ${NE
 proposers running CONCURRENTLY right now -- all of you read from and write models into the SAME
 search.db at the same time, with no coordinator. Reward =
 held-out ${LABEL} test_corr (mean per-target Pearson r of a fixed ridge readout). For reference,
-${CEIL}. ${CAPNOTE}The shared brain is search.db in your run; reach it ONLY through \`python lab.py\`
+${CEIL}. ${CAPNOTE}The shared brain is search.db in your run; reach it ONLY through \`python hub.py\`
 (run from this sandbox)."
 
 PROMPT="${PREAMBLE}
@@ -43,7 +43,7 @@ export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET"
 cd "$SANDBOX"
 # No wall-clock here: the proposer stays alive for the whole run; the launcher owns the stop.
 # Confined to its OWN sandbox: --add-dir is ONLY the sandbox, so the agent cannot browse the repo
-# (docs/, harness source, other proposers). It still RUNS `python lab.py` / `import harness` via the
+# (docs/, harness source, other proposers). It still RUNS `python hub.py` / `import harness` via the
 # symlinks (OS resolves those for subprocesses regardless of the agent's path allow-list).
 # Output is APPENDED to this proposer's OWN log (kept across restarts) so the launcher can sum this
 # session's "AI Credits" at shutdown. `exec` is preserved so a TERM still reaches copilot directly
