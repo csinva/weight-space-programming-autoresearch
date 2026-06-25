@@ -8,6 +8,7 @@ scored row to disk lives in ``harness.results``.
 """
 from __future__ import annotations
 
+import os
 import time
 import traceback
 
@@ -58,11 +59,29 @@ def _select_targets(Y, mask):
 
 
 def _ridge_predict(A_train, A_test, Y_train, device):
-    """Fit himalaya RidgeCV (per-target alpha) train->Y and predict BOTH splits.
+    """Fit a per-target ridge readout train->Y and predict BOTH splits.
+
+    Returns ``(pred_train, pred_test)`` as float64 numpy arrays -- the entire readout. The method is
+    chosen by ``NEURO_READOUT`` (default ``"fast"``):
+
+      * ``"fast"`` -- ``harness.fast_ridge``: one eigendecomposition + closed-form leave-one-out
+        alpha selection (sklearn's efficient-LOO scheme). ~20x faster than himalaya on a GPU because
+        it avoids himalaya's per-fold cuSOLVER SVD (~12s each); the reward ``test_corr`` agrees with
+        himalaya to ~1e-4. This is the default the search runs.
+      * ``"himalaya"`` -- the reference Gallant-lab ``RidgeCV`` (per-target alpha via 5-fold CV,
+        ``torch_cuda`` backend). Slower but the original ground truth; kept for verification.
+    """
+    if os.environ.get("NEURO_READOUT", "fast").lower() == "himalaya":
+        return _ridge_predict_himalaya(A_train, A_test, Y_train, device)
+    from harness.fast_ridge import fast_ridge_predict
+    return fast_ridge_predict(A_train, A_test, Y_train, alphas=_ALPHAS, device=device)
+
+
+def _ridge_predict_himalaya(A_train, A_test, Y_train, device):
+    """The reference himalaya ``RidgeCV`` readout (per-target alpha, 5-fold CV). See ``_ridge_predict``.
 
     Uses the GPU ``torch_cuda`` backend (float32) when on CUDA, else the ``torch`` backend
-    (float64). Returns ``(pred_train, pred_test)`` as float64 numpy arrays. This is the entire
-    readout -- no hand-rolled ridge math.
+    (float64). Returns ``(pred_train, pred_test)`` as float64 numpy arrays -- no hand-rolled math.
     """
     from himalaya.backend import set_backend
     from himalaya.ridge import RidgeCV
