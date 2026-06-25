@@ -20,7 +20,7 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.shared import _cache_dir, drop_constant_cols_with_rois
+from harness.loaders.shared import _cache_dir, drop_constant_cols_with_rois, processed_dir
 
 
 def _subject(d: Dataset) -> str:
@@ -48,19 +48,30 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
 
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     im = d.imsize
-    with h5py.File(_stimuli_path(d), "r") as h5:
-        brick = h5["imgBrick"]                                  # (73000, 425, 425, 3) uint8
-        off = 1 if int(nsd_ids.max()) >= brick.shape[0] else 0  # NSD ids are 1-based
-        X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
-        order = np.argsort(nsd_ids)                             # h5 fancy-index needs increasing rows
-        for s in range(0, len(order), 1000):
-            idx = order[s:s + 1000]
-            rows = (nsd_ids[idx] - off).astype(int)
-            sb = np.argsort(rows)
-            imgs = brick[np.sort(rows)]                         # (b, 425, 425, 3)
-            t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
-            t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
-            X[idx[sb]] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
+    pdir = processed_dir("nsd")
+    if os.path.isdir(pdir):                                     # in-repo store: one (425,425,3) per id
+        with h5py.File(os.path.join(pdir, "stimuli", "images.h5"), "r") as h5:
+            X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
+            for s in range(0, len(nsd_ids), 1000):
+                ids = nsd_ids[s:s + 1000]
+                imgs = np.stack([h5[str(int(i))][:] for i in ids])  # (b, 425, 425, 3) uint8
+                t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
+                t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
+                X[s:s + 1000] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
+    else:
+        with h5py.File(_stimuli_path(d), "r") as h5:
+            brick = h5["imgBrick"]                                  # (73000, 425, 425, 3) uint8
+            off = 1 if int(nsd_ids.max()) >= brick.shape[0] else 0  # NSD ids are 1-based
+            X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
+            order = np.argsort(nsd_ids)                             # h5 fancy-index needs increasing rows
+            for s in range(0, len(order), 1000):
+                idx = order[s:s + 1000]
+                rows = (nsd_ids[idx] - off).astype(int)
+                sb = np.argsort(rows)
+                imgs = brick[np.sort(rows)]                         # (b, 425, 425, 3)
+                t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
+                t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
+                X[idx[sb]] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
     if not os.environ.get("NEURO_NO_CACHE"):
         os.makedirs(_cache_dir(), exist_ok=True)
         torch.save({"X": X}, cache, pickle_protocol=4)          # ~1-4 GB at imsize 128
@@ -94,9 +105,14 @@ def load_nsd(d: Dataset):
     split. Returns (X_train, X_test, Y_train, Y_test, roi_masks). ``roi_masks`` carries the per-ROI
     breakdown (early, ventral + V1/V2/V3/hV4/FFA/PPA/VWFA). Train-constant voxels are dropped."""
     subject = _subject(d)
-    pkl = os.path.join(d.path, "per_subject", f"subj{subject}.pkl")
-    with open(pkl, "rb") as f:
-        blob = pickle.load(f)
+    pdir = processed_dir("nsd")
+    pt = os.path.join(pdir, "neural", f"subj{subject}.pt")
+    if os.path.isdir(pdir) and os.path.exists(pt):             # in-repo repacked blob
+        blob = torch.load(pt, weights_only=False)
+    else:
+        pkl = os.path.join(d.path, "per_subject", f"subj{subject}.pkl")
+        with open(pkl, "rb") as f:
+            blob = pickle.load(f)
     rois = blob["rois"]
     early = np.asarray(rois["early"], dtype="float32")
     Y = np.concatenate([early, np.asarray(rois["ventral"], dtype="float32")], axis=1)

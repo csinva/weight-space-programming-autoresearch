@@ -14,7 +14,9 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols_with_rois
+from harness.loaders.shared import (
+    RawPixels, _cache_dir, drop_constant_cols_with_rois, processed_dir,
+)
 
 _TVSD_N_ELEC = 1024
 # Per-monkey electrode -> cortical area, hardcoded from the release's _code/norm_MUA.m (the
@@ -108,13 +110,49 @@ def _tvsd_build_X(d: Dataset, subject: str, things_imgs_mat: str):
     return X_train, X_test
 
 
+def _tvsd_build_X_processed(d: Dataset, subject: str):
+    """(X_train, X_test) RawPixels features from the stored native JPEGs in data/tvsd/."""
+    from PIL import Image
+    pix = RawPixels(imsize=d.imsize)
+    sroot = os.path.join(processed_dir("tvsd"), "stimuli", f"monkey{subject}")
+
+    def build(split):
+        sdir = os.path.join(sroot, split)
+        n = len(os.listdir(sdir))
+        feats = [pix._get_image_features(
+                     np.asarray(Image.open(os.path.join(sdir, f"{i}.jpg")).convert("RGB")
+                                .resize((d.imsize, d.imsize))))
+                 for i in range(n)]
+        return np.stack(feats).astype("float32")
+
+    return build("train"), build("test")
+
+
 def load_tvsd(d: Dataset):
     """TVSD: Y from THINGS_normMUA.mat, X from the THINGS images, reward = ALL electrodes.
 
     Returns (X_train, X_test, Y_train, Y_test, roi_masks); ``roi_masks`` breaks the score down by
     cortical area (V1/V4/IT). The split is the dataset's own (22248 train / 100 repeated test images).
+    Prefers the in-repo processed tree (data/tvsd/) when present -- native JPEGs + a .pt of the MUA --
+    so the gated THINGS images and the .mat are not needed; else falls back to the raw .mat + images.
     """
     subject = (d.subject or "F").upper()
+    proc = processed_dir("tvsd")
+
+    if os.path.isdir(proc):
+        blob = torch.load(os.path.join(proc, "neural", f"monkey{subject}.pt"), weights_only=False)
+        Y_train = np.asarray(blob["train_MUA"], dtype=np.float32)
+        Y_test = np.asarray(blob["test_MUA"], dtype=np.float32)
+        labels = blob["areas"]
+        roi_masks = {a: labels == a for a in _TVSD_REGIONS}
+        X_train, X_test = _tvsd_build_X_processed(d, subject)
+        Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
+        Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
+        Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
+        print(f"  TVSD monkey{subject} [processed]: {Xtr.shape[0]} train / {Xte.shape[0]} test "
+              f"images; region=all -> {Ytr.shape[1]} electrodes ({Xtr.shape[1]} stim dims)")
+        return Xtr, Xte, Ytr, Yte, roi_masks
+
     mdir = os.path.join(d.path, f"monkey{subject}")
     mat = _read_mat(os.path.join(mdir, "THINGS_normMUA.mat"))
     Y_train = _tvsd_targets(mat["train_MUA"])           # [22248 x 1024]

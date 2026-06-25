@@ -19,12 +19,50 @@ import json
 import os
 
 import numpy as np
+import pandas as pd
 import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
 from harness.loaders.neuralset import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
-from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_constant_cols
+from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_constant_cols, processed_dir
+
+
+# Studies whose continuous neural signal has a slim, raw-free data/<ds>/ tree
+# (written by scripts/process_dataset/audio_neural.py). Maps the study name to the
+# processed-dir key; when that dir exists the loader rebuilds events from it instead
+# of touching the raw .fif/edf/BIDS. fMRI timelines (text) are not processed here.
+_PROCESSED_KEY = {"Bel2026PetitListenSample": "meg", "Zada2025Podcast": "ieeg"}
+
+
+def _processed_audio_events(out: str):
+    """Rebuild the NeuralSet events DataFrame from a slim data/<ds>/ tree (audio neural).
+
+    Mirrors what the raw study.run() returns for the fields _build_xy uses: one neural
+    row (pointing at the preprocessed 100Hz .fif), one Audio row (the copied wav), and one
+    Word row per onset. The neural extractor re-picks/re-resamples to a no-op, and the Mel
+    is recomputed at load -- so window + Mel params stay flexible and (X, Y) match the raw path.
+    """
+    from neuralset.events.utils import standardize_events
+
+    meta = json.load(open(os.path.join(out, "neural", "meta.json")))
+    type_for = {"meg": "Meg", "ieeg": "Ieeg"}[meta["modality"]]
+    fif = os.path.join(out, "neural", f"continuous_{meta['modality']}.fif")
+    timeline, subject = "t0", meta["subject"]
+
+    neural_row = {
+        "type": type_for, "start": meta["start"], "frequency": meta["frequency"],
+        "filepath": fif, "subject": subject, "timeline": timeline,
+    }
+    audio_row = {
+        "type": "Audio", "start": meta["audio_start"], "duration": meta["audio_duration"],
+        "timeline": timeline, "filepath": os.path.join(out, "stimuli", "audio.wav"),
+    }
+    words = pd.read_csv(os.path.join(out, "stimuli", "words.csv"))
+    words["type"] = "Word"
+    words["timeline"] = timeline
+    df = pd.concat([pd.DataFrame([neural_row, audio_row]), words], ignore_index=True)
+    return standardize_events(df)
 
 
 def _load_workers() -> int:
@@ -48,10 +86,9 @@ _CACHE_VERSION = "v2"
 
 # Fields that only affect post-build (cheap) steps, so they are excluded from the
 # build-cache key: ``test_frac`` only sizes a temporal tail; ``reward_roi`` only
-# selects which targets the scalar reward averages over; ``run_tag`` only names the
-# output CSV. All region/run loops therefore share ONE build (the timeseries is read
-# only once).
-_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi", "run_tag")
+# selects which targets the scalar reward averages over. All region loops therefore
+# share ONE build (the timeseries is read only once).
+_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi")
 
 
 def _build_cache_key(d: Dataset) -> str:
@@ -232,11 +269,18 @@ def load_neuralset(d: Dataset):
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     build_path = os.path.join(_cache_dir(), _build_cache_key(d))
 
-    study = ns.Study(name=d.study, path=_study_path(d))
+    # Prefer the slim, raw-free data/<ds>/ tree when present (audio neural: meg/ieeg).
+    out = processed_dir(_PROCESSED_KEY[d.study]) if d.study in _PROCESSED_KEY else None
+    use_processed = out is not None and os.path.isdir(out)
 
     if use_cache and os.path.exists(build_path):
         X, Y, onsets, stim_ids = _build_cache_load(build_path)
+    elif use_processed:
+        X, Y, onsets, stim_ids = _build_xy(d, _processed_audio_events(out))
+        if use_cache:
+            _build_cache_save(build_path, X, Y, onsets, stim_ids)
     else:
+        study = ns.Study(name=d.study, path=_study_path(d))
         if d.download:
             study.download()
         try:
