@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # search/conduct.sh -- the CONDUCTOR loop (optional 3rd always-on loop search.sh supervises).
 # Every NEURO_EPOCH_MINS minutes it runs ONE headless Copilot pass (search/conductor.md) that reads
-# the shared search.db and writes a BROAD standing direction per proposer slot into the `steering`
-# table (`hub.py steer`). ADVISORY only: proposers read their direction (`hub.py direction`) to bias
-# what they explore; nothing in the queue or scoring gates on it. Runs once at startup to seed
-# directions immediately, then sleeps between epochs.
+# the shared search.db and writes a BROAD, high-level standing direction per proposer slot into that
+# slot's sandbox file `proposers/pNN/direction.txt` (one short line, via `echo ... > direction.txt`).
+# ADVISORY only: each proposer reads its own direction.txt to bias what it explores; nothing in the
+# queue or scoring gates on it. Runs once at startup to seed directions immediately, then sleeps.
 #   LAB_RUN=runs/nsd__2026-06-24 NEURO_DATASET=nsd NEURO_EPOCH_MINS=30 search/conduct.sh
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -20,7 +20,7 @@ export LAB_RUN="$RUN" NEURO_DATASET="$DATASET"
 echo "[conduct] conductor up (epoch ${MINS}m, $MODEL/$EFFORT, dataset=$DATASET)"
 secs="$(awk -v m="$MINS" 'BEGIN{printf "%d", m*60}')"
 while :; do
-  echo "[conduct] epoch pass $(date -u +%FT%TZ)" >> "$LOG"
+  echo "[conduct] epoch pass $(TZ=America/New_York date +%FT%T%Z)" >> "$LOG"
   # Re-read the prompt each epoch so edits to conductor.md go live without a restart.
   copilot -p "$(cat "$REPO/search/conductor.md")" --allow-all --model "$MODEL" --effort "$EFFORT" \
     --add-dir "$REPO" -C "$REPO" >> "$LOG" 2>&1 || true
