@@ -71,9 +71,17 @@ def _nnn_build_X(d: Dataset, img_pool) -> np.ndarray:
 
 
 def _load_nnn_processed(d: Dataset, proc: str):
-    """Read X (native imgs resized at load), Y (rel-filtered), areas from data/nnn/."""
-    imgs = np.load(os.path.join(proc, "stimuli", "img_pool.npy"))  # [1000, H, W, 3] uint8
-    X = _nnn_build_X(d, imgs)                                       # resize to d.imsize at load
+    """Read X (native imgs resized at load, cached by imsize), Y (rel-filtered), areas from data/nnn/."""
+    use_cache = not os.environ.get("NEURO_NO_CACHE")
+    x_cache = os.path.join(_cache_dir(), f"nnn_X_im{d.imsize}.pt")   # same 1000 NSD images as raw
+    if use_cache and os.path.exists(x_cache):
+        X = torch.load(x_cache, weights_only=False)["X"]
+    else:
+        imgs = np.load(os.path.join(proc, "stimuli", "img_pool.npy"))  # [1000, H, W, 3] uint8
+        X = _nnn_build_X(d, imgs)                                       # resize to d.imsize at load
+        if use_cache:
+            os.makedirs(_cache_dir(), exist_ok=True)
+            torch.save({"X": X}, x_cache)
     blob = torch.load(os.path.join(proc, "neural", "all_units.pt"), weights_only=False)
     keep = np.asarray(blob["reliability"]).ravel() > _nnn_min_reliability()
     Y = np.asarray(blob["Y"])[:, keep].astype("float32")
@@ -88,10 +96,6 @@ def load_nnn(d: Dataset):
     (``reliability_best`` > NNN_MIN_RELIABILITY) across all 90 sessions; X is the 1000 NSD images,
     split deterministically (every ``round(1/test_frac)``-th held out). Cached by (reliability, imsize).
     """
-    import glob
-    import re
-    import scipy.io as sio
-
     root, min_rel = d.path, _nnn_min_reliability()
     use_cache = not os.environ.get("NEURO_NO_CACHE")
 
@@ -104,6 +108,11 @@ def load_nnn(d: Dataset):
     else:
         X, Y, areas, n_src = _load_nnn_raw(d, root, min_rel, use_cache)
         roi_masks = {a: areas == a for a in ("EVC", "IT")}
+
+    if Y.shape[1] == 0:
+        raise RuntimeError(
+            f"NNN[{n_src}]: no units passed reliability>{min_rel} "
+            f"(lower NNN_MIN_RELIABILITY).")
 
     # Deterministic strided split of the 1000 images (every round(1/test_frac)-th -> test).
     step = max(2, int(round(1.0 / d.test_frac)))
@@ -157,7 +166,7 @@ def _load_nnn_raw(d: Dataset, root: str, min_rel: float, use_cache: bool):
                 areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
             cols.append(rb[keep])                     # [kept_units, 1000]
         if not cols:
-            raise RuntimeError(f"NNN: no units passed reliability>{min_rel}")
+            raise RuntimeError(f"NNN: no Processed_ses*.mat sessions found under {root!r}")
         Y = np.concatenate(cols, axis=0).T            # [1000 images, total_units]
         areas = np.asarray(areas)
         if use_cache:
