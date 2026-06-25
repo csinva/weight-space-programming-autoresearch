@@ -26,21 +26,28 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   DB, GPU, and dataset from agents. Each proposer is an ISLAND: it reads source only from its own
   best (`get_best_model`) or one random other island (`get_best_model_from_other_island`), never the
   global champion, so backbones stay diverse.
-- **`search/`** — the open-ended loop: `search.sh` scaffolds a dated run and supervises two
-  always-on, decentralized loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via
-  `proposer.sh`, each confined to its own sandbox) + the single GPU evaluator
-  (`evaluate.sh` / `evaluator.py`). Self-paced (each proposer waits only for its OWN score); no
-  conductor, no barrier. `proposer.md` is the task; `repair.sh` auto-fixes small model bugs;
-  `lib.sh` holds the supervisor primitives shared by `search.sh` + `propose.sh`.
+- **`search/`** — the open-ended loop: `search.sh` scaffolds a dated run and supervises up to three
+  always-on loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via `proposer.sh`,
+  each confined to its own sandbox) + the single GPU evaluator (`evaluate.sh` / `evaluator.py`) + an
+  OPTIONAL **conductor** (`conduct.sh` / `conductor.md`, runs from the repo root, not sandboxed).
+  The search stays self-paced and decentralized — each proposer waits only for its OWN score, no
+  barrier, and the conductor never gates the queue or scoring. Every `--epoch-mins` (default 30; `0`
+  disables it) the conductor runs one headless pass that reads the board and writes ONE broad,
+  ADVISORY `direction.txt` per proposer slot — keeping the pool diverse and unstuck; proposers read
+  their `direction.txt` to bias what they explore. `proposer.md` / `conductor.md` are the agent
+  prompts; `repair.sh` auto-fixes small model bugs; `lib.sh` holds the supervisor primitives shared
+  by `search.sh` + `propose.sh`.
 - **`runs/<dataset>__<date>/`** (gitignored) — one search: `search.db` (the only shared memory +
   queue) + `models/<id>.py` (immutable archive) + `proposers/pNN/` sandboxes (seeded from the
-  random-projection baseline `model.py`) + `eval/`. Same date resumes losslessly; a new date starts fresh.
+  random-projection baseline `model.py`, each with a `direction.txt`) + `eval/` + `conductor.log`.
+  Same date resumes losslessly; a new date starts fresh.
 - **`model.py`** — the root random-projection baseline (the manual-path model + the proposer seed). **`docs/`** — human docs.
 
 ## Run
 ```bash
 python -m harness.run                   # evaluate the current model.py once (manual)
-search/search.sh nsd --hours 12         # launch the unattended search (10 proposers + 1 evaluator)
+search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 30m
+search/search.sh nsd --hours 12 --epoch-mins 0   # same, but conductor OFF (pure decentralized pool)
 ```
 
 ## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)

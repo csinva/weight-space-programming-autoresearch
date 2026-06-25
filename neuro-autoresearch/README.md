@@ -97,12 +97,13 @@ Loads the data split once, evaluates `model.py` exactly once, prints `train_corr
 ### Open-ended search (unattended)
 
 ```bash
-search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator
+search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator + conductor (steers every 30m)
+search/search.sh nsd --hours 12 --epoch-mins 0  # conductor OFF — pure decentralized pool
 search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
 ```
 
-`search.sh` scaffolds a dated run and supervises two always-on, **decentralized** loops
-against it — there is no conductor and no synchronization barrier:
+`search.sh` scaffolds a dated run and supervises up to three always-on, **decentralized**
+loops against it — the search stays self-paced with no synchronization barrier:
 
 - **An N-proposer pool** (`propose.sh` → N headless Copilot CLIs via `proposer.sh`). Each
   proposer is confined to its own sandbox, queries shared history, edits its own
@@ -110,6 +111,11 @@ against it — there is no conductor and no synchronization barrier:
 - **A single GPU evaluator** (`evaluate.sh` / `evaluator.py`) that claims queued models
   one at a time, scores each with the fixed harness in an isolated subprocess, and writes
   the result back. `repair.sh` auto-fixes small mechanical model faults (≤2 attempts).
+- **An optional conductor** (`conduct.sh` / `conductor.md`) — a steering overlay. Every
+  `--epoch-mins` (default 30; `0` disables it) it runs one headless pass that reads the
+  board and writes ONE broad, **advisory** `direction.txt` per proposer to keep the pool
+  diverse and unstuck. It never gates the queue or scoring — proposers just read their
+  `direction.txt` to bias what they explore.
 
 Everything shared lives in one SQLite file, `runs/<dataset>__<date>/search.db` — the
 queue, the full history, and the scores. Re-launching the same date **resumes** the run
