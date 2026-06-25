@@ -26,8 +26,11 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
   (`load_split` dispatch in `__init__`; `shared.py` (RawPixels, cache dir, study-path, constant-col
   drop); `neuralset/` (Segmenter loader + `studies.py` Study subclasses + `roi.py` the NSD ROI
   resolver) for text/meg/ieeg; `standalone/` (`nsd.py`, `tvsd.py`, `nnn.py`) for the pre-aligned
-  table datasets) · `reward.py` (himalaya ridge → the region `test_corr`) · `results.py` / `run.py`
-  (the manual single-eval path).
+  table datasets) · `ridge.py` (the readout: fast eigh+LOO default / himalaya, via `NEURO_READOUT`) ·
+  `reward.py` (orchestration: forward → readout → the region `test_corr`) · `roi.py` (reward-region
+  target selection + advisory per-ROI breakdown) · `results.py` / `run.py` (the manual single-eval
+  path) · `scripts/benchmark/` (profile the readout pipeline phase-by-phase under GPU contention +
+  HTML dashboard).
 - **`hub.py`** — the ONE importable API + CLI over a run's `search.db`
   (`propose` / `wait_for_result` / `champions` / `sample` / `get_best_model` /
   `get_best_model_from_other_island` / `query` + `get_next_model` / `record` / `score`). Hides the
@@ -54,6 +57,8 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
 ## Run
 ```bash
 python -m harness.run                   # evaluate the current model.py once (manual)
+NEURO_READOUT=himalaya python -m harness.run     # reference readout (default: the ~20× faster fast ridge)
+python scripts/benchmark/benchmark.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
 search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 30m
 search/search.sh nsd --hours 12 --effort high    # ONE effort knob for ALL proposers + conductor (low|medium|high|xhigh|max; default xhigh)
 search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralized pool)

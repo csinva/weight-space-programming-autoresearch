@@ -33,10 +33,12 @@ memorizing the data, and the model never sees the neural target `Y`.
    `X (N, D_in)` to activations `(N, D_out)`. Weights are hard-coded; nothing is
    trained; a sample's activations depend only on that sample.
 2. **Activate.** The fixed harness runs the stimulus through the model.
-3. **Read out & score.** A himalaya `RidgeCV` readout (fit on GPU) linearly predicts the
-   recorded neural activity from those activations. The reward is **`test_corr`** — the
-   mean per-target Pearson correlation on a held-out split. Only the readout is fit; the
-   model is frozen.
+3. **Read out & score.** A ridge readout (fit on GPU) linearly predicts the recorded
+   neural activity from those activations. The reward is **`test_corr`** — the mean
+   per-target Pearson correlation on a held-out split. Only the readout is fit; the model
+   is frozen. The readout defaults to a fast eigendecomposition + leave-one-out ridge
+   (`NEURO_READOUT=fast`, ~20× faster on GPU); set `NEURO_READOUT=himalaya` for the
+   reference himalaya `RidgeCV` (same per-target alpha selection, agrees to ~1e-4).
 
 A high `train_corr` with a low `test_corr` means the readout overfit, not that the model
 is good.
@@ -68,9 +70,12 @@ harness/             FIXED evaluation harness — must not be edited
   datasets.py          the Dataset registry (pick one via NEURO_DATASET)
   loaders/             the only file/network I/O — neuralset/ (Segmenter timeline studies)
                        vs standalone/ (pre-aligned response tables); load_split dispatch
-  reward.py            the predictivity reward (himalaya ridge → test_corr)
+  reward.py            the predictivity reward: forward → readout → test_corr (orchestration)
+  ridge.py             the ridge readout — fast eigh+LOO (default) | himalaya, via NEURO_READOUT
+  roi.py               reward-region target selection + advisory per-ROI breakdown
   run.py               the manual single-eval driver — `python -m harness.run`
 scripts/setup_run.py scaffolds an isolated run folder + proposer sandboxes
+scripts/benchmark/   profile the readout pipeline phase-by-phase (3 concurrent) + HTML dashboard
 runs/<dataset>__<date>/  one search: search.db + models/ + proposers/ + eval/ (gitignored)
 ```
 
@@ -90,6 +95,7 @@ pip install .
 ```bash
 python -m harness.run                    # score the current model.py on the active dataset
 NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg | ieeg | tvsd | nnn)
+NEURO_READOUT=himalaya python -m harness.run  # reference readout (default: the ~20× faster fast ridge)
 ```
 
 Loads the data split once, evaluates `model.py` exactly once, prints `train_corr` /
