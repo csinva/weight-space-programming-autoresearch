@@ -14,11 +14,10 @@ import traceback
 
 import numpy as np
 import torch
-import neuralset as ns
 
 from harness.datasets import Dataset
 from harness.ridge import ridge_predict, _readout_device, _to_np
-from harness.roi import roi_breakdown
+from harness.roi import roi_breakdown, _select_targets, _study_for, _slice_target_mask
 
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 
@@ -34,13 +33,6 @@ def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
 def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
     """Mean per-column Pearson correlation."""
     return float(_corr_per_column(np.asarray(y_hat), np.asarray(y)).mean())
-
-
-def _select_targets(Y, mask):
-    """Select the reward-region columns of the neural targets ``Y`` (or all if ``mask`` is None)."""
-    if mask is None:
-        return Y
-    return Y[:, mask]
 
 
 def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
@@ -153,42 +145,6 @@ def _free_gpu(exc: BaseException | None = None) -> None:
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-
-
-def _study_for(d: Dataset):
-    """Construct the (no-download) NeuralSet study used to resolve the reward region.
-
-    Table-loader and prepared-betas datasets are not NeuralSet studies and carry their region
-    labels in the loader (TVSD) or as a per-ROI betas key (NSD-betas), not an ns.Study ROI
-    resolver -- return None so the reward averages over the targets the loader already selected.
-    """
-    if getattr(d, "loader", "neuralset") != "neuralset":
-        return None
-    from harness.loaders.shared import _study_path
-    return ns.Study(name=d.study, path=_study_path(d))
-
-
-def _slice_target_mask(study, name: str, n_targets: int):
-    """Boolean mask (length ``n_targets``) selecting region ``name``'s target columns.
-
-    NSD: ``name`` is an ROI resolved by ``neuralset.roi._roi_voxel_keep`` to a per-voxel keep mask over the
-    nsdgeneral voxels; the eval targets are those voxels (voxel-major if multi-TR), so the per-voxel
-    mask is repeated across the TRs. Returns ``None`` (the clean extension point) when the study has
-    no ROI resolver, the name is unknown, or the targets do not map cleanly onto the voxels.
-    """
-    if not hasattr(study, "_roi_path"):      # non-volumetric studies (text/meg): no resolver
-        return None
-    from harness.loaders.neuralset.roi import _roi_voxel_keep
-
-    try:
-        keep, n_voxels = _roi_voxel_keep(study, name)
-    except (ValueError, FileNotFoundError):
-        return None
-    if keep is None:                          # whole-region name (e.g. nsdgeneral)
-        return None
-    if n_targets % n_voxels:                  # targets are not a clean multiple of the voxels
-        return None
-    return np.repeat(keep, n_targets // n_voxels)
 
 
 def evaluate(model, dataset: Dataset, slices=()) -> dict:

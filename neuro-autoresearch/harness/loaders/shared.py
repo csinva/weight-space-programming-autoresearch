@@ -30,6 +30,16 @@ def _study_path(d):
     return d.path if d.path is not None else (None if d.download else ns.CACHE_FOLDER)
 
 
+def processed_dir(name) -> str:
+    """Absolute path to ``<repo_root>/data/<name>``, the in-repo processed-dataset tree.
+    Root is ``$NEURO_DATA_DIR`` if set, else ``data/`` two parents up from harness/."""
+    root = os.environ.get(
+        "NEURO_DATA_DIR",
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data"),
+    )
+    return os.path.join(root, name)
+
+
 def _cache_dir() -> str:
     return os.environ.get(
         "NEURO_SPLIT_CACHE",
