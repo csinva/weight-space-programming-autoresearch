@@ -5,7 +5,8 @@ activity, on the dataset's reward region (NSD: the ventral visual stream). Only 
 is fit; the model is never trained. The readout itself (both implementations + the ``NEURO_READOUT``
 switch) lives in ``harness.ridge``; this file does the surrounding eval: pick the region's target
 columns, run the readout, score the mean per-target Pearson r, and assemble the result row.
-Persisting a scored row to disk lives in ``harness.results``.
+The caller persists the row (the search loop records it into a run's ``search.db``; the manual
+``harness.run`` path just prints it).
 """
 from __future__ import annotations
 
@@ -17,7 +18,9 @@ import torch
 
 from harness.datasets import Dataset
 from harness.ridge import ridge_predict, _readout_device, _to_np
-from harness.roi import roi_breakdown, _select_targets, _study_for, _slice_target_mask
+from harness.roi import (
+    roi_breakdown, _select_targets, _study_for, _slice_target_mask, _standalone_target_mask,
+)
 
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 
@@ -58,10 +61,19 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
                          f"(keep the model's output dimension under {MAX_DOUT})")
 
     # The reward narrows the targets to the dataset's region (NSD: ventral); the readout fits
-    # exactly those targets. For studies with no ROI resolver (text/meg/table) the loader already
-    # selected the targets, so we fit all of them.
+    # exactly those targets. NeuralSet studies resolve the region via an ns.Study ROI resolver;
+    # the standalone loaders bake the region into Y at load time and may narrow to one named
+    # sub-ROI of their roi_masks (a None mask -> fit every loaded target).
     study = _study_for(dataset)
-    mask = _slice_target_mask(study, dataset.reward_roi, int(Y_train.shape[1]))
+    if study is None:
+        mask = _standalone_target_mask(roi_masks, dataset.reward_roi)
+    else:
+        mask = _slice_target_mask(study, dataset.reward_roi, int(Y_train.shape[1]))
+    if mask is not None:
+        # Re-align the advisory breakdown to the narrowed targets the readout actually scores.
+        roi_masks = {k: np.asarray(v, dtype=bool)[mask] for k, v in roi_masks.items()}
+        if torch.is_tensor(Y_train):
+            mask = torch.as_tensor(mask, device=Y_train.device)
     Yv_train, Yv_test = _select_targets(Y_train, mask), _select_targets(Y_test, mask)
 
     pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
@@ -85,7 +97,6 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
         "reward_roi": dataset.reward_roi,
-        "run_tag": dataset.run_tag,
     }
 
 
@@ -116,7 +127,6 @@ def _error_row(model, split, dataset: Dataset, exc: BaseException,
         "seconds": round(seconds, 2),
         "status": _error_status(exc),
         "reward_roi": dataset.reward_roi,
-        "run_tag": dataset.run_tag,
     }
 
 

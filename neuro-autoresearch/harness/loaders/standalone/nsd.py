@@ -49,8 +49,9 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     im = d.imsize
     pdir = processed_dir("nsd")
-    if os.path.isdir(pdir):                                     # in-repo store: one (425,425,3) per id
-        with h5py.File(os.path.join(pdir, "stimuli", "images.h5"), "r") as h5:
+    images_h5 = os.path.join(pdir, "stimuli", "images.h5")
+    if os.path.exists(images_h5):                              # in-repo store: one (425,425,3) per id
+        with h5py.File(images_h5, "r") as h5:
             X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
             for s in range(0, len(nsd_ids), 1000):
                 ids = nsd_ids[s:s + 1000]
@@ -61,12 +62,12 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
     else:
         with h5py.File(_stimuli_path(d), "r") as h5:
             brick = h5["imgBrick"]                                  # (73000, 425, 425, 3) uint8
-            off = 1 if int(nsd_ids.max()) >= brick.shape[0] else 0  # NSD ids are 1-based
+            # NSD ids are 1-based; imgBrick is 0-based -> row = nsd_id - 1 (matches store_stimuli).
             X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
             order = np.argsort(nsd_ids)                             # h5 fancy-index needs increasing rows
             for s in range(0, len(order), 1000):
                 idx = order[s:s + 1000]
-                rows = (nsd_ids[idx] - off).astype(int)
+                rows = (nsd_ids[idx] - 1).astype(int)
                 sb = np.argsort(rows)
                 imgs = brick[np.sort(rows)]                         # (b, 425, 425, 3)
                 t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
@@ -84,18 +85,27 @@ _NSD_FINE = ("V1", "V2", "V3", "hV4", "FFA", "PPA", "VWFA")
 def _nsd_roi_masks(rois, Y, n_early):
     """ROI masks over the early+ventral region columns: the two streams (disjoint -> a clean split
     at ``n_early``) plus the functional patches, byte-matched to their in-region voxels (a patch's
-    out-of-stream part is not in Y, so it is simply not scored)."""
+    out-of-stream part is not in Y, so it is simply not scored).
+
+    The voxel<->column join is by the column's exact bytes. The hash only buckets candidates -- the
+    full bytes are then compared -- so a 64-bit hash collision can't mismatch, and byte-identical
+    voxels (duplicates/all-zero) each get marked rather than one silently stealing the other."""
+    from collections import defaultdict
+
     n = Y.shape[1]
     cols = np.arange(n)
     masks = {"early": cols < n_early, "ventral": cols >= n_early}
-    index = {hash(Y[:, j].tobytes()): j for j in range(n)}
+    index: dict = defaultdict(list)
+    for j in range(n):
+        index[hash(Y[:, j].tobytes())].append(j)
     for name in _NSD_FINE:
         m = np.zeros(n, dtype=bool)
         M = np.asarray(rois[name], dtype="float32")
         for j in range(M.shape[1]):
-            k = index.get(hash(M[:, j].tobytes()))
-            if k is not None:
-                m[k] = True
+            col = M[:, j].tobytes()
+            for k in index.get(hash(col), ()):
+                if Y[:, k].tobytes() == col:
+                    m[k] = True
         masks[name] = m
     return masks
 

@@ -37,6 +37,19 @@ def _select_targets(Y, mask):
     return Y[:, mask]
 
 
+def _standalone_target_mask(roi_masks: dict, reward_roi: str):
+    """Reward-region mask for the standalone loaders (nsd/tvsd/nnn), which have no ns.Study resolver.
+
+    These loaders bake their region into ``Y`` at load time and hand back ``roi_masks`` (the named
+    sub-regions over the scored columns). ``reward_roi`` may narrow the reward to ONE of those named
+    sub-ROIs -- a key of ``roi_masks`` (e.g. ``"IT"`` on nnn/tvsd, ``"FFA"`` on nsd), the analog of
+    the NeuralSet ROI menu. A whole-region value (anything that is not an ``roi_masks`` key, e.g.
+    ``"all"`` or NSD's ``"early+ventral"``) returns ``None`` -> the readout fits every loaded target.
+    """
+    m = roi_masks.get(reward_roi)
+    return None if m is None else np.asarray(m, dtype=bool)
+
+
 def _study_for(d: Dataset):
     """Construct the (no-download) NeuralSet study used to resolve the reward region.
 

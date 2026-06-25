@@ -55,6 +55,18 @@ def _nnn_unit_area(table: dict, ses: int, pos: float) -> tuple[str, str]:
     return "Unknown", "Unknown"
 
 
+def _nnn_roi_masks(areas) -> dict:
+    """Per-area advisory masks over EVERY area actually present, not just EVC/IT.
+
+    Units whose ``pos`` falls outside any annotated shank range are tagged ``"Unknown"`` (~15% of
+    reliable units); they are scored like the rest, so a hardcoded ``{EVC, IT}`` breakdown would
+    silently drop them. Keying on the areas present keeps the advisory's coverage = the scored set."""
+    areas = np.asarray(areas)
+    order = [a for a in ("EVC", "IT") if a in areas]
+    order += [a for a in np.unique(areas) if a not in order]
+    return {a: areas == a for a in order}
+
+
 def _nnn_build_X(d: Dataset, img_pool) -> np.ndarray:
     """RawPixels features of the 1000 NSD images, read straight from img_pool.mat."""
     from PIL import Image
@@ -103,11 +115,10 @@ def load_nnn(d: Dataset):
     proc = processed_dir("nnn")
     if os.path.isdir(proc):
         X, Y, areas = _load_nnn_processed(d, proc)
-        roi_masks = {a: areas == a for a in ("EVC", "IT")}
         n_src = "data/nnn"
     else:
         X, Y, areas, n_src = _load_nnn_raw(d, root, min_rel, use_cache)
-        roi_masks = {a: areas == a for a in ("EVC", "IT")}
+    roi_masks = _nnn_roi_masks(areas)
 
     if Y.shape[1] == 0:
         raise RuntimeError(
