@@ -49,7 +49,8 @@ each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
 ```bash
 python -m harness.run                   # evaluate the current model.py once (manual)
 search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 30m
-search/search.sh nsd --hours 12 --epoch-mins 0   # same, but conductor OFF (pure decentralized pool)
+search/search.sh nsd --hours 12 --effort high    # ONE effort knob for ALL proposers + conductor (low|medium|high|xhigh|max; default xhigh)
+search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralized pool)
 ```
 
 ## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)

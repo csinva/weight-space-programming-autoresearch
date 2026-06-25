@@ -99,9 +99,15 @@ Loads the data split once, evaluates `model.py` exactly once, prints `train_corr
 
 ```bash
 search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator + conductor (steers every 30m)
+search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + conductor
 search/search.sh nsd --hours 12 --epoch-mins 0  # conductor OFF — pure decentralized pool
 search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
 ```
+
+Thinking **effort** is a single knob — `--effort` (or the `NEURO_EFFORT` env var; one of
+`low|medium|high|xhigh|max`, default `xhigh`) — applied uniformly to **every proposer and
+the conductor**. The model *mix* is separate: by default the fleet is split between Opus 4.8
+(first half) and GPT‑5.5 (second half) — tune via `NEURO_OPUS_FRACTION` / `NEURO_MODEL_A` / `NEURO_MODEL_B`.
 
 `search.sh` scaffolds a dated run and supervises up to three always-on, **decentralized**
 loops against it — the search stays self-paced with no synchronization barrier:

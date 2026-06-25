@@ -14,16 +14,17 @@
 # scaffolding, the wall-clock STOP CONDITION (--hours), and graceful shutdown that leaves the DB
 # consistent (orphaned `running` rows reset to `queued`).
 #
-#   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--date YYYY-MM-DD]
+#   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--date YYYY-MM-DD]
 #   e.g.  search/search.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 30m
 #         search/search.sh nsd --hours 8 --epoch-mins 15  # steer every 15 minutes
+#         search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
 #         search/search.sh tvsd --hours 6 --fleet 6 --epoch-mins 0   # conductor OFF (decentralized)
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
 
-DATASET=""; HOURS=""; FLEET=""; DATE=""; EPOCH=""; pos=0
+DATASET=""; HOURS=""; FLEET=""; DATE=""; EPOCH=""; EFFORT=""; pos=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --hours)   HOURS="${2:?--hours needs a value}"; shift 2;;
@@ -34,24 +35,30 @@ while [ $# -gt 0 ]; do
     --date=*)  DATE="${1#*=}"; shift;;
     --epoch-mins)   EPOCH="${2:?--epoch-mins needs a value}"; shift 2;;
     --epoch-mins=*) EPOCH="${1#*=}"; shift;;
+    --effort)   EFFORT="${2:?--effort needs a value}"; shift 2;;
+    --effort=*) EFFORT="${1#*=}"; shift;;
     -h|--help) sed -n '2,20p' "$0"; exit 0;;
     --*)       echo "[search] unknown flag: $1" >&2; exit 2;;
     *) case "$pos" in 0) DATASET="$1";; *) echo "[search] unexpected arg: $1" >&2; exit 2;; esac; pos=$((pos+1)); shift;;
   esac
 done
 DATASET="${DATASET:-nsd}"; HOURS="${HOURS:-12}"; FLEET="${FLEET:-10}"; EPOCH="${EPOCH:-30}"
-DATE="${DATE:-$(date -u +%Y-%m-%d)}"
+# The ONE thinking-effort knob: applies to every proposer AND the conductor (children inherit
+# NEURO_EFFORT below). Precedence: --effort > $NEURO_EFFORT > default.
+EFFORT="${EFFORT:-${NEURO_EFFORT:-xhigh}}"
+DATE="${DATE:-$(TZ=America/New_York date +%Y-%m-%d)}"   # run rolls over at ET midnight
 
 case "$HOURS" in ''|*[!0-9.]*|*.*.*) echo "[search] --hours must be a positive number (got '$HOURS')" >&2; exit 2;; esac
 awk -v h="$HOURS" 'BEGIN { exit !(h + 0 > 0) }' || { echo "[search] --hours must be > 0" >&2; exit 2; }
 case "$EPOCH" in ''|*[!0-9.]*|*.*.*) echo "[search] --epoch-mins must be a number >= 0 (got '$EPOCH'; 0 disables the conductor)" >&2; exit 2;; esac
+case "$EFFORT" in low|medium|high|xhigh|max) ;; *) echo "[search] --effort must be one of: low medium high xhigh max (got '$EFFORT')" >&2; exit 2;; esac
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
 RUN="$REPO/runs/${DATASET}__${DATE}"
 python scripts/setup_run.py "$DATASET" --date "$DATE" --n "$FLEET" >/dev/null
 KEY="${DATASET}__${DATE}"
-export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_MINS="$EPOCH"
+export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_MINS="$EPOCH" NEURO_EFFORT="$EFFORT"
 
 # --- DB consistency (delegated to the hub CLI; LAB_RUN targets this run) ------------------------
 # reconcile: reset any orphaned `running` row back to `queued` (startup + shutdown).
@@ -64,7 +71,7 @@ log_summary() { echo "[search] $(python hub.py summary)"; }
 write_costs() {
   local out="$RUN/costs.txt" total=0 pn log c usd
   { printf '# per-proposer API cost for %s (USD = AI Credits / 100)\n' "$KEY"
-    printf '# written %s\n' "$(date -u +%FT%TZ)"
+    printf '# written %s\n' "$(TZ=America/New_York date +%FT%T%Z)"
     printf '%-8s %12s %12s\n' "proposer" "credits" "usd"; } > "$out"
   for d in "$RUN"/proposers/p*/; do
     [ -d "$d" ] || continue

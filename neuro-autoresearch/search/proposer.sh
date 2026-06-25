@@ -12,7 +12,7 @@ PNAME="${1:?usage: proposer.sh <pNN> (LAB_RUN + NEURO_DATASET in env)}"
 RUN="${LAB_RUN:?LAB_RUN must point at the run dir}"
 DATASET="${NEURO_DATASET:-nsd}"
 MODEL="${NEURO_PROPOSER_MODEL:-claude-opus-4.8}"
-EFFORT="${NEURO_PROPOSER_EFFORT:-high}"
+EFFORT="${NEURO_PROPOSER_EFFORT:-${NEURO_EFFORT:-xhigh}}"
 SANDBOX="$RUN/proposers/$PNAME"
 [ -d "$SANDBOX" ] || { echo "[proposer] missing sandbox: $SANDBOX" >&2; exit 1; }
 LOG="$SANDBOX/proposer.log"   # this worker's OWN log -> per-proposer AI-credit attribution at run end
@@ -48,6 +48,6 @@ cd "$SANDBOX"
 # Output is APPENDED to this proposer's OWN log (kept across restarts) so the launcher can sum this
 # session's "AI Credits" at shutdown. `exec` is preserved so a TERM still reaches copilot directly
 # and it flushes its final credit summary.
-echo "[proposer] $PNAME session start $(date -u +%FT%TZ) ($MODEL/$EFFORT)" >> "$LOG"
+echo "[proposer] $PNAME session start $(TZ=America/New_York date +%FT%T%Z) ($MODEL/$EFFORT)" >> "$LOG"
 exec copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
      --add-dir "$SANDBOX" -C "$SANDBOX" >> "$LOG" 2>&1
