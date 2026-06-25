@@ -146,6 +146,14 @@ def load_tvsd(d: Dataset):
         labels = blob["areas"]
         roi_masks = {a: labels == a for a in _TVSD_REGIONS}
         X_train, X_test = _tvsd_build_X_processed(d, subject)
+        for split, nx, ny in (("train", len(X_train), len(Y_train)),
+                              ("test", len(X_test), len(Y_test))):
+            if nx != ny:
+                raise RuntimeError(
+                    f"TVSD monkey{subject} [processed]: {split} stimuli/neural count mismatch "
+                    f"({nx} images vs {ny} MUA rows). The processed tree at {proc!r} is partial "
+                    f"-- re-run `python -m scripts.process_dataset.tvsd` to stage all images, or "
+                    f"`--n N` to stage a matched smoke subset of both.")
         Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
         Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
         Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)

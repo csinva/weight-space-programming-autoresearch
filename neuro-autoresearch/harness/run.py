@@ -5,11 +5,11 @@ Run from the repo root::
     python -m harness.run
 
 Loads the active dataset split ONCE (the slow step), then evaluates the model in
-``model.py`` exactly once and appends a single row to ``results/<study>.csv`` -- one
-run = one model = one iteration (the append-only ``iteration`` column counts the
-models tried across runs). A model that raises or returns a bad shape does not crash
-the run: it is recorded as a ``status='error'`` row (NaN reward) and the run exits
-cleanly. The active dataset is chosen by ``NEURO_DATASET`` (see ``harness/datasets.py``).
+``model.py`` exactly once and prints the scored row. A model that raises or returns a
+bad shape does not crash the run: it is reported as a ``status='error'`` row (NaN
+reward) and the run exits cleanly. The active dataset is chosen by ``NEURO_DATASET``
+(see ``harness/datasets.py``). This is the manual eval path; the unattended search
+records results into a run's ``search.db`` (see ``hub.py``), not here.
 The agent should NOT edit this file.
 """
 from __future__ import annotations
@@ -20,7 +20,6 @@ from model import MODEL
 from harness.datasets import DATASET
 from harness.loaders import load_split
 from harness.reward import evaluate_on_split_safe
-from harness.results import save_results
 
 
 def _print_row(row: dict) -> None:
@@ -44,7 +43,6 @@ def main() -> None:
     print(header)
     print("-" * len(header))
     row = evaluate_on_split_safe(MODEL, split, DATASET)
-    save_results(row)
     _print_row(row)
     if row["status"] != "ok":
         print(f"\n{row['status']}\n  -> recorded as a failed attempt (NaN reward); "

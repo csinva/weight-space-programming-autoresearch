@@ -41,8 +41,6 @@ class Dataset:
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value (NSD = "ventral"), NOT an operator knob.
-    run_tag: str = ""                # per-run id (set by NEURO_RUN): suffixes the results
-                                     # CSV so each run gets its own. Empty => shared.
     loader: str = "neuralset"        # "neuralset" Segmenter path, or standalone reader:
                                      # "nsd", "tvsd", or "nnn".
     subject: str = ""                # preset subject/animal when supported
@@ -157,15 +155,9 @@ if _key not in PRESETS:
         f"Valid keys: {sorted(PRESETS)}"
     )
 
-# The one active dataset, chosen by NEURO_DATASET (default "text").
+# The one active dataset, chosen by NEURO_DATASET (default "text"). The reward is always the
+# WHOLE-dataset test_corr (each preset's built-in reward_roi); there is no ROI knob.
 DATASET = PRESETS[_key]
-
-# Trivial single-field override: NEURO_RUN tags the results CSV (one per run). The reward is
-# always the WHOLE-dataset test_corr (each preset's built-in reward_roi); there is no ROI knob.
-for _env, _field in (("NEURO_RUN", "run_tag"),):
-    _val = os.environ.get(_env)
-    if _val:
-        DATASET = replace(DATASET, **{_field: _val})
 
 # Input-resolution override (NEURO_IMSIZE): the operator-chosen pixel size for image
 # stimuli (RawPixels imsize). It only enriches the model INPUT X -- the neural target

@@ -34,6 +34,8 @@ def process_monkey(subject: str, n: int | None):
     mat = _read_mat(os.path.join(mdir, "THINGS_normMUA.mat"))
     Y_train = torch.from_numpy(_tvsd_targets(mat["train_MUA"]))
     Y_test = torch.from_numpy(_tvsd_targets(mat["test_MUA"]))
+    if n is not None:  # smoke subset: keep neural rows aligned to the copied stimuli below.
+        Y_train, Y_test = Y_train[:n], Y_test[:n]
     labels = _tvsd_area_labels(subject)
     ndir = os.path.join(out, "neural")
     os.makedirs(ndir, exist_ok=True)
