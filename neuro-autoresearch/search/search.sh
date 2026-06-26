@@ -14,44 +14,40 @@
 # scaffolding, the wall-clock STOP CONDITION (--hours), and graceful shutdown that leaves the DB
 # consistent (orphaned `running` rows reset to `queued`).
 #
-#   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--date YYYY-MM-DD]
+#   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--gpu G] [--date YYYY-MM-DD]
 #   e.g.  search/search.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 30m
 #         search/search.sh nsd --hours 8 --epoch-mins 15  # steer every 15 minutes
 #         search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
-#         search/search.sh tvsd --hours 6 --fleet 6 --epoch-mins 0   # conductor OFF (decentralized)
+#         search/search.sh tvsd --hours 6 --gpu 1 --epoch-mins 0     # pin the run to GPU 1 (one dataset per card), conductor OFF
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
 
-DATASET=""; HOURS=""; FLEET=""; DATE=""; EPOCH=""; EFFORT=""; pos=0
+# Generic flag parser: every "--key val" / "--key=val" lands in OPT[key]; the first bare arg is the
+# dataset. Resolve precedence is flag > env > default (below); GPU pins the whole run to one card.
+declare -A OPT; DATASET=""; pos=0
 while [ $# -gt 0 ]; do
   case "$1" in
-    --hours)   HOURS="${2:?--hours needs a value}"; shift 2;;
-    --hours=*) HOURS="${1#*=}"; shift;;
-    --fleet)   FLEET="${2:?--fleet needs a value}"; shift 2;;
-    --fleet=*) FLEET="${1#*=}"; shift;;
-    --date)    DATE="${2:?--date needs a value}"; shift 2;;
-    --date=*)  DATE="${1#*=}"; shift;;
-    --epoch-mins)   EPOCH="${2:?--epoch-mins needs a value}"; shift 2;;
-    --epoch-mins=*) EPOCH="${1#*=}"; shift;;
-    --effort)   EFFORT="${2:?--effort needs a value}"; shift 2;;
-    --effort=*) EFFORT="${1#*=}"; shift;;
-    -h|--help) sed -n '2,20p' "$0"; exit 0;;
-    --*)       echo "[search] unknown flag: $1" >&2; exit 2;;
-    *) case "$pos" in 0) DATASET="$1";; *) echo "[search] unexpected arg: $1" >&2; exit 2;; esac; pos=$((pos+1)); shift;;
+    -h|--help) sed -n '2,21p' "$0"; exit 0;;
+    --*=*) k="${1#--}"; k="${k%%=*}"; v="${1#*=}"; shift;;
+    --*)   k="${1#--}"; v="${2:?$1 needs a value}"; shift 2;;
+    *)     [ "$pos" = 0 ] && { DATASET="$1"; pos=1; shift; continue; }; echo "[search] unexpected arg: $1" >&2; exit 2;;
   esac
+  case "$k" in hours|fleet|date|epoch-mins|effort|gpu) OPT[$k]="$v";; *) echo "[search] unknown flag: --$k" >&2; exit 2;; esac
 done
-DATASET="${DATASET:-nsd}"; HOURS="${HOURS:-12}"; FLEET="${FLEET:-10}"; EPOCH="${EPOCH:-30}"
-# The ONE thinking-effort knob: applies to every proposer AND the conductor (children inherit
-# NEURO_EFFORT below). Precedence: --effort > $NEURO_EFFORT > default.
-EFFORT="${EFFORT:-${NEURO_EFFORT:-xhigh}}"
-DATE="${DATE:-$(TZ=America/New_York date +%Y-%m-%d)}"   # run rolls over at ET midnight
+DATASET="${DATASET:-nsd}"; HOURS="${OPT[hours]:-12}"; FLEET="${OPT[fleet]:-10}"; EPOCH="${OPT[epoch-mins]:-30}"
+# --effort is the ONE thinking knob (all proposers + conductor, via NEURO_EFFORT). --gpu pins the run
+# to one CUDA device (multi-GPU: a dataset per card); empty = current default GPU. Both: flag > env > default.
+EFFORT="${OPT[effort]:-${NEURO_EFFORT:-xhigh}}"; GPU="${OPT[gpu]:-${CUDA_VISIBLE_DEVICES:-}}"
+DATE="${OPT[date]:-$(TZ=America/New_York date +%Y-%m-%d)}"   # run rolls over at ET midnight
 
 case "$HOURS" in ''|*[!0-9.]*|*.*.*) echo "[search] --hours must be a positive number (got '$HOURS')" >&2; exit 2;; esac
 awk -v h="$HOURS" 'BEGIN { exit !(h + 0 > 0) }' || { echo "[search] --hours must be > 0" >&2; exit 2; }
 case "$EPOCH" in ''|*[!0-9.]*|*.*.*) echo "[search] --epoch-mins must be a number >= 0 (got '$EPOCH'; 0 disables the conductor)" >&2; exit 2;; esac
 case "$EFFORT" in low|medium|high|xhigh|max) ;; *) echo "[search] --effort must be one of: low medium high xhigh max (got '$EFFORT')" >&2; exit 2;; esac
+case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list (got '$GPU')" >&2; exit 2;; esac
+[ -n "$GPU" ] && export CUDA_VISIBLE_DEVICES="$GPU"   # torch in the evaluator reads this; no harness code changes
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
@@ -117,7 +113,7 @@ shutdown() {
 }
 install_shutdown_trap shutdown
 
-echo "[search] $KEY -- always-on search (dataset=$DATASET fleet=$FLEET) for ${HOURS}h"
+echo "[search] $KEY -- always-on search (dataset=$DATASET fleet=$FLEET${GPU:+ gpu=$GPU}) for ${HOURS}h"
 echo "[search] run dir: $RUN"
 start_propose
 start_evaluate

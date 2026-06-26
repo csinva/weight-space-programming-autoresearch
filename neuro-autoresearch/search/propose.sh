@@ -4,11 +4,12 @@
 # sandbox, and keeps the pool full: a worker that dies is restarted until the wall-clock deadline.
 # It owns only pool size + liveness, NOT the stop-condition (search.sh signals this whole group).
 #
-# Per-slot MODEL mix: by DEFAULT the first half of the fleet drives on Opus 4.8 and the second half
-# on GPT-5.5 -- so the pool blends a strong and a different model. Tune the split with
-# NEURO_OPUS_FRACTION (0..1, default 0.5) or override the two models via NEURO_MODEL_A (first half)
-# / NEURO_MODEL_B (second half). Thinking EFFORT is uniform across the whole pool and comes from the
-# single knob NEURO_EFFORT (set centrally by search.sh's --effort; default xhigh).
+# Per-slot MODEL mix: by DEFAULT the fleet is spread round-robin across a ROSTER of distinct models
+# (Opus 4.8 / 4.7 / 4.6, GPT-5.5, Gemini 3.1 Pro) -- so for a pool of 10 each model drives 2 slots,
+# blending strong and architecturally-different proposers. Override the roster via NEURO_MODEL_ROSTER
+# (space-separated, each entry "model" or "model:effort"). A per-entry ":effort" pins that model's
+# thinking effort (Gemini is pinned to high by default); every other slot inherits the pool-wide
+# NEURO_EFFORT (set centrally by search.sh's --effort; default xhigh).
 #   LAB_RUN=... NEURO_DATASET=... NEURO_FLEET=10 NEURO_DEADLINE=<epoch> search/propose.sh
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -19,21 +20,23 @@ DEADLINE="${NEURO_DEADLINE:-0}"
 [ -f "$WORKER" ] || { echo "[propose] missing $WORKER" >&2; exit 1; }
 : "${LAB_RUN:?LAB_RUN must be set}"
 
-MODEL_A="${NEURO_MODEL_A:-claude-opus-4.8}"   # first half of the fleet
-MODEL_B="${NEURO_MODEL_B:-gpt-5.5}"           # second half
-EFFORT="${NEURO_EFFORT:-xhigh}"              # the ONE effort knob (search.sh --effort), pool-wide
-FRACTION="${NEURO_OPUS_FRACTION:-0.5}"
-# Number of slots on model A (the first split), rounded; the rest go to model B.
-SPLIT=$(awk -v n="$FLEET" -v f="$FRACTION" 'BEGIN { printf "%d", (n * f) + 0.5 }')
-echo "[propose] pool of $FLEET (run=$LAB_RUN dataset=${NEURO_DATASET:-nsd}) effort=$EFFORT -- slots 0..$((SPLIT-1)): $MODEL_A | $SPLIT..$((FLEET-1)): $MODEL_B"
+EFFORT="${NEURO_EFFORT:-xhigh}"              # the ONE pool-wide effort knob (search.sh --effort)
+# The model roster: round-robin across the fleet. Each entry is "model" or "model:effort"; a
+# ":effort" suffix pins that model's reasoning effort (else it inherits the pool-wide $EFFORT).
+DEFAULT_ROSTER="claude-opus-4.8 claude-opus-4.7 claude-opus-4.6 gpt-5.5 gemini-3.1-pro-preview:high"
+read -r -a ROSTER <<< "${NEURO_MODEL_ROSTER:-$DEFAULT_ROSTER}"
+NROSTER=${#ROSTER[@]}
+echo "[propose] pool of $FLEET (run=$LAB_RUN dataset=${NEURO_DATASET:-nsd}) base-effort=$EFFORT -- roster (round-robin): ${ROSTER[*]}"
 
 declare -a PIDS
 start_slot() {
-  local i="$1" m
-  if [ "$i" -lt "$SPLIT" ]; then m="$MODEL_A"; else m="$MODEL_B"; fi
-  NEURO_PROPOSER_MODEL="$m" NEURO_PROPOSER_EFFORT="$EFFORT" bash "$WORKER" "$(printf 'p%02d' "$i")" &
+  local i="$1" entry m e
+  entry="${ROSTER[$((i % NROSTER))]}"   # round-robin assignment
+  m="${entry%%:*}"                       # model id (before any ":effort")
+  if [ "$entry" = "$m" ]; then e="$EFFORT"; else e="${entry#*:}"; fi
+  NEURO_PROPOSER_MODEL="$m" NEURO_PROPOSER_EFFORT="$e" bash "$WORKER" "$(printf 'p%02d' "$i")" &
   PIDS[$i]=$!
-  echo "[propose] $(printf 'p%02d' "$i") up (pid ${PIDS[$i]}, $m/$EFFORT)"
+  echo "[propose] $(printf 'p%02d' "$i") up (pid ${PIDS[$i]}, $m/$e)"
 }
 shutdown() { trap '' INT TERM; echo "[propose] stopping ${#PIDS[@]} workers..."; for pid in "${PIDS[@]:-}"; do term "$pid"; done; wait 2>/dev/null || true; }
 install_shutdown_trap shutdown

@@ -109,12 +109,19 @@ search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evalu
 search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + conductor
 search/search.sh nsd --hours 12 --epoch-mins 0  # conductor OFF — pure decentralized pool
 search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
+search/search.sh tvsd --hours 6 --gpu 1      # pin to GPU 1 — run a dataset per card in parallel on a multi-GPU box
 ```
+
+On a **multi-GPU** box, `--gpu N` (or just `CUDA_VISIBLE_DEVICES=N`) pins the whole run to one card,
+so you can launch several datasets side-by-side — `nsd` on GPU 0, `tvsd` on GPU 1, … each fully
+isolated. Default (no flag) uses the current default GPU, unchanged.
 
 Thinking **effort** is a single knob — `--effort` (or the `NEURO_EFFORT` env var; one of
 `low|medium|high|xhigh|max`, default `xhigh`) — applied uniformly to **every proposer and
-the conductor**. The model *mix* is separate: by default the fleet is split between Opus 4.8
-(first half) and GPT‑5.5 (second half) — tune via `NEURO_OPUS_FRACTION` / `NEURO_MODEL_A` / `NEURO_MODEL_B`.
+the conductor**. The model *mix* is separate: by default the fleet is spread round-robin across a
+roster of five distinct models — Opus 4.8 / 4.7 / 4.6, GPT‑5.5, and Gemini 3.1 Pro (pinned to
+`high` effort) — so a pool of 10 runs 2 proposers per model. Override the roster via
+`NEURO_MODEL_ROSTER` (space-separated `model` or `model:effort` entries).
 
 `search.sh` scaffolds a dated run and supervises up to three always-on, **decentralized**
 loops against it — the search stays self-paced with no synchronization barrier:
