@@ -2,7 +2,9 @@
 
 Writes, for subjects 01/02/05/07 only:
   data/nsd/neural/subj{01,02,05,07}.pt  -- the per-subject blob (rois, nsd_ids, shared, ...),
-                                            repacked from per_subject/subjNN.pkl.
+                                            repacked from per_subject/subjNN.pkl, with
+                                            ``blob['ncsnr'] = {roi: (n_vox,)}`` -- NSD's per-voxel
+                                            noise-ceiling SNR, fetched + aligned (unless --no-ncsnr).
   data/nsd/stimuli/images.h5            -- NATIVE 425x425x3 uint8 NSD images, ONE dataset
                                             per nsd_id (key = str(nsd_id)), ONLY for the union
                                             of nsd_ids referenced by those 4 subjects (~37k of
@@ -40,9 +42,18 @@ def repack_neural(subjects, out):
     nd = os.path.join(out, "neural")
     os.makedirs(nd, exist_ok=True)
     for s in subjects:
+        dst = os.path.join(nd, f"subj{s}.pt")
         with open(os.path.join(RAW, "per_subject", f"subj{s}.pkl"), "rb") as f:
             blob = pickle.load(f)
-        torch.save(blob, os.path.join(nd, f"subj{s}.pt"), pickle_protocol=4)
+        if os.path.exists(dst):                    # carry forward a prior ncsnr so a re-pack (esp.
+            prev = torch.load(dst, weights_only=False)   # with --no-ncsnr) never silently strips it
+            if "ncsnr" in prev:
+                # CONTRACT: the carried-forward ncsnr is NOT re-validated here against the new betas.
+                # A default run re-aligns it (build_ncsnr, count-asserted); but under --no-ncsnr the
+                # stale ncsnr rides along untouched. Only --no-ncsnr re-pack when the betas voxel SET
+                # is unchanged -- if the ROI/stream definition changed, drop ncsnr and rebuild it.
+                blob["ncsnr"] = prev["ncsnr"]
+        torch.save(blob, dst, pickle_protocol=4)
         print(f"  neural subj{s}: {len(np.asarray(blob['nsd_ids']))} images repacked")
 
 
@@ -77,10 +88,18 @@ def main():
     ap.add_argument("--ids-limit", type=int, default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--neural-only", action="store_true")
+    ap.add_argument("--no-ncsnr", action="store_true",
+                    help="skip fetching/aligning NSD per-voxel ncsnr (the reliability signal)")
     a = ap.parse_args()
     out = a.out or processed_dir("nsd")
     print(f"NSD -> {out}  subjects={a.subjects}")
     repack_neural(a.subjects, out)
+    if not a.no_ncsnr:
+        from scripts.process_dataset.nsd_ncsnr import build as build_ncsnr
+        cache = os.path.join(out, "ncsnr_src")
+        os.makedirs(cache, exist_ok=True)
+        for s in a.subjects:
+            build_ncsnr(s, out, cache)
     if not a.neural_only:
         ids = union_ids(a.subjects)
         if a.ids_limit:

@@ -2,8 +2,11 @@
 
 Open-ended autoresearch for **neural encoding**: an agent proposes a fixed, **never-trained**
 model `X (N, D_in) -> activations (N, D_out)`; the harness reads it out with ridge regression
-against recorded brain activity; held-out `test_corr` is the reward. The detailed task handed to
-each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
+against recorded brain activity; held-out `test_corr` is the reward. On NSD `test_corr` is **noise-
+ceiling-normalized** — mean sign-preserving `r²/NC_r2` (Algonauts fraction-of-explainable-variance)
+over the reliable voxels only, NOT raw Pearson r; datasets without a repeat-based ceiling keep raw
+mean r. So NSD scores are NOT comparable to pre-normalization runs or to raw-r datasets. The detailed
+task handed to each search proposer lives in **`search/proposer.md`** (+ per-dataset framing in
 `search/proposer.sh`). This file is the high-level codebase map.
 
 ## Invariants (what keeps the reward honest)
@@ -65,6 +68,10 @@ search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentral
 ```
 
 ## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)
-`nsd` — NSD prepared GLMdenoise betas, reward = **ventral stream**, all 8 subjects via
-`NEURO_SUBJECT` · `text` / `meg` / `ieeg` — NeuralSet timeline studies · `tvsd` / `nnn` — macaque
-spiking tables. Never `download=True` unattended.
+`nsd` — NSD prepared GLMdenoise betas, reward = **early+ventral** stream (noise-normalized; see top),
+all 8 subjects via `NEURO_SUBJECT`. `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
+reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
+ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
+provisioned `ncsnr` raises — (re)run `python -m scripts.process_dataset.nsd` to fetch+align it.
+`text` / `meg` / `ieeg` — NeuralSet timeline studies · `tvsd` / `nnn` — macaque spiking tables. Never
+`download=True` unattended.

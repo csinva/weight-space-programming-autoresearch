@@ -60,12 +60,15 @@ def drop_constant_cols(Y_train, *others):
     return tuple(Y[:, keep] for Y in (Y_train, *others))
 
 
-def drop_constant_cols_with_rois(Y_train, Y_test, roi_masks):
+def drop_constant_cols_with_rois(Y_train, Y_test, roi_masks, keep=None):
     """Drop train-constant columns from (Y_train, Y_test) and re-align each ROI mask to them.
 
     The standalone loaders carry a ``{roi: bool mask}`` breakdown alongside Y; this keeps that
-    breakdown aligned to the surviving (scored) columns. Returns (Y_train, Y_test, roi_masks)."""
-    keep = surviving_cols(Y_train)
+    breakdown aligned to the surviving (scored) columns. Returns (Y_train, Y_test, roi_masks).
+    Pass a precomputed ``keep`` (a ``surviving_cols`` mask) to avoid re-scanning Y_train when the
+    caller already needs the mask for something else (e.g. subsetting a per-voxel ceiling)."""
+    if keep is None:
+        keep = surviving_cols(Y_train)
     keep_np = keep.numpy() if torch.is_tensor(keep) else np.asarray(keep)
     roi_masks = {k: v[keep_np] for k, v in roi_masks.items()}
     return Y_train[:, keep], Y_test[:, keep], roi_masks

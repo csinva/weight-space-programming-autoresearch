@@ -83,6 +83,10 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
 
 _NSD_FINE = ("V1", "V2", "V3", "hV4", "FFA", "PPA", "VWFA")
 
+# Absolute NC_r2 floor enforced even when NSD_NCSNR_MIN=0: NC_r2 < this (~NC_r < 0.1) means a voxel
+# has essentially no explainable variance, so normalizing r^2/NC_r2 by it would blow up the reward.
+_NC_R2_FLOOR = 0.01
+
 
 def _nsd_roi_masks(rois, Y, n_early):
     """ROI masks over the early+ventral region columns: the two streams (disjoint -> a clean split
@@ -119,8 +123,9 @@ def _ncsnr_select(blob, Ytr, Yte, roi_masks):
     aligned column-for-column to the early+ventral betas). From it the averaged-over-n R^2 ceiling
     is ``NC_r2 = ncsnr^2 / (ncsnr^2 + 1/n)`` (n=3 reps), whose sqrt ``NC_r`` is the Pearson-r ceiling.
     Voxels with ``NC_r < NSD_NCSNR_MIN`` (operator knob; default 0.2, the field-standard reliability
-    cut; set 0 to keep all) are dropped from Y AND every roi_mask, so each breakdown scores only its
-    signal voxels. Returns ``(Ytr, Yte, roi_masks, nc_r2)`` with ``nc_r2`` aligned to the surviving
+    cut; set 0 to keep all *reliable* voxels) are dropped from Y AND every roi_mask, so each
+    breakdown scores only its signal voxels. An absolute ``_NC_R2_FLOOR`` is enforced regardless of
+    the knob so near-zero-ceiling voxels never reach the reward's r^2/NC_r2 divide. Returns ``(Ytr, Yte, roi_masks, nc_r2)`` with ``nc_r2`` aligned to the surviving
     columns -- the reward noise-normalizes per voxel by it (Algonauts r^2/NC_r2). ``nc_r2`` is None
     only for a legacy blob with no ncsnr when the cut is disabled."""
     thresh = float(os.environ.get("NSD_NCSNR_MIN", "0.2"))
@@ -137,6 +142,12 @@ def _ncsnr_select(blob, Ytr, Yte, roi_masks):
         f"ncsnr ({ncsnr.size}) misaligned to early+ventral Y ({Ytr.shape[1]})")
     nc_r2 = ncsnr ** 2 / (ncsnr ** 2 + 1.0 / 3)               # R^2 ceiling, n=3 repeats
     keep = np.sqrt(nc_r2) >= thresh                           # all-True when thresh <= 0
+    # Absolute floor applied even when the reliability cut is disabled (NSD_NCSNR_MIN=0): a voxel
+    # with ~zero explainable variance would make the reward's r^2/NC_r2 explode, so "keep all" still
+    # excludes essentially-unpredictable voxels rather than letting noise dominate the reward.
+    keep &= nc_r2 >= _NC_R2_FLOOR
+    if not keep.any():
+        raise ValueError(f"NSD_NCSNR_MIN={thresh} filtered out every voxel (no reliable targets)")
     print(f"  NSD ncsnr select: NC_r>={thresh} keeps {int(keep.sum())}/{keep.size} voxels")
     keep_t = torch.as_tensor(keep)
     roi_masks = {k: np.asarray(v, bool)[keep] for k, v in roi_masks.items()}
@@ -169,10 +180,10 @@ def load_nsd(d: Dataset):
     Xtr, Xte = torch.as_tensor(X[tr]), torch.as_tensor(X[te])
     Ytr, Yte = torch.as_tensor(Y[tr]), torch.as_tensor(Y[te])
     Ytr, Yte, roi_masks, nc = _ncsnr_select(blob, Ytr, Yte, roi_masks)
+    keep = surviving_cols(Ytr)                                 # one train-constant scan, shared below
     if nc is not None:                                         # ride the same constant-col drop as Y
-        keep = surviving_cols(Ytr)
         nc = nc[keep.numpy() if torch.is_tensor(keep) else np.asarray(keep)]
-    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
+    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks, keep=keep)
     print(f"  NSD-betas subj{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region=early+ventral -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte, roi_masks, nc

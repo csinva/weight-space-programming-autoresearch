@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlexNet vs champion — explained variance on NSD high-signal voxels</title>
+<style>
+  :root{
+    --ivory:#FAF9F5; --paper:#FFFFFF; --slate:#141413;
+    --g100:#F0EEE6; --g200:#E6E3DA; --g300:#D1CFC5; --g500:#87867F; --g700:#3D3D3A;
+    --clay:#D97757; --clay-d:#B85C3E; --oat:#E3DACC; --olive:#788C5D;
+    --cobalt:#3B6FB0; --cobalt-d:#2C5588;
+    --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    --shadow: 0 10px 30px rgba(20,20,19,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ivory);color:var(--slate);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 32px 120px}
+  code{font-family:var(--mono);background:var(--g100);padding:1px 5px;border-radius:4px;font-size:.92em}
+  pre{font-family:var(--mono);background:var(--paper);border:1.5px solid var(--g300);border-radius:10px;padding:14px 16px;overflow:auto;font-size:13px;line-height:1.6}
+
+  .masthead{padding:64px 0 32px;border-bottom:1.5px solid var(--g300)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--g500);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:24px;height:1.5px;background:var(--clay)}
+  h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.4vw,48px);line-height:1.08;letter-spacing:-.018em;margin:0;max-width:20ch}
+  h1 em{font-style:italic;color:var(--clay)}
+  .intro{font-size:16px;color:var(--g700);margin:20px 0 0;max-width:680px}
+
+  section{margin-top:56px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .sec-head .idx{font-family:var(--mono);font-size:13px;color:var(--clay);font-weight:600;width:30px}
+  .sec-head h2{font-family:var(--serif);font-weight:500;font-size:25px;margin:0;letter-spacing:-.012em}
+  .sec-intro{font-size:14.5px;color:var(--g700);max-width:760px;margin:0 0 22px 44px}
+  .sec-body{margin-left:44px}
+  .sec-body p{color:var(--g700);max-width:760px}
+  @media(max-width:640px){.sec-intro,.sec-body{margin-left:0}}
+
+  /* headline duel */
+  .duel{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch;margin:26px 0 8px;max-width:760px}
+  @media(max-width:640px){.duel{grid-template-columns:1fr}}
+  .card{background:var(--paper);border:1.5px solid var(--g300);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow)}
+  .card .who{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--g500)}
+  .card .name{font-family:var(--serif);font-size:19px;margin:6px 0 16px}
+  .card .num{font-family:var(--serif);font-size:54px;font-weight:500;line-height:1;letter-spacing:-.02em}
+  .card .unit{font-family:var(--mono);font-size:11px;color:var(--g500);margin-top:8px;text-transform:uppercase;letter-spacing:.06em}
+  .card.champ{border-color:var(--clay)} .card.champ .num{color:var(--clay-d)}
+  .card.alex{border-color:var(--cobalt)} .card.alex .num{color:var(--cobalt-d)}
+  .vs{align-self:center;font-family:var(--serif);font-style:italic;font-size:22px;color:var(--g500)}
+  .verdict{font-size:13.5px;color:var(--g700);max-width:760px;margin:14px 0 0;font-style:italic}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:22px 0}
+  .stat{background:var(--paper);border:1.5px solid var(--g300);border-radius:14px;padding:18px 20px}
+  .stat .n{font-family:var(--serif);font-size:34px;font-weight:500;color:var(--clay);line-height:1}
+  .stat .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--g500);margin-top:9px}
+  .stat .s{font-size:12.5px;color:var(--g700);margin-top:5px}
+
+  .callout{border:1.5px solid var(--g300);border-left-width:4px;border-radius:10px;background:var(--paper);padding:14px 18px;margin:16px 0;max-width:820px}
+  .callout .k{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--g500);margin-bottom:4px}
+  .callout p{margin:0;color:var(--g700)}
+  .callout.note{border-left-color:var(--g500)}
+
+  table.cmp{width:100%;border-collapse:collapse;font-size:14px;max-width:820px;margin:8px 0}
+  table.cmp th,table.cmp td{border-bottom:1.5px solid var(--g200);padding:10px 12px;text-align:left}
+  table.cmp thead th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);border-bottom:1.5px solid var(--g300)}
+  table.cmp td.region{font-weight:600}
+  table.cmp td.region small{font-weight:400;color:var(--g500);font-family:var(--mono);font-size:10.5px}
+  table.cmp .val{font-family:var(--mono);font-size:13.5px}
+  table.cmp .bars{width:46%}
+  table.cmp tr.head-region td{background:var(--g100);font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--g700);text-transform:uppercase}
+  .bar{position:relative;height:9px;border-radius:999px;background:var(--g200);margin:3px 0}
+  .bar > span{position:absolute;left:0;top:0;height:100%;border-radius:999px}
+  .bar.c > span{background:var(--clay)} .bar.a > span{background:var(--cobalt)}
+  .win{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:999px;border:1.5px solid}
+  .win.c{color:var(--clay-d);border-color:var(--clay)} .win.a{color:var(--cobalt-d);border-color:var(--cobalt)}
+  .legend{display:flex;gap:18px;font-family:var(--mono);font-size:11.5px;color:var(--g700);margin:4px 0 14px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:middle}
+  .legend .c i{background:var(--clay)} .legend .a i{background:var(--cobalt)}
+
+  details{border:1.5px solid var(--g300);border-radius:10px;background:var(--paper);padding:0 16px;margin:14px 0;max-width:820px}
+  details summary{cursor:pointer;padding:12px 0;font-family:var(--serif);font-size:16px;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"▸ ";color:var(--clay)}
+  details[open] summary::before{content:"▾ "}
+  details table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 14px}
+  details th,details td{border-bottom:1px solid var(--g200);padding:7px 9px;text-align:right;font-family:var(--mono);font-size:12.5px}
+  details th:first-child,details td:first-child{text-align:left}
+  details thead th{color:var(--g500);text-transform:uppercase;font-size:10px;letter-spacing:.05em}
+  details td.best{color:var(--cobalt-d);font-weight:600}
+
+  footer{margin-top:80px;border-top:1.5px solid var(--g300);padding-top:26px;font-size:13px;color:var(--g500);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">NSD · subj01 · explained variance</div>
+    <h1>Untrained <em>champion</em> vs trained AlexNet, on the variance that's actually predictable</h1>
+    <p class="intro">One number, one comparison. The score is the <b>fraction of explained variance</b> a model captures on the high-signal voxels of NSD's early + ventral visual cortex. Higher is better; 1.0 = the noisy data's own ceiling.</p>
+  </header>
+
+  <main>
+
+    <!-- ============ HEADLINE ============ -->
+    <section id="headline">
+      <div class="sec-head"><span class="idx">01</span><h2>The result</h2></div>
+      <p class="sec-intro">Both models are <b>never trained</b> on the brain data — only the ridge readout is fit. Score = mean over high-signal voxels of <code>R² / NC_r2</code>, the early + ventral reward region.</p>
+      <div class="sec-body">
+        <div class="duel">
+          <div class="card champ">
+            <div class="who">champion · untrained</div>
+            <div class="name">foveal chroma<br>+ spectral statistics</div>
+            <div class="num">0.263</div>
+            <div class="unit">fraction explained variance</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="card alex">
+            <div class="who">AlexNet · ImageNet-trained</div>
+            <div class="name">best layer (fc6),<br>frozen features</div>
+            <div class="num">0.408</div>
+            <div class="unit">fraction explained variance</div>
+          </div>
+        </div>
+        <p class="verdict">AlexNet leads overall by ~0.145 — and leads in <b>every region but one</b>. The untrained champion only reaches parity in V1; everywhere else, especially the ventral / category-selective end, trained features pull clearly ahead (next section).</p>
+      </div>
+    </section>
+
+    <!-- ============ HIGH-SIGNAL VOXELS ============ -->
+    <section id="voxels">
+      <div class="sec-head"><span class="idx">02</span><h2>What we score: high-signal voxels only</h2></div>
+      <p class="sec-intro">Voxels whose noise ceiling is too low to be predictable are dropped (NC_r &lt; 0.2) and never enter the score. These are the only boxes that count.</p>
+      <div class="sec-body">
+        <div class="stats">
+          <div class="stat"><div class="n">4,965</div><div class="l">early · high-signal voxels</div><div class="s">median ceiling NC_r2 = 0.34</div></div>
+          <div class="stat"><div class="n">5,636</div><div class="l">ventral · high-signal voxels</div><div class="s">median ceiling NC_r2 = 0.22</div></div>
+          <div class="stat"><div class="n">10,601</div><div class="l">total voxels scored</div><div class="s">early + ventral, the reward region</div></div>
+        </div>
+        <div class="callout note"><div class="k">The metric, in one line</div><p>For each high-signal voxel: <code>R² / NC_r2</code> = of the variance that was even predictable given the noise, what fraction did the model capture. The reward is the mean of that across the voxels above — the Algonauts 2023 convention. Reliability cut: NC_r ≥ 0.2, n = 3 repeats.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ PER-REGION ============ -->
+    <section id="byregion">
+      <div class="sec-head"><span class="idx">03</span><h2>Where each model wins</h2></div>
+      <p class="sec-intro">Same metric, broken out by region. AlexNet is scored layer by layer (brain-score protocol); shown here is its <b>best layer per region</b> — a deliberately generous baseline. The champion is one fixed representation.</p>
+      <div class="sec-body">
+        <div class="legend"><span class="c"><i></i>champion (untrained)</span><span class="a"><i></i>AlexNet (best layer)</span></div>
+        <table class="cmp">
+          <thead><tr><th>Region</th><th class="bars">explained-variance fraction (bar to 0.65)</th><th>champion</th><th>AlexNet</th><th>leads</th></tr></thead>
+          <tbody>
+            <tr class="head-region"><td colspan="5">reward region</td></tr>
+            <tr>
+              <td class="region">early + ventral<br><small>all 10,601 voxels</small></td>
+              <td class="bars"><div class="bar c"><span style="width:40.5%"></span></div><div class="bar a"><span style="width:62.8%"></span></div></td>
+              <td class="val">0.263</td><td class="val">0.408</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr class="head-region"><td colspan="5">early / retinotopic cortex</td></tr>
+            <tr>
+              <td class="region">early stream</td>
+              <td class="bars"><div class="bar c"><span style="width:56.8%"></span></div><div class="bar a"><span style="width:68.5%"></span></div></td>
+              <td class="val">0.369</td><td class="val">0.445</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">V1</td>
+              <td class="bars"><div class="bar c"><span style="width:83.4%"></span></div><div class="bar a"><span style="width:83.1%"></span></div></td>
+              <td class="val">0.542</td><td class="val">0.540</td><td><span class="win c">champion</span></td>
+            </tr>
+            <tr>
+              <td class="region">V2</td>
+              <td class="bars"><div class="bar c"><span style="width:70.9%"></span></div><div class="bar a"><span style="width:72.8%"></span></div></td>
+              <td class="val">0.461</td><td class="val">0.473</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">V3</td>
+              <td class="bars"><div class="bar c"><span style="width:66.6%"></span></div><div class="bar a"><span style="width:72.3%"></span></div></td>
+              <td class="val">0.433</td><td class="val">0.470</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr class="head-region"><td colspan="5">mid / high ventral</td></tr>
+            <tr>
+              <td class="region">hV4</td>
+              <td class="bars"><div class="bar c"><span style="width:55.8%"></span></div><div class="bar a"><span style="width:68.0%"></span></div></td>
+              <td class="val">0.363</td><td class="val">0.442</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">ventral stream</td>
+              <td class="bars"><div class="bar c"><span style="width:29.2%"></span></div><div class="bar a"><span style="width:68.3%"></span></div></td>
+              <td class="val">0.190</td><td class="val">0.444</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">FFA <small>faces</small></td>
+              <td class="bars"><div class="bar c"><span style="width:45.1%"></span></div><div class="bar a"><span style="width:78.2%"></span></div></td>
+              <td class="val">0.293</td><td class="val">0.508</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">PPA <small>places</small></td>
+              <td class="bars"><div class="bar c"><span style="width:50.9%"></span></div><div class="bar a"><span style="width:94.8%"></span></div></td>
+              <td class="val">0.331</td><td class="val">0.616</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+            <tr>
+              <td class="region">VWFA <small>words</small></td>
+              <td class="bars"><div class="bar c"><span style="width:35.5%"></span></div><div class="bar a"><span style="width:60.6%"></span></div></td>
+              <td class="val">0.231</td><td class="val">0.394</td><td><span class="win a">AlexNet</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout note"><div class="k">Reading it</div><p>This untrained chroma/spectral champion reaches AlexNet's level only in <b>V1</b> (0.542 vs 0.540). Everywhere else AlexNet is ahead, and the gap widens steadily up the hierarchy — modest in early/retinotopic cortex (V2, V3, early stream) and large in the category-selective end (ventral, faces, places, words), where ImageNet training buys representations a fixed low-level feature bank can't reproduce.</p></div>
+
+        <details>
+          <summary>AlexNet, layer by layer (which layer was "best" per region)</summary>
+          <table>
+            <thead><tr><th>layer</th><th>early+ventral</th><th>early</th><th>ventral</th><th>V1</th><th>V4</th><th>FFA</th><th>PPA</th></tr></thead>
+            <tbody>
+              <tr><td>conv1</td><td>0.228</td><td>0.330</td><td>0.138</td><td>0.465</td><td>0.256</td><td>0.132</td><td>0.158</td></tr>
+              <tr><td>conv2</td><td>0.289</td><td>0.390</td><td>0.200</td><td>0.532</td><td>0.314</td><td>0.211</td><td>0.281</td></tr>
+              <tr><td>conv3</td><td>0.365</td><td class="best">0.445</td><td>0.294</td><td class="best">0.540</td><td>0.409</td><td>0.328</td><td>0.411</td></tr>
+              <tr><td>conv4</td><td>0.392</td><td>0.433</td><td>0.355</td><td>0.472</td><td class="best">0.442</td><td>0.405</td><td>0.490</td></tr>
+              <tr><td>conv5</td><td>0.397</td><td>0.399</td><td>0.395</td><td>0.415</td><td>0.419</td><td>0.462</td><td>0.524</td></tr>
+              <tr><td>fc6</td><td class="best">0.408</td><td>0.367</td><td class="best">0.444</td><td>0.348</td><td>0.424</td><td>0.507</td><td>0.606</td></tr>
+              <tr><td>fc7</td><td>0.371</td><td>0.299</td><td>0.434</td><td>0.280</td><td>0.341</td><td class="best">0.508</td><td class="best">0.616</td></tr>
+              <tr><td>fc8</td><td>0.350</td><td>0.271</td><td>0.420</td><td>0.252</td><td>0.313</td><td>0.495</td><td>0.605</td></tr>
+            </tbody>
+          </table>
+          <p style="font-family:var(--sans);font-size:12.5px;color:var(--g500);padding-bottom:12px">Bold = best layer for that region (the value used in the table above). Early cortex peaks at conv3; category-selective regions peak at fc6/fc7 — the trained-semantics end the champion can't reach.</p>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>NSD subj01 · GLMdenoise betas · n=3 · NC_r≥0.2 · metric = mean R²/NC_r2 (explained variance)</span>
+    <span style="font-family:var(--serif);font-style:italic;color:var(--g700);font-size:15px">champion dhqyl (run 2026-06-24) vs AlexNet-SRP</span>
+  </footer>
+
+</div>
+</body>
+</html>
