@@ -24,6 +24,16 @@ from harness.roi import (
 )
 
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
+FORWARD_BATCH = 512           # chunk the forward pass over samples (per-sample invariant => identical output)
+
+
+def _forward(model, X):
+    """Run ``model`` over ``X`` in ``FORWARD_BATCH``-sized sample chunks, concatenating the per-chunk
+    activations. Identical to one ``model(X)`` call given the per-sample invariant (no statistic
+    across the batch), but keeps a heavy model's peak memory bounded by the chunk, not all N."""
+    if not torch.is_tensor(X) or X.shape[0] <= FORWARD_BATCH:
+        return model(X)
+    return torch.cat([model(X[i:i + FORWARD_BATCH]) for i in range(0, X.shape[0], FORWARD_BATCH)], 0)
 
 
 def _experiment_notes(model) -> str:
@@ -83,7 +93,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     # Move the stimulus to the readout device so the model's forward pass runs on the GPU too.
     if torch.is_tensor(X_train):
         X_train, X_test = X_train.to(device), X_test.to(device)
-    A_train, A_test = model(X_train), model(X_test)
+    A_train, A_test = _forward(model, X_train), _forward(model, X_test)
 
     d_out = int(A_train.shape[1])
     if d_out >= MAX_DOUT:
