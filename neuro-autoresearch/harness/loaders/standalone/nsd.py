@@ -20,7 +20,9 @@ import torch
 import torch.nn.functional as F
 
 from harness.datasets import Dataset
-from harness.loaders.shared import _cache_dir, drop_constant_cols_with_rois, processed_dir
+from harness.loaders.shared import (
+    _cache_dir, drop_constant_cols_with_rois, processed_dir, surviving_cols,
+)
 
 
 def _subject(d: Dataset) -> str:
@@ -110,10 +112,42 @@ def _nsd_roi_masks(rois, Y, n_early):
     return masks
 
 
+def _ncsnr_select(blob, Ytr, Yte, roi_masks):
+    """Per-voxel NSD noise ceiling: keep only reliable voxels AND return the ceiling for scoring.
+
+    NSD ships a per-voxel ncsnr (provisioned into ``blob['ncsnr']`` by scripts.process_dataset.nsd,
+    aligned column-for-column to the early+ventral betas). From it the averaged-over-n R^2 ceiling
+    is ``NC_r2 = ncsnr^2 / (ncsnr^2 + 1/n)`` (n=3 reps), whose sqrt ``NC_r`` is the Pearson-r ceiling.
+    Voxels with ``NC_r < NSD_NCSNR_MIN`` (operator knob; default 0.2, the field-standard reliability
+    cut; set 0 to keep all) are dropped from Y AND every roi_mask, so each breakdown scores only its
+    signal voxels. Returns ``(Ytr, Yte, roi_masks, nc_r2)`` with ``nc_r2`` aligned to the surviving
+    columns -- the reward noise-normalizes per voxel by it (Algonauts r^2/NC_r2). ``nc_r2`` is None
+    only for a legacy blob with no ncsnr when the cut is disabled."""
+    thresh = float(os.environ.get("NSD_NCSNR_MIN", "0.2"))
+    if "ncsnr" not in blob:
+        if thresh > 0:
+            raise RuntimeError(
+                "NSD_NCSNR_MIN is set but this NSD blob has no 'ncsnr' -- (re)run "
+                "`python -m scripts.process_dataset.nsd` to fetch + align it.")
+        return Ytr, Yte, roi_masks, None
+    nc = blob["ncsnr"]
+    ncsnr = np.concatenate([np.asarray(nc["early"], "float32"),
+                            np.asarray(nc["ventral"], "float32")])
+    assert ncsnr.size == Ytr.shape[1], (
+        f"ncsnr ({ncsnr.size}) misaligned to early+ventral Y ({Ytr.shape[1]})")
+    nc_r2 = ncsnr ** 2 / (ncsnr ** 2 + 1.0 / 3)               # R^2 ceiling, n=3 repeats
+    keep = np.sqrt(nc_r2) >= thresh                           # all-True when thresh <= 0
+    print(f"  NSD ncsnr select: NC_r>={thresh} keeps {int(keep.sum())}/{keep.size} voxels")
+    keep_t = torch.as_tensor(keep)
+    roi_masks = {k: np.asarray(v, bool)[keep] for k, v in roi_masks.items()}
+    return Ytr[:, keep_t], Yte[:, keep_t], roi_masks, nc_r2[keep]
+
+
 def load_nsd(d: Dataset):
     """NSD GLMdenoise betas: reward = the joint EARLY+VENTRAL stream; X from the images, shared-1000
-    split. Returns (X_train, X_test, Y_train, Y_test, roi_masks). ``roi_masks`` carries the per-ROI
-    breakdown (early, ventral + V1/V2/V3/hV4/FFA/PPA/VWFA). Train-constant voxels are dropped."""
+    split. Returns (X_train, X_test, Y_train, Y_test, roi_masks, nc). ``roi_masks`` carries the
+    per-ROI breakdown (early, ventral + V1/V2/V3/hV4/FFA/PPA/VWFA); ``nc`` is the per-voxel R^2 noise
+    ceiling (aligned to the scored columns) the reward normalizes by. Train-constant voxels dropped."""
     subject = _subject(d)
     pdir = processed_dir("nsd")
     pt = os.path.join(pdir, "neural", f"subj{subject}.pt")
@@ -134,7 +168,11 @@ def load_nsd(d: Dataset):
     tr, te = ~shared, shared
     Xtr, Xte = torch.as_tensor(X[tr]), torch.as_tensor(X[te])
     Ytr, Yte = torch.as_tensor(Y[tr]), torch.as_tensor(Y[te])
+    Ytr, Yte, roi_masks, nc = _ncsnr_select(blob, Ytr, Yte, roi_masks)
+    if nc is not None:                                         # ride the same constant-col drop as Y
+        keep = surviving_cols(Ytr)
+        nc = nc[keep.numpy() if torch.is_tensor(keep) else np.asarray(keep)]
     Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
     print(f"  NSD-betas subj{subject}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region=early+ventral -> {Ytr.shape[1]} voxels ({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte, roi_masks
+    return Xtr, Xte, Ytr, Yte, roi_masks, nc

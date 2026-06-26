@@ -33,7 +33,7 @@ def main() -> None:
     print("Loading split once (the slow step) ...")
     t = time.time()
     split = load_split(DATASET)
-    Xtr, Xte, Ytr, Yte, _ = split
+    Xtr, Xte, Ytr, Yte, _, _ = split
     print(f"  X_train{tuple(Xtr.shape)} X_test{tuple(Xte.shape)} "
           f"Y_train{tuple(Ytr.shape)} Y_test{tuple(Yte.shape)}  "
           f"(load {time.time() - t:.1f}s)\n")

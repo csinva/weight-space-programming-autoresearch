@@ -1,10 +1,10 @@
 """Fixed reward. The agent should NOT edit this file.
 
 Reward = held-out predictivity of a ridge readout from model activations to recorded neural
-activity, on the dataset's reward region (NSD: the ventral visual stream). Only the ridge readout
+activity, on the dataset's reward region (e.g. NSD's ventral visual stream). Only the ridge readout
 is fit; the model is never trained. The readout itself (both implementations + the ``NEURO_READOUT``
 switch) lives in ``harness.ridge``; this file does the surrounding eval: pick the region's target
-columns, run the readout, score the mean per-target Pearson r, and assemble the result row.
+columns, run the readout, score the reward (noise-normalized mean predictivity), and assemble the row.
 The caller persists the row (the search loop records it into a run's ``search.db``; the manual
 ``harness.run`` path just prints it).
 """
@@ -33,6 +33,13 @@ def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
     return r
 
 
+def _noise_normalize(r: np.ndarray, nc) -> np.ndarray:
+    """Per-voxel noise-normalized score: Algonauts r^2 / NC_r2 (fraction of EXPLAINABLE variance the
+    model captured) where a per-voxel ceiling ``nc`` exists, else raw Pearson r (datasets without
+    repeat-based ceilings keep the unnormalized reward)."""
+    return r ** 2 / nc if nc is not None else r
+
+
 def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
     """Mean per-column Pearson correlation."""
     return float(_corr_per_column(np.asarray(y_hat), np.asarray(y)).mean())
@@ -42,12 +49,13 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     """Evaluate ``model`` on an already-loaded ``split`` (the reusable core).
 
     Runs the model forward, then fits the ``harness.ridge`` readout from the activations to the
-    dataset's REWARD-REGION neural targets only (NSD: the ventral stream), and returns the mean
-    per-target held-out Pearson r as ``test_corr``. Times only the model + readout (not the one-off
+    dataset's REWARD-REGION neural targets only (e.g. the ventral stream on NSD), and returns the
+    noise-normalized mean over reward-region voxels as ``test_corr`` (Algonauts r^2/NC_r2 where the
+    loader supplies a per-voxel ceiling, else raw mean Pearson r). Times only the model + readout (not the one-off
     data load). ``slices`` is accepted for back-compat and ignored. A representation wider than
     ``MAX_DOUT`` is rejected (raised -> recorded as a ``status='error'`` row by the safe wrapper).
     """
-    X_train, X_test, Y_train, Y_test, roi_masks = split
+    X_train, X_test, Y_train, Y_test, roi_masks, nc = split
     device = _readout_device()
     t0 = time.time()
     # Move the stimulus to the readout device so the model's forward pass runs on the GPU too.
@@ -60,7 +68,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         raise ValueError(f"representation D_out={d_out} >= {MAX_DOUT} cap "
                          f"(keep the model's output dimension under {MAX_DOUT})")
 
-    # The reward narrows the targets to the dataset's region (NSD: ventral); the readout fits
+    # The reward narrows the targets to the dataset's region (e.g. ventral on NSD); the readout fits
     # exactly those targets. NeuralSet studies resolve the region via an ns.Study ROI resolver;
     # the standalone loaders bake the region into Y at load time and may narrow to one named
     # sub-ROI of their roi_masks (a None mask -> fit every loaded target).
@@ -70,15 +78,19 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     else:
         mask = _slice_target_mask(study, dataset.reward_roi, int(Y_train.shape[1]))
     if mask is not None:
-        # Re-align the advisory breakdown to the narrowed targets the readout actually scores.
+        # Re-align the advisory breakdown + the per-voxel ceiling to the narrowed targets scored.
         roi_masks = {k: np.asarray(v, dtype=bool)[mask] for k, v in roi_masks.items()}
+        if nc is not None:
+            nc = nc[mask]
         if torch.is_tensor(Y_train):
             mask = torch.as_tensor(mask, device=Y_train.device)
     Yv_train, Yv_test = _select_targets(Y_train, mask), _select_targets(Y_test, mask)
 
     pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
-    test_np = _corr_per_column(pred_test, _to_np(Yv_test))
-    train_np = _corr_per_column(pred_train, _to_np(Yv_train))
+    # Noise-normalize per voxel (r^2/NC_r2) before averaging -- the scalar reward AND the ROI
+    # breakdown all report fraction-of-explainable-variance; raw r where no ceiling (nc is None).
+    test_np = _noise_normalize(_corr_per_column(pred_test, _to_np(Yv_test)), nc)
+    train_np = _noise_normalize(_corr_per_column(pred_train, _to_np(Yv_train)), nc)
     test_corr, train_corr = float(test_np.mean()), float(train_np.mean())
 
     return {
@@ -109,7 +121,7 @@ def _error_status(exc: BaseException) -> str:
 def _error_row(model, split, dataset: Dataset, exc: BaseException,
                seconds: float, slices=()) -> dict:
     """A durable ``status='error'`` row for a model/readout fault (NaN scores)."""
-    _, _, Y_train, Y_test, _ = split
+    _, _, Y_train, Y_test, _, _ = split
     nan = float("nan")
     return {
         "study": dataset.study,
