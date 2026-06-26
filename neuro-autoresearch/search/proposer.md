@@ -37,25 +37,38 @@ See the landscape (scores + ideas, NO source):
   `python hub.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
 Build on real code:
   `python hub.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
-  `python hub.py peek-island`          # best of ONE RANDOM OTHER island, WITH source -- cross-pollination.
-                                       # You do NOT choose which; use at most ONCE before your next propose.
-  (both take `--no-code` for the row only, no source.)
+                                       # (`--no-code` for the row only.)
+Cross-pollinate (ideas only, never code):
+  `python hub.py peek-island`          # best of ONE RANDOM OTHER island as idea + experiment_notes
+                                       # (description + insight) + score + roi_corr -- NO source. You do
+                                       # NOT choose which island; it is auto-picked at random.
 
 Propose + get your score:
   `id=$(python hub.py propose-model model.py --idea "<short label>")`  # snapshots + queues YOUR model.py
   `python hub.py wait-for-score $id`  # BLOCKS until the GPU evaluator scores YOUR model; prints the
                                      # row (test_corr = reward, status). One call parks; don't busy-poll.
-Grow YOUR OWN backbone -- improve `my-best`, optionally fold in one `peek-island` idea per round. Never
+Grow YOUR OWN backbone -- improve `my-best`, optionally re-implementing a `peek-island` idea. Never
 try to reconstruct the global champion.
 
 ## The model contract (so the harness can score it)
-A self-contained `model.py` defining `class Model` with attributes `name`, `idea`, `summary`,
-`n_params`, and `__call__(self, X)` mapping a stimulus batch `X` of shape `(N, D_in)` to
+A self-contained `model.py` defining `class Model` with attributes `name`, `idea`, `description`,
+`insight`, `n_params`, and `__call__(self, X)` mapping a stimulus batch `X` of shape `(N, D_in)` to
 activations `(N, D_out)`; end the file with `MODEL = Model()`. For image datasets `X` is flattened
 RGB pixels of a square image -- infer `side = round(sqrt(D_in/3))` and reshape. Chunk the forward
 pass over `N` under `torch.no_grad()` to bound GPU memory. **Keep the output width `D_out` < 10,000**
 -- a wider representation is rejected by the ridge readout (recorded as an error). Make the FIRST
 line `# idea: <label>`.
+
+**The text fields are what the pool learns from -- write them for a stranger, not for yourself:**
+- `idea` -- a concise plain-language one-liner of what THIS model tries. NO `pNN`/`vNN` prefixes
+  (your proposer id and version are tracked separately), NO raw hyperparameter shorthand
+  (`S2_K=2168`, `dog5-fovea40`): say the MECHANISM in words, not the knob values.
+- `description` -- the model in <=3 information-dense, re-implementable sentences (front-end,
+  pooling, readout). Another island will only ever see this, never your code.
+- `insight` -- <=3 information-dense sentences: the KEY TAKEAWAY -- what neural/visual structure
+  this captures, what worked vs your parent, what it implies for what to try next. `description`
+  + `insight` are captured at score time into the shared `experiment_notes`, which is exactly what
+  `peek-island` hands to other islands.
 
 **Compute budget.** Your forward pass shares a GPU: budget **~20 GB VRAM** and finish each eval
 within **7 minutes** -- exceed either and the model is killed and recorded as an `error` (no score).
@@ -90,8 +103,9 @@ is entirely YOUR call. There is no mandated sequence of discovery steps.
    FIRST run `cat direction.txt 2>/dev/null`: if it prints a non-empty line, a conductor has
    given you a BROAD standing direction for this round -- treat it as your mandate and explore WITHIN
    it (you choose all the specifics). If it is blank, you are free to go wherever the DB leads you.
-2. EDIT `model.py` -- exactly ONE new idea per turn (improve YOUR island's `my-best`, fold in a
-   `peek-island` idea, fix what stalled, or invent something new). You own the whole computation.
+2. EDIT `model.py` -- exactly ONE new idea per turn (improve YOUR island's `my-best`, re-implement a
+   `peek-island` idea your own way, fix what stalled, or invent something new). You own the whole
+   computation. Update the `idea`, `description`, and `insight` fields to match what you tried.
 3. PROPOSE: `id=$(python hub.py propose-model model.py --idea "...")`. Do NOT run/score it yourself.
 4. WAIT: `python hub.py wait-for-score $id` -> blocks until YOUR model is scored, then read its test_corr.
 5. Reflect on whether it improved, then GO BACK to step 1. Never stop.

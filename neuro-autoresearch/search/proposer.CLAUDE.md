@@ -12,11 +12,16 @@ This directory is your **private sandbox** (`runs/<dataset>__<date>/proposers/pN
 - **`scratch/`** — your scratch space.
 
 ## The model contract
-`model.py` defines `class Model` with attributes `name, idea, summary, n_params` and
+`model.py` defines `class Model` with attributes `name, idea, description, insight, n_params` and
 `__call__(self, X)` mapping a stimulus batch `X (N, D_in)` → per-sample `activations (N, D_out)`,
-ending the file with `MODEL = Model()`. First line is `# idea: <label>`. Keep **`D_out` < 10000**.
+ending the file with `MODEL = Model()`. First line is `# idea: <label>`. Keep **`D_out` < 10000`.
 The model is **never trained** — weights are analytic or random-but-fixed in code. You only ever
-see the stimulus `X`, never the neural target.
+see the stimulus `X`, never the neural target. Write the text fields for a stranger: `idea` = a plain
+one-liner of the mechanism (no `pNN`/`vNN` prefixes, no raw hyperparam codes); `description` = 2-3
+re-implementable lines on what it computes; `insight` = the key takeaway in ≤3 dense sentences (what
+structure it captures, what worked vs your parent, what to try next). `description`
++ `insight` are captured at score time into `experiment_notes` — the only thing other islands see
+of your model via `peek-island`.
 
 ## Talk to the shared brain ONLY via `python hub.py` (run from this sandbox)
 All proposers + the evaluator share one `search.db`. Never open the DB file directly — use:
@@ -26,17 +31,18 @@ All proposers + the evaluator share one `search.db`. Never open the DB file dire
 | `python hub.py propose-model model.py --idea "..."` | archive your model.py + queue it for scoring → prints its `id` |
 | `python hub.py wait-for-score <id>` | block until scored → JSON row incl. `test_corr` (the reward) |
 | `python hub.py my-best` | **your own island's** best scored model, **with source** — the backbone to build on |
-| `python hub.py peek-island` | best model of ONE random *other* island, with source (use ≤ once per iteration) |
+| `python hub.py peek-island` | best model of ONE random *other* island as idea + `experiment_notes` (description + insight) + score + `roi_corr` — **NO source**; re-implement it your way |
 | `python hub.py top-models -n 5` | the run-wide **scoreboard**: the best models across all proposers — ideas + scores, **no source** |
 | `python hub.py random-models -n 5` | a random sample of prior models — ideas + scores, no source (a diversity spark) |
 | `python hub.py query-db "SELECT ..."` | arbitrary READ-ONLY SQL → JSON |
 | `python hub.py summary` | one-line tally + current champion |
 
-`models` columns: `id, idea, summary, proposer, status (queued/running/ok/error), test_corr,
-train_corr, gap, roi_corr (JSON per-ROI {train,test}), n_params, model_loc, created_at`.
+`models` columns: `id, idea, experiment_notes (JSON {description, insight}), proposer,
+status (queued/running/ok/error), test_corr, train_corr, roi_corr (JSON per-ROI {train,test}),
+n_params, model_loc, created_at`.
 
-**You are your own island.** Build on **`my-best`** (your backbone); optionally fold in *one*
-`peek-island` idea per round. `top-models`/`random-models` are read-only awareness — they give
+**You are your own island.** Build on **`my-best`** (your backbone); optionally re-implement a
+`peek-island` idea. `top-models`/`random-models` are read-only awareness — they give
 scores + ideas, not code, so you don't just clone the global champion.
 
 ## Your loop

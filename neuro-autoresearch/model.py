@@ -10,7 +10,15 @@ D_OUT, SEED = 8192, 0
 class Model:
     name = "random-projection"
     idea = "fixed random linear projection of the raw stimulus"
-    summary = "Baseline: fixed random linear map to D_OUT features. Untrained, per-sample."
+    # description + insight are captured at score time into experiment_notes (the JSON that
+    # peek-island shares with other islands, no source). Keep each to <=3 dense, plain-language,
+    # re-implementable sentences.
+    description = ("Fixed seeded random linear map from the flattened raw stimulus to D_OUT=8192 "
+                   "features, with an identity passthrough when the input is already smaller. "
+                   "Untrained, per-sample, and deterministic -- no learned or hand-tuned weights.")
+    insight = ("Establishes the floor: a structure-free random projection of the raw stimulus that "
+               "every engineered model should beat. Whatever predictivity it reaches is attributable "
+               "to the ridge readout alone, not to any visual inductive bias.")
     n_params = 0
 
     def __init__(self):

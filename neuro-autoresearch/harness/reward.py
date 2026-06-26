@@ -10,6 +10,7 @@ The caller persists the row (the search loop records it into a run's ``search.db
 """
 from __future__ import annotations
 
+import json
 import time
 import traceback
 
@@ -25,6 +26,18 @@ from harness.roi import (
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 
 
+def _experiment_notes(model) -> str:
+    """The proposer-authored notes captured from the model's class attributes, as a compact JSON
+    blob ``{"description", "insight"}``: a plain-language account of the model and the key takeaway
+    it carries. This is what cross-island ``peek-island`` surfaces (idea + notes, no source), so it
+    must be self-contained -- a re-implementable description, not hyperparameter shorthand. Each
+    field is kept to a few information-dense sentences."""
+    return json.dumps({
+        "description": (getattr(model, "description", "") or "")[:600],
+        "insight": (getattr(model, "insight", "") or "")[:600],
+    })
+
+
 def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
     a = y_hat - y_hat.mean(0)
     b = y - y.mean(0)
@@ -36,8 +49,17 @@ def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
 def _noise_normalize(r: np.ndarray, nc) -> np.ndarray:
     """Per-voxel noise-normalized score: Algonauts r^2 / NC_r2 (fraction of EXPLAINABLE variance the
     model captured) where a per-voxel ceiling ``nc`` exists, else raw Pearson r (datasets without
-    repeat-based ceilings keep the unnormalized reward)."""
-    return r ** 2 / nc if nc is not None else r
+    repeat-based ceilings keep the unnormalized reward).
+
+    Sign-preserving (``sign(r) * r^2 / NC_r2``) so an anti-correlated voxel scores NEGATIVE rather
+    than being rewarded like a well-predicted one. The denominator is floored at a tiny epsilon as a
+    pure divide-by-zero guard; the real ceiling floor lives at voxel-selection time
+    (``_ncsnr_select``) so near-zero-ceiling voxels never reach this average regardless of the
+    ``NSD_NCSNR_MIN`` reliability cut."""
+    if nc is None:
+        return r
+    nc = np.maximum(np.asarray(nc, dtype=float), 1e-12)
+    return np.sign(r) * r ** 2 / nc
 
 
 def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
@@ -97,14 +119,13 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "study": dataset.study,
         "model_name": model.name,
         "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
-        "summary": getattr(model, "summary", ""),
+        "experiment_notes": _experiment_notes(model),
         "n_params": model.n_params,
         "n_train": int(Yv_train.shape[0]),
         "n_test": int(Yv_test.shape[0]),
         "n_targets": int(Yv_train.shape[1]),
         "test_corr": test_corr,
         "train_corr": train_corr,
-        "gap": train_corr - test_corr,
         "roi_corr": roi_breakdown(roi_masks, train_np, test_np),
         "seconds": round(time.time() - t0, 2),
         "status": "ok",
@@ -127,14 +148,13 @@ def _error_row(model, split, dataset: Dataset, exc: BaseException,
         "study": dataset.study,
         "model_name": getattr(model, "name", "?"),
         "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
-        "summary": getattr(model, "summary", ""),
+        "experiment_notes": _experiment_notes(model),
         "n_params": getattr(model, "n_params", nan),
         "n_train": int(Y_train.shape[0]),
         "n_test": int(Y_test.shape[0]),
         "n_targets": int(Y_test.shape[1]) if getattr(Y_test, "ndim", 1) > 1 else 0,
         "test_corr": nan,
         "train_corr": nan,
-        "gap": nan,
         "roi_corr": {},
         "seconds": round(seconds, 2),
         "status": _error_status(exc),

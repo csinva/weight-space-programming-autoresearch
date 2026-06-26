@@ -36,7 +36,7 @@ CLI (what a headless agent calls without writing Python)::
     python hub.py top-models [-n 5]                         # public scoreboard: scores + ideas (NO source)
     python hub.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
     python hub.py my-best [--no-code]                       # YOUR island's best model (+source) to build on
-    python hub.py peek-island [--no-code]                   # best of ONE random OTHER island (+source); once/iter
+    python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes + roi_corr, NO source
     python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
     python hub.py summary                                   # launcher: one-line tally + champion
     python hub.py requeue                                   # evaluator startup crash recovery
@@ -67,9 +67,11 @@ from datetime import datetime, timezone
 # count of hard-coded / random-but-fixed weights) and ``model_loc`` (lines of code defining the
 # model -- a proxy for how elaborate it is). Both are captured from the proposed model.py at propose
 # time; ``n_params`` is also refreshed from the live model attribute when the evaluator scores it.
-NUM = ("test_corr", "train_corr", "gap", "n_params", "seconds")
-COLS = ("id", "idea", "summary", "proposer", "dataset", "status",
-        "test_corr", "train_corr", "gap", "roi_corr", "n_params", "model_loc",
+# ``experiment_notes`` is a JSON blob {"description", "insight"} the proposer authors as model.py
+# attributes; the evaluator captures it at score time and writes it back with the correlations.
+NUM = ("test_corr", "train_corr", "n_params", "seconds")
+COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
+        "test_corr", "train_corr", "roi_corr", "n_params", "model_loc",
         "seconds", "created_at", "path")
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
@@ -230,11 +232,13 @@ def newid(run: str | None = None) -> str:
 
 
 # --------------------------------------------------------------------------- proposer: write + sync
-def propose(model_file: str, idea: str = "", summary: str = "",
+def propose(model_file: str, idea: str = "",
             proposer: str | None = None, run: str | None = None) -> str:
     """Register a new model: snapshot ``model_file`` into ``models/<id>.py`` (immutable) + insert one
     ``queued`` row; return the id. A proposer's only DB write -- it can edit its working ``model.py``
-    for the next attempt the instant this returns (the snapshot is what gets scored)."""
+    for the next attempt the instant this returns (the snapshot is what gets scored). The
+    ``experiment_notes`` (description + insight) are NOT written here: they are authored as
+    ``model.py`` attributes and captured by the evaluator at score time."""
     run = _ensure(run)
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
@@ -246,9 +250,9 @@ def propose(model_file: str, idea: str = "", summary: str = "",
         shutil.copyfile(model_file, dst)
         cx = model_complexity(dst)            # proposer-owned complexity, read from the model source
         row = {
-            "id": mid, "idea": (idea or "")[:500], "summary": (summary or "")[:1000],
+            "id": mid, "idea": (idea or "")[:500], "experiment_notes": None,
             "proposer": proposer, "dataset": dataset, "status": "queued",
-            "test_corr": None, "train_corr": None, "gap": None, "roi_corr": None,
+            "test_corr": None, "train_corr": None, "roi_corr": None,
             "n_params": cx["n_params"], "model_loc": cx["model_loc"],
             "seconds": None, "created_at": _now(), "path": os.path.abspath(dst),
         }
@@ -303,7 +307,7 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     """A random draw of ``ok`` models (idea + score, no source) -- a diversity spark so the pool
     studies different prior work, not just the single champion."""
     with connect(_ensure(run)) as con:
-        rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, gap "
+        rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, experiment_notes "
                           "FROM models WHERE status='ok' AND test_corr IS NOT NULL "
                           "ORDER BY RANDOM() LIMIT ?", (int(k),))
     return rows
@@ -327,11 +331,12 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
     return row
 
 
-def get_best_model_from_other_island(with_code: bool = True, run: str | None = None) -> dict | None:
-    """Cross-pollination: the best ``ok`` model of ONE RANDOMLY chosen OTHER proposer (island), with
-    source unless ``with_code=False``. You do NOT get to aim it -- the island is auto-picked at
-    random, so it is never just the global champion. ``None`` if no other island has scored yet.
-    Use at most ONCE per iteration (before your next propose)."""
+def get_best_model_from_other_island(run: str | None = None) -> dict | None:
+    """Cross-pollination: the best ``ok`` model of ONE RANDOMLY chosen OTHER proposer (island), as
+    its ``idea`` + ``experiment_notes`` (description + insight) + score + ``roi_corr`` -- NO source
+    code. You must RE-IMPLEMENT the concept, not clone a file: that is what keeps backbones diverse.
+    You do NOT get to aim it -- the island is auto-picked at random, so it is never just the global
+    champion. ``None`` if no other island has scored yet."""
     proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
         isl = con.execute(
@@ -341,14 +346,10 @@ def get_best_model_from_other_island(with_code: bool = True, run: str | None = N
         if isl is None:
             return None
         r = con.execute(
-            "SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+            "SELECT id, idea, experiment_notes, proposer, test_corr, train_corr, roi_corr "
+            "FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
             "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
-    row = dict(r)
-    if with_code:
-        row["code"] = _read_source(row.get("path"))
-    row["note"] = ("You have used your ONE cross-pollination for this iteration. Do NOT call "
-                   "peek-island again before you propose your next model.")
-    return row
+    return dict(r)
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
@@ -375,7 +376,8 @@ def get_next_model(run: str | None = None) -> dict | None:
 def record(mid: str, scores: dict | None = None, status: str = "ok",
            run: str | None = None) -> str:
     """Write a model's result back: ``running -> ok|error``, filling the numeric score columns
-    present in ``scores``. ``id``/``idea``/``path``/... are untouched."""
+    present in ``scores``, plus the ``experiment_notes`` JSON the proposer authored in model.py
+    (captured by the evaluator at score time). ``id``/``idea``/``path``/... are untouched."""
     st = "ok" if str(status).strip().lower().startswith("ok") else "error"
     scores = scores or {}
     cols = [c for c in NUM if scores.get(c) not in (None, "")]
@@ -383,6 +385,9 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     if scores.get("roi_corr"):                    # TEXT json blob, only when the breakdown is non-empty
         cols.append("roi_corr")
         vals.append(json.dumps(scores["roi_corr"]))
+    if scores.get("experiment_notes"):            # TEXT json blob {"description","insight"} from model.py
+        cols.append("experiment_notes")
+        vals.append(scores["experiment_notes"])
     assignments = [f"{c}=?" for c in cols] + ["status=?"]
     vals = vals + [st, mid]
     with connect(_ensure(run)) as con:
@@ -441,7 +446,8 @@ def summary(run: str | None = None) -> str:
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
 def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> dict:
     """Score one model file with the FIXED harness in a subprocess (isolation against CUDA faults).
-    Returns ``{status, test_corr, train_corr, gap, n_params, seconds}``; never raises on a model
+    Returns ``{status, test_corr, train_corr, roi_corr, experiment_notes, n_params, seconds}``;
+    never raises on a model
     fault -- a crash/timeout becomes ``status='error'``. Reward is the dataset's fixed-region
     ``test_corr`` (NSD: the ventral stream); no operator ROI knob."""
     import subprocess
@@ -486,8 +492,8 @@ def _score_child(model_file: str) -> None:
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         row = evaluate_on_split_safe(mod.MODEL, load_split(DATASET), DATASET, ())
-        res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "gap",
-                                       "roi_corr", "n_params", "seconds")}
+        res = {k: row.get(k) for k in ("status", "test_corr", "train_corr",
+                                       "roi_corr", "experiment_notes", "n_params", "seconds")}
     except Exception as e:  # noqa: BLE001  -- any import/eval fault is a recorded error, not a crash
         import traceback
         traceback.print_exc()
@@ -510,9 +516,9 @@ def main(argv=None):
     def add(name, fn, json_out=False):
         sp = sub.add_parser(name); sp.set_defaults(_fn=fn, _json=json_out); return sp
 
-    sp = add("propose-model", lambda a: propose(a.model_file, a.idea, a.summary, a.proposer))
+    sp = add("propose-model", lambda a: propose(a.model_file, a.idea, a.proposer))
     sp.add_argument("model_file"); sp.add_argument("--idea", default="")
-    sp.add_argument("--summary", default=""); sp.add_argument("--proposer", default=None)
+    sp.add_argument("--proposer", default=None)
     sp = add("wait-for-score", lambda a: wait_for_result(a.id, timeout=a.timeout), json_out=True)
     sp.add_argument("id"); sp.add_argument("--timeout", type=float, default=None)
     sp = add("top-models", lambda a: champions(a.n), json_out=True); sp.add_argument("-n", type=int, default=5)
@@ -520,8 +526,7 @@ def main(argv=None):
     sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
     sp = add("my-best", lambda a: get_best_model(not a.no_code), json_out=True)
     sp.add_argument("--no-code", action="store_true", help="return the row only, without source")
-    sp = add("peek-island", lambda a: get_best_model_from_other_island(not a.no_code), json_out=True)
-    sp.add_argument("--no-code", action="store_true", help="return the row only, without source")
+    add("peek-island", lambda a: get_best_model_from_other_island(), json_out=True)
     add("query-db", lambda a: query(a.sql), json_out=True).add_argument("sql")
     add("requeue", lambda a: requeue_orphans())
     add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")

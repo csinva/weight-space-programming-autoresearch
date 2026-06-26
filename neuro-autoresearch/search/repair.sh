@@ -28,7 +28,7 @@ problems so it runs -- do NOT redesign it, do NOT change its core idea, do NOT t
 FILE TO FIX (edit it IN PLACE, save to the same path): ${MODEL_FILE}
 
 Harness contract the file MUST satisfy: a self-contained Python file defining \`class Model\`
-with attributes name/idea/summary/n_params and \`__call__(self, X)\` mapping a stimulus batch
+with attributes name/idea/description/insight/n_params and \`__call__(self, X)\` mapping a stimulus batch
 X of shape (N, D_in) -> activations (N, D_out), ending with \`MODEL = Model()\`. Two HARD rules
 stay intact: (1) UNTRAINED -- every weight analytic or random-but-fixed (fixed seeds), never
 fit to data, never read the neural target Y; (2) PER-SAMPLE -- an image's activations depend
