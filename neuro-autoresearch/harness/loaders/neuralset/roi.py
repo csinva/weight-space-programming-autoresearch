@@ -31,7 +31,7 @@ _ROI_DEFS: dict[str, tuple[str, tuple[int, ...]]] = {
     "EBA": ("floc-bodies", (1,)),        # extrastriate body area
     "VWFA": ("floc-words", (2, 3)),      # visual word form area (VWFA-1 + VWFA-2)
     "early": ("streams", (1,)),          # early visual stream
-    "ventral": ("streams", (2, 3)),      # ventral visual stream (midventral + ventral)
+    "ventral": ("streams", (2, 5)),      # ventral visual stream (midventral + ventral)
 }
 
 _S3_NSD = "s3://natural-scenes-dataset"
