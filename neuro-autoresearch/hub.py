@@ -604,14 +604,13 @@ def _score_child(model_file: str) -> None:
     res = {"status": "error: unknown"}
     try:
         from harness.datasets import DATASET
-        from harness.loaders import load_split
-        from harness.reward import evaluate_on_split_safe
+        from harness.reward import evaluate_subjects
         spec = importlib.util.spec_from_file_location("model", model_file)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        row = evaluate_on_split_safe(mod.MODEL, load_split(DATASET), DATASET, ())
-        res = {k: row.get(k) for k in ("status", "test_corr", "train_corr",
-                                       "roi_corr", "experiment_notes", "n_params", "seconds")}
+        row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECTS -> mean over subjects; else single
+        res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
+                                       "experiment_notes", "n_params", "seconds", "n_subjects")}
     except Exception as e:  # noqa: BLE001  -- any import/eval fault is a recorded error, not a crash
         import traceback
         traceback.print_exc()

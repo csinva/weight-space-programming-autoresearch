@@ -168,24 +168,24 @@ _imsize = os.environ.get("NEURO_IMSIZE")
 if _imsize:
     DATASET = replace(DATASET, imsize=int(_imsize))
 
-# Optional subject override (NEURO_SUBJECT). Supported presets:
-#   text: one English subject (e.g. EN058), switching to that subject's registered
-#         catalog class + the all-subjects directory.
-#   nsd:  one of the 8 subjects (1-8), switching betas pickle + study/results name.
-#   tvsd: monkey F or N.
-# Other presets keep the value in DATASET.subject but do not rewrite the study name.
+def with_subject(dataset: Dataset, subject: str) -> Dataset:
+    """Return ``dataset`` rebound to ``subject`` (switching the data it loads). Supported:
+    text (one English subject, e.g. EN058), nsd (1-8), tvsd (monkey F/N). Other presets keep the
+    value in ``subject`` but do not rewrite the study name. This is the one place the per-subject
+    data mapping lives, so a multi-subject reward can build variants in-process (see
+    ``harness.reward.evaluate_subjects``)."""
+    if dataset.loader == "nsd":
+        sid = f"{int(subject):02d}"
+        return replace(dataset, subject=sid, study=f"NsdBetasSubj{sid}")
+    if dataset.loader == "tvsd":
+        return replace(dataset, subject=subject, study=f"TvsdMonkey{subject.upper()}")
+    if dataset.study.startswith("Li2022PetitSubj"):
+        en_all = os.path.join(os.path.dirname(dataset.path), "li2022petit_en_all", "Li2022PetitSubj")
+        return replace(dataset, subject=subject, study=f"Li2022PetitSubj{subject}", path=en_all)
+    return replace(dataset, subject=subject)
+
+
+# Optional subject override (NEURO_SUBJECT) for the manual single-subject path.
 _subject = os.environ.get("NEURO_SUBJECT")
 if _subject:
-    if _key == "text":
-        _en_all = os.path.join(
-            os.path.dirname(DATASET.path), "li2022petit_en_all", "Li2022PetitSubj")
-        DATASET = replace(
-            DATASET, subject=_subject, study=f"Li2022PetitSubj{_subject}", path=_en_all
-        )
-    elif _key == "nsd":
-        _sid = f"{int(_subject):02d}"
-        DATASET = replace(DATASET, subject=_sid, study=f"NsdBetasSubj{_sid}")
-    elif _key == "tvsd":
-        DATASET = replace(DATASET, subject=_subject, study=f"TvsdMonkey{_subject.upper()}")
-    else:
-        DATASET = replace(DATASET, subject=_subject)
+    DATASET = with_subject(DATASET, _subject)

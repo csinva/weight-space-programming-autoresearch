@@ -69,7 +69,11 @@ search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentral
 
 ## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)
 `nsd` — NSD prepared GLMdenoise betas, reward = **early+ventral** stream (noise-normalized; see top),
-all 8 subjects via `NEURO_SUBJECT`. `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
+all 8 subjects via `NEURO_SUBJECT`. **`NEURO_SUBJECTS`** (comma list, e.g. `1,2`) makes the search
+reward the MEAN over several subjects — scored per subject, averaged, recorded as one `test_corr`
+(proposers stay blind); unset = the single `NEURO_SUBJECT`. Works for datasets that switch data by
+subject (`nsd` / `text` / `tvsd`); `nnn` pools sessions so its animals aren't separable yet. Hold out
+the rest for generalization (`scripts/benchmark/compare_subjects.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
 ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
 provisioned `ncsnr` raises — (re)run `python -m scripts.process_dataset.nsd` to fetch+align it.

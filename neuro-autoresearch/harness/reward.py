@@ -11,6 +11,7 @@ The caller persists the row (the search loop records it into a run's ``search.db
 from __future__ import annotations
 
 import json
+import os
 import time
 import traceback
 
@@ -123,7 +124,10 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     # breakdown all report fraction-of-explainable-variance; raw r where no ceiling (nc is None).
     test_np = _noise_normalize(_corr_per_column(pred_test, _to_np(Yv_test)), nc)
     train_np = _noise_normalize(_corr_per_column(pred_train, _to_np(Yv_train)), nc)
-    test_corr, train_corr = float(test_np.mean()), float(train_np.mean())
+    # Round the scalar reward to 4 decimals at the SOURCE so every downstream surface -- the stored
+    # DB value, champion ranking, and the proposer's reward feedback -- sees the same 4-dp number,
+    # for every dataset. (roi_breakdown rounds its per-ROI means likewise.)
+    test_corr, train_corr = round(float(test_np.mean()), 4), round(float(train_np.mean()), 4)
 
     return {
         "study": dataset.study,
@@ -210,3 +214,39 @@ def evaluate(model, dataset: Dataset, slices=()) -> dict:
     row = evaluate_on_split(model, load_split(dataset), dataset, slices)
     row["seconds"] = round(time.time() - t0, 2)
     return row
+
+
+def _mean_rows(rows: list[dict]) -> dict:
+    """Average ok per-subject rows into one row: scalar test/train_corr + per-ROI roi_corr (equal
+    weight per subject -- each is already noise-ceiling-normalized to its own ceiling). Metadata
+    (model_name/idea/n_params) is taken from the first row; ``seconds`` is summed."""
+    f = rows[0]
+    rois = f.get("roi_corr") or {}
+    roi_avg = {r: {k: float(np.mean([row["roi_corr"][r][k] for row in rows]))
+                   for k in rois[r]} for r in rois}
+    return {**f, "test_corr": float(np.mean([row["test_corr"] for row in rows])),
+            "train_corr": float(np.mean([row["train_corr"] for row in rows])),
+            "roi_corr": roi_avg, "seconds": round(sum(row.get("seconds", 0) for row in rows), 2),
+            "n_subjects": len(rows)}
+
+
+def evaluate_subjects(model, dataset: Dataset, slices=()) -> dict:
+    """The search reward. With ``NEURO_SUBJECTS`` set (comma list, e.g. ``"1,2"``) the model is
+    scored on EACH subject and the rows averaged into one reward (proposers see only the mean).
+    Unset -> the single active subject (today's behavior). A fault on ANY subject is the row's
+    status, so a recorded model must work on all search subjects."""
+    from harness.datasets import with_subject
+    from harness.loaders import load_split
+
+    subs = os.environ.get("NEURO_SUBJECTS")
+    if not subs:
+        return evaluate_on_split_safe(model, load_split(dataset), dataset, slices)
+    rows = []
+    for s in (x.strip() for x in subs.split(",") if x.strip()):
+        d = with_subject(dataset, s)
+        row = evaluate_on_split_safe(model, load_split(d), d, slices)
+        row["subject"] = d.subject
+        if not str(row.get("status", "")).startswith("ok"):
+            return row                       # propagate the first subject's failure as the reward
+        rows.append(row)
+    return _mean_rows(rows)
