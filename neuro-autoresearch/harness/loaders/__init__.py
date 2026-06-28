@@ -28,7 +28,7 @@ def load_split(d: Dataset):
         return load_nsd(d)                         # nsd provides the per-voxel ceiling
     if d.loader == "tvsd":
         from harness.loaders.standalone.tvsd import load_tvsd
-        return (*load_tvsd(d), None)
+        return load_tvsd(d)                        # tvsd provides the per-electrode oracle ceiling
     if d.loader == "nnn":
         from harness.loaders.standalone.nnn import load_nnn
         return (*load_nnn(d), None)

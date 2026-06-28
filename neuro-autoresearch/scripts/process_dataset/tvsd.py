@@ -19,7 +19,8 @@ import torch
 
 from harness.loaders.shared import processed_dir
 from harness.loaders.standalone.tvsd import (
-    _read_mat, _tvsd_area_labels, _tvsd_image_relpaths, _tvsd_images_root, _tvsd_targets,
+    _read_mat, _tvsd_area_labels, _tvsd_image_relpaths, _tvsd_images_root, _tvsd_oracle,
+    _tvsd_targets,
 )
 
 RAW = "/home/t-ymehta/Research/neuralset/data/tvsd_normmua"
@@ -34,14 +35,16 @@ def process_monkey(subject: str, n: int | None):
     mat = _read_mat(os.path.join(mdir, "THINGS_normMUA.mat"))
     Y_train = torch.from_numpy(_tvsd_targets(mat["train_MUA"]))
     Y_test = torch.from_numpy(_tvsd_targets(mat["test_MUA"]))
+    oracle = torch.from_numpy(_tvsd_oracle(mat["oracle"]))   # per-electrode noise ceiling
     if n is not None:  # smoke subset: keep neural rows aligned to the copied stimuli below.
         Y_train, Y_test = Y_train[:n], Y_test[:n]
     labels = _tvsd_area_labels(subject)
     ndir = os.path.join(out, "neural")
     os.makedirs(ndir, exist_ok=True)
-    torch.save({"train_MUA": Y_train, "test_MUA": Y_test, "areas": labels},
+    torch.save({"train_MUA": Y_train, "test_MUA": Y_test, "areas": labels, "oracle": oracle},
                os.path.join(ndir, f"monkey{subject}.pt"))
-    print(f"  monkey{subject} neural: train {tuple(Y_train.shape)} test {tuple(Y_test.shape)}")
+    print(f"  monkey{subject} neural: train {tuple(Y_train.shape)} test {tuple(Y_test.shape)} "
+          f"oracle med {float(oracle.median()):.3f}")
 
     # stimuli: copy the native THINGS JPEGs this monkey uses, keyed by split+index.
     imgs_mat = os.path.join(mdir, "things_imgs.mat")
