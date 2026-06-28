@@ -18,6 +18,9 @@ complexity takes care of itself.
 You are `cd`'d into your own proposer folder. It contains:
 - `model.py`   -- YOUR mutable working model. It **starts as the RANDOM-PROJECTION baseline** (a
   fixed random linear projection of the raw input pixels). You evolve it from there; it is yours alone.
+  (If you ever find `model.py` back at the baseline and `my-best` returning null mid-run, the
+  conductor has RESET your island: embrace it -- build your assigned `direction.txt` role afresh from
+  the floor, don't try to recover your old backbone.)
 - `scratch/`   -- free space: write notes, experiments, or your OWN custom DB-query helpers here.
 - `hub.py`, `harness/` -- symlinked fixed code you can `import`. You never edit these.
 

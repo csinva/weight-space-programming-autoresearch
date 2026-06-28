@@ -38,6 +38,7 @@ CLI (what a headless agent calls without writing Python)::
     python hub.py my-best [--no-code]                       # YOUR island's best model (+source, +your own score) to build on
     python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes + roi_corr, NO source
     python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON (score/source columns hidden from proposers)
+    python hub.py reset-island <pNN> [--role "..."]        # CONDUCTOR only: reset an island to the baseline + re-explore (non-destructive)
     python hub.py summary                                   # launcher: one-line tally + champion
     python hub.py requeue                                   # evaluator startup crash recovery
     python hub.py migrate                                   # bring an old search.db to the current schema
@@ -76,6 +77,8 @@ COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
+
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__))   # hub.py sits at the repo root
 
 # Columns hidden from a sandboxed proposer: other islands' scores + the on-disk source path. A
 # proposer is blinded to the global scoreboard (no ``top-models``, score-free ``query``) so islands
@@ -329,16 +332,37 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     return rows
 
 
+def _island_reset_at(proposer: str, run: str) -> str | None:
+    """The ISO timestamp of the island's last conductor reset, or ``None``. Scored rows created at or
+    before this are excluded from the island's ``my-best`` -- so a reset island genuinely re-explores
+    from the baseline floor instead of reloading its old (converged) lineage."""
+    if not proposer:
+        return None
+    f = os.path.join(_ensure(run), "proposers", proposer, "reset_at")
+    try:
+        with open(f) as fh:
+            return fh.read().strip() or None
+    except OSError:
+        return None
+
+
 def get_best_model(with_code: bool = True, run: str | None = None) -> dict | None:
     """The CALLING proposer's OWN island (``$LAB_PROPOSER``) best ``ok`` model -- the thing to build
     on -- with its source unless ``with_code=False``. Each proposer is its own ISLAND: this never
     returns another proposer's work, so backbones don't all collapse onto one global champion.
-    ``None`` if your island has no scored model yet (then just evolve your current ``model.py``)."""
+    ``None`` if your island has no scored model yet (then just evolve your current ``model.py``).
+
+    Honors a conductor RESET: rows at/before the island's ``reset_at`` marker are excluded, so a
+    freshly reset island sees ``None`` and re-explores from the baseline ``model.py`` floor."""
     proposer = os.environ.get("LAB_PROPOSER", "")
-    with connect(_ensure(run)) as con:
-        r = con.execute(
-            "SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
-            "ORDER BY test_corr DESC LIMIT 1", (proposer,)).fetchone()
+    run = _ensure(run)
+    reset_at = _island_reset_at(proposer, run)
+    sql = ("SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+           + ("AND created_at > ? " if reset_at else "")
+           + "ORDER BY test_corr DESC LIMIT 1")
+    params = (proposer, reset_at) if reset_at else (proposer,)
+    with connect(run) as con:
+        r = con.execute(sql, params).fetchone()
     if r is None:
         return None
     row = dict(r)
@@ -366,6 +390,34 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
             "FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
             "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
     return dict(r)
+
+
+def reset_island(proposer: str, role: str | None = None, run: str | None = None) -> dict:
+    """CONDUCTOR power: hard-reset an island so it RE-EXPLORES its role from scratch.
+
+    Atomically: (1) overwrites ``proposers/<pNN>/model.py`` with the random-projection BASELINE (the
+    fresh floor), (2) writes a ``reset_at`` marker so the island's ``my-best`` ignores its old
+    (converged) lineage and returns ``None`` until it scores anew, and (3) sets ``direction.txt`` to
+    ``role`` if given. NON-DESTRUCTIVE: archived rows + the global champion are untouched -- only the
+    island's WORKING lineage is cleared -- so resetting any island (even the champion's) never loses
+    recorded science or the best result. Reset is to the BASELINE, never a clone of another island,
+    so the fleet regains genuine diversity. Conductor/launcher only (refused for a proposer)."""
+    if _is_proposer():
+        raise PermissionError("reset-island is a CONDUCTOR power; a proposer cannot reset islands.")
+    run = _ensure(run)
+    proposer = (proposer or "").strip()
+    sandbox = os.path.join(run, "proposers", proposer)
+    if not proposer or not os.path.isdir(sandbox):
+        raise ValueError(f"reset-island: no such island sandbox {proposer!r} under {run}")
+    baseline = os.path.join(REPO_ROOT, "model.py")
+    shutil.copyfile(baseline, os.path.join(sandbox, "model.py"))   # back to the floor
+    with open(os.path.join(sandbox, "reset_at"), "w") as fh:       # mute the old lineage in my-best
+        fh.write(_now())
+    if role:
+        with open(os.path.join(sandbox, "direction.txt"), "w") as fh:
+            fh.write(role.strip() + "\n")
+    return {"reset": proposer, "model_py": "baseline", "reset_at": _now(),
+            "role": role or "(unchanged)"}
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
@@ -572,6 +624,9 @@ def main(argv=None):
     sp.add_argument("--no-code", action="store_true", help="return the row only, without source")
     add("peek-island", lambda a: get_best_model_from_other_island(), json_out=True)
     add("query-db", lambda a: query(a.sql), json_out=True).add_argument("sql")
+    sp = add("reset-island", lambda a: reset_island(a.proposer, a.role), json_out=True)
+    sp.add_argument("proposer", help="island to reset, e.g. p04")
+    sp.add_argument("--role", default=None, help="new direction.txt to set on reset (optional)")
     add("requeue", lambda a: requeue_orphans())
     add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")
     add("summary", lambda a: summary())
