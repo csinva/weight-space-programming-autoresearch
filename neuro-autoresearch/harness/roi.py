@@ -25,8 +25,8 @@ def roi_breakdown(roi_masks: dict, train_corr, test_corr) -> dict:
     for name, m in roi_masks.items():
         m = np.asarray(m, dtype=bool)
         if m.any():
-            out[name] = {"train": round(float(tr[m].mean()), 5),
-                         "test": round(float(te[m].mean()), 5)}
+            out[name] = {"train": round(float(tr[m].mean()), 4),
+                         "test": round(float(te[m].mean()), 4)}
     return out
 
 
