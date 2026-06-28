@@ -48,6 +48,9 @@ case "$EPOCH" in ''|*[!0-9.]*|*.*.*) echo "[search] --epoch-mins must be a numbe
 case "$EFFORT" in low|medium|high|xhigh|max) ;; *) echo "[search] --effort must be one of: low medium high xhigh max (got '$EFFORT')" >&2; exit 2;; esac
 case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list (got '$GPU')" >&2; exit 2;; esac
 [ -n "$GPU" ] && export CUDA_VISIBLE_DEVICES="$GPU"   # torch in the evaluator reads this; no harness code changes
+# NSD reward defaults to the MEAN over search subjects 1+2 (only the average is recorded; proposers
+# stay blind) -- hold out the rest for generalization. Operator override: set NEURO_SUBJECTS yourself.
+[ "$DATASET" = nsd ] && export NEURO_SUBJECTS="${NEURO_SUBJECTS:-1,2}"
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
