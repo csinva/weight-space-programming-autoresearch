@@ -35,10 +35,10 @@ that is deliberate, so the pool grows genuinely different backbones instead of a
 recipe. The shared DB shows you the SCOREBOARD (scores + ideas, no code), and you can pull SOURCE
 from only two places: your own island, and one random other island.
 
-See the landscape (scores + ideas, NO source):
-  `python hub.py top-models -n 5`      # the pool's best scores + idea labels -- what's working, not how
-  `python hub.py random-models -n 5`   # random prior ideas + scores -- a diversity spark
+See the landscape (ideas only -- your OWN island's scores via `my-best`, never the global board):
+  `python hub.py random-models -n 5`   # random prior ideas -- a diversity spark
   `python hub.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
+                                       # (other islands' score/source columns are hidden from you)
 Build on real code:
   `python hub.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
                                        # (`--no-code` for the row only.)
@@ -100,8 +100,8 @@ The ONLY fixed mechanic is: write a model into `model.py`, `propose` it, then `w
 Everything else -- what you look at, how you mine the shared DB, how you decide what to build next --
 is entirely YOUR call. There is no mandated sequence of discovery steps.
 1. ORIENT however you see fit. The DB is live and shared by all the proposers running alongside you;
-   interrogate it any way you like -- `top-models`, `random-models`, `my-best`, `peek-island`, arbitrary
-   `query-db`, or your own `import hub` helpers in `scratch/` -- and use any tool you have to learn the
+   interrogate it any way you like -- `random-models`, `my-best`, `peek-island`, arbitrary
+   `query-db` (other islands' scores/source are hidden from you), or your own `import hub` helpers in `scratch/` -- and use any tool you have to learn the
    dataset, the harness, or what the pool is currently trying. Pull as much or as little context as YOU
    judge useful.
    FIRST run `cat direction.txt 2>/dev/null`: if it prints a non-empty line, a conductor has

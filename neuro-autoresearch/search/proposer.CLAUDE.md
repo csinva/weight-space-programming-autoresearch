@@ -32,20 +32,20 @@ All proposers + the evaluator share one `search.db`. Never open the DB file dire
 | `python hub.py wait-for-score <id>` | block until scored → JSON row incl. `test_corr` (the reward) |
 | `python hub.py my-best` | **your own island's** best scored model, **with source** — the backbone to build on |
 | `python hub.py peek-island` | best model of ONE random *other* island as idea + `experiment_notes` (description + insight) + score + `roi_corr` — **NO source**; re-implement it your way |
-| `python hub.py top-models -n 5` | the run-wide **scoreboard**: the best models across all proposers — ideas + scores, **no source** |
-| `python hub.py random-models -n 5` | a random sample of prior models — ideas + scores, no source (a diversity spark) |
-| `python hub.py query-db "SELECT ..."` | arbitrary READ-ONLY SQL → JSON |
+| `python hub.py random-models -n 5` | a random sample of prior models — **ideas only** (a diversity spark) |
+| `python hub.py query-db "SELECT ..."` | arbitrary READ-ONLY SQL → JSON (other islands' score/source columns are hidden from you) |
 | `python hub.py summary` | one-line tally + current champion |
 
 `models` columns: `id, idea, experiment_notes (JSON {description, insight}), proposer,
-status (queued/running/ok/error), test_corr, train_corr, roi_corr (JSON per-ROI {train,test}),
-n_params, model_loc, created_at`.
+status (queued/running/ok/error), n_params, model_loc, created_at`. (Other islands' `test_corr,
+train_corr, roi_corr` and the source `path` are hidden from a proposer's `query-db`; see your OWN
+score via `my-best`/`wait-for-score`.)
 
 **You are your own island.** Build on **`my-best`** (your backbone); optionally re-implement a
-`peek-island` idea. `top-models`/`random-models` are read-only awareness — they give
-scores + ideas, not code, so you don't just clone the global champion.
+`peek-island` idea. `random-models` is read-only awareness — ideas only, not scores or code, so you
+don't just clone the global champion.
 
 ## Your loop
-Read the shared state (`my-best`, `top-models`, `random-models`, `summary`) → edit `model.py` →
+Read the shared state (`my-best`, `random-models`, `peek-island`) → edit `model.py` →
 `propose-model` → `wait-for-score` *your* result → read the state again → repeat, chasing a higher
 held-out `test_corr`. Treat the harness as a black box.

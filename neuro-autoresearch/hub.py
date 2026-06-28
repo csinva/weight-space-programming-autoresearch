@@ -33,11 +33,11 @@ CLI (what a headless agent calls without writing Python)::
 
     python hub.py propose-model <model_file> --idea "..."  # -> prints the new id
     python hub.py wait-for-score <id>                       # block; prints the scored row as JSON
-    python hub.py top-models [-n 5]                         # public scoreboard: scores + ideas (NO source)
+    python hub.py top-models [-n 5]                         # CONDUCTOR/launcher only -- global scoreboard (blocked for proposers)
     python hub.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
-    python hub.py my-best [--no-code]                       # YOUR island's best model (+source) to build on
+    python hub.py my-best [--no-code]                       # YOUR island's best model (+source, +your own score) to build on
     python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes + roi_corr, NO source
-    python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON
+    python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON (score/source columns hidden from proposers)
     python hub.py summary                                   # launcher: one-line tally + champion
     python hub.py requeue                                   # evaluator startup crash recovery
     python hub.py migrate                                   # bring an old search.db to the current schema
@@ -76,6 +76,18 @@ COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
+
+# Columns hidden from a sandboxed proposer: other islands' scores + the on-disk source path. A
+# proposer is blinded to the global scoreboard (no ``top-models``, score-free ``query``) so islands
+# diverge instead of all chasing one champion; the conductor/launcher keep full visibility.
+_PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path")
+
+
+def _is_proposer() -> bool:
+    """True when running inside a sandboxed proposer island (``LAB_PROPOSER`` set by ``proposer.sh``).
+    The conductor (``conduct.sh``) and the manual/launcher paths leave it unset, so they keep full
+    score visibility."""
+    return bool(os.environ.get("LAB_PROPOSER"))
 _POLL = float(os.environ.get("LAB_POLL", "5"))  # seconds between wait/queue polls
 
 
@@ -304,12 +316,16 @@ def champions(k: int = 5, with_code: bool = False, run: str | None = None) -> li
 
 
 def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
-    """A random draw of ``ok`` models (idea + score, no source) -- a diversity spark so the pool
-    studies different prior work, not just the single champion."""
+    """A random draw of ``ok`` models (idea + experiment_notes) -- a diversity spark so the pool
+    studies different prior work, not just the single champion. Scores are included for the
+    conductor/launcher but hidden from a proposer (``LAB_PROPOSER`` set) so islands don't chase the
+    global board; a proposer sees its OWN score via ``my-best``."""
     with connect(_ensure(run)) as con:
         rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, experiment_notes "
                           "FROM models WHERE status='ok' AND test_corr IS NOT NULL "
                           "ORDER BY RANDOM() LIMIT ?", (int(k),))
+    if _is_proposer():
+        rows = [{k: v for k, v in r.items() if k not in _PROPOSER_HIDDEN} for r in rows]
     return rows
 
 
@@ -354,11 +370,28 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
     """Read-only arbitrary SQL over ``search.db`` -- the escape hatch for any custom view an agent
-    wants (it can build its own helpers in its sandbox on top of this). Rejects non-SELECT SQL."""
+    wants (it can build its own helpers in its sandbox on top of this). Rejects non-SELECT SQL.
+
+    For a PROPOSER (``LAB_PROPOSER`` set) the global scoreboard is hidden: SQL referencing another
+    island's score / source columns (``test_corr``/``train_corr``/``roi_corr``/``path``) is rejected,
+    and those keys are stripped from results so a ``SELECT *`` can't surface them either. The
+    conductor/launcher (no ``LAB_PROPOSER``) get unrestricted access."""
     if sql.lstrip().split(None, 1)[0].lower() not in ("select", "with"):
         raise ValueError("query() is read-only: use a SELECT/WITH statement")
+    proposer = _is_proposer()
+    if proposer:
+        low = sql.lower()
+        hit = next((c for c in _PROPOSER_HIDDEN if c in low), None)
+        if hit is not None:
+            raise ValueError(
+                f"query: column {hit!r} is hidden from a proposer -- you cannot read other islands' "
+                f"scores or source. Use `my-best` for your OWN island's score and `peek-island` for "
+                f"one random other island's idea (no scores). Query idea/status/notes/proposer freely.")
     with connect(_ensure(run)) as con:
-        return _rows(con, sql, params)
+        rows = _rows(con, sql, params)
+    if proposer:                       # strip score/path keys a `SELECT *` would otherwise surface
+        rows = [{k: v for k, v in r.items() if k not in _PROPOSER_HIDDEN} for r in rows]
+    return rows
 
 
 # --------------------------------------------------------------------------- evaluator: claim / record
@@ -507,6 +540,17 @@ def _print(obj):
     print(json.dumps(obj, indent=2, default=str))
 
 
+def _top_models_cli(a):
+    """``top-models`` is for the conductor/launcher only. A proposer calling it is refused -- the
+    global scoreboard is hidden so islands diverge instead of all converging on one champion."""
+    if _is_proposer():
+        raise ValueError(
+            "top-models is unavailable to proposers (the global scoreboard is hidden so islands stay "
+            "diverse). Use `peek-island` for ONE random other island's idea (no scores) and "
+            "`my-best` for your OWN island's best + score.")
+    return champions(a.n)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="hub -- the search-run API (see module docstring).")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -521,7 +565,7 @@ def main(argv=None):
     sp.add_argument("--proposer", default=None)
     sp = add("wait-for-score", lambda a: wait_for_result(a.id, timeout=a.timeout), json_out=True)
     sp.add_argument("id"); sp.add_argument("--timeout", type=float, default=None)
-    sp = add("top-models", lambda a: champions(a.n), json_out=True); sp.add_argument("-n", type=int, default=5)
+    sp = add("top-models", _top_models_cli, json_out=True); sp.add_argument("-n", type=int, default=5)
     sp = add("random-models", lambda a: sample(a.n, a.seed), json_out=True)
     sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
     sp = add("my-best", lambda a: get_best_model(not a.no_code), json_out=True)
