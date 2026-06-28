@@ -219,15 +219,19 @@ def evaluate(model, dataset: Dataset, slices=()) -> dict:
 def _mean_rows(rows: list[dict]) -> dict:
     """Average ok per-subject rows into one row: scalar test/train_corr + per-ROI roi_corr (equal
     weight per subject -- each is already noise-ceiling-normalized to its own ceiling). Metadata
-    (model_name/idea/n_params) is taken from the first row; ``seconds`` is summed."""
+    (model_name/idea/n_params) is taken from the first row; ``seconds`` is summed. Scalars and
+    per-ROI means are rounded to 4 dp to match the single-subject ``evaluate_on_split`` reward, so
+    both paths feed the DB / ranking / proposer feedback the same precision. Only ROIs present for
+    EVERY subject are averaged -- a reliability cut can leave an ROI empty (and thus absent from
+    ``roi_breakdown``) on some subjects but not others, and a partial mean would be misleading."""
     f = rows[0]
-    rois = f.get("roi_corr") or {}
-    roi_avg = {r: {k: float(np.mean([row["roi_corr"][r][k] for row in rows]))
-                   for k in rois[r]} for r in rois}
-    return {**f, "test_corr": float(np.mean([row["test_corr"] for row in rows])),
-            "train_corr": float(np.mean([row["train_corr"] for row in rows])),
-            "roi_corr": roi_avg, "seconds": round(sum(row.get("seconds", 0) for row in rows), 2),
-            "n_subjects": len(rows)}
+    common = set.intersection(*(set(row.get("roi_corr") or {}) for row in rows))
+    roi_avg = {r: {k: round(float(np.mean([row["roi_corr"][r][k] for row in rows])), 4)
+                   for k in (f["roi_corr"][r])}
+               for r in (f.get("roi_corr") or {}) if r in common}
+    return {**f, "test_corr": round(float(np.mean([row["test_corr"] for row in rows])), 4),
+            "train_corr": round(float(np.mean([row["train_corr"] for row in rows])), 4),
+            "roi_corr": roi_avg, "seconds": round(sum(row.get("seconds", 0) for row in rows), 2)}
 
 
 def evaluate_subjects(model, dataset: Dataset, slices=()) -> dict:
