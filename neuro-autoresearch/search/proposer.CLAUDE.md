@@ -31,7 +31,7 @@ All proposers + the evaluator share one `search.db`. Never open the DB file dire
 | `python hub.py propose-model model.py --idea "..."` | archive your model.py + queue it for scoring → prints its `id` |
 | `python hub.py wait-for-score <id>` | block until scored → JSON row incl. `test_corr` (the reward) |
 | `python hub.py my-best` | **your own island's** best scored model, **with source** — the backbone to build on |
-| `python hub.py peek-island` | best model of ONE random *other* island as idea + `experiment_notes` (description + insight) + score + `roi_corr` — **NO source**; re-implement it your way |
+| `python hub.py peek-island` | best model of ONE random *other* island as idea + `experiment_notes` (description + insight) — **NO source, NO score**; re-implement it your way |
 | `python hub.py random-models -n 5` | a random sample of prior models — **ideas only** (a diversity spark) |
 | `python hub.py query-db "SELECT ..."` | arbitrary READ-ONLY SQL → JSON (other islands' score/source columns are hidden from you) |
 | `python hub.py summary` | one-line tally + current champion |

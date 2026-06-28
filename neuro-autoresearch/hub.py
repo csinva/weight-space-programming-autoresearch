@@ -258,6 +258,12 @@ def propose(model_file: str, idea: str = "",
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
     proposer = proposer or os.environ.get("LAB_PROPOSER", "")
+    if proposer:                       # race handshake: refuse a snapshot taken before a mid-turn reset
+        if (_island_reset_at(proposer, run) or "") != _read_text(_sandbox_file(proposer, run, "reset_seen")):
+            raise RuntimeError(
+                "island was RESET since you last read `my-best` -- this model.py is from your old "
+                "(now-retired) lineage. Re-read `my-best` (it returns the baseline floor now) and "
+                "rebuild your assigned direction.txt role from scratch; do NOT re-propose the old backbone.")
     dataset = os.environ.get("NEURO_DATASET", "")
     for _ in range(50):                       # retry on the rare id collision
         mid = newid(run)
@@ -332,18 +338,27 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     return rows
 
 
+def _sandbox_file(proposer: str, run: str, name: str) -> str:
+    return os.path.join(_ensure(run), "proposers", proposer, name)
+
+
+def _read_text(path: str) -> str:
+    try:
+        with open(path) as fh:
+            return fh.read().strip()
+    except OSError:
+        return ""
+
+
 def _island_reset_at(proposer: str, run: str) -> str | None:
-    """The ISO timestamp of the island's last conductor reset, or ``None``. Scored rows created at or
-    before this are excluded from the island's ``my-best`` -- so a reset island genuinely re-explores
-    from the baseline floor instead of reloading its old (converged) lineage."""
+    """The marker of the island's last conductor reset, or ``None``. Scored rows created at or before
+    this are excluded from the island's ``my-best`` -- so a reset island genuinely re-explores from
+    the baseline floor instead of reloading its old (converged) lineage. The same marker is the
+    handshake token: ``my-best`` records it (``reset_seen``) and ``propose`` refuses a snapshot taken
+    before a reset that landed mid-turn (see :func:`propose`)."""
     if not proposer:
         return None
-    f = os.path.join(_ensure(run), "proposers", proposer, "reset_at")
-    try:
-        with open(f) as fh:
-            return fh.read().strip() or None
-    except OSError:
-        return None
+    return _read_text(_sandbox_file(proposer, run, "reset_at")) or None
 
 
 def get_best_model(with_code: bool = True, run: str | None = None) -> dict | None:
@@ -353,10 +368,15 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
     ``None`` if your island has no scored model yet (then just evolve your current ``model.py``).
 
     Honors a conductor RESET: rows at/before the island's ``reset_at`` marker are excluded, so a
-    freshly reset island sees ``None`` and re-explores from the baseline ``model.py`` floor."""
+    freshly reset island sees ``None`` and re-explores from the baseline ``model.py`` floor. Calling
+    this also records the reset epoch you are syncing to (``reset_seen``), which ``propose`` checks to
+    reject a stale snapshot if a reset lands mid-turn."""
     proposer = os.environ.get("LAB_PROPOSER", "")
     run = _ensure(run)
     reset_at = _island_reset_at(proposer, run)
+    if proposer:                       # record the reset epoch this turn is built on (race handshake)
+        with open(_sandbox_file(proposer, run, "reset_seen"), "w") as fh:
+            fh.write(reset_at or "")
     sql = ("SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
            + ("AND created_at > ? " if reset_at else "")
            + "ORDER BY test_corr DESC LIMIT 1")
@@ -373,10 +393,11 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
 
 def get_best_model_from_other_island(run: str | None = None) -> dict | None:
     """Cross-pollination: the best ``ok`` model of ONE RANDOMLY chosen OTHER proposer (island), as
-    its ``idea`` + ``experiment_notes`` (description + insight) + score + ``roi_corr`` -- NO source
-    code. You must RE-IMPLEMENT the concept, not clone a file: that is what keeps backbones diverse.
-    You do NOT get to aim it -- the island is auto-picked at random, so it is never just the global
-    champion. ``None`` if no other island has scored yet."""
+    its ``idea`` + ``experiment_notes`` (description + insight) -- NO source code and NO scores. You
+    must RE-IMPLEMENT the concept, not clone a file, and you are not told how well it scored: that is
+    what keeps backbones diverse and stops every island chasing the same number. You do NOT get to aim
+    it -- the island is auto-picked at random, so it is never just the global champion. ``None`` if no
+    other island has scored yet."""
     proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
         isl = con.execute(
@@ -386,7 +407,7 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
         if isl is None:
             return None
         r = con.execute(
-            "SELECT id, idea, experiment_notes, proposer, test_corr, train_corr, roi_corr "
+            "SELECT id, idea, experiment_notes, proposer "
             "FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
             "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
     return dict(r)
@@ -397,11 +418,13 @@ def reset_island(proposer: str, role: str | None = None, run: str | None = None)
 
     Atomically: (1) overwrites ``proposers/<pNN>/model.py`` with the random-projection BASELINE (the
     fresh floor), (2) writes a ``reset_at`` marker so the island's ``my-best`` ignores its old
-    (converged) lineage and returns ``None`` until it scores anew, and (3) sets ``direction.txt`` to
-    ``role`` if given. NON-DESTRUCTIVE: archived rows + the global champion are untouched -- only the
-    island's WORKING lineage is cleared -- so resetting any island (even the champion's) never loses
-    recorded science or the best result. Reset is to the BASELINE, never a clone of another island,
-    so the fleet regains genuine diversity. Conductor/launcher only (refused for a proposer)."""
+    (converged) lineage and returns ``None`` until it scores anew, (3) CLEARS the island's ``scratch/``
+    notes so the proposer can't re-derive its retired backbone from its own saved analysis, and
+    (4) sets ``direction.txt`` to ``role`` if given. NON-DESTRUCTIVE to the science: archived rows +
+    the global champion are untouched -- only the island's WORKING lineage + scratch are cleared -- so
+    resetting any island (even the champion's) never loses recorded science or the best result. Reset
+    is to the BASELINE, never a clone of another island, so the fleet regains genuine diversity.
+    Conductor/launcher only (refused for a proposer)."""
     if _is_proposer():
         raise PermissionError("reset-island is a CONDUCTOR power; a proposer cannot reset islands.")
     run = _ensure(run)
@@ -409,15 +432,20 @@ def reset_island(proposer: str, role: str | None = None, run: str | None = None)
     sandbox = os.path.join(run, "proposers", proposer)
     if not proposer or not os.path.isdir(sandbox):
         raise ValueError(f"reset-island: no such island sandbox {proposer!r} under {run}")
+    stamp = _now()
     baseline = os.path.join(REPO_ROOT, "model.py")
     shutil.copyfile(baseline, os.path.join(sandbox, "model.py"))   # back to the floor
     with open(os.path.join(sandbox, "reset_at"), "w") as fh:       # mute the old lineage in my-best
-        fh.write(_now())
+        fh.write(stamp)
+    scratch = os.path.join(sandbox, "scratch")                     # wipe the proposer's own notes so it
+    if os.path.isdir(scratch):                                     # can't re-derive its retired backbone
+        shutil.rmtree(scratch, ignore_errors=True)
+    os.makedirs(scratch, exist_ok=True)
     if role:
         with open(os.path.join(sandbox, "direction.txt"), "w") as fh:
             fh.write(role.strip() + "\n")
-    return {"reset": proposer, "model_py": "baseline", "reset_at": _now(),
-            "role": role or "(unchanged)"}
+    return {"reset": proposer, "model_py": "baseline", "scratch": "cleared",
+            "reset_at": stamp, "role": role or "(unchanged)"}
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:

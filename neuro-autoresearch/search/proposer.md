@@ -47,7 +47,7 @@ Build on real code:
                                        # (`--no-code` for the row only.)
 Cross-pollinate (ideas only, never code):
   `python hub.py peek-island`          # best of ONE RANDOM OTHER island as idea + experiment_notes
-                                       # (description + insight) + score + roi_corr -- NO source. You do
+                                       # (description + insight) -- NO source, NO score. You do
                                        # NOT choose which island; it is auto-picked at random.
 
 Propose + get your score:
