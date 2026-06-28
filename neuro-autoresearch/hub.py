@@ -36,7 +36,7 @@ CLI (what a headless agent calls without writing Python)::
     python hub.py top-models [-n 5]                         # CONDUCTOR/launcher only -- global scoreboard (blocked for proposers)
     python hub.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
     python hub.py my-best [--no-code]                       # YOUR island's best model (+source, +your own score) to build on
-    python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes + roi_corr, NO source
+    python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes, NO source, NO score
     python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON (score/source columns hidden from proposers)
     python hub.py reset-island <pNN> [--role "..."]        # CONDUCTOR only: reset an island to the baseline + re-explore (non-destructive)
     python hub.py summary                                   # launcher: one-line tally + champion
@@ -258,6 +258,11 @@ def propose(model_file: str, idea: str = "",
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
     proposer = proposer or os.environ.get("LAB_PROPOSER", "")
+    # Stamp created_at NOW, before the handshake + snapshot. If a reset lands anytime during this
+    # call, its reset_at will be > this created_at, so the `created_at > reset_at` filter in
+    # get_best_model auto-excludes this row -- closing the TOCTOU window between the handshake check
+    # and the DB insert. (The handshake below catches the larger reset-before-propose window.)
+    created_at = _now()
     if proposer:                       # race handshake: refuse a snapshot taken before a mid-turn reset
         if (_island_reset_at(proposer, run) or "") != _read_text(_sandbox_file(proposer, run, "reset_seen")):
             raise RuntimeError(
@@ -275,7 +280,7 @@ def propose(model_file: str, idea: str = "",
             "proposer": proposer, "dataset": dataset, "status": "queued",
             "test_corr": None, "train_corr": None, "roi_corr": None,
             "n_params": cx["n_params"], "model_loc": cx["model_loc"],
-            "seconds": None, "created_at": _now(), "path": os.path.abspath(dst),
+            "seconds": None, "created_at": created_at, "path": os.path.abspath(dst),
         }
         try:
             with connect(run) as con:
