@@ -1,0 +1,128 @@
+/* sections/overview_main.css — Overview LEFT column (.sx-ov prefix)
+   Three stacked blocks: BEST SCORE · CHART (owned by chart.js) · ATTEMPTS.
+   Chart internals live in chart.css; this file only sets the column rhythm. */
+
+.sx-ov {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;            /* calm, even vertical rhythm between the three blocks */
+}
+
+/* ---- 1) best score headline -------------------------------------------- */
+.sx-ov-best {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 1.6rem;
+}
+.sx-ov-best-main { min-width: 0; }
+.sx-ov-best-num {
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -.01em;
+  margin: .5rem 0 .35rem;
+  font-variant-numeric: tabular-nums;
+}
+.sx-ov-best-sub {
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  max-width: 48ch;
+}
+.sx-ov-best-counts {
+  flex: none;
+  text-align: right;
+  font-size: var(--text-sm);
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  white-space: nowrap;
+}
+.sx-ov-best-counts .sx-ov-cnum { color: var(--fg); }
+
+/* ---- shared counts pill (mono "N scored / M total") -------------------- */
+.sx-ov-counts {
+  font-size: var(--text-sm);
+  color: var(--fg);
+}
+
+/* ---- 3) attempts table card -------------------------------------------- */
+.sx-ov-tablecard { padding: 1.4rem 1.6rem .4rem; }
+.sx-ov-cardhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: .9rem;
+}
+
+.sx-ov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.sx-ov-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  padding: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.sx-ov-th-rank { width: 2.5rem; }
+.sx-ov-th-score { cursor: pointer; user-select: none; white-space: nowrap; }
+.sx-ov-th-score:hover { color: var(--fg); }
+.sx-ov-sort { color: var(--fg); }
+.sx-ov-th-time { text-align: left; }
+
+.sx-ov-table td {
+  padding: .6rem .5rem;
+  border-bottom: 1px solid var(--border-faint);
+  vertical-align: middle;
+}
+.sx-ov-table tbody tr:last-child td { border-bottom: 0; }
+.sx-ov-table tbody tr:hover { background: var(--surface-2); }
+.sx-ov-rank { color: var(--faint-fg); width: 2.5rem; }
+.sx-ov-score { font-weight: 600; }
+.sx-ov-agent { display: flex; align-items: center; gap: .4rem; color: var(--muted-fg); }
+.sx-ov-adot-i {
+  width: .55rem; height: .55rem; border-radius: 999px;
+  display: inline-block; flex: none;
+}
+.sx-ov-time { color: var(--muted-fg); font-size: var(--text-sm); white-space: nowrap; }
+
+.sx-ov-cap {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--faint-fg);
+  text-align: center;
+  padding: .6rem 0 .1rem;
+}
+
+.sx-ov-showall {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted-fg);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: .85rem;
+  margin-top: .1rem;
+}
+.sx-ov-showall:hover { background: var(--surface-2); color: var(--fg); }
+
+/* ---- empty states ------------------------------------------------------ */
+.sx-ov .empty {
+  text-align: center;
+  color: var(--muted-fg);
+  font-size: var(--text-sm);
+  padding: 2rem 1rem;
+}

@@ -1,0 +1,178 @@
+/* sections/agents.css — proposer roster cards. Prefix: .sx-ag
+   Headline of the redesign: each card pairs a color-keyed MODEL chip with a
+   separate, elegant EFFORT meter as the visual focal point. */
+
+.sx-ag { display: flex; flex-direction: column; gap: .85rem; }
+
+.sx-ag-head {
+  display: flex; align-items: baseline; gap: .55rem;
+  padding: 0 .1rem;
+}
+.sx-ag-count {
+  font-size: var(--text-xs); color: var(--faint-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.sx-ag-stack { display: flex; flex-direction: column; gap: .7rem; }
+
+/* ---- card shell ---- */
+.sx-ag-card {
+  position: relative;
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+}
+.sx-ag-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--border-strong);
+}
+
+/* thin vertical accent bar in the agent color */
+.sx-ag-bar {
+  flex: 0 0 4px;
+  align-self: stretch;
+  background: var(--accent);
+  opacity: .85;
+}
+.sx-ag-card:hover .sx-ag-bar { opacity: 1; }
+
+.sx-ag-cbody {
+  flex: 1 1 auto; min-width: 0;
+  padding: .85rem 1rem .9rem;
+  display: flex; flex-direction: column; gap: .55rem;
+}
+
+/* ---- top row: id + model/effort/status cluster ---- */
+.sx-ag-top {
+  display: flex; align-items: center; gap: .6rem;
+  flex-wrap: wrap;
+}
+.sx-ag-id {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -.01em;
+  color: var(--fg);
+}
+.sx-ag-meta {
+  margin-left: auto;
+  display: flex; align-items: center; gap: .5rem;
+  flex-wrap: wrap; justify-content: flex-end;
+}
+
+/* MODEL chip — tinted by the model color */
+.sx-ag-model {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  padding: .26rem .55rem .26rem .5rem;
+  border-radius: 999px;
+  color: color-mix(in oklab, var(--mc) 72%, var(--fg));
+  background: color-mix(in oklab, var(--mc) 11%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--mc) 32%, var(--border));
+  white-space: nowrap; max-width: 14rem;
+}
+.sx-ag-model-dot {
+  width: .5rem; height: .5rem; flex: none;
+  border-radius: 999px; background: var(--mc);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--mc) 22%, transparent);
+}
+.sx-ag-model-name { overflow: hidden; text-overflow: ellipsis; }
+
+/* faint divider between model and effort */
+.sx-ag-vsep {
+  width: 1px; height: 1.1rem;
+  background: var(--border);
+}
+
+/* EFFORT meter — the aesthetic centerpiece */
+.sx-ag-effort {
+  display: inline-flex; align-items: center; gap: .45rem;
+  --eff: var(--muted-fg);
+}
+.sx-ag-effort[data-lvl="lo"]  { --eff: var(--amber-accent); }
+.sx-ag-effort[data-lvl="mid"] { --eff: var(--blue); }
+.sx-ag-effort[data-lvl="hi"]  { --eff: var(--emerald); }
+
+.sx-ag-effort-bars {
+  display: inline-flex; align-items: flex-end; gap: 2px;
+  height: 1rem;
+}
+.sx-ag-seg {
+  width: .26rem;
+  border-radius: 1px;
+  background: var(--muted);
+  /* stair-stepped heights so the meter reads as a level */
+  height: calc(.42rem + var(--i) * .145rem);
+  transition: background .14s ease, box-shadow .14s ease;
+}
+.sx-ag-seg.is-on {
+  background: var(--eff);
+}
+.sx-ag-card:hover .sx-ag-seg.is-on {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--eff) 30%, transparent);
+}
+.sx-ag-effort-word {
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--eff) 78%, var(--fg));
+  font-weight: 500;
+}
+
+/* status */
+.sx-ag-status {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted-fg);
+}
+
+/* ---- second row: counts ---- */
+.sx-ag-stats {
+  display: flex; align-items: center; gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--muted-fg);
+}
+.sx-ag-stat b { color: var(--fg); font-weight: 600; }
+.sx-ag-dotsep { color: var(--border-strong); }
+
+/* ---- direction ---- */
+.sx-ag-dir {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--fg);
+}
+.sx-ag-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: .35rem;
+}
+.sx-ag-prev {
+  margin: 0;
+  display: flex; align-items: baseline; gap: .45rem;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--faint-fg);
+}
+.sx-ag-prevtag {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--faint-fg);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-sm);
+  padding: .05rem .3rem;
+}

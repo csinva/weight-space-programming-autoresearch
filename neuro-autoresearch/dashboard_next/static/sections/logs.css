@@ -1,0 +1,159 @@
+/* sections/logs.css — Logs view (.sx-lg prefix). Two-column transcript browser. */
+
+.sx-lg {
+  display: grid;
+  grid-template-columns: minmax(0, 38%) minmax(0, 62%);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+/* ---- left: agent list ---- */
+.sx-lg-left {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  max-height: calc(100vh - 6.5rem);
+  min-width: 0;
+}
+.sx-lg-heading { padding-left: .15rem; }
+.sx-lg-cards {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  overflow-y: auto;
+  padding: .15rem .25rem .25rem 0;
+}
+
+.sx-lg-card {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: .85rem 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: background .12s ease, border-color .12s ease;
+}
+.sx-lg-card:hover { border-color: var(--border-strong); }
+.sx-lg-card.is-selected {
+  background: var(--fg);
+  border-color: var(--fg);
+}
+.sx-lg-card.is-selected .sx-lg-stats,
+.sx-lg-card.is-selected .sx-lg-time { color: var(--faint-fg); }
+.sx-lg-card.is-selected .sx-lg-pid { color: var(--surface); }
+
+.sx-lg-card-top {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  min-width: 0;
+}
+.sx-lg-pid {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+.sx-lg-badge {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--m, var(--muted-fg));
+  border: 1px solid color-mix(in oklab, var(--m, var(--border-strong)) 45%, transparent);
+  background: color-mix(in oklab, var(--m, var(--muted)) 12%, var(--surface));
+  padding: .15rem .45rem;
+  border-radius: 999px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 11rem;
+}
+.sx-lg-status {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  white-space: nowrap;
+}
+.sx-lg-card.is-selected .sx-lg-status { color: var(--faint-fg); }
+
+.sx-lg-card-bot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.sx-lg-stats { font-size: var(--text-sm); color: var(--muted-fg); }
+.sx-lg-time { font-size: var(--text-xs); color: var(--faint-fg); white-space: nowrap; }
+
+/* ---- right: transcript ---- */
+.sx-lg-right { min-width: 0; }
+.sx-lg-feed {
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  min-width: 0;
+}
+
+.sx-lg-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.sx-lg-system {
+  font-size: var(--text-xs);
+  color: var(--faint-fg);
+  letter-spacing: var(--tracking-wide);
+}
+
+.sx-lg-tool {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  min-width: 0;
+}
+.sx-lg-chip {
+  align-self: flex-start;
+  max-width: 100%;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: var(--text-sm);
+  padding: .45rem .8rem;
+  border-radius: var(--radius-lg);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sx-lg-toolbody {
+  background: var(--surface-2);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-md);
+  color: var(--muted-fg);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  padding: .6rem .8rem;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+@media (max-width: 1080px) {
+  .sx-lg { grid-template-columns: 1fr; }
+  .sx-lg-left { position: static; max-height: none; }
+  .sx-lg-cards { max-height: 40vh; }
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "p00",
+    "model": "claude-opus-4.8",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 164,
+    "best_score": 0.26277,
+    "direction": "Stay OFF spectral knobs -- own PERIPHERAL TEXTURE-TILING / summary-statistic (texform) representations for high-level ventral scene/object form.",
+    "prev_direction": "Your spectral-gist drift is a saturated crowd (5 slots stuck at .262) -- leave it for good. Build peripheral SUMMARY-STATISTIC / texture-tiling (texform) representations for high-level ventral scene/object form.",
+    "last_activity": 1782405924.2950926
+  },
+  {
+    "id": "p01",
+    "model": "claude-opus-4.8",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 201,
+    "best_score": 0.26253,
+    "direction": "KEEP -- second-order / bilinear cross-feature COVARIANCE binding (configural part co-occurrence) for FFA/VWFA; keep branching the binding mechanism, do NOT revert to spectral.",
+    "prev_direction": "Exploit the proven invariant-prototype region but break the knob-rety loop: grow genuine part->whole->scene COMPOSITION DEPTH that lifts high-level ventral (FFA/VWFA/PPA) -- no more pool/power/S2_K/top-k sweeps that return the same score.",
+    "last_activity": 1782405924.243092
+  },
+  {
+    "id": "p02",
+    "model": "claude-opus-4.8",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 162,
+    "best_score": 0.26245,
+    "direction": "KEEP -- whole-object SHAPE: curvature / medial-axis / skeleton form over your part backbone; keep deepening the V4->ventral form mechanism.",
+    "prev_direction": "EXPLOIT the crown lineage, but BAN the score-identical power-norm/branch-weight/top-k exponent reties -- only moves that add genuine STRUCTURE lifting high-level ventral (FFA/VWFA/PPA), where all the headroom is.",
+    "last_activity": 1782405924.244092
+  },
+  {
+    "id": "p03",
+    "model": "claude-opus-4.8",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 168,
+    "best_score": 0.26088,
+    "direction": "Spectral-gist sweeps are exhausted -- switch to FIGURE-GROUND / border-ownership SEGMENTATION into object silhouette + form; grow the segmentation machinery toward high-level ventral.",
+    "prev_direction": "",
+    "last_activity": 1782405924.2880924
+  },
+  {
+    "id": "p04",
+    "model": "claude-opus-4.8",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 145,
+    "best_score": 0.25787,
+    "direction": "Stop RFF gain/part micro-knobs -- own untrained OBJECT-PROTOTYPE / exemplar-template similarity coding (sparse dictionary of object-scale patches) for ventral object/face selectivity.",
+    "prev_direction": "",
+    "last_activity": 1782405924.3070927
+  },
+  {
+    "id": "p05",
+    "model": "gpt-5.5",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 220,
+    "best_score": 0.26227,
+    "direction": "Off block/DN/source knob sweeps (capped) -- chromatic SURFACE-MATERIAL statistics (shading / specular / higher-order colour-texture) at object scale for material/face/scene ventral.",
+    "prev_direction": "EXPLOIT the HMAX/C2 part-template winner -- but push to DEEPER compositional object-part hierarchies; the top-k pooling grid is saturated, stop micro-tuning it",
+    "last_activity": 1782405924.3050926
+  },
+  {
+    "id": "p06",
+    "model": "gpt-5.5",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 211,
+    "best_score": 0.26005,
+    "direction": "STOP seed/sketch sweeps for good -- mid-level CONTOUR-GROUPING / Gestalt collinear facilitation; branch the grouping mechanism toward whole-object form.",
+    "prev_direction": "",
+    "last_activity": 1782405924.367093
+  },
+  {
+    "id": "p07",
+    "model": "gpt-5.5",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 231,
+    "best_score": 0.26303,
+    "direction": "Frontier slot -- STOP spectral micro-knobs (saturated); CONSOLIDATE by FUSING the complementary paying streams (shape, covariance binding, contour, material) onto your backbone, aimed at the weak FFA/PPA/VWFA/ventral readout.",
+    "prev_direction": "",
+    "last_activity": 1782405924.4300938
+  },
+  {
+    "id": "p08",
+    "model": "gpt-5.5",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 220,
+    "best_score": 0.26262,
+    "direction": "KEEP -- DEEPEN stacked untrained nonlinear CONV hierarchies to whole-object receptive fields; build the real nonlinear depth the fleet lacks.",
+    "prev_direction": "",
+    "last_activity": 1782405924.3100927
+  },
+  {
+    "id": "p09",
+    "model": "gpt-5.5",
+    "effort": "xhigh",
+    "status": "idle",
+    "models_count": 233,
+    "best_score": 0.26253,
+    "direction": "Abandon the C3 / DN-sigma sweeps (flat) -- explore RECURRENT / predictive-coding lateral DYNAMICS (iterative normalization / feedback), a mechanism the static crowd never tries, pushed at high-level ventral.",
+    "prev_direction": "",
+    "last_activity": 1782405924.3010926
+  }
+]

@@ -1,0 +1,90 @@
+/* Shell chrome: top bar, nav, run selector, status chip, page layout.
+   Section-specific styles live in sections/<name>.css with a .sx-<name> prefix. */
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 1.5rem;
+  padding: .85rem 1.6rem;
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-left { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.brand { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; }
+.brand-slash { color: var(--border-strong); font-size: 1.1rem; }
+.topbar-right { margin-left: auto; }
+
+/* run selector */
+.runsel { position: relative; }
+.runsel-btn {
+  display: flex; align-items: center; gap: .5rem;
+  background: transparent; border: 1px solid transparent;
+  padding: .3rem .5rem; border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+.runsel-btn:hover { background: var(--muted); }
+.runsel-run { color: var(--fg); font-weight: 500; }
+.runsel-caret { color: var(--muted-fg); font-size: .7rem; }
+.runsel-menu {
+  position: absolute; top: calc(100% + .4rem); left: 0;
+  min-width: 230px; max-height: 60vh; overflow: auto;
+  padding: .5rem; box-shadow: var(--shadow); z-index: 30;
+}
+.runsel-group + .runsel-group { margin-top: .4rem; }
+.runsel-task { padding: .25rem .4rem; }
+.runsel-item {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .4rem .5rem; border: 0; background: transparent;
+  border-radius: var(--radius-sm); font-size: var(--text-sm); color: var(--fg);
+}
+.runsel-item:hover { background: var(--muted); }
+.runsel-item.is-cur { background: var(--surface-2); font-weight: 600; }
+.runsel-meta { display: flex; align-items: center; gap: .45rem; }
+
+/* nav */
+.nav { display: flex; gap: .25rem; margin: 0 auto; }
+.nav-item {
+  border: 0; background: transparent; color: var(--muted-fg);
+  padding: .4rem .9rem; border-radius: var(--radius-md);
+  font-size: var(--text-sm); font-weight: 500;
+}
+.nav-item:hover { color: var(--fg); background: var(--muted); }
+.nav-item.is-active { background: var(--fg); color: var(--bg); }
+
+/* status chip */
+.chip {
+  display: flex; align-items: center; gap: .45rem;
+  font-size: var(--text-sm); color: var(--muted-fg);
+  font-family: var(--font-mono);
+}
+.chip-status { text-transform: capitalize; color: var(--fg); }
+.chip-sep { color: var(--border-strong); }
+.chip .num { color: var(--fg); }
+.chip-idx { margin-left: .15rem; }
+
+/* page layout */
+.content { max-width: var(--maxw); margin: 0 auto; padding: 1.5rem 1.6rem 4rem; }
+.page-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+.col-divider { background: var(--border); align-self: stretch; }
+.col-left, .col-right { min-width: 0; display: flex; flex-direction: column; gap: 1.1rem; }
+
+@media (max-width: 1080px) {
+  .page-cols { grid-template-columns: 1fr; }
+  .col-divider { display: none; }
+  .nav { margin: 0; }
+}
+
+.banner-error {
+  background: color-mix(in oklab, var(--red) 12%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--red) 35%, var(--border));
+  color: var(--red); padding: .6rem .9rem; border-radius: var(--radius-md);
+  font-size: var(--text-sm); margin-bottom: 1rem;
+}
+
+/* generic empty state */
+.empty { color: var(--faint-fg); font-size: var(--text-sm); padding: 2rem; text-align: center; }
