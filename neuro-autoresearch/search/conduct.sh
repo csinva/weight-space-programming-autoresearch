@@ -13,7 +13,7 @@ RUN="${LAB_RUN:?LAB_RUN must point at the run dir}"
 DATASET="${NEURO_DATASET:-nsd}"
 MODEL="${NEURO_CONDUCTOR_MODEL:-claude-opus-4.8}"
 EFFORT="${NEURO_CONDUCTOR_EFFORT:-${NEURO_EFFORT:-xhigh}}"
-MINS="${NEURO_EPOCH_MINS:-30}"
+MINS="${NEURO_EPOCH_MINS:-120}"
 case "$MINS" in ''|*[!0-9.]*|*.*.*) echo "[conduct] NEURO_EPOCH_MINS must be a positive number (got '$MINS')" >&2; exit 2;; esac
 LOG="$RUN/conductor.log"
 export LAB_RUN="$RUN" NEURO_DATASET="$DATASET"

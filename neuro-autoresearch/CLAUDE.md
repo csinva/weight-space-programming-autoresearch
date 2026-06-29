@@ -45,7 +45,7 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   each confined to its own sandbox) + the single GPU evaluator (`evaluate.sh` / `evaluator.py`) + an
   OPTIONAL **conductor** (`conduct.sh` / `conductor.md`, runs from the repo root, not sandboxed).
   The search stays self-paced and decentralized — each proposer waits only for its OWN score, no
-  barrier, and the conductor never gates the queue or scoring. Every `--epoch-mins` (default 30; `0`
+  barrier, and the conductor never gates the queue or scoring. Every `--epoch-mins` (default 120; `0`
   disables it) the conductor runs one headless pass that reads the board and writes ONE broad,
   ADVISORY `direction.txt` per proposer slot — keeping the pool diverse and unstuck; proposers read
   their `direction.txt` to bias what they explore. `proposer.md` / `conductor.md` are the agent
@@ -62,7 +62,7 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
 python -m harness.run                   # evaluate the current model.py once (manual)
 NEURO_READOUT=himalaya python -m harness.run     # reference readout (default: the ~20× faster fast ridge)
 python scripts/benchmark/benchmark.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
-search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 30m
+search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 2h
 search/search.sh nsd --hours 12 --effort high    # ONE effort knob for ALL proposers + conductor (low|medium|high|xhigh|max; default xhigh)
 search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralized pool)
 ```
