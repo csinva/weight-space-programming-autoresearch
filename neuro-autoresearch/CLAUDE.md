@@ -26,13 +26,14 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   `harness/loaders/` (reading the in-repo `data/<name>/` tree); never in `model.py`.
 
 ## Architecture
-- **`harness/`** (fixed eval): `datasets.py` (presets; pick via `NEURO_DATASET`) · `loaders/`
-  (`load_split` dispatch in `__init__`; `shared.py` (RawPixels, cache dir, study-path, constant-col
-  drop); `neuralset/` (Segmenter loader + `studies.py` Study subclasses + `roi.py` the NSD ROI
-  resolver) for text/meg/ieeg; `standalone/` (`nsd.py`, `tvsd.py`, `nnn.py`) for the pre-aligned
-  table datasets) · `ridge.py` (the readout: fast eigh+LOO default / himalaya, via `NEURO_READOUT`) ·
-  `reward.py` (orchestration: forward → readout → the region `test_corr`) · `roi.py` (reward-region
-  target selection + advisory per-ROI breakdown) · `run.py` (the manual single-eval CLI; prints the
+- **`harness/`** (fixed eval): `datasets.py` (presets + the `Dataset`/`Timeline` config; pick via
+  `NEURO_DATASET`) · `loaders/` (`load_split` dispatch in `__init__`; `shared.py` (RawPixels, cache
+  dir, constant-col drop); `timeline.py` (the NeuralSet `Segmenter` loader) + `studies.py` (Study
+  subclasses) for the timeline datasets text/meg/ieeg; `vision/` (`nsd.py`, `tvsd.py`, `nnn.py`) for
+  the pre-aligned image-table datasets) · `ridge.py` (the readout: fast eigh+LOO default / himalaya,
+  via `NEURO_READOUT`) · `reward.py` (orchestration: forward → readout → the region `test_corr`) ·
+  `roi.py` (one `reward_region_mask` selector over the loader's per-ROI masks + the advisory per-ROI
+  breakdown) · `run.py` (the manual single-eval CLI; prints the
   row — the search loop records into `search.db` via `hub.py`) · `scripts/benchmark/` (profile the
   readout pipeline phase-by-phase under GPU contention + HTML dashboard).
 - **`hub.py`** — the ONE importable API + CLI over a run's `search.db`
