@@ -20,9 +20,7 @@ import torch
 
 from harness.datasets import Dataset
 from harness.ridge import ridge_predict, _readout_device, _to_np
-from harness.roi import (
-    roi_breakdown, _select_targets, _study_for, _slice_target_mask, _standalone_target_mask,
-)
+from harness.roi import roi_breakdown, select_targets, reward_region_mask
 
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 FORWARD_BATCH = 512           # chunk the forward pass over samples (per-sample invariant => identical output)
@@ -101,15 +99,10 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         raise ValueError(f"representation D_out={d_out} >= {MAX_DOUT} cap "
                          f"(keep the model's output dimension under {MAX_DOUT})")
 
-    # The reward narrows the targets to the dataset's region (e.g. ventral on NSD); the readout fits
-    # exactly those targets. NeuralSet studies resolve the region via an ns.Study ROI resolver;
-    # the standalone loaders bake the region into Y at load time and may narrow to one named
-    # sub-ROI of their roi_masks (a None mask -> fit every loaded target).
-    study = _study_for(dataset)
-    if study is None:
-        mask = _standalone_target_mask(roi_masks, dataset.reward_roi)
-    else:
-        mask = _slice_target_mask(study, dataset.reward_roi, int(Y_train.shape[1]))
+    # The reward narrows the targets to the dataset's region; the readout fits exactly those targets.
+    # Every loader bakes its region into Y at load time and may narrow to one named sub-ROI of its
+    # roi_masks (a None mask -> fit every loaded target).
+    mask = reward_region_mask(roi_masks, dataset.reward_roi)
     if mask is not None:
         # Re-align the advisory breakdown + the per-voxel ceiling to the narrowed targets scored.
         roi_masks = {k: np.asarray(v, dtype=bool)[mask] for k, v in roi_masks.items()}
@@ -117,7 +110,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
             nc = nc[mask]
         if torch.is_tensor(Y_train):
             mask = torch.as_tensor(mask, device=Y_train.device)
-    Yv_train, Yv_test = _select_targets(Y_train, mask), _select_targets(Y_test, mask)
+    Yv_train, Yv_test = select_targets(Y_train, mask), select_targets(Y_test, mask)
 
     pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
     # Noise-normalize per voxel (r^2/NC_r2) before averaging -- the scalar reward AND the ROI

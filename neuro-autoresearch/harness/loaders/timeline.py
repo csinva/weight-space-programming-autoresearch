@@ -24,7 +24,7 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
-from harness.loaders.neuralset import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
+from harness.loaders import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
 from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_constant_cols, processed_dir
 
 

@@ -40,9 +40,7 @@ STREAMS = ("early", "ventral")          # the ROIs that partition the NSD reward
 
 def _roi_counts(roi_masks, Ytr, DATASET, R):
     """Reliable-voxel count per ROI within the reward region (same slicing as ``_readout``)."""
-    study = R._study_for(DATASET)
-    mask = (R._standalone_target_mask(roi_masks, DATASET.reward_roi) if study is None
-            else R._slice_target_mask(study, DATASET.reward_roi, int(Ytr.shape[1])))
+    mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
     rm = ({k: np.asarray(v, bool)[mask] for k, v in roi_masks.items()} if mask is not None
           else {k: np.asarray(v, bool) for k, v in roi_masks.items()})
     return {k: int(v.sum()) for k, v in rm.items()}

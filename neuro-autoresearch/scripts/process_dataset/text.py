@@ -19,8 +19,8 @@ import torch
 import neuralset as ns
 
 from harness.datasets import PRESETS, with_subject
-from harness.loaders.neuralset import studies  # noqa: F401  (registers Li2022PetitSubj*)
-from harness.loaders.neuralset import _build_xy
+from harness.loaders import studies  # noqa: F401  (registers Li2022PetitSubj*)
+from harness.loaders.timeline import _build_xy
 from harness.loaders.shared import processed_dir
 
 # Raw OpenNeuro source dirs (the offline build reads here once; runtime reads only data/text/).

@@ -113,7 +113,7 @@ PRESETS: dict[str, Dataset] = {
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
-    # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
+    # x stimuli), so loader="tvsd" (loaders.vision.tvsd) with the dataset's own image-disjoint
     # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
     # F/N via NEURO_SUBJECT. Runtime reads only the in-repo data/tvsd/ tree (native JPEGs + a .pt of
     # the MUA); the gated THINGS images + raw .mat are needed ONLY by the build step
@@ -131,7 +131,7 @@ PRESETS: dict[str, Dataset] = {
     # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
     # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
     # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
-    # images), so loader="nnn" (loaders.standalone.nnn). Y pools reliable units (reliability>0.4,
+    # images), so loader="nnn" (loaders.vision.nnn). Y pools reliable units (reliability>0.4,
     # ~35k of 47.5k) across all sessions. Reward = ALL reliable units; roi_corr breaks it down by
     # stream area (EVC/IT). The 1000 NSD images split deterministically (every 5th held out).
     # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.

@@ -21,15 +21,15 @@ def load_split(d: Dataset):
     None when the dataset has no repeat-based ceiling). Dispatches on d.loader; imports are lazy so a
     score-only caller never pulls a loader's heavy deps."""
     if d.loader == "neuralset":
-        from harness.loaders.neuralset import load_neuralset
+        from harness.loaders.timeline import load_neuralset
         return (*load_neuralset(d), {}, None)      # timeline studies (text/meg/ieeg): no ROI map / ceiling
     if d.loader == "nsd":
-        from harness.loaders.standalone.nsd import load_nsd
+        from harness.loaders.vision.nsd import load_nsd
         return load_nsd(d)                         # nsd provides the per-voxel ceiling
     if d.loader == "tvsd":
-        from harness.loaders.standalone.tvsd import load_tvsd
+        from harness.loaders.vision.tvsd import load_tvsd
         return load_tvsd(d)                        # tvsd provides the per-electrode oracle ceiling
     if d.loader == "nnn":
-        from harness.loaders.standalone.nnn import load_nnn
+        from harness.loaders.vision.nnn import load_nnn
         return (*load_nnn(d), None)
     raise ValueError(f"unknown loader {d.loader!r}; expected neuralset|nsd|tvsd|nnn")

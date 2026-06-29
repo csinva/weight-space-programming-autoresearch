@@ -157,11 +157,7 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
     -- minus only the MAX_DOUT proposer guard, which does not apply to a fixed baseline."""
     from harness.ridge import ridge_predict
 
-    study = R._study_for(DATASET)
-    if study is None:
-        mask = R._standalone_target_mask(roi_masks, DATASET.reward_roi)
-    else:
-        mask = R._slice_target_mask(study, DATASET.reward_roi, int(Ytr.shape[1]))
+    mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
     if mask is not None:
         roi_masks = {k: np.asarray(v, dtype=bool)[mask] for k, v in roi_masks.items()}
         if nc is not None:

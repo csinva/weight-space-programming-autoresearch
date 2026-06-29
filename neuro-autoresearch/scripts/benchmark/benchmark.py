@@ -85,7 +85,7 @@ def _worker(dataset: str, subject: str, method: str, idx: int, out: dict) -> Non
     # 1) Data load (decode/resize stimuli, cached after first build; read the responses).
     s = time.time()
     split = load_split(DATASET)
-    Xtr, Xte, Ytr, Yte = split[0], split[1], split[2], split[3]   # 5th is roi_masks (unused here)
+    Xtr, Xte, Ytr, Yte, roi_masks = split[0], split[1], split[2], split[3], split[4]
     t["data_load"] = time.time() - s
 
     # 2) Move the stimulus to the readout device.
@@ -109,9 +109,8 @@ def _worker(dataset: str, subject: str, method: str, idx: int, out: dict) -> Non
     t["model_forward"] = time.time() - s
 
     # Narrow the targets to the reward ROI, exactly as reward.py does.
-    study = R._study_for(DATASET)
-    mask = R._slice_target_mask(study, DATASET.reward_roi, int(Ytr.shape[1]))
-    Yv_train, Yv_test = R._select_targets(Ytr, mask), R._select_targets(Yte, mask)
+    mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
+    Yv_train, Yv_test = R.select_targets(Ytr, mask), R.select_targets(Yte, mask)
 
     # 4) Readout: the harness's per-target ridge (fast or himalaya, per NEURO_READOUT) -> predictions
     #    for BOTH splits. This is the phase the whole exercise is about.

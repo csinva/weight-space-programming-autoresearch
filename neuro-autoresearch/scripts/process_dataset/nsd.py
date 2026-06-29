@@ -10,7 +10,7 @@ Writes, for subjects 01/02/05/07 only:
                                             of nsd_ids referenced by those 4 subjects (~37k of
                                             73k). NOT pre-resized -- imsize stays a load-time knob.
 
-Once data/nsd/ exists, harness.loaders.standalone.nsd prefers it automatically (no env flag).
+Once data/nsd/ exists, harness.loaders.vision.nsd prefers it automatically (no env flag).
 
 Full run (all 4 subjects, ~20GB stimuli, slow -- streams the 39GB imgBrick):
     python -m scripts.process_dataset.nsd
