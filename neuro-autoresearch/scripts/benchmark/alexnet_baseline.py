@@ -164,7 +164,7 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
             nc = nc[mask]
         if torch.is_tensor(Ytr):
             mask = torch.as_tensor(mask, device=Ytr.device)
-    Yv_train, Yv_test = R._select_targets(Ytr, mask), R._select_targets(Yte, mask)
+    Yv_train, Yv_test = R.select_targets(Ytr, mask), R.select_targets(Yte, mask)
 
     pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
     test_n = R._noise_normalize(R._corr_per_column(pred_test, R._to_np(Yv_test)), nc)

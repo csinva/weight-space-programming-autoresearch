@@ -1,10 +1,10 @@
 """Data loaders, grouped by the two paradigms a dataset can take. ``load_split`` is the
 single entry point.
 
-- **neuralset** (text/meg/ieeg) -- continuous-timeline studies aligned on the fly via the
+- **timeline** (text/meg/ieeg) -- continuous-timeline studies aligned on the fly via the
   NeuralSet ``Segmenter``: each trigger event cuts a stimulus + neural segment.
-- **standalone** (nsd/tvsd/nnn) -- pre-aligned response tables (prepared betas / spiking
-  MUA), read directly by a self-contained reader; no Segmenter.
+- **vision** (nsd/tvsd/nnn) -- pre-aligned response tables (prepared betas / spiking MUA),
+  read directly by a self-contained ``loaders.vision`` reader; no Segmenter.
 
 A model is read out by the harness against ``load_split``'s (X_train, X_test, Y_train,
 Y_test); the agent should NOT need to edit anything here.
@@ -21,8 +21,10 @@ def load_split(d: Dataset):
     None when the dataset has no repeat-based ceiling). Dispatches on d.loader; imports are lazy so a
     score-only caller never pulls a loader's heavy deps."""
     if d.loader == "timeline":
-        from harness.loaders.timeline import load_neuralset
-        return (*load_neuralset(d), {}, None)      # timeline studies (text/meg/ieeg): no ROI map / ceiling
+        if d.timeline is None:
+            raise ValueError(f"{d.study}: loader='timeline' requires a timeline=Timeline(...) block")
+        from harness.loaders.timeline import load_timeline
+        return (*load_timeline(d), {}, None)       # timeline studies (text/meg/ieeg): no ROI map / ceiling
     if d.loader == "nsd":
         from harness.loaders.vision.nsd import load_nsd
         return load_nsd(d)                         # nsd provides the per-voxel ceiling
@@ -32,4 +34,4 @@ def load_split(d: Dataset):
     if d.loader == "nnn":
         from harness.loaders.vision.nnn import load_nnn
         return (*load_nnn(d), None)
-    raise ValueError(f"unknown loader {d.loader!r}; expected neuralset|nsd|tvsd|nnn")
+    raise ValueError(f"unknown loader {d.loader!r}; expected timeline|nsd|tvsd|nnn")

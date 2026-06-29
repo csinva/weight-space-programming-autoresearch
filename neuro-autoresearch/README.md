@@ -195,9 +195,9 @@ dataset identity, so reruns load in seconds.
 
 ### Adding a dataset
 
-Append a `Dataset(...)` entry to `PRESETS` in `harness/datasets.py` (and a loader under
-`harness/loaders/neuralset/` if it's a NeuralSet Study, or `harness/loaders/standalone/` if it's
-read directly). Dataset specifics live only there; the harness and models need no changes. Never point an unattended run at a gated `download=True`
+Append a `Dataset(...)` entry to `PRESETS` in `harness/datasets.py` (and a loader: extend
+`harness/loaders/timeline.py` if it's a NeuralSet timeline Study, or add a reader under
+`harness/loaders/vision/` if it's a pre-aligned table read directly). Dataset specifics live only there; the harness and models need no changes. Never point an unattended run at a gated `download=True`
 study.
 
 ---

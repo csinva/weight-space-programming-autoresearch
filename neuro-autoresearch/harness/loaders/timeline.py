@@ -281,7 +281,7 @@ def _build_xy(d: Dataset, events):
     return X, Y, onsets, stim_ids
 
 
-def load_neuralset(d: Dataset):
+def load_timeline(d: Dataset):
     """Timeline path: build aligned (X, Y) via the Segmenter, take a contiguous temporal
     hold-out (the latest ``test_frac`` of triggers by onset), and drop train-constant target
     columns. Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors.
