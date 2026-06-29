@@ -34,6 +34,23 @@ from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_cons
 # of touching the raw .fif/edf/BIDS. fMRI timelines (text) are not processed here.
 _PROCESSED_KEY = {"Bel2026PetitListenSample": "meg", "Zada2025Podcast": "ieeg"}
 
+# Text (Le Petit Prince fMRI). Its volumes don't reduce to a re-segmentable continuous .fif the way
+# meg/ieeg do, so instead of a slim tree it ships a BAKED final (X, Y) blob per study in data/text/
+# (windows fixed at build time). Runtime loads that blob directly; the build step is the only raw reader.
+_TEXT_PREFIX = "Li2022PetitSubj"
+
+
+def _load_text_blob(d: Dataset):
+    """Load the baked (X, Y, onsets, stim_ids) for a text fMRI study from data/text/<study>.pt."""
+    blob_path = os.path.join(processed_dir("text"), f"{d.study}.pt")
+    if not os.path.exists(blob_path):
+        suffix = d.study[len(_TEXT_PREFIX):]
+        raise FileNotFoundError(
+            f"{d.study} expects the in-repo blob {blob_path!r}; data/text/ is the only source -- "
+            f"build it once with `python -m scripts.process_dataset.text"
+            f"{(' --subject ' + suffix) if suffix else ''}`.")
+    return _build_cache_load(blob_path)
+
 
 def _processed_audio_events(out: str):
     """Rebuild the NeuralSet events DataFrame from a slim data/<ds>/ tree (audio neural).
@@ -276,32 +293,40 @@ def load_neuralset(d: Dataset):
     """
     use_cache = not os.environ.get("NEURO_NO_CACHE")
 
-    # Prefer the slim, raw-free data/<ds>/ tree when present (audio neural: meg/ieeg).
-    out = processed_dir(_PROCESSED_KEY[d.study]) if d.study in _PROCESSED_KEY else None
-    use_processed = out is not None and os.path.isdir(out)
-
-    # Key the build cache by source so a raw-built cache never shadows the processed
-    # tree (and vice versa); each source rebuilds at most once.
-    build_path = os.path.join(_cache_dir(), _build_cache_key(d, processed=use_processed))
-
-    if use_cache and os.path.exists(build_path):
-        X, Y, onsets, stim_ids = _build_cache_load(build_path)
-    elif use_processed:
-        X, Y, onsets, stim_ids = _build_xy(d, _processed_audio_events(out))
-        if use_cache:
-            _build_cache_save(build_path, X, Y, onsets, stim_ids)
+    if d.study.startswith(_TEXT_PREFIX):    # text fMRI: baked in-repo blob, never re-segmented at runtime
+        X, Y, onsets, stim_ids = _load_text_blob(d)
     else:
-        study = ns.Study(name=d.study, path=_study_path(d))
-        if d.download:
-            study.download()
-        try:
-            events = study.run()
-        except FileNotFoundError:           # cold demo cache: self-provision once
-            study.download()
-            events = study.run()
-        X, Y, onsets, stim_ids = _build_xy(d, events)
-        if use_cache:
-            _build_cache_save(build_path, X, Y, onsets, stim_ids)
+        # Prefer the slim, raw-free data/<ds>/ tree when present (audio neural: meg/ieeg).
+        out = processed_dir(_PROCESSED_KEY[d.study]) if d.study in _PROCESSED_KEY else None
+        use_processed = out is not None and os.path.isdir(out)
+
+        # Key the build cache by source so a raw-built cache never shadows the processed
+        # tree (and vice versa); each source rebuilds at most once.
+        build_path = os.path.join(_cache_dir(), _build_cache_key(d, processed=use_processed))
+
+        if use_cache and os.path.exists(build_path):
+            X, Y, onsets, stim_ids = _build_cache_load(build_path)
+        elif use_processed:
+            X, Y, onsets, stim_ids = _build_xy(d, _processed_audio_events(out))
+            if use_cache:
+                _build_cache_save(build_path, X, Y, onsets, stim_ids)
+        else:
+            if d.study in _PROCESSED_KEY:   # meg/ieeg: the in-repo data/<ds>/ tree is the only source
+                raise FileNotFoundError(
+                    f"{d.study} expects the in-repo data/{_PROCESSED_KEY[d.study]}/ tree at {out!r}; "
+                    f"run `python -m scripts.process_dataset.audio_neural "
+                    f"--dataset {_PROCESSED_KEY[d.study]}`.")
+            study = ns.Study(name=d.study, path=_study_path(d))
+            if d.download:
+                study.download()
+            try:
+                events = study.run()
+            except FileNotFoundError:       # cold demo cache: self-provision once
+                study.download()
+                events = study.run()
+            X, Y, onsets, stim_ids = _build_xy(d, events)
+            if use_cache:
+                _build_cache_save(build_path, X, Y, onsets, stim_ids)
 
     n_trials = X.shape[0]
 

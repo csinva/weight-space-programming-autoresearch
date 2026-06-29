@@ -22,7 +22,8 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   their `test_corr` agree to ~1e-4. `fast` avoids himalaya's per-fold cuSOLVER SVD (~12 s each), which
   was the entire readout cost and serialized ~3× across concurrent evals.
 - **Per-sample** activations (no statistic across the batch); representation `D_out < 10000`.
-- Raw file/network I/O is confined to `harness/loaders/`; never in `model.py`.
+- Raw/network *staging* lives in `scripts/process_dataset/`; runtime file I/O is confined to
+  `harness/loaders/` (reading the in-repo `data/<name>/` tree); never in `model.py`.
 
 ## Architecture
 - **`harness/`** (fixed eval): `datasets.py` (presets; pick via `NEURO_DATASET`) · `loaders/`
@@ -67,9 +68,19 @@ search/search.sh nsd --hours 12 --effort high    # ONE effort knob for ALL propo
 search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralized pool)
 ```
 
-## Datasets (staged offline under `~/Research/neuralset/data/`; switch via `NEURO_DATASET`)
+## Datasets (runtime reads the in-repo `data/<name>/` tree; switch via `NEURO_DATASET`)
+**Single source of truth:** every loader reads ONLY the in-repo `data/<name>/` store (relocate via
+`NEURO_DATA_DIR`); if a dataset isn't staged there the loader raises and names its build script. The
+external `~/Research/neuralset/data/` is build-time-only scratch — the raw source for the offline
+`scripts/process_dataset/<name>.py` step, never touched at runtime, so no preset sets `path`. Timeline
+datasets still segment with the NeuralSet `Segmenter`; `nsd`/`tvsd`/`nnn` use standalone readers — but
+both read from `data/<name>/`. `text` ships a baked `data/text/<study>.pt` `(X,Y)` blob (its fMRI
+doesn't reduce to a re-segmentable signal); `meg`/`ieeg` ship a slim re-segmentable tree.
+
 `nsd` — NSD prepared GLMdenoise betas, reward = **early+ventral** stream (noise-normalized; see top),
-all 8 subjects via `NEURO_SUBJECT`. **`NEURO_SUBJECTS`** (comma list) makes the reward the MEAN over
+subjects **`{1,2,5,7}` staged in-repo** via `NEURO_SUBJECT` (1+2 the search reward, 5+7 held-out; other
+ids raise — repack with `scripts.process_dataset.nsd`, then extend `_NSD_SUBJECTS`).
+**`NEURO_SUBJECTS`** (comma list) makes the reward the MEAN over
 several subjects — scored per subject, averaged, recorded as ONE `test_corr` + averaged `roi_corr`
 (per-subject values are never stored; proposers stay blind); unset = the single `NEURO_SUBJECT`.
 **`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECTS`

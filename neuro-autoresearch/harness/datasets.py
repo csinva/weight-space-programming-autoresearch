@@ -37,7 +37,10 @@ class Dataset:
     stim_start: float | None = None  # stimulus window start; None => reuse `start`
     stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
     download: bool = False           # download the study before running?
-    path: str | None = None          # pre-downloaded data dir; None => shared cache
+    path: str | None = None          # UNUSED by the active presets: every dataset reads ONLY the
+                                     # in-repo data/<name>/ tree at runtime. Raw sources live in
+                                     # scripts/process_dataset/ (the build step). Kept for the
+                                     # download-from-scratch path (_study_path) of a fresh study.
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value (NSD = "ventral"), NOT an operator knob.
@@ -65,7 +68,6 @@ PRESETS: dict[str, Dataset] = {
         stim_start=0.0,
         stim_duration=0.5,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/li2022petit_en057",
     ),
     # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
     # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
@@ -80,7 +82,6 @@ PRESETS: dict[str, Dataset] = {
         stimulus="image",
         imsize=128,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/nsd_betas",
         reward_roi="early+ventral",
         subject="01",
     ),
@@ -96,7 +97,6 @@ PRESETS: dict[str, Dataset] = {
         start=0.0,
         duration=0.5,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/bel2026petitlisten_sample",
     ),
     # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + audio:
     # epilepsy patients listening to a 30-min podcast. Single-subject by necessity
@@ -110,14 +110,14 @@ PRESETS: dict[str, Dataset] = {
         start=0.0,
         duration=0.5,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/ds005574_podcast",
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
     # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
     # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
-    # F/N via NEURO_SUBJECT. GOTCHA: the THINGS stimulus images are gated (not bundled) -- stage
-    # them once (see harness.loaders.standalone.tvsd._tvsd_images_root).
+    # F/N via NEURO_SUBJECT. Runtime reads only the in-repo data/tvsd/ tree (native JPEGs + a .pt of
+    # the MUA); the gated THINGS images + raw .mat are needed ONLY by the build step
+    # (scripts.process_dataset.tvsd, see its RAW + THINGS_IMAGES).
     "tvsd": Dataset(
         study="TvsdMonkeyF",
         loader="tvsd",
@@ -126,7 +126,6 @@ PRESETS: dict[str, Dataset] = {
         imsize=16,
         subject="F",
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/tvsd_normmua",
         reward_roi="all",
     ),
     # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
@@ -143,7 +142,6 @@ PRESETS: dict[str, Dataset] = {
         stimulus="image",
         imsize=16,
         download=False,
-        path="/home/t-ymehta/Research/neuralset/data/nnn_processed",
         reward_roi="all",
     ),
 }
@@ -180,8 +178,8 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
     if dataset.loader == "tvsd":
         return replace(dataset, subject=subject, study=f"TvsdMonkey{subject.upper()}")
     if dataset.study.startswith("Li2022PetitSubj"):
-        en_all = os.path.join(os.path.dirname(dataset.path), "li2022petit_en_all", "Li2022PetitSubj")
-        return replace(dataset, subject=subject, study=f"Li2022PetitSubj{subject}", path=en_all)
+        # Runtime reads data/text/<study>.pt by study name; the raw dir is the build step's concern.
+        return replace(dataset, subject=subject, study=f"Li2022PetitSubj{subject}")
     return replace(dataset, subject=subject)
 
 

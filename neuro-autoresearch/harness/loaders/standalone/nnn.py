@@ -108,16 +108,15 @@ def load_nnn(d: Dataset):
     (``reliability_best`` > NNN_MIN_RELIABILITY) across all 90 sessions; X is the 1000 NSD images,
     split deterministically (every ``round(1/test_frac)``-th held out). Cached by (reliability, imsize).
     """
-    root, min_rel = d.path, _nnn_min_reliability()
-    use_cache = not os.environ.get("NEURO_NO_CACHE")
+    min_rel = _nnn_min_reliability()
 
-    # Prefer the in-repo processed tree when present (no raw .mat/.xls needed).
     proc = processed_dir("nnn")
-    if os.path.isdir(proc):
-        X, Y, areas = _load_nnn_processed(d, proc)
-        n_src = "data/nnn"
-    else:
-        X, Y, areas, n_src = _load_nnn_raw(d, root, min_rel, use_cache)
+    if not os.path.isdir(proc):
+        raise FileNotFoundError(
+            f"NNN not staged in-repo at {proc!r}. data/nnn/ is the only source -- "
+            f"run `python -m scripts.process_dataset.nnn` to build it.")
+    X, Y, areas = _load_nnn_processed(d, proc)
+    n_src = "data/nnn"
     roi_masks = _nnn_roi_masks(areas)
 
     if Y.shape[1] == 0:
@@ -139,48 +138,3 @@ def load_nnn(d: Dataset):
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte, roi_masks
-
-
-def _load_nnn_raw(d: Dataset, root: str, min_rel: float, use_cache: bool):
-    """The original raw path: pool reliable units across the 90 Processed_ses*.mat."""
-    import glob
-    import re
-    import scipy.io as sio
-
-    # X: the 1000 NSD images (cached by imsize).
-    x_cache = os.path.join(_cache_dir(), f"nnn_X_im{d.imsize}.pt")
-    if use_cache and os.path.exists(x_cache):
-        X = torch.load(x_cache, weights_only=False)["X"]
-    else:
-        img_pool = sio.loadmat(os.path.join(root, "img_pool.mat"), simplify_cells=True)["img_pool"]
-        X = _nnn_build_X(d, img_pool)
-        if use_cache:
-            os.makedirs(_cache_dir(), exist_ok=True)
-            torch.save({"X": X}, x_cache)
-
-    # Y: every reliable unit pooled across sessions, each tagged with its stream area (cached by rel/imsize).
-    y_cache = os.path.join(_cache_dir(), f"nnn_Y_all_rel{min_rel}.pt")
-    sessions = sorted(glob.glob(os.path.join(root, "Processed_ses*.mat")))
-    if use_cache and os.path.exists(y_cache):
-        blob = torch.load(y_cache, weights_only=False)
-        Y, areas = blob["Y"], blob["areas"]
-    else:
-        table = _nnn_area_table(root)
-        cols, areas = [], []
-        for f in sessions:
-            ses = int(re.search(r"ses(\d+)", os.path.basename(f)).group(1))
-            m = sio.loadmat(f, simplify_cells=True)
-            rb = np.asarray(m["response_best"], dtype="float32")[:, :_NNN_N_NSD_IMAGES]
-            keep = np.asarray(m["reliability_best"]).ravel() > min_rel
-            pos = np.asarray(m["pos"]).ravel()
-            for i in np.flatnonzero(keep):
-                areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
-            cols.append(rb[keep])                     # [kept_units, 1000]
-        if not cols:
-            raise RuntimeError(f"NNN: no Processed_ses*.mat sessions found under {root!r}")
-        Y = np.concatenate(cols, axis=0).T            # [1000 images, total_units]
-        areas = np.asarray(areas)
-        if use_cache:
-            os.makedirs(_cache_dir(), exist_ok=True)
-            torch.save({"Y": Y, "areas": areas}, y_cache)
-    return X, Y, areas, f"{len(sessions)} sessions"

@@ -19,13 +19,15 @@ import numpy as np
 import scipy.io as sio
 import torch
 
-from harness.datasets import PRESETS
 from harness.loaders.shared import processed_dir
 from harness.loaders.standalone.nnn import _NNN_N_NSD_IMAGES, _nnn_area_table, _nnn_unit_area
 
+# Raw source (the offline build reads here once; runtime reads only data/nnn/).
+RAW = "/home/t-ymehta/Research/neuralset/data/nnn_processed"
+
 
 def main():
-    root = PRESETS["nnn"].path
+    root = RAW
     out = processed_dir("nnn")
     os.makedirs(os.path.join(out, "stimuli"), exist_ok=True)
     os.makedirs(os.path.join(out, "neural"), exist_ok=True)

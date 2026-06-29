@@ -31,9 +31,15 @@ import pandas as pd
 import neuralset as ns
 
 from harness.datasets import PRESETS
-from harness.loaders.shared import _study_path, processed_dir
+from harness.loaders.shared import processed_dir
 from harness.loaders.neuralset import studies  # noqa: F401  (registers the studies)
 from harness.loaders.neuralset import _NEURAL
+
+# Raw source per dataset (the offline build reads here once; runtime reads only data/<ds>/).
+RAW = {
+    "meg": "/home/t-ymehta/Research/neuralset/data/bel2026petitlisten_sample",
+    "ieeg": "/home/t-ymehta/Research/neuralset/data/ds005574_podcast",
+}
 
 
 def _process(ds_key: str) -> None:
@@ -43,7 +49,7 @@ def _process(ds_key: str) -> None:
     os.makedirs(neural_dir, exist_ok=True)
     os.makedirs(stim_dir, exist_ok=True)
 
-    study = ns.Study(name=d.study, path=_study_path(d))
+    study = ns.Study(name=d.study, path=RAW[ds_key])
     events = study.run()
 
     # --- neural: run the dataset's own extractor to get the preprocessed (picked, 100Hz)

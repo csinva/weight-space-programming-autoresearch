@@ -13,7 +13,6 @@ All raw I/O for this dataset (the betas pickle + the stimulus HDF5) is confined 
 from __future__ import annotations
 
 import os
-import pickle
 
 import numpy as np
 import torch
@@ -25,19 +24,20 @@ from harness.loaders.shared import (
 )
 
 
+# The NSD subjects staged in-repo (data/nsd/neural/subjNN.pt): subj 1+2 are the search reward,
+# 5+7 the held-out cross-subject set. Other subjects are intentionally not provisioned -- add one
+# by repacking it with scripts.process_dataset.nsd, then list it here.
+_NSD_SUBJECTS = (1, 2, 5, 7)
+
+
 def _subject(d: Dataset) -> str:
-    """Two-digit subject id (1-8), from NEURO_SUBJECT or the preset's ``subject`` (default 01)."""
-    s = os.environ.get("NEURO_SUBJECT") or d.subject or "01"
-    return f"{int(s):02d}"
-
-
-def _stimuli_path(d: Dataset) -> str:
-    path = os.path.join(d.path, "nsd_stimuli.hdf5")
-    if not os.path.exists(path):
-        raise FileNotFoundError(
-            f"NSD stimuli not found at {path!r} (the 73k-image imgBrick HDF5 must live next to the "
-            f"betas, e.g. {os.path.join(d.path, 'nsd_stimuli.hdf5')}).")
-    return path
+    """Two-digit subject id, restricted to the in-repo staged set ``_NSD_SUBJECTS``."""
+    s = int(os.environ.get("NEURO_SUBJECT") or d.subject or "01")
+    if s not in _NSD_SUBJECTS:
+        raise ValueError(
+            f"NSD subject {s} is not staged in-repo; valid subjects are {list(_NSD_SUBJECTS)}. "
+            f"Repack it with `python -m scripts.process_dataset.nsd` and add it to _NSD_SUBJECTS.")
+    return f"{s:02d}"
 
 
 def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
@@ -50,31 +50,19 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
 
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     im = d.imsize
-    pdir = processed_dir("nsd")
-    images_h5 = os.path.join(pdir, "stimuli", "images.h5")
-    if os.path.exists(images_h5):                              # in-repo store: one (425,425,3) per id
-        with h5py.File(images_h5, "r") as h5:
-            X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
-            for s in range(0, len(nsd_ids), 1000):
-                ids = nsd_ids[s:s + 1000]
-                imgs = np.stack([h5[str(int(i))][:] for i in ids])  # (b, 425, 425, 3) uint8
-                t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
-                t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
-                X[s:s + 1000] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
-    else:
-        with h5py.File(_stimuli_path(d), "r") as h5:
-            brick = h5["imgBrick"]                                  # (73000, 425, 425, 3) uint8
-            # NSD ids are 1-based; imgBrick is 0-based -> row = nsd_id - 1 (matches store_stimuli).
-            X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
-            order = np.argsort(nsd_ids)                             # h5 fancy-index needs increasing rows
-            for s in range(0, len(order), 1000):
-                idx = order[s:s + 1000]
-                rows = (nsd_ids[idx] - 1).astype(int)
-                sb = np.argsort(rows)
-                imgs = brick[np.sort(rows)]                         # (b, 425, 425, 3)
-                t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
-                t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
-                X[idx[sb]] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
+    images_h5 = os.path.join(processed_dir("nsd"), "stimuli", "images.h5")
+    if not os.path.exists(images_h5):
+        raise FileNotFoundError(
+            f"NSD stimuli not staged in-repo at {images_h5!r}. data/nsd/ is the only source -- "
+            f"run `python -m scripts.process_dataset.nsd` to build it.")
+    with h5py.File(images_h5, "r") as h5:                          # in-repo store: one (425,425,3) per id
+        X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
+        for s in range(0, len(nsd_ids), 1000):
+            ids = nsd_ids[s:s + 1000]
+            imgs = np.stack([h5[str(int(i))][:] for i in ids])  # (b, 425, 425, 3) uint8
+            t = torch.from_numpy(imgs).to(dev).permute(0, 3, 1, 2).float() / 255.0
+            t = F.interpolate(t, size=(im, im), mode="bilinear", align_corners=False)
+            X[s:s + 1000] = t.permute(0, 2, 3, 1).reshape(t.shape[0], -1).cpu().numpy()
     if not os.environ.get("NEURO_NO_CACHE"):
         os.makedirs(_cache_dir(), exist_ok=True)
         torch.save({"X": X}, cache, pickle_protocol=4)          # ~1-4 GB at imsize 128
@@ -160,14 +148,12 @@ def load_nsd(d: Dataset):
     per-ROI breakdown (early, ventral + V1/V2/V3/hV4/FFA/PPA/VWFA); ``nc`` is the per-voxel R^2 noise
     ceiling (aligned to the scored columns) the reward normalizes by. Train-constant voxels dropped."""
     subject = _subject(d)
-    pdir = processed_dir("nsd")
-    pt = os.path.join(pdir, "neural", f"subj{subject}.pt")
-    if os.path.isdir(pdir) and os.path.exists(pt):             # in-repo repacked blob
-        blob = torch.load(pt, weights_only=False)
-    else:
-        pkl = os.path.join(d.path, "per_subject", f"subj{subject}.pkl")
-        with open(pkl, "rb") as f:
-            blob = pickle.load(f)
+    pt = os.path.join(processed_dir("nsd"), "neural", f"subj{subject}.pt")
+    if not os.path.exists(pt):
+        raise FileNotFoundError(
+            f"NSD subject {subject} not staged in-repo at {pt!r}. data/nsd/ is the only source -- "
+            f"run `python -m scripts.process_dataset.nsd` to repack it.")
+    blob = torch.load(pt, weights_only=False)                  # in-repo repacked blob
     rois = blob["rois"]
     early = np.asarray(rois["early"], dtype="float32")
     Y = np.concatenate([early, np.asarray(rois["ventral"], dtype="float32")], axis=1)
