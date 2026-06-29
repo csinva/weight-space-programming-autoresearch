@@ -138,47 +138,22 @@ def _tvsd_image_relpaths(things_imgs_mat: str, key: str) -> list[str]:
         return [decode(r).replace("\\", "/") for r in refs]
 
 
-def _tvsd_build_X(d: Dataset, subject: str, things_imgs_mat: str):
-    """(X_train, X_test) RawPixels features of the THINGS images, cached by (subject, imsize)."""
-    cache = os.path.join(_cache_dir(), f"tvsd_X_{subject}_im{d.imsize}.pt")
-    use_cache = not os.environ.get("NEURO_NO_CACHE")
-    if use_cache and os.path.exists(cache):
-        blob = torch.load(cache, weights_only=False)   # cache holds numpy arrays
-        return blob["X_train"], blob["X_test"]
-    from PIL import Image
-    pix, root = RawPixels(imsize=d.imsize), _tvsd_images_root()
-
-    def build(key):
-        rels = _tvsd_image_relpaths(things_imgs_mat, key)
-        feats = [pix._get_image_features(
-                     np.asarray(Image.open(os.path.join(root, r)).convert("RGB")
-                                .resize((d.imsize, d.imsize))))
-                 for r in rels]
-        return np.stack(feats).astype("float32")
-
-    X_train, X_test = build("train_imgs"), build("test_imgs")
-    if use_cache:
-        os.makedirs(_cache_dir(), exist_ok=True)
-        # protocol 4: at imsize 128 X_train is ~4.4 GB, over the 4 GB limit of pickle proto <=3.
-        torch.save({"X_train": X_train, "X_test": X_test}, cache, pickle_protocol=4)
-    return X_train, X_test
-
-
-def _tvsd_build_X_processed(d: Dataset, subject: str):
+def _tvsd_build_X_processed(d: Dataset):
     """(X_train, X_test) RawPixels features from the stored native JPEGs in data/tvsd/.
 
-    Cached by (subject, imsize) -- decoding the 22k+ training JPEGs is the load bottleneck, so the
-    built float features are memoized to disk (as the raw-.mat path and NSD do). Subsequent runs and
-    every concurrent search-eval process then load one tensor instead of re-decoding every image.
+    Stimuli are SHARED across monkeys (identical images), so they live in one ``stimuli/`` tree and
+    the features cache by imsize ALONE (``tvsd_Xproc_im{imsize}.pt``) -- built once, reused for both
+    monkeys. Decoding the 22k+ JPEGs is the load bottleneck, so the built floats are memoized to
+    disk; subsequent runs and every concurrent search-eval process load one tensor instead.
     """
-    cache = os.path.join(_cache_dir(), f"tvsd_Xproc_{subject}_im{d.imsize}.pt")
+    cache = os.path.join(_cache_dir(), f"tvsd_Xproc_im{d.imsize}.pt")
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     if use_cache and os.path.exists(cache):
         blob = torch.load(cache, weights_only=False)
         return blob["X_train"], blob["X_test"]
     from PIL import Image
     pix = RawPixels(imsize=d.imsize)
-    sroot = os.path.join(processed_dir("tvsd"), "stimuli", f"monkey{subject}")
+    sroot = os.path.join(processed_dir("tvsd"), "stimuli")
 
     def build(split):
         sdir = os.path.join(sroot, split)
@@ -205,47 +180,35 @@ def load_tvsd(d: Dataset):
     reward normalizes by (r^2/oracle^2, the oracle-normalized predictivity). Electrodes with
     ``oracle < TVSD_ORACLE_MIN`` (default 0.2) are dropped from scoring -- the TVSD analog of NSD's
     ncsnr reliability cut. The split is the dataset's own (22248 train / 100 repeated test images).
-    Prefers the in-repo processed tree (data/tvsd/) when present -- native JPEGs + a .pt of the MUA --
-    so the gated THINGS images and the .mat are not needed; else falls back to the raw .mat + images.
+    Reads the in-repo processed tree (data/tvsd/) only -- native JPEGs + a .pt of the MUA -- so the
+    gated THINGS images and the raw .mat are never needed at runtime (stage them with
+    scripts.process_dataset.tvsd, which is the only raw reader).
     """
     subject = (d.subject or "F").upper()
     proc = processed_dir("tvsd")
-
-    if os.path.isdir(proc):
-        blob = torch.load(os.path.join(proc, "neural", f"monkey{subject}.pt"), weights_only=False)
-        Y_train = np.asarray(blob["train_MUA"], dtype=np.float32)
-        Y_test = np.asarray(blob["test_MUA"], dtype=np.float32)
-        labels = blob["areas"]
-        roi_masks = {a: labels == a for a in _TVSD_REGIONS}
-        if "oracle" not in blob:
-            raise RuntimeError(
-                f"TVSD monkey{subject} [processed] blob at {proc!r} has no 'oracle' noise ceiling "
-                f"-- re-run `python -m scripts.process_dataset.tvsd` to (re)stage it.")
-        oracle = blob["oracle"]
-        X_train, X_test = _tvsd_build_X_processed(d, subject)
-        for split, nx, ny in (("train", len(X_train), len(Y_train)),
-                              ("test", len(X_test), len(Y_test))):
-            if nx != ny:
-                raise RuntimeError(
-                    f"TVSD monkey{subject} [processed]: {split} stimuli/neural count mismatch "
-                    f"({nx} images vs {ny} MUA rows). The processed tree at {proc!r} is partial "
-                    f"-- re-run `python -m scripts.process_dataset.tvsd` to stage all images, or "
-                    f"`--n N` to stage a matched smoke subset of both.")
-        Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
-        Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
-        return _tvsd_finalize(Xtr, Xte, Ytr, Yte, roi_masks, oracle, subject, " [processed]")
-
-    mdir = os.path.join(d.path, f"monkey{subject}")
-    mat = _read_mat(os.path.join(mdir, "THINGS_normMUA.mat"))
-    Y_train = _tvsd_targets(mat["train_MUA"])           # [22248 x 1024]
-    Y_test = _tvsd_targets(mat["test_MUA"])             # [100 x 1024]
-    oracle = mat["oracle"]                              # [1024] per-electrode noise ceiling
-
-    labels = _tvsd_area_labels(subject)                 # length-1024 V1/V4/IT per electrode
+    if not os.path.isdir(proc):
+        raise FileNotFoundError(
+            f"TVSD not staged in-repo at {proc!r}. data/tvsd/ is the only source -- "
+            f"run `python -m scripts.process_dataset.tvsd` to build it.")
+    blob = torch.load(os.path.join(proc, "neural", f"monkey{subject}.pt"), weights_only=False)
+    Y_train = np.asarray(blob["train_MUA"], dtype=np.float32)
+    Y_test = np.asarray(blob["test_MUA"], dtype=np.float32)
+    labels = blob["areas"]
     roi_masks = {a: labels == a for a in _TVSD_REGIONS}
-
-    X_train, X_test = _tvsd_build_X(d, subject, os.path.join(mdir, "things_imgs.mat"))
-
+    if "oracle" not in blob:
+        raise RuntimeError(
+            f"TVSD monkey{subject} blob at {proc!r} has no 'oracle' noise ceiling "
+            f"-- re-run `python -m scripts.process_dataset.tvsd` to (re)stage it.")
+    oracle = blob["oracle"]
+    X_train, X_test = _tvsd_build_X_processed(d)
+    for split, nx, ny in (("train", len(X_train), len(Y_train)),
+                          ("test", len(X_test), len(Y_test))):
+        if nx != ny:
+            raise RuntimeError(
+                f"TVSD monkey{subject}: {split} stimuli/neural count mismatch "
+                f"({nx} images vs {ny} MUA rows). The processed tree at {proc!r} is partial "
+                f"-- re-run `python -m scripts.process_dataset.tvsd` to stage all images, or "
+                f"`--n N` to stage a matched smoke subset of both.")
     Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
     Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
     return _tvsd_finalize(Xtr, Xte, Ytr, Yte, roi_masks, oracle, subject, "")
