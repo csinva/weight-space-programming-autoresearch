@@ -20,7 +20,7 @@ def load_split(d: Dataset):
     (per-voxel R^2 noise ceiling aligned to the scored targets, for noise-normalizing the reward, or
     None when the dataset has no repeat-based ceiling). Dispatches on d.loader; imports are lazy so a
     score-only caller never pulls a loader's heavy deps."""
-    if d.loader == "neuralset":
+    if d.loader == "timeline":
         from harness.loaders.timeline import load_neuralset
         return (*load_neuralset(d), {}, None)      # timeline studies (text/meg/ieeg): no ROI map / ceiling
     if d.loader == "nsd":
