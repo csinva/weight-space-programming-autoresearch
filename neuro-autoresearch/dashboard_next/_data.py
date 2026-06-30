@@ -101,7 +101,7 @@ def overview_meta(rd: Path) -> dict[str, Any]:
     return {
         "total": len(rows),
         "scored": len(scored),
-        "best_score": round(best_row["test_corr"], 5) if best_row else None,
+        "best_score": round(best_row["test_corr"], 4) if best_row else None,
         "best_title": (best_row.get("idea") or "") if best_row else "",
         "best_index": best_idx,
     }
@@ -140,7 +140,7 @@ def attempts(rd: Path) -> list[dict[str, Any]]:
             "hash": row["id"],
             "agent": row.get("proposer") or "?",
             "title": row.get("idea") or row["id"],
-            "score": round(sc, 5) if sc is not None else None,
+            "score": round(sc, 4) if sc is not None else None,
             "status": status,
             "time": row.get("created_at") or "",
         })
@@ -174,7 +174,7 @@ def agents(rd: Path) -> list[dict[str, Any]]:
             "effort": effort,
             "status": status,
             "models_count": len(mine),
-            "best_score": round(max(scored), 5) if scored else None,
+            "best_score": round(max(scored), 4) if scored else None,
             "direction": direction,
             "prev_direction": _db.previous_direction(history.get(pid, []), direction),
             "last_activity": last,
@@ -204,8 +204,8 @@ def knowledge(rd: Path) -> list[dict[str, Any]]:
             "description": notes["description"],
             "n_params": r.get("n_params"),
             "seconds": _as_float(r.get("seconds")),
-            "test_corr": round(r["test_corr"], 5),
-            "roi_corr": (round(_as_float(r.get("roi_corr")), 5)
+            "test_corr": round(r["test_corr"], 4),
+            "roi_corr": (round(_as_float(r.get("roi_corr")), 4)
                          if _as_float(r.get("roi_corr")) is not None else None),
             "model": a.get("model", ""),
             "effort": a.get("effort", ""),

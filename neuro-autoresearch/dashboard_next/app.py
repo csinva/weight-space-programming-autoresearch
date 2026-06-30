@@ -14,6 +14,7 @@ from pathlib import Path
 
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 from starlette.responses import FileResponse, Response
@@ -26,6 +27,17 @@ from dashboard.logs import get_logs, get_logs_list
 from .api import get_agents, get_attempts, get_knowledge, get_meta, switch_run
 
 STATIC_DIR = Path(__file__).parent / "static"
+
+
+class NoCacheMiddleware(BaseHTTPMiddleware):
+    """Tell browsers never to cache our assets, so a reload always loads the latest
+    JS/CSS. The dashboard is local + read-only, so there's nothing to gain from caching
+    and a stale ES-module graph is a real footgun while the UI is iterated on."""
+
+    async def dispatch(self, request: Request, call_next):
+        resp = await call_next(request)
+        resp.headers["Cache-Control"] = "no-store, max-age=0"
+        return resp
 
 
 def create_app(run_dir: Path | None = None) -> Starlette:
@@ -70,6 +82,7 @@ def create_app(run_dir: Path | None = None) -> Starlette:
     routes.append(Route("/{path:path}", spa_fallback))
 
     middleware = [
-        Middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+        Middleware(NoCacheMiddleware),
+        Middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]),
     ]
     return Starlette(routes=routes, middleware=middleware, lifespan=lifespan)

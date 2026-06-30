@@ -23,7 +23,7 @@ function BestScore({ best_score, best_title, scored, total }) {
   return html`<div class="card sx-ov-best">
     <div class="sx-ov-best-main">
       <div class="label">Best Score</div>
-      <div class="sx-ov-best-num serif">${fmtNum(best_score, 5)}</div>
+      <div class="sx-ov-best-num serif">${fmtNum(best_score, 4)}</div>
       <div class="sx-ov-best-sub muted">${best_title || "—"}</div>
     </div>
     <div class="sx-ov-best-counts num">
@@ -75,7 +75,7 @@ function AttemptsTable({ scored, total, attempts }) {
             ${rows.map(
               (a, i) => html`<tr key=${a.hash}>
                 <td class="num sx-ov-rank">${i + 1}</td>
-                <td class="num sx-ov-score">${a.score == null ? "—" : fmtNum(a.score, 5)}</td>
+                <td class="num sx-ov-score">${a.score == null ? "—" : fmtNum(a.score, 4)}</td>
                 <td class="mono sx-ov-agent">
                   <span class="sx-ov-adot-i" style=${`background:${agentColor(a.agent)}`}></span>${a.agent}
                 </td>

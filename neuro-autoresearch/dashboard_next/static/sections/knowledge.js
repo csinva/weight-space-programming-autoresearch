@@ -134,12 +134,12 @@ function Entry({ item, defaultOpen }) {
         <div class="sx-kn-right">
           <div class="sx-kn-scores">
             <div class="sx-kn-score-main">
-              <div class="sx-kn-score-val num">${fmtNum(item.test_corr, 5)}</div>
+              <div class="sx-kn-score-val num">${fmtNum(item.test_corr, 4)}</div>
               <div class="sx-kn-score-lab">test corr</div>
             </div>
             ${item.roi_corr !== null && item.roi_corr !== undefined ? html`
               <div class="sx-kn-score-sub">
-                <div class="sx-kn-score-sub-val num">${fmtNum(item.roi_corr, 5)}</div>
+                <div class="sx-kn-score-sub-val num">${fmtNum(item.roi_corr, 4)}</div>
                 <div class="sx-kn-score-lab">roi corr</div>
               </div>` : null}
           </div>

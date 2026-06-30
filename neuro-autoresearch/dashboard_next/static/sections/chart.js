@@ -1,12 +1,12 @@
 // Chart card — the score/best evolution chart with a "Replay evolution" animation.
 // Extracted & upgraded from overview_main.js. Self-contained SVG (no chart library).
 import {
-  html, useState, useEffect, useRef, useMemo, agentColor, fmtNum,
+  html, useState, useEffect, useRef, useMemo,
+  agentColor, fmtNum, fmtTime, StatusBadge,
 } from "../lib/ui.js";
 
 // ---- constants & local helpers -----------------------------------------
 const VIEW_N = { all: Infinity, "50": 50, "20": 20 };
-const MARKER_CAP = 120;        // beyond this many points, draw the line only (perf)
 const REPLAY_MS = 12000;       // target full-replay duration, regardless of N
 
 function Segmented({ value, options, onChange }) {
@@ -39,6 +39,31 @@ const IcoExpand = () => html`<svg viewBox="0 0 16 16" width="13" height="13" ari
     fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
   <path d="M9.5 2.5H13.5V6.5M6.5 13.5H2.5V9.5M13.5 2.5 9 7M2.5 13.5 7 9" />
 </svg>`;
+
+// ---- hover/pin detail card ---------------------------------------------
+function PointTip({ mk, pinned, W, H }) {
+  const d = mk.d || {};
+  const leftPct = (mk.x / W) * 100;
+  const below = mk.y / H < 0.34;            // near the top edge -> drop below the point
+  const style =
+    `left:${leftPct}%; top:${(mk.y / H) * 100}%;` +
+    `transform:translate(-50%, ${below ? "16px" : "calc(-100% - 14px)"});`;
+  return html`<div class=${"sx-ch-tip" + (below ? " is-below" : "") + (pinned ? " is-pinned" : "")}
+      style=${style}>
+    <div class="sx-ch-tip-head">
+      <span class="sx-ch-tip-dot" style=${`background:${mk.color}`}></span>
+      <span class="sx-ch-tip-agent mono">${d.agent}</span>
+      <span class="sx-ch-tip-idx mono">#${d.index}</span>
+      <${StatusBadge} status=${d.status} />
+      ${pinned ? html`<span class="sx-ch-tip-pin mono">pinned</span>` : null}
+    </div>
+    <div class="sx-ch-tip-score num">${fmtNum(d.score, 4)}
+      <span class="sx-ch-tip-best mono">best ${fmtNum(d.best, 4)}</span>
+    </div>
+    ${d.title ? html`<div class="sx-ch-tip-title">${d.title}</div>` : null}
+    <div class="sx-ch-tip-time mono">${fmtTime(d.time)}</div>
+  </div>`;
+}
 
 // ---- main ---------------------------------------------------------------
 export default function Chart({ attempts }) {
@@ -155,15 +180,6 @@ export default function Chart({ attempts }) {
     const xpix = e.map((p) => px(xv(p)));
     const scoreY = e.map((p) => py(tx(p.score)));
     const bestY = e.map((p) => py(tx(p.best)));
-    const baseY = py(ymin);
-
-    const linePath = e
-      .map((p, i) => `${i ? "L" : "M"} ${xpix[i].toFixed(1)} ${scoreY[i].toFixed(1)}`)
-      .join(" ");
-    const areaPath =
-      `M ${xpix[0].toFixed(1)} ${baseY.toFixed(1)} ` +
-      e.map((p, i) => `L ${xpix[i].toFixed(1)} ${scoreY[i].toFixed(1)}`).join(" ") +
-      ` L ${xpix[xpix.length - 1].toFixed(1)} ${baseY.toFixed(1)} Z`;
 
     let bestPath = `M ${xpix[0].toFixed(1)} ${bestY[0].toFixed(1)}`;
     for (let i = 1; i < e.length; i++) {
@@ -188,20 +204,59 @@ export default function Chart({ attempts }) {
       });
     }
 
-    const showMarkers = e.length <= MARKER_CAP;
-    const markers = showMarkers
-      ? e.map((p, i) => ({
-          x: xpix[i], y: scoreY[i],
-          improved: p.status === "improved",
-          on: isOn(p.agent),
-        }))
-      : [];
+    // Every scored attempt is a dot, coloured by its proposer (like the original).
+    // Improved-best points are drawn last (on top) with a ring so they read clearly.
+    const markers = e.map((p, i) => ({
+      x: xpix[i], y: scoreY[i],
+      improved: p.status === "improved",
+      on: isOn(p.agent),
+      color: agentColor(p.agent),
+      d: { index: p.index, agent: p.agent, title: p.title,
+           score: p.score, best: p.best, time: p.time, status: p.status },
+    }));
+    markers.sort((a, b) => (a.improved === b.improved ? 0 : a.improved ? 1 : -1));
 
-    return { linePath, areaPath, bestPath, yticks, xticks, markers, showMarkers };
+    return { bestPath, yticks, xticks, markers };
     // eslint-disable-next-line
   }, [pts, scale, xaxis, expanded, onAgents, H]);
 
   const canReplay = N >= 2;
+
+  // ---- point inspection: nearest-marker hover + click-to-pin ----
+  const svgRef = useRef(null);
+  const [hoverIdx, setHoverIdx] = useState(-1);
+  const [pinnedIdx, setPinnedIdx] = useState(-1);
+
+  // any change to the plotted set invalidates a held index
+  useEffect(() => { setHoverIdx(-1); setPinnedIdx(-1); }, [pts, scale, xaxis, onAgents]);
+
+  const nearestMarker = (ev) => {
+    const svg = svgRef.current, mk = geom && geom.markers;
+    if (!svg || !mk) return -1;
+    const rect = svg.getBoundingClientRect();
+    if (!rect.width || !rect.height) return -1;
+    const sx = rect.width / W, sy = rect.height / H;
+    const vx = (ev.clientX - rect.left) / sx;
+    const vy = (ev.clientY - rect.top) / sy;
+    let best = -1, bestD = Infinity;
+    for (let i = 0; i < mk.length; i++) {
+      if (!mk[i].on) continue;
+      const dx = (mk[i].x - vx) * sx, dy = (mk[i].y - vy) * sy;
+      const d = dx * dx + dy * dy;
+      if (d < bestD) { bestD = d; best = i; }
+    }
+    return bestD <= 20 * 20 ? best : -1;   // within ~20px
+  };
+
+  const onMove = (ev) => setHoverIdx(nearestMarker(ev));
+  const onLeave = () => setHoverIdx(-1);
+  const onClick = (ev) => {
+    const i = nearestMarker(ev);
+    setPinnedIdx((cur) => (i >= 0 && i === cur ? -1 : i));
+  };
+
+  const activeIdx = pinnedIdx >= 0 ? pinnedIdx : hoverIdx;
+  const active = geom && activeIdx >= 0 ? geom.markers[activeIdx] : null;
 
   return html`<div class=${"card sx-ch" + (expanded ? " is-expanded" : "")}>
     <!-- row 1: scale / x-axis / view  +  replay / expand -->
@@ -265,39 +320,47 @@ export default function Chart({ attempts }) {
     </div>
 
     <div class="sx-ch-legend">
-      <span><span class="sx-ch-lg sx-ch-lg-score"></span>Score</span>
+      <span><span class="sx-ch-lg-dot"></span>Score</span>
       <span><span class="sx-ch-lg sx-ch-lg-best"></span>Best</span>
     </div>
 
     ${geom
       ? html`<div class="sx-ch-plot">
-          <svg viewBox=${`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img"
-            aria-label="Score evolution chart">
-            ${geom.yticks.map(
-              (t) => html`<g>
-                <line class="sx-ch-grid" x1=${padL} x2=${W - padR} y1=${t.y} y2=${t.y} />
-                <text class="sx-ch-ytxt" x=${padL - 7} y=${t.y + 3} text-anchor="end">${t.label}</text>
-              </g>`
-            )}
-            ${geom.xticks.map(
-              (t) => html`<text class="sx-ch-xtxt" x=${t.x} y=${H - 9} text-anchor="middle">${t.label}</text>`
-            )}
-            <path class="sx-ch-area" d=${geom.areaPath} />
-            <path class="sx-ch-best" d=${geom.bestPath} />
-            <path class="sx-ch-line" d=${geom.linePath} />
-            ${geom.markers.map(
-              (mk) => html`<circle
-                class=${"sx-ch-mk" + (mk.on ? "" : " is-off") + (mk.improved ? " is-imp" : "")}
-                cx=${mk.x} cy=${mk.y} r=${mk.on ? 3.4 : 2.3} />`
-            )}
-          </svg>
+          <div class="sx-ch-svgwrap">
+            <svg ref=${svgRef} viewBox=${`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img"
+              aria-label="Score evolution chart"
+              onMouseMove=${onMove} onMouseLeave=${onLeave} onClick=${onClick}>
+              ${geom.yticks.map(
+                (t) => html`<g>
+                  <line class="sx-ch-grid" x1=${padL} x2=${W - padR} y1=${t.y} y2=${t.y} />
+                  <text class="sx-ch-ytxt" x=${padL - 7} y=${t.y + 3} text-anchor="end">${t.label}</text>
+                </g>`
+              )}
+              ${geom.xticks.map(
+                (t) => html`<text class="sx-ch-xtxt" x=${t.x} y=${H - 9} text-anchor="middle">${t.label}</text>`
+              )}
+              <path class="sx-ch-best" d=${geom.bestPath} />
+              ${geom.markers.map(
+                (mk) => html`<circle
+                  class=${"sx-ch-mk" + (mk.on ? "" : " is-off") + (mk.improved ? " is-imp" : "")}
+                  cx=${mk.x} cy=${mk.y} r=${mk.improved ? 3.1 : 2.2}
+                  style=${`fill:${mk.color}`} />`
+              )}
+              ${active ? html`
+                <line class="sx-ch-cross" x1=${active.x} x2=${active.x} y1=${padT} y2=${H - padB} />
+                <circle class="sx-ch-mk-hi" cx=${active.x} cy=${active.y} r="6"
+                  style=${`stroke:${active.color}`} />` : null}
+            </svg>
+            ${active ? html`<${PointTip} mk=${active} pinned=${pinnedIdx >= 0} W=${W} H=${H} />` : null}
+          </div>
           <div class="sx-ch-foot">
             <span class="label">${overriding ? "Replaying" : "Showing"}</span>
             <span class="num">${pts.length}</span>
             <span class="muted">scored</span>
             ${overriding
               ? html`<span class="muted">· ${cursor} / ${N} attempts</span>`
-              : null}
+              : active ? null
+              : html`<span class="sx-ch-hint muted">· hover a point to inspect · click to pin</span>`}
           </div>
         </div>`
       : html`<div class="empty">No scored attempts in view yet.</div>`}
