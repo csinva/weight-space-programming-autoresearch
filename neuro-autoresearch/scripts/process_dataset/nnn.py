@@ -20,7 +20,7 @@ import scipy.io as sio
 import torch
 
 from harness.loaders.shared import processed_dir
-from harness.loaders.standalone.nnn import _NNN_N_NSD_IMAGES, _nnn_area_table, _nnn_unit_area
+from harness.loaders.vision.nnn import _NNN_N_NSD_IMAGES, _nnn_area_table, _nnn_unit_area
 
 # Raw source (the offline build reads here once; runtime reads only data/nnn/).
 RAW = "/home/t-ymehta/Research/neuralset/data/nnn_processed"

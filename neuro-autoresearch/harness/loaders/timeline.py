@@ -24,7 +24,7 @@ import torch
 import neuralset as ns
 
 from harness.datasets import Dataset
-from harness.loaders.neuralset import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
+from harness.loaders import studies  # noqa: F401  (registers Li2022PetitSubj / Zada2025Podcast)
 from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_constant_cols, processed_dir
 
 
@@ -147,7 +147,7 @@ _NEURAL = {
     # BOLD response and time-aggregate it (`neural_aggregation`); the default cleaning
     # (z-score + detrend) is applied by FmriExtractor itself.
     "fmri": lambda d: ns.extractors.FmriExtractor(
-        aggregation=d.neural_aggregation, offset=d.neural_offset
+        aggregation=d.timeline.neural_aggregation, offset=d.timeline.neural_offset
     ),
 }
 
@@ -210,7 +210,7 @@ def _seg_stim_ids(segments):
 def _segment_batch(d: Dataset, events, extractors: dict, start: float, duration: float):
     seg = ns.Segmenter(
         extractors=extractors,
-        trigger_query=d.trigger, start=start, duration=duration,
+        trigger_query=d.timeline.trigger, start=start, duration=duration,
         drop_incomplete=True,
     )
     return seg.apply(events).load_all(num_workers=_load_workers())
@@ -218,8 +218,8 @@ def _segment_batch(d: Dataset, events, extractors: dict, start: float, duration:
 
 def _stim_window(d: Dataset) -> tuple[float, float]:
     """The stimulus (start, duration); defaults to the neural window."""
-    start = d.start if d.stim_start is None else d.stim_start
-    duration = d.duration if d.stim_duration is None else d.stim_duration
+    start = d.timeline.start if d.timeline.stim_start is None else d.timeline.stim_start
+    duration = d.timeline.duration if d.timeline.stim_duration is None else d.timeline.stim_duration
     return start, duration
 
 
@@ -232,7 +232,7 @@ def _neural_2d(neural, d) -> torch.Tensor:
     ``"single"`` keeps every TR as a separate target (the default; unchanged).
     """
     neural = neural.float()
-    if d.neural_aggregation == "mean" and neural.dim() >= 3:
+    if d.timeline.neural_aggregation == "mean" and neural.dim() >= 3:
         neural = neural.mean(dim=-1)        # collapse the trailing TR/time axis
     return neural.reshape(neural.shape[0], -1)
 
@@ -251,16 +251,16 @@ def _build_xy(d: Dataset, events):
     stim_start, stim_duration = _stim_window(d)
     stim_ext, neural_ext = _stim_extractor(d), _NEURAL[d.neural](d)
 
-    if (stim_start, stim_duration) == (d.start, d.duration):
+    if (stim_start, stim_duration) == (d.timeline.start, d.timeline.duration):
         batch = _segment_batch(
-            d, events, dict(stim=stim_ext, neural=neural_ext), d.start, d.duration
+            d, events, dict(stim=stim_ext, neural=neural_ext), d.timeline.start, d.timeline.duration
         )
         X = batch.data["stim"].float()
         Y = _neural_2d(batch.data["neural"], d)
         onsets = np.array([s.start for s in batch.segments])
         return X, Y, onsets, _seg_stim_ids(batch.segments)
 
-    neural_batch = _segment_batch(d, events, dict(neural=neural_ext), d.start, d.duration)
+    neural_batch = _segment_batch(d, events, dict(neural=neural_ext), d.timeline.start, d.timeline.duration)
     stim_batch = _segment_batch(d, events, dict(stim=stim_ext), stim_start, stim_duration)
 
     stim_row = {_trigger_key(s): i for i, s in enumerate(stim_batch.segments)}
@@ -281,7 +281,7 @@ def _build_xy(d: Dataset, events):
     return X, Y, onsets, stim_ids
 
 
-def load_neuralset(d: Dataset):
+def load_timeline(d: Dataset):
     """Timeline path: build aligned (X, Y) via the Segmenter, take a contiguous temporal
     hold-out (the latest ``test_frac`` of triggers by onset), and drop train-constant target
     columns. Returns (X_train, X_test, Y_train, Y_test) as 2-D float tensors.

@@ -1,19 +1,17 @@
 """Runtime dataset selection for the fixed evaluation harness.
 
-A ``Dataset`` declares the stimulus modality, neural modality, loader path, split
-policy inputs, and reward region. ``harness.loaders.load_split`` is the single
-entry point: it either segments a NeuralSet timeline (``loader="neuralset"``) or
-calls a standalone table reader (``loader="nsd"``, ``"tvsd"``, or ``"nnn"``).
-The model and reward stay modality-agnostic, so the same search loop can run
-across fMRI, MEG, iEEG, and spiking datasets.
+A ``Dataset`` declares the stimulus + neural modality, split policy, reward region, and which
+of two loader paths to take. ``harness.loaders.load_split`` is the single entry point:
+  * ``loader="timeline"`` (text/meg/ieeg) -- a continuous NeuralSet study segmented on the fly by
+    the ``Segmenter``; its segmentation params live in the dataset's ``timeline=Timeline(...)`` block.
+  * ``loader="nsd"|"tvsd"|"nnn"`` (vision) -- a pre-aligned response table read directly by a
+    standalone ``loaders.vision`` reader; ``timeline`` is ``None``.
+The model and reward stay modality-agnostic, so the same search loop runs across all of them.
 
-Presets are registered in ``PRESETS``. Pick one at run time via
-``NEURO_DATASET`` (default ``"text"``), without editing source files::
+Every loader reads ONLY the in-repo ``data/<name>/`` tree at runtime. Presets are registered in
+``PRESETS``; pick one via ``NEURO_DATASET`` (default ``"text"``), without editing source::
 
     NEURO_DATASET=meg python -m harness.run
-
-NeuralSet presets can name any registered ``neuralset.Study.catalog()`` entry.
-Standalone presets use local readers and only need ``path`` to their staged data.
 """
 from __future__ import annotations
 
@@ -22,32 +20,33 @@ from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
+class Timeline:
+    """NeuralSet Segmenter params -- set ONLY for timeline datasets (``loader="timeline"``: text/meg/
+    ieeg). Vision table datasets (nsd/tvsd/nnn) leave ``Dataset.timeline=None``."""
+    trigger: str = "type=='Word'"       # NeuralSet trigger query (which events segment the timeline)
+    start: float = 0.0                  # neural segment start, seconds after the trigger
+    duration: float = 0.3               # neural segment duration, seconds
+    neural_offset: float = 0.0          # shift the neural window forward to align the HRF BOLD (fMRI)
+    neural_aggregation: str = "single"  # time-aggregation: "single" (keep TRs) | "mean" (one/channel)
+    stim_start: float | None = None     # stimulus window start; None => reuse `start`
+    stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
+
+
+@dataclass(frozen=True)
 class Dataset:
     study: str = "Fake2025Meg"       # NeuralSet study name or descriptive standalone tag
-    trigger: str = "type=='Image'"   # NeuralSet trigger query; ignored by standalone loaders
     neural: str = "meg"              # neural modality: fmri | meg | ieeg | spikes
     stimulus: str = "image"          # stimulus modality: image | text | audio
     imsize: int = 16                 # image stimuli resized to imsize x imsize
-    start: float = 0.0               # NeuralSet neural segment start, seconds after trigger
-    duration: float = 0.3            # NeuralSet neural segment duration, seconds
-    neural_offset: float = 0.0       # seconds to shift the neural window forward to
-                                     # align the delayed (HRF) BOLD response (fMRI)
-    neural_aggregation: str = "single"  # time-aggregation: "single" (keep TRs) or
-                                     # "mean" (one value per channel/voxel)
-    stim_start: float | None = None  # stimulus window start; None => reuse `start`
-    stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
     download: bool = False           # download the study before running?
-    path: str | None = None          # UNUSED by the active presets: every dataset reads ONLY the
-                                     # in-repo data/<name>/ tree at runtime. Raw sources live in
-                                     # scripts/process_dataset/ (the build step). Kept for the
-                                     # download-from-scratch path (_study_path) of a fresh study.
+    path: str | None = None          # UNUSED by active presets (runtime reads ONLY data/<name>/);
+                                     # kept for the download-from-scratch path (_study_path).
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
-                                     # per-dataset value (NSD = "ventral"), NOT an operator knob.
-    loader: str = "neuralset"        # "neuralset" Segmenter path, or standalone reader:
-                                     # "nsd", "tvsd", or "nnn".
-    subject: str = ""                # preset subject/animal when supported
-                                     # (text, NSD, TVSD); otherwise informational.
+                                     # per-dataset value, NOT an operator knob.
+    loader: str = "timeline"         # "timeline" (Segmenter: text/meg/ieeg) | "nsd" | "tvsd" | "nnn"
+    subject: str = ""                # preset subject/animal when supported (text, NSD, TVSD)
+    timeline: "Timeline | None" = None  # Segmenter params; set ONLY for loader="timeline" datasets
 
 
 # Active dataset presets across neural modalities (fMRI/MEG/iEEG/spikes) and
@@ -60,14 +59,10 @@ PRESETS: dict[str, Dataset] = {
     # from a short decoupled window at the word (stim_start=0.0/stim_duration=0.5).
     "text": Dataset(
         study="Li2022PetitSubj",
-        trigger="type=='Word'",
         neural="fmri",
         stimulus="audio",
-        start=2.0,
-        duration=4.0,
-        stim_start=0.0,
-        stim_duration=0.5,
-        download=False,
+        timeline=Timeline(trigger="type=='Word'", start=2.0, duration=4.0,
+                          stim_start=0.0, stim_duration=0.5),
     ),
     # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
     # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
@@ -91,12 +86,9 @@ PRESETS: dict[str, Dataset] = {
     # MaxShield, loaded by the NeuralSet loader with allow_maxshield=True.
     "meg": Dataset(
         study="Bel2026PetitListenSample",
-        trigger="type=='Word'",
         neural="meg",
         stimulus="audio",
-        start=0.0,
-        duration=0.5,
-        download=False,
+        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5),
     ),
     # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + audio:
     # epilepsy patients listening to a 30-min podcast. Single-subject by necessity
@@ -104,16 +96,13 @@ PRESETS: dict[str, Dataset] = {
     # triggers a 0.5s epoch; iEEG is near-instant so windows coincide (as for meg).
     "ieeg": Dataset(
         study="Zada2025Podcast",
-        trigger="type=='Word'",
         neural="ieeg",
         stimulus="audio",
-        start=0.0,
-        duration=0.5,
-        download=False,
+        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5),
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
-    # x stimuli), so loader="tvsd" (loaders.standalone.tvsd) with the dataset's own image-disjoint
+    # x stimuli), so loader="tvsd" (loaders.vision.tvsd) with the dataset's own image-disjoint
     # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
     # F/N via NEURO_SUBJECT. Runtime reads only the in-repo data/tvsd/ tree (native JPEGs + a .pt of
     # the MUA); the gated THINGS images + raw .mat are needed ONLY by the build step
@@ -131,7 +120,7 @@ PRESETS: dict[str, Dataset] = {
     # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
     # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
     # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
-    # images), so loader="nnn" (loaders.standalone.nnn). Y pools reliable units (reliability>0.4,
+    # images), so loader="nnn" (loaders.vision.nnn). Y pools reliable units (reliability>0.4,
     # ~35k of 47.5k) across all sessions. Reward = ALL reliable units; roi_corr breaks it down by
     # stream area (EVC/IT). The 1000 NSD images split deterministically (every 5th held out).
     # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.

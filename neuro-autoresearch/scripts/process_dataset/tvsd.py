@@ -19,7 +19,7 @@ import numpy as np
 import torch
 
 from harness.loaders.shared import processed_dir
-from harness.loaders.standalone.tvsd import (
+from harness.loaders.vision.tvsd import (
     _read_mat, _tvsd_area_labels, _tvsd_image_relpaths, _tvsd_images_root, _tvsd_oracle,
     _tvsd_targets,
 )

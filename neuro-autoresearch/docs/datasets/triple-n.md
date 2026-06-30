@@ -8,7 +8,7 @@ It is the image/spiking sibling of TVSD — same shape of data (a pre-averaged
 uses, which makes it directly comparable to the human NSD fMRI encoding work here.
 
 It is the live **`nnn`** preset in `harness/datasets.py` (`loader="nnn"`,
-`harness/loaders/standalone/nnn.py`).
+`harness/loaders/vision/nnn.py`).
 
 ## Chosen release
 

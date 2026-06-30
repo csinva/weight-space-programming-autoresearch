@@ -11,7 +11,7 @@ OPTION A: we do NOT pre-segment or bake the Mel / window. We write only:
   data/<ds>/stimuli/words.csv                 -- the word-onset table (start,duration,text,
       language,modality) in recording time.
 
-At LOAD time, harness.loaders.neuralset rebuilds an events DataFrame from these files and runs the
+At LOAD time, harness.loaders.timeline rebuilds an events DataFrame from these files and runs the
 EXISTING Segmenter + Mel extractor + _build_xy, so the window (start/duration) and Mel params stay
 flexible and the output reproduces the raw path bit-for-bit (verified for meg).
 
@@ -32,8 +32,8 @@ import neuralset as ns
 
 from harness.datasets import PRESETS
 from harness.loaders.shared import processed_dir
-from harness.loaders.neuralset import studies  # noqa: F401  (registers the studies)
-from harness.loaders.neuralset import _NEURAL
+from harness.loaders import studies  # noqa: F401  (registers the studies)
+from harness.loaders.timeline import _NEURAL
 
 # Raw source per dataset (the offline build reads here once; runtime reads only data/<ds>/).
 RAW = {
@@ -82,9 +82,9 @@ def _process(ds_key: str) -> None:
             "start": float(ta.start),
             "audio_start": float(audio_row["start"]),
             "audio_duration": float(audio_row["duration"]),
-            "trigger": d.trigger,
-            "neural_start": d.start,
-            "neural_duration": d.duration,
+            "trigger": d.timeline.trigger,
+            "neural_start": d.timeline.start,
+            "neural_duration": d.timeline.duration,
         },
         open(os.path.join(neural_dir, "meta.json"), "w"),
         indent=2,

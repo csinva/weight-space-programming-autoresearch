@@ -157,18 +157,14 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
     -- minus only the MAX_DOUT proposer guard, which does not apply to a fixed baseline."""
     from harness.ridge import ridge_predict
 
-    study = R._study_for(DATASET)
-    if study is None:
-        mask = R._standalone_target_mask(roi_masks, DATASET.reward_roi)
-    else:
-        mask = R._slice_target_mask(study, DATASET.reward_roi, int(Ytr.shape[1]))
+    mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
     if mask is not None:
         roi_masks = {k: np.asarray(v, dtype=bool)[mask] for k, v in roi_masks.items()}
         if nc is not None:
             nc = nc[mask]
         if torch.is_tensor(Ytr):
             mask = torch.as_tensor(mask, device=Ytr.device)
-    Yv_train, Yv_test = R._select_targets(Ytr, mask), R._select_targets(Yte, mask)
+    Yv_train, Yv_test = R.select_targets(Ytr, mask), R.select_targets(Yte, mask)
 
     pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
     test_n = R._noise_normalize(R._corr_per_column(pred_test, R._to_np(Yv_test)), nc)
