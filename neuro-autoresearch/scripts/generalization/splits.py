@@ -1,0 +1,22 @@
+"""Per-dataset generalization splits -- the ONLY dataset-specific knowledge the runner needs.
+
+A dataset generalizes along ONE *axis*: the harness env var that selects an independent unit of data
+(the subject, for the table datasets). The search optimizes its reward over the ``search`` units; the
+generalization test re-evaluates the winning model, UNCHANGED, on the ``heldout`` units it never saw.
+Add a dataset by declaring its axis + unit lists here -- ``generalize.py`` is otherwise dataset-agnostic.
+"""
+from __future__ import annotations
+
+# dataset -> {axis: env var selecting a unit, search: optimized units, heldout: generalization units}
+GEN_SPLITS = {
+    # NSD: search reward is the subj 1,2 mean (search/search.sh default); 5,7 are staged but held out.
+    "nsd": {"axis": "NEURO_SUBJECT", "search": ["1", "2"], "heldout": ["5", "7"]},
+    # Future datasets that switch data by subject (text / tvsd) drop in the same shape.
+}
+
+
+def split_for(dataset: str) -> dict:
+    if dataset not in GEN_SPLITS:
+        raise SystemExit(f"no generalization split for dataset {dataset!r}; add one to "
+                         f"scripts/generalization/splits.py (have: {list(GEN_SPLITS)})")
+    return GEN_SPLITS[dataset]

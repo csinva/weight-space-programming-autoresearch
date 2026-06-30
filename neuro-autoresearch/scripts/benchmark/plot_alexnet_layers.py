@@ -27,7 +27,7 @@ RESULTS = os.path.join(HERE, "results")
 
 # Champion qq145 (NSD subj1, early+ventral; run nsd__2026-06-28) per-ROI NOISE-NORMALIZED test
 # score (r^2/NC_r2, the search reward) -- the comparison point. Overall reward 0.4407. Untrained
-# HMAX-style Gabor/C1 + random conv model; re-evaluated in-process (eval_champion.py), reproduces
+# HMAX-style Gabor/C1 + random conv model; re-evaluated in-process (generalization/generalize.py), reproduces
 # the DB row exactly.
 CHAMPION = {"early": 0.54807, "ventral": 0.34611, "V1": 0.64456, "V2": 0.56438, "V3": 0.54084,
             "hV4": 0.48739, "FFA": 0.36687, "PPA": 0.45163, "VWFA": 0.26109}
