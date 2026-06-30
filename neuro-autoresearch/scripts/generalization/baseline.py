@@ -21,11 +21,9 @@ from alexnet_baseline import AlexNetSRP, _LAYERS, _readout
 STREAMS = ("early", "ventral")                   # the ROIs that partition the NSD reward region
 
 
-def _roi_counts(roi_masks, Ytr, DATASET, R):
-    """Reliable-voxel count per ROI within the reward region (same slicing as ``_readout``)."""
-    study = R._study_for(DATASET)
-    mask = (R._standalone_target_mask(roi_masks, DATASET.reward_roi) if study is None
-            else R._slice_target_mask(study, DATASET.reward_roi, int(Ytr.shape[1])))
+def _roi_counts(roi_masks, DATASET, R):
+    """Reliable-voxel count per ROI within the reward region (same selector as ``_readout``)."""
+    mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
     rm = ({k: np.asarray(v, bool)[mask] for k, v in roi_masks.items()} if mask is not None
           else {k: np.asarray(v, bool) for k, v in roi_masks.items()})
     return {k: int(v.sum()) for k, v in rm.items()}
@@ -44,7 +42,7 @@ def alex_oracle(split, DATASET, R, roi_breakdown, layers=tuple(_LAYERS)):
         rec = _readout(torch.from_numpy(ftr[L]).to(device), torch.from_numpy(fte[L]).to(device),
                        Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
         per[L] = {roi: v["test"] for roi, v in rec["roi_corr"].items()}
-    counts = _roi_counts(roi_masks, Ytr, DATASET, R)
+    counts = _roi_counts(roi_masks, DATASET, R)
     best = {roi: max(layers, key=lambda L: per[L].get(roi, -9.0)) for roi in per[next(iter(per))]}
     rois = {roi: {"alex_best": round(per[best[roi]][roi], 5), "layer": best[roi],
                   "voxels": counts.get(roi)} for roi in best}
