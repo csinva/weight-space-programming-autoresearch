@@ -15,7 +15,7 @@
 # consistent (orphaned `running` rows reset to `queued`).
 #
 #   search/search.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--gpu G] [--date YYYY-MM-DD]
-#   e.g.  search/search.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 2h
+#   e.g.  search/search.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 1h
 #         search/search.sh nsd --hours 8 --epoch-mins 15  # steer every 15 minutes
 #         search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
 #         search/search.sh tvsd --hours 6 --gpu 1 --epoch-mins 0     # pin the run to GPU 1 (one dataset per card), conductor OFF
@@ -36,7 +36,7 @@ while [ $# -gt 0 ]; do
   esac
   case "$k" in hours|fleet|date|epoch-mins|effort|gpu) OPT[$k]="$v";; *) echo "[search] unknown flag: --$k" >&2; exit 2;; esac
 done
-DATASET="${DATASET:-nsd}"; HOURS="${OPT[hours]:-12}"; FLEET="${OPT[fleet]:-10}"; EPOCH="${OPT[epoch-mins]:-120}"
+DATASET="${DATASET:-nsd}"; HOURS="${OPT[hours]:-12}"; FLEET="${OPT[fleet]:-10}"; EPOCH="${OPT[epoch-mins]:-60}"
 # --effort is the ONE thinking knob (all proposers + conductor, via NEURO_EFFORT). --gpu pins the run
 # to one CUDA device (multi-GPU: a dataset per card); empty = current default GPU. Both: flag > env > default.
 EFFORT="${OPT[effort]:-${NEURO_EFFORT:-xhigh}}"; GPU="${OPT[gpu]:-${CUDA_VISIBLE_DEVICES:-}}"
