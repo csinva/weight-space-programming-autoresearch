@@ -11,3 +11,6 @@ search/state/
 logs/
 analyze/report.html
 __pycache__/
+
+# Talk deck (local copy, not tracked)
+/talk/
