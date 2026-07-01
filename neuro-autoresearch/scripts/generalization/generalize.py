@@ -11,7 +11,7 @@ env var is the axis, which units are search vs held-out) lives in ``splits.py``.
     # auto-pick the run's DB champion, sweep nsd's search + held-out subjects
     python scripts/generalization/generalize.py --run runs/nsd__2026-06-28
     python scripts/generalization/generalize.py --run runs/nsd__2026-06-28 --model runs/.../models/foo.py
-    python scripts/generalization/generalize.py --run runs/nsd__2026-06-28 --baseline   # + oracle-AlexNet
+    python scripts/generalization/generalize.py --run runs/nsd__2026-06-28 --baseline   # + AlexNet-concat
 """
 from __future__ import annotations
 
@@ -83,8 +83,8 @@ def eval_unit(model, dataset, axis, unit, with_baseline):
     if with_baseline:
         from harness import reward as R
         from harness.roi import roi_breakdown
-        from baseline import alex_oracle
-        out["alex"] = alex_oracle(split, DATASET, R, roi_breakdown)
+        from baseline import alex_baseline
+        out["alex"] = alex_baseline(split, DATASET, R, roi_breakdown)
     return out
 
 
@@ -95,7 +95,7 @@ def main(argv=None):
     p.add_argument("--model", default=None, help="model .py to test (default: the run's DB champion)")
     p.add_argument("--dataset", default=None, help="override dataset (default: inferred from run dir)")
     p.add_argument("--baseline", action="store_true",
-                   help="also score the oracle-AlexNet reference per unit")
+                   help="also score the AlexNet-concat reference (all layers SRP->2048) per unit")
     a = p.parse_args(argv)
 
     dataset = dataset_of(a.run, a.dataset)
@@ -123,7 +123,7 @@ def main(argv=None):
             rows.append(r)
             line = f"  [{kind:>7}] {axis}={unit}: reward {r['test_corr']:.4f}"
             if a.baseline:
-                line += f"   alex-oracle {r['alex']['overall']:.4f}"
+                line += f"   alexnet-concat {r['alex']['overall']:.4f}"
             print(line + f"   ({r['seconds']}s)")
 
     def mean(kind):

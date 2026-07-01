@@ -3,21 +3,23 @@
 
 An ImageNet-pretrained AlexNet is run forward (its weights are FROZEN -- never trained here, exactly
 like the search's untrained models). The post-ReLU activations of each layer (the 5 conv stages +
-fc6 + fc7) are each **sparse-random-projected to 4096 dims** and concatenated into one per-sample
-representation, which is then fed through the EXACT harness readout + ROI machinery the search uses:
+fc6 + fc7 + fc8) are each **sparse-random-projected to 2048 dims** and concatenated into one
+per-sample representation -- the WHOLE feature hierarchy at once, NOT a cherry-picked best layer
+(``--per-layer`` opts into the old brain-score-style per-layer scoring). This concatenated
+representation is then fed through the EXACT harness readout + ROI machinery the search uses:
 the same ``harness.loaders.load_split`` (so same images, same shared-1000 split, same early+ventral
 target voxels, same per-ROI masks), the same ``harness.ridge.ridge_predict`` readout (``NEURO_READOUT``),
 and the same ``harness.roi.roi_breakdown``. So ``test_corr`` and the per-ROI numbers are directly
 comparable to the search-DB champions' ``roi_corr``.
 
 This is the body of ``harness.reward.evaluate_on_split`` reusing its own helpers -- it only skips that
-function's ``MAX_DOUT`` guard, which is a *proposer* constraint (7x4096 = 28672 > 10000), not a readout
+function's ``MAX_DOUT`` guard, which is a *proposer* constraint (8x2048 > 10000), not a readout
 limit: fast ridge handles p>n via its dual form. Nothing under ``harness/`` is modified.
 
-    python scripts/benchmark/alexnet_baseline.py                       # nsd subj1, early+ventral
+    python scripts/benchmark/alexnet_baseline.py                       # nsd subj1, concat all layers
     NEURO_SUBJECT=2 python scripts/benchmark/alexnet_baseline.py       # another subject
-    python scripts/benchmark/alexnet_baseline.py --layers conv1 conv2 conv3 conv4 conv5
-    python scripts/benchmark/alexnet_baseline.py --dim 2048 --batch 512
+    python scripts/benchmark/alexnet_baseline.py --weights both        # trained vs untrained control
+    python scripts/benchmark/alexnet_baseline.py --per-layer           # old per-layer (brain-score) scoring
 """
 from __future__ import annotations
 
@@ -42,8 +44,8 @@ _IMAGENET_MEAN = (0.485, 0.456, 0.406)
 _IMAGENET_STD = (0.229, 0.224, 0.225)
 
 # Taps of the AlexNet hierarchy. (sub-module, index) into the named child. conv1-5 + fc6/fc7 are
-# post-ReLU; fc8 is the final logits (no ReLU after it). conv taps are huge (>4096) so they get the
-# SRP; fc taps are already <=4096 and are used raw.
+# post-ReLU; fc8 is the final logits (no ReLU after it). Any tap with D>``dim`` gets the SRP; taps
+# already <=``dim`` (e.g. fc8's 1000 logits at the default dim=2048) are used raw.
 _LAYERS = {
     "conv1": ("features", 1),
     "conv2": ("features", 4),
@@ -63,17 +65,17 @@ def _srp_cache_dir():
 class AlexNetSRP:
     """X (N, imsize*imsize*3) [0,1] HWC pixels -> per-layer AlexNet features.
 
-    Frozen ImageNet AlexNet. CONV taps (D>``dim``) are sparse-random-projected to ``dim`` with the
-    visreps SRP (``_get_srp``); FC taps (D<=``dim``) are used RAW (no projection needed). The SRP
+    Frozen ImageNet AlexNet. Taps with D>``dim`` are sparse-random-projected to ``dim`` with the
+    visreps SRP (``_get_srp``); taps already D<=``dim`` are used RAW (no projection needed). The SRP
     matrices are keyed by input dim D and built once, so train and test share the same projection.
     Forward runs in image batches to bound memory.
     """
 
-    idea = "ImageNet-pretrained AlexNet; conv layers sparse-random-projected to 4096 (fc layers raw)."
-    summary = ("Frozen ImageNet AlexNet feature hierarchy (conv1-5 + fc6/fc7/fc8); conv taps SRP->4096 "
-               "(visreps SparseRandomProjection), fc taps raw. Trained net, never trained here.")
+    idea = "ImageNet-pretrained AlexNet; every layer sparse-random-projected to 2048 and concatenated."
+    summary = ("Frozen ImageNet AlexNet feature hierarchy (conv1-5 + fc6/fc7/fc8); each tap SRP->2048 "
+               "(visreps SparseRandomProjection) and concatenated. Trained net, never trained here.")
 
-    def __init__(self, imsize, layers, dim=4096, density=None, resize=224, batch=256, seed=0,
+    def __init__(self, imsize, layers, dim=2048, density=None, resize=224, batch=256, seed=0,
                  pretrained=True):
         from torchvision.models import AlexNet_Weights, alexnet
 
@@ -113,7 +115,7 @@ class AlexNetSRP:
         The SRP transformer is the vendored visreps ``get_srp_transformer`` (conv layers only)."""
         D = feats_np.shape[1]
         if D <= self.dim:
-            return feats_np                  # fc layers: already <=4096, used raw
+            return feats_np                  # tap already <=dim (e.g. fc8 logits): used raw
         if D not in self._srp:
             from sparse_random_projection import get_srp_transformer
             self._srp[D] = get_srp_transformer(D, self.dim, self.density, self.seed,
@@ -182,10 +184,10 @@ def main(argv=None):
     p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "nsd"))
     p.add_argument("--layers", nargs="+", default=list(_LAYERS), choices=list(_LAYERS),
                    help="which AlexNet taps to use (default: all 8 -- conv1-5, fc6, fc7, fc8)")
-    p.add_argument("--concat", action="store_true",
-                   help="concatenate the taps into ONE representation instead of scoring each layer "
-                        "separately (the default is per-layer, the brain-score protocol).")
-    p.add_argument("--dim", type=int, default=4096, help="SRP target dim for conv taps (default 4096)")
+    p.add_argument("--per-layer", action="store_true",
+                   help="score each tap separately (old brain-score protocol) instead of the default: "
+                        "all taps SRP'd and concatenated into ONE representation.")
+    p.add_argument("--dim", type=int, default=2048, help="SRP target dim per tap (default 2048)")
     p.add_argument("--density", type=float, default=None,
                    help="SRP density (default None -> sklearn 'auto' = 1/sqrt(D), as in visreps)")
     p.add_argument("--resize", type=int, default=224, help="image size fed to AlexNet (default 224)")
@@ -204,7 +206,7 @@ def main(argv=None):
     from harness.roi import roi_breakdown
 
     subj = os.environ.get("NEURO_SUBJECT", "1")
-    mode = "concat" if a.concat else "per-layer"
+    mode = "per-layer" if a.per_layer else "concat"
     print(f"=== AlexNet-SRP baseline ({mode}) | {a.dataset} subj={subj} "
           f"| reward_roi={DATASET.reward_roi} | layers={'+'.join(a.layers)} | conv_srp_dim={a.dim} "
           f"| weights={a.weights} ===")
@@ -240,7 +242,7 @@ def main(argv=None):
         print(f"\n--- {wlabel} AlexNet ---  forward {time.time() - t0:.1f}s   "
               f"n_train={Ytr.shape[0]} n_test={Yte.shape[0]} n_targets={Ytr.shape[1]}")
         recs = []
-        if a.concat:
+        if not a.per_layer:
             cat_tr = np.concatenate([feat_tr[n] for n in a.layers], axis=1)
             cat_te = np.concatenate([feat_te[n] for n in a.layers], axis=1)
             recs.append(run(cat_tr, cat_te, f"{wlabel}|concat:" + "+".join(a.layers)))
@@ -251,7 +253,8 @@ def main(argv=None):
         for r in recs:
             r["weights"] = wlabel
         best = max(recs, key=lambda r: r["test_corr"])
-        print(f"  best {wlabel} layer (reward): {best['label']}  test_corr={best['test_corr']:.4f}")
+        sel = "best layer" if a.per_layer else "concat"
+        print(f"  {wlabel} ({sel}) reward: {best['label']}  test_corr={best['test_corr']:.4f}")
         return model, recs
 
     variants = ["trained", "untrained"] if a.weights == "both" else [a.weights]
@@ -265,7 +268,7 @@ def main(argv=None):
     if a.weights == "both":
         bt = max((r for r in records if r["weights"] == "trained"), key=lambda r: r["test_corr"])
         bu = max((r for r in records if r["weights"] == "untrained"), key=lambda r: r["test_corr"])
-        print(f"\n  === trained-vs-untrained (best layer) ===")
+        print(f"\n  === trained-vs-untrained ({mode}) ===")
         print(f"    trained  : {bt['label']:>28}  test_corr={bt['test_corr']:.4f}")
         print(f"    untrained: {bu['label']:>28}  test_corr={bu['test_corr']:.4f}")
         print(f"    delta (trained - untrained): {bt['test_corr'] - bu['test_corr']:+.4f}")
