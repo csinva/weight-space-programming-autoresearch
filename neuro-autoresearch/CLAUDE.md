@@ -41,7 +41,10 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   `get_best_model_from_other_island` / `query` + `get_next_model` / `record` / `score`). Hides the
   DB, GPU, and dataset from agents. Each proposer is an ISLAND: it reads source only from its own
   best (`get_best_model`) or one random other island (`get_best_model_from_other_island`), never the
-  global champion, so backbones stay diverse.
+  global champion, so backbones stay diverse. Scores (not code) ARE shared: `sample` (`random-models`)
+  surfaces other islands' `test_corr`/`roi_corr`, anonymized (no id/proposer). The `LAB_SOLO=1` env
+  closes every cross-island channel (`sample` + `get_best_model_from_other_island`) and forces the
+  conductor off — each proposer sees ONLY its own lineage, i.e. the N-independent-loops baseline.
 - **`search/`** — the open-ended loop: `search.sh` scaffolds a dated run and supervises up to three
   always-on loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via `proposer.sh`,
   each confined to its own sandbox) + the single GPU evaluator (`evaluate.sh` / `evaluator.py`) + an

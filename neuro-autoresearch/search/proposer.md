@@ -38,10 +38,12 @@ that is deliberate, so the pool grows genuinely different backbones instead of a
 recipe. The shared DB shows you the SCOREBOARD (scores + ideas, no code), and you can pull SOURCE
 from only two places: your own island, and one random other island.
 
-See the landscape (ideas only -- your OWN island's scores via `my-best`, never the global board):
-  `python hub.py random-models -n 5`   # random prior ideas -- a diversity spark
+See the landscape:
+  `python hub.py random-models -n 5`   # random prior models: idea + notes + SCORES
+                                       # (test_corr/roi_corr) -- anonymized, no code. Use the scores
+                                       # to see which prior ideas actually worked.
   `python hub.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
-                                       # (other islands' score/source columns are hidden from you)
+                                       # (score/source columns hidden HERE; use random-models for scores)
 Build on real code:
   `python hub.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
                                        # (`--no-code` for the row only.)

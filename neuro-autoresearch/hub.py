@@ -80,9 +80,9 @@ _ID_LEN = 5
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))   # hub.py sits at the repo root
 
-# Columns hidden from a sandboxed proposer: other islands' scores + the on-disk source path. A
-# proposer is blinded to the global scoreboard (no ``top-models``, score-free ``query``) so islands
-# diverge instead of all chasing one champion; the conductor/launcher keep full visibility.
+# Columns hidden from a sandboxed proposer in ``query``/``top-models``: other islands' scores + the
+# on-disk source path, so islands diverge instead of all chasing one champion. (``random-models`` is
+# the deliberate exception -- it surfaces scores, anonymized, no code pointers.) Conductor sees all.
 _PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path")
 
 
@@ -91,6 +91,13 @@ def _is_proposer() -> bool:
     The conductor (``conduct.sh``) and the manual/launcher paths leave it unset, so they keep full
     score visibility."""
     return bool(os.environ.get("LAB_PROPOSER"))
+
+
+def _solo_guard(cmd: str) -> None:
+    """SOLO mode (``LAB_SOLO``): close every cross-island channel so each proposer sees ONLY its own
+    lineage -- the N-independent-loops baseline. Same boundary as the proposer blinding."""
+    if os.environ.get("LAB_SOLO") and _is_proposer():
+        raise PermissionError(f"{cmd} is OFF in SOLO mode (independent-loops baseline): evolve your OWN `my-best`.")
 _POLL = float(os.environ.get("LAB_POLL", "5"))  # seconds between wait/queue polls
 
 
@@ -330,16 +337,17 @@ def champions(k: int = 5, with_code: bool = False, run: str | None = None) -> li
 
 
 def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
-    """A random draw of ``ok`` models (idea + experiment_notes) -- a diversity spark so the pool
-    studies different prior work, not just the single champion. Scores are included for the
-    conductor/launcher but hidden from a proposer (``LAB_PROPOSER`` set) so islands don't chase the
-    global board; a proposer sees its OWN score via ``my-best``."""
+    """A random draw of ``ok`` models (idea + notes + scores) -- a diversity spark. Returns scores
+    (``test_corr``/``train_corr``/``roi_corr``) to proposers too, so they can see which prior ideas
+    worked; a proposer only loses the ``id``/``proposer`` code POINTERS (archive + sibling sandbox).
+    OFF entirely under ``LAB_SOLO``, so only the full system is affected."""
+    _solo_guard("random-models")
     with connect(_ensure(run)) as con:
-        rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, experiment_notes "
+        rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, roi_corr, experiment_notes "
                           "FROM models WHERE status='ok' AND test_corr IS NOT NULL "
                           "ORDER BY RANDOM() LIMIT ?", (int(k),))
     if _is_proposer():
-        rows = [{k: v for k, v in r.items() if k not in _PROPOSER_HIDDEN} for r in rows]
+        rows = [{k: v for k, v in r.items() if k not in ("id", "proposer")} for r in rows]
     return rows
 
 
@@ -403,6 +411,7 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
     what keeps backbones diverse and stops every island chasing the same number. You do NOT get to aim
     it -- the island is auto-picked at random, so it is never just the global champion. ``None`` if no
     other island has scored yet."""
+    _solo_guard("peek-island")
     proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
         isl = con.execute(
@@ -412,7 +421,7 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
         if isl is None:
             return None
         r = con.execute(
-            "SELECT id, idea, experiment_notes, proposer "
+            "SELECT idea, experiment_notes "
             "FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
             "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
     return dict(r)
