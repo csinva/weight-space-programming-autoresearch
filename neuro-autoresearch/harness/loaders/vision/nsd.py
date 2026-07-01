@@ -31,8 +31,10 @@ _NSD_SUBJECTS = (1, 2, 5, 7)
 
 
 def _subject(d: Dataset) -> str:
-    """Two-digit subject id, restricted to the in-repo staged set ``_NSD_SUBJECTS``."""
-    s = int(os.environ.get("NEURO_SUBJECT") or d.subject or "01")
+    """Two-digit subject id, restricted to the in-repo staged set ``_NSD_SUBJECTS``. The subject is
+    carried on the dataset (bound by ``with_subject`` / the ``NEURO_SUBJECT`` import hook), never read
+    from the env here -- so the reward's per-subject loop is always authoritative."""
+    s = int(d.subject or "01")
     if s not in _NSD_SUBJECTS:
         raise ValueError(
             f"NSD subject {s} is not staged in-repo; valid subjects are {list(_NSD_SUBJECTS)}. "

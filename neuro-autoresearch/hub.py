@@ -617,7 +617,7 @@ def _score_child(model_file: str) -> None:
         spec = importlib.util.spec_from_file_location("model", model_file)
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECTS -> mean over subjects; else single
+        row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean over subjects; else single
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}
     except Exception as e:  # noqa: BLE001  -- any import/eval fault is a recorded error, not a crash

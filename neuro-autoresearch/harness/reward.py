@@ -228,14 +228,14 @@ def _mean_rows(rows: list[dict]) -> dict:
 
 
 def evaluate_subjects(model, dataset: Dataset, slices=()) -> dict:
-    """The search reward. With ``NEURO_SUBJECTS`` set (comma list, e.g. ``"1,2"``) the model is
-    scored on EACH subject and the rows averaged into one reward (proposers see only the mean).
-    Unset -> the single active subject (today's behavior). A fault on ANY subject is the row's
-    status, so a recorded model must work on all search subjects."""
+    """The search reward. ``NEURO_SUBJECT`` selects the subject(s): a single id (e.g. ``"1"``) scores
+    that one; a comma list (e.g. ``"1,2"``) scores EACH and averages the rows into one reward
+    (proposers see only the mean). Unset -> the dataset's default subject. A fault on ANY subject is
+    the row's status, so a recorded model must work on all listed subjects."""
     from harness.datasets import with_subject
     from harness.loaders import load_split
 
-    subs = os.environ.get("NEURO_SUBJECTS")
+    subs = os.environ.get("NEURO_SUBJECT")
     if not subs:
         return evaluate_on_split_safe(model, load_split(dataset), dataset, slices)
     rows = []

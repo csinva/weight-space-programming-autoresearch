@@ -172,7 +172,8 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
     return replace(dataset, subject=subject)
 
 
-# Optional subject override (NEURO_SUBJECT) for the manual single-subject path.
-_subject = os.environ.get("NEURO_SUBJECT")
+# Default subject binding from NEURO_SUBJECT (a single id, or the first of a comma list -- the
+# reward loops over the full list; this just binds the default DATASET for single-split callers).
+_subject = (os.environ.get("NEURO_SUBJECT") or "").split(",")[0].strip()
 if _subject:
     DATASET = with_subject(DATASET, _subject)

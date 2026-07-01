@@ -85,10 +85,11 @@ doesn't reduce to a re-segmentable signal); `meg`/`ieeg` ship a slim re-segmenta
 `nsd` — NSD prepared GLMdenoise betas, reward = **early+ventral** stream (noise-normalized; see top),
 subjects **`{1,2,5,7}` staged in-repo** via `NEURO_SUBJECT` (1+2 the search reward, 5+7 held-out; other
 ids raise — repack with `scripts.process_dataset.nsd`, then extend `_NSD_SUBJECTS`).
-**`NEURO_SUBJECTS`** (comma list) makes the reward the MEAN over
-several subjects — scored per subject, averaged, recorded as ONE `test_corr` + averaged `roi_corr`
-(per-subject values are never stored; proposers stay blind); unset = the single `NEURO_SUBJECT`.
-**`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECTS`
+**`NEURO_SUBJECT` is the ONE subject knob**: a single id (`NEURO_SUBJECT=1`) scores that subject; a
+comma list (`NEURO_SUBJECT=1,2`) makes the reward the MEAN over several subjects — scored per subject,
+averaged, recorded as ONE `test_corr` + averaged `roi_corr` (per-subject values are never stored;
+proposers stay blind); unset = the dataset's default subject.
+**`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECT`
 env. Works for datasets that switch data by subject (`nsd` / `text` / `tvsd`); `nnn` pools sessions so
 its animals aren't separable yet. Hold out the rest for generalization
 (`scripts/generalization/generalize.py` — re-evals a run's DB champion on the held-out units; the

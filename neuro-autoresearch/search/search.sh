@@ -53,8 +53,9 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # Default 0 = the full system (cross-island pollination + conductor).
 [ "${VANILLA_AUTORESEARCH:-0}" = 1 ] && { EPOCH=0; export VANILLA_AUTORESEARCH; echo "[search] VANILLA_AUTORESEARCH: cross-island OFF, conductor OFF (N independent loops)"; }
 # NSD reward defaults to the MEAN over search subjects 1+2 (only the average is recorded; proposers
-# stay blind) -- hold out the rest for generalization. Operator override: set NEURO_SUBJECTS yourself.
-[ "$DATASET" = nsd ] && export NEURO_SUBJECTS="${NEURO_SUBJECTS:-1,2}"
+# stay blind) -- hold out the rest for generalization. Override with NEURO_SUBJECT (a single id like
+# `NEURO_SUBJECT=1` for one subject, or a comma list `NEURO_SUBJECT=1,2` for the mean).
+[ "$DATASET" = nsd ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2}"
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
