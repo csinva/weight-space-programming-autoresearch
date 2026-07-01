@@ -42,7 +42,7 @@ PROMPT="${PREAMBLE}
 
 $(cat "$REPO/search/proposer.md")"
 
-export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET" LAB_SOLO="${LAB_SOLO:-}"
+export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET" VANILLA_AUTORESEARCH="${VANILLA_AUTORESEARCH:-0}"
 cd "$SANDBOX"
 # No wall-clock here: the proposer stays alive for the whole run; the launcher owns the stop.
 # Confined to its OWN sandbox: --add-dir is ONLY the sandbox, so the agent cannot browse the repo
