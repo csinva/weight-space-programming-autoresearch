@@ -76,7 +76,7 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("dataset", help="dataset key, e.g. nsd / text / meg / tvsd / nnn")
-    p.add_argument("--date", default=None, help="run date (default: today, UTC)")
+    p.add_argument("--date", default=None, help="run date (default: today, ET)")
     p.add_argument("--n", type=int, default=10, help="number of proposer sandboxes")
     a = p.parse_args()
     run_dir = scaffold_run(a.dataset, a.date, n_proposers=a.n)

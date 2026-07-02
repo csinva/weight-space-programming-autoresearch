@@ -32,7 +32,7 @@ All proposers + the evaluator share one `search.db`. Never open the DB file dire
 | `python hub.py wait-for-score <id>` | block until scored → JSON row incl. `test_corr` (the reward) |
 | `python hub.py my-best` | **your own island's** best scored model, **with source** — the backbone to build on |
 | `python hub.py peek-island` | best model of ONE random *other* island as idea + `experiment_notes` (description + insight) — **NO source, NO score**; re-implement it your way |
-| `python hub.py random-models -n 5` | a random sample of prior models — **ideas only** (a diversity spark) |
+| `python hub.py random-models -n 5` | a random sample of prior models — ideas + notes **and their scores** (`test_corr`/`roi_corr`), a diversity spark; no source, and the `id`/`proposer` pointers are stripped |
 | `python hub.py query-db "SELECT ..."` | arbitrary READ-ONLY SQL → JSON (other islands' score/source columns are hidden from you) |
 | `python hub.py summary` | one-line tally + current champion |
 
@@ -42,8 +42,8 @@ train_corr, roi_corr` and the source `path` are hidden from a proposer's `query-
 score via `my-best`/`wait-for-score`.)
 
 **You are your own island.** Build on **`my-best`** (your backbone); optionally re-implement a
-`peek-island` idea. `random-models` is read-only awareness — ideas only, not scores or code, so you
-don't just clone the global champion.
+`peek-island` idea. `random-models` is read-only awareness — ideas, notes, and scores but no
+source or island pointers, so you learn what worked without just cloning the global champion.
 
 ## Your loop
 Read the shared state (`my-best`, `random-models`, `peek-island`) → edit `model.py` →

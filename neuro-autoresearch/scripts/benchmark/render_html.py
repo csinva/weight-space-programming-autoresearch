@@ -265,7 +265,7 @@ def render_page(results):
             '<main><div class="wrap"><section class="section">'
             '<h2 class="sec">benchmark result</h2>'
             '<h3 class="head">No results yet</h3>'
-            '<p class="small">Run <code>python scripts/benchmark/benchmark_nsd.py</code> '
+            '<p class="small">Run <code>python scripts/benchmark/benchmark.py</code> '
             'to produce result JSONs, then re-render.</p>'
             '</section></div></main>'
         )

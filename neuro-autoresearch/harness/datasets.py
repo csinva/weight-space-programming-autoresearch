@@ -53,7 +53,7 @@ class Dataset:
 # stimulus modalities (image/audio). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
     # Li2022Petit (Le Petit Prince), fMRI + audio: one full English subject (EN057)
-    # via the Li2022PetitSubj subclass (harness/li2022_subj.py). Each spoken Word
+    # via the Li2022PetitSubj subclass (harness/loaders/studies.py). Each spoken Word
     # triggers a segment. The neural window (start=2.0/duration=4.0) captures the
     # HRF-delayed BOLD, but audio response is near-instant so the stimulus is read
     # from a short decoupled window at the word (stim_start=0.0/stim_duration=0.5).

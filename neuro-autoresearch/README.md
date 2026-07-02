@@ -46,8 +46,8 @@ is good.
 ## The model contract
 
 A self-contained `model.py` defining `class Model` with attributes `name` / `idea` /
-`summary` / `n_params` and `__call__(self, X)` mapping `(N, D_in) -> (N, D_out)`, ending
-with `MODEL = Model()`. For image datasets `X` is flattened RGB pixels of a square image
+`description` / `insight` / `n_params` and `__call__(self, X)` mapping `(N, D_in) -> (N, D_out)`,
+ending with `MODEL = Model()`. For image datasets `X` is flattened RGB pixels of a square image
 (`side = round(sqrt(D_in/3))`). Two hard rules keep the reward real:
 
 1. **Untrained** — every weight is analytic or random-but-fixed (fixed seeds); never fit
@@ -68,8 +68,8 @@ search/              the open-ended search loop (launcher + proposer pool + eval
   proposer.md          the task description handed to each proposer
 harness/             FIXED evaluation harness — must not be edited
   datasets.py          the Dataset registry (pick one via NEURO_DATASET)
-  loaders/             the only file/network I/O — neuralset/ (Segmenter timeline studies)
-                       vs standalone/ (pre-aligned response tables); load_split dispatch
+  loaders/             the only file/network I/O — timeline.py + studies.py (Segmenter timeline
+                       studies) vs vision/ (pre-aligned response tables); load_split dispatch
   reward.py            the predictivity reward: forward → readout → test_corr (orchestration)
   ridge.py             the ridge readout — fast eigh+LOO (default) | himalaya, via NEURO_READOUT
   roi.py               reward-region target selection + advisory per-ROI breakdown
@@ -105,7 +105,7 @@ only in the unattended search loop (see `hub.py`).
 ### Open-ended search (unattended)
 
 ```bash
-search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator + conductor (steers every 30m)
+search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator + conductor (steers every 60m)
 search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + conductor
 search/search.sh nsd --hours 12 --epoch-mins 0  # conductor OFF — pure decentralized pool
 search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
@@ -133,7 +133,7 @@ loops against it — the search stays self-paced with no synchronization barrier
   one at a time, scores each with the fixed harness in an isolated subprocess, and writes
   the result back. `repair.sh` auto-fixes small mechanical model faults (≤2 attempts).
 - **An optional conductor** (`conduct.sh` / `conductor.md`) — a steering overlay. Every
-  `--epoch-mins` (default 30; `0` disables it) it runs one headless pass that reads the
+  `--epoch-mins` (default 60; `0` disables it) it runs one headless pass that reads the
   board and writes ONE broad, **advisory** `direction.txt` per proposer to keep the pool
   diverse and unstuck. It never gates the queue or scoring — proposers just read their
   `direction.txt` to bias what they explore.
@@ -149,19 +149,17 @@ Agents never touch the DB, GPU, or dataset directly — they go through `hub.py`
 ```bash
 python hub.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
 python hub.py wait-for-score <id>              # block until the evaluator scores it
-python hub.py top-models -n 5                  # public scoreboard: scores + ideas (no source)
-python hub.py random-models -n 5               # random prior models (diversity)
+python hub.py random-models -n 5               # random prior models: scores + ideas (no source)
 python hub.py my-best [--no-code]              # YOUR island's best model (+source) to build on
-python hub.py peek-island [--no-code]          # best of one RANDOM other island (+source); once/iter
+python hub.py peek-island                      # best of one RANDOM other island: idea + notes only (no source, no score)
 python hub.py query-db "SELECT ..."            # arbitrary read-only SQL
 python hub.py summary                          # one-line DB tally + current champion
 ```
 
-Each proposer is its own **island**: it can read source only from `my-best` (its own lineage) and
-`peek-island` (one random other island), never the global champion -- so backbones diverge instead
-of all grafting onto one recipe.
-
-(`next` / `record` / `requeue` are the evaluator-side verbs.)
+Each proposer is its own **island**: it can read source only from `my-best` (its own lineage);
+`peek-island` shares one random other island's idea and notes (never source, never score), so
+backbones diverge instead of all grafting onto one recipe. (`top-models` is a conductor-only
+scoreboard; `requeue` / `migrate` / `reset-island` are operator/evaluator-side verbs.)
 
 ## Datasets
 
@@ -172,14 +170,15 @@ pre-staged locally and loaded with `download=False`, so they run **fully offline
 | `NEURO_DATASET` | study | neural | stimulus | reward |
 | --- | --- | --- | --- | --- |
 | `text` (default) | Le Petit Prince (LPP) | fMRI | audio | whole-study |
-| `nsd` | Natural Scenes Dataset | fMRI | image | **ventral** stream |
+| `nsd` | Natural Scenes Dataset | fMRI | image | **early+ventral** stream |
 | `meg` | LPP-Listen | MEG | audio | whole-study |
 | `ieeg` | LPP iEEG | iEEG | audio | whole-study |
 | `tvsd` / `nnn` | macaque IT | spiking | image | whole-study |
 
 - **`nsd`** uses the prepared single-trial **GLMdenoise betas**
   (`betas_fithrf_GLMdenoise_RR`, Algonauts-2023 style: z-scored per session, 3-rep
-  averaged). The reward is the fine-grained **ventral visual stream** (~8.6k voxels). The
+  averaged). The reward is the joint **early+ventral visual stream** (~14.5k voxels),
+  noise-ceiling-normalized (mean sign-preserving r²/NC_r2 over the reliable voxels). The
   canonical **shared-1000** images are held out as an image-disjoint test set. All 8
   subjects are available via `NEURO_SUBJECT=1..8`.
 - The reward region is a fixed **per-dataset** attribute, not an operator knob — there is

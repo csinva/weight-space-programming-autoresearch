@@ -20,22 +20,20 @@ LOG="$SANDBOX/proposer.log"   # this worker's OWN log -> per-proposer AI-credit 
 # Shared aspiration (same scientific goal for every dataset; carries NO eval mechanics so the
 # proposer can't game the ruler -- only the target's identity is dataset-specific, below).
 CEIL="it should be possible for an untrained model to explain a large fraction of the explainable variance in neural predictivity -- push that as far as you can"
-# Per-dataset framing: just the target's identity (dataset + modality + ROI) and any output-dim cap
-# (the ridge SVD limit at this dataset). Deliberately NO subject count, voxel count, or metric detail.
+# Per-dataset framing: just the target's identity (dataset + modality + ROI).
+# Deliberately NO subject count, voxel count, or metric detail.
 case "$DATASET" in
-  nsd)  LABEL="the Natural Scenes Dataset (NSD): human fMRI responses to natural images, across the early and ventral visual stream"; CAP="";;
-  tvsd) LABEL="TVSD: macaque multi-unit spiking to natural images, across early visual cortex through IT"; CAP="";;
-  nnn)  LABEL="Triple-N: macaque spiking to natural images, across early visual cortex and IT"; CAP="";;
-  *)    LABEL="$DATASET"; CAP="";;
+  nsd)  LABEL="the Natural Scenes Dataset (NSD): human fMRI responses to natural images, across the early and ventral visual stream";;
+  tvsd) LABEL="TVSD: macaque multi-unit spiking to natural images, across early visual cortex through IT";;
+  nnn)  LABEL="Triple-N: macaque spiking to natural images, across early visual cortex and IT";;
+  *)    LABEL="$DATASET";;
 esac
-CAPNOTE=""
-[ -n "$CAP" ] && CAPNOTE="DATASET LIMIT: keep the model OUTPUT dim D_out under ~${CAP} -- the ridge readout's GPU SVD fails above that at this dataset's row count (scored as an error). "
 
 PREAMBLE="THIS RUN -- dataset=${DATASET}. You are proposer ${PNAME}, ONE of ${NEURO_FLEET:-several}
 proposers running CONCURRENTLY right now -- all of you read from and write models into the SAME
 search.db at the same time, with no coordinator. Reward =
 a held-out encoding score on ${LABEL} (a fixed ridge readout from your model's activations to the
-recorded responses). For reference, ${CEIL}. ${CAPNOTE}The shared brain is search.db in your run; reach it ONLY through \`python hub.py\`
+recorded responses). For reference, ${CEIL}. The shared brain is search.db in your run; reach it ONLY through \`python hub.py\`
 (run from this sandbox)."
 
 PROMPT="${PREAMBLE}

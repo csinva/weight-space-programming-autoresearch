@@ -12,7 +12,6 @@ alive()         { kill -0 "$1" 2>/dev/null; }
 
 # Single-PID signals (propose.sh starts workers in this group).
 term()          { [ "${1:-0}" -gt 0 ] && kill -TERM "$1" 2>/dev/null; return 0; }
-kill9()         { [ "${1:-0}" -gt 0 ] && kill -KILL "$1" 2>/dev/null; return 0; }
 # Process-GROUP signals (search.sh runs each child under `set -m`, one group each).
 term_group()    { [ "${1:-0}" -gt 0 ] && kill -TERM -"$1" 2>/dev/null; return 0; }
 kill_group()    { [ "${1:-0}" -gt 0 ] && kill -KILL -"$1" 2>/dev/null; return 0; }

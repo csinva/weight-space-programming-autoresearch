@@ -52,7 +52,6 @@ import argparse
 import json
 import os
 import re
-import re
 import secrets
 import shutil
 import sqlite3
@@ -234,10 +233,17 @@ def _rows(con, sql, params=()):
     return [dict(r) for r in con.execute(sql, params).fetchall()]
 
 
-def _read_source(path):
+# The reliability predicate shared by every "best/scored model" query: a successfully-scored row
+# with a real reward. Kept in one place so the five call sites can't drift apart.
+_OK = "status='ok' AND test_corr IS NOT NULL"
+
+
+def _read_file(path, strip: bool = False) -> str:
+    """Read a file's text, returning "" for a missing/None path (used for model source and for the
+    per-island marker files). ``strip=True`` for the whitespace-sensitive marker files."""
     try:
         with open(path) as f:
-            return f.read()
+            return f.read().strip() if strip else f.read()
     except (OSError, TypeError):
         return ""
 
@@ -271,7 +277,7 @@ def propose(model_file: str, idea: str = "",
     # and the DB insert. (The handshake below catches the larger reset-before-propose window.)
     created_at = _now()
     if proposer:                       # race handshake: refuse a snapshot taken before a mid-turn reset
-        if (_island_reset_at(proposer, run) or "") != _read_text(_sandbox_file(proposer, run, "reset_seen")):
+        if (_island_reset_at(proposer, run) or "") != _read_file(_sandbox_file(proposer, run, "reset_seen"), strip=True):
             raise RuntimeError(
                 "island was RESET since you last read `my-best` -- this model.py is from your old "
                 "(now-retired) lineage. Re-read `my-best` (it returns the baseline floor now) and "
@@ -322,18 +328,14 @@ def wait_for_result(mid: str, poll: float = _POLL, timeout: float | None = None,
 
 
 # --------------------------------------------------------------------------- proposer: read / learn
-def champions(k: int = 5, with_code: bool = False, run: str | None = None) -> list[dict]:
+def champions(k: int = 5, run: str | None = None) -> list[dict]:
     """The pool's public scoreboard: the ``ok`` models with the highest reward, best first, as
-    scores + ideas (NO source by default). Source is deliberately withheld -- a proposer builds on
-    its OWN island (``get_best_model``) or one random other island (``get_best_model_from_other_island``),
-    never a copy of the global champion. Pass ``with_code=True`` only for a non-island consumer."""
+    scores + ideas (NO source). Source is deliberately withheld -- a proposer builds on its OWN
+    island (``get_best_model``) or one random other island (``get_best_model_from_other_island``),
+    never a copy of the global champion."""
     with connect(_ensure(run)) as con:
-        rows = _rows(con, "SELECT * FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+        return _rows(con, f"SELECT * FROM models WHERE {_OK} "
                           "ORDER BY test_corr DESC LIMIT ?", (int(k),))
-    if with_code:
-        for r in rows:
-            r["code"] = _read_source(r.get("path"))
-    return rows
 
 
 def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
@@ -344,7 +346,7 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     _vanilla_guard("random-models")
     with connect(_ensure(run)) as con:
         rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, roi_corr, experiment_notes "
-                          "FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+                          f"FROM models WHERE {_OK} "
                           "ORDER BY RANDOM() LIMIT ?", (int(k),))
     if _is_proposer():
         rows = [{k: v for k, v in r.items() if k not in ("id", "proposer")} for r in rows]
@@ -355,12 +357,6 @@ def _sandbox_file(proposer: str, run: str, name: str) -> str:
     return os.path.join(_ensure(run), "proposers", proposer, name)
 
 
-def _read_text(path: str) -> str:
-    try:
-        with open(path) as fh:
-            return fh.read().strip()
-    except OSError:
-        return ""
 
 
 def _island_reset_at(proposer: str, run: str) -> str | None:
@@ -371,7 +367,7 @@ def _island_reset_at(proposer: str, run: str) -> str | None:
     before a reset that landed mid-turn (see :func:`propose`)."""
     if not proposer:
         return None
-    return _read_text(_sandbox_file(proposer, run, "reset_at")) or None
+    return _read_file(_sandbox_file(proposer, run, "reset_at"), strip=True) or None
 
 
 def get_best_model(with_code: bool = True, run: str | None = None) -> dict | None:
@@ -390,7 +386,7 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
     if proposer:                       # record the reset epoch this turn is built on (race handshake)
         with open(_sandbox_file(proposer, run, "reset_seen"), "w") as fh:
             fh.write(reset_at or "")
-    sql = ("SELECT * FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+    sql = (f"SELECT * FROM models WHERE proposer=? AND {_OK} "
            + ("AND created_at > ? " if reset_at else "")
            + "ORDER BY test_corr DESC LIMIT 1")
     params = (proposer, reset_at) if reset_at else (proposer,)
@@ -400,7 +396,7 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
         return None
     row = dict(r)
     if with_code:
-        row["code"] = _read_source(row.get("path"))
+        row["code"] = _read_file(row.get("path"))
     return row
 
 
@@ -415,14 +411,14 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
     proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
         isl = con.execute(
-            "SELECT proposer FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+            f"SELECT proposer FROM models WHERE {_OK} "
             "AND proposer<>? AND proposer<>'' GROUP BY proposer ORDER BY RANDOM() LIMIT 1",
             (proposer,)).fetchone()
         if isl is None:
             return None
         r = con.execute(
             "SELECT idea, experiment_notes "
-            "FROM models WHERE proposer=? AND status='ok' AND test_corr IS NOT NULL "
+            f"FROM models WHERE proposer=? AND {_OK} "
             "ORDER BY test_corr DESC LIMIT 1", (isl["proposer"],)).fetchone()
     return dict(r)
 
@@ -563,7 +559,7 @@ def summary(run: str | None = None) -> str:
         tally = dict(con.execute(
             "SELECT COALESCE(status,'?'), COUNT(*) FROM models GROUP BY 1").fetchall())
         best = con.execute(
-            "SELECT id, test_corr FROM models WHERE status='ok' AND test_corr IS NOT NULL "
+            f"SELECT id, test_corr FROM models WHERE {_OK} "
             "ORDER BY test_corr DESC LIMIT 1").fetchone()
     t = " ".join(f"{k}={v}" for k, v in sorted(tally.items())) or "(empty)"
     champ = f"{best['id']} @ {best['test_corr']:.4f}" if best else "(none)"
