@@ -52,14 +52,25 @@ def _process(ds_key: str) -> None:
     study = ns.Study(name=d.study, path=RAW[ds_key])
     events = study.run()
 
-    # --- neural: run the dataset's own extractor to get the preprocessed (picked, 100Hz)
-    # continuous signal, then dump it as a plain .fif via MneTimedArray.to_native(). ---
-    ext = _NEURAL[d.neural](d)
-    typed = ext._event_types_helper.extract(events)
-    if len(typed) != 1:
-        raise RuntimeError(f"expected one {d.neural} event, got {len(typed)}")
-    ta = next(ext._get_data([typed[0]]))
-    raw = ta.to_native()
+    # --- neural: the picked, 100Hz continuous signal, dumped as a plain .fif. iEEG stages the
+    # dataset's OWN high-gamma derivative (ecogprep: artifact-cleaned, z-scored 70-200 Hz power --
+    # the standard ECoG cognition signal; raw voltage @100Hz discards the HG band, and a hand-rolled
+    # Hilbert envelope isn't normalised so slow drift dominates the reward). meg reruns its extractor.
+    # Baked once here so the load path stays a plain pick/resample (_NEURAL["ieeg"]). ---
+    if ds_key == "ieeg":
+        import mne
+        hg = os.path.join(RAW[ds_key], "derivatives/ecogprep/sub-01/ieeg",
+                          "sub-01_task-podcast_desc-highgamma_ieeg.fif")
+        raw = mne.io.read_raw_fif(hg, preload=True).pick("ecog").resample(100.0)
+        subject, freq, start = f"{d.study}/01", 100.0, 0.0
+    else:
+        ext = _NEURAL[d.neural](d)
+        typed = ext._event_types_helper.extract(events)
+        if len(typed) != 1:
+            raise RuntimeError(f"expected one {d.neural} event, got {len(typed)}")
+        ta = next(ext._get_data([typed[0]]))
+        raw = ta.to_native()
+        subject, freq, start = str(getattr(typed[0], "subject", "") or ""), float(ta.frequency), float(ta.start)
     fif = os.path.join(neural_dir, f"continuous_{d.neural}.fif")
     raw.save(fif, overwrite=True)
 
@@ -77,9 +88,9 @@ def _process(ds_key: str) -> None:
     json.dump(
         {
             "modality": d.neural,
-            "subject": str(getattr(typed[0], "subject", "") or ""),
-            "frequency": float(ta.frequency),
-            "start": float(ta.start),
+            "subject": subject,
+            "frequency": freq,
+            "start": start,
             "audio_start": float(audio_row["start"]),
             "audio_duration": float(audio_row["duration"]),
             "trigger": d.timeline.trigger,

@@ -42,6 +42,8 @@ class Dataset:
     path: str | None = None          # UNUSED by active presets (runtime reads ONLY data/<name>/);
                                      # kept for the download-from-scratch path (_study_path).
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
+    cv_folds: int = 0                # >1 => reward = rotating K-fold temporal CV (no single window
+                                     # to overfit); 0 = the single train/test split. Fixed, not a knob.
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value, NOT an operator knob.
     loader: str = "timeline"         # "timeline" (Segmenter: text/meg/ieeg) | "nsd" | "tvsd" | "nnn"
@@ -93,12 +95,18 @@ PRESETS: dict[str, Dataset] = {
     # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + audio:
     # epilepsy patients listening to a 30-min podcast. Single-subject by necessity
     # (each patient has different electrodes; default subject 01). Each transcript Word
-    # triggers a 0.5s epoch; iEEG is near-instant so windows coincide (as for meg).
+    # triggers a 0.5s epoch. The target is the HIGH-GAMMA (70-200 Hz) envelope -- the
+    # standard ECoG cognition signal, staged by scripts/process_dataset/audio_neural.py --
+    # word-averaged (neural_aggregation="mean") to one power value per electrode per word.
     "ieeg": Dataset(
         study="Zada2025Podcast",
         neural="ieeg",
         stimulus="audio",
-        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5),
+        reward_roi="all",
+        cv_folds=5,   # reward = 5-fold temporal CV: a single fixed hold-out (only ~1k words, 99 raw-r
+                      # channels, no noise ceiling) is trivially overfit by a search that grep's it.
+        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5,
+                          neural_aggregation="mean"),
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes

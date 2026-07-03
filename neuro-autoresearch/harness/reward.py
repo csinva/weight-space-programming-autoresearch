@@ -76,6 +76,30 @@ def predictivity(y_hat: np.ndarray, y: np.ndarray) -> float:
     return float(_corr_per_column(np.asarray(y_hat), np.asarray(y)).mean())
 
 
+def _cv_column_r(A, Y, k_folds: int, device, nc):
+    """Per-column predictivity under contiguous temporal K-fold CV, averaged over the folds.
+
+    A single fixed hold-out window is trivially overfit by a search that optimizes it directly (a
+    proposer bakes features tuned to that one window). Rotating the held-out fold over the whole
+    recording removes that fixed target -- a model must generalize across every fold, so only
+    genuinely predictive features raise the reward. Rows are already in trigger-onset order (train
+    block first, test tail last), so contiguous index folds are temporal. Returns (train_col_r,
+    test_col_r) aligned to Y's columns."""
+    A, Y = A.to(device), Y.to(device)        # A is on the GPU, Y may be on the CPU -- align both
+    n = A.shape[0]
+    train_np = test_np = None
+    for k in range(k_folds):
+        lo, hi = round(k * n / k_folds), round((k + 1) * n / k_folds)
+        keep = torch.ones(n, dtype=torch.bool, device=device)
+        keep[lo:hi] = False
+        pred_tr, pred_te = ridge_predict(A[keep], A[lo:hi], Y[keep], device=device)
+        te = _noise_normalize(_corr_per_column(pred_te, _to_np(Y[lo:hi])), nc)
+        tr = _noise_normalize(_corr_per_column(pred_tr, _to_np(Y[keep])), nc)
+        test_np = te if test_np is None else test_np + te
+        train_np = tr if train_np is None else train_np + tr
+    return train_np / k_folds, test_np / k_folds
+
+
 def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     """Evaluate ``model`` on an already-loaded ``split`` (the reusable core).
 
@@ -112,11 +136,17 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
             mask = torch.as_tensor(mask, device=Y_train.device)
     Yv_train, Yv_test = select_targets(Y_train, mask), select_targets(Y_test, mask)
 
-    pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
-    # Noise-normalize per voxel (r^2/NC_r2) before averaging -- the scalar reward AND the ROI
-    # breakdown all report fraction-of-explainable-variance; raw r where no ceiling (nc is None).
-    test_np = _noise_normalize(_corr_per_column(pred_test, _to_np(Yv_test)), nc)
-    train_np = _noise_normalize(_corr_per_column(pred_train, _to_np(Yv_train)), nc)
+    # Per-column held-out predictivity. cv_folds>1 (iEEG) uses rotating temporal K-fold CV so there
+    # is no single fixed hold-out window a proposer can bake features against; every other dataset
+    # keeps its single train/test split. Both then noise-normalize (r^2/NC_r2, or raw r when nc is
+    # None) and average identically downstream -- the scalar reward AND the per-ROI breakdown.
+    if getattr(dataset, "cv_folds", 0) > 1:
+        A_full, Y_full = torch.cat([A_train, A_test], 0), torch.cat([Yv_train, Yv_test], 0)
+        train_np, test_np = _cv_column_r(A_full, Y_full, dataset.cv_folds, device, nc)
+    else:
+        pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
+        test_np = _noise_normalize(_corr_per_column(pred_test, _to_np(Yv_test)), nc)
+        train_np = _noise_normalize(_corr_per_column(pred_train, _to_np(Yv_train)), nc)
     # Round the scalar reward to 4 decimals at the SOURCE so every downstream surface -- the stored
     # DB value, champion ranking, and the proposer's reward feedback -- sees the same 4-dp number,
     # for every dataset. (roi_breakdown rounds its per-ROI means likewise.)

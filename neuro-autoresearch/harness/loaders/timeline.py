@@ -105,7 +105,7 @@ _CACHE_VERSION = "v2"
 # build-cache key: ``test_frac`` only sizes a temporal tail; ``reward_roi`` only
 # selects which targets the scalar reward averages over. All region loops therefore
 # share ONE build (the timeseries is read only once).
-_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi")
+_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi", "cv_folds")
 
 
 def _build_cache_key(d: Dataset, processed: bool = False) -> str:
