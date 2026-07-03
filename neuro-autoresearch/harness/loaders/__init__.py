@@ -14,8 +14,21 @@ from __future__ import annotations
 from harness.datasets import Dataset
 
 
+_SPLIT_MEMO: dict = {}
+
+
 def load_split(d: Dataset):
-    """Return (X_train, X_test, Y_train, Y_test, roi_masks, nc) -- 2-D float tensors, a (possibly
+    """Return (X_train, X_test, Y_train, Y_test, roi_masks, nc). Memoized per-process by the (frozen,
+    hashable) ``Dataset``: the search evaluator scores many models against the SAME split, so the load
+    is paid ONCE, not once per model. The split is treated read-only downstream (the reward copies X
+    to the GPU per eval), so sharing it across models is safe."""
+    if d not in _SPLIT_MEMO:
+        _SPLIT_MEMO[d] = _dispatch_split(d)
+    return _SPLIT_MEMO[d]
+
+
+def _dispatch_split(d: Dataset):
+    """Load (X_train, X_test, Y_train, Y_test, roi_masks, nc) -- 2-D float tensors, a (possibly
     empty) ``{roi_name: bool mask}`` over the scored targets for the per-ROI breakdown, and ``nc``
     (per-voxel R^2 noise ceiling aligned to the scored targets, for noise-normalizing the reward, or
     None when the dataset has no repeat-based ceiling). Dispatches on d.loader; imports are lazy so a

@@ -568,60 +568,39 @@ def summary(run: str | None = None) -> str:
 
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
 def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> dict:
-    """Score one model file with the FIXED harness in a subprocess (isolation against CUDA faults).
-    Returns ``{status, test_corr, train_corr, roi_corr, experiment_notes, n_params, seconds}``;
-    never raises on a model
-    fault -- a crash/timeout becomes ``status='error'``. Reward is the dataset's fixed-region
-    ``test_corr`` (NSD: the ventral stream); no operator ROI knob."""
-    import subprocess
-    import tempfile
-    repo = os.path.dirname(os.path.abspath(__file__))
-    dataset = dataset or os.environ.get("NEURO_DATASET", "nsd")
-    env = {**os.environ, "NEURO_DATASET": dataset}
-    env.pop("NEURO_ROI", None)                # no ROI knob: reward = the preset's fixed region (NSD: ventral)
-    # A throwaway out-file the child writes the JSON result to.
-    with tempfile.NamedTemporaryFile("r", suffix=".json", delete=False) as tf:
-        out = tf.name
-    env["LAB_SCORE_OUT"] = out
+    """Score one model with the FIXED harness IN-PROCESS, reusing the per-process split cache: the
+    torch import, CUDA init, and the split load are paid ONCE across every model this process scores
+    (~50x the old subprocess-per-model throughput). Never raises on a model fault -- an exception or a
+    SIGALRM wall-clock timeout becomes ``status='error'``. Returns ``{status, test_corr, train_corr,
+    roi_corr, experiment_notes, n_params, seconds, log}`` (``log`` = captured-output tail, for repair).
+    A model that HARD-crashes the interpreter (segfault / ``os._exit``) takes the evaluator down; the
+    search supervisor restarts it and ``requeue_orphans`` recovers the row."""
+    import contextlib, importlib.util, io, signal, threading, traceback
+    os.environ["NEURO_DATASET"] = dataset or os.environ.get("NEURO_DATASET", "nsd")
+    os.environ.pop("NEURO_ROI", None)             # no ROI knob: reward = the preset's fixed region
+    buf = io.StringIO()
+    on_main = threading.current_thread() is threading.main_thread()
+    if on_main:                                   # SIGALRM (main thread only) cuts off a hung model
+        signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError(f"timeout after {timeout}s")))
+        signal.alarm(int(timeout))
     try:
-        proc = subprocess.run([sys.executable, "-m", "hub", "_score_child", os.path.abspath(model_file)],
-                              cwd=repo, env=env, capture_output=True, text=True, timeout=timeout)
-        log = (proc.stdout or "") + (proc.stderr or "")
-        if os.path.getsize(out):
-            with open(out) as f:
-                res = json.load(f)
-        else:
-            res = {"status": "error: no result (import/crash)"}
-    except subprocess.TimeoutExpired as e:
-        log = (e.stdout or "") + (e.stderr or "") + f"\nTIMEOUT after {timeout}s\n"
-        res = {"status": f"error: timeout after {timeout}s"}
-    finally:
-        os.path.exists(out) and os.remove(out)
-    res.setdefault("log", log[-4000:])        # tail of stdout+stderr (the traceback, for repair)
-    return res
-
-
-def _score_child(model_file: str) -> None:
-    """Child entrypoint (``python -m hub _score_child <file>``): import the harness, score the
-    model on the active dataset (whole-dataset reward), write JSON to ``$LAB_SCORE_OUT``."""
-    import importlib.util
-    out = os.environ["LAB_SCORE_OUT"]
-    res = {"status": "error: unknown"}
-    try:
-        from harness.datasets import DATASET
-        from harness.reward import evaluate_subjects
-        spec = importlib.util.spec_from_file_location("model", model_file)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean over subjects; else single
+        with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
+            from harness.datasets import DATASET
+            from harness.reward import evaluate_subjects
+            spec = importlib.util.spec_from_file_location("model", model_file)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}
-    except Exception as e:  # noqa: BLE001  -- any import/eval fault is a recorded error, not a crash
-        import traceback
-        traceback.print_exc()
+    except Exception as e:  # noqa: BLE001  -- any eval fault (incl. the SIGALRM timeout) is a recorded error
+        traceback.print_exc(file=buf)
         res = {"status": f"error: {type(e).__name__}: {e}"[:300]}
-    with open(out, "w") as f:
-        json.dump(res, f)
+    finally:
+        if on_main:
+            signal.alarm(0)
+    res.setdefault("log", buf.getvalue()[-4000:])
+    return res
 
 
 # --------------------------------------------------------------------------- CLI
@@ -667,12 +646,8 @@ def main(argv=None):
     add("requeue", lambda a: requeue_orphans())
     add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")
     add("summary", lambda a: summary())
-    sub.add_parser("_score_child").add_argument("model_file")  # internal: scores in a subprocess
 
     a = p.parse_args(argv)
-    if a.cmd == "_score_child":
-        _score_child(a.model_file)
-        return
     (_print if a._json else print)(a._fn(a))
 
 
