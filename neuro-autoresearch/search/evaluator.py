@@ -22,6 +22,7 @@ import argparse
 import os
 import subprocess
 import sys
+import threading
 import time
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +44,24 @@ def repair(model_file, log_file, rmodel, reffort, timeout=300):
         print(f"[evaluator]   repair timed out after {timeout}s; recording as-is")
 
 
+def score_guarded(mid, src, dataset, timeout):
+    """``hub.score`` under a hard wall-clock watchdog. In-process scoring can't interrupt a model hung
+    in native CUDA/C, so a watchdog thread records the model as errored and hard-exits on timeout; the
+    supervisor restarts this evaluator and ``requeue_orphans`` leaves the now-errored row alone, so the
+    queue moves past the poison model instead of wedging forever."""
+    done = threading.Event()
+    def watchdog():
+        if not done.wait(timeout):
+            os.write(2, f"[evaluator] {mid}: exceeded {timeout}s -> error + restart\n".encode())  # raw fd: hub.score redirects sys.stderr
+            hub.record(mid, {}, "error")
+            os._exit(70)
+    threading.Thread(target=watchdog, daemon=True).start()
+    try:
+        return hub.score(src, dataset)
+    finally:
+        done.set()
+
+
 def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
     mid, src = row["id"], row.get("path")
     if not src or not os.path.exists(src):
@@ -52,7 +71,7 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
     log_file = os.path.join(log_dir, "last_eval.log")
     repairs = 0
     while True:
-        res = hub.score(src, dataset, timeout)                # subprocess-isolated; never raises
+        res = score_guarded(mid, src, dataset, timeout)       # watchdog-guarded; never raises
         with open(log_file, "w") as f:
             f.write(res.get("log", "") or "")
         if _is_ok(res) or repairs >= max_repairs:

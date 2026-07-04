@@ -567,22 +567,19 @@ def summary(run: str | None = None) -> str:
 
 
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
-def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> dict:
+def score(model_file: str, dataset: str | None = None) -> dict:
     """Score one model with the FIXED harness IN-PROCESS, reusing the per-process split cache: the
     torch import, CUDA init, and the split load are paid ONCE across every model this process scores
-    (~50x the old subprocess-per-model throughput). Never raises on a model fault -- an exception or a
-    SIGALRM wall-clock timeout becomes ``status='error'``. Returns ``{status, test_corr, train_corr,
-    roi_corr, experiment_notes, n_params, seconds, log}`` (``log`` = captured-output tail, for repair).
-    A model that HARD-crashes the interpreter (segfault / ``os._exit``) takes the evaluator down; the
-    search supervisor restarts it and ``requeue_orphans`` recovers the row."""
-    import contextlib, importlib.util, io, signal, threading, traceback
+    (~50x the old subprocess-per-model throughput). Never raises on a model fault -- an exception
+    becomes ``status='error'``. Returns ``{status, test_corr, train_corr, roi_corr, experiment_notes,
+    n_params, seconds, log}`` (``log`` = captured-output tail, for repair). ONE dataset per process
+    (``DATASET`` is import-bound). A model that HANGS (native CUDA/C, uninterruptible in-process) or
+    hard-crashes is handled by the evaluator's watchdog, which records the error and restarts the
+    process (``requeue_orphans`` recovers the row)."""
+    import contextlib, importlib.util, io, traceback
     os.environ["NEURO_DATASET"] = dataset or os.environ.get("NEURO_DATASET", "nsd")
     os.environ.pop("NEURO_ROI", None)             # no ROI knob: reward = the preset's fixed region
     buf = io.StringIO()
-    on_main = threading.current_thread() is threading.main_thread()
-    if on_main:                                   # SIGALRM (main thread only) cuts off a hung model
-        signal.signal(signal.SIGALRM, lambda *_: (_ for _ in ()).throw(TimeoutError(f"timeout after {timeout}s")))
-        signal.alarm(int(timeout))
     try:
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
             from harness.datasets import DATASET
@@ -593,12 +590,9 @@ def score(model_file: str, dataset: str | None = None, timeout: int = 420) -> di
             row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}
-    except Exception as e:  # noqa: BLE001  -- any eval fault (incl. the SIGALRM timeout) is a recorded error
+    except Exception as e:  # noqa: BLE001  -- any eval fault is a recorded error, not a crash
         traceback.print_exc(file=buf)
         res = {"status": f"error: {type(e).__name__}: {e}"[:300]}
-    finally:
-        if on_main:
-            signal.alarm(0)
     res.setdefault("log", buf.getvalue()[-4000:])
     return res
 

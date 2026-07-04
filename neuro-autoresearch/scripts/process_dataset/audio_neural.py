@@ -59,10 +59,11 @@ def _process(ds_key: str) -> None:
     # Baked once here so the load path stays a plain pick/resample (_NEURAL["ieeg"]). ---
     if ds_key == "ieeg":
         import mne
-        hg = os.path.join(RAW[ds_key], "derivatives/ecogprep/sub-01/ieeg",
-                          "sub-01_task-podcast_desc-highgamma_ieeg.fif")
+        subj = d.subject or "01"                  # which patient's high-gamma to stage (default sub-01)
+        hg = os.path.join(RAW[ds_key], f"derivatives/ecogprep/sub-{subj}/ieeg",
+                          f"sub-{subj}_task-podcast_desc-highgamma_ieeg.fif")
         raw = mne.io.read_raw_fif(hg, preload=True).pick("ecog").resample(100.0)
-        subject, freq, start = f"{d.study}/01", 100.0, 0.0
+        subject, freq, start = f"{d.study}/{subj}", 100.0, 0.0
     else:
         ext = _NEURAL[d.neural](d)
         typed = ext._event_types_helper.extract(events)
