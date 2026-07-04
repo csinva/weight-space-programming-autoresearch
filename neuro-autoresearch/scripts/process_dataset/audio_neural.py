@@ -26,6 +26,7 @@ import argparse
 import json
 import os
 import shutil
+from dataclasses import replace
 
 import pandas as pd
 import neuralset as ns
@@ -42,8 +43,10 @@ RAW = {
 }
 
 
-def _process(ds_key: str) -> None:
+def _process(ds_key: str, subject: str = "") -> None:
     d = PRESETS[ds_key]
+    if subject:
+        d = replace(d, subject=subject)          # stage this patient (iEEG is multi-subject)
     out = processed_dir(ds_key)
     neural_dir, stim_dir = os.path.join(out, "neural"), os.path.join(out, "stimuli")
     os.makedirs(neural_dir, exist_ok=True)
@@ -59,11 +62,10 @@ def _process(ds_key: str) -> None:
     # Baked once here so the load path stays a plain pick/resample (_NEURAL["ieeg"]). ---
     if ds_key == "ieeg":
         import mne
-        subj = d.subject or "01"                  # which patient's high-gamma to stage (default sub-01)
-        hg = os.path.join(RAW[ds_key], f"derivatives/ecogprep/sub-{subj}/ieeg",
-                          f"sub-{subj}_task-podcast_desc-highgamma_ieeg.fif")
+        hg = os.path.join(RAW[ds_key], f"derivatives/ecogprep/sub-{d.subject}/ieeg",
+                          f"sub-{d.subject}_task-podcast_desc-highgamma_ieeg.fif")
         raw = mne.io.read_raw_fif(hg, preload=True).pick("ecog").resample(100.0)
-        subject, freq, start = f"{d.study}/{subj}", 100.0, 0.0
+        subject, freq, start = f"{d.study}/{d.subject}", 100.0, 0.0
     else:
         ext = _NEURAL[d.neural](d)
         typed = ext._event_types_helper.extract(events)
@@ -72,7 +74,10 @@ def _process(ds_key: str) -> None:
         ta = next(ext._get_data([typed[0]]))
         raw = ta.to_native()
         subject, freq, start = str(getattr(typed[0], "subject", "") or ""), float(ta.frequency), float(ta.start)
-    fif = os.path.join(neural_dir, f"continuous_{d.neural}.fif")
+    # Per-subject neural file (iEEG stages several patients into one tree; meg is single-subject -> no
+    # suffix). The stimuli (audio/words) and the shared fields of meta.json are identical across patients.
+    suffix = f"_sub-{d.subject}" if d.subject else ""
+    fif = os.path.join(neural_dir, f"continuous_{d.neural}{suffix}.fif")
     raw.save(fif, overwrite=True)
 
     # --- stimuli: copy the audio verbatim, write the word-onset table. ---
@@ -109,4 +114,6 @@ def _process(ds_key: str) -> None:
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--dataset", required=True, choices=["meg", "ieeg"])
-    _process(p.parse_args().dataset)
+    p.add_argument("--subject", default="", help="iEEG patient to stage, e.g. 01 (default: the preset's)")
+    a = p.parse_args()
+    _process(a.dataset, a.subject)

@@ -56,6 +56,9 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # stay blind) -- hold out the rest for generalization. Override with NEURO_SUBJECT (a single id like
 # `NEURO_SUBJECT=1` for one subject, or a comma list `NEURO_SUBJECT=1,2` for the mean).
 [ "$DATASET" = nsd ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2}"
+# iEEG reward = the cross-subject mean over patients 01-03 (each 5-fold CV'd); a model must
+# generalize ACROSS brains, not overfit one. 04-05 held out for generalization (splits.py).
+[ "$DATASET" = ieeg ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-01,02,03}"
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.

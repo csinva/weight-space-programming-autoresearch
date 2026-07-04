@@ -103,6 +103,8 @@ PRESETS: dict[str, Dataset] = {
         neural="ieeg",
         stimulus="audio",
         reward_roi="all",
+        subject="01",   # default patient; the search reward means over several (NEURO_SUBJECT) so a
+                        # model must generalize ACROSS brains -- no single subject's noise to overfit.
         cv_folds=5,   # reward = 5-fold temporal CV: a single fixed hold-out (only ~1k words, 99 raw-r
                       # channels, no noise ceiling) is trivially overfit by a search that grep's it.
         timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5,
