@@ -11,6 +11,9 @@ from __future__ import annotations
 GEN_SPLITS = {
     # NSD: search reward is the subj 1,2 mean (search/search.sh default); 5,7 are staged but held out.
     "nsd": {"axis": "NEURO_SUBJECT", "search": ["1", "2"], "heldout": ["5", "7"]},
+    # iEEG Podcast: reward = the cross-subject mean over patients 01-03 (search/search.sh default);
+    # 04-05 are staged but held out, so generalization = predicting an UNSEEN patient's high-gamma.
+    "ieeg": {"axis": "NEURO_SUBJECT", "search": ["01", "02", "03"], "heldout": ["04", "05"]},
     # Future datasets that switch data by subject (text / tvsd) drop in the same shape.
 }
 

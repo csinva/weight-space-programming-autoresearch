@@ -52,8 +52,10 @@ def _load_text_blob(d: Dataset):
     return _build_cache_load(blob_path)
 
 
-def _processed_audio_events(out: str):
-    """Rebuild the NeuralSet events DataFrame from a slim data/<ds>/ tree (audio neural).
+def _processed_audio_events(out: str, subject: str = ""):
+    """Rebuild the NeuralSet events DataFrame from a slim data/<ds>/ tree (audio neural). ``subject``
+    picks the per-patient neural file for multi-subject iEEG (``continuous_ieeg_sub-<NN>.fif``); meg
+    passes "" and reads the single unsuffixed file.
 
     Mirrors what the raw study.run() returns for the fields _build_xy uses: one neural
     row (pointing at the preprocessed 100Hz .fif), one Audio row (the copied wav), and one
@@ -64,8 +66,9 @@ def _processed_audio_events(out: str):
 
     meta = json.load(open(os.path.join(out, "neural", "meta.json")))
     type_for = {"meg": "Meg", "ieeg": "Ieeg"}[meta["modality"]]
-    fif = os.path.join(out, "neural", f"continuous_{meta['modality']}.fif")
-    timeline, subject = "t0", meta["subject"]
+    suffix = f"_sub-{subject}" if subject else ""     # iEEG: per-patient neural file; meg: unsuffixed
+    fif = os.path.join(out, "neural", f"continuous_{meta['modality']}{suffix}.fif")
+    timeline, subject = "t0", (subject or meta["subject"])
 
     neural_row = {
         "type": type_for, "start": meta["start"], "frequency": meta["frequency"],
@@ -105,7 +108,7 @@ _CACHE_VERSION = "v2"
 # build-cache key: ``test_frac`` only sizes a temporal tail; ``reward_roi`` only
 # selects which targets the scalar reward averages over. All region loops therefore
 # share ONE build (the timeseries is read only once).
-_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi")
+_BUILD_AGNOSTIC_FIELDS = ("test_frac", "reward_roi", "cv_folds")
 
 
 def _build_cache_key(d: Dataset, processed: bool = False) -> str:
@@ -307,7 +310,7 @@ def load_timeline(d: Dataset):
         if use_cache and os.path.exists(build_path):
             X, Y, onsets, stim_ids = _build_cache_load(build_path)
         elif use_processed:
-            X, Y, onsets, stim_ids = _build_xy(d, _processed_audio_events(out))
+            X, Y, onsets, stim_ids = _build_xy(d, _processed_audio_events(out, d.subject))
             if use_cache:
                 _build_cache_save(build_path, X, Y, onsets, stim_ids)
         else:

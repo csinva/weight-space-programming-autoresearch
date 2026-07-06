@@ -26,6 +26,7 @@ case "$DATASET" in
   nsd)  LABEL="the Natural Scenes Dataset (NSD): human fMRI responses to natural images, across the early and ventral visual stream";;
   tvsd) LABEL="TVSD: macaque multi-unit spiking to natural images, across early visual cortex through IT";;
   nnn)  LABEL="Triple-N: macaque spiking to natural images, across early visual cortex and IT";;
+  ieeg) LABEL="the 'Podcast' ECoG dataset: human intracranial (iEEG) high-gamma responses to naturalistic spoken language, across one patient's cortical electrodes";;
   *)    LABEL="$DATASET";;
 esac
 
