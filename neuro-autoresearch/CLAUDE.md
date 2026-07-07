@@ -28,9 +28,9 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
 ## Architecture
 - **`harness/`** (fixed eval): `datasets.py` (presets + the `Dataset`/`Timeline` config; pick via
   `NEURO_DATASET`) · `loaders/` (`load_split` dispatch in `__init__`; `shared.py` (RawPixels, cache
-  dir, constant-col drop); `timeline.py` (the NeuralSet `Segmenter` loader) + `studies.py` (Study
-  subclasses) for the timeline datasets text/meg/ieeg; `vision/` (`nsd.py`, `tvsd.py`, `nnn.py`) for
-  the pre-aligned image-table datasets) · `ridge.py` (the readout: fast eigh+LOO default / himalaya,
+  dir, constant-col drop); `timeline.py` (the NeuralSet `Segmenter` loader) + `studies.py` (the
+  `Zada2025Podcast` Study) for the timeline dataset `ieeg`; `vision/` (`nsd.py`, `tvsd.py`, `nnn.py`)
+  for the pre-aligned image-table datasets) · `ridge.py` (the readout: fast eigh+LOO default / himalaya,
   via `NEURO_READOUT`) · `reward.py` (orchestration: forward → readout → the region `test_corr`) ·
   `roi.py` (one `reward_region_mask` selector over the loader's per-ROI masks + the advisory per-ROI
   breakdown) · `run.py` (the manual single-eval CLI; prints the
@@ -77,10 +77,12 @@ search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentral
 **Single source of truth:** every loader reads ONLY the in-repo `data/<name>/` store (relocate via
 `NEURO_DATA_DIR`); if a dataset isn't staged there the loader raises and names its build script. The
 external `~/Research/neuralset/data/` is build-time-only scratch — the raw source for the offline
-`scripts/process_dataset/<name>.py` step, never touched at runtime, so no preset sets `path`. Timeline
-datasets still segment with the NeuralSet `Segmenter`; `nsd`/`tvsd`/`nnn` use standalone readers — but
-both read from `data/<name>/`. `text` ships a baked `data/text/<study>.pt` `(X,Y)` blob (its fMRI
-doesn't reduce to a re-segmentable signal); `meg`/`ieeg` ship a slim re-segmentable tree.
+`scripts/process_dataset/<name>.py` step, never touched at runtime, so no preset sets `path`. Two
+families: **vision** (`nsd`/`tvsd`/`nnn`, standalone image-table readers) + **language** (`ieeg`,
+NeuralSet `Segmenter`; a Huth-lab fMRI-language timeline is the next language dataset — the timeline
+engine keeps its generic fMRI/audio paths for it). `ieeg` ships a slim re-segmentable tree
+(per-patient high-gamma `.fif` + word onsets); the vision datasets ship pre-aligned tables — all read
+from `data/<name>/`.
 
 `nsd` — NSD prepared GLMdenoise betas, reward = **early+ventral** stream (noise-normalized; see top),
 subjects **`{1,2,5,7}` staged in-repo** via `NEURO_SUBJECT` (1+2 the search reward, 5+7 held-out; other
@@ -90,14 +92,19 @@ comma list (`NEURO_SUBJECT=1,2`) makes the reward the MEAN over several subjects
 averaged, recorded as ONE `test_corr` + averaged `roi_corr` (per-subject values are never stored;
 proposers stay blind); unset = the dataset's default subject.
 **`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECT`
-env. Works for datasets that switch data by subject (`nsd` / `text` / `tvsd`); `nnn` pools sessions so
+env. Works for datasets that switch data by subject (`nsd` / `tvsd` / `ieeg`); `nnn` pools sessions so
 its animals aren't separable yet. Hold out the rest for generalization
 (`scripts/generalization/generalize.py` — re-evals a run's DB champion on the held-out units; the
 per-dataset search/held-out split lives in `scripts/generalization/splits.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
 ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
 provisioned `ncsnr` raises — (re)run `python -m scripts.process_dataset.nsd` to fetch+align it.
-`text` / `meg` / `ieeg` — NeuralSet timeline studies · `tvsd` / `nnn` — macaque spiking tables. `nnn`
+`ieeg` — the 'Podcast' ECoG timeline study (human intracranial high-gamma to spoken language). Stimulus
+is **`chars`** (each word → char-id grid of its N-gram, so `model.py` builds linguistic structure
+itself — no pretrained embeddings); reward = **5-fold rotating temporal CV** over all electrodes (raw
+mean r, no ceiling; the CV blocks a single fixed hold-out from being grep'd), multi-subject mean via
+`NEURO_SUBJECT` (patients 01-03 the search reward, 04-05 held out). Stage a patient with
+`scripts.process_dataset.audio_neural --subject NN`. · `tvsd` / `nnn` — macaque spiking tables. `nnn`
 is **noise-ceiling-normalized** (r²/NC_r2, NC_r = the release's per-unit split-half `reliability_best`)
 like NSD — so `nnn` scores are NOT comparable to pre-normalization raw-r runs. Reward = reliable units
 (`NNN_MIN_RELIABILITY` 0.4) pooled; `NNN_UNIT_TYPE` (unset=all, default; `=1` → single units only,

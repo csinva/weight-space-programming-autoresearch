@@ -94,7 +94,7 @@ pip install .
 
 ```bash
 python -m harness.run                    # score the current model.py on the active dataset
-NEURO_DATASET=meg python -m harness.run  # pick a preset (text | nsd | meg | ieeg | tvsd | nnn)
+NEURO_DATASET=ieeg python -m harness.run # pick a preset (nsd | tvsd | nnn | ieeg)
 NEURO_READOUT=himalaya python -m harness.run  # reference readout (default: the ~20× faster fast ridge)
 ```
 
@@ -167,20 +167,26 @@ Presets are registered in `harness/datasets.py` and selected by the `NEURO_DATAS
 environment variable — no source edit, so parallel runs never collide. All are
 pre-staged locally and loaded with `download=False`, so they run **fully offline**.
 
+Two families — **vision** (image → neural response tables) and **language** (spoken words → intracranial recordings):
+
 | `NEURO_DATASET` | study | neural | stimulus | reward |
 | --- | --- | --- | --- | --- |
-| `text` (default) | Le Petit Prince (LPP) | fMRI | audio | whole-study |
-| `nsd` | Natural Scenes Dataset | fMRI | image | **early+ventral** stream |
-| `meg` | LPP-Listen | MEG | audio | whole-study |
-| `ieeg` | LPP iEEG | iEEG | audio | whole-study |
-| `tvsd` / `nnn` | macaque IT | spiking | image | whole-study |
+| `nsd` (default) | Natural Scenes Dataset | fMRI | image | **early+ventral** stream, noise-normalized |
+| `tvsd` | THINGS ventral-stream (macaque) | spiking | image | all electrodes (V1→IT) |
+| `nnn` | Triple-N (macaque) | spiking | image | all reliable units (EVC+IT), noise-normalized |
+| `ieeg` | 'Podcast' ECoG (human) | iEEG | text (chars) | all electrodes, 5-fold temporal CV |
 
 - **`nsd`** uses the prepared single-trial **GLMdenoise betas**
   (`betas_fithrf_GLMdenoise_RR`, Algonauts-2023 style: z-scored per session, 3-rep
   averaged). The reward is the joint **early+ventral visual stream** (~14.5k voxels),
   noise-ceiling-normalized (mean sign-preserving r²/NC_r2 over the reliable voxels). The
-  canonical **shared-1000** images are held out as an image-disjoint test set. All 8
-  subjects are available via `NEURO_SUBJECT=1..8`.
+  canonical **shared-1000** images are held out as an image-disjoint test set. Subjects
+  1, 2, 5, 7 are staged in-repo via `NEURO_SUBJECT` (1+2 the search reward, 5+7 held out).
+- **`ieeg`** is the language dataset: human intracranial **high-gamma** (70–200 Hz) power to a
+  ~30-min spoken podcast. The stimulus is **`chars`** — each word encoded as the char-id grid of
+  its N-gram, so `model.py` must build linguistic structure from characters up (no pretrained
+  embeddings). The reward is a rotating **5-fold temporal CV** (a single fixed hold-out is trivially
+  overfit), meaned across patients via `NEURO_SUBJECT`.
 - The reward region is a fixed **per-dataset** attribute, not an operator knob — there is
   no per-region ROI menu and no way to point the readout at the target.
 
@@ -201,4 +207,4 @@ study.
 
 ---
 
-*Data loading and alignment are provided by NeuralSet / NeuralFetch.*
+*Timeline segmentation and alignment are provided by NeuralSet.*
