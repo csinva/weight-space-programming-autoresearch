@@ -11,20 +11,28 @@ Y_test); the agent should NOT need to edit anything here.
 """
 from __future__ import annotations
 
+import os
+
 from harness.datasets import Dataset
 
 
 _SPLIT_MEMO: dict = {}
 
+# Env knobs that shape WHICH voxels/units/rows a split contains -- part of the memo key so an
+# in-process threshold sweep can't hand back a stale split under a changed cut. (imsize/subject
+# already live on the frozen Dataset.)
+_SPLIT_ENV_KEYS = ("NSD_NCSNR_MIN", "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_NO_CACHE")
+
 
 def load_split(d: Dataset):
-    """Return (X_train, X_test, Y_train, Y_test, roi_masks, nc). Memoized per-process by the (frozen,
-    hashable) ``Dataset``: the search evaluator scores many models against the SAME split, so the load
-    is paid ONCE, not once per model. The split is treated read-only downstream (the reward copies X
-    to the GPU per eval), so sharing it across models is safe."""
-    if d not in _SPLIT_MEMO:
-        _SPLIT_MEMO[d] = _dispatch_split(d)
-    return _SPLIT_MEMO[d]
+    """Return (X_train, X_test, Y_train, Y_test, roi_masks, nc). Memoized per-process by the frozen
+    ``Dataset`` plus the split-shaping env knobs: the search evaluator scores many models against the
+    SAME split, so the load is paid ONCE, not once per model. The split is treated read-only
+    downstream (the reward copies/clones X per eval), so sharing it across models is safe."""
+    key = (d, tuple(os.environ.get(k) for k in _SPLIT_ENV_KEYS))
+    if key not in _SPLIT_MEMO:
+        _SPLIT_MEMO[key] = _dispatch_split(d)
+    return _SPLIT_MEMO[key]
 
 
 def _dispatch_split(d: Dataset):

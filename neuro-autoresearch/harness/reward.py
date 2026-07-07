@@ -116,8 +116,12 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     device = _readout_device()
     t0 = time.time()
     # Move the stimulus to the readout device so the model's forward pass runs on the GPU too.
+    # .to(cuda) copies; .to(cpu) is a no-op, so clone on CPU to keep the shared memoized split
+    # safe from an in-place-mutating model.
     if torch.is_tensor(X_train):
         X_train, X_test = X_train.to(device), X_test.to(device)
+        if device.type == "cpu":
+            X_train, X_test = X_train.clone(), X_test.clone()
     A_train, A_test = _forward(model, X_train), _forward(model, X_test)
 
     d_out = int(A_train.shape[1])
@@ -145,8 +149,8 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
     if getattr(dataset, "cv_folds", 0) > 1:
         A_full, Y_full = torch.cat([A_train, A_test], 0), torch.cat([Yv_train, Yv_test], 0)
         train_np, test_np = _cv_column_r(A_full, Y_full, dataset.cv_folds, device, nc)
-        n_test = int(Y_full.shape[0])                          # CV: every row is a held-out point once
-        n_train = n_test - round(n_test / dataset.cv_folds)    # rows a single fold trains on
+        n_test = round(int(Y_full.shape[0]) / dataset.cv_folds)   # CV: one representative fold's split
+        n_train = int(Y_full.shape[0]) - n_test
     else:
         pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
         test_np = _noise_normalize(_corr_per_column(pred_test, _to_np(Yv_test)), nc)
@@ -270,11 +274,12 @@ def evaluate_subjects(model, dataset: Dataset, slices=()) -> dict:
     from harness.datasets import with_subject
     from harness.loaders import load_split
 
-    subs = os.environ.get("NEURO_SUBJECT")
-    if not subs:
+    subs = os.environ.get("NEURO_SUBJECT") or ""
+    tokens = [x.strip() for x in subs.split(",") if x.strip()]
+    if not tokens:                                   # unset, or whitespace/comma-only -> default subject
         return evaluate_on_split_safe(model, load_split(dataset), dataset, slices)
     rows = []
-    for s in (x.strip() for x in subs.split(",") if x.strip()):
+    for s in tokens:
         d = with_subject(dataset, s)
         row = evaluate_on_split_safe(model, load_split(d), d, slices)
         row["subject"] = d.subject

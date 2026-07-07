@@ -69,8 +69,11 @@ def _processed_audio_events(out: str, subject: str = ""):
 
     meta = json.load(open(os.path.join(out, "neural", "meta.json")))
     type_for = {"meg": "Meg", "ieeg": "Ieeg"}[meta["modality"]]
-    suffix = f"_sub-{subject}" if subject else ""     # iEEG: per-patient neural file; meg: unsuffixed
+    suffix = f"_sub-{subject}" if subject and meta["modality"] == "ieeg" else ""   # iEEG: per-patient file
     fif = os.path.join(out, "neural", f"continuous_{meta['modality']}{suffix}.fif")
+    if not os.path.exists(fif):
+        raise FileNotFoundError(
+            f"neural file {fif!r} not staged -- run `python -m scripts.process_dataset.audio_neural`.")
     timeline, subject = "t0", (subject or meta["subject"])
 
     neural_row = {
@@ -252,8 +255,8 @@ _CHAR_STOI = {c: i + 2 for i, c in enumerate(_CHAR_VOCAB)}   # 0=pad, 1=<unk>
 
 
 def _char_ngram_ids(words: list[str], ngram: int, max_chars: int) -> torch.Tensor:
-    """Per word i, encode the N-gram string ``words[i-ngram+1 : i+1]`` (word + preceding
-    ngram-1 words) as char ids into a fixed (n_words, max_chars) long grid. Keeps the LAST
+    """Per word i, encode the N-gram string ``words[i-ngram : i+1]`` (trigger word + preceding
+    ngram words) as char ids into a fixed (n_words, max_chars) long grid. Keeps the LAST
     ``max_chars`` characters (the recent context/the trigger word), left-aligned + right-padded
     with 0, so the final non-pad column is the last character of the trigger word."""
     out = torch.zeros((len(words), max_chars), dtype=torch.long)

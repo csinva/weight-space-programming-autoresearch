@@ -188,11 +188,13 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
     if dataset.study.startswith("Li2022PetitSubj"):
         # Runtime reads data/text/<study>.pt by study name; the raw dir is the build step's concern.
         return replace(dataset, subject=subject, study=f"Li2022PetitSubj{subject}")
+    if dataset.study.startswith("Zada2025Podcast"):
+        return replace(dataset, subject=f"{int(subject):02d}")   # iEEG: zero-padded per-patient id
     return replace(dataset, subject=subject)
 
 
 # Default subject binding from NEURO_SUBJECT (a single id, or the first of a comma list -- the
 # reward loops over the full list; this just binds the default DATASET for single-split callers).
-_subject = (os.environ.get("NEURO_SUBJECT") or "").split(",")[0].strip()
-if _subject:
-    DATASET = with_subject(DATASET, _subject)
+_subjects = [s.strip() for s in (os.environ.get("NEURO_SUBJECT") or "").split(",") if s.strip()]
+if _subjects:
+    DATASET = with_subject(DATASET, _subjects[0])

@@ -22,6 +22,10 @@ from harness.loaders.shared import (
 
 _NNN_N_NSD_IMAGES = 1000
 
+# Absolute NC_r2 floor (NC_r ~0.1): a unit with near-zero explainable variance would blow up the
+# r^2/NC_r2 reward, so it is dropped even if NNN_MIN_RELIABILITY is lowered. Mirrors nsd's _NC_R2_FLOOR.
+_NNN_NC_R2_FLOOR = 0.01
+
 
 def _nnn_min_reliability() -> float:
     """Per-unit reliability cut for a usable target (env NNN_MIN_RELIABILITY).
@@ -40,7 +44,12 @@ def _nnn_unit_types() -> set[int] | None:
     pool); a comma list (``1,2``) keeps several classes.
     """
     raw = os.environ.get("NNN_UNIT_TYPE", "").strip()
-    return {int(t) for t in raw.split(",") if t.strip()} or None
+    types = set()
+    for t in (x.strip() for x in raw.split(",") if x.strip()):
+        if t not in ("1", "2", "3"):
+            raise ValueError(f"NNN_UNIT_TYPE={raw!r}: unknown class {t!r} (1=single, 2=MUA, 3=non-somatic).")
+        types.add(int(t))
+    return types or None
 
 
 def _nnn_area_table(root: str) -> dict:
@@ -108,8 +117,12 @@ def _load_nnn_processed(d: Dataset, proc: str, types: set[int] | None):
             torch.save({"X": X}, x_cache)
     blob = torch.load(os.path.join(proc, "neural", "all_units.pt"), weights_only=False)
     rel = np.asarray(blob["reliability"]).ravel()
-    keep = rel > _nnn_min_reliability()
+    keep = (rel > _nnn_min_reliability()) & (rel ** 2 >= _NNN_NC_R2_FLOOR)
     if types is not None:
+        if "unit_type" not in blob:
+            raise RuntimeError(
+                "NNN_UNIT_TYPE is set but this all_units.pt has no 'unit_type' -- (re)run "
+                "`python -m scripts.process_dataset.nnn` to add it.")
         keep &= np.isin(np.asarray(blob["unit_type"]).ravel(), list(types))
     Y = np.asarray(blob["Y"])[:, keep].astype("float32")
     areas = np.asarray(blob["areas"])[keep]
