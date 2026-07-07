@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>neuro·autoresearch — overview</title>
+<meta name="description" content="Open-ended autoresearch for neural encoding: an AI agent writes the code for a function that maps stimuli to a representation, a ridge readout scores it against recorded brain activity, and held-out predictivity is the reward — a search for the computations the brain implements." />
+<style>
+/* =====================================================================
+   neuro·autoresearch — project overview
+   Design system + reusable components (visual scaffold; prose is a later pass)
+
+   DIRECTION
+     Quiet cool "lab porcelain" paper + near-black ink. One distinctive
+     accent: SPECTRAL MAGENTA, borrowed from the hot end of magma/viridis
+     heatmaps — the native visual language of brain-activity maps. Reserved
+     for reward, metrics, and emphasis. A muted TEAL appears only inside the
+     pipeline diagram as the "signal" color. Everything else stays disciplined.
+
+   TYPE  (system fonts only — no CDNs/webfonts)
+     Display : editorial old-style serif  (Iowan / Palatino → Georgia)
+     Body    : clean humanist sans        (system-ui / -apple-system)
+     Utility : monospace                  (ui-monospace / SF Mono → Menlo)
+   ===================================================================== */
+
+:root{
+  /* ---- palette : lab porcelain + ink ---- */
+  --paper:      #eef0ea;   /* cool porcelain page                */
+  --paper-sunk: #e5e7df;   /* recessed panels                    */
+  --card:       #fcfcfa;   /* raised card / surface              */
+  --card-hi:    #ffffff;   /* higher surface / hover             */
+  --ink:        #14161b;   /* near-black, faint blue             */
+  --ink-soft:   #474b54;   /* secondary text                    */
+  --ink-faint:  #82868f;   /* captions, meta                    */
+  --line:       #d8dace;   /* hairline rules                    */
+  --line-soft:  #e4e6dd;   /* softer dividers                   */
+
+  /* ---- accent : spectral magenta (magma hot-end) ---- */
+  --spec:       #bd1a67;   /* primary accent                    */
+  --spec-deep:  #8a1350;   /* pressed / deep                    */
+  --spec-soft:  #e57aa9;   /* tint                              */
+  --spec-wash:  rgba(189,26,103,.08);
+  --spec-glow:  rgba(189,26,103,.22);
+
+  /* ---- signal teal (diagram only) ---- */
+  --sig:        #12736f;
+  --sig-soft:   #6fb8b3;
+  --sig-wash:   rgba(18,115,111,.08);
+
+  /* ---- magma ramp : cold -> hot (metrics, spectral bars) ---- */
+  --m0:#2a1b46; --m1:#762a6a; --m2:#c31d6b; --m3:#ea5c3d; --m4:#f2b53a;
+
+  /* ---- type roles ---- */
+  --display:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,"Liberation Mono",monospace;
+
+  /* ---- type scale (major-third-ish, fluid) ---- */
+  --fs-mega:clamp(2.7rem,6.2vw,4.7rem);
+  --fs-h1:  clamp(2.1rem,4.4vw,3.3rem);
+  --fs-h2:  clamp(1.55rem,3vw,2.3rem);
+  --fs-h3:  clamp(1.18rem,1.7vw,1.4rem);
+  --fs-lead:clamp(1.08rem,1.5vw,1.32rem);
+  --fs-body:clamp(1rem,.4vw + .92rem,1.08rem);
+  --fs-sm:  .875rem;
+  --fs-xs:  .75rem;
+  --fs-mono:.82rem;
+
+  /* ---- spacing scale ---- */
+  --s1:.375rem; --s2:.625rem; --s3:1rem; --s4:1.5rem;
+  --s5:2.25rem; --s6:3.25rem; --s7:5rem; --s8:7.5rem;
+
+  /* ---- structure ---- */
+  --maxw:1120px; --measure:68ch; --radius:4px; --radius-lg:10px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
+/* ---------- reset / base ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:var(--fs-body);line-height:1.55;
+  font-weight:400;-webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;overflow-x:hidden;
+}
+/* faint field gradient — a whisper of the magma ramp, top-left only */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1000px 560px at -3% -8%, rgba(189,26,103,.07), transparent 60%),
+    radial-gradient(820px 560px at 104% 106%, rgba(18,115,111,.05), transparent 60%);
+}
+img{max-width:100%;display:block}
+a{color:var(--spec);text-decoration:none;text-underline-offset:.2em}
+a:hover{text-decoration:underline;text-decoration-thickness:1px}
+::selection{background:var(--spec-wash);color:var(--ink)}
+:focus-visible{outline:2px solid var(--spec);outline-offset:3px;border-radius:2px}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+
+/* ---------- layout primitives ---------- */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1.15rem,4vw,2.4rem)}
+.section{padding:var(--s6) 0;border-top:1px solid var(--line-soft);scroll-margin-top:70px}
+.section--flush{border-top:0}
+.stack > * + *{margin-top:var(--s3)}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  background:color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.topbar__in{
+  max-width:var(--maxw);margin:0 auto;
+  padding:.7rem clamp(1.15rem,4vw,2.4rem);
+  display:flex;align-items:center;justify-content:space-between;gap:1.2rem;
+}
+.wordmark{
+  font-family:var(--mono);font-size:.9rem;font-weight:600;letter-spacing:.01em;
+  color:var(--ink);display:inline-flex;align-items:center;gap:.6rem;white-space:nowrap;
+}
+.wordmark:hover{text-decoration:none}
+.wordmark .dot{
+  width:11px;height:11px;border-radius:50%;
+  background:conic-gradient(from 210deg,var(--m0),var(--m1),var(--m2),var(--m3),var(--m4),var(--m0));
+  box-shadow:0 0 0 3px var(--spec-wash);
+}
+.wordmark b{color:var(--spec);font-weight:600}
+.navlinks{display:flex;align-items:center;gap:.15rem;flex-wrap:wrap}
+.navlinks a{
+  font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.03em;
+  color:var(--ink-soft);padding:.4rem .68rem;border-radius:999px;
+  transition:color .2s var(--ease),background .2s var(--ease);
+}
+.navlinks a:hover{color:var(--spec);background:var(--spec-wash);text-decoration:none}
+
+/* ============================================================
+   EYEBROW / KICKER  (structural label — encodes section role)
+   ============================================================ */
+.eyebrow{
+  font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.24em;
+  text-transform:uppercase;color:var(--spec);
+  display:inline-flex;align-items:center;gap:.6rem;margin:0 0 var(--s3);
+}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--spec);opacity:.7}
+.eyebrow--sig{color:var(--sig)}
+.eyebrow--sig::before{background:var(--sig)}
+.eyebrow--muted{color:var(--ink-faint)}
+.eyebrow--muted::before{background:var(--ink-faint)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{padding:clamp(2rem,5vw,3.2rem) 0 clamp(1.4rem,3vw,2rem);position:relative}
+.hero__title{
+  font-family:var(--display);font-weight:600;line-height:1.02;
+  letter-spacing:-.015em;font-size:var(--fs-mega);
+  margin:.4rem 0 0;max-width:16ch;
+}
+.hero__title em{
+  font-style:italic;
+  background:linear-gradient(96deg,var(--m1) 4%,var(--m2) 42%,var(--m3) 74%,var(--m4));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero__tagline{
+  font-family:var(--mono);font-size:var(--fs-mono);color:var(--ink-soft);
+  letter-spacing:.02em;margin:1.4rem 0 0;
+  display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;
+}
+.hero__tagline .arw{color:var(--spec);font-weight:600}
+.hero__sub{
+  font-family:var(--display);font-size:var(--fs-lead);line-height:1.45;
+  color:var(--ink-soft);max-width:60ch;margin:1.5rem 0 0;
+}
+.hero__sub b{color:var(--ink);font-weight:600}
+.hero__cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:var(--s5)}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family:var(--mono);font-size:var(--fs-sm);letter-spacing:.01em;
+  padding:.62rem 1.15rem;border-radius:999px;display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid transparent;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease);
+}
+.btn:hover{text-decoration:none}
+.btn--primary{background:var(--spec);color:#fff;box-shadow:0 10px 24px -14px var(--spec)}
+.btn--primary:hover{background:var(--spec-deep);transform:translateY(-1px);box-shadow:0 14px 28px -12px var(--spec)}
+.btn--ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn--ghost:hover{border-color:var(--spec-soft);color:var(--spec)}
+
+/* ============================================================
+   SECTION HEADERS  +  LEAD PARAGRAPHS
+   ============================================================ */
+.section-head{max-width:var(--measure);margin-bottom:var(--s4)}
+.h2{
+  font-family:var(--display);font-weight:600;line-height:1.08;
+  letter-spacing:-.01em;font-size:var(--fs-h2);margin:0;max-width:22ch;
+}
+.h3{
+  font-family:var(--display);font-weight:600;line-height:1.2;
+  font-size:var(--fs-h3);margin:0 0 var(--s2);
+}
+.lead{
+  font-size:var(--fs-lead);line-height:1.5;color:var(--ink-soft);
+  max-width:var(--measure);margin:var(--s3) 0 0;
+}
+.lead b{color:var(--ink);font-weight:600}
+.prose{max-width:var(--measure);color:var(--ink-soft)}
+.prose p{margin:0 0 var(--s3)}
+.prose code{
+  font-family:var(--mono);font-size:.86em;background:var(--paper-sunk);
+  padding:.08em .38em;border-radius:3px;color:var(--ink);
+}
+
+/* ============================================================
+   TWO-COLUMN EXPLANATORY LAYOUT
+   ============================================================ */
+.cols{
+  display:grid;gap:clamp(1.6rem,4vw,3rem);align-items:start;
+  grid-template-columns:1fr 1fr;
+}
+.cols--aside{grid-template-columns:1.5fr 1fr}   /* body + narrow aside */
+.cols--lede{grid-template-columns:.8fr 1.2fr}   /* label + explanation */
+@media(max-width:760px){.cols,.cols--aside,.cols--lede{grid-template-columns:1fr}}
+
+/* ============================================================
+   CALLOUT / ASIDE
+   ============================================================ */
+.callout{
+  border:1px solid var(--line);border-left:3px solid var(--spec);
+  background:var(--card);border-radius:var(--radius);
+  padding:var(--s4) var(--s4);
+}
+.callout--sig{border-left-color:var(--sig)}
+.callout__label{
+  font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--spec);margin:0 0 var(--s2);
+}
+.callout--sig .callout__label{color:var(--sig)}
+.callout p{margin:0;color:var(--ink-soft);font-size:var(--fs-sm)}
+.aside{
+  background:var(--paper-sunk);border-radius:var(--radius-lg);
+  padding:var(--s4);font-size:var(--fs-sm);color:var(--ink-soft);
+}
+.aside .h3{font-size:1.02rem}
+
+/* ============================================================
+   METRIC / STAT TILES  (magma-tinted instrument readout)
+   ============================================================ */
+.metric-grid{
+  display:grid;gap:var(--s3);
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+}
+.metric{
+  position:relative;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius-lg);padding:var(--s4) var(--s4) var(--s3);
+  overflow:hidden;
+}
+.metric__spark{position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--m0),var(--m1),var(--m2),var(--m3),var(--m4))}
+.metric__value{
+  font-family:var(--display);font-weight:600;font-size:clamp(2.2rem,4vw,3rem);
+  line-height:1;letter-spacing:-.02em;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.metric__value .unit{font-size:.42em;color:var(--ink-faint);font-family:var(--mono);margin-left:.35em;letter-spacing:0}
+.metric__label{
+  font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-faint);margin:var(--s2) 0 0;
+}
+.metric__note{font-size:var(--fs-sm);color:var(--ink-soft);margin:var(--s1) 0 0}
+.metric--hero .metric__value{color:var(--spec)}
+
+/* ============================================================
+   CODE VIEWER  (scrollable, fixed max-height, line numbers)
+   CRITICAL COMPONENT — code scrolls inside its own box.
+   ============================================================ */
+.codeview{
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  background:#fbfbf9;overflow:hidden;
+  box-shadow:0 1px 0 rgba(22,24,29,.02),0 18px 40px -32px rgba(22,24,29,.4);
+}
+.codeview__bar{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.55rem .85rem;border-bottom:1px solid var(--line);
+  background:var(--paper-sunk);
+}
+.codeview__dots{display:inline-flex;gap:.32rem}
+.codeview__dots i{width:9px;height:9px;border-radius:50%;background:var(--line);display:inline-block}
+.codeview__dots i:first-child{background:var(--spec-soft)}
+.codeview__file{
+  font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-soft);letter-spacing:.02em;
+}
+.codeview__tag{
+  margin-left:auto;font-family:var(--mono);font-size:var(--fs-xs);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--spec);
+  padding:.15rem .5rem;border:1px solid var(--spec-soft);border-radius:999px;
+}
+.codeview__body{
+  max-height:400px;overflow:auto;
+  font-family:var(--mono);font-size:var(--fs-mono);line-height:1.62;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+}
+.codeview__body::-webkit-scrollbar{width:10px;height:10px}
+.codeview__body::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px;border:3px solid #fbfbf9}
+.codeview__body::-webkit-scrollbar-track{background:transparent}
+.code-line{display:flex;white-space:pre;min-width:max-content}
+.code-line:hover{background:var(--spec-wash)}
+.code-line .ln{
+  flex:0 0 auto;width:3.2em;text-align:right;padding:0 1em 0 .9rem;
+  color:var(--ink-faint);opacity:.6;user-select:none;
+  border-right:1px solid var(--line-soft);position:sticky;left:0;background:#fbfbf9;
+}
+.code-line .lc{padding:0 1.2rem 0 1rem;color:var(--ink)}
+/* lightweight syntax tokens */
+.tok-kw{color:var(--spec-deep);font-weight:600}
+.tok-fn{color:var(--sig)}
+.tok-str{color:#8a6d1f}
+.tok-num{color:#b0533a}
+.tok-com{color:var(--ink-faint);font-style:italic}
+.tok-self{color:var(--ink-soft)}
+
+/* ============================================================
+   DATASET-CARD GRID
+   ============================================================ */
+.dataset-grid{
+  display:grid;gap:var(--s3);
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+}
+.dcard{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
+  transition:border-color .2s var(--ease),transform .2s var(--ease);
+}
+.dcard:hover{border-color:var(--spec-soft);transform:translateY(-2px)}
+.dcard__name{
+  font-family:var(--mono);font-size:var(--fs-sm);font-weight:600;color:var(--ink);
+  display:flex;align-items:center;gap:.5rem;
+}
+.dcard__swatch{width:10px;height:10px;border-radius:2px;background:var(--spec)}
+.dcard__kind{
+  font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+.dcard__desc{font-size:var(--fs-sm);color:var(--ink-soft);margin:0;flex:1}
+.dcard__meta{
+  font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);
+  padding-top:var(--s2);border-top:1px solid var(--line-soft);
+  display:flex;justify-content:space-between;gap:.5rem;
+}
+/* per-dataset swatch accents (reuse the magma ramp + teal) */
+.dcard--m0 .dcard__swatch{background:var(--m0)}
+.dcard--m1 .dcard__swatch{background:var(--m1)}
+.dcard--m2 .dcard__swatch{background:var(--m2)}
+.dcard--m3 .dcard__swatch{background:var(--m3)}
+.dcard--m4 .dcard__swatch{background:var(--m4)}
+.dcard--sig .dcard__swatch{background:var(--sig)}
+
+/* ============================================================
+   SHOWCASE  (metric + description  paired with  code viewer)
+   ============================================================ */
+.showcase{
+  display:grid;gap:clamp(1.6rem,4vw,2.6rem);align-items:start;
+  grid-template-columns:1fr 1.3fr;
+}
+@media(max-width:860px){.showcase{grid-template-columns:1fr}}
+.showcase__panel{display:flex;flex-direction:column;gap:var(--s3)}
+
+/* ============================================================
+   PIPELINE DIAGRAM  (pure HTML/CSS signal chain)
+   Signature element — the reward loop as an instrument readout.
+   ============================================================ */
+.pipeline{
+  display:flex;align-items:stretch;flex-wrap:wrap;gap:0;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:var(--s5) var(--s4);overflow-x:auto;
+}
+.pstage{
+  flex:1 1 130px;min-width:120px;display:flex;flex-direction:column;
+  align-items:center;text-align:center;gap:.4rem;padding:0 .4rem;
+}
+.pstage__box{
+  width:100%;padding:var(--s3) var(--s2);border-radius:var(--radius);
+  border:1px solid var(--line);background:var(--paper-sunk);
+  font-family:var(--mono);font-size:var(--fs-sm);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;min-height:3.4em;
+}
+.pstage__box--in{border-color:var(--sig-soft);background:var(--sig-wash);color:var(--sig)}
+.pstage__box--out{border-color:var(--spec-soft);background:var(--spec-wash);color:var(--spec-deep);font-weight:600}
+.pstage__cap{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);letter-spacing:.04em}
+.parrow{
+  flex:0 0 auto;align-self:center;color:var(--ink-faint);
+  font-family:var(--mono);font-size:1.1rem;padding:0 .1rem;transform:translateY(-.6rem);
+}
+.parrow::before{content:"→"}
+/* feedback arc — the reward returning to the proposer */
+.pipeline__loop{
+  margin-top:var(--s3);width:100%;display:flex;align-items:center;gap:.6rem;
+  font-family:var(--mono);font-size:var(--fs-xs);color:var(--spec);
+  border-top:1px dashed var(--spec-soft);padding-top:var(--s3);
+}
+.pipeline__loop .rc{color:var(--ink-faint)}
+@media(max-width:640px){
+  .pipeline{flex-direction:column;gap:.4rem}
+  .pstage{width:100%}
+  .parrow{transform:rotate(90deg);padding:.1rem 0}
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  border-top:1px solid var(--line);padding:var(--s6) 0;
+  font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);
+}
+.footer__in{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--s3)}
+
+
+/* ---- inline stat strip (hero) ---- */
+.statstrip{display:flex;flex-wrap:wrap;gap:0;margin-top:var(--s4);
+  border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--card)}
+.statstrip .st{flex:1 1 120px;padding:.7rem 1rem;border-right:1px solid var(--line-soft)}
+.statstrip .st:last-child{border-right:0}
+.statstrip .st b{font-family:var(--display);font-size:1.5rem;font-weight:600;color:var(--spec);
+  display:block;line-height:1;font-variant-numeric:tabular-nums}
+.statstrip .st span{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.04em;color:var(--ink-faint);
+  text-transform:uppercase;display:block;margin-top:.35rem}
+.statstrip .st.plain b{color:var(--ink)}
+/* ---- big idea callout ---- */
+.bigidea{border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--card);
+  padding:var(--s4) var(--s5);display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4)}
+.bigidea .bi{border-left:3px solid var(--spec);padding-left:var(--s3)}
+.bigidea .bi h4{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--spec);margin:0 0 .4rem}
+.bigidea .bi p{margin:0;font-size:var(--fs-sm);color:var(--ink-soft)}
+@media(max-width:760px){.bigidea{grid-template-columns:1fr;gap:var(--s3)}}
+/* ---- spec box (the contract) ---- */
+.spec{font-family:var(--mono);font-size:var(--fs-sm);background:var(--paper-sunk);
+  border:1px solid var(--line);border-radius:var(--radius);padding:var(--s3) var(--s4)}
+.spec .row{display:flex;gap:.7rem;padding:.28rem 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.spec .row:last-child{border-bottom:0}
+.spec .k{color:var(--spec-deep);flex:0 0 8.5em}
+.spec .v{color:var(--ink-soft)}
+/* ---- question grid ---- */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--s3)}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:var(--s4);border-top:2px solid var(--spec)}
+.qcard .qn{font-family:var(--mono);font-size:var(--fs-xs);color:var(--spec);letter-spacing:.1em}
+.qcard h4{font-family:var(--display);font-size:1.12rem;font-weight:600;margin:.3rem 0 .5rem;line-height:1.2}
+.qcard p{margin:0;font-size:var(--fs-sm);color:var(--ink-soft)}
+/* ---- abridged code tag ---- */
+.codeview__tag.alt{color:var(--ink-faint);border-color:var(--line)}
+/* ---- tighten dataset grid & metrics ---- */
+.dataset-grid{gap:var(--s2)}
+.metric-grid{gap:var(--s2)}
+/* ---- agent loop (numbered) ---- */
+.looplist{list-style:none;margin:0;padding:0;counter-reset:l}
+.looplist li{counter-increment:l;position:relative;padding:.55rem 0 .55rem 2.2rem;
+  border-bottom:1px dashed var(--line);font-size:var(--fs-sm);color:var(--ink-soft)}
+.looplist li:last-child{border-bottom:0}
+.looplist li b{color:var(--ink)}
+.looplist li::before{content:counter(l);position:absolute;left:0;top:.5rem;
+  font-family:var(--mono);font-size:.7rem;color:#fff;background:var(--spec);
+  width:1.35rem;height:1.35rem;border-radius:50%;display:grid;place-items:center;font-weight:600}
+
+/* ============================================================
+   REFINEMENTS  ·  depth, tonal rhythm, and a heatmap signature
+   ============================================================ */
+
+/* hero signature — a faint voxel grid (a brain-activation field) behind the title,
+   with a few "hot" magma voxels: the subject's native visual language, kept quiet. */
+.hero{overflow:visible}
+.hero > *{position:relative;z-index:1}
+.hero__field{
+  position:absolute;inset:-1rem -16vw auto -2vw;height:min(560px,74vh);z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:42px 42px,42px 42px;
+  -webkit-mask-image:radial-gradient(120% 86% at 86% 2%,#000,transparent 60%);
+          mask-image:radial-gradient(120% 86% at 86% 2%,#000,transparent 60%);
+  opacity:.7;
+}
+.hero__field::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle 13px at 79% 20%, var(--m2), transparent 58%),
+    radial-gradient(circle 9px  at 87% 35%, var(--m3), transparent 58%),
+    radial-gradient(circle 7px  at 71% 47%, var(--m4), transparent 60%),
+    radial-gradient(circle 11px at 93% 12%, var(--m1), transparent 58%),
+    radial-gradient(circle 6px  at 82% 52%, var(--m2), transparent 60%);
+  filter:blur(.3px);opacity:.85;
+}
+@media(prefers-reduced-motion:no-preference){
+  .hero__field::after{animation:voxelpulse 7.5s var(--ease) infinite alternate}
+}
+@keyframes voxelpulse{from{opacity:.5}to{opacity:.95}}
+
+/* tonal rhythm — full-bleed sunk bands so the page isn't one flat porcelain tone */
+.section--band{position:relative;border-top:0}
+.section--band::before{
+  content:"";position:absolute;top:0;bottom:0;left:50%;width:100vw;
+  transform:translateX(-50%);z-index:-1;background:var(--paper-sunk);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+
+/* depth — soft, believable shadows on the raised surfaces */
+.metric,.dcard,.qcard{box-shadow:0 1px 2px rgba(20,22,27,.04),0 14px 32px -26px rgba(20,22,27,.55)}
+.dcard:hover{box-shadow:0 2px 4px rgba(20,22,27,.05),0 22px 46px -26px var(--spec-glow)}
+.bigidea,.statstrip,.spec,.callout,.aside,.pipeline{box-shadow:0 1px 2px rgba(20,22,27,.035),0 16px 38px -32px rgba(20,22,27,.5)}
+
+/* accent polish — reserved for the signal */
+.metric__spark{box-shadow:0 0 14px -2px var(--spec-glow)}
+.statstrip .st b{text-shadow:0 6px 18px var(--spec-glow)}
+.pstage__box--out{box-shadow:0 0 0 1px var(--spec-wash),0 10px 26px -14px var(--spec-glow)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar__in">
+    <a class="wordmark" href="#top"><span class="dot" aria-hidden="true"></span>neuro<b>·</b>autoresearch</a>
+    <nav class="navlinks" aria-label="Sections">
+      <a href="#search">the search</a>
+      <a href="#why">the constraints</a>
+      <a href="#questions">new questions</a>
+      <a href="#datasets">datasets</a>
+      <a href="#results">results</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero wrap section--flush">
+    <div class="hero__field" aria-hidden="true"></div>
+    <p class="eyebrow">Open-ended autoresearch · an AI agent searching the space of functions</p>
+    <h1 class="hero__title">Search for the <em>computations</em> that explain the brain</h1>
+    <p class="hero__sub">
+      An AI agent writes and rewrites the code for a function <b>f: stimulus → representation</b>; a ridge readout to
+      recorded neural activity scores it, and that score is the agent's <b>reward</b>. The agent can invent <b>any</b>
+      computation — a wavelet bank, a kernel expansion, an energy hierarchy, not just a neural network — with its
+      parameters written directly in code rather than learned from data. The object of the search is not a model that
+      fits the brain but the <b>function a brain region computes</b>: what class of computation does it implement?
+    </p>
+    <div class="statstrip">
+      <div class="st"><b>0.44</b><span>NSD · r²/NC</span></div>
+      <div class="st"><b>0.063</b><span>iEEG · test_corr</span></div>
+      <div class="st plain"><b>&lt;1M</b><span>params · enforced</span></div>
+      <div class="st plain"><b>0</b><span>gradient steps</span></div>
+      <div class="st plain"><b>5</b><span>datasets · 2 species</span></div>
+    </div>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#search">How the search works</a>
+      <a class="btn btn--ghost" href="#results">Read the best models</a>
+    </div>
+  </section>
+
+  <!-- ===== THE BIG IDEA ===== -->
+  <section class="section wrap">
+    <div class="bigidea">
+      <div class="bi">
+        <h4>Not architecture search</h4>
+        <p>The search space is the space of <b>functions</b>, not a fixed backbone family. A proposal can be Gabor
+          energy, a scattering transform, a hashed lexical bag — anything computable under the contract. The NSD
+          champion is an HMAX energy model, not a CNN.</p>
+      </div>
+      <div class="bi">
+        <h4>Written, not fitted</h4>
+        <p>Parameters are analytic or random-but-fixed, written directly in code. No gradient descent, and the function
+          never sees the neural target — so a high score reflects the <b>computation itself</b>, not weights tuned to
+          the data. What we recover is the function, not a fit to it.</p>
+      </div>
+      <div class="bi">
+        <h4>An agent as the scientist</h4>
+        <p>Autonomous LLM agents author, run, and revise the code — reasoning about mechanism, reading their own scores,
+          and building on what worked. The search runs unsupervised for hours across a diverse pool.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THE SEARCH (method-forward) ===== -->
+  <section class="section wrap" id="search">
+    <div class="section-head">
+      <p class="eyebrow">01 · The search</p>
+      <h2 class="h2">An AI agent writes the function, reads its score, and rewrites it</h2>
+      <p class="lead">The project began with one question: could a large language model, given a brain region and a way
+        to score predictions, simply <em>write</em> the code for a function that predicts it — authoring the computation
+        rather than tuning parameters? It can. The system scales that into a decentralized, always-on search.</p>
+    </div>
+    <div class="cols cols--aside">
+      <div class="prose stack">
+        <p><b>What the agent is handed, and what it writes.</b> Each proposer is an autonomous LLM agent. On every
+          iteration it receives a concrete brief — the input/output contract, the source code of its own current best
+          function, and an anonymized scoreboard of what rival approaches have scored — and it authors a new function as
+          a self-contained program: choosing a front-end (oriented filters, kernels, character features), a
+          nonlinearity, a pooling scheme, and how to lay out the representation. It reasons in natural language about the
+          mechanism it expects to matter, then emits the code.</p>
+        <p><b>The reward and the feedback.</b> It submits that function and the harness returns a single scalar
+          <b>reward</b> — held-out predictivity of the neural activity — together with a per-region breakdown showing
+          <em>where</em> it won and lost. That signal is not a gradient: the agent reads the score against its own prior
+          notes, forms a hypothesis about what to change, and writes the next version. Propose → score → read → mutate,
+          looping for hours, with a GPU evaluator fitting the readout and an optional conductor nudging the pool toward
+          unexplored territory.</p>
+        <p><b>A pool of many agents, kept diverse.</b> Scores are shared; source code is not. Each agent is an
+          <b>island</b> that may read code only from its own best or one random other island — never a global champion —
+          so approaches stay genuinely different instead of collapsing onto one recipe. The cross-island channels can be
+          closed off entirely to recover an independent-loops baseline for controlled comparison. Diversity is the point:
+          an open-ended search should populate <em>many</em> distinct hypotheses, not converge to one.</p>
+        <p><b>What the reward measures.</b> On NSD and Triple-N the score is <b>noise-ceiling-normalized</b> — the mean
+          fraction of <em>explainable</em> variance captured over the reliably-driven voxels or units — so 0.44 means 44%
+          of the recoverable signal, not a raw correlation.</p>
+      </div>
+      <aside class="stack">
+        <div class="spec">
+          <div class="row"><span class="k">contract</span><span class="v">f: X(N,D_in) → (N,D_out)</span></div>
+          <div class="row"><span class="k">weights</span><span class="v">written in code, not learned</span></div>
+          <div class="row"><span class="k">params</span><span class="v">&lt; 1,000,000 (enforced)</span></div>
+          <div class="row"><span class="k">width</span><span class="v">D_out &lt; 10,000</span></div>
+          <div class="row"><span class="k">per-sample</span><span class="v">no batch statistics</span></div>
+          <div class="row"><span class="k">sees</span><span class="v">only X, never Y</span></div>
+          <div class="row"><span class="k">fit</span><span class="v">ridge readout only</span></div>
+          <div class="row"><span class="k">reward</span><span class="v">held-out test_corr</span></div>
+        </div>
+        <div class="callout callout--sig">
+          <p class="callout__label">The only thing that moves</p>
+          <p>The model's code is the sole evolving artifact; the evaluation harness around it is fixed. If that
+            harness could be edited, the reward would be meaningless.</p>
+        </div>
+        <div class="aside">
+          <p class="callout__label" style="color:var(--spec)">The agent's loop</p>
+          <ol class="looplist">
+            <li><b>Brief</b> — the input/output contract, its own current best code, and anonymized rival scores.</li>
+            <li><b>Write</b> — author a new function: front-end, nonlinearity, pooling, readout.</li>
+            <li><b>Score</b> — submit; receive a scalar reward plus a per-region breakdown.</li>
+            <li><b>Revise</b> — read the score, form a hypothesis, rewrite. Repeat for hours.</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+
+    <div class="pipeline" role="img" aria-label="Pipeline: stimulus to fixed function to representation to ridge readout to brain activity to reward, looping back to the agent" style="margin-top:var(--s4)">
+      <div class="pstage"><div class="pstage__box pstage__box--in">X (N, D_in)</div><span class="pstage__cap">stimuli</span></div>
+      <span class="parrow" aria-hidden="true"></span>
+      <div class="pstage"><div class="pstage__box">f — any function</div><span class="pstage__cap">agent-authored, fixed</span></div>
+      <span class="parrow" aria-hidden="true"></span>
+      <div class="pstage"><div class="pstage__box">rep (N, D_out)</div><span class="pstage__cap">per-sample</span></div>
+      <span class="parrow" aria-hidden="true"></span>
+      <div class="pstage"><div class="pstage__box">ridge readout</div><span class="pstage__cap">the only fit</span></div>
+      <span class="parrow" aria-hidden="true"></span>
+      <div class="pstage"><div class="pstage__box">brain activity Y</div><span class="pstage__cap">held-out</span></div>
+      <span class="parrow" aria-hidden="true"></span>
+      <div class="pstage"><div class="pstage__box pstage__box--out">test_corr</div><span class="pstage__cap">reward</span></div>
+      <div class="pipeline__loop"><span>reward</span><span class="rc">──▶ into the shared scoreboard ▶── the agent rewrites f ▶── next function</span></div>
+    </div>
+  </section>
+
+  <!-- ===== THE CONSTRAINTS ===== -->
+  <section class="section section--band wrap" id="why">
+    <div class="section-head">
+      <p class="eyebrow">02 · The constraints</p>
+      <h2 class="h2">Why the weights are written, not learned — and why a size cap</h2>
+    </div>
+    <div class="cols">
+      <div class="prose stack">
+        <p>A trained encoding model entangles two questions: does the brain resemble this <em>computation</em>, or this
+          <em>training set</em>? Writing the parameters in code instead of learning them answers only the first — which
+          is the one we want. The score then isolates the explanatory work in the <b>function's structure</b>:
+          receptive-field layout, pooling, nonlinearity, the statistics it reads — rather than in what a training set
+          taught it.</p>
+        <p>Because no gradient shapes the representation, predictivity is a clean readout of that structure. The 0.44 NSD
+          result says a hand-specified energy hierarchy already captures 44% of the explainable variance in early+ventral
+          cortex — telling us the computation, before learning is even in the picture.</p>
+      </div>
+      <div class="prose stack">
+        <p>A hard <b>1M-parameter ceiling</b> is the forcing function for
+          interpretability. Static and runtime guards also block pretrained weights, network access, and reading the
+          neural target — so every champion is a small, self-contained, <b>readable</b> computation, not a black box you
+          can only benchmark.</p>
+        <p>Two more constraints keep the readout honest: representations are strictly <b>per-sample</b> (no statistic
+          leaks across a batch), and width is capped at <code>D_out &lt; 10⁴</code> so the ridge cannot simply
+          memorize. The result is a champion you can read top to bottom and turn into a mechanistic claim — which is
+          the whole point.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEW QUESTIONS ===== -->
+  <section class="section wrap" id="questions">
+    <div class="section-head">
+      <p class="eyebrow">03 · What this opens up</p>
+      <h2 class="h2">Questions a fixed hypothesis class cannot ask</h2>
+      <p class="lead">Because the search ranges over <b>arbitrary agent-authored functions</b> — not points in one
+        architecture family — it can pose and answer questions that model-comparison studies structurally cannot.</p>
+    </div>
+    <div class="qgrid">
+      <div class="qcard"><span class="qn">Q1</span><h4>Which primitives does a region need?</h4>
+        <p>Read the champion for area X and ablate it: is fine-scale Gabor energy sufficient for early+ventral, or are
+          co-occurrence and part statistics load-bearing? The code <em>is</em> the answer.</p></div>
+      <div class="qcard"><span class="qn">Q2</span><h4>Do computations recur across brains?</h4>
+        <p>Run the same search on macaque spikes, human fMRI, and human ECoG. Convergent primitives across species and
+          recording modality are evidence for a shared computational motif.</p></div>
+      <div class="qcard"><span class="qn">Q3</span><h4>What is the minimal computation?</h4>
+        <p>Under a 1M-parameter cap, how close to the noise ceiling can a hand-written function get? The frontier traces
+          the irreducible computational content of a region's responses.</p></div>
+      <div class="qcard"><span class="qn">Q4</span><h4>Where is learning actually required?</h4>
+        <p>The gap between the best written function and a trained network localizes what <em>must</em> be learned —
+          separating the underlying computation from experience, region by region.</p></div>
+      <div class="qcard"><span class="qn">Q5</span><h4>Can an agent invent something new?</h4>
+        <p>Open-ended search can surface computations no one enumerated — hue×orientation conjunctions, content-word
+          weighting — turning the search into a source of hypotheses, not just a fit.</p></div>
+      <div class="qcard"><span class="qn">Q6</span><h4>Does the loop become a scientist?</h4>
+        <p>Agents that propose, test, and revise code against neural data are a testbed for autonomous discovery — how
+          far can decentralized search push scientific understanding on its own?</p></div>
+    </div>
+  </section>
+
+  <!-- ===== DATASETS ===== -->
+  <section class="section section--band wrap" id="datasets">
+    <div class="section-head">
+      <p class="eyebrow">04 · Datasets</p>
+      <h2 class="h2">Three vision, two language — two species, three modalities</h2>
+      <p class="lead">One search framework spans fMRI, macaque spiking, and human ECoG — the same agent-driven
+        search runs against each.</p>
+    </div>
+    <div class="dataset-grid">
+      <article class="dcard dcard--m2">
+        <div class="dcard__name"><span class="dcard__swatch"></span>NSD</div>
+        <p class="dcard__kind">fMRI · human · vision</p>
+        <p class="dcard__desc">GLMdenoise betas to natural images; reward = the joint <b>early+ventral</b> stream over
+          reliable voxels, noise-ceiling-normalized.</p>
+        <div class="dcard__meta"><span>subj 1,2</span><span>0.44 champ</span></div>
+      </article>
+      <article class="dcard dcard--m1">
+        <div class="dcard__name"><span class="dcard__swatch"></span>TVSD</div>
+        <p class="dcard__kind">spiking · macaque · vision</p>
+        <p class="dcard__desc">Multi-unit responses to natural images — a direct electrophysiological readout of the
+          ventral stream, complementing NSD's BOLD.</p>
+        <div class="dcard__meta"><span>visual units</span><span>raw r</span></div>
+      </article>
+      <article class="dcard dcard--m3">
+        <div class="dcard__name"><span class="dcard__swatch"></span>Triple-N</div>
+        <p class="dcard__kind">spiking · macaque · vision</p>
+        <p class="dcard__desc">The macaque <b>NSD-1000</b> spiking release; reward = reliable IT units pooled,
+          noise-ceiling-normalized (<code>r²/NC_r²</code>) like NSD.</p>
+        <div class="dcard__meta"><span>reward: IT</span><span>NC-normalized</span></div>
+      </article>
+      <article class="dcard dcard--m4">
+        <div class="dcard__name"><span class="dcard__swatch"></span>iEEG podcast</div>
+        <p class="dcard__kind">ECoG · human · language</p>
+        <p class="dcard__desc">Intracranial <b>high-gamma</b> to a spoken narrative, word-aligned; scored under
+          rotating K-fold temporal CV to resist fixed-window overfitting.</p>
+        <div class="dcard__meta"><span>high-γ</span><span>0.063 champ</span></div>
+      </article>
+      <article class="dcard dcard--sig">
+        <div class="dcard__name"><span class="dcard__swatch"></span>Huth · language</div>
+        <p class="dcard__kind">fMRI · human · language</p>
+        <p class="dcard__desc">Story-listening fMRI over semantic cortex (Huth lab) — extends the search to
+          naturalistic language understanding at the voxel level.</p>
+        <div class="dcard__meta"><span>in progress · C. Singh</span><span>—</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== RESULTS ===== -->
+  <section class="section wrap" id="results">
+    <div class="section-head">
+      <p class="eyebrow">05 · Results</p>
+      <h2 class="h2">Two champions, read as hypotheses</h2>
+      <p class="lead">Each is the best function an open-ended run found — shown here <b>distilled to its mechanism</b>
+        (the full tuned source runs several hundred lines). Read it: these are hand-computable pipelines, not black boxes.</p>
+    </div>
+
+    <div class="metric-grid" style="margin-bottom:var(--s5)">
+      <div class="metric metric--hero"><span class="metric__spark" aria-hidden="true"></span>
+        <div class="metric__value">0.44<span class="unit">r²/NC</span></div>
+        <p class="metric__label">NSD · vision</p>
+        <p class="metric__note">Fraction of explainable variance in human early+ventral cortex.</p></div>
+      <div class="metric metric--hero"><span class="metric__spark" aria-hidden="true"></span>
+        <div class="metric__value">0.063<span class="unit">test_corr</span></div>
+        <p class="metric__label">iEEG · language</p>
+        <p class="metric__note">High-gamma predictivity under K-fold temporal CV.</p></div>
+      <div class="metric"><span class="metric__spark" aria-hidden="true"></span>
+        <div class="metric__value">&lt;1<span class="unit">M params</span></div>
+        <p class="metric__label">enforced ceiling</p>
+        <p class="metric__note">No pretrained weights, no network, no leakage.</p></div>
+      <div class="metric"><span class="metric__spark" aria-hidden="true"></span>
+        <div class="metric__value">0<span class="unit">grad steps</span></div>
+        <p class="metric__label">weights learned</p>
+        <p class="metric__note">Parameters written in code; only the ridge readout is fit.</p></div>
+    </div>
+
+    <!-- showcase 1: NSD -->
+    <div class="showcase" style="margin-bottom:var(--s5)">
+      <div class="showcase__panel">
+        <p class="eyebrow eyebrow--muted">Vision · NSD · 0.44</p>
+        <h3 class="h3">An HMAX energy hierarchy</h3>
+        <p class="prose"><b>Gabor quadrature-energy</b> over a fine scale/orientation ladder gives V1 edge power;
+          <b>HMAX max-pooling</b> and a compressive nonlinearity add tolerance; <b>random-weight conv layers with an
+          abs (phase-invariant) nonlinearity</b> build mid/high features; a <b>cross-orientation Gram</b> captures
+          texture; a <b>foveal pool</b> reads the central object. Concatenated pools form the representation.</p>
+        <div class="callout"><p class="callout__label">What it finds</p>
+          <p>Ventral predictivity is driven by <b>fine-scale contrast energy with tuned compressive nonlinearities and
+            co-occurrence statistics</b> — the function's structure, not learned categories. 44% of explainable variance
+            from under 1M parameters, none of them learned.</p></div>
+      </div>
+      <figure class="codeview" style="margin:0">
+        <figcaption class="codeview__bar">
+          <span class="codeview__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="codeview__file">nsd champion · essence</span>
+          <span class="codeview__tag alt">abridged from 451 lines</span>
+        </figcaption>
+        <div class="codeview__body">
+<div class="code-line"><span class="ln">1</span><span class="lc"><span class="tok-com"># NSD vision champion — an HMAX-style energy hierarchy (weights written in code, not learned).</span></span></div>
+<div class="code-line"><span class="ln">2</span><span class="lc"><span class="tok-com"># Abridged to the load-bearing computation (the full tuned version is ~450 lines).</span></span></div>
+<div class="code-line"><span class="ln">3</span><span class="lc"><span class="tok-kw">import</span> math, torch</span></div>
+<div class="code-line"><span class="ln">4</span><span class="lc"><span class="tok-kw">import</span> torch.nn.functional <span class="tok-kw">as</span> F</span></div>
+<div class="code-line"><span class="ln">5</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">6</span><span class="lc"><span class="tok-kw">def</span> <span class="tok-fn">gabor_bank</span>(size, wavelengths, n_orient):</span></div>
+<div class="code-line"><span class="ln">7</span><span class="lc">    <span class="tok-str">&quot;&quot;&quot;Quadrature (even/odd) Gabor filters over a ladder of scales x orientations.&quot;&quot;&quot;</span></span></div>
+<div class="code-line"><span class="ln">8</span><span class="lc">    half = size // <span class="tok-num">2</span></span></div>
+<div class="code-line"><span class="ln">9</span><span class="lc">    ys, xs = torch.meshgrid(torch.arange(-half, half + <span class="tok-num">1.</span>), torch.arange(-half, half + <span class="tok-num">1.</span>), indexing=<span class="tok-str">&quot;ij&quot;</span>)</span></div>
+<div class="code-line"><span class="ln">10</span><span class="lc">    even, odd = [], []</span></div>
+<div class="code-line"><span class="ln">11</span><span class="lc">    <span class="tok-kw">for</span> lam <span class="tok-kw">in</span> wavelengths:</span></div>
+<div class="code-line"><span class="ln">12</span><span class="lc">        sigma = <span class="tok-num">0.5</span> * lam</span></div>
+<div class="code-line"><span class="ln">13</span><span class="lc">        <span class="tok-kw">for</span> o <span class="tok-kw">in</span> range(n_orient):</span></div>
+<div class="code-line"><span class="ln">14</span><span class="lc">            t = o * math.pi / n_orient</span></div>
+<div class="code-line"><span class="ln">15</span><span class="lc">            xr = xs * math.cos(t) + ys * math.sin(t)</span></div>
+<div class="code-line"><span class="ln">16</span><span class="lc">            yr = ys * math.cos(t) - xs * math.sin(t)</span></div>
+<div class="code-line"><span class="ln">17</span><span class="lc">            env = torch.exp(-(xr ** <span class="tok-num">2</span> + yr ** <span class="tok-num">2</span>) / (<span class="tok-num">2</span> * sigma ** <span class="tok-num">2</span>))</span></div>
+<div class="code-line"><span class="ln">18</span><span class="lc">            even.append(env * torch.cos(<span class="tok-num">2</span> * math.pi * xr / lam))</span></div>
+<div class="code-line"><span class="ln">19</span><span class="lc">            odd.append(env * torch.sin(<span class="tok-num">2</span> * math.pi * xr / lam))</span></div>
+<div class="code-line"><span class="ln">20</span><span class="lc">    <span class="tok-kw">return</span> torch.stack(even)[:, <span class="tok-kw">None</span>], torch.stack(odd)[:, <span class="tok-kw">None</span>]</span></div>
+<div class="code-line"><span class="ln">21</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">22</span><span class="lc"><span class="tok-kw">def</span> <span class="tok-fn">energy</span>(x, even, odd):</span></div>
+<div class="code-line"><span class="ln">23</span><span class="lc">    <span class="tok-str">&quot;&quot;&quot;S1 simple-cell quadrature energy: sqrt(even^2 + odd^2) — phase-invariant edge power.&quot;&quot;&quot;</span></span></div>
+<div class="code-line"><span class="ln">24</span><span class="lc">    p = even.shape[-<span class="tok-num">1</span>] // <span class="tok-num">2</span></span></div>
+<div class="code-line"><span class="ln">25</span><span class="lc">    <span class="tok-kw">return</span> torch.sqrt(F.conv2d(x, even, padding=p) ** <span class="tok-num">2</span> + F.conv2d(x, odd, padding=p) ** <span class="tok-num">2</span> + <span class="tok-num">1e-6</span>)</span></div>
+<div class="code-line"><span class="ln">26</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">27</span><span class="lc"><span class="tok-kw">class</span> <span class="tok-fn">Model</span>:</span></div>
+<div class="code-line"><span class="ln">28</span><span class="lc">    <span class="tok-kw">def</span> <span class="tok-fn">__init__</span>(<span class="tok-self">self</span>):</span></div>
+<div class="code-line"><span class="ln">29</span><span class="lc">        <span class="tok-self">self</span>.E1, <span class="tok-self">self</span>.O1 = gabor_bank(<span class="tok-num">21</span>, [<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>, <span class="tok-num">6</span>, <span class="tok-num">9</span>], n_orient=<span class="tok-num">8</span>)   <span class="tok-com"># a fine V1 scale ladder</span></span></div>
+<div class="code-line"><span class="ln">30</span><span class="lc">        g = torch.Generator().manual_seed(<span class="tok-num">0</span>)                            <span class="tok-com"># parameters written in code, not learned</span></span></div>
+<div class="code-line"><span class="ln">31</span><span class="lc">        <span class="tok-self">self</span>.W2 = torch.randn(<span class="tok-num">256</span>, <span class="tok-num">40</span>, <span class="tok-num">3</span>, <span class="tok-num">3</span>, generator=g) * (<span class="tok-num">2</span> / (<span class="tok-num">40</span> * <span class="tok-num">9</span>)) ** <span class="tok-num">0.5</span>   <span class="tok-com"># random He conv</span></span></div>
+<div class="code-line"><span class="ln">32</span><span class="lc">        <span class="tok-self">self</span>.W3 = torch.randn(<span class="tok-num">512</span>, <span class="tok-num">256</span>, <span class="tok-num">3</span>, <span class="tok-num">3</span>, generator=g) * (<span class="tok-num">2</span> / (<span class="tok-num">256</span> * <span class="tok-num">9</span>)) ** <span class="tok-num">0.5</span></span></div>
+<div class="code-line"><span class="ln">33</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">34</span><span class="lc">    @torch.no_grad()</span></div>
+<div class="code-line"><span class="ln">35</span><span class="lc">    <span class="tok-kw">def</span> <span class="tok-fn">__call__</span>(<span class="tok-self">self</span>, X):</span></div>
+<div class="code-line"><span class="ln">36</span><span class="lc">        N = X.shape[<span class="tok-num">0</span>]</span></div>
+<div class="code-line"><span class="ln">37</span><span class="lc">        side = round((X.shape[<span class="tok-num">1</span>] / <span class="tok-num">3</span>) ** <span class="tok-num">0.5</span>)</span></div>
+<div class="code-line"><span class="ln">38</span><span class="lc">        img = X.reshape(N, side, side, <span class="tok-num">3</span>).permute(<span class="tok-num">0</span>, <span class="tok-num">3</span>, <span class="tok-num">1</span>, <span class="tok-num">2</span>).float()</span></div>
+<div class="code-line"><span class="ln">39</span><span class="lc">        lum = img.mean(<span class="tok-num">1</span>, keepdim=<span class="tok-kw">True</span>)</span></div>
+<div class="code-line"><span class="ln">40</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">41</span><span class="lc">        <span class="tok-com"># 1. V1 — Gabor energy, then HMAX C1 = local max-pool (position/scale tolerance),</span></span></div>
+<div class="code-line"><span class="ln">42</span><span class="lc">        <span class="tok-com">#    then a compressive nonlinearity (the cortical contrast-response curve).</span></span></div>
+<div class="code-line"><span class="ln">43</span><span class="lc">        c1 = F.max_pool2d(energy(lum, <span class="tok-self">self</span>.E1, <span class="tok-self">self</span>.O1), <span class="tok-num">2</span>).pow(<span class="tok-num">0.5</span>)</span></div>
+<div class="code-line"><span class="ln">44</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">45</span><span class="lc">        <span class="tok-com"># 2. Mid/high level — random conv layers with ABS (a phase-invariant, complex-cell</span></span></div>
+<div class="code-line"><span class="ln">46</span><span class="lc">        <span class="tok-com">#    nonlinearity that keeps both signs of each projection, unlike ReLU).</span></span></div>
+<div class="code-line"><span class="ln">47</span><span class="lc">        c2 = F.max_pool2d(F.conv2d(c1, <span class="tok-self">self</span>.W2, padding=<span class="tok-num">1</span>).abs(), <span class="tok-num">2</span>)</span></div>
+<div class="code-line"><span class="ln">48</span><span class="lc">        c3 = F.max_pool2d(F.conv2d(c2, <span class="tok-self">self</span>.W3, padding=<span class="tok-num">1</span>).abs(), <span class="tok-num">2</span>)</span></div>
+<div class="code-line"><span class="ln">49</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">50</span><span class="lc">        <span class="tok-com"># 3. Texture statistic — cross-orientation co-occurrence (a Gram matrix) of the V1 channels:</span></span></div>
+<div class="code-line"><span class="ln">51</span><span class="lc">        <span class="tok-com">#    which orientations fire together (the Portilla–Simoncelli/V2 texture cue).</span></span></div>
+<div class="code-line"><span class="ln">52</span><span class="lc">        v = c1.flatten(<span class="tok-num">2</span>); v = v / (v.norm(dim=<span class="tok-num">2</span>, keepdim=<span class="tok-kw">True</span>) + <span class="tok-num">1e-6</span>)</span></div>
+<div class="code-line"><span class="ln">53</span><span class="lc">        gram = torch.bmm(v, v.transpose(<span class="tok-num">1</span>, <span class="tok-num">2</span>))</span></div>
+<div class="code-line"><span class="ln">54</span><span class="lc">        iu = torch.triu_indices(v.shape[<span class="tok-num">1</span>], v.shape[<span class="tok-num">1</span>], offset=<span class="tok-num">1</span>)</span></div>
+<div class="code-line"><span class="ln">55</span><span class="lc">        texture = gram[:, iu[<span class="tok-num">0</span>], iu[<span class="tok-num">1</span>]]</span></div>
+<div class="code-line"><span class="ln">56</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">57</span><span class="lc">        <span class="tok-com"># 4. Foveal pool — a center-weighted mean of the deep features, since NSD objects sit centrally.</span></span></div>
+<div class="code-line"><span class="ln">58</span><span class="lc">        H = c3.shape[-<span class="tok-num">1</span>]</span></div>
+<div class="code-line"><span class="ln">59</span><span class="lc">        yy, xx = torch.meshgrid(torch.arange(H), torch.arange(H), indexing=<span class="tok-str">&quot;ij&quot;</span>)</span></div>
+<div class="code-line"><span class="ln">60</span><span class="lc">        w = torch.exp(-((yy - (H - <span class="tok-num">1</span>) / <span class="tok-num">2</span>) ** <span class="tok-num">2</span> + (xx - (H - <span class="tok-num">1</span>) / <span class="tok-num">2</span>) ** <span class="tok-num">2</span>) / (<span class="tok-num">2</span> * (H * <span class="tok-num">0.1</span>) ** <span class="tok-num">2</span>))</span></div>
+<div class="code-line"><span class="ln">61</span><span class="lc">        deep = (c3 * (w / w.sum())).sum(dim=(<span class="tok-num">2</span>, <span class="tok-num">3</span>))</span></div>
+<div class="code-line"><span class="ln">62</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">63</span><span class="lc">        <span class="tok-com"># 5. Readout — concatenate per-branch spatial pools into the representation (D_out &lt; 10k).</span></span></div>
+<div class="code-line"><span class="ln">64</span><span class="lc">        <span class="tok-kw">return</span> torch.cat([c1.mean((<span class="tok-num">2</span>, <span class="tok-num">3</span>)), c1.amax((<span class="tok-num">2</span>, <span class="tok-num">3</span>)), texture, deep], dim=<span class="tok-num">1</span>)</span></div>
+<div class="code-line"><span class="ln">65</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">66</span><span class="lc">MODEL = Model()</span></div>
+<div class="code-line"><span class="ln">67</span><span class="lc"></span></div>
+        </div>
+      </figure>
+    </div>
+
+    <!-- showcase 2: iEEG -->
+    <div class="showcase">
+      <div class="showcase__panel">
+        <p class="eyebrow eyebrow--muted">Language · iEEG · 0.063</p>
+        <h3 class="h3">A hand-built lexical–syntactic feature map</h3>
+        <p class="prose">Words are encoded from <b>character codes</b> (no pretrained lexicon); the current word's
+          <b>n-gram form</b> is hashed, a <b>recency-weighted context bag up-weights content words</b> over function
+          words, a <b>syntactic-category</b> one-hot is read from a hand-coded lookup, and a <b>bilinear</b> term asks
+          whether the word fits its topic — all read against high-gamma ECoG.</p>
+        <div class="callout callout--sig"><p class="callout__label">What it finds</p>
+          <p>Function words recur densely and swamp a naive context bag; <b>up-weighting content words</b> and exposing
+            <b>syntactic category</b> measurably improves predictivity — the signal is carried by lexical topic and
+            grammatical class.</p></div>
+      </div>
+      <figure class="codeview" style="margin:0">
+        <figcaption class="codeview__bar">
+          <span class="codeview__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="codeview__file">ieeg champion · essence</span>
+          <span class="codeview__tag alt">abridged from 576 lines</span>
+        </figcaption>
+        <div class="codeview__body">
+<div class="code-line"><span class="ln">1</span><span class="lc"><span class="tok-com"># iEEG language champion — a hand-built lexical / syntactic feature map (no pretrained lexicon).</span></span></div>
+<div class="code-line"><span class="ln">2</span><span class="lc"><span class="tok-com"># Abridged to the load-bearing computation (the full tuned version is ~580 lines).</span></span></div>
+<div class="code-line"><span class="ln">3</span><span class="lc"><span class="tok-kw">import</span> numpy <span class="tok-kw">as</span> np, torch</span></div>
+<div class="code-line"><span class="ln">4</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">5</span><span class="lc">GAMMA = <span class="tok-num">0.95</span>   <span class="tok-com"># context recency decay</span></span></div>
+<div class="code-line"><span class="ln">6</span><span class="lc"><span class="tok-com"># ~50 common English function words grouped into syntactic categories, detected purely by</span></span></div>
+<div class="code-line"><span class="ln">7</span><span class="lc"><span class="tok-com"># character codes (articles, pronouns, prepositions, auxiliaries, conjunctions, modals, ...).</span></span></div>
+<div class="code-line"><span class="ln">8</span><span class="lc">SYNCAT = {w: cat <span class="tok-kw">for</span> cat, words <span class="tok-kw">in</span> {</span></div>
+<div class="code-line"><span class="ln">9</span><span class="lc">    <span class="tok-num">0</span>: [<span class="tok-str">&quot;the&quot;</span>, <span class="tok-str">&quot;a&quot;</span>, <span class="tok-str">&quot;an&quot;</span>],                    <span class="tok-num">1</span>: [<span class="tok-str">&quot;i&quot;</span>, <span class="tok-str">&quot;you&quot;</span>, <span class="tok-str">&quot;he&quot;</span>, <span class="tok-str">&quot;she&quot;</span>, <span class="tok-str">&quot;it&quot;</span>, <span class="tok-str">&quot;we&quot;</span>, <span class="tok-str">&quot;they&quot;</span>],</span></div>
+<div class="code-line"><span class="ln">10</span><span class="lc">    <span class="tok-num">2</span>: [<span class="tok-str">&quot;to&quot;</span>, <span class="tok-str">&quot;of&quot;</span>, <span class="tok-str">&quot;in&quot;</span>, <span class="tok-str">&quot;for&quot;</span>, <span class="tok-str">&quot;on&quot;</span>, <span class="tok-str">&quot;by&quot;</span>], <span class="tok-num">3</span>: [<span class="tok-str">&quot;is&quot;</span>, <span class="tok-str">&quot;was&quot;</span>, <span class="tok-str">&quot;are&quot;</span>, <span class="tok-str">&quot;be&quot;</span>, <span class="tok-str">&quot;have&quot;</span>, <span class="tok-str">&quot;do&quot;</span>],</span></div>
+<div class="code-line"><span class="ln">11</span><span class="lc">    <span class="tok-num">4</span>: [<span class="tok-str">&quot;and&quot;</span>, <span class="tok-str">&quot;or&quot;</span>, <span class="tok-str">&quot;but&quot;</span>, <span class="tok-str">&quot;so&quot;</span>, <span class="tok-str">&quot;if&quot;</span>, <span class="tok-str">&quot;that&quot;</span>], <span class="tok-num">5</span>: [<span class="tok-str">&quot;can&quot;</span>, <span class="tok-str">&quot;will&quot;</span>, <span class="tok-str">&quot;would&quot;</span>, <span class="tok-str">&quot;should&quot;</span>],</span></div>
+<div class="code-line"><span class="ln">12</span><span class="lc">}.items() <span class="tok-kw">for</span> w <span class="tok-kw">in</span> words}</span></div>
+<div class="code-line"><span class="ln">13</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">14</span><span class="lc"><span class="tok-kw">def</span> <span class="tok-fn">word_hash</span>(word, n_buckets, n_hashes=<span class="tok-num">6</span>):</span></div>
+<div class="code-line"><span class="ln">15</span><span class="lc">    <span class="tok-str">&quot;&quot;&quot;Signed feature-hash of a word into a fixed bag — a lexicon-free stand-in for an embedding.&quot;&quot;&quot;</span></span></div>
+<div class="code-line"><span class="ln">16</span><span class="lc">    v = np.zeros(n_buckets, np.float32)</span></div>
+<div class="code-line"><span class="ln">17</span><span class="lc">    <span class="tok-kw">for</span> seed <span class="tok-kw">in</span> range(n_hashes):</span></div>
+<div class="code-line"><span class="ln">18</span><span class="lc">        h = seed * <span class="tok-num">7919</span></span></div>
+<div class="code-line"><span class="ln">19</span><span class="lc">        <span class="tok-kw">for</span> ch <span class="tok-kw">in</span> word:</span></div>
+<div class="code-line"><span class="ln">20</span><span class="lc">            h = (h * <span class="tok-num">31</span> + int(ch)) &amp; <span class="tok-num">0x7fffffff</span></span></div>
+<div class="code-line"><span class="ln">21</span><span class="lc">        v[h % n_buckets] += <span class="tok-num">1.0</span> <span class="tok-kw">if</span> (h * <span class="tok-num">2654435761</span> % <span class="tok-num">2</span>) == <span class="tok-num">0</span> <span class="tok-kw">else</span> -<span class="tok-num">1.0</span></span></div>
+<div class="code-line"><span class="ln">22</span><span class="lc">    <span class="tok-kw">return</span> v</span></div>
+<div class="code-line"><span class="ln">23</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">24</span><span class="lc"><span class="tok-kw">class</span> <span class="tok-fn">Model</span>:</span></div>
+<div class="code-line"><span class="ln">25</span><span class="lc">    @torch.no_grad()</span></div>
+<div class="code-line"><span class="ln">26</span><span class="lc">    <span class="tok-kw">def</span> <span class="tok-fn">__call__</span>(<span class="tok-self">self</span>, X):</span></div>
+<div class="code-line"><span class="ln">27</span><span class="lc">        seqs = torch.as_tensor(X, dtype=torch.long).cpu().numpy()</span></div>
+<div class="code-line"><span class="ln">28</span><span class="lc">        trig = np.zeros((len(seqs), <span class="tok-num">2048</span>), np.float32)   <span class="tok-com"># current word: sub-lexical n-gram form</span></span></div>
+<div class="code-line"><span class="ln">29</span><span class="lc">        ctx  = np.zeros((len(seqs), <span class="tok-num">1024</span>), np.float32)   <span class="tok-com"># recency-weighted context bag</span></span></div>
+<div class="code-line"><span class="ln">30</span><span class="lc">        syn  = np.zeros((len(seqs), <span class="tok-num">16</span>),   np.float32)   <span class="tok-com"># syntactic category of the current word</span></span></div>
+<div class="code-line"><span class="ln">31</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">32</span><span class="lc">        <span class="tok-kw">for</span> i, seq <span class="tok-kw">in</span> enumerate(seqs):</span></div>
+<div class="code-line"><span class="ln">33</span><span class="lc">            words = split_on_spaces(seq)                 <span class="tok-com"># -&gt; list of char-code words in the window</span></span></div>
+<div class="code-line"><span class="ln">34</span><span class="lc">            <span class="tok-kw">if</span> <span class="tok-kw">not</span> words:</span></div>
+<div class="code-line"><span class="ln">35</span><span class="lc">                <span class="tok-kw">continue</span></span></div>
+<div class="code-line"><span class="ln">36</span><span class="lc">            trigger = words[-<span class="tok-num">1</span>]                          <span class="tok-com"># the word whose high-gamma we predict</span></span></div>
+<div class="code-line"><span class="ln">37</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">38</span><span class="lc">            <span class="tok-com"># 1. Current word — character n-gram hashes capture sub-lexical form / morphology.</span></span></div>
+<div class="code-line"><span class="ln">39</span><span class="lc">            <span class="tok-kw">for</span> n <span class="tok-kw">in</span> (<span class="tok-num">2</span>, <span class="tok-num">3</span>, <span class="tok-num">4</span>):</span></div>
+<div class="code-line"><span class="ln">40</span><span class="lc">                trig[i] += hash_ngrams(trigger, n, <span class="tok-num">2048</span>)</span></div>
+<div class="code-line"><span class="ln">41</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">42</span><span class="lc">            <span class="tok-com"># 2. Context bag — recency-weighted sum of word hashes, with CONTENT words up-weighted:</span></span></div>
+<div class="code-line"><span class="ln">43</span><span class="lc">            <span class="tok-com">#    function words recur constantly and would otherwise swamp the topic signal.</span></span></div>
+<div class="code-line"><span class="ln">44</span><span class="lc">            <span class="tok-kw">for</span> j, w <span class="tok-kw">in</span> enumerate(words[:-<span class="tok-num">1</span>]):</span></div>
+<div class="code-line"><span class="ln">45</span><span class="lc">                weight = GAMMA ** (len(words) - <span class="tok-num">1</span> - j)</span></div>
+<div class="code-line"><span class="ln">46</span><span class="lc">                <span class="tok-kw">if</span> tuple(w) <span class="tok-kw">not</span> <span class="tok-kw">in</span> SYNCAT <span class="tok-kw">and</span> len(w) &gt; <span class="tok-num">3</span>:</span></div>
+<div class="code-line"><span class="ln">47</span><span class="lc">                    weight *= <span class="tok-num">1.3</span>                        <span class="tok-com"># boost topic-carrying words</span></span></div>
+<div class="code-line"><span class="ln">48</span><span class="lc">                ctx[i] += weight * word_hash(w, <span class="tok-num">1024</span>)</span></div>
+<div class="code-line"><span class="ln">49</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">50</span><span class="lc">            <span class="tok-com"># 3. Syntactic category — one-hot of the current word&#x27;s grammatical class.</span></span></div>
+<div class="code-line"><span class="ln">51</span><span class="lc">            <span class="tok-kw">if</span> tuple(trigger) <span class="tok-kw">in</span> SYNCAT:</span></div>
+<div class="code-line"><span class="ln">52</span><span class="lc">                syn[i, SYNCAT[tuple(trigger)]] = <span class="tok-num">1.0</span></span></div>
+<div class="code-line"><span class="ln">53</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">54</span><span class="lc">        <span class="tok-com"># 4. Bilinear trigger x context — does this word fit the running topic? (element-wise on</span></span></div>
+<div class="code-line"><span class="ln">55</span><span class="lc">        <span class="tok-com">#    random projections of the two bags), then concatenate every bank into the representation.</span></span></div>
+<div class="code-line"><span class="ln">56</span><span class="lc">        bilinear = (trig @ PROJ_TRIG) * (ctx @ PROJ_CTX)</span></div>
+<div class="code-line"><span class="ln">57</span><span class="lc">        out = np.concatenate([trig, ctx, syn, bilinear], axis=<span class="tok-num">1</span>)</span></div>
+<div class="code-line"><span class="ln">58</span><span class="lc">        <span class="tok-kw">return</span> torch.tensor(out, dtype=torch.float32)    <span class="tok-com"># read out against high-gamma ECoG</span></span></div>
+<div class="code-line"><span class="ln">59</span><span class="lc"></span></div>
+<div class="code-line"><span class="ln">60</span><span class="lc">MODEL = Model()</span></div>
+<div class="code-line"><span class="ln">61</span><span class="lc"></span></div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer wrap">
+  <div class="footer__in">
+    <span>neuro·autoresearch — an open-ended search over functions that explain the brain</span>
+    <span>fixed harness · agent-authored function · honest reward</span>
+  </div>
+</footer>
+
+</body>
+</html>
