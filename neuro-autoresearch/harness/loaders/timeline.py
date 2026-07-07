@@ -10,6 +10,9 @@ Stimulus extractors are OFFLINE-friendly (no model-weight downloads):
   * image -> RawPixels (flattened RGB)
   * text  -> WordLength + WordFrequency (the trigger word's [length, zipf-freq])
   * audio -> MelSpectrum (time-averaged Mel bands)
+  * chars -> char-id encoding of each word's N-gram (the word + the preceding N-1 words); the
+             model receives an integer (n_words, L) grid and must build any linguistic structure
+             itself (the language-encoding analogue of the vision path -- no pretrained embeddings).
 """
 from __future__ import annotations
 
@@ -240,6 +243,49 @@ def _neural_2d(neural, d) -> torch.Tensor:
     return neural.reshape(neural.shape[0], -1)
 
 
+# --- "chars" stimulus: word N-gram -> char-id grid ------------------------------
+# The characters that occur in the (lowercased) transcripts: letters, digits, space,
+# and the punctuation that shows up in hyphenated/alphanumeric tokens. Index 0 == pad,
+# 1 == <unk>. Held fixed so the char->id mapping is stable across runs/subjects.
+_CHAR_VOCAB = " abcdefghijklmnopqrstuvwxyz0123456789'-.!?,()[]{}\\"
+_CHAR_STOI = {c: i + 2 for i, c in enumerate(_CHAR_VOCAB)}   # 0=pad, 1=<unk>
+
+
+def _char_ngram_ids(words: list[str], ngram: int, max_chars: int) -> torch.Tensor:
+    """Per word i, encode the N-gram string ``words[i-ngram+1 : i+1]`` (word + preceding
+    ngram-1 words) as char ids into a fixed (n_words, max_chars) long grid. Keeps the LAST
+    ``max_chars`` characters (the recent context/the trigger word), left-aligned + right-padded
+    with 0, so the final non-pad column is the last character of the trigger word."""
+    out = torch.zeros((len(words), max_chars), dtype=torch.long)
+    for i in range(len(words)):
+        # match circuit-building get_ngrams: the trigger word + `ngram` preceding words.
+        s = " ".join(words[max(0, i - ngram): i + 1]).lower()
+        ids = [_CHAR_STOI.get(c, 1) for c in s][-max_chars:]
+        if ids:
+            out[i, :len(ids)] = torch.tensor(ids, dtype=torch.long)
+    return out
+
+
+def _build_xy_chars(d: Dataset, events):
+    """Char-N-gram stimulus path (X is an integer grid, not an extractor output).
+
+    Only the NEURAL signal is segmented (for Y/onsets); the stimulus is the trigger words'
+    text, assembled into per-word N-grams IN ONSET ORDER (so "preceding words" is well defined)
+    and char-encoded. Everything is returned in onset order; the caller re-sorts by onset anyway.
+    """
+    neural_batch = _segment_batch(d, events, dict(neural=_NEURAL[d.neural](d)),
+                                  d.timeline.start, d.timeline.duration)
+    segs = neural_batch.segments
+    order = torch.as_tensor(np.argsort([s.trigger.start for s in segs], kind="stable"),
+                            dtype=torch.long)
+    words = [str(getattr(segs[i].trigger, "text", "") or "") for i in order.tolist()]
+    X = _char_ngram_ids(words, d.timeline.stim_ngram, d.timeline.stim_max_chars)
+    Y = _neural_2d(neural_batch.data["neural"], d)[order]
+    onsets = np.array([segs[i].trigger.start for i in order.tolist()])
+    stim_ids = _seg_stim_ids([segs[i] for i in order.tolist()])
+    return X, Y, onsets, stim_ids
+
+
 def _build_xy(d: Dataset, events):
     """Build row-aligned (X, Y, onsets, stim_ids): one row per trigger.
 
@@ -251,6 +297,9 @@ def _build_xy(d: Dataset, events):
     by trigger -- ``drop_incomplete`` may drop different triggers on each side, so
     the result is the intersection, ordered by trigger onset.
     """
+    if d.stimulus == "chars":            # word N-gram char grid: stimulus is the trigger text, not
+        return _build_xy_chars(d, events)  # a windowed extractor -> handled separately.
+
     stim_start, stim_duration = _stim_window(d)
     stim_ext, neural_ext = _stim_extractor(d), _NEURAL[d.neural](d)
 

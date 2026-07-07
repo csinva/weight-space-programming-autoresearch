@@ -30,13 +30,18 @@ class Timeline:
     neural_aggregation: str = "single"  # time-aggregation: "single" (keep TRs) | "mean" (one/channel)
     stim_start: float | None = None     # stimulus window start; None => reuse `start`
     stim_duration: float | None = None  # stimulus window duration; None => reuse `duration`
+    stim_ngram: int = 10                # "chars" stimulus only: preceding words of context per
+                                        # n-gram (trigger word + stim_ngram prior words; matches
+                                        # circuit-building get_ngrams -> stim_ngram+1 tokens)
+    stim_max_chars: int = 96            # "chars" stimulus only: fixed char-id width L (the LAST L
+                                        # characters of the n-gram; shorter n-grams are right-padded)
 
 
 @dataclass(frozen=True)
 class Dataset:
     study: str = "Fake2025Meg"       # NeuralSet study name or descriptive standalone tag
     neural: str = "meg"              # neural modality: fmri | meg | ieeg | spikes
-    stimulus: str = "image"          # stimulus modality: image | text | audio
+    stimulus: str = "image"          # stimulus modality: image | text | audio | chars
     imsize: int = 16                 # image stimuli resized to imsize x imsize
     download: bool = False           # download the study before running?
     path: str | None = None          # UNUSED by active presets (runtime reads ONLY data/<name>/);
@@ -92,23 +97,27 @@ PRESETS: dict[str, Dataset] = {
         stimulus="audio",
         timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5),
     ),
-    # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + audio:
-    # epilepsy patients listening to a 30-min podcast. Single-subject by necessity
-    # (each patient has different electrodes; default subject 01). Each transcript Word
-    # triggers a 0.5s epoch. The target is the HIGH-GAMMA (70-200 Hz) envelope -- the
+    # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + text:
+    # epilepsy patients listening to a 30-min podcast (~5.1k transcript words). Single-subject
+    # by necessity (each patient has different electrodes; default subject 01). Each transcript
+    # Word triggers a 0.5s epoch; the target is the HIGH-GAMMA (70-200 Hz) envelope -- the
     # standard ECoG cognition signal, staged by scripts/process_dataset/audio_neural.py --
     # word-averaged (neural_aggregation="mean") to one power value per electrode per word.
+    # STIMULUS is "chars": each word maps to the char-id encoding of its N-gram (the word + the
+    # preceding stim_ngram-1 words), so a hand-written char-transformer model.py must build any
+    # linguistic structure itself -- the language-encoding analogue of the vision datasets (no
+    # acoustic/Mel features; the neural side and CV reward are unchanged).
     "ieeg": Dataset(
         study="Zada2025Podcast",
         neural="ieeg",
-        stimulus="audio",
+        stimulus="chars",
         reward_roi="all",
         subject="01",   # default patient; the search reward means over several (NEURO_SUBJECT) so a
                         # model must generalize ACROSS brains -- no single subject's noise to overfit.
-        cv_folds=5,   # reward = 5-fold temporal CV: a single fixed hold-out (only ~1k words, 99 raw-r
+        cv_folds=5,   # reward = 5-fold temporal CV: a single fixed hold-out (~5.1k words, 99 raw-r
                       # channels, no noise ceiling) is trivially overfit by a search that grep's it.
         timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5,
-                          neural_aggregation="mean"),
+                          neural_aggregation="mean", stim_ngram=10, stim_max_chars=96),
     ),
     # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
     # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
