@@ -94,8 +94,8 @@ def _nnn_build_X(d: Dataset, img_pool) -> np.ndarray:
     return np.stack(feats).astype("float32")  # [1000, imsize*imsize*3]
 
 
-def _load_nnn_processed(d: Dataset, proc: str):
-    """Read X (native imgs resized at load, cached by imsize), Y (rel-filtered), areas from data/nnn/."""
+def _load_nnn_processed(d: Dataset, proc: str, types: set[int] | None):
+    """Read X (native imgs resized at load, cached by imsize), Y (rel/type-filtered), areas, nc."""
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     x_cache = os.path.join(_cache_dir(), f"nnn_X_im{d.imsize}.pt")   # same 1000 NSD images as raw
     if use_cache and os.path.exists(x_cache):
@@ -109,7 +109,6 @@ def _load_nnn_processed(d: Dataset, proc: str):
     blob = torch.load(os.path.join(proc, "neural", "all_units.pt"), weights_only=False)
     rel = np.asarray(blob["reliability"]).ravel()
     keep = rel > _nnn_min_reliability()
-    types = _nnn_unit_types()
     if types is not None:
         keep &= np.isin(np.asarray(blob["unit_type"]).ravel(), list(types))
     Y = np.asarray(blob["Y"])[:, keep].astype("float32")
@@ -135,7 +134,8 @@ def load_nnn(d: Dataset):
         raise FileNotFoundError(
             f"NNN not staged in-repo at {proc!r}. data/nnn/ is the only source -- "
             f"run `python -m scripts.process_dataset.nnn` to build it.")
-    X, Y, areas, nc = _load_nnn_processed(d, proc)
+    types = _nnn_unit_types()
+    X, Y, areas, nc = _load_nnn_processed(d, proc, types)
     n_src = "data/nnn"
     roi_masks = _nnn_roi_masks(areas)
 
@@ -156,7 +156,6 @@ def load_nnn(d: Dataset):
     keep = surviving_cols(Ytr)                          # one train-constant scan, shared with nc below
     nc = nc[keep.numpy()]
     Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks, keep=keep)
-    types = _nnn_unit_types()
     sel = "all-classes" if types is None else "UnitType=" + ",".join(map(str, sorted(types)))
     print(f"  NNN[{n_src}]: region=all ({sel}, reliability>{min_rel}, NC-normalized) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
