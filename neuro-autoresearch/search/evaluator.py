@@ -70,7 +70,6 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
         return
     log_file = os.path.join(log_dir, "last_eval.log")
     repairs = 0
-    t_score = time.perf_counter()
     while True:
         res = score_guarded(mid, src, dataset, timeout)       # watchdog-guarded; never raises
         with open(log_file, "w") as f:
@@ -80,10 +79,9 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
         repairs += 1
         print(f"[evaluator] {mid}: failed -> repair {repairs}/{max_repairs}")
         repair(src, log_file, rmodel, reffort)                # edits the on-disk source in place
-    scored_in = time.perf_counter() - t_score                 # wall-clock to score this model (incl. repairs)
     status = hub.record(mid, res, "ok" if _is_ok(res) else "error")
     print(f"[evaluator] {mid}: status={status} test_corr={res.get('test_corr', '-')} "
-          f"scored_in={scored_in:.2f}s (proposer={row.get('proposer')} repairs={repairs})")
+          f"(proposer={row.get('proposer')} repairs={repairs})")
 
 
 def main(argv=None):
