@@ -1,7 +1,7 @@
 """Data loaders, grouped by the two paradigms a dataset can take. ``load_split`` is the
 single entry point.
 
-- **timeline** (text/meg/ieeg) -- continuous-timeline studies aligned on the fly via the
+- **timeline** (iEEG) -- continuous-timeline studies aligned on the fly via the
   NeuralSet ``Segmenter``: each trigger event cuts a stimulus + neural segment.
 - **vision** (nsd/tvsd/nnn) -- pre-aligned response tables (prepared betas / spiking MUA),
   read directly by a self-contained ``loaders.vision`` reader; no Segmenter.
@@ -45,7 +45,7 @@ def _dispatch_split(d: Dataset):
         if d.timeline is None:
             raise ValueError(f"{d.study}: loader='timeline' requires a timeline=Timeline(...) block")
         from harness.loaders.timeline import load_timeline
-        return (*load_timeline(d), {}, None)       # timeline studies (text/meg/ieeg): no ROI map / ceiling
+        return (*load_timeline(d), {}, None)       # timeline studies (iEEG): no ROI map / ceiling
     if d.loader == "nsd":
         from harness.loaders.vision.nsd import load_nsd
         return load_nsd(d)                         # nsd provides the per-voxel ceiling

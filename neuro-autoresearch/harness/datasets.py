@@ -2,16 +2,16 @@
 
 A ``Dataset`` declares the stimulus + neural modality, split policy, reward region, and which
 of two loader paths to take. ``harness.loaders.load_split`` is the single entry point:
-  * ``loader="timeline"`` (text/meg/ieeg) -- a continuous NeuralSet study segmented on the fly by
-    the ``Segmenter``; its segmentation params live in the dataset's ``timeline=Timeline(...)`` block.
+  * ``loader="timeline"`` (iEEG; future language timelines) -- a continuous NeuralSet study
+    segmented on the fly by the ``Segmenter``; its params live in the dataset's ``timeline=`` block.
   * ``loader="nsd"|"tvsd"|"nnn"`` (vision) -- a pre-aligned response table read directly by a
     standalone ``loaders.vision`` reader; ``timeline`` is ``None``.
 The model and reward stay modality-agnostic, so the same search loop runs across all of them.
 
 Every loader reads ONLY the in-repo ``data/<name>/`` tree at runtime. Presets are registered in
-``PRESETS``; pick one via ``NEURO_DATASET`` (default ``"text"``), without editing source::
+``PRESETS``; pick one via ``NEURO_DATASET`` (default ``"nsd"``), without editing source::
 
-    NEURO_DATASET=meg python -m harness.run
+    NEURO_DATASET=ieeg python -m harness.run
 """
 from __future__ import annotations
 
@@ -21,8 +21,8 @@ from dataclasses import dataclass, replace
 
 @dataclass(frozen=True)
 class Timeline:
-    """NeuralSet Segmenter params -- set ONLY for timeline datasets (``loader="timeline"``: text/meg/
-    ieeg). Vision table datasets (nsd/tvsd/nnn) leave ``Dataset.timeline=None``."""
+    """NeuralSet Segmenter params -- set ONLY for timeline datasets (``loader="timeline"``: iEEG,
+    plus future language timelines). Vision table datasets (nsd/tvsd/nnn) leave ``timeline=None``."""
     trigger: str = "type=='Word'"       # NeuralSet trigger query (which events segment the timeline)
     start: float = 0.0                  # neural segment start, seconds after the trigger
     duration: float = 0.3               # neural segment duration, seconds
@@ -39,8 +39,8 @@ class Timeline:
 
 @dataclass(frozen=True)
 class Dataset:
-    study: str = "Fake2025Meg"       # NeuralSet study name or descriptive standalone tag
-    neural: str = "meg"              # neural modality: fmri | meg | ieeg | spikes
+    study: str = "Unnamed"           # NeuralSet study name or descriptive standalone tag
+    neural: str = "ieeg"             # neural modality: fmri | ieeg | spikes
     stimulus: str = "image"          # stimulus modality: image | text | audio | chars
     imsize: int = 16                 # image stimuli resized to imsize x imsize
     download: bool = False           # download the study before running?
@@ -51,26 +51,14 @@ class Dataset:
                                      # to overfit); 0 = the single train/test split. Fixed, not a knob.
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value, NOT an operator knob.
-    loader: str = "timeline"         # "timeline" (Segmenter: text/meg/ieeg) | "nsd" | "tvsd" | "nnn"
-    subject: str = ""                # preset subject/animal when supported (text, NSD, TVSD)
+    loader: str = "timeline"         # "timeline" (Segmenter: iEEG) | "nsd" | "tvsd" | "nnn"
+    subject: str = ""                # preset subject/animal when supported (iEEG, NSD, TVSD)
     timeline: "Timeline | None" = None  # Segmenter params; set ONLY for loader="timeline" datasets
 
 
-# Active dataset presets across neural modalities (fMRI/MEG/iEEG/spikes) and
-# stimulus modalities (image/audio). Select one with NEURO_DATASET=<key>.
+# Active dataset presets across neural modalities (fMRI/iEEG/spikes) and stimulus
+# modalities (image/chars). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
-    # Li2022Petit (Le Petit Prince), fMRI + audio: one full English subject (EN057)
-    # via the Li2022PetitSubj subclass (harness/loaders/studies.py). Each spoken Word
-    # triggers a segment. The neural window (start=2.0/duration=4.0) captures the
-    # HRF-delayed BOLD, but audio response is near-instant so the stimulus is read
-    # from a short decoupled window at the word (stim_start=0.0/stim_duration=0.5).
-    "text": Dataset(
-        study="Li2022PetitSubj",
-        neural="fmri",
-        stimulus="audio",
-        timeline=Timeline(trigger="type=='Word'", start=2.0, duration=4.0,
-                          stim_start=0.0, stim_duration=0.5),
-    ),
     # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
     # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
     # NOT the coarse raw-timeseries HRF-peak average. Y is the per-ROI betas from
@@ -86,16 +74,6 @@ PRESETS: dict[str, Dataset] = {
         download=False,
         reward_roi="early+ventral",
         subject="01",
-    ),
-    # Bel2026PetitListen (LPP-Listen MEG, OpenNeuro ds007523), MEG + audio. Each
-    # spoken Word triggers a 0.5s epoch; MEG is near-instant so stimulus and neural
-    # windows coincide ([0,0.5]s, no HRF decoupling). GOTCHA: the raw .fif is Elekta
-    # MaxShield, loaded by the NeuralSet loader with allow_maxshield=True.
-    "meg": Dataset(
-        study="Bel2026PetitListenSample",
-        neural="meg",
-        stimulus="audio",
-        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5),
     ),
     # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + text:
     # epilepsy patients listening to a 30-min podcast (~5.1k transcript words). Single-subject
@@ -154,14 +132,14 @@ PRESETS: dict[str, Dataset] = {
     ),
 }
 
-_key = os.environ.get("NEURO_DATASET", "text")
+_key = os.environ.get("NEURO_DATASET", "nsd")
 if _key not in PRESETS:
     raise ValueError(
         f"NEURO_DATASET={_key!r} is not a known dataset. "
         f"Valid keys: {sorted(PRESETS)}"
     )
 
-# The one active dataset, chosen by NEURO_DATASET (default "text"). The reward is always the
+# The one active dataset, chosen by NEURO_DATASET (default "nsd"). The reward is always the
 # WHOLE-dataset test_corr (each preset's built-in reward_roi); there is no ROI knob.
 DATASET = PRESETS[_key]
 
@@ -176,18 +154,14 @@ if _imsize:
 
 def with_subject(dataset: Dataset, subject: str) -> Dataset:
     """Return ``dataset`` rebound to ``subject`` (switching the data it loads). Supported:
-    text (one English subject, e.g. EN058), nsd (1-8), tvsd (monkey F/N). Other presets keep the
-    value in ``subject`` but do not rewrite the study name. This is the one place the per-subject
-    data mapping lives, so a multi-subject reward can build variants in-process (see
-    ``harness.reward.evaluate_subjects``)."""
+    nsd (1-8), tvsd (monkey F/N), iEEG (patient id). Other presets keep the value in ``subject``
+    but do not rewrite the study name. This is the one place the per-subject data mapping lives, so
+    a multi-subject reward can build variants in-process (see ``harness.reward.evaluate_subjects``)."""
     if dataset.loader == "nsd":
         sid = f"{int(subject):02d}"
         return replace(dataset, subject=sid, study=f"NsdBetasSubj{sid}")
     if dataset.loader == "tvsd":
         return replace(dataset, subject=subject, study=f"TvsdMonkey{subject.upper()}")
-    if dataset.study.startswith("Li2022PetitSubj"):
-        # Runtime reads data/text/<study>.pt by study name; the raw dir is the build step's concern.
-        return replace(dataset, subject=subject, study=f"Li2022PetitSubj{subject}")
     if dataset.study.startswith("Zada2025Podcast"):
         return replace(dataset, subject=f"{int(subject):02d}")   # iEEG: zero-padded per-patient id
     return replace(dataset, subject=subject)

@@ -44,7 +44,7 @@ def reward_region_mask(roi_masks: dict, reward_roi: str):
     columns). ``reward_roi`` may narrow the reward to ONE named sub-ROI -- a key of ``roi_masks`` (e.g.
     ``"IT"`` on nnn/tvsd, ``"FFA"`` on nsd). A whole-region tag (anything that is not an ``roi_masks``
     key, e.g. ``"all"`` or NSD's ``"early+ventral"``) returns ``None`` -> the readout fits every loaded
-    target. Timeline datasets (text/meg/ieeg) hand back an empty ``roi_masks`` -> always ``None``.
+    target. Timeline datasets (iEEG) hand back an empty ``roi_masks`` -> always ``None``.
     """
     m = roi_masks.get(reward_roi)
     return None if m is None else np.asarray(m, dtype=bool)
