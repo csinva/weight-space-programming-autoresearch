@@ -270,6 +270,17 @@ def propose(model_file: str, idea: str = "",
     run = _ensure(run)
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
+    cheat = _scan_source(model_file)              # reject reward-hacks BEFORE they queue
+    if cheat:
+        raise RuntimeError(
+            f"model.py rejected -- reward-hack: {cheat}. Models must be HAND-WRITTEN and UNTRAINED: "
+            f"analytic / fixed-seed weights in your own code, receiving only the stimulus. No "
+            f"pretrained/downloaded weights, no network, no reading the neural target or the readout.")
+    declared = model_complexity(model_file).get("n_params")   # early reject; score-time re-checks the real count
+    if declared and declared > _MAX_PARAMS:
+        raise RuntimeError(
+            f"model.py rejected -- declared n_params {declared:,} exceeds the {_MAX_PARAMS:,} cap. "
+            f"Keep the model small and hand-written -- fewer, interpretable parameters.")
     proposer = proposer or os.environ.get("LAB_PROPOSER", "")
     # Stamp created_at NOW, before the handshake + snapshot. If a reset lands anytime during this
     # call, its reset_at will be > this created_at, so the `created_at > reset_at` filter in
@@ -566,6 +577,70 @@ def summary(run: str | None = None) -> str:
     return f"DB: {t} | champion: {champ}"
 
 
+# --------------------------------------------------------------------------- reward-integrity guard
+# The reward is real only if the model is HAND-WRITTEN & UNTRAINED (analytic/fixed-seed weights in its
+# own code, fed only the stimulus). Reject two cheat families -- loading PRETRAINED weights, and
+# reading the target/readout (leakage) -- statically (source scan) + at runtime (no network, no
+# pretrained-lib imports), and cap the params. Nothing hand-written needs any of these.
+_BANNED_IMPORTS = ("transformers", "huggingface_hub", "timm", "open_clip",
+                   "sentence_transformers", "sonar", "fairseq", "diffusers")
+_CHEAT_PATTERNS = (
+    (r"from_pretrained|AutoModel|AutoTokenizer|\bGPT2\w*|\btransformers\b|huggingface|\btimm\b|"
+     r"open_clip|sentence_transformers|torch\.hub\.load|torchvision\.models", "loads a pretrained model"),
+    (r"\burllib\b|\brequests\b|https?://|socket\.|\bwget\b|\bcurl\b|snapshot_download", "network / download"),
+    (r"harness\.reward|harness\.ridge|harness\.loaders|\bload_split\b|reward_region_mask", "reads the target/readout"),
+    (r"corrcoef\s*=|evaluate_on_split\s*=|\bridge\.\w+\s*=|\breward\.\w+\s*=", "monkeypatches the readout"),
+)
+_MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)   # hand-written models stay small
+_GUARD_INSTALLED = False
+
+
+def _scan_source(path):
+    """Reason string if the model SOURCE contains an obvious reward-hack, else None."""
+    try:
+        src = open(path, encoding="utf-8", errors="ignore").read()
+    except OSError:
+        return None
+    return next((why for pat, why in _CHEAT_PATTERNS if re.search(pat, src)), None)
+
+
+def _n_params(model):
+    """Param count for the cap: max of the declared n_params and the real params of any nn.Module it
+    is/wraps -- so under-declaring while holding a big Module (e.g. a pretrained net) can't dodge it."""
+    try:
+        declared = int(getattr(model, "n_params", 0) or 0)
+    except (TypeError, ValueError):
+        declared = 0
+    try:
+        import torch
+        mods = [m for m in (model, *vars(model).values()) if isinstance(m, torch.nn.Module)]
+        real = sum(p.numel() for m in mods for p in m.parameters())
+    except Exception:  # noqa: BLE001  -- best effort; declared count still applies
+        real = 0
+    return max(declared, real)
+
+
+def _install_integrity_guard():
+    """Block the pretrained/download cheat at runtime: no network, no pretrained-lib imports.
+    Idempotent + process-wide (the harness needs neither)."""
+    global _GUARD_INSTALLED
+    if _GUARD_INSTALLED:
+        return
+    import socket, importlib.abc
+    os.environ.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", HF_DATASETS_OFFLINE="1")
+
+    def _no_net(*_a, **_k):
+        raise RuntimeError("network disabled while scoring -- hand-written models only (no downloads)")
+    socket.socket.connect = socket.create_connection = _no_net
+
+    class _Block(importlib.abc.MetaPathFinder):
+        def find_spec(self, name, path=None, target=None):
+            if name.split(".")[0] in _BANNED_IMPORTS:
+                raise ImportError(f"import of {name!r} blocked -- hand-written models only")
+    sys.meta_path.insert(0, _Block())
+    _GUARD_INSTALLED = True
+
+
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
 def score(model_file: str, dataset: str | None = None) -> dict:
     """Score one model with the FIXED harness IN-PROCESS, reusing the per-process split cache: the
@@ -579,6 +654,10 @@ def score(model_file: str, dataset: str | None = None) -> dict:
     import contextlib, importlib.util, io, traceback
     os.environ["NEURO_DATASET"] = dataset or os.environ.get("NEURO_DATASET", "nsd")
     os.environ.pop("NEURO_ROI", None)             # no ROI knob: reward = the preset's fixed region
+    _install_integrity_guard()                    # no network / no pretrained-model imports while scoring
+    cheat = _scan_source(model_file)              # static reject (also catches already-queued cheats)
+    if cheat:
+        return {"status": f"error: reward-hack blocked -- {cheat}"[:300], "log": ""}
     buf = io.StringIO()
     try:
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
@@ -587,6 +666,8 @@ def score(model_file: str, dataset: str | None = None) -> dict:
             spec = importlib.util.spec_from_file_location("model", model_file)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
+            if (n := _n_params(mod.MODEL)) > _MAX_PARAMS:   # small & hand-written: no big param dump wins
+                raise ValueError(f"n_params {n:,} exceeds the {_MAX_PARAMS:,} cap")
             row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}

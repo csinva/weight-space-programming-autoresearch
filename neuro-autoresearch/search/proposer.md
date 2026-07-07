@@ -95,10 +95,21 @@ Two complexity fields travel with YOUR model into the shared DB -- set them HONE
   explicit `model_loc = <int>` attribute only if you want to override the count).
 
 ## THE TWO HARD RULES (they make the held-out reward REAL; everything else is unconstrained)
-1. UNTRAINED: every weight is analytic or random-but-fixed (fixed seeds). NEVER fit weights to data
-   and NEVER read the neural target. (Only the harness ridge readout is fit -- that is the eval.)
+1. UNTRAINED & HAND-WRITTEN: every weight is analytic or random-but-fixed (fixed seeds), materialised
+   IN YOUR OWN CODE. This is NOT "not fit to the neural data" -- it means NO externally-learned
+   weights AT ALL. Concretely BANNED (all count as reward-hacking and are rejected before scoring):
+   loading any PRETRAINED model or checkpoint (`from_pretrained`, `torch.hub.load`, GPT-2/BERT/CLIP/
+   `transformers`/`timm`/`torchvision.models`, GloVe/word2vec, any downloaded `.pt`/`.bin`); ANY
+   network/download at runtime; reading the neural target `Y` or importing the harness loaders/
+   readout/reward; monkeypatching the ridge/readout. A pretrained net is "trained" even though YOU
+   didn't fit it -- it is the baseline you are trying to BEAT by hand, not a building block. Only the
+   harness ridge readout is fit; that IS the eval. Your `model.py` receives ONLY the stimulus.
 2. PER-SAMPLE: an image's activations depend ONLY on that image. NO statistic across the batch
    (no mean/std over dim 0, no batchnorm/whitening over the set). Per-image normalisation only.
+
+Also HARD-CAPPED: **at most 1,000,000 parameters** (`NEURO_MAX_PARAMS`) -- counted as the larger of
+your declared `n_params` and any `nn.Module` you materialise, so under-declaring won't dodge it. A
+model over the cap is rejected at propose time and errors at score time. Stay small and hand-written.
 
 ## THE LOOP -- repeat forever
 The ONLY fixed mechanic is: write a model into `model.py`, `propose` it, then `wait` for its score.
