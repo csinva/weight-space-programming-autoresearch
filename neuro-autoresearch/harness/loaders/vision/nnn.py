@@ -17,7 +17,8 @@ import numpy as np
 import torch
 
 from harness.datasets import Dataset
-from harness.loaders.shared import RawPixels, _cache_dir, drop_constant_cols_with_rois, processed_dir
+from harness.loaders.shared import (
+    RawPixels, _cache_dir, drop_constant_cols_with_rois, processed_dir, surviving_cols)
 
 _NNN_N_NSD_IMAGES = 1000
 
@@ -29,6 +30,17 @@ def _nnn_min_reliability() -> float:
     repeated presentations); units below it are noise and only dilute the mean-r.
     """
     return float(os.environ.get("NNN_MIN_RELIABILITY", "0.4"))
+
+
+def _nnn_unit_types() -> set[int] | None:
+    """BombCell spike-isolation classes to keep (env NNN_UNIT_TYPE; unset = all).
+
+    Every unit is tagged 1 = single unit, 2 = MUA, 3 = non-somatic. ``NNN_UNIT_TYPE=1``
+    restricts the reward to single units (a robustness check on the ~47k MUA-dominated
+    pool); a comma list (``1,2``) keeps several classes.
+    """
+    raw = os.environ.get("NNN_UNIT_TYPE", "").strip()
+    return {int(t) for t in raw.split(",") if t.strip()} or None
 
 
 def _nnn_area_table(root: str) -> dict:
@@ -95,16 +107,24 @@ def _load_nnn_processed(d: Dataset, proc: str):
             os.makedirs(_cache_dir(), exist_ok=True)
             torch.save({"X": X}, x_cache)
     blob = torch.load(os.path.join(proc, "neural", "all_units.pt"), weights_only=False)
-    keep = np.asarray(blob["reliability"]).ravel() > _nnn_min_reliability()
+    rel = np.asarray(blob["reliability"]).ravel()
+    keep = rel > _nnn_min_reliability()
+    types = _nnn_unit_types()
+    if types is not None:
+        keep &= np.isin(np.asarray(blob["unit_type"]).ravel(), list(types))
     Y = np.asarray(blob["Y"])[:, keep].astype("float32")
     areas = np.asarray(blob["areas"])[keep]
-    return X, Y, areas
+    # reliability is the per-unit split-half NC_r; its square is the R^2 ceiling the reward
+    # normalizes by (Algonauts r^2/NC_r2), matching NSD's per-voxel ncsnr path.
+    nc = (rel[keep] ** 2).astype("float32")
+    return X, Y, areas, nc
 
 
 def load_nnn(d: Dataset):
     """Triple-N: Y from the per-session Processed tables, X from the NSD images, reward = ALL
-    reliable units (EVC+IT pooled). Returns (X_train, X_test, Y_train, Y_test, roi_masks); ``roi_masks``
-    breaks the score down by stream area (EVC/IT). Y pools every reliable unit
+    reliable units (EVC+IT pooled). Returns (X_train, X_test, Y_train, Y_test, roi_masks, nc);
+    ``roi_masks`` breaks the score down by stream area (EVC/IT), ``nc`` is the per-unit R^2 noise
+    ceiling (reliability_best^2) the reward normalizes by. Y pools every reliable unit
     (``reliability_best`` > NNN_MIN_RELIABILITY) across all 90 sessions; X is the 1000 NSD images,
     split deterministically (every ``round(1/test_frac)``-th held out). Cached by (reliability, imsize).
     """
@@ -115,7 +135,7 @@ def load_nnn(d: Dataset):
         raise FileNotFoundError(
             f"NNN not staged in-repo at {proc!r}. data/nnn/ is the only source -- "
             f"run `python -m scripts.process_dataset.nnn` to build it.")
-    X, Y, areas = _load_nnn_processed(d, proc)
+    X, Y, areas, nc = _load_nnn_processed(d, proc)
     n_src = "data/nnn"
     roi_masks = _nnn_roi_masks(areas)
 
@@ -133,8 +153,12 @@ def load_nnn(d: Dataset):
     Xt, Yt = torch.as_tensor(X), torch.as_tensor(Y)
     Xtr, Xte = Xt[tr], Xt[te]
     Ytr, Yte = Yt[tr], Yt[te]
-    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks)
-    print(f"  NNN[{n_src}]: region=all (reliability>{min_rel}) -> "
+    keep = surviving_cols(Ytr)                          # one train-constant scan, shared with nc below
+    nc = nc[keep.numpy()]
+    Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks, keep=keep)
+    types = _nnn_unit_types()
+    sel = "all-classes" if types is None else "UnitType=" + ",".join(map(str, sorted(types)))
+    print(f"  NNN[{n_src}]: region=all ({sel}, reliability>{min_rel}, NC-normalized) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte, roi_masks
+    return Xtr, Xte, Ytr, Yte, roi_masks, nc

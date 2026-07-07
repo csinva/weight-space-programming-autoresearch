@@ -97,5 +97,9 @@ per-dataset search/held-out split lives in `scripts/generalization/splits.py`). 
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
 ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
 provisioned `ncsnr` raises — (re)run `python -m scripts.process_dataset.nsd` to fetch+align it.
-`text` / `meg` / `ieeg` — NeuralSet timeline studies · `tvsd` / `nnn` — macaque spiking tables. Never
+`text` / `meg` / `ieeg` — NeuralSet timeline studies · `tvsd` / `nnn` — macaque spiking tables. `nnn`
+is **noise-ceiling-normalized** (r²/NC_r2, NC_r = the release's per-unit split-half `reliability_best`)
+like NSD — so `nnn` scores are NOT comparable to pre-normalization raw-r runs. Reward = reliable units
+(`NNN_MIN_RELIABILITY` 0.4) pooled; `NNN_UNIT_TYPE` (unset=all, default; `=1` → single units only,
+a robustness check) subsets by BombCell class (1=single unit, 2=MUA, 3=non-somatic). Never
 `download=True` unattended.

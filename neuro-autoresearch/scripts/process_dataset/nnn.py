@@ -3,7 +3,8 @@
 Reads the raw Processed_ses*.mat + exclude_area.xls + img_pool.mat from d.path and writes:
   data/nnn/stimuli/img_pool.npy   : the 1000 NSD images at NATIVE resolution (uint8 [1000,H,W,3])
   data/nnn/neural/all_units.pt    : ALL units UNFILTERED -- responses [1000, total_units] (NSD cols),
-                                    per-unit reliability [total_units], per-unit stream area [total_units].
+                                    per-unit reliability (split-half NC_r), stream area, and BombCell
+                                    unit_type (1=SU/2=MUA/3=non-somatic); all filtering is LOAD-time.
 
 NNN_MIN_RELIABILITY and imsize stay LOAD-time knobs (no filtering / no resize here).
 
@@ -45,24 +46,26 @@ def main():
 
     # Neural: ALL units pooled across sessions, NO reliability filter.
     table = _nnn_area_table(root)
-    cols, rel, areas = [], [], []
+    cols, rel, areas, utype = [], [], [], []
     for f in sorted(glob.glob(os.path.join(root, "Processed_ses*.mat"))):
         ses = int(re.search(r"ses(\d+)", os.path.basename(f)).group(1))
         m = sio.loadmat(f, simplify_cells=True)
         rb = np.asarray(m["response_best"], dtype="float32")[:, :_NNN_N_NSD_IMAGES]
-        r = np.asarray(m["reliability_best"]).ravel()
         pos = np.asarray(m["pos"]).ravel()
         for i in range(rb.shape[0]):
             areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
         cols.append(rb)
-        rel.append(r)
-    Y = np.concatenate(cols, axis=0).T            # [1000 images, total_units]
-    rel = np.concatenate(rel).astype("float32")   # [total_units]
-    areas = np.asarray(areas)                      # [total_units]
-    torch.save({"Y": Y, "reliability": rel, "areas": areas},
+        rel.append(np.asarray(m["reliability_best"]).ravel())
+        utype.append(np.asarray(m["UnitType"]).ravel())   # BombCell class: 1=SU, 2=MUA, 3=non-somatic
+    Y = np.concatenate(cols, axis=0).T             # [1000 images, total_units]
+    rel = np.concatenate(rel).astype("float32")    # [total_units] split-half NC_r
+    areas = np.asarray(areas)                       # [total_units]
+    utype = np.concatenate(utype).astype("int16")   # [total_units]
+    torch.save({"Y": Y, "reliability": rel, "areas": areas, "unit_type": utype},
                os.path.join(out, "neural", "all_units.pt"))
     print(f"wrote {out}: stimuli {imgs.shape} uint8; neural Y {Y.shape}, "
-          f"{len(rel)} units ({(rel > 0.4).sum()} with rel>0.4)")
+          f"{len(rel)} units ({(rel > 0.4).sum()} with rel>0.4); "
+          f"UnitType counts {dict(zip(*[x.tolist() for x in np.unique(utype, return_counts=True)]))}")
 
 
 if __name__ == "__main__":

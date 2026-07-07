@@ -46,5 +46,5 @@ def _dispatch_split(d: Dataset):
         return load_tvsd(d)                        # tvsd provides the per-electrode oracle ceiling
     if d.loader == "nnn":
         from harness.loaders.vision.nnn import load_nnn
-        return (*load_nnn(d), None)
+        return load_nnn(d)                          # nnn provides the per-unit split-half ceiling
     raise ValueError(f"unknown loader {d.loader!r}; expected timeline|nsd|tvsd|nnn")
