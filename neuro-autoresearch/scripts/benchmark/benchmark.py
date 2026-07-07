@@ -2,7 +2,7 @@
 """Benchmark the neural-encoding readout pipeline, phase by phase, under GPU contention.
 
 Times the EXACT path the harness runs (``harness/reward.py``) for ANY dataset (NSD/TVSD/NNN/
-text/meg/ieeg): load the split, move the stimulus to the GPU, run the (untrained) ``model.py``
+iEEG): load the split, move the stimulus to the GPU, run the (untrained) ``model.py``
 forward to activations, fit the per-target ridge readout, predict both splits, and score the mean
 per-target test correlation. The ``readout`` phase calls ``harness.ridge.ridge_predict`` directly,
 so ``--method`` selects the SAME readout the search uses:
@@ -207,7 +207,7 @@ def _save_results(dataset, subject, method, procs, solo, solo_wall, par, par_wal
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--dataset", default="nsd", help="NEURO_DATASET preset (nsd/tvsd/nnn/text/meg/ieeg)")
+    p.add_argument("--dataset", default="nsd", help="NEURO_DATASET preset (nsd/tvsd/nnn/ieeg)")
     p.add_argument("--subject", default="1", help="subject/animal id (e.g. 1-8 for nsd, F/N for tvsd); '' if N/A")
     p.add_argument("--method", default="fast", choices=["fast", "himalaya"],
                    help="readout method (NEURO_READOUT); default fast")

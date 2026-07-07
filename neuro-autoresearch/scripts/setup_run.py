@@ -75,7 +75,7 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("dataset", help="dataset key, e.g. nsd / text / meg / tvsd / nnn")
+    p.add_argument("dataset", help="dataset key, e.g. nsd / tvsd / nnn / ieeg")
     p.add_argument("--date", default=None, help="run date (default: today, ET)")
     p.add_argument("--n", type=int, default=10, help="number of proposer sandboxes")
     a = p.parse_args()

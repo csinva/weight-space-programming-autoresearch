@@ -14,7 +14,7 @@ GEN_SPLITS = {
     # iEEG Podcast: reward = the cross-subject mean over patients 01-03 (search/search.sh default);
     # 04-05 are staged but held out, so generalization = predicting an UNSEEN patient's high-gamma.
     "ieeg": {"axis": "NEURO_SUBJECT", "search": ["01", "02", "03"], "heldout": ["04", "05"]},
-    # Future datasets that switch data by subject (text / tvsd) drop in the same shape.
+    # Future datasets that switch data by subject (tvsd) drop in the same shape.
 }
 
 
