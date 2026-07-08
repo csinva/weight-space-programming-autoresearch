@@ -1,210 +1,196 @@
 # neuro-autoresearch
 
-**Can an AI discover better models of the brain — without ever training one?**
+**Search for the *computations* that explain the brain.**
 
-`neuro-autoresearch` is a self-improving research loop for **neural encoding**: the
-task of predicting recorded brain activity from the stimulus a person (or animal) saw
-or heard. An agent writes a small, **fixed** computational model in code, the harness
-scores how well that model's activations predict real neural recordings, and the agent
-iterates to push the score up. No gradient descent, no optimizer — the model is
-*designed*, not trained.
+An AI agent writes — and rewrites — the code for a function `f: stimulus → representation`. A
+ridge readout from that representation to recorded brain activity scores it, and the held-out score
+is the agent's reward. The object of the search is not a model that *fits* the brain but the
+**function a brain region computes**: given oriented filters, kernels, energy hierarchies, character
+features — any computation expressible in code — which one predicts the neural response?
 
-The unit of progress is a single file (`model.py`) and the unit of truth is a single
-number (`test_corr`).
+The unit of progress is one file (`model.py`); the unit of truth is one number (`test_corr`).
 
-## Why this is interesting
+> **0.44** NSD · r²/NC  ·  **0.063** iEEG · test_corr  ·  **< 1M** params (enforced)  ·  **0** gradient steps  ·  **5** datasets, **2** species
 
-In computational neuroscience the standard way to test a theory of how the brain
-represents a stimulus is **encoding**: extract features from the stimulus, fit a linear
-readout to neural activity, and measure how well it predicts held-out data. The
-features *are* the hypothesis. Here an agent authors those features directly — as plain
-Python mapping a stimulus to activations — and the held-out predictivity is an honest,
-automatically-computed reward. That turns "propose a better representation of the brain"
-into a closed optimization loop the agent can run on its own.
+## The idea
 
-Crucially, **the proposed model is never trained.** Its weights are written straight
-into the code (analytic or random-but-fixed). The only thing that gets fit is the
-ridge-regression readout, which *is* the evaluation — so the score can't be gamed by
-memorizing the data, and the model never sees the neural target `Y`.
+Three things separate this from architecture search or model-fitting:
 
-## The loop (3 steps)
+- **Not architecture search.** The search space is the space of *functions*, not a fixed backbone
+  family. A proposal can be Gabor energy, a scattering transform, a hashed lexical bag — anything
+  computable under the contract. The NSD champion is an HMAX energy model, not a CNN.
+- **Written, not fitted.** Every parameter is analytic or random-but-fixed, written directly in
+  code. No gradient descent, and the function never sees the neural target `Y` — so a high score
+  reflects the **computation itself**, not weights tuned to the data.
+- **An agent as the scientist.** Autonomous LLM agents author, run, and revise the code — reasoning
+  about mechanism, reading their own scores, and building on what worked. The search runs
+  unsupervised for hours across a diverse pool.
 
-1. **Propose.** A model in `model.py` — a callable mapping a batch of stimuli
-   `X (N, D_in)` to activations `(N, D_out)`. Weights are hard-coded; nothing is
-   trained; a sample's activations depend only on that sample.
-2. **Activate.** The fixed harness runs the stimulus through the model.
-3. **Read out & score.** A ridge readout (fit on GPU) linearly predicts the recorded
-   neural activity from those activations. The reward is **`test_corr`** — the mean
-   per-target Pearson correlation on a held-out split. Only the readout is fit; the model
-   is frozen. The readout defaults to a fast eigendecomposition + leave-one-out ridge
-   (`NEURO_READOUT=fast`, ~20× faster on GPU); set `NEURO_READOUT=himalaya` for the
-   reference himalaya `RidgeCV` (same per-target alpha selection, agrees to ~1e-4).
+## The loop
 
-A high `train_corr` with a low `test_corr` means the readout overfit, not that the model
-is good.
-
-## The model contract
-
-A self-contained `model.py` defining `class Model` with attributes `name` / `idea` /
-`description` / `insight` / `n_params` and `__call__(self, X)` mapping `(N, D_in) -> (N, D_out)`,
-ending with `MODEL = Model()`. For image datasets `X` is flattened RGB pixels of a square image
-(`side = round(sqrt(D_in/3))`). Two hard rules keep the reward real:
-
-1. **Untrained** — every weight is analytic or random-but-fixed (fixed seeds); never fit
-   to data, never read the neural target `Y`.
-2. **Per-sample** — a sample's activations depend only on that sample (no statistic
-   across the batch); keep the output width `D_out < 10000`.
-
-The repo-root `model.py` is the **random-projection baseline** (a fixed random linear
-projection of the raw pixels) — the floor every proposed model should beat, and the seed each
-search proposer starts from.
-
-## What you edit vs. what's fixed
+Each proposer is an autonomous LLM agent. On every iteration it gets a brief — the I/O contract, the
+source of its own current best function, and an anonymized scoreboard of what rival approaches
+scored — and authors a new function as a self-contained program (front-end, nonlinearity, pooling,
+layout). It submits; the fixed harness returns a scalar **reward** (held-out predictivity) plus a
+per-region breakdown of *where* it won and lost. That signal is **not a gradient**: the agent reads
+it against its own notes, forms a hypothesis, and writes the next version.
 
 ```
-model.py             EVOLVED: the one model (seed: random-projection baseline)
-hub.py               the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
-search/              the open-ended search loop (launcher + proposer pool + evaluator)
-  proposer.md          the task description handed to each proposer
-harness/             FIXED evaluation harness — must not be edited
-  datasets.py          the Dataset registry (pick one via NEURO_DATASET)
-  loaders/             the only file/network I/O — timeline.py + studies.py (Segmenter timeline
-                       studies) vs vision/ (pre-aligned response tables); load_split dispatch
-  reward.py            the predictivity reward: forward → readout → test_corr (orchestration)
-  ridge.py             the ridge readout — fast eigh+LOO (default) | himalaya, via NEURO_READOUT
-  roi.py               reward-region target selection + advisory per-ROI breakdown
-  run.py               the manual single-eval driver — `python -m harness.run`
-scripts/setup_run.py scaffolds an isolated run folder + proposer sandboxes
-scripts/benchmark/   profile the readout pipeline phase-by-phase (3 concurrent) + HTML dashboard
-runs/<dataset>__<date>/  one search: search.db + models/ + proposers/ + eval/ (gitignored)
+X (N,D_in) → f (agent-authored, fixed) → rep (N,D_out) → ridge (the only fit) → brain Y (held-out) → test_corr → back to the agent
 ```
 
-`model.py` is the only artifact that evolves; the fixed harness is what makes the reward
-trustworthy.
+**Islands keep the pool diverse.** Scores are shared; source code is not. Each agent is an *island*
+that may read code only from its own best or one random other island — never a global champion — so
+approaches stay genuinely different instead of collapsing onto one recipe. (`VANILLA_AUTORESEARCH=1`
+closes the cross-island channels to recover an independent-loops baseline for controlled comparison.)
 
-## Install
+## The contract — what keeps the reward honest
 
+A self-contained `model.py` defines `class Model` with `__call__(self, X)` and ends with
+`MODEL = Model()`:
+
+| | |
+| --- | --- |
+| signature | `f: X (N, D_in) → (N, D_out)` |
+| weights | written in code, never learned |
+| params | `< 1,000,000` (enforced) |
+| width | `D_out < 10,000` |
+| per-sample | no statistics across the batch |
+| sees | only `X`, never the target `Y` |
+| fit | the ridge readout only — that *is* the evaluation |
+| reward | held-out `test_corr` |
+
+`model.py` is the **only** evolving artifact; the harness around it is fixed — if it could be edited,
+the reward would be meaningless. Static and runtime guards block pretrained weights, network access,
+and reading the target. The repo-root `model.py` is the **random-projection baseline** — the floor
+every model should beat and the seed each proposer starts from. (For image datasets `X` is flattened
+RGB pixels of a square image, `side = round(sqrt(D_in/3))`.)
+
+**Why written, not learned?** A trained encoding model entangles two questions: does the brain
+resemble this *computation*, or this *training set*? Writing the parameters in code answers only the
+first — the one we want. The 1M-parameter ceiling is a forcing function for interpretability: every
+champion is a small, readable computation you can turn into a mechanistic claim, not a black box.
+On NSD and Triple-N the reward is **noise-ceiling-normalized** (r²/NC over the reliably-driven
+voxels/units), so 0.44 means 44% of the *recoverable* signal, not a raw correlation.
+
+## Datasets
+
+Presets live in `harness/datasets.py`, selected by the `NEURO_DATASET` env var (no source edit, so
+parallel runs never collide). All are pre-staged locally and load **fully offline**
+(`download=False`). Three vision, two language — two species, three modalities:
+
+| `NEURO_DATASET` | study | neural · stimulus | reward |
+| --- | --- | --- | --- |
+| `nsd` (default) | Natural Scenes Dataset (human) | fMRI · image | early+ventral stream, NC-normalized · **0.44** |
+| `tvsd` | THINGS ventral-stream (macaque) | spiking · image | visual units (V1→IT), raw r |
+| `nnn` | Triple-N / macaque NSD-1000 | spiking · image | reliable EVC+IT units, NC-normalized |
+| `ieeg` | 'Podcast' ECoG (human) | iEEG · text (chars) | all electrodes, 5-fold temporal CV · **0.063** |
+
+- **`nsd`** — prepared GLMdenoise betas; reward = the joint early+ventral stream (~14.5k reliable
+  voxels); the shared-1000 images are held out image-disjoint. Subjects 1, 2, 5, 7 are staged via
+  `NEURO_SUBJECT` (1+2 the search reward, 5+7 held out).
+- **`ieeg`** — human high-gamma (70–200 Hz) power to a ~30-min spoken podcast; the stimulus is
+  `chars` (each word encoded as the char-id grid of its n-gram, so the model builds linguistic
+  structure from characters up — no pretrained embeddings); reward = rotating 5-fold temporal CV
+  (a single fixed hold-out is trivially overfit), meaned over patients.
+- A **Huth-lab story-listening fMRI** language dataset (semantic cortex) is in progress.
+- The reward region is a fixed **per-dataset** attribute — no ROI menu and no way to aim the readout
+  at the target.
+
+The train/test split is a contiguous **temporal hold-out** by default (so time-adjacent samples
+sharing a neural window can't leak), or **image-disjoint** for NSD; it is cached on disk keyed by the
+full dataset identity, so reruns load in seconds.
+
+## Two champions, read as hypotheses
+
+- **NSD · 0.44 — an HMAX energy hierarchy.** Gabor quadrature-energy (V1 edge power), HMAX
+  max-pooling with a compressive nonlinearity (tolerance), random-weight conv layers with an abs
+  (phase-invariant) nonlinearity (mid/high features), a cross-orientation Gram (texture), and a
+  foveal pool. Scored through the *identical* harness against five frozen pretrained nets (AlexNet,
+  ResNet-50, ViT-B/16, CLIP, DINOv2, each given its best layer per stream), it yields a **double
+  dissociation**: the untrained champion owns early/mid vision (0.55 vs AlexNet's 0.43) while a
+  pretrained net owns the category-selective ventral tip (DINOv2 0.47 vs champion 0.35).
+- **iEEG · 0.063 — a hand-built lexical–syntactic feature map** from character codes (no pretrained
+  lexicon): a hashed n-gram form of the current word, a recency-weighted context bag that up-weights
+  content words over function words, a syntactic-category one-hot, and a bilinear "does this word fit
+  the running topic" term — all read against high-gamma ECoG.
+
+## Run (offline, no downloads)
+
+**Install**
 ```bash
 pip install .
 ```
 
-## Run (offline, no downloads)
-
-### Manual single eval (from the repo root)
-
+**Manual single eval** (repo root) — loads the split once, scores `model.py` once, prints the row
+(`train_corr` / `test_corr` / timing); persists nothing.
 ```bash
-python -m harness.run                    # score the current model.py on the active dataset
-NEURO_DATASET=ieeg python -m harness.run # pick a preset (nsd | tvsd | nnn | ieeg)
-NEURO_READOUT=himalaya python -m harness.run  # reference readout (default: the ~20× faster fast ridge)
+python -m harness.run                          # score the current model.py on the active dataset
+NEURO_DATASET=ieeg python -m harness.run       # pick a preset: nsd | tvsd | nnn | ieeg
+NEURO_READOUT=himalaya python -m harness.run   # reference readout (default = the ~20× faster fast ridge)
 ```
 
-Loads the data split once, evaluates `model.py` exactly once, and prints the scored row
-(`train_corr` / `test_corr` / timing). It does not persist anything — result recording lives
-only in the unattended search loop (see `hub.py`).
-
-### Open-ended search (unattended)
-
+**Open-ended search** (unattended) — `search.sh` scaffolds a dated run and supervises three
+decentralized, self-paced loops with no synchronization barrier:
 ```bash
-search/search.sh nsd --hours 12              # NSD, 12 h, 10 proposers + 1 evaluator + conductor (steers every 60m)
-search/search.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + conductor
-search/search.sh nsd --hours 12 --epoch-mins 0  # conductor OFF — pure decentralized pool
-search/search.sh tvsd --hours 6 --fleet 6    # another dataset, 6 proposers
-search/search.sh tvsd --hours 6 --gpu 1      # pin to GPU 1 — run a dataset per card in parallel on a multi-GPU box
+search/search.sh nsd --hours 12                # 10 proposers + 1 GPU evaluator + a conductor steering every 60m
+search/search.sh nsd --hours 12 --effort high  # ONE effort knob (low|medium|high|xhigh|max) for every agent
+search/search.sh nsd --hours 12 --epoch-mins 0 # conductor OFF — pure decentralized pool
+search/search.sh tvsd --hours 6 --gpu 1        # pin to GPU 1 → run a dataset per card in parallel
+```
+- **Proposer pool** — N headless LLM CLIs, each confined to its own sandbox, editing its own
+  `model.py`, proposing it, and blocking only on *its own* score.
+- **GPU evaluator** — claims queued models one at a time, scores each with the fixed harness in
+  isolation, and writes the result back (`repair.sh` auto-fixes small mechanical faults, ≤2 tries).
+- **Conductor** (optional) — every `--epoch-mins` writes one broad, **advisory** `direction.txt` per
+  proposer to keep the pool diverse and unstuck; it never gates the queue or scoring.
+
+By default the fleet is spread round-robin across five models (Opus 4.8/4.7/4.6, GPT‑5.5, Gemini 3.1
+Pro); override with `NEURO_MODEL_ROSTER`. Everything shared lives in one SQLite file,
+`runs/<dataset>__<date>/search.db` — the queue, full history, and scores. Re-launching the same date
+**resumes** losslessly; a new date starts fresh.
+
+**The `hub` API/CLI** — agents never touch the DB, GPU, or dataset directly:
+```bash
+python hub.py propose-model model.py --idea "…"  # snapshot + queue this model → prints its id
+python hub.py wait-for-score <id>                # block until the evaluator scores it
+python hub.py my-best                            # YOUR island's best model (+source) to build on
+python hub.py peek-island                        # one RANDOM other island's idea + notes (no source, no score)
+python hub.py random-models -n 5                 # random prior models: scores + ideas (no source)
+python hub.py summary                            # one-line DB tally + current champion
 ```
 
-On a **multi-GPU** box, `--gpu N` (or just `CUDA_VISIBLE_DEVICES=N`) pins the whole run to one card,
-so you can launch several datasets side-by-side — `nsd` on GPU 0, `tvsd` on GPU 1, … each fully
-isolated. Default (no flag) uses the current default GPU, unchanged.
+## Repo layout
 
-Thinking **effort** is a single knob — `--effort` (or the `NEURO_EFFORT` env var; one of
-`low|medium|high|xhigh|max`, default `xhigh`) — applied uniformly to **every proposer and
-the conductor**. The model *mix* is separate: by default the fleet is spread round-robin across a
-roster of five distinct models — Opus 4.8 / 4.7 / 4.6, GPT‑5.5, and Gemini 3.1 Pro (pinned to
-`high` effort) — so a pool of 10 runs 2 proposers per model. Override the roster via
-`NEURO_MODEL_ROSTER` (space-separated `model` or `model:effort` entries).
-
-`search.sh` scaffolds a dated run and supervises up to three always-on, **decentralized**
-loops against it — the search stays self-paced with no synchronization barrier:
-
-- **An N-proposer pool** (`propose.sh` → N headless Copilot CLIs via `proposer.sh`). Each
-  proposer is confined to its own sandbox, queries shared history, edits its own
-  `model.py`, proposes it, blocks on *its own* score, and repeats — self-paced.
-- **A single GPU evaluator** (`evaluate.sh` / `evaluator.py`) that claims queued models
-  one at a time, scores each with the fixed harness in an isolated subprocess, and writes
-  the result back. `repair.sh` auto-fixes small mechanical model faults (≤2 attempts).
-- **An optional conductor** (`conduct.sh` / `conductor.md`) — a steering overlay. Every
-  `--epoch-mins` (default 60; `0` disables it) it runs one headless pass that reads the
-  board and writes ONE broad, **advisory** `direction.txt` per proposer to keep the pool
-  diverse and unstuck. It never gates the queue or scoring — proposers just read their
-  `direction.txt` to bias what they explore.
-
-Everything shared lives in one SQLite file, `runs/<dataset>__<date>/search.db` — the
-queue, the full history, and the scores. Re-launching the same date **resumes** the run
-losslessly; a new date starts fresh.
-
-### The `hub` API/CLI
-
-Agents never touch the DB, GPU, or dataset directly — they go through `hub.py`:
-
-```bash
-python hub.py propose-model model.py --idea "..."  # snapshot + queue this model -> prints its id
-python hub.py wait-for-score <id>              # block until the evaluator scores it
-python hub.py random-models -n 5               # random prior models: scores + ideas (no source)
-python hub.py my-best [--no-code]              # YOUR island's best model (+source) to build on
-python hub.py peek-island                      # best of one RANDOM other island: idea + notes only (no source, no score)
-python hub.py query-db "SELECT ..."            # arbitrary read-only SQL
-python hub.py summary                          # one-line DB tally + current champion
+```
+model.py            EVOLVED — the one model (seed: random-projection baseline)
+hub.py              the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
+search/             the open-ended loop: search.sh + proposer pool + GPU evaluator + conductor
+  proposer.md         the task brief handed to each proposer
+harness/            FIXED evaluation — must not be edited
+  datasets.py         the Dataset registry (pick one via NEURO_DATASET)
+  loaders/            the only file/network I/O (timeline studies + pre-aligned vision tables)
+  reward.py           the predictivity reward: forward → readout → test_corr
+  ridge.py            the readout: fast eigh+LOO (default) | himalaya, via NEURO_READOUT
+  roi.py              reward-region target selection + advisory per-ROI breakdown
+  run.py              the manual single-eval driver — `python -m harness.run`
+scripts/            dataset staging, benchmarks, generalization, and run scaffolding
+docs/               human docs — start at docs/overview.html
+runs/<dataset>__<date>/   one search: search.db + models/ + proposers/ + eval/ (gitignored)
 ```
 
-Each proposer is its own **island**: it can read source only from `my-best` (its own lineage);
-`peek-island` shares one random other island's idea and notes (never source, never score), so
-backbones diverge instead of all grafting onto one recipe. (`top-models` is a conductor-only
-scoreboard; `requeue` / `migrate` / `reset-island` are operator/evaluator-side verbs.)
+## The experiments it enables
 
-## Datasets
+Three programs build on each other — **search → analyze → dissect**:
 
-Presets are registered in `harness/datasets.py` and selected by the `NEURO_DATASET`
-environment variable — no source edit, so parallel runs never collide. All are
-pre-staged locally and loaded with `download=False`, so they run **fully offline**.
-
-Two families — **vision** (image → neural response tables) and **language** (spoken words → intracranial recordings):
-
-| `NEURO_DATASET` | study | neural | stimulus | reward |
-| --- | --- | --- | --- | --- |
-| `nsd` (default) | Natural Scenes Dataset | fMRI | image | **early+ventral** stream, noise-normalized |
-| `tvsd` | THINGS ventral-stream (macaque) | spiking | image | all electrodes (V1→IT) |
-| `nnn` | Triple-N (macaque) | spiking | image | all reliable units (EVC+IT), noise-normalized |
-| `ieeg` | 'Podcast' ECoG (human) | iEEG | text (chars) | all electrodes, 5-fold temporal CV |
-
-- **`nsd`** uses the prepared single-trial **GLMdenoise betas**
-  (`betas_fithrf_GLMdenoise_RR`, Algonauts-2023 style: z-scored per session, 3-rep
-  averaged). The reward is the joint **early+ventral visual stream** (~14.5k voxels),
-  noise-ceiling-normalized (mean sign-preserving r²/NC_r2 over the reliable voxels). The
-  canonical **shared-1000** images are held out as an image-disjoint test set. Subjects
-  1, 2, 5, 7 are staged in-repo via `NEURO_SUBJECT` (1+2 the search reward, 5+7 held out).
-- **`ieeg`** is the language dataset: human intracranial **high-gamma** (70–200 Hz) power to a
-  ~30-min spoken podcast. The stimulus is **`chars`** — each word encoded as the char-id grid of
-  its N-gram, so `model.py` must build linguistic structure from characters up (no pretrained
-  embeddings). The reward is a rotating **5-fold temporal CV** (a single fixed hold-out is trivially
-  overfit), meaned across patients via `NEURO_SUBJECT`.
-- The reward region is a fixed **per-dataset** attribute, not an operator knob — there is
-  no per-region ROI menu and no way to point the readout at the target.
-
-### How the split avoids leakage
-
-By default the train/test split is a **contiguous temporal hold-out** so time-adjacent
-samples that share a neural window can't leak across the split. For NSD (where stimuli
-repeat) the split is instead **image-disjoint** (the shared-1000 set). Constant targets
-(e.g. non-brain voxels) are dropped. The split is cached on disk, keyed by the full
-dataset identity, so reruns load in seconds.
-
-### Adding a dataset
-
-Append a `Dataset(...)` entry to `PRESETS` in `harness/datasets.py` (and a loader: extend
-`harness/loaders/timeline.py` if it's a NeuralSet timeline Study, or add a reader under
-`harness/loaders/vision/` if it's a pre-aligned table read directly). Dataset specifics live only there; the harness and models need no changes. Never point an unattended run at a gated `download=True`
-study.
+1. **Search** for models, either optimizing a single target dataset (vanilla) or *jointly* across
+   several at once (multi-dataset). *Are there models good for human vision but poor for monkey — or
+   vice versa — and can one be good at both?*
+2. **Analyze the population** (~2,000 models): which computational motifs are enriched in the best
+   models, and which properties distinguish the ones that generalize across datasets?
+3. **Dissect the best**: identify a champion's motifs, perturb them one at a time, and measure which
+   are *causally* responsible for brain alignment — moving from *finding* good models to
+   understanding *why* they work.
 
 ---
-
 *Timeline segmentation and alignment are provided by NeuralSet.*
