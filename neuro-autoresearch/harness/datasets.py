@@ -126,7 +126,8 @@ PRESETS: dict[str, Dataset] = {
         loader="nnn",
         neural="spikes",
         stimulus="image",
-        imsize=16,
+        imsize=128,          # natural images (the NSD shared-1000, like nsd) -- 16 starves untrained
+                             # models of the form/texture detail IT/EVC actually encode; NEURO_IMSIZE overrides.
         download=False,
         reward_roi="all",
     ),
@@ -162,6 +163,10 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
         return replace(dataset, subject=sid, study=f"NsdBetasSubj{sid}")
     if dataset.loader == "tvsd":
         return replace(dataset, subject=subject, study=f"TvsdMonkey{subject.upper()}")
+    if dataset.loader == "nnn":
+        # nnn pools 90 sessions from 5 animals; the loader subsets units by this monkey id (1..5).
+        # One study, so only the subject field changes -- the loader validates the id.
+        return replace(dataset, subject=str(subject).strip())
     if dataset.study.startswith("Zada2025Podcast"):
         return replace(dataset, subject=f"{int(subject):02d}")   # iEEG: zero-padded per-patient id
     return replace(dataset, subject=subject)

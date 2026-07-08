@@ -59,6 +59,9 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # iEEG reward = the cross-subject mean over patients 01-03 (each 5-fold CV'd); a model must
 # generalize ACROSS brains, not overfit one. 04-05 held out for generalization (splits.py).
 [ "$DATASET" = ieeg ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-01,02,03}"
+# NNN reward = the mean over the 3 highest-yield monkeys (M1,M3,M4 ~30k reliable units); each is
+# scored on its OWN units and the noise-normalized r2 averaged. M2,M5 held out for generalization.
+[ "$DATASET" = nnn ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,3,4}"
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.

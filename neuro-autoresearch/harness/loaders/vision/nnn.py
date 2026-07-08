@@ -52,6 +52,24 @@ def _nnn_unit_types() -> set[int] | None:
     return types or None
 
 
+_NNN_MONKEYS = (1, 2, 3, 4, 5)   # the 5 recording animals (M1..M5), staged from the raw session names
+
+
+def _nnn_monkey_id(subject: str) -> int | None:
+    """Map a ``NEURO_SUBJECT`` token to a monkey id (1..5), or None to pool ALL animals.
+
+    Accepts a bare digit (``"3"``) or the release's ``"M3"`` form; empty/unset -> None (the
+    historical behavior: every session pooled into one population). Unknown ids raise rather than
+    silently pooling, so a typo can't quietly change the reward."""
+    s = str(subject or "").strip().upper().lstrip("M")
+    if not s:
+        return None
+    if not s.isdigit() or int(s) not in _NNN_MONKEYS:
+        raise ValueError(f"NNN subject {subject!r} is not a valid monkey; valid ids are "
+                         f"{list(_NNN_MONKEYS)} (M1..M5).")
+    return int(s)
+
+
 def _nnn_area_table(root: str) -> dict:
     """exclude_area.xls -> {session: [(y1, y2, AREALABEL, Area), ...]}.
 
@@ -118,6 +136,13 @@ def _load_nnn_processed(d: Dataset, proc: str, types: set[int] | None):
     blob = torch.load(os.path.join(proc, "neural", "all_units.pt"), weights_only=False)
     rel = np.asarray(blob["reliability"]).ravel()
     keep = (rel > _nnn_min_reliability()) & (rel ** 2 >= _NNN_NC_R2_FLOOR)
+    mk = _nnn_monkey_id(d.subject)
+    if mk is not None:                        # subset to ONE recording animal (multi-monkey reward
+        if "monkey" not in blob:              # loops this per subject and averages -- see reward.py)
+            raise RuntimeError(
+                "NEURO_SUBJECT selects a monkey but this all_units.pt has no 'monkey' field -- "
+                "(re)run `python -m scripts.process_dataset.nnn` to add it.")
+        keep &= (np.asarray(blob["monkey"]).ravel() == mk)
     if types is not None:
         if "unit_type" not in blob:
             raise RuntimeError(
@@ -170,7 +195,9 @@ def load_nnn(d: Dataset):
     nc = nc[keep.numpy()]
     Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks, keep=keep)
     sel = "all-classes" if types is None else "UnitType=" + ",".join(map(str, sorted(types)))
-    print(f"  NNN[{n_src}]: region=all ({sel}, reliability>{min_rel}, NC-normalized) -> "
+    mk = _nnn_monkey_id(d.subject)
+    who = "all-monkeys" if mk is None else f"M{mk}"
+    print(f"  NNN[{n_src}]: region=all ({who}, {sel}, reliability>{min_rel}, NC-normalized) -> "
           f"{Ytr.shape[1]} units; train/test = {Xtr.shape[0]}/{Xte.shape[0]} NSD images "
           f"({Xtr.shape[1]} stim dims)")
     return Xtr, Xte, Ytr, Yte, roi_masks, nc

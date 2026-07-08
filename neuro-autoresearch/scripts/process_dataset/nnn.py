@@ -46,14 +46,18 @@ def main():
 
     # Neural: ALL units pooled across sessions, NO reliability filter.
     table = _nnn_area_table(root)
-    cols, rel, areas, utype = [], [], [], []
+    cols, rel, areas, utype, monkey = [], [], [], [], []
     for f in sorted(glob.glob(os.path.join(root, "Processed_ses*.mat"))):
         ses = int(re.search(r"ses(\d+)", os.path.basename(f)).group(1))
+        # The recording animal is encoded in the filename (Processed_sesNN_YYMMDD_M<k>_*.mat);
+        # it is the ONLY place per-session animal identity lives, so tag each unit with it here.
+        mk = int(re.search(r"_M(\d+)_", os.path.basename(f)).group(1))
         m = sio.loadmat(f, simplify_cells=True)
         rb = np.asarray(m["response_best"], dtype="float32")[:, :_NNN_N_NSD_IMAGES]
         pos = np.asarray(m["pos"]).ravel()
         for i in range(rb.shape[0]):
             areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
+        monkey.extend([mk] * rb.shape[0])
         cols.append(rb)
         rel.append(np.asarray(m["reliability_best"]).ravel())
         utype.append(np.asarray(m["UnitType"]).ravel())   # BombCell class: 1=SU, 2=MUA, 3=non-somatic
@@ -61,11 +65,13 @@ def main():
     rel = np.concatenate(rel).astype("float32")    # [total_units] split-half NC_r
     areas = np.asarray(areas)                       # [total_units]
     utype = np.concatenate(utype).astype("int16")   # [total_units]
-    torch.save({"Y": Y, "reliability": rel, "areas": areas, "unit_type": utype},
+    monkey = np.asarray(monkey, dtype="int16")      # [total_units] recording animal (1..5)
+    torch.save({"Y": Y, "reliability": rel, "areas": areas, "unit_type": utype, "monkey": monkey},
                os.path.join(out, "neural", "all_units.pt"))
     print(f"wrote {out}: stimuli {imgs.shape} uint8; neural Y {Y.shape}, "
           f"{len(rel)} units ({(rel > 0.4).sum()} with rel>0.4); "
-          f"UnitType counts {dict(zip(*[x.tolist() for x in np.unique(utype, return_counts=True)]))}")
+          f"UnitType counts {dict(zip(*[x.tolist() for x in np.unique(utype, return_counts=True)]))}; "
+          f"monkey counts {dict(zip(*[x.tolist() for x in np.unique(monkey, return_counts=True)]))}")
 
 
 if __name__ == "__main__":
