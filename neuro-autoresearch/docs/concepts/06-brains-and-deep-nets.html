@@ -1122,7 +1122,7 @@
 
   <div class="callout project">
     <span class="k">In this project</span>
-    <p>Each <code>python -m harness.run</code> evaluates the current model once and appends a single row (<code>iteration, model_name, idea, summary, test_corr, train_corr, gap, best_so_far, …, corr_&lt;region&gt;</code>) to the study CSV — an append-only history of every model tried. The reward narrows to one region via <code>NEURO_ROI</code> (default <code>ventral</code>), while every region's predictivity is still logged. For unattended hill-climbing the loop runs nonstop under a launcher, bounded by a wall-clock timeout. The same fixed harness scores image models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and language models on the <a href="../ecog-podcast.html">Podcast ECoG</a> and <a href="../le-petit-prince.html">Le Petit Prince</a> targets.</p>
+    <p>Each <code>python -m harness.run</code> evaluates the current model once and appends a single row (<code>iteration, model_name, idea, summary, test_corr, train_corr, gap, best_so_far, …, corr_&lt;region&gt;</code>) to the study CSV — an append-only history of every model tried. The reward narrows to one region via <code>NEURO_ROI</code> (default <code>ventral</code>), while every region's predictivity is still logged. For unattended hill-climbing the loop runs nonstop under a launcher, bounded by a wall-clock timeout. The same fixed harness scores image models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and language models on the <a href="../ecog-podcast.html">Podcast ECoG</a> target.</p>
   </div>
 </section>
 
@@ -1284,7 +1284,7 @@
 
   <div class="callout project">
     <span class="k">In this project</span>
-    <p>The harness builds identifiability discipline in directly. Only the ridge is fit, the readout is fixed across models, the held-out split is honest, and <strong>small differences (below ~0.005) are treated as noise</strong> — a tie band, not a verdict. The append-only history logs every model's <code>idea</code> and <code>summary</code> so ties are visible rather than silently resolved. And the same fixed bridge scores <em>vision</em> models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and <em>language</em> models on <a href="../ecog-podcast.html">Podcast ECoG</a> / <a href="../le-petit-prince.html">Le Petit Prince</a> — one encoding-model logic across modalities.</p>
+    <p>The harness builds identifiability discipline in directly. Only the ridge is fit, the readout is fixed across models, the held-out split is honest, and <strong>small differences (below ~0.005) are treated as noise</strong> — a tie band, not a verdict. The append-only history logs every model's <code>idea</code> and <code>summary</code> so ties are visible rather than silently resolved. And the same fixed bridge scores <em>vision</em> models on <a href="../tvsd-macaque-spiking.html">macaque IT</a> and <em>language</em> models on <a href="../ecog-podcast.html">Podcast ECoG</a> — one encoding-model logic across modalities.</p>
   </div>
 
   <details class="qcheck reveal">
@@ -1331,7 +1331,7 @@
 
   <div class="callout project">
     <span class="k">In this project</span>
-    <p>The thesis, stated once more, plainly: <strong>architecture buys you early vision; learning buys you high-level vision.</strong> Hand-designed untrained models reliably match or beat trained AlexNet in <strong>V1–V3</strong>; <strong>FFA / PPA / EBA / VWFA</strong> remain the open frontier where task-learned, category-selective structure is hard to write by hand. The autoresearch loop searches for the priors that close that gap — see the dataset guides for each target: <a href="../ecog-podcast.html">Podcast ECoG</a>, <a href="../tvsd-macaque-spiking.html">TVSD macaque spiking</a>, <a href="../le-petit-prince.html">Le Petit Prince</a>, and the <a href="../overview.html">overview</a>.</p>
+    <p>The thesis, stated once more, plainly: <strong>architecture buys you early vision; learning buys you high-level vision.</strong> Hand-designed untrained models reliably match or beat trained AlexNet in <strong>V1–V3</strong>; <strong>FFA / PPA / EBA / VWFA</strong> remain the open frontier where task-learned, category-selective structure is hard to write by hand. The autoresearch loop searches for the priors that close that gap — see the dataset guides for each target: <a href="../ecog-podcast.html">Podcast ECoG</a>, <a href="../tvsd-macaque-spiking.html">TVSD macaque spiking</a>, and the <a href="../overview.html">overview</a>.</p>
   </div>
 
   <div class="terms reveal">
@@ -1508,7 +1508,6 @@
           <li><a href="../overview.html">Project overview</a></li>
           <li><a href="../ecog-podcast.html">"Podcast" ECoG (iEEG, language)</a></li>
           <li><a href="../tvsd-macaque-spiking.html">TVSD macaque spiking (vision)</a></li>
-          <li><a href="../le-petit-prince.html">Le Petit Prince (fMRI + MEG)</a></li>
           <li><a href="../index.html">Dataset hub</a></li>
         </ul>
       </div>

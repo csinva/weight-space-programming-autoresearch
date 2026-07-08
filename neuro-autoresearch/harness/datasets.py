@@ -123,7 +123,8 @@ PRESETS: dict[str, Dataset] = {
     # images), so loader="nnn" (loaders.vision.nnn). Y pools reliable units (reliability>0.4,
     # ~35k of 47.5k) across all sessions. Reward = ALL reliable units; roi_corr breaks it down by
     # stream area (EVC/IT). The 1000 NSD images split deterministically (every 5th held out).
-    # Self-contained: X is read straight from img_pool.mat (no NSD staging). See docs/datasets/.
+    # Self-contained: X is read straight from img_pool.mat (no NSD staging). See
+    # docs/triple-n-macaque-nsd.html for the dataset guide.
     "nnn": Dataset(
         study="NnnV1",
         loader="nnn",

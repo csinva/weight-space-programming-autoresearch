@@ -63,7 +63,6 @@ h1 em{font-style:italic;color:var(--lpp-soft)}
 .c-ecog{--ac:var(--ecog);--glow:rgba(124,92,255,.42)}
 .c-tvsd{--ac:var(--tvsd);--glow:rgba(232,132,63,.40)}
 .c-nnn{--ac:var(--nnn);--glow:rgba(180,131,240,.42)}
-.c-lpp{--ac:var(--lpp);--glow:rgba(227,179,65,.38)}
 .c-idx{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--dim)}
 .c-mod{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ac);border:1px solid var(--ac);border-radius:999px;padding:.2rem .6rem;
@@ -90,8 +89,8 @@ thead th{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-tran
 tbody tr:last-child td{border-bottom:none}
 td:first-child{font-family:var(--serif);font-size:1.18rem}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.5rem;vertical-align:middle}
-.t-ecog .dot{background:var(--ecog)} .t-tvsd .dot{background:var(--tvsd)} .t-nnn .dot{background:var(--nnn)} .t-lpp .dot{background:var(--lpp)}
-.t-ecog td:first-child{color:var(--ecog-soft)} .t-tvsd td:first-child{color:var(--tvsd-soft)} .t-nnn td:first-child{color:var(--nnn-soft)} .t-lpp td:first-child{color:var(--lpp-soft)}
+.t-ecog .dot{background:var(--ecog)} .t-tvsd .dot{background:var(--tvsd)} .t-nnn .dot{background:var(--nnn)}
+.t-ecog td:first-child{color:var(--ecog-soft)} .t-tvsd td:first-child{color:var(--tvsd-soft)} .t-nnn td:first-child{color:var(--nnn-soft)}
 code{font-family:var(--mono);font-size:.82em;background:rgba(255,255,255,.05);
   border:1px solid var(--line);border-radius:5px;padding:.08rem .38rem;color:var(--ink)}
 .note{color:var(--mut);font-size:.93rem;max-width:74ch;margin:1.3rem 0 0}
@@ -168,20 +167,6 @@ footer .mono{font-family:var(--mono);font-size:.76rem}
         </div>
         <div class="c-go"><span>Read the guide</span><span class="arrow">→</span></div>
       </a>
-
-      <a class="card c-lpp rv d7" href="le-petit-prince.html">
-        <div class="c-idx">04 — naturalistic language</div>
-        <div class="c-mod">fMRI · MEG</div>
-        <div class="c-title">Le Petit<br>Prince</div>
-        <p class="c-ess">One children's book, two complementary windows: fMRI maps <em>where</em> language lives,
-          MEG catches <em>when</em> each word lands — the same story heard by the brain twice.</p>
-        <div class="c-stats">
-          <div><b>where</b><small>fMRI · mm</small></div>
-          <div><b>when</b><small>MEG · ms</small></div>
-          <div><b>~100 min</b><small>of story</small></div>
-        </div>
-        <div class="c-go"><span>Read the guide</span><span class="arrow">→</span></div>
-      </a>
     </div>
 
     <div class="section-h">At a glance · how the recordings differ</div>
@@ -218,15 +203,6 @@ footer .mono{font-family:var(--mono);font-size:.76rem}
             <td>Macaque monkeys (90 sessions)</td>
             <td>NSD shared-1000 natural scenes</td>
             <td><code>NEURO_DATASET=nnn</code></td>
-          </tr>
-          <tr class="t-lpp">
-            <td><span class="dot"></span>Le Petit Prince</td>
-            <td>fMRI (BOLD) &nbsp;+&nbsp; MEG (magnetic fields)</td>
-            <td>fMRI: blood-oxygen (lagged ~5 s) · MEG: neuronal currents</td>
-            <td>fMRI mm/sec · MEG cm/ms <em>(complementary)</em></td>
-            <td>Human listeners (EN057 · sub-26)</td>
-            <td>The Little Prince audiobook</td>
-            <td><code>NEURO_DATASET=text</code> · <code>meg</code></td>
           </tr>
         </tbody>
       </table>

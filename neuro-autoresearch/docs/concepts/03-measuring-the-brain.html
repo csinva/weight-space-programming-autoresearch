@@ -701,10 +701,6 @@
       <p>"MEG/EEG has great spatial resolution because it's so fast" — no. Speed and space are <em>separate</em> axes. EEG/MEG are superb in time (ms) and weak in space (cm-scale, and ambiguous because of the inverse problem). A sharp temporal signal localized to the wrong place is still mislocalized.</p>
     </div>
 
-    <div class="callout project reveal">
-      <span class="k">In this project</span>
-      <p><strong>Le Petit Prince</strong> includes human <strong>MEG</strong> (and fMRI) while people listen to the story. Because MEG is near-instantaneous, the harness windows the neural response to coincide with the word — same logic as ECoG — rather than shifting forward in time. See: <a href="../le-petit-prince.html">the Le Petit Prince guide →</a>.</p>
-    </div>
   </div>
 </section>
 
@@ -943,7 +939,7 @@
 
     <div class="callout project reveal">
       <span class="k">In this project</span>
-      <p>For <strong>NSD</strong> (human fMRI, vision) and the <strong>Le Petit Prince</strong> fMRI, the harness does not read the response at the stimulus onset — it shifts the window forward by <code>offset ≈ 5 s</code> to the HRF peak and averages the peak TRs into <strong>one value per voxel</strong> (a betas-like estimate). That offset is what makes the signal real: a trained AlexNet scores ~0.006 at offset 0 but ~0.32 once the window lands on the peak.</p>
+      <p>For <strong>NSD</strong> (human fMRI, vision), the harness does not read the response at the stimulus onset — it shifts the window forward by <code>offset ≈ 5 s</code> to the HRF peak and averages the peak TRs into <strong>one value per voxel</strong> (a betas-like estimate). That offset is what makes the signal real: a trained AlexNet scores ~0.006 at offset 0 but ~0.32 once the window lands on the peak.</p>
     </div>
   </div>
 </section>
@@ -1167,7 +1163,7 @@
 
     <div class="callout project reveal">
       <span class="k">In this project</span>
-      <p>This is exactly how the harness builds <code>Y</code>, per modality. For fMRI (<strong>NSD</strong>, <strong>Le Petit Prince</strong>) it shifts the window forward ~5 s to the HRF peak and averages TRs into a betas-like value; for <strong>MEG</strong> and <strong>ECoG</strong> the window coincides with the word because the signal is near-instant. Same target shape, different treatment — the method's physics dictates the recipe. Dataset guides: <a href="../ecog-podcast.html">Podcast ECoG</a> · <a href="../le-petit-prince.html">Le Petit Prince</a> · <a href="../tvsd-macaque-spiking.html">TVSD macaque</a>.</p>
+      <p>This is exactly how the harness builds <code>Y</code>, per modality. For fMRI (<strong>NSD</strong>) it shifts the window forward ~5 s to the HRF peak and averages TRs into a betas-like value; for <strong>MEG</strong> and <strong>ECoG</strong> the window coincides with the word because the signal is near-instant. Same target shape, different treatment — the method's physics dictates the recipe. Dataset guides: <a href="../ecog-podcast.html">Podcast ECoG</a> · <a href="../tvsd-macaque-spiking.html">TVSD macaque</a>.</p>
     </div>
   </div>
 </section>
