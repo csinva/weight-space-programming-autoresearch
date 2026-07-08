@@ -132,6 +132,7 @@ def _tvsd_image_relpaths(things_imgs_mat: str, key: str) -> list[str]:
         refs = np.asarray(f[key]["things_path"]).reshape(-1)
 
         def decode(ref):
+            """One HDF5 char-array reference -> its decoded path string."""
             codes = np.asarray(f[ref][()]).reshape(-1)
             return "".join(chr(int(c)) for c in codes if int(c) > 0)
 
@@ -156,6 +157,7 @@ def _tvsd_build_X_processed(d: Dataset):
     sroot = os.path.join(processed_dir("tvsd"), "stimuli")
 
     def build(split):
+        """Decode + resize every JPEG in one split's folder into a [N, imsize*imsize*3] float array."""
         sdir = os.path.join(sroot, split)
         n = len(os.listdir(sdir))
         feats = [pix._get_image_features(

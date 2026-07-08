@@ -88,6 +88,8 @@ def _nnn_area_table(root: str) -> dict:
 
 
 def _nnn_unit_area(table: dict, ses: int, pos: float) -> tuple[str, str]:
+    """(label, area) of the shank range a unit's depth ``pos`` falls in for its session, or
+    ``("Unknown", "Unknown")`` if it maps to no annotated range."""
     for y1, y2, label, area in table.get(ses, []):
         if y1 <= pos < y2:
             return label, area

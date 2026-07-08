@@ -16,6 +16,7 @@ from typing import Optional
 
 
 def rprint(msg, style=None):  # shim for visreps.utils.rprint (rich-styled console print)
+    """Stand-in for visreps' rich ``rprint``; plain print since that package isn't installed here."""
     print(msg)
 
 

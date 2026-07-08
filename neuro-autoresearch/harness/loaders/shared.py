@@ -19,6 +19,7 @@ class RawPixels(BaseClassicImageExtractor):
     """Flattened, [0,1]-normalised RGB pixels of each stimulus image."""
 
     def _get_image_features(self, image: np.ndarray) -> np.ndarray:
+        """One image -> flat [0,1] RGB vector (grayscale is broadcast to 3 channels)."""
         if image.ndim == 2:
             image = np.stack([image] * 3, -1)
         return (image.astype("float32") / 255.0).reshape(-1)
@@ -41,6 +42,7 @@ def processed_dir(name) -> str:
 
 
 def _cache_dir() -> str:
+    """The on-disk split-cache root (``$NEURO_SPLIT_CACHE`` or ``~/.cache/neuro-autoresearch/splits``)."""
     return os.environ.get(
         "NEURO_SPLIT_CACHE",
         os.path.join(os.path.expanduser("~"), ".cache", "neuro-autoresearch", "splits"),

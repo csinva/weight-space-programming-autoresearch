@@ -118,11 +118,14 @@ def _build_cache_key(d: Dataset, processed: bool = False) -> str:
 
 
 def _build_cache_load(path: str):
+    """Load a previously segmented+aligned (X, Y, onsets, stim_ids) blob from disk."""
     blob = torch.load(path, weights_only=False)
     return blob["X"], blob["Y"], blob["onsets"], blob["stim_ids"]
 
 
 def _build_cache_save(path: str, X, Y, onsets, stim_ids) -> None:
+    """Atomically persist a segmented+aligned blob (write-tmp-then-rename, so concurrent evals
+    never read a half-written cache)."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     tmp = f"{path}.tmp.{os.getpid()}"
     torch.save({"X": X, "Y": Y, "onsets": onsets, "stim_ids": stim_ids}, tmp)
@@ -198,6 +201,8 @@ def _seg_stim_ids(segments):
 
 
 def _segment_batch(d: Dataset, events, extractors: dict, start: float, duration: float):
+    """Cut every trigger event into a (start, duration) window and run the given extractors over it,
+    returning the loaded segments. The shared core of both the stimulus and neural passes."""
     seg = ns.Segmenter(
         extractors=extractors,
         trigger_query=d.timeline.trigger, start=start, duration=duration,

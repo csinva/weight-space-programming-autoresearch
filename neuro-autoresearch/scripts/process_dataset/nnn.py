@@ -28,6 +28,7 @@ RAW = "/home/t-ymehta/Research/neuralset/data/nnn_processed"
 
 
 def main():
+    """Read the raw NNN .mat sources and write the native-res image pool + one unfiltered all_units.pt (responses, reliability, area, unit_type, monkey) into data/nnn/."""
     root = RAW
     out = processed_dir("nnn")
     os.makedirs(os.path.join(out, "stimuli"), exist_ok=True)

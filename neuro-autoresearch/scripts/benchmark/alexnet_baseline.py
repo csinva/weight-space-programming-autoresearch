@@ -59,6 +59,7 @@ _LAYERS = {
 
 
 def _srp_cache_dir():
+    """Where the fitted SRP matrices are cached (keyed by D/k/density/seed), so runs reuse them."""
     return os.path.join(os.path.dirname(os.path.abspath(__file__)), "results", "srp_cache")
 
 
@@ -77,6 +78,8 @@ class AlexNetSRP:
 
     def __init__(self, imsize, layers, dim=2048, density=None, resize=224, batch=256, seed=0,
                  pretrained=True):
+        """Load the frozen AlexNet (ImageNet weights, or seeded random init when ``pretrained``
+        is False), freeze all params, and attach a capture hook to each requested tap."""
         from torchvision.models import AlexNet_Weights, alexnet
 
         tag = "" if pretrained else "-untrained"
@@ -105,6 +108,7 @@ class AlexNetSRP:
             getattr(self.net, sub)[idx].register_forward_hook(self._capture(name))
 
     def _capture(self, name):
+        """Build a forward hook that stashes this tap's post-ReLU activations under ``name``."""
         def hook(_module, _inp, out):
             self._caught[name] = out.detach().flatten(1)   # (b, feat)
         return hook
@@ -144,6 +148,7 @@ class AlexNetSRP:
         return {name: np.concatenate(chunks[name], axis=0).astype(np.float32) for name in self.layers}
 
     def __call__(self, X):
+        """Forward + concatenate every requested tap into one (N, sum-of-dims) representation."""
         out = self.forward_layers(X)
         cat = np.concatenate([out[name] for name in self.layers], axis=1)  # (N, sum of per-layer dims)
         return torch.from_numpy(cat).to(self.device)
@@ -180,6 +185,8 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
 
 
 def main(argv=None):
+    """Score the frozen AlexNet feature hierarchy through the harness readout and print/save the
+    per-ROI ``test_corr`` (concat or per-layer, one or both weight inits) for comparison to champions."""
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "nsd"))
     p.add_argument("--layers", nargs="+", default=list(_LAYERS), choices=list(_LAYERS),
@@ -221,6 +228,7 @@ def main(argv=None):
         Xtr, Xte = Xtr.to(device), Xte.to(device)
 
     def run(A_train, A_test, label):
+        """Score one representation through the readout, print its reward + per-ROI row, return the rec."""
         rec = _readout(torch.from_numpy(A_train).to(device), torch.from_numpy(A_test).to(device),
                        Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
         rec["label"] = label

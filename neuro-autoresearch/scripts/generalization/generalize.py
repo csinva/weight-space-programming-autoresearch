@@ -89,6 +89,7 @@ def eval_unit(model, dataset, axis, unit, with_baseline):
 
 
 def main(argv=None):
+    """Load the run's champion, re-score it per search + held-out unit, print the gap, write a results JSON."""
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--run", required=True, help="search run dir (holds search.db + models/)")
@@ -127,6 +128,7 @@ def main(argv=None):
             print(line + f"   ({r['seconds']}s)")
 
     def mean(kind):
+        """Mean test_corr over the rows tagged 'search' or 'heldout'."""
         v = [r["test_corr"] for r in rows if r["kind"] == kind]
         return sum(v) / len(v) if v else float("nan")
 

@@ -50,6 +50,7 @@ class Zada2025Podcast(study.Study):
     )
 
     def iter_timelines(self) -> tp.Iterator[dict[str, tp.Any]]:
+        """One timeline per subject (this study ships a single subject's recording)."""
         if not self.path.exists():
             raise RuntimeError(f"Missing folder {self.path}")
         yield dict(subject=self.SUBJECT)

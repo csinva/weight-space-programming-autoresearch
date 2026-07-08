@@ -65,6 +65,7 @@ def process_stimuli(n: int | None):
 
 
 def main():
+    """Stage the TVSD tree: write per-subject (F, N) neural responses plus the shared stimulus images into data/tvsd/."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=None,
                     help="only first N images per split (smoke test); default all")

@@ -27,10 +27,12 @@ EARLY, VENTRAL = (1,), (2, 5)   # streams labels: early; midventral+ventral
 
 
 def _img(data, ref):
+    """Wrap a data array in a Nifti1Image borrowing ref's affine/header."""
     return nib.Nifti1Image(data.astype("float32"), ref.affine, ref.header)
 
 
 def main():
+    """Render one subject's streams atlas as PNGs: early-vs-ventral reward region, the full 7-label atlas, and (if provisioned) the ncsnr reliability map."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--subject", default="01")
     a = ap.parse_args()

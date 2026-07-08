@@ -23,11 +23,13 @@ from harness.reward import evaluate_on_split_safe
 
 
 def _print_row(row: dict) -> None:
+    """Format one result row (name, params, corrs, seconds) as an aligned scoreboard line."""
     print(f"{row['model_name']:<18} {row['n_params']:>8}  "
           f"{row['train_corr']:>10.4f}  {row['test_corr']:>9.4f}  {row['seconds']:>5.2f}")
 
 
 def main() -> None:
+    """Load the dataset split once, score the current ``model.py`` on it, and print the reward row."""
     print(f"Dataset: {DATASET.study}  stimulus={DATASET.stimulus}  neural={DATASET.neural}"
           f"  reward_roi={DATASET.reward_roi}")
     print("Loading split once (the slow step) ...")

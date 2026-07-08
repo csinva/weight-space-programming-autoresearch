@@ -152,6 +152,7 @@ def _run_batch(n, dataset, subject, method, label):
 
 
 def _report(results, wall):
+    """Print the per-worker phase-timing table + the per-phase max and batch wall-clock."""
     if not results:
         print("  (no workers returned -- check for an error/OOM above)")
         return
@@ -173,6 +174,7 @@ def _report(results, wall):
 
 
 def _worker_record(t):
+    """Slim one worker's timing dict down to the phase seconds + totals kept in the results JSON."""
     rec = {p: t.get(p, 0.0) for p in PHASES}
     rec.update(total=t.get("total"), test_corr=t.get("test_corr"),
                train_corr=t.get("train_corr"), model_src=t.get("model_src"))
@@ -180,6 +182,8 @@ def _worker_record(t):
 
 
 def _save_results(dataset, subject, method, procs, solo, solo_wall, par, par_wall):
+    """Write the run (shapes, concurrent + optional solo phase breakdowns, contention ratio) to a
+    timestamped results JSON; return its path."""
     meta = next(iter(par.values()))
     payload = {
         "dataset": dataset,
@@ -206,6 +210,8 @@ def _save_results(dataset, subject, method, procs, solo, solo_wall, par, par_wal
 
 
 def main(argv=None):
+    """Run the readout pipeline in N concurrent workers (plus an optional solo baseline), print +
+    save the phase-by-phase timings, and optionally re-render the HTML dashboard."""
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dataset", default="nsd", help="NEURO_DATASET preset (nsd/tvsd/nnn/ieeg)")
     p.add_argument("--subject", default="1", help="subject/animal id (e.g. 1-8 for nsd, F/N for tvsd); '' if N/A")

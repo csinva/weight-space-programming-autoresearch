@@ -48,6 +48,8 @@ def _experiment_notes(model) -> str:
 
 
 def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
+    """Pearson r between prediction and truth for each target column (voxel/unit), 0 where a column
+    is constant (zero denominator)."""
     a = y_hat - y_hat.mean(0)
     b = y - y.mean(0)
     den = np.sqrt((a ** 2).sum(0) * (b ** 2).sum(0))

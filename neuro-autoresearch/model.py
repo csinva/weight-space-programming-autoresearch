@@ -8,6 +8,9 @@ import torch
 D_OUT, SEED = 8192, 0
 
 class Model:
+    """The evolving artifact. A fixed, never-trained map ``X (N, D_in) -> activations (N, D_out)``;
+    the harness fits a ridge readout from these activations to brain activity and reports held-out
+    ``test_corr`` as the reward. Only this file changes across the search."""
     name = "random-projection"
     idea = "fixed random linear projection of the raw stimulus"
     # description + insight are captured at score time into experiment_notes (the JSON that
@@ -26,6 +29,8 @@ class Model:
 
     @torch.no_grad()
     def __call__(self, X):
+        """Stimulus batch ``X (N, ...)`` -> per-sample activations ``(N, D_out)``. Each row is
+        computed independently (no cross-batch statistics); ``_W`` is lazily built once and reused."""
         X = torch.as_tensor(X).reshape(X.shape[0], -1).float()
         d_in = X.shape[1]
         if d_in <= D_OUT:

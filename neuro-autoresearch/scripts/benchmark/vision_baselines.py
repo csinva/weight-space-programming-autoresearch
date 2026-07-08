@@ -111,6 +111,7 @@ def _hook_forward(net, tap_map: dict, X_tensor, device, batch=64):
 
 
 def extract_alexnet(X_flat, imsize, dim, seed, device, batch=128):
+    """Frozen ImageNet AlexNet -> {conv1-5, fc6-8: (N, dim)} features, each tap SRP'd to ``dim``."""
     from torchvision.models import alexnet, AlexNet_Weights
     net = alexnet(weights=AlexNet_Weights.IMAGENET1K_V1).eval().to(device)
     net.requires_grad_(False)
@@ -127,6 +128,7 @@ def extract_alexnet(X_flat, imsize, dim, seed, device, batch=128):
 
 
 def extract_resnet50(X_flat, imsize, dim, seed, device, batch=128):
+    """Frozen ImageNet ResNet-50 -> {layer1-4 + avgpool: (N, dim)} features, each SRP'd to ``dim``."""
     from torchvision.models import resnet50, ResNet50_Weights
     net = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2).eval().to(device)
     net.requires_grad_(False)
@@ -358,6 +360,8 @@ def score_model(model_name, Xtr, Xte, Ytr, Yte, roi_masks, nc,
 # ---------------------------------------------------------------------------
 
 def main(argv=None):
+    """Run each requested vision model through best-layer-per-region scoring and print + save the
+    per-model ``test_corr`` / per-ROI table (directly comparable to search-DB champions)."""
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--model",   default="all",
                    choices=list(MODEL_REGISTRY) + ["all"],

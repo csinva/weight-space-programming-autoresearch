@@ -48,6 +48,7 @@ class TrainableChampion(nn.Module):
     """Champion feature extractor (W2/W3 trainable) + a linear ImageNet head."""
 
     def __init__(self, device, n_classes=1000):
+        """Wrap the trainable champion; probe its D_out to size the linear head."""
         super().__init__()
         self.champ = load_trainable_champion(device)
         self.trained = nn.ParameterList([self.champ.W2, self.champ.W3])   # register for the optimizer
@@ -80,6 +81,7 @@ class ParquetImageNet(torch.utils.data.IterableDataset):
 
 
 def main():
+    """Stream ImageNet parquet shards, train the champion's W2/W3 + a 1000-way head, checkpoint W2/W3+head each epoch."""
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--epochs", type=int, default=5)
     p.add_argument("--batch", type=int, default=64)

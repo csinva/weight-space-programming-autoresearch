@@ -36,6 +36,7 @@ RAW = {"ieeg": "/home/t-ymehta/Research/neuralset/data/ds005574_podcast"}
 
 
 def _process(ds_key: str, subject: str = "") -> None:
+    """Stage one iEEG patient: write the picked+resampled high-gamma .fif, the copied audio, the word-onset table, and meta.json into data/ieeg/."""
     d = PRESETS[ds_key]
     if subject:
         d = replace(d, subject=subject)          # stage this patient (iEEG is multi-subject)

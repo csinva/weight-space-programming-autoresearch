@@ -29,6 +29,7 @@ def _readout_device() -> torch.device:
 
 
 def _to_np(a) -> np.ndarray:
+    """Any tensor/array -> a float64 numpy array (the readout's common return type)."""
     if torch.is_tensor(a):
         a = a.detach().cpu().numpy()
     return np.asarray(a, dtype=np.float64)

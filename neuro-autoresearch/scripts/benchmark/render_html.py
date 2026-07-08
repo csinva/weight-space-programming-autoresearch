@@ -149,6 +149,7 @@ def render_card(res):
         return w.get(key)
 
     def phase_max(key):
+        """Max of a phase's timing across the concurrent workers (None if none are numeric)."""
         vals = [worker_val(w, key) for w in workers]
         nums = [float(v) for v in vals if isinstance(v, (int, float))]
         return max(nums) if nums else None
@@ -300,6 +301,7 @@ def load_results(results_dir):
 
 
 def main():
+    """Load every benchmark results JSON and write the self-contained HTML dashboard."""
     here = os.path.dirname(os.path.abspath(__file__))
     default_dir = os.path.join(here, "results")
     ap = argparse.ArgumentParser(description="Render benchmark results to HTML.")

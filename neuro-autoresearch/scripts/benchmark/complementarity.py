@@ -59,6 +59,8 @@ def srp_to(feats_np, dim, seed, cache_dir):
 
 
 def main(argv=None):
+    """Score AlexNet-layer, champion, and their concat in early + ventral regions and report whether
+    Combined beats the best single source (champion carries variance AlexNet misses); print + save."""
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--subject", default="1", help="NSD subject id (default 1)")
     p.add_argument("--champion", default=DEFAULT_CHAMPION, help="searched champion model .py")
@@ -89,6 +91,7 @@ def main(argv=None):
 
     # --- AlexNet conv4 and fc7, each SRP'd to `dim` (fc7 is 4096>dim, so also projected) ---
     def alex_layer(layer):
+        """Forward the frozen AlexNet and return one tap's train/test features, SRP'd to ``dim``."""
         m = AlexNetSRP(DATASET.imsize, [layer], dim=a.dim, seed=a.seed, pretrained=True)
         tr, te = m.forward_layers(Xtr), m.forward_layers(Xte)
         return tr[layer], te[layer]                                  # already (N, dim)
@@ -122,6 +125,7 @@ def main(argv=None):
         return ((A_tr - mu) / sd).astype(np.float32), ((A_te - mu) / sd).astype(np.float32)
 
     def score(A_tr, A_te):
+        """Standardize columns then run the harness readout; return the per-ROI record."""
         A_tr, A_te = standardize(A_tr, A_te)
         rec = _readout(torch.from_numpy(A_tr).to(device), torch.from_numpy(A_te).to(device),
                        Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
@@ -141,6 +145,7 @@ def main(argv=None):
     }
 
     def roi_test(name, region):
+        """A source's noise-normalized test score in one region (for the per-region bar plots)."""
         return round(float(sources[name]["roi_corr"][region]["test"]), 4)
 
     plots = {

@@ -42,6 +42,7 @@ ROI_DEFS = {
 
 
 def _fetch(src, dst):
+    """Download an S3 volume to dst if not cached (atomic via .tmp) and return its loaded fdata."""
     if not os.path.exists(dst):
         tmp = dst + ".tmp"                          # atomic: a broken download must not poison cache
         subprocess.run(["aws", "s3", "cp", "--no-sign-request", src, tmp], check=True)
@@ -50,6 +51,7 @@ def _fetch(src, dst):
 
 
 def build(subj, out, cache):
+    """Fetch one subject's ncsnr + ROI label volumes, extract per-ROI ncsnr aligned (count-asserted) to the prepared betas, and write blob['ncsnr'] back into subj<NN>.pt."""
     pt = os.path.join(out, "neural", f"subj{subj}.pt")
     blob = torch.load(pt, weights_only=False)
     ncsnr_vol = _fetch(_NCSNR.format(s=subj), os.path.join(cache, f"subj{subj}_ncsnr.nii.gz"))
@@ -76,6 +78,7 @@ def build(subj, out, cache):
 
 
 def main():
+    """Fetch + align ncsnr into each requested subject's prepared betas blob."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--subjects", nargs="+", default=["01", "02", "05", "07"])
     ap.add_argument("--out", default=None)

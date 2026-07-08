@@ -39,6 +39,9 @@ class Timeline:
 
 @dataclass(frozen=True)
 class Dataset:
+    """One dataset preset: the stimulus + neural modality, split/CV policy, reward region, and which
+    loader path to take. The ``PRESETS`` entry ``NEURO_DATASET`` selects is what fixes the whole eval;
+    every field here is a scientific constant of that benchmark, NOT an operator knob."""
     study: str = "Unnamed"           # NeuralSet study name or descriptive standalone tag
     neural: str = "ieeg"             # neural modality: fmri | ieeg | spikes
     stimulus: str = "image"          # stimulus modality: image | text | audio | chars

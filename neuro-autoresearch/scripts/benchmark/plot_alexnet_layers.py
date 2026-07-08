@@ -42,6 +42,7 @@ EARLY_ANCHOR, VENT_ANCHOR = "#0d2c4a", "#6e1b12"     # stream means: darker than
 
 
 def _latest():
+    """Newest ``alexnet_per-layer_*.json`` in results/ (exits if none exist yet)."""
     files = sorted(glob.glob(os.path.join(RESULTS, "alexnet_per-layer_*.json")))
     if not files:
         sys.exit("no alexnet_per-layer_*.json in results/ -- run alexnet_baseline.py first")
@@ -49,6 +50,8 @@ def _latest():
 
 
 def _panel(ax, x, layers, recs, rois, ramp, anchor, stream, title, ymax):
+    """Draw one stream's panel: the stream-mean curve + its sub-ROI lines across AlexNet layers,
+    with conv/fc shading, peak markers, and the search-champion reference line."""
     def series(roi):
         return [r["roi_corr"].get(roi, {}).get("test", float("nan")) for r in recs]
 
@@ -104,6 +107,7 @@ def _panel(ax, x, layers, recs, rois, ramp, anchor, stream, title, ymax):
 
 
 def main(argv=None):
+    """Render the two-panel (early + ventral) AlexNet per-layer encoding figure to a PNG beside the JSON."""
     path = (argv or sys.argv[1:])
     path = path[0] if path else _latest()
     if not os.path.isabs(path):

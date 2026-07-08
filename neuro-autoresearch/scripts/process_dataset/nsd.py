@@ -58,6 +58,7 @@ def repack_neural(subjects, out):
 
 
 def union_ids(subjects):
+    """Sorted union of the nsd_ids seen by any of the given subjects (the stimuli to stage)."""
     ids = set()
     for s in subjects:
         with open(os.path.join(RAW, "per_subject", f"subj{s}.pkl"), "rb") as f:
@@ -83,6 +84,7 @@ def store_stimuli(ids, out):
 
 
 def main():
+    """Repack each subject's prepared betas into data/nsd/, align per-voxel ncsnr (unless --no-ncsnr), and store the union of stimuli images."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--subjects", nargs="+", default=SUBJECTS)
     ap.add_argument("--ids-limit", type=int, default=None)

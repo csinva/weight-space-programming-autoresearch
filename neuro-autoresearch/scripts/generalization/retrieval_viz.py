@@ -159,6 +159,7 @@ def figure(raw, q, rows, out_path, k, title):
 
 
 def main():
+    """Embed the shared-1000 gallery in brain / champion / AlexNet spaces and write per-query early+ventral top-K retrieval figures."""
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", default=DEFAULT_MODEL, help="champion model .py (default: NSD qq145)")
     ap.add_argument("--subject", type=int, default=1, help="NSD subject id for the gallery (default 1)")
