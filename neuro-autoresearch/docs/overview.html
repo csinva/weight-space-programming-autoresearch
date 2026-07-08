@@ -520,6 +520,44 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
 .metric__spark{box-shadow:0 0 14px -2px var(--spec-glow)}
 .statstrip .st b{text-shadow:0 6px 18px var(--spec-glow)}
 .pstage__box--out{box-shadow:0 0 0 1px var(--spec-wash),0 10px 26px -14px var(--spec-glow)}
+
+/* ============================================================
+   EXPERIMENT LEDGER  ·  three numbered, building programs
+   ============================================================ */
+.explist{list-style:none;margin:0;padding:0;counter-reset:exp;display:grid;gap:var(--s4)}
+.exp{
+  counter-increment:exp;position:relative;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:var(--s5);display:grid;grid-template-columns:3.4rem 1fr;gap:var(--s4);align-items:start;
+  box-shadow:0 1px 2px rgba(20,22,27,.035),0 16px 38px -32px rgba(20,22,27,.5);
+}
+.exp::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;
+  background:linear-gradient(180deg,var(--m1),var(--m2) 55%,var(--m3))}
+.exp__idx{
+  font-family:var(--display);font-weight:600;font-size:2.6rem;line-height:.9;
+  color:var(--spec);font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+}
+.exp__idx::before{content:counter(exp,decimal-leading-zero)}
+.exp__title{font-family:var(--display);font-weight:600;font-size:var(--fs-h3);line-height:1.15;margin:.1rem 0 0}
+.exp__lead{margin:var(--s2) 0 0;color:var(--ink-soft);font-size:var(--fs-body)}
+.exp__lead b{color:var(--ink)}
+.exp__subs{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin:var(--s4) 0}
+@media(max-width:640px){.exp__subs{grid-template-columns:1fr}}
+.subcard{background:var(--paper-sunk);border:1px solid var(--line);border-radius:var(--radius);
+  padding:var(--s3) var(--s4)}
+.subcard__tag{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--spec);margin:0 0 .3rem}
+.subcard p{margin:0;font-size:var(--fs-sm);color:var(--ink-soft)}
+.subcard p b{color:var(--ink)}
+.exp__qhead{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-faint);margin:var(--s4) 0 .2rem;padding-top:var(--s3);border-top:1px solid var(--line-soft)}
+.qlist{list-style:none;margin:.5rem 0 0;padding:0;display:grid;gap:.45rem}
+.qlist li{position:relative;padding-left:1.5rem;font-size:var(--fs-sm);color:var(--ink-soft);line-height:1.5}
+.qlist li::before{content:"→";position:absolute;left:0;top:0;color:var(--spec-soft);font-weight:600}
+@media(max-width:560px){
+  .exp{grid-template-columns:1fr;gap:var(--s3);padding:var(--s4)}
+  .exp__idx{font-size:2.1rem}
+}
 </style>
 </head>
 <body>
@@ -530,7 +568,7 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
     <nav class="navlinks" aria-label="Sections">
       <a href="#search">the search</a>
       <a href="#why">the constraints</a>
-      <a href="#questions">new questions</a>
+      <a href="#experiments">experiments</a>
       <a href="#datasets">datasets</a>
       <a href="#results">results</a>
     </nav>
@@ -694,33 +732,80 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
   </section>
 
   <!-- ===== NEW QUESTIONS ===== -->
-  <section class="section wrap" id="questions">
+  <section class="section wrap" id="experiments">
     <div class="section-head">
-      <p class="eyebrow">03 · What this opens up</p>
-      <h2 class="h2">Questions a fixed hypothesis class cannot ask</h2>
-      <p class="lead">Because the search ranges over <b>arbitrary agent-authored functions</b> — not points in one
-        architecture family — it can pose and answer questions that model-comparison studies structurally cannot.</p>
+      <p class="eyebrow">03 · Experiments</p>
+      <h2 class="h2">The experiments this search makes possible</h2>
+      <p class="lead">Three programs build on each other: <b>search</b> for models, <b>analyze</b> the population
+        they form, then <b>dissect</b> the best — moving from finding good models to understanding <em>why</em>
+        they work.</p>
     </div>
-    <div class="qgrid">
-      <div class="qcard"><span class="qn">Q1</span><h4>Which primitives does a region need?</h4>
-        <p>Read the champion for area X and ablate it: is fine-scale Gabor energy sufficient for early+ventral, or are
-          co-occurrence and part statistics load-bearing? The code <em>is</em> the answer.</p></div>
-      <div class="qcard"><span class="qn">Q2</span><h4>Do computations recur across brains?</h4>
-        <p>Run the same search on macaque spikes, human fMRI, and human ECoG. Convergent primitives across species and
-          recording modality are evidence for a shared computational motif.</p></div>
-      <div class="qcard"><span class="qn">Q3</span><h4>What is the minimal computation?</h4>
-        <p>Under a 1M-parameter cap, how close to the noise ceiling can a hand-written function get? The frontier traces
-          the irreducible computational content of a region's responses.</p></div>
-      <div class="qcard"><span class="qn">Q4</span><h4>Where is learning actually required?</h4>
-        <p>The gap between the best written function and a trained network localizes what <em>must</em> be learned —
-          separating the underlying computation from experience, region by region.</p></div>
-      <div class="qcard"><span class="qn">Q5</span><h4>Can an agent invent something new?</h4>
-        <p>Open-ended search can surface computations no one enumerated — hue×orientation conjunctions, content-word
-          weighting — turning the search into a source of hypotheses, not just a fit.</p></div>
-      <div class="qcard"><span class="qn">Q6</span><h4>Does the loop become a scientist?</h4>
-        <p>Agents that propose, test, and revise code against neural data are a testbed for autonomous discovery — how
-          far can decentralized search push scientific understanding on its own?</p></div>
-    </div>
+
+    <ol class="explist">
+      <!-- 1 · Search experiments -->
+      <li class="exp">
+        <div class="exp__idx" aria-hidden="true"></div>
+        <div class="exp__body">
+          <h3 class="exp__title">Search experiments</h3>
+          <p class="exp__lead">Two ways to run the open-ended search, defined by what the reward optimizes.</p>
+          <div class="exp__subs">
+            <div class="subcard">
+              <p class="subcard__tag">a · Vanilla search</p>
+              <p>Search for models that optimize performance on a <b>single</b> target dataset or benchmark.</p>
+            </div>
+            <div class="subcard">
+              <p class="subcard__tag">b · Multi-dataset optimization</p>
+              <p>Search for models that <b>jointly</b> optimize across multiple datasets at once.</p>
+            </div>
+          </div>
+          <p class="exp__qhead">Key questions</p>
+          <ul class="qlist">
+            <li>Are there models that are good for human visual processing but bad for monkey neural data?</li>
+            <li>Are there models that are good for monkeys but poor for humans?</li>
+            <li>Can we find models that perform well across both humans and monkeys?</li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- 2 · Population analysis -->
+      <li class="exp">
+        <div class="exp__idx" aria-hidden="true"></div>
+        <div class="exp__body">
+          <h3 class="exp__title">Analysis across the model population</h3>
+          <p class="exp__lead">With a broad set of computational models — roughly <b>2,000</b> — we can analyze
+            what separates the good models from the bad.</p>
+          <p class="exp__qhead">Key questions</p>
+          <ul class="qlist">
+            <li>What computational motifs or principles are enriched in the best-performing models?</li>
+            <li>What properties distinguish models that generalize across datasets from models that only work
+              well on one?</li>
+            <li>Are there recurring architectural or algorithmic patterns that predict good brain alignment?</li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- 3 · Best-model dissection -->
+      <li class="exp">
+        <div class="exp__idx" aria-hidden="true"></div>
+        <div class="exp__body">
+          <h3 class="exp__title">Best-model analysis &amp; dissection</h3>
+          <p class="exp__lead">Analyze the best-performing models in detail — identify their motifs, then
+            perturb them to find which ones actually carry the signal.</p>
+          <p class="exp__qhead">Key experiments</p>
+          <ul class="qlist">
+            <li>Identify the main computational motifs in the best model.</li>
+            <li>Remove or perturb specific motifs, one at a time.</li>
+            <li>Test how each removal affects performance.</li>
+            <li>Determine which motifs are causally important for alignment with human data, monkey data, or both.</li>
+          </ul>
+          <div class="callout callout--sig" style="margin-top:var(--s4)">
+            <p class="callout__label">Why it matters</p>
+            <p>This moves us beyond finding good models and toward understanding <b>why they work</b> —
+              the causal computations behind brain alignment.</p>
+          </div>
+        </div>
+      </li>
+    </ol>
   </section>
 
   <!-- ===== DATASETS ===== -->
@@ -888,6 +973,90 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
 <div class="code-line"><span class="ln">67</span><span class="lc"></span></div>
         </div>
       </figure>
+    </div>
+
+    <!-- NSD: champion vs. best pretrained models, by visual stream (subject 1) -->
+    <style>
+      .streamcmp{margin-bottom:var(--s5)}
+      .streamcmp__grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);margin-top:var(--s4)}
+      @media (max-width:720px){.streamcmp__grid{grid-template-columns:1fr}}
+      .streamcol{margin:0;padding:var(--s4);background:var(--paper-sunk);
+        border:1px solid var(--line);border-radius:14px}
+      .streamcol__head{display:flex;justify-content:space-between;align-items:baseline;
+        gap:.6rem;margin-bottom:var(--s3);font-weight:600;color:var(--ink)}
+      .streamcol__win{font-family:var(--mono);font-size:.72rem;font-weight:600;
+        padding:.16rem .5rem;border-radius:999px}
+      .streamcol__win--champ{color:var(--spec);background:var(--spec-wash)}
+      .streamcol__win--pre{color:var(--sig);background:var(--sig-wash)}
+      .bar{display:grid;grid-template-columns:9.5rem 1fr 2.8rem;align-items:center;
+        gap:.6rem;margin:.34rem 0;font-size:.82rem}
+      .bar__name{color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .bar__name em{color:var(--ink-faint);font-style:normal;font-size:.72rem}
+      .bar__track{height:.7rem;background:color-mix(in srgb,var(--ink) 6%,transparent);
+        border-radius:999px;overflow:hidden}
+      .bar__fill{display:block;height:100%;border-radius:999px}
+      .bar__fill--champ{background:linear-gradient(90deg,var(--spec-deep),var(--spec))}
+      .bar__fill--pre{background:var(--sig-soft)}
+      .bar__fill--best{background:linear-gradient(90deg,var(--sig),var(--sig-soft))}
+      .bar__val{font-family:var(--mono);font-size:.76rem;color:var(--ink);text-align:right}
+      .bar--lead .bar__name{color:var(--ink);font-weight:600}
+      .bar--lead .bar__val{font-weight:700}
+      .streamcmp__legend{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:var(--s3);
+        font-size:.75rem;color:var(--ink-faint)}
+      .streamcmp__legend i{display:inline-block;width:.7rem;height:.7rem;border-radius:3px;
+        margin-right:.35rem;vertical-align:middle}
+    </style>
+    <div class="streamcmp">
+      <div class="section-head" style="margin-bottom:0">
+        <p class="eyebrow eyebrow--muted">NSD · subject 1 · r²/NC² · searched champion vs. best pretrained model</p>
+        <h3 class="h3">A double dissociation across the visual streams</h3>
+        <p class="lead">The untrained champion and five frozen pretrained nets (AlexNet, ResNet‑50, ViT‑B/16,
+          CLIP, DINOv2) are scored through the <b>identical harness</b> — same images, same NC<sub>r</sub> ≥ 0.2
+          reliable voxels, same per‑voxel noise‑normalized reward, each net given its <b>best layer per stream</b>
+          (chosen on a held‑out split, no test leakage). They finish a near‑tie overall, by <em>opposite</em>
+          means: the champion <b>owns early/mid vision</b>; a pretrained net <b>owns the category‑selective ventral tip</b>.</p>
+      </div>
+      <div class="streamcmp__grid">
+        <!-- EARLY -->
+        <figure class="streamcol">
+          <figcaption class="streamcol__head"><span>Early visual stream</span>
+            <span class="streamcol__win streamcol__win--champ">champion +0.12</span></figcaption>
+          <div class="bar bar--lead"><span class="bar__name">Champion <em>· HMAX</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--champ" style="width:91%"></span></span><span class="bar__val">0.548</span></div>
+          <div class="bar"><span class="bar__name">AlexNet <em>· conv3</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--best" style="width:72%"></span></span><span class="bar__val">0.429</span></div>
+          <div class="bar"><span class="bar__name">ResNet‑50 <em>· layer3</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:64%"></span></span><span class="bar__val">0.384</span></div>
+          <div class="bar"><span class="bar__name">CLIP <em>· block6</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:58%"></span></span><span class="bar__val">0.348</span></div>
+          <div class="bar"><span class="bar__name">ViT‑B/16 <em>· block6</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:55%"></span></span><span class="bar__val">0.330</span></div>
+          <div class="bar"><span class="bar__name">DINOv2 <em>· block6</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:54%"></span></span><span class="bar__val">0.324</span></div>
+        </figure>
+        <!-- VENTRAL -->
+        <figure class="streamcol">
+          <figcaption class="streamcol__head"><span>Ventral visual stream</span>
+            <span class="streamcol__win streamcol__win--pre">pretrained +0.12</span></figcaption>
+          <div class="bar bar--lead"><span class="bar__name">DINOv2 <em>· block9</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--best" style="width:78%"></span></span><span class="bar__val">0.470</span></div>
+          <div class="bar"><span class="bar__name">CLIP <em>· pooled</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:78%"></span></span><span class="bar__val">0.467</span></div>
+          <div class="bar"><span class="bar__name">ViT‑B/16 <em>· block9</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:72%"></span></span><span class="bar__val">0.431</span></div>
+          <div class="bar"><span class="bar__name">AlexNet <em>· fc6</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:72%"></span></span><span class="bar__val">0.431</span></div>
+          <div class="bar"><span class="bar__name">ResNet‑50 <em>· avgpool</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--pre" style="width:69%"></span></span><span class="bar__val">0.415</span></div>
+          <div class="bar bar--lead"><span class="bar__name">Champion <em>· HMAX</em></span>
+            <span class="bar__track"><span class="bar__fill bar__fill--champ" style="width:58%"></span></span><span class="bar__val">0.346</span></div>
+        </figure>
+      </div>
+      <div class="streamcmp__legend">
+        <span><i style="background:var(--spec)"></i>searched champion (untrained)</span>
+        <span><i style="background:var(--sig-soft)"></i>frozen pretrained net · best layer per stream</span>
+        <span>shared axis 0 – 0.60 r²/NC²</span>
+      </div>
     </div>
 
     <!-- showcase 2: iEEG -->
