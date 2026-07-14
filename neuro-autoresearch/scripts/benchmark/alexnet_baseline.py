@@ -160,8 +160,10 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
     captured, the harness/search metric): ``test_corr`` + per-ROI ``roi_corr``.
 
     This is the body of ``harness.reward.evaluate_on_split`` reusing its helpers (same reward-region
-    target selection, same fast/himalaya ridge, same per-ROI breakdown, same per-voxel ceiling ``nc``)
-    -- minus only the MAX_DOUT proposer guard, which does not apply to a fixed baseline."""
+    target selection, same fast/himalaya ridge, same per-ROI breakdown, same per-voxel ceiling ``nc``,
+    AND the same ``cv_folds`` branch -- rotating K-fold CV when the preset sets it, e.g. nnn/ieeg, so
+    the baseline is scored under the EXACT protocol the search DB uses) -- minus only the MAX_DOUT
+    proposer guard, which does not apply to a fixed baseline."""
     from harness.ridge import ridge_predict
 
     mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)
@@ -173,9 +175,16 @@ def _readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown
             mask = torch.as_tensor(mask, device=Ytr.device)
     Yv_train, Yv_test = R.select_targets(Ytr, mask), R.select_targets(Yte, mask)
 
-    pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
-    test_n = R._noise_normalize(R._corr_per_column(pred_test, R._to_np(Yv_test)), nc)
-    train_n = R._noise_normalize(R._corr_per_column(pred_train, R._to_np(Yv_train)), nc)
+    # cv_folds>1 (nnn/ieeg): reproduce the reward's rotating K-fold CV over the FULL image set so the
+    # baseline's test_corr is apples-to-apples with the search DB; else the single train/test split.
+    if getattr(DATASET, "cv_folds", 0) > 1:
+        A_full = torch.cat([A_train, A_test], 0)
+        Y_full = torch.cat([torch.as_tensor(Yv_train), torch.as_tensor(Yv_test)], 0)
+        train_n, test_n = R._cv_column_r(A_full, Y_full, DATASET.cv_folds, device, nc)
+    else:
+        pred_train, pred_test = ridge_predict(A_train, A_test, Yv_train, device=device)
+        test_n = R._noise_normalize(R._corr_per_column(pred_test, R._to_np(Yv_test)), nc)
+        train_n = R._noise_normalize(R._corr_per_column(pred_train, R._to_np(Yv_train)), nc)
     return {
         "d_out": int(A_train.shape[1]),
         "test_corr": round(float(test_n.mean()), 4), "train_corr": round(float(train_n.mean()), 4),
@@ -203,75 +212,123 @@ def main(argv=None):
     p.add_argument("--weights", choices=["trained", "untrained", "both"], default="trained",
                    help="ImageNet-pretrained weights ('trained'), random-init same architecture "
                         "('untrained'), or 'both' for the trained-vs-untrained control (one data load).")
+    p.add_argument("--subject", default=None,
+                   help="NEURO_SUBJECT; a comma list (e.g. 1,3,4) is scored per-subject and averaged "
+                        "(equal weight), like the search reward. Default: dataset default subject.")
     p.add_argument("--no-save", action="store_true")
     a = p.parse_args(argv)
 
     os.environ["NEURO_DATASET"] = a.dataset
-    from harness.datasets import DATASET
+    if a.subject is not None:
+        os.environ["NEURO_SUBJECT"] = str(a.subject)
+    from harness.datasets import DATASET, with_subject
     from harness.loaders import load_split
     from harness import reward as R
     from harness.roi import roi_breakdown
 
-    subj = os.environ.get("NEURO_SUBJECT", "1")
+    from subjects import subject_tokens, common_roi_keys, mean_scalar
+    subjects = subject_tokens(a.subject if a.subject is not None else os.environ.get("NEURO_SUBJECT"))
+    subj_label = ",".join(subjects) if subjects else "default"
     mode = "per-layer" if a.per_layer else "concat"
-    print(f"=== AlexNet-SRP baseline ({mode}) | {a.dataset} subj={subj} "
+    device = R._readout_device()
+    print(f"=== AlexNet-SRP baseline ({mode}) | {a.dataset} subj={subj_label} "
           f"| reward_roi={DATASET.reward_roi} | layers={'+'.join(a.layers)} | conv_srp_dim={a.dim} "
           f"| weights={a.weights} ===")
 
-    # Same split the search/harness uses: same images, shared-1000 hold-out, target voxels, ROI masks.
-    # Loaded ONCE and reused across weight variants (the load is the slow step).
-    split = load_split(DATASET)
-    Xtr, Xte, Ytr, Yte, roi_masks, nc = split   # nc = per-voxel R^2 noise ceiling (None off-NSD);
-    #   the readout below reports the noise-normalized reward (r^2/NC_r2) + raw r side by side.
-    device = R._readout_device()
-    if torch.is_tensor(Xtr):
-        Xtr, Xte = Xtr.to(device), Xte.to(device)
+    def score_split(dset):
+        """Load ``dset``'s split (same images/hold-out/voxels/ROI masks the search uses) and score
+        every requested weight-variant/layer on it. Returns ``(records, model_names)``. The split load
+        is the slow step -- shared across weight variants."""
+        Xtr, Xte, Ytr, Yte, roi_masks, nc = load_split(dset)
+        if torch.is_tensor(Xtr):
+            Xtr, Xte = Xtr.to(device), Xte.to(device)
 
-    def run(A_train, A_test, label):
-        """Score one representation through the readout, print its reward + per-ROI row, return the rec."""
-        rec = _readout(torch.from_numpy(A_train).to(device), torch.from_numpy(A_test).to(device),
-                       Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
-        rec["label"] = label
-        rois = list(rec["roi_corr"])
-        print(f"\n  [{label}]  REWARD r²/NC² test={rec['test_corr']:.4f} train={rec['train_corr']:.4f} "
-              f"gap={rec['gap']:.4f}  (D_out={rec['d_out']})")
-        print("  " + "".join(f"{r:>9}" for r in rois))
-        print("  r²/NC²  " + "".join(f"{rec['roi_corr'][r]['test']:>9.4f}" for r in rois))
-        return rec
+        def run(A_train, A_test, label):
+            """Score one representation through the readout, print its reward + per-ROI row, return the rec."""
+            rec = _readout(torch.from_numpy(A_train).to(device), torch.from_numpy(A_test).to(device),
+                           Ytr, Yte, dict(roi_masks), nc, dset, R, roi_breakdown, device)
+            rec["label"] = label
+            rois = list(rec["roi_corr"])
+            print(f"\n  [{label}]  REWARD r²/NC² test={rec['test_corr']:.4f} train={rec['train_corr']:.4f} "
+                  f"gap={rec['gap']:.4f}  (D_out={rec['d_out']})")
+            print("  " + "".join(f"{r:>9}" for r in rois))
+            print("  r²/NC²  " + "".join(f"{rec['roi_corr'][r]['test']:>9.4f}" for r in rois))
+            return rec
 
-    def evaluate_variant(pretrained):
-        """Build the (frozen) AlexNet at the given init, run forward + score every tap. Returns the
-        model + its records, so trained/untrained share the one expensive data load above."""
-        wlabel = "trained" if pretrained else "untrained"
-        model = AlexNetSRP(DATASET.imsize, a.layers, dim=a.dim, density=a.density, resize=a.resize,
-                           batch=a.batch, seed=a.seed, pretrained=pretrained)
-        t0 = time.time()
-        feat_tr, feat_te = model.forward_layers(Xtr), model.forward_layers(Xte)
-        print(f"\n--- {wlabel} AlexNet ---  forward {time.time() - t0:.1f}s   "
-              f"n_train={Ytr.shape[0]} n_test={Yte.shape[0]} n_targets={Ytr.shape[1]}")
-        recs = []
-        if not a.per_layer:
-            cat_tr = np.concatenate([feat_tr[n] for n in a.layers], axis=1)
-            cat_te = np.concatenate([feat_te[n] for n in a.layers], axis=1)
-            recs.append(run(cat_tr, cat_te, f"{wlabel}|concat:" + "+".join(a.layers)))
-        else:
-            # Each tap scored on its own -- the brain-score protocol; sidesteps the all-concat overfit.
-            for name in a.layers:
-                recs.append(run(feat_tr[name], feat_te[name], f"{wlabel}|{name}"))
-        for r in recs:
-            r["weights"] = wlabel
-        best = max(recs, key=lambda r: r["test_corr"])
-        sel = "best layer" if a.per_layer else "concat"
-        print(f"  {wlabel} ({sel}) reward: {best['label']}  test_corr={best['test_corr']:.4f}")
-        return model, recs
+        def evaluate_variant(pretrained):
+            """Build the (frozen) AlexNet at the given init, run forward + score every tap. Returns the
+            model + its records, so trained/untrained share the one expensive data load above."""
+            wlabel = "trained" if pretrained else "untrained"
+            model = AlexNetSRP(dset.imsize, a.layers, dim=a.dim, density=a.density, resize=a.resize,
+                               batch=a.batch, seed=a.seed, pretrained=pretrained)
+            t0 = time.time()
+            feat_tr, feat_te = model.forward_layers(Xtr), model.forward_layers(Xte)
+            print(f"\n--- {wlabel} AlexNet ---  forward {time.time() - t0:.1f}s   "
+                  f"n_train={Ytr.shape[0]} n_test={Yte.shape[0]} n_targets={Ytr.shape[1]}")
+            recs = []
+            if not a.per_layer:
+                cat_tr = np.concatenate([feat_tr[n] for n in a.layers], axis=1)
+                cat_te = np.concatenate([feat_te[n] for n in a.layers], axis=1)
+                recs.append(run(cat_tr, cat_te, f"{wlabel}|concat:" + "+".join(a.layers)))
+            else:
+                # Each tap scored on its own -- the brain-score protocol; sidesteps the all-concat overfit.
+                for name in a.layers:
+                    recs.append(run(feat_tr[name], feat_te[name], f"{wlabel}|{name}"))
+            for r in recs:
+                r["weights"] = wlabel
+            best = max(recs, key=lambda r: r["test_corr"])
+            sel = "best layer" if a.per_layer else "concat"
+            print(f"  {wlabel} ({sel}) reward: {best['label']}  test_corr={best['test_corr']:.4f}")
+            return model, recs
 
-    variants = ["trained", "untrained"] if a.weights == "both" else [a.weights]
+        variants = ["trained", "untrained"] if a.weights == "both" else [a.weights]
+        recs, names = [], []
+        for w in variants:
+            model, rv = evaluate_variant(w == "trained")
+            recs.extend(rv)
+            names.append(model.name)
+        return recs, names
+
+    def mean_records(per_subject):
+        """Average per-subject records with EQUAL weight per subject, grouped by their stable ``label``
+        (mirrors ``harness.reward.evaluate_subjects``): mean test/train/gap + per-ROI train/test over
+        the ROIs present for every subject."""
+        subs = list(per_subject)
+        by_label: dict = {}
+        for s in subs:
+            for r in per_subject[s]:
+                by_label.setdefault(r["label"], {})[s] = r
+        out = []
+        for label, recs in by_label.items():
+            rs = list(recs.values())
+            roi_keys = common_roi_keys([r["roi_corr"] for r in rs])
+            out.append({
+                "label": label, "weights": rs[0]["weights"], "d_out": rs[0]["d_out"],
+                "test_corr": mean_scalar(r["test_corr"] for r in rs),
+                "train_corr": mean_scalar(r["train_corr"] for r in rs),
+                "gap": mean_scalar(r["gap"] for r in rs),
+                "roi_corr": {k: {"train": mean_scalar(recs[s]["roi_corr"][k]["train"] for s in subs),
+                                 "test": mean_scalar(recs[s]["roi_corr"][k]["test"] for s in subs)}
+                             for k in roi_keys},
+                "subjects": subs,
+            })
+        return out
+
     t_all = time.time()
-    records, model_names = [], []
-    for w in variants:
-        model, recs = evaluate_variant(w == "trained")
-        records.extend(recs)
-        model_names.append(model.name)
+    if len(subjects) <= 1:
+        # Single subject (or the dataset default): DATASET is already bound to it at import.
+        records, model_names = score_split(DATASET)
+    else:
+        # Per-subject then equal-weight mean -- the search reward's multi-subject protocol.
+        per_subject, model_names = {}, []
+        for s in subjects:
+            dset = with_subject(DATASET, s)
+            print(f"\n----- subject {s} ({dset.study}) -----")
+            per_subject[s], model_names = score_split(dset)
+        records = mean_records(per_subject)
+        print(f"\n  === mean over subjects {subj_label} ===")
+        for r in records:
+            print(f"    {r['label']:>34}  test_corr={r['test_corr']:.4f}")
 
     if a.weights == "both":
         bt = max((r for r in records if r["weights"] == "trained"), key=lambda r: r["test_corr"])
@@ -285,11 +342,11 @@ def main(argv=None):
     if not a.no_save:
         stamp = time.strftime("%Y%m%d_%H%M%S")
         out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results",
-                           f"alexnet_{mode}_{a.weights}_{a.dataset}_subj{subj}_{stamp}.json")
+                           f"alexnet_{mode}_{a.weights}_{a.dataset}_subj{subj_label}_{stamp}.json")
         os.makedirs(os.path.dirname(out), exist_ok=True)
         with open(out, "w") as f:
             json.dump({"model": "+".join(model_names), "mode": mode, "weights": a.weights,
-                       "dataset": a.dataset, "subject": subj, "reward_roi": DATASET.reward_roi,
+                       "dataset": a.dataset, "subject": subj_label, "reward_roi": DATASET.reward_roi,
                        "layers": a.layers, "srp_dim": a.dim, "records": records}, f, indent=2)
         print(f"  saved -> {out}")
 

@@ -329,8 +329,23 @@ def score_model(model_name, Xtr, Xte, Ytr, Yte, roi_masks, nc,
     # 2) each region picks the layer with the best mean val score inside it.
     best = {g: max(val_corr, key=lambda L: float(val_corr[L][roi_m[g]].mean())) for g in groups}
 
-    # 3) test pass: per-voxel test score for each distinct winning layer (fit on FULL train).
-    test_corr = {L: per_voxel_corr(feats_tr[L], feats_te[L], Yv, Yte_v) for L in set(best.values())}
+    # 3) test pass: per-voxel test score for each distinct winning layer. When the preset sets
+    #    cv_folds>1 (nnn/ieeg), score the winner under the reward's OWN rotating K-fold CV over the
+    #    FULL image set -- no feature standardization, exactly as harness.reward does -- so the
+    #    number is apples-to-apples with the search DB; otherwise the single fit-on-train pass.
+    #    (Layer selection above still uses the train-only 80/20 val split, so no test leakage.)
+    cv = getattr(DATASET, "cv_folds", 0)
+    winners = set(best.values())
+    if cv > 1:
+        Y_full = np.concatenate([Yv, Yte_v], 0).astype(np.float32)
+
+        def cv_test(L):
+            A_full = np.concatenate([feats_tr[L], feats_te[L]], 0).astype(np.float32)
+            return R._cv_column_r(torch.from_numpy(A_full).to(device),
+                                  torch.from_numpy(Y_full).to(device), cv, device, nc_m)[1]
+        test_corr = {L: cv_test(L) for L in winners}
+    else:
+        test_corr = {L: per_voxel_corr(feats_tr[L], feats_te[L], Yv, Yte_v) for L in winners}
 
     # 4) assemble: each region's voxels take its own layer's test score; overall = mean over them.
     per_voxel = np.full(Yv.shape[1], np.nan)
@@ -359,47 +374,22 @@ def score_model(model_name, Xtr, Xte, Ytr, Yte, roi_masks, nc,
 # CLI
 # ---------------------------------------------------------------------------
 
-def main(argv=None):
-    """Run each requested vision model through best-layer-per-region scoring and print + save the
-    per-model ``test_corr`` / per-ROI table (directly comparable to search-DB champions)."""
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--model",   default="all",
-                   choices=list(MODEL_REGISTRY) + ["all"],
-                   help="which model to run (default: all)")
-    p.add_argument("--dataset", default="nsd",  help="NEURO_DATASET (default nsd)")
-    p.add_argument("--subject", default=None,   help="NEURO_SUBJECT (default: dataset default)")
-    p.add_argument("--dim",     type=int, default=2048, help="SRP target dim (default 2048)")
-    p.add_argument("--seed",    type=int, default=0)
-    p.add_argument("--no-save", action="store_true")
-    a = p.parse_args(argv)
-
-    os.environ["NEURO_DATASET"] = a.dataset
-    if a.subject is not None:
-        os.environ["NEURO_SUBJECT"] = str(a.subject)
-    subj = os.environ.get("NEURO_SUBJECT", "default")
-
-    from harness.datasets import DATASET
+def _score_all(models, DATASET, R, device, dim, seed):
+    """Load ``DATASET``'s split and run every model through best-layer-per-region scoring; return
+    ``{model_name: record}`` (or ``{"error": ...}`` for a model that raised). Prints each row."""
     from harness.loaders import load_split
-    from harness import reward as R
-
-    models = list(MODEL_REGISTRY) if a.model == "all" else [a.model]
-    print(f"=== vision_baselines | dataset={a.dataset} subj={subj} "
-          f"reward_roi={DATASET.reward_roi} dim={a.dim} models={models} ===")
-
     t_load = time.time()
     Xtr, Xte, Ytr, Yte, roi_masks, nc = load_split(DATASET)
-    device = R._readout_device()
     if torch.is_tensor(Xtr):
         Xtr, Xte = Xtr.to(device), Xte.to(device)
     print(f"  data loaded in {time.time()-t_load:.1f}s  "
           f"n_train={Ytr.shape[0]} n_test={Yte.shape[0]} n_targets={Ytr.shape[1]}")
-
-    all_records = {}
+    records = {}
     for mname in models:
         try:
             rec = score_model(mname, Xtr, Xte, Ytr, Yte, roi_masks, nc,
-                              DATASET, R, device, a.dim, a.seed)
-            all_records[mname] = rec
+                              DATASET, R, device, dim, seed)
+            records[mname] = rec
             regions = " ".join(f"{g}:{rec['region_best'][g]['layer']}"
                                f"({rec['region_best'][g]['test']:.3f})"
                                for g in rec["select_groups"])
@@ -409,22 +399,96 @@ def main(argv=None):
             print("  r²/NC² " + "".join(f"{rec['roi_corr'][r]:>9.4f}" for r in rois))
         except Exception as e:
             print(f"\n  [{mname}] FAILED: {e}")
-            all_records[mname] = {"error": str(e)}
+            records[mname] = {"error": str(e)}
+    return records
+
+
+def _mean_over_subjects(models, per_subject):
+    """Average each model's per-subject records with EQUAL weight per subject (mirrors
+    ``harness.reward.evaluate_subjects``): mean ``test_corr`` + mean ``roi_corr`` over the ROIs present
+    for every subject. The per-subject records (incl. each subject's chosen layers) are kept under
+    ``per_subject`` for inspection. A model that errored on ANY subject stays an error."""
+    from subjects import common_roi_keys, mean_scalar
+    out = {}
+    for m in models:
+        recs = {s: per_subject[s][m] for s in per_subject}
+        errs = {s: r for s, r in recs.items() if "test_corr" not in r}
+        if errs:
+            out[m] = {"error": f"failed on subjects {sorted(errs)}", "per_subject": recs}
+            continue
+        roi_keys = common_roi_keys([r["roi_corr"] for r in recs.values()])
+        out[m] = {
+            "test_corr": mean_scalar(r["test_corr"] for r in recs.values()),
+            "roi_corr": {k: mean_scalar(recs[s]["roi_corr"][k] for s in recs) for k in roi_keys},
+            "subjects": list(per_subject),
+            "per_subject": recs,
+        }
+    return out
+
+
+def main(argv=None):
+    """Run each requested vision model through best-layer-per-region scoring and print + save the
+    per-model ``test_corr`` / per-ROI table (directly comparable to search-DB champions). A
+    comma ``--subject`` list scores each subject separately and averages (equal weight per subject),
+    matching the multi-subject search reward."""
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--model",   default="all",
+                   choices=list(MODEL_REGISTRY) + ["all"],
+                   help="which model to run (default: all)")
+    p.add_argument("--dataset", default="nsd",  help="NEURO_DATASET (default nsd)")
+    p.add_argument("--subject", default=None,
+                   help="NEURO_SUBJECT; a comma list (e.g. 1,3,4) is scored per-subject and averaged "
+                        "(equal weight), like the search reward. Default: dataset default subject.")
+    p.add_argument("--dim",     type=int, default=2048, help="SRP target dim (default 2048)")
+    p.add_argument("--seed",    type=int, default=0)
+    p.add_argument("--no-save", action="store_true")
+    a = p.parse_args(argv)
+
+    os.environ["NEURO_DATASET"] = a.dataset
+    if a.subject is not None:
+        os.environ["NEURO_SUBJECT"] = str(a.subject)
+
+    from subjects import subject_tokens
+    from harness.datasets import DATASET, with_subject
+    from harness import reward as R
+
+    subjects = subject_tokens(a.subject if a.subject is not None else os.environ.get("NEURO_SUBJECT"))
+    subj_label = ",".join(subjects) if subjects else "default"
+    models = list(MODEL_REGISTRY) if a.model == "all" else [a.model]
+    device = R._readout_device()
+    print(f"=== vision_baselines | dataset={a.dataset} subj={subj_label} "
+          f"reward_roi={DATASET.reward_roi} dim={a.dim} models={models} ===")
+
+    if len(subjects) <= 1:
+        # Single subject (or the dataset default): DATASET is already bound to it at import.
+        all_records = _score_all(models, DATASET, R, device, a.dim, a.seed)
+    else:
+        # Per-subject then equal-weight mean -- the search reward's multi-subject protocol.
+        per_subject = {}
+        for s in subjects:
+            dset = with_subject(DATASET, s)
+            print(f"\n----- subject {s} ({dset.study}) -----")
+            per_subject[s] = _score_all(models, dset, R, device, a.dim, a.seed)
+        all_records = _mean_over_subjects(models, per_subject)
 
     # Summary table
     print("\n=== summary ===")
     for mname, rec in all_records.items():
-        if "test_corr" in rec:
+        if "test_corr" not in rec:
+            continue
+        if "select_groups" in rec:
             regions = "  ".join(f"{g}={rec['region_best'][g]['layer']}" for g in rec["select_groups"])
             print(f"  {mname:>10}: test_corr={rec['test_corr']:.4f}   [{regions}]")
+        else:                                          # multi-subject mean (layers differ per subject)
+            print(f"  {mname:>10}: test_corr={rec['test_corr']:.4f}   [mean over subjects {subj_label}]")
 
     if not a.no_save:
         stamp = time.strftime("%Y%m%d_%H%M%S")
         out = os.path.join(HERE, "results",
-                           f"vision_baselines_{a.model}_{a.dataset}_subj{subj}_{stamp}.json")
+                           f"vision_baselines_{a.model}_{a.dataset}_subj{subj_label}_{stamp}.json")
         os.makedirs(os.path.dirname(out), exist_ok=True)
         with open(out, "w") as f:
-            json.dump({"dataset": a.dataset, "subject": subj, "reward_roi": DATASET.reward_roi,
+            json.dump({"dataset": a.dataset, "subject": subj_label, "reward_roi": DATASET.reward_roi,
                        "srp_dim": a.dim, "seed": a.seed, "records": all_records}, f, indent=2)
         print(f"  saved -> {out}")
 
