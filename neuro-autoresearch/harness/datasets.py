@@ -134,6 +134,11 @@ PRESETS: dict[str, Dataset] = {
                              # models of the form/texture detail IT/EVC actually encode; NEURO_IMSIZE overrides.
         download=False,
         reward_roi="all",
+        cv_folds=5,   # reward = 5-fold CV over the whole 1000-image set (only 1000 stimuli, so a
+                      # single 800/200 split gives a noisy test_corr the search can selection-overfit
+                      # to; CV holds each image out once and averages, tightening the estimate). Unlike
+                      # iEEG's temporal CV there is NO autocorrelation across images -- they are
+                      # exchangeable, so the contiguous blocks are just a leakage-free 5-way partition.
     ),
 }
 
