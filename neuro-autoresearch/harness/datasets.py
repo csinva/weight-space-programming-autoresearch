@@ -45,7 +45,8 @@ class Dataset:
     study: str = "Unnamed"           # NeuralSet study name or descriptive standalone tag
     neural: str = "ieeg"             # neural modality: fmri | ieeg | spikes
     stimulus: str = "image"          # stimulus modality: image | text | audio | chars
-    imsize: int = 16                 # image stimuli resized to imsize x imsize
+    imsize: int = 128                # image stimuli resized to imsize x imsize (hard floor MIN_IMSIZE;
+                                     # 128 is the minimum -- coarser starves models of form/texture detail)
     download: bool = False           # download the study before running?
     path: str | None = None          # UNUSED by active presets (runtime reads ONLY data/<name>/);
                                      # kept for the download-from-scratch path (_study_path).
@@ -112,7 +113,7 @@ PRESETS: dict[str, Dataset] = {
         loader="tvsd",
         neural="spikes",
         stimulus="image",
-        imsize=16,
+        imsize=128,
         subject="F",
         download=False,
         reward_roi="all",
@@ -130,8 +131,9 @@ PRESETS: dict[str, Dataset] = {
         loader="nnn",
         neural="spikes",
         stimulus="image",
-        imsize=128,          # natural images (the NSD shared-1000, like nsd) -- 16 starves untrained
-                             # models of the form/texture detail IT/EVC actually encode; NEURO_IMSIZE overrides.
+        imsize=128,          # natural images (the NSD shared-1000, like nsd); MIN_IMSIZE floor --
+                             # a coarser input starves untrained models of the form/texture detail
+                             # IT/EVC encode. NEURO_IMSIZE can raise it (never below 128).
         download=False,
         reward_roi="all",
         cv_folds=5,   # reward = 5-fold CV over the whole 1000-image set (only 1000 stimuli, so a
@@ -161,6 +163,15 @@ DATASET = PRESETS[_key]
 _imsize = os.environ.get("NEURO_IMSIZE")
 if _imsize:
     DATASET = replace(DATASET, imsize=int(_imsize))
+
+# Hard floor on the image-input resolution: image stimuli must be >= MIN_IMSIZE (128) px. A coarser
+# input starves untrained models of the form/texture detail the ventral stream actually encodes, so
+# a sub-128 imsize (a stale preset or an NEURO_IMSIZE typo) is a hard error, never silently accepted.
+MIN_IMSIZE = 128
+if DATASET.stimulus == "image" and DATASET.imsize < MIN_IMSIZE:
+    raise ValueError(
+        f"imsize={DATASET.imsize} < MIN_IMSIZE={MIN_IMSIZE}: image stimuli must be >= {MIN_IMSIZE}px "
+        f"(set NEURO_IMSIZE>={MIN_IMSIZE} or fix the preset; never go below {MIN_IMSIZE}).")
 
 def with_subject(dataset: Dataset, subject: str) -> Dataset:
     """Return ``dataset`` rebound to ``subject`` (switching the data it loads). Supported:
