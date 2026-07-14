@@ -23,7 +23,7 @@ DEADLINE="${NEURO_DEADLINE:-0}"
 EFFORT="${NEURO_EFFORT:-xhigh}"              # the ONE pool-wide effort knob (search.sh --effort)
 # The model roster: round-robin across the fleet. Each entry is "model" or "model:effort"; a
 # ":effort" suffix pins that model's reasoning effort (else it inherits the pool-wide $EFFORT).
-DEFAULT_ROSTER="claude-opus-4.8 claude-opus-4.7 claude-opus-4.6 gpt-5.5 claude-opus-4.8"
+DEFAULT_ROSTER="claude-opus-4.8 claude-opus-4.7 claude-opus-4.6 gpt-5.5 gpt-5.6-sol"
 read -r -a ROSTER <<< "${NEURO_MODEL_ROSTER:-$DEFAULT_ROSTER}"
 NROSTER=${#ROSTER[@]}
 echo "[propose] pool of $FLEET (run=$LAB_RUN dataset=${NEURO_DATASET:-nsd}) base-effort=$EFFORT -- roster (round-robin): ${ROSTER[*]}"
