@@ -92,8 +92,8 @@ comma list (`NEURO_SUBJECT=1,2`) makes the reward the MEAN over several subjects
 averaged, recorded as ONE `test_corr` + averaged `roi_corr` (per-subject values are never stored;
 proposers stay blind); unset = the dataset's default subject.
 **`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECT`
-env. Works for datasets that switch data by subject (`nsd` / `tvsd` / `ieeg`); `nnn` pools sessions so
-its animals aren't separable yet. Hold out the rest for generalization
+env. Works for datasets that switch data by subject (`nsd` / `tvsd` / `ieeg` / `nnn`); `nnn` subsets its
+90 sessions by recording animal (M1..M5; unset = pool ALL animals). Hold out the rest for generalization
 (`scripts/generalization/generalize.py` — re-evals a run's DB champion on the held-out units; the
 per-dataset search/held-out split lives in `scripts/generalization/splits.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-

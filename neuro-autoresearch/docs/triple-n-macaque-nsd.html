@@ -523,6 +523,7 @@
       <div class="reveal">
         <p>Triple-N ships pre-averaged: for every recorded unit and every image, the evoked spiking is reduced to one value in a <code>response_best</code> table of shape <code>[units × 1072]</code>. The first <strong>1,000</strong> columns are the NSD shared-1000 scenes; the final <strong>72</strong> are face/body/object localizer images used to characterize each patch.</p>
         <p>Not every unit is worth predicting. The release reports a <strong>split-half reliability</strong> per unit — how well the response to an image agrees across repeats. The harness keeps only units above a threshold (<code>reliability&nbsp;&gt;&nbsp;0.4</code> by default, tunable via <code>NNN_MIN_RELIABILITY</code>): <strong>35,494 of 47,503</strong> units pass, pooled across all 90 sessions.</p>
+        <p>The 90 sessions come from <strong>five recording animals (M1–M5)</strong>. By default the reward pools every animal, but <code>NEURO_SUBJECT</code> subsets the units to one monkey (a bare digit like <code>3</code> or the release's <code>M3</code> form), or averages a comma-list — the same subject knob <code>nsd</code>/<code>tvsd</code>/<code>ieeg</code> use. The search default optimizes the three highest-yield animals (M1, M3, M4) and holds out M2, M5 for cross-animal generalization.</p>
       </div>
       <div class="reveal">
         <div class="glossary">
