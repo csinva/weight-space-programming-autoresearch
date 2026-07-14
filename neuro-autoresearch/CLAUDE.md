@@ -65,7 +65,13 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
 - **`model.py`** — the root random-projection baseline (the manual-path model + the proposer seed). **`docs/`** — human docs.
 
 ## Run
+**Activate the venv first (`source .venv/bin/activate`)** — the scripts call bare `python`, which is
+ONLY the interpreter inside `.venv/`. Without it, `python` resolves to nothing (or system py3 lacking
+torch): `search.sh` silently fails `setup_run.py` (no proposer sandboxes -> every proposer loops
+"missing sandbox") and the evaluators die with `env: python: No such file`. Always launch from an
+activated venv (or invoke `.venv/bin/python` explicitly).
 ```bash
+source .venv/bin/activate                # REQUIRED before any of the below
 python -m harness.run                   # evaluate the current model.py once (manual)
 NEURO_READOUT=himalaya python -m harness.run     # reference readout (default: the ~20× faster fast ridge)
 python scripts/benchmark/benchmark.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
