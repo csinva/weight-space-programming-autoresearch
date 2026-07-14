@@ -48,7 +48,8 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   lineage, i.e. the N-independent-loops baseline.
 - **`search/`** — the open-ended loop: `search.sh` scaffolds a dated run and supervises up to three
   always-on loops — the N-proposer pool (`propose.sh` → N headless Copilot CLIs via `proposer.sh`,
-  each confined to its own sandbox) + the single GPU evaluator (`evaluate.sh` / `evaluator.py`) + an
+  each confined to its own sandbox) + the GPU evaluator (`evaluate.sh` / `evaluator.py`; `NEURO_EVALUATORS`
+  workers drain the queue concurrently, optionally pinned across cards via `NEURO_EVAL_GPUS`) + an
   OPTIONAL **conductor** (`conduct.sh` / `conductor.md`, runs from the repo root, not sandboxed).
   The search stays self-paced and decentralized — each proposer waits only for its OWN score, no
   barrier, and the conductor never gates the queue or scoring. Every `--epoch-mins` (default 60; `0`
