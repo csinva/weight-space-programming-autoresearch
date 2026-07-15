@@ -349,6 +349,14 @@ def champions(k: int = 5, run: str | None = None) -> list[dict]:
                           "ORDER BY test_corr DESC LIMIT ?", (int(k),))
 
 
+def champion(run: str | None = None) -> dict | None:
+    """The single highest-reward ``ok`` model in the run (WITH its ``path``) -- the distillation
+    target. ``None`` if nothing has scored yet. Launcher/tooling use (e.g. ``scripts/distill``);
+    like ``top-models`` it exposes the global best + source, so it is refused for a proposer."""
+    rows = champions(1, run)
+    return rows[0] if rows else None
+
+
 def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
     """A random draw of ``ok`` models (idea + notes + scores) -- a diversity spark. Returns scores
     (``test_corr``/``train_corr``/``roi_corr``) to proposers too, so they can see which prior ideas
@@ -694,6 +702,16 @@ def _top_models_cli(a):
     return champions(a.n)
 
 
+def _champion_cli(a):
+    """``champion`` is for the launcher/distiller, not proposers -- it returns the global best model
+    WITH its source path, the same reason ``top-models`` is hidden from an island."""
+    if _is_proposer():
+        raise ValueError(
+            "champion is unavailable to proposers (the global scoreboard is hidden so islands stay "
+            "diverse). Use `my-best` for your own island and `peek-island` for one random other.")
+    return champion()
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="hub -- the search-run API (see module docstring).")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -709,6 +727,7 @@ def main(argv=None):
     sp = add("wait-for-score", lambda a: wait_for_result(a.id, timeout=a.timeout), json_out=True)
     sp.add_argument("id"); sp.add_argument("--timeout", type=float, default=None)
     sp = add("top-models", _top_models_cli, json_out=True); sp.add_argument("-n", type=int, default=5)
+    add("champion", _champion_cli, json_out=True)
     sp = add("random-models", lambda a: sample(a.n, a.seed), json_out=True)
     sp.add_argument("-n", type=int, default=5); sp.add_argument("--seed", default=None)
     sp = add("my-best", lambda a: get_best_model(not a.no_code), json_out=True)
