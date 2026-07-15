@@ -16,3 +16,6 @@ scripts/experiments/*.log
 
 # Talk deck (local copy, not tracked)
 /talk/
+
+# Independent manuscript repository
+/manuscript_natneuro/
