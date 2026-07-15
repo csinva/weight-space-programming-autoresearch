@@ -17,8 +17,8 @@ the same readout and metric. It writes detailed JSON under `results/paper/<run>/
 paper table to `results/paper/summary.csv`.
 
 Jobs are resumable: existing JSON is reused. Use `--force` to recompute it or `--dry-run` to inspect
-every command first. The default suites are AlexNet, ResNet-50, ViT-B/16, CLIP, and DINOv2 for vision,
-plus GPT-2 and GPT-2-XL for language.
+every command first. The vision suite uses pretrained and random-initialized AlexNet, ResNet-50, and
+ViT-B/16, plus pretrained-only CLIP and DINOv2. The language suite is pretrained GPT-2-XL only.
 
-For language, "untrained" means random transformer weights with the same fixed pretrained tokenizer;
-the tokenizer is part of the input representation and is identical in the paired comparison.
+The lower-level benchmark scripts retain their weight-selection options for one-off checks, but the
+paper runner launches only this predefined matrix.
