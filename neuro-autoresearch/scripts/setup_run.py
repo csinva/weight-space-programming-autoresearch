@@ -20,6 +20,7 @@ shared -- the DB and the model archive live once at the run root.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import shutil
 import sys
@@ -28,6 +29,26 @@ from zoneinfo import ZoneInfo
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
+
+# The eval-env knobs that change what the reward SCORES (subject set + readout + reliability cuts).
+# Persisted into env.json at scaffold time so a later re-score (e.g. scripts/distill) reproduces the
+# EXACT evaluation this run used, instead of guessing the defaults.
+EVAL_ENV_KEYS = ("NEURO_SUBJECT", "NEURO_READOUT", "NEURO_MAX_PARAMS", "NSD_NCSNR_MIN",
+                 "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_HUTH_NUM_TRAIN")
+
+
+def write_env_json(run_dir: str, dataset: str) -> str:
+    """Snapshot the run's eval environment into ``run_dir/env.json`` (write-once: a resumed run keeps
+    its original env). Records the dataset plus whichever ``EVAL_ENV_KEYS`` are set right now -- the
+    same env the evaluator will score under -- so distillation/generalization can read it back."""
+    path = os.path.join(run_dir, "env.json")
+    if os.path.exists(path):
+        return path
+    env = {"NEURO_DATASET": dataset}
+    env.update({k: os.environ[k] for k in EVAL_ENV_KEYS if os.environ.get(k)})
+    with open(path, "w") as f:
+        json.dump(env, f, indent=2)
+    return path
 
 
 def make_sandbox(path: str, repo_root: str = REPO) -> str:
@@ -66,6 +87,7 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
     sys.path.insert(0, repo_root)
     import hub
     hub.init(run_dir)                              # search.db + models/
+    write_env_json(run_dir, dataset)               # eval-env snapshot for later re-scoring
     for i in range(n_proposers):
         make_sandbox(os.path.join(run_dir, "proposers", f"p{i:02d}"), repo_root)
     os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch (scores via hub.score in-repo)
