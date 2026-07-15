@@ -39,7 +39,9 @@ from harness.loaders.timeline import _char_ngram_ids   # the shared 10-gram char
 
 RAW = os.environ.get("HUTH_DS003020", os.path.expanduser("~/Research/neuralset/data/ds003020"))
 TR = 2.0                      # ds003020 repetition time (seconds)
-SKIP_TRS, EDGE_TRIM = 10, 30  # `data` is trimmed [10:-5]; the reference default trims a further 30/end
+SKIP_TRS, EDGE_TRIM = 5, 30   # ds003020 `data` front-trim is 5 TRs (data == full[5:-15]); the reference
+                              # default trims a further 30/end. (An HRF-alignment sweep against the
+                              # reference GPT-2 XL baseline confirms front-trim 5, not 10.)
 NGRAM, MAX_CHARS = 10, 64     # 10-gram char grid; keep last 64 chars (reference SimpleTransformer max_seq_len)
 WINDOW = 3                    # Lanczos filter half-width (reference default)
 # Words dropped exactly as the reference make_word_ds (bad_words, checked after .strip("{}")).
