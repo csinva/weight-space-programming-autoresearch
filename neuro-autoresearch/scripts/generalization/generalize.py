@@ -97,10 +97,19 @@ def main(argv=None):
     p.add_argument("--dataset", default=None, help="override dataset (default: inferred from run dir)")
     p.add_argument("--baseline", action="store_true",
                    help="also score the AlexNet-concat reference (all layers SRP->2048) per unit")
+    p.add_argument("--search-subjects", help="comma list overriding the declared search units")
+    p.add_argument("--heldout-subjects", help="comma list overriding the declared held-out units")
+    p.add_argument("--output", help="write JSON to this exact path")
     a = p.parse_args(argv)
 
     dataset = dataset_of(a.run, a.dataset)
-    sp = split_for(dataset)
+    if a.search_subjects or a.heldout_subjects:
+        if not (a.search_subjects and a.heldout_subjects):
+            p.error("--search-subjects and --heldout-subjects must be provided together")
+        sp = {"axis": "NEURO_SUBJECT", "search": a.search_subjects.split(","),
+              "heldout": a.heldout_subjects.split(",")}
+    else:
+        sp = split_for(dataset)
     axis = sp["axis"]
     if a.model:
         model_path, champ_id, champ_score = a.model, os.path.basename(a.model).removesuffix(".py"), None
@@ -137,7 +146,7 @@ def main(argv=None):
 
     os.makedirs(RESULTS, exist_ok=True)
     stamp = time.strftime("%Y%m%d_%H%M%S")
-    out = os.path.join(RESULTS, f"gen_{dataset}_{champ_id}_{stamp}.json")
+    out = a.output or os.path.join(RESULTS, f"gen_{dataset}_{champ_id}_{stamp}.json")
     with open(out, "w") as f:
         json.dump({"dataset": dataset, "model": champ_id, "model_path": model_path,
                    "search_reward": champ_score, "axis": axis,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Contextual LLM (GPT-2 / GPT-2-XL) encoding baseline for the language datasets (ieeg) -- the
+"""Contextual LLM (GPT-2 / GPT-2-XL) encoding baseline for the language datasets (iEEG and Huth) -- the
 language analogue of ``alexnet_baseline.py`` / ``vision_baselines.py``.
 
 A frozen pretrained language model is run forward over the transcript (its weights are NEVER trained
@@ -14,10 +14,9 @@ representation is then read out through the EXACT harness machinery the search u
   * the same 5-fold rotating temporal CV reward (``harness.reward._cv_column_r``) -- raw mean-r over
     all electrodes (ieeg has no repeat-based noise ceiling), the SAME metric as the search DB.
 
-Best-layer protocol (the "bar to beat"): every layer's mean predictivity is scored on an 80/20 val
-split carved from TRAIN only (no test leakage); the single best layer is then reported under the
-dataset's own 5-fold CV. A comma ``--subject`` list is scored per-subject and averaged with equal
-weight, matching the search reward's multi-subject mean.
+Best-layer protocol: every layer is selected on a train-only temporal validation tail, then the
+winner is scored with the dataset's own final protocol. A comma ``--subject`` list is scored
+per-subject and averaged with equal weight, matching the search reward's multi-subject mean.
 
     python scripts/benchmark/language_baselines.py --model gpt2-xl --subject 01,02,03   # the ieeg bar
     python scripts/benchmark/language_baselines.py --model gpt2                          # fast smoke test
@@ -75,14 +74,21 @@ class ContextualLM:
     embeddings. Each word's vector is the hidden state at its LAST sub-token, with left context up to
     the model's max position (sliding window, stride = half the window)."""
 
-    def __init__(self, model_name: str, device, dtype=torch.float32):
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+    def __init__(self, model_name: str, device, pretrained=True, seed=0, dtype=torch.float32):
+        from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
         hf = _HF_NAME.get(model_name, model_name)
         self.name = model_name
         self.device = device
         self.tok = AutoTokenizer.from_pretrained(hf)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            hf, output_hidden_states=True, dtype=dtype).to(device).eval()
+        torch.manual_seed(seed)
+        if pretrained:
+            self.model = AutoModelForCausalLM.from_pretrained(
+                hf, output_hidden_states=True, dtype=dtype)
+        else:
+            config = AutoConfig.from_pretrained(hf, output_hidden_states=True)
+            self.model = AutoModelForCausalLM.from_config(config, dtype=dtype)
+        self.model = self.model.to(device).eval()
+        self.model.requires_grad_(False)
         self.max_ctx = int(getattr(self.model.config, "n_positions", 1024))
 
     def _tokenize_words(self, words):
@@ -127,39 +133,86 @@ class ContextualLM:
         return emb                        # (n_layers, n_words, d_model) float16
 
 
+def _decode_words(X):
+    """Recover each row's current word from the harness char N-gram grid (used by baked Huth data)."""
+    from harness.loaders.timeline import _CHAR_STOI
+    itos = {v: k for k, v in _CHAR_STOI.items()}
+    rows = X.cpu().numpy() if torch.is_tensor(X) else np.asarray(X)
+    text = ["".join(itos.get(int(i), "?") for i in row if i).rstrip() for row in rows]
+    return [s.rsplit(" ", 1)[-1] or "." for s in text]
+
+
+def _embed_stories(lm, words, counts):
+    """Embed stories independently so context never crosses a story boundary."""
+    out, start = [], 0
+    for count in counts:
+        out.append(lm.embed(words[start:start + count]))
+        start += count
+    return np.concatenate(out, axis=1)
+
+
 # --------------------------------------------------------------------------------------------------
 # 3) Best-layer scoring through the harness readout (5-fold CV reward)
 # --------------------------------------------------------------------------------------------------
 def score_subject(emb, Y, d, R, device):
-    """Score EVERY layer under the dataset's 5-fold rotating temporal CV (the harness reward) and
-    report the best. Selecting the layer against the CV mirrors exactly how the search obtains its
-    champion -- ``model.py`` is optimized directly against the same CV -- so the best-layer number is
-    an apples-to-apples 'bar to beat', not a val-split estimate. One region here = all electrodes
-    (ieeg exposes no ROI map); raw mean-r (no repeat-based noise ceiling)."""
+    """Select the layer on a train-only temporal validation tail, then report the harness CV score."""
     from harness.loaders.shared import surviving_cols
+    from harness.ridge import ridge_predict
 
     n = Y.shape[0]
     n_test = max(1, int(round(n * d.test_frac)))
     n_layers = emb.shape[0]
 
-    # drop train-constant electrodes exactly as harness.loaders.timeline.load_timeline does, then run
-    # the reward's CV over the full onset-ordered set (the split the reward itself scores).
-    keep = surviving_cols(torch.from_numpy(Y[: n - n_test]))
+    n_train = n - n_test
+    keep = surviving_cols(torch.from_numpy(Y[:n_train]))
     keep = keep.cpu().numpy() if torch.is_tensor(keep) else np.asarray(keep)
     Y_full = torch.from_numpy(Y[:, keep].astype(np.float32)).to(device)
 
-    layer_cv = np.zeros(n_layers)
+    cut = max(1, round(0.8 * n_train))
+    layer_val, layer_cv = np.zeros(n_layers), np.zeros(n_layers)
     for L in range(n_layers):
         A = torch.from_numpy(emb[L].astype(np.float32)).to(device)
+        pred = ridge_predict(A[:cut], A[cut:n_train], Y_full[:cut], device=device)[1]
+        layer_val[L] = float(R._corr_per_column(pred, R._to_np(Y_full[cut:n_train])).mean())
         layer_cv[L] = float(R._cv_column_r(A, Y_full, d.cv_folds, device, None)[1].mean())
-    best_L = int(np.argmax(layer_cv))
+    best_L = int(np.argmax(layer_val))
     return {
         "test_corr": round(float(layer_cv[best_L]), 4),
         "best_layer": best_L,
         "n_electrodes": int(keep.sum()),
         "n_words": int(n),
+        "layer_val": {f"L{L:02d}": round(float(layer_val[L]), 4) for L in range(n_layers)},
         "layer_cv": {f"L{L:02d}": round(float(layer_cv[L]), 4) for L in range(n_layers)},
     }
+
+
+def score_huth_subject(lm, subject, R, device):
+    """Frozen-LM best-layer baseline through Huth's exact Lanczos/FIR feature pipeline."""
+    from harness.datasets import DATASET, with_subject
+    from harness.loaders import apply_feature_pipeline, load_split
+    from harness.ridge import ridge_predict
+
+    d = with_subject(DATASET, subject) if subject else DATASET
+    Xtr, Xte, Ytr, Yte, _, _ = load_split(d)
+    from harness.loaders.huth import _PIPELINE
+    pipe = _PIPELINE[d.study]
+    Etr = _embed_stories(lm, _decode_words(Xtr), pipe["train_wc"])
+    Ete = _embed_stories(lm, _decode_words(Xte), pipe["test_wc"])
+    Ytr, Yte = Ytr.to(device), Yte.to(device)
+    cut = max(1, round(0.8 * len(Ytr)))
+    val, test = [], []
+    for layer in range(Etr.shape[0]):
+        Atr = apply_feature_pipeline(d, torch.from_numpy(Etr[layer].astype(np.float32)).to(device), "train")
+        Ate = apply_feature_pipeline(d, torch.from_numpy(Ete[layer].astype(np.float32)).to(device), "test")
+        pred_val = ridge_predict(Atr[:cut], Atr[cut:], Ytr[:cut], device=device)[1]
+        val.append(float(R._corr_per_column(pred_val, R._to_np(Ytr[cut:])).mean()))
+        pred_test = ridge_predict(Atr, Ate, Ytr, device=device)[1]
+        test.append(float(R._corr_per_column(pred_test, R._to_np(Yte)).mean()))
+    best = int(np.argmax(val))
+    return {"test_corr": round(test[best], 4), "best_layer": best,
+            "n_voxels": int(Ytr.shape[1]), "n_words": int(len(Xtr) + len(Xte)),
+            "layer_val": {f"L{i:02d}": round(v, 4) for i, v in enumerate(val)},
+            "layer_test": {f"L{i:02d}": round(v, 4) for i, v in enumerate(test)}}
 
 
 def main(argv=None):
@@ -169,6 +222,9 @@ def main(argv=None):
     p.add_argument("--subject", default="01,02,03",
                    help="NEURO_SUBJECT; a comma list is scored per-subject and averaged (search reward).")
     p.add_argument("--no-save", action="store_true")
+    p.add_argument("--weights", choices=("pretrained", "untrained", "both"), default="both")
+    p.add_argument("--seed", type=int, default=0, help="random initialization seed")
+    p.add_argument("--output", help="write JSON to this exact path")
     a = p.parse_args(argv)
 
     os.environ["NEURO_DATASET"] = a.dataset
@@ -178,42 +234,37 @@ def main(argv=None):
     device = R._readout_device()
     subjects = subject_tokens(a.subject) or [""]
     subj_label = ",".join(s for s in subjects if s) or "default"
-    print(f"=== {a.model} contextual LM baseline | {a.dataset} subj={subj_label} "
-          f"| 5-fold CV reward (raw mean-r) | device={device} ===")
+    variants = ("pretrained", "untrained") if a.weights == "both" else (a.weights,)
+    records = {}
+    for weights in variants:
+        print(f"=== {a.model}-{weights} | {a.dataset} subj={subj_label} | device={device} ===")
+        lm = ContextualLM(a.model, device, weights == "pretrained", a.seed)
+        emb_cache, per_subject = {}, {}
+        for s in subjects:
+            t0 = time.time()
+            if a.dataset == "huth":
+                rec = score_huth_subject(lm, s, R, device)
+            else:
+                words, Y, _, d = load_words_and_neural(s)
+                wkey = hash(tuple(words))
+                if wkey not in emb_cache:
+                    emb_cache[wkey] = lm.embed(words)
+                rec = score_subject(emb_cache[wkey], Y, d, R, device)
+            per_subject[s or "default"] = rec
+            print(f"  [{s or 'default'}] layer=L{rec['best_layer']:02d} "
+                  f"test_corr={rec['test_corr']:.4f} ({time.time()-t0:.1f}s)")
+        records[f"{a.model}-{weights}"] = {
+            "test_corr": mean_scalar(r["test_corr"] for r in per_subject.values()),
+            "weights": weights, "per_subject": per_subject,
+        }
+        del lm
 
-    lm = ContextualLM(a.model, device)
-    print(f"  loaded {a.model}: {lm.model.config.num_hidden_layers} layers, "
-          f"d={lm.model.config.hidden_size}, max_ctx={lm.max_ctx}")
-
-    emb_cache: dict = {}
-    per_subject = {}
-    for s in subjects:
-        t0 = time.time()
-        words, Y, onsets, d = load_words_and_neural(s)
-        wkey = hash(tuple(words))
-        if wkey not in emb_cache:                       # identical transcript across patients -> reuse
-            emb_cache[wkey] = lm.embed(words)
-        emb = emb_cache[wkey]
-        rec = score_subject(emb, Y, d, R, device)
-        per_subject[s or "default"] = rec
-        print(f"\n  [subj {s or 'default'}] n_words={rec['n_words']} electrodes={rec['n_electrodes']} "
-              f"-> best layer L{rec['best_layer']:02d}  test_corr(5-fold CV)={rec['test_corr']:.4f} "
-              f"({time.time()-t0:.1f}s)")
-
-    mean_tc = mean_scalar([r["test_corr"] for r in per_subject.values()])
-    print(f"\n=== {a.model} | {a.dataset} subj={subj_label}: MEAN test_corr = {mean_tc:.4f} ===")
-    for s, r in per_subject.items():
-        print(f"    subj {s}: {r['test_corr']:.4f}  (layer L{r['best_layer']:02d})")
-
-    out = {
-        "dataset": a.dataset, "model": a.model, "subject": subj_label,
-        "metric": "raw mean-r under 5-fold rotating temporal CV (ieeg reward)",
-        "test_corr": mean_tc, "per_subject": per_subject,
-    }
+    out = {"dataset": a.dataset, "model": a.model, "subject": subj_label,
+           "seed": a.seed, "records": records}
     if not a.no_save:
         os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
         stamp = time.strftime("%Y%m%d_%H%M%S")
-        fn = os.path.join(HERE, "results",
+        fn = a.output or os.path.join(HERE, "results",
                           f"language_baselines_{a.model.replace('/', '-')}_{a.dataset}_subj{subj_label}_{stamp}.json")
         json.dump(out, open(fn, "w"), indent=1)
         print(f"\n  saved -> {fn}")

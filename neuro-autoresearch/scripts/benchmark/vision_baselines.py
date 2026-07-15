@@ -110,10 +110,10 @@ def _hook_forward(net, tap_map: dict, X_tensor, device, batch=64):
     return {n: torch.cat(caught[n], 0).numpy() for n in tap_map}
 
 
-def extract_alexnet(X_flat, imsize, dim, seed, device, batch=128):
+def extract_alexnet(X_flat, imsize, dim, seed, device, pretrained=True, batch=128):
     """Frozen ImageNet AlexNet -> {conv1-5, fc6-8: (N, dim)} features, each tap SRP'd to ``dim``."""
     from torchvision.models import alexnet, AlexNet_Weights
-    net = alexnet(weights=AlexNet_Weights.IMAGENET1K_V1).eval().to(device)
+    net = alexnet(weights=AlexNet_Weights.IMAGENET1K_V1 if pretrained else None).eval().to(device)
     net.requires_grad_(False)
     Xt = _preprocess(X_flat, imsize, 224, _IMAGENET_MEAN, _IMAGENET_STD, device, batch)
     taps = {
@@ -127,10 +127,10 @@ def extract_alexnet(X_flat, imsize, dim, seed, device, batch=128):
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
 
-def extract_resnet50(X_flat, imsize, dim, seed, device, batch=128):
+def extract_resnet50(X_flat, imsize, dim, seed, device, pretrained=True, batch=128):
     """Frozen ImageNet ResNet-50 -> {layer1-4 + avgpool: (N, dim)} features, each SRP'd to ``dim``."""
     from torchvision.models import resnet50, ResNet50_Weights
-    net = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2).eval().to(device)
+    net = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2 if pretrained else None).eval().to(device)
     net.requires_grad_(False)
     Xt = _preprocess(X_flat, imsize, 224, _IMAGENET_MEAN, _IMAGENET_STD, device, batch)
     taps = {
@@ -152,10 +152,10 @@ def extract_resnet50(X_flat, imsize, dim, seed, device, batch=128):
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
 
-def extract_vit(X_flat, imsize, dim, seed, device, batch=64):
+def extract_vit(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
     """ViT-B/16 (ImageNet-1k). Tap encoder blocks 3,6,9,12 (CLS token) + final embedding."""
     from torchvision.models import vit_b_16, ViT_B_16_Weights
-    net = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1).eval().to(device)
+    net = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1 if pretrained else None).eval().to(device)
     net.requires_grad_(False)
     D = net.hidden_dim  # 768
 
@@ -182,10 +182,10 @@ def extract_vit(X_flat, imsize, dim, seed, device, batch=64):
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
 
-def extract_clip(X_flat, imsize, dim, seed, device, batch=64):
+def extract_clip(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
     """CLIP ViT-B/32 via HuggingFace transformers. Taps: blocks 3,6,9,12 + pooled."""
     import logging
-    from transformers import CLIPVisionModel, CLIPImageProcessor
+    from transformers import CLIPVisionConfig, CLIPVisionModel, CLIPImageProcessor
     # Suppress benign "UNEXPECTED key" warnings (CLIP checkpoint includes text weights;
     # CLIPVisionModel only loads the visual encoder and correctly ignores the rest).
     logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)
@@ -193,7 +193,8 @@ def extract_clip(X_flat, imsize, dim, seed, device, batch=64):
     processor = CLIPImageProcessor.from_pretrained(model_id)
     clip_mean = processor.image_mean
     clip_std  = processor.image_std
-    model = CLIPVisionModel.from_pretrained(model_id)
+    model = (CLIPVisionModel.from_pretrained(model_id) if pretrained else
+             CLIPVisionModel(CLIPVisionConfig.from_pretrained(model_id)))
     model = model.eval().to(device)
     model.requires_grad_(False)
 
@@ -222,43 +223,25 @@ def extract_clip(X_flat, imsize, dim, seed, device, batch=64):
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
 
-def extract_dino(X_flat, imsize, dim, seed, device, batch=64):
-    """DINOv2 ViT-B/14 via timm. Taps: blocks 3,6,9,12 + final CLS embedding."""
-    import timm
-    model_name = "vit_base_patch14_dinov2"
-    net = timm.create_model(model_name, pretrained=True, num_classes=0, dynamic_img_size=True)
-    net = net.eval().to(device)
-    net.requires_grad_(False)
-
-    # Use timm data config for DINO
-    cfg = timm.data.resolve_model_data_config(net)
-    mean = cfg.get("mean", _IMAGENET_MEAN)
-    std  = cfg.get("std",  _IMAGENET_STD)
-    Xt = _preprocess(X_flat, imsize, 224, mean, std, device, batch)
-
-    num_blocks = len(net.blocks)
-    tap_indices = [2, 5, 8, num_blocks - 1]
-
-    layer_out = {f"block{i+1}": [] for i in tap_indices}
-    emb_out   = []
+def extract_dino(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
+    """DINOv2 ViT-B/14. Taps: blocks 3,6,9,12 + final CLS embedding."""
+    from transformers import AutoImageProcessor, Dinov2Config, Dinov2Model
+    model_id = "facebook/dinov2-base"
+    processor = AutoImageProcessor.from_pretrained(model_id)
+    net = (Dinov2Model.from_pretrained(model_id) if pretrained else
+           Dinov2Model(Dinov2Config.from_pretrained(model_id)))
+    net = net.eval().to(device); net.requires_grad_(False)
+    Xt = _preprocess(X_flat, imsize, 224, processor.image_mean, processor.image_std, device, batch)
+    num_blocks = net.config.num_hidden_layers
+    tap_indices = sorted({2, 5, 8, num_blocks - 1})
+    layer_out = {f"block{i+1}": [] for i in tap_indices}; emb_out = []
     with torch.no_grad():
         for s in range(0, len(Xt), batch):
             xb = Xt[s:s+batch].to(device)
-            x  = net.patch_embed(xb)
-            pos_out = net._pos_embed(x)
-            if isinstance(pos_out, tuple):
-                x, rope = pos_out
-            else:
-                x, rope = pos_out, None
-            if hasattr(net, 'norm_pre'):
-                x = net.norm_pre(x)
-            for i, block in enumerate(net.blocks):
-                x = block(x, rope=rope) if rope is not None else block(x)
-                if i in tap_indices:
-                    feat = x[:, 0].cpu().float().numpy()  # CLS
-                    layer_out[f"block{i+1}"].append(feat)
-            emb = net.norm(x[:, 0])
-            emb_out.append(emb.cpu().float().numpy())
+            out = net(pixel_values=xb, output_hidden_states=True)
+            for i in tap_indices:
+                layer_out[f"block{i+1}"].append(out.hidden_states[i + 1][:, 0].cpu().float().numpy())
+            emb_out.append(out.last_hidden_state[:, 0].cpu().float().numpy())
 
     raw = {k: np.concatenate(v, 0) for k, v in layer_out.items()}
     raw["embedding"] = np.concatenate(emb_out, 0)
@@ -283,15 +266,18 @@ MODEL_REGISTRY = {
 # Best-layer selection + scoring
 # ---------------------------------------------------------------------------
 
-def score_model(model_name, Xtr, Xte, Ytr, Yte, roi_masks, nc,
+def score_model(model_name, weights, Xtr, Xte, Ytr, Yte, roi_masks, nc,
                 DATASET, R, device, dim, seed):
     """Extract all taps, pick the best layer PER brain region on a val split, then report each
     region's chosen-layer test score and the voxel-weighted overall (brain-score protocol)."""
     extractor = MODEL_REGISTRY[model_name]
     t0 = time.time()
-    print(f"\n--- {model_name} | extracting features ---")
-    feats_tr = extractor(Xtr, DATASET.imsize, dim, seed, device)
-    feats_te = extractor(Xte, DATASET.imsize, dim, seed, device)
+    label = f"{model_name}-{weights}"
+    print(f"\n--- {label} | extracting features ---")
+    torch.manual_seed(seed)
+    feats_tr = extractor(Xtr, DATASET.imsize, dim, seed, device, weights == "pretrained")
+    torch.manual_seed(seed)
+    feats_te = extractor(Xte, DATASET.imsize, dim, seed, device, weights == "pretrained")
     print(f"    forward done in {time.time()-t0:.1f}s  layers={list(feats_tr)}")
 
     from harness.ridge import ridge_predict
@@ -385,21 +371,23 @@ def _score_all(models, DATASET, R, device, dim, seed):
     print(f"  data loaded in {time.time()-t_load:.1f}s  "
           f"n_train={Ytr.shape[0]} n_test={Yte.shape[0]} n_targets={Ytr.shape[1]}")
     records = {}
-    for mname in models:
+    for mname, weights in models:
+        label = f"{mname}-{weights}"
         try:
-            rec = score_model(mname, Xtr, Xte, Ytr, Yte, roi_masks, nc,
+            rec = score_model(mname, weights, Xtr, Xte, Ytr, Yte, roi_masks, nc,
                               DATASET, R, device, dim, seed)
-            records[mname] = rec
+            rec["weights"] = weights
+            records[label] = rec
             regions = " ".join(f"{g}:{rec['region_best'][g]['layer']}"
                                f"({rec['region_best'][g]['test']:.3f})"
                                for g in rec["select_groups"])
-            print(f"\n  [{mname}] overall r²/NC² test={rec['test_corr']:.4f}  |  {regions}")
+            print(f"\n  [{label}] overall r²/NC² test={rec['test_corr']:.4f}  |  {regions}")
             rois = list(rec["roi_corr"])
             print("  " + "".join(f"{r:>9}" for r in rois))
             print("  r²/NC² " + "".join(f"{rec['roi_corr'][r]:>9.4f}" for r in rois))
         except Exception as e:
-            print(f"\n  [{mname}] FAILED: {e}")
-            records[mname] = {"error": str(e)}
+            print(f"\n  [{label}] FAILED: {e}")
+            records[label] = {"error": str(e), "weights": weights}
     return records
 
 
@@ -410,7 +398,8 @@ def _mean_over_subjects(models, per_subject):
     ``per_subject`` for inspection. A model that errored on ANY subject stays an error."""
     from subjects import common_roi_keys, mean_scalar
     out = {}
-    for m in models:
+    for model, weights in models:
+        m = f"{model}-{weights}"
         recs = {s: per_subject[s][m] for s in per_subject}
         errs = {s: r for s, r in recs.items() if "test_corr" not in r}
         if errs:
@@ -435,6 +424,8 @@ def main(argv=None):
     p.add_argument("--model",   default="all",
                    choices=list(MODEL_REGISTRY) + ["all"],
                    help="which model to run (default: all)")
+    p.add_argument("--weights", choices=("pretrained", "untrained", "both"), default="both",
+                   help="score learned weights, matched random initialization, or both (default)")
     p.add_argument("--dataset", default="nsd",  help="NEURO_DATASET (default nsd)")
     p.add_argument("--subject", default=None,
                    help="NEURO_SUBJECT; a comma list (e.g. 1,3,4) is scored per-subject and averaged "
@@ -442,6 +433,7 @@ def main(argv=None):
     p.add_argument("--dim",     type=int, default=2048, help="SRP target dim (default 2048)")
     p.add_argument("--seed",    type=int, default=0)
     p.add_argument("--no-save", action="store_true")
+    p.add_argument("--output", help="write JSON to this exact path")
     a = p.parse_args(argv)
 
     os.environ["NEURO_DATASET"] = a.dataset
@@ -454,7 +446,9 @@ def main(argv=None):
 
     subjects = subject_tokens(a.subject if a.subject is not None else os.environ.get("NEURO_SUBJECT"))
     subj_label = ",".join(subjects) if subjects else "default"
-    models = list(MODEL_REGISTRY) if a.model == "all" else [a.model]
+    names = list(MODEL_REGISTRY) if a.model == "all" else [a.model]
+    weights = ("pretrained", "untrained") if a.weights == "both" else (a.weights,)
+    models = [(name, w) for name in names for w in weights]
     device = R._readout_device()
     print(f"=== vision_baselines | dataset={a.dataset} subj={subj_label} "
           f"reward_roi={DATASET.reward_roi} dim={a.dim} models={models} ===")
@@ -484,13 +478,14 @@ def main(argv=None):
 
     if not a.no_save:
         stamp = time.strftime("%Y%m%d_%H%M%S")
-        out = os.path.join(HERE, "results",
+        out = a.output or os.path.join(HERE, "results",
                            f"vision_baselines_{a.model}_{a.dataset}_subj{subj_label}_{stamp}.json")
         os.makedirs(os.path.dirname(out), exist_ok=True)
         with open(out, "w") as f:
             json.dump({"dataset": a.dataset, "subject": subj_label, "reward_roi": DATASET.reward_roi,
                        "srp_dim": a.dim, "seed": a.seed, "records": all_records}, f, indent=2)
         print(f"  saved -> {out}")
+    return all_records
 
 
 if __name__ == "__main__":
