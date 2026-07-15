@@ -64,10 +64,9 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   Same date resumes losslessly; a new date starts fresh.
 - **`model.py`** — the root random-projection baseline (the manual-path model + the proposer seed). **`docs/`** — human docs.
 - **`manuscript_natneuro/`** — the paper lives in its own GitHub repository, which is synced to
-  Overleaf. It is currently an ignored, independent checkout and is intended to become a Git
-  submodule of this repository. Treat it as a separate Git repository: make manuscript commits and
-  pulls inside `manuscript_natneuro/`; after the submodule conversion, the parent repository should
-  track only the submodule pointer, never duplicate the manuscript files.
+  Overleaf. It is an ignored, independent checkout — treat it as a separate Git repository: make
+  manuscript commits and pulls inside `manuscript_natneuro/`. The parent repository never tracks the
+  manuscript files.
 
 ## Run
 **Activate the venv first (`source .venv/bin/activate`)** — the scripts call bare `python`, which is
