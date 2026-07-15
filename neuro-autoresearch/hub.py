@@ -712,6 +712,65 @@ def _champion_cli(a):
     return champion()
 
 
+# --------------------------------------------------------------------------- simplify: output equivalence
+def _load_model_instance(model_file: str):
+    """Import ``model_file`` as a throwaway module and return its ``MODEL`` instance. Used by the
+    behavior-preserving ``simplify`` check to run a candidate's forward pass directly (no readout)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("_eqmodel", model_file)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.MODEL
+
+
+def _synthetic_batch(spec: dict):
+    """Build ONE fixed synthetic stimulus batch ``(batch, *stim_shape)`` from an ``input_spec`` (shape,
+    dtype, value range) captured once from the real split. Deterministic (fixed seed) so every call
+    -- reference and candidate -- sees identical inputs; values are random but dtype/shape/range match
+    the real stimulus, so a refactor that changes the computation shows up as a mismatch."""
+    import numpy as np
+    import torch
+    g = torch.Generator().manual_seed(int(spec.get("seed", 0)))
+    shape = (int(spec["batch"]), *[int(d) for d in spec["stim_shape"]])
+    dtype = getattr(torch, str(spec["dtype"]).replace("torch.", ""))
+    lo, hi = float(spec.get("low", 0.0)), float(spec.get("high", 1.0))
+    if dtype.is_floating_point:
+        x = torch.rand(shape, generator=g, dtype=torch.float64) * (hi - lo) + lo
+        return x.to(dtype)
+    return torch.randint(int(np.floor(lo)), int(np.floor(hi)) + 1, shape, generator=g).to(dtype)
+
+
+def check_equivalence(candidate_file: str, reference_file: str, spec_file: str,
+                      rtol: float = 1e-4, atol: float = 1e-6) -> dict:
+    """Behavior-preserving check for ``simplify``: run the CANDIDATE and the frozen REFERENCE model on
+    the SAME fixed synthetic stimulus batch and report whether their activations are numerically equal
+    (``torch.allclose(rtol, atol)``). No ridge readout, no dataset load, no GPU needed -- so it returns
+    in well under a second, giving the simplifier many fast iterations. Returns
+    ``{equivalent, max_abs_diff, max_rel_diff, ref_shape, cand_shape, rtol, atol}`` or ``{error}``."""
+    import json as _json
+    import torch
+    try:
+        with torch.no_grad():
+            spec = _json.load(open(spec_file))
+            X = _synthetic_batch(spec)
+            a_ref = torch.as_tensor(_load_model_instance(reference_file)(X)).float().cpu()
+            a_cand = torch.as_tensor(_load_model_instance(candidate_file)(X)).float().cpu()
+        if a_ref.shape != a_cand.shape:
+            return {"equivalent": False, "reason": "shape mismatch",
+                    "ref_shape": list(a_ref.shape), "cand_shape": list(a_cand.shape)}
+        diff = (a_ref - a_cand).abs()
+        denom = a_ref.abs().clamp_min(1e-12)
+        equivalent = bool(torch.allclose(a_cand, a_ref, rtol=rtol, atol=atol))
+        return {"equivalent": equivalent,
+                "max_abs_diff": float(diff.max()), "max_rel_diff": float((diff / denom).max()),
+                "ref_shape": list(a_ref.shape), "cand_shape": list(a_cand.shape),
+                "rtol": rtol, "atol": atol}
+    except Exception as e:  # noqa: BLE001 -- a candidate that won't import/run is a failed check, not a crash
+        import traceback
+        return {"equivalent": False, "error": f"{type(e).__name__}: {e}",
+                "trace": traceback.format_exc()[-1500:]}
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="hub -- the search-run API (see module docstring).")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -739,6 +798,14 @@ def main(argv=None):
     sp.add_argument("--role", default=None, help="new direction.txt to set on reset (optional)")
     add("requeue", lambda a: requeue_orphans())
     add("migrate", lambda a: f"migrated schema; filled complexity for {migrate()} rows")
+    sp = add("check-equivalence",
+             lambda a: check_equivalence(a.candidate, a.reference, a.spec, a.rtol, a.atol),
+             json_out=True)
+    sp.add_argument("candidate", help="the refactored model.py to verify")
+    sp.add_argument("--reference", required=True, help="the frozen original model.py")
+    sp.add_argument("--spec", required=True, help="input_spec.json (synthetic-batch shape/dtype/range)")
+    sp.add_argument("--rtol", type=float, default=1e-4)
+    sp.add_argument("--atol", type=float, default=1e-6)
     add("summary", lambda a: summary())
 
     a = p.parse_args(argv)
