@@ -23,12 +23,15 @@ PYTHON = sys.executable
 sys.path.insert(0, str(REPO / "scripts/generalization"))
 from splits import GEN_SPLITS  # noqa: E402
 
-VISION = {"nsd", "nnn", "tvsd"}
-LANGUAGE = {"ieeg", "huth"}
-VISION_BASELINES = {"alexnet": "both", "resnet50": "both", "vit": "both",
-                    "clip": "pretrained", "dino": "pretrained"}
+MODALITY = {"nsd": "vision", "nnn": "vision", "ieeg": "language", "huth": "language"}
+BASELINES = {
+    "vision": ("scripts/benchmark/vision_baselines.py",
+               (("alexnet", "both"), ("resnet50", "both"), ("vit", "both"),
+                ("clip", "pretrained"), ("dino", "pretrained"))),
+    "language": ("scripts/benchmark/language_baselines.py", (("gpt2-xl", "pretrained"),)),
+}
 METRIC = {"nsd": "sign(r)*r^2/NC_r2", "nnn": "sign(r)*r^2/NC_r2",
-          "tvsd": "mean_r", "ieeg": "mean_r", "huth": "mean_r"}
+          "ieeg": "mean_r", "huth": "mean_r"}
 
 
 def dataset_of(run: Path) -> str:
@@ -96,9 +99,6 @@ def main(argv=None):
     p.add_argument("runs", nargs="+", type=Path, help="completed runs/<dataset>__<date> directories")
     p.add_argument("--split", action="append", default=[], metavar="DATASET=SEARCH:HELDOUT",
                    help="override/add a subject split; each side is comma-separated")
-    p.add_argument("--vision-models", default=",".join(VISION_BASELINES),
-                   help="comma list drawn from alexnet,resnet50,vit,clip,dino")
-    p.add_argument("--language-models", default="gpt2-xl")
     p.add_argument("--output", type=Path, default=REPO / "results/paper")
     p.add_argument("--force", action="store_true", help="rerun completed jobs")
     p.add_argument("--dry-run", action="store_true", help="print commands without evaluating")
@@ -110,8 +110,8 @@ def main(argv=None):
         if not (run / "search.db").exists():
             p.error(f"not a search run: {run}")
         dataset, split = dataset_of(run), split_for(run, custom)
-        if dataset not in VISION | LANGUAGE:
-            p.error(f"no baseline family for dataset {dataset!r}")
+        if dataset not in MODALITY:
+            p.error(f"dataset {dataset!r} is not in the paper matrix")
         env = os.environ.copy()
         env.update(run_env(run))
         env["NEURO_DATASET"] = dataset
@@ -125,25 +125,14 @@ def main(argv=None):
 
         for group in ("search", "heldout"):
             subjects = ",".join(split[group])
-            if dataset in VISION:
-                for model in tokens(a.vision_models):
-                    if model not in VISION_BASELINES:
-                        p.error(f"unknown vision baseline {model!r}")
-                    weights = VISION_BASELINES[model]
-                    output = root / f"{group}_{model}_baselines.json"
-                    cmd = [PYTHON, "scripts/benchmark/vision_baselines.py", "--dataset", dataset,
-                           "--subject", subjects, "--model", model, "--weights", weights,
-                           "--output", str(output)]
-                    execute(cmd, env, output, a.force, a.dry_run)
-                    jobs.append((dataset, group, subjects, "vision", output))
-            else:
-                for model in tokens(a.language_models):
-                    output = root / f"{group}_{model.replace('/', '-')}_baselines.json"
-                    cmd = [PYTHON, "scripts/benchmark/language_baselines.py", "--dataset", dataset,
-                           "--subject", subjects, "--model", model, "--weights", "pretrained",
-                           "--output", str(output)]
-                    execute(cmd, env, output, a.force, a.dry_run)
-                    jobs.append((dataset, group, subjects, "language", output))
+            family = MODALITY[dataset]
+            script, baselines = BASELINES[family]
+            for model, weights in baselines:
+                output = root / f"{group}_{model}_baselines.json"
+                cmd = [PYTHON, script, "--dataset", dataset, "--subject", subjects,
+                       "--model", model, "--weights", weights, "--output", str(output)]
+                execute(cmd, env, output, a.force, a.dry_run)
+                jobs.append((dataset, group, subjects, family, output))
 
     if a.dry_run:
         return

@@ -22,3 +22,31 @@ ViT-B/16, plus pretrained-only CLIP and DINOv2. The language suite is pretrained
 
 The lower-level benchmark scripts retain their weight-selection options for one-off checks, but the
 paper runner launches only this predefined matrix.
+
+## Exact computation
+
+The runner is a thin wrapper over the existing `scripts/benchmark/vision_baselines.py`,
+`scripts/benchmark/language_baselines.py`, `scripts/generalization/generalize.py`, and fixed
+`harness/` readout. It does not implement a second evaluation path.
+
+For every subject and vision network:
+
+1. Run the frozen network on the dataset's train and test images and collect its configured layer
+   taps. Random-initialized variants use the same fixed seed for train and test images.
+2. Project a layer wider than 2,048 features to 2,048 dimensions with the same fixed sparse random
+   projection.
+3. Split only the neural training set 80/20 and select the layer with the highest validation score.
+   Selection is per broad region: `early` and `ventral` for NSD; `EVC` and `IT` for NNN. The final
+   test responses are not used for layer selection.
+4. Fit the same ridge readout used by the search with the selected representation. NSD is scored on
+   its fixed held-out images; NNN uses its fixed five-fold image CV. Report the dataset's exact
+   noise-ceiling-normalized score.
+
+For GPT-2-XL, each transcript word receives its contextual hidden state at every layer. The best
+layer is selected on a train-only temporal validation tail. iEEG then uses the harness's five-fold
+temporal CV; Huth applies its existing Lanczos word-to-TR and FIR-delay pipeline before its fixed
+held-out-story score. Both language datasets report raw mean correlation.
+
+Every model is evaluated separately for every subject. Subject scores are averaged with equal
+weight within the search cohort and within the held-out cohort. The search champion is loaded from
+the run database and evaluated unchanged through the same harness.
