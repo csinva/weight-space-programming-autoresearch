@@ -139,7 +139,7 @@ def _story(subject: str, story: str):
     """(X chars, Y BOLD TRs, L Lanczos) for one story."""
     with h5py.File(os.path.join(RAW, "derivatives/preprocessed_data", subject, f"{story}.hf5")) as f:
         data = np.asarray(f["data"], dtype=np.float32)           # (n_tr0, n_voxels) == full[10:-5]
-    Y = data[EDGE_TRIM:-EDGE_TRIM]                                # full[40:-35] (matches the reference)
+    Y = data[EDGE_TRIM:-EDGE_TRIM]                                # 30 TRs off each story end (trimmed)
 
     times, words = _word_times(os.path.join(RAW, "derivatives/TextGrids", f"{story}.TextGrid"))
     # Lanczos onto the trimmed TR grid, using TR MIDPOINTS (trtimes + TR/2, per DataSequence.from_grid):
