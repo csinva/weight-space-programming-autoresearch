@@ -613,19 +613,22 @@ def _scan_source(path):
 
 
 def _n_params(model):
-    """Param count for the cap: max of the declared n_params and the real params of any nn.Module it
-    is/wraps -- so under-declaring while holding a big Module (e.g. a pretrained net) can't dodge it."""
+    """Param count for the cap: the larger of the declared ``n_params`` and the tensors the model has
+    actually materialised (Module params/buffers AND loose fixed banks), via the harness robust
+    counter -- so under-declaring while holding a big bank (a pretrained net, or a hand-built
+    Gabor/projection bank kept as loose tensors) can't dodge it. Falls back to the declared value if
+    the harness counter is unavailable. NOTE: weights built lazily on the first forward pass are not
+    yet present at pre-forward call sites; ``score`` re-checks the cap post-forward from the recorded
+    ``n_params`` to catch those too."""
     try:
         declared = int(getattr(model, "n_params", 0) or 0)
     except (TypeError, ValueError):
         declared = 0
     try:
-        import torch
-        mods = [m for m in (model, *vars(model).values()) if isinstance(m, torch.nn.Module)]
-        real = sum(p.numel() for m in mods for p in m.parameters())
-    except Exception:  # noqa: BLE001  -- best effort; declared count still applies
-        real = 0
-    return max(declared, real)
+        from harness.reward import count_params
+        return max(declared, count_params(model))
+    except Exception:  # noqa: BLE001  -- best effort; the declared count still applies
+        return declared
 
 
 def _install_integrity_guard():
@@ -677,6 +680,10 @@ def score(model_file: str, dataset: str | None = None) -> dict:
             if (n := _n_params(mod.MODEL)) > _MAX_PARAMS:   # small & hand-written: no big param dump wins
                 raise ValueError(f"n_params {n:,} exceeds the {_MAX_PARAMS:,} cap")
             row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
+            # Post-forward re-check: lazily-built weights (banks materialised inside __call__) aren't
+            # visible at the pre-forward check above; the recorded n_params counts them, so cap here too.
+            if str(row.get("status", "")).startswith("ok") and (rn := row.get("n_params")) and rn > _MAX_PARAMS:
+                raise ValueError(f"n_params {int(rn):,} exceeds the {_MAX_PARAMS:,} cap")
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}
     except Exception as e:  # noqa: BLE001  -- any eval fault is a recorded error, not a crash

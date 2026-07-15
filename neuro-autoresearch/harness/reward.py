@@ -47,6 +47,73 @@ def _experiment_notes(model) -> str:
     })
 
 
+def count_params(model) -> int:
+    """Robust count of the FIXED weights a model has MATERIALISED -- the honest complexity/cap number.
+
+    ``nn.Module.parameters()`` only sees registered ``Parameter``/submodule weights, so a hand-written
+    model that stashes its fixed banks as loose tensors (e.g. a Gabor bank kept in a Python list, or a
+    projection matrix assigned to ``self._W``) reads as 0 params even though it holds thousands. This
+    walks the whole model: the parameters AND buffers of any ``nn.Module`` it is or wraps, plus every
+    loose ``torch.Tensor`` reachable through its attributes and nested lists/tuples/dicts/sets. Tensors
+    are de-duplicated by identity (a buffer also aliased as an attribute counts once), and cycles/great
+    depth are guarded. Weights are commonly built lazily on the first forward pass, so call this AFTER
+    a forward to capture them. Best-effort: anything it cannot introspect is skipped (returns 0)."""
+    seen_t: set[int] = set()      # tensor ids already counted
+    seen_c: set[int] = set()      # container/module ids already visited (cycle guard)
+    total = 0
+
+    def add(t: "torch.Tensor") -> None:
+        nonlocal total
+        if id(t) not in seen_t:
+            seen_t.add(id(t))
+            total += int(t.numel())
+
+    def walk(obj, depth: int) -> None:
+        if depth > 8:
+            return
+        if isinstance(obj, torch.Tensor):
+            add(obj)
+            return
+        if id(obj) in seen_c:
+            return
+        if isinstance(obj, torch.nn.Module):
+            seen_c.add(id(obj))
+            for t in obj.parameters(recurse=True):
+                add(t)
+            for t in obj.buffers(recurse=True):
+                add(t)
+            for v in vars(obj).values():
+                walk(v, depth + 1)
+        elif isinstance(obj, dict):
+            seen_c.add(id(obj))
+            for v in obj.values():
+                walk(v, depth + 1)
+        elif isinstance(obj, (list, tuple, set)):
+            seen_c.add(id(obj))
+            for v in obj:
+                walk(v, depth + 1)
+
+    try:
+        if isinstance(model, torch.nn.Module):
+            walk(model, 0)                                  # params/buffers/submodules + loose attrs
+        for v in getattr(model, "__dict__", {}).values():  # loose tensors on any model (incl. plain classes)
+            walk(v, 0)
+    except Exception:  # noqa: BLE001  -- honest best-effort; never fail scoring over a count
+        pass
+    return total
+
+
+def robust_n_params(model) -> int:
+    """The recorded/cap ``n_params``: the larger of the model's DECLARED ``n_params`` attribute and the
+    tensors it actually materialised (:func:`count_params`). Under-declaring (0 while holding a real
+    Gabor/projection bank) can no longer hide the true size."""
+    try:
+        declared = int(getattr(model, "n_params", 0) or 0)
+    except (TypeError, ValueError):
+        declared = 0
+    return max(declared, count_params(model))
+
+
 def _corr_per_column(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Pearson r between prediction and truth for each target column (voxel/unit), 0 where a column
     is constant (zero denominator)."""
@@ -178,7 +245,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "model_name": model.name,
         "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
         "experiment_notes": _experiment_notes(model),
-        "n_params": model.n_params,
+        "n_params": robust_n_params(model),   # declared vs. actually-materialised tensors, whichever larger
         "n_train": n_train,
         "n_test": n_test,
         "n_targets": int(Yv_train.shape[1]),
