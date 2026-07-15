@@ -21,7 +21,7 @@ _SPLIT_MEMO: dict = {}
 # Env knobs that shape WHICH voxels/units/rows a split contains -- part of the memo key so an
 # in-process threshold sweep can't hand back a stale split under a changed cut. (imsize/subject
 # already live on the frozen Dataset.)
-_SPLIT_ENV_KEYS = ("NSD_NCSNR_MIN", "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_NO_CACHE")
+_SPLIT_ENV_KEYS = ("NSD_NCSNR_MIN", "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_HUTH_NUM_TRAIN", "NEURO_NO_CACHE")
 
 
 def load_split(d: Dataset):
@@ -55,4 +55,15 @@ def _dispatch_split(d: Dataset):
     if d.loader == "nnn":
         from harness.loaders.vision.nnn import load_nnn
         return load_nnn(d)                          # nnn provides the per-unit split-half ceiling
-    raise ValueError(f"unknown loader {d.loader!r}; expected timeline|nsd|tvsd|nnn")
+    if d.loader == "huth":
+        from harness.loaders.huth import load_huth
+        return load_huth(d)                         # Huth language fMRI: baked blob, no ceiling
+    raise ValueError(f"unknown loader {d.loader!r}; expected timeline|nsd|tvsd|nnn|huth")
+
+
+def apply_feature_pipeline(d: Dataset, A, which: str):
+    """Post-forward feature transform hook used by ``harness.reward`` (lazy so score-only callers
+    don't import a loader's deps). Dispatches on ``d.feature_pipeline``; currently only the Huth
+    fMRI-language ``"lanczos_fir"`` pipeline (Lanczos word->TR + z-score + FIR delays)."""
+    from harness.loaders.huth import apply_feature_pipeline as _huth
+    return _huth(d, A, which)

@@ -53,6 +53,11 @@ class Dataset:
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     cv_folds: int = 0                # >1 => reward = rotating K-fold temporal CV (no single window
                                      # to overfit); 0 = the single train/test split. Fixed, not a knob.
+    feature_pipeline: str = ""       # optional post-forward feature transform applied between the
+                                     # model and the fixed ridge (e.g. "lanczos_fir" for the Huth
+                                     # fMRI-language dataset: Lanczos word->TR + z-score + FIR delays).
+                                     # Empty => no transform (every other dataset). A fixed benchmark
+                                     # property, NOT an operator knob.
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value, NOT an operator knob.
     loader: str = "timeline"         # "timeline" (Segmenter: iEEG) | "nsd" | "tvsd" | "nnn"
@@ -63,6 +68,26 @@ class Dataset:
 # Active dataset presets across neural modalities (fMRI/iEEG/spikes) and stimulus
 # modalities (image/chars). Select one with NEURO_DATASET=<key>.
 PRESETS: dict[str, Dataset] = {
+    # Huth natural-language fMRI (LeBel 2023, OpenNeuro ds003020) -- the dataset used by
+    # circuit-building-autoresearch's evolve-neuro. Human fMRI (BOLD) while subjects listen to spoken
+    # narrative stories (the "Moth Radio Hour"); default subject UTS03, others via NEURO_SUBJECT
+    # (UTS01/UTS02/...). Encoding follows the reference src/features.py EXACTLY: the model embeds each
+    # word's 10-gram (STIMULUS "chars" -- the reference embeds each 10-gram, here the char-transformer
+    # model.py IS that embedder, no pretrained weights); those per-word embeddings are then
+    # Lanczos-downsampled onto the fMRI TR grid, z-scored, and FIR-delayed (feature_pipeline
+    # "lanczos_fir", applied by the harness between the model and the ridge), and ridge-fit to the
+    # TR-rate BOLD responses over ALL cortical voxels (raw mean r; fixed held-out test stories, as in
+    # the reference). Ships as a BAKED blob in data/huth/<study>.pt (per-word X, TR responses Y, and
+    # the per-story Lanczos operators), built once by scripts/process_dataset/huth.py.
+    "huth": Dataset(
+        study="HuthLangFmriUTS03",
+        loader="huth",
+        neural="fmri",
+        stimulus="chars",
+        reward_roi="all",
+        subject="UTS03",
+        feature_pipeline="lanczos_fir",   # Lanczos word->TR + z-score + 4 FIR delays (reference)
+    ),
     # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
     # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
     # NOT the coarse raw-timeseries HRF-peak average. Y is the per-ROI betas from
@@ -187,6 +212,10 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
         # nnn pools 90 sessions from 5 animals; the loader subsets units by this monkey id (1..5).
         # One study, so only the subject field changes -- the loader validates the id.
         return replace(dataset, subject=str(subject).strip())
+    if dataset.study.startswith("HuthLangFmri"):
+        # Huth language fMRI: runtime reads data/huth/<study>.pt by study name. Accept "UTS03" or "3".
+        sid = subject if subject.upper().startswith("UTS") else f"UTS{int(subject):02d}"
+        return replace(dataset, subject=sid, study=f"HuthLangFmri{sid}")
     if dataset.study.startswith("Zada2025Podcast"):
         return replace(dataset, subject=f"{int(subject):02d}")   # iEEG: zero-padded per-patient id
     return replace(dataset, subject=subject)

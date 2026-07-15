@@ -131,6 +131,16 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         raise ValueError(f"representation D_out={d_out} >= {MAX_DOUT} cap "
                          f"(keep the model's output dimension under {MAX_DOUT})")
 
+    # Optional per-dataset feature pipeline between the model and the fixed ridge. For the Huth
+    # fMRI-language dataset ("lanczos_fir") the per-word model embeddings are Lanczos-downsampled to
+    # the fMRI TR grid, z-scored, and FIR-delayed (the reference src/features.py pipeline), turning
+    # per-word activations into the TR-rate design matrix aligned with the TR responses Y. A pure
+    # no-op for every other dataset (empty feature_pipeline), so the reward is unchanged elsewhere.
+    if getattr(dataset, "feature_pipeline", ""):
+        from harness.loaders import apply_feature_pipeline
+        A_train, A_test = (apply_feature_pipeline(dataset, A_train, "train"),
+                           apply_feature_pipeline(dataset, A_test, "test"))
+
     # The reward narrows the targets to the dataset's region; the readout fits exactly those targets.
     # Every loader bakes its region into Y at load time and may narrow to one named sub-ROI of its
     # roi_masks (a None mask -> fit every loaded target).
