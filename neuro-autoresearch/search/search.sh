@@ -62,6 +62,10 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # NNN reward = the mean over search monkeys M1,M2,M3; each is scored on its OWN units and the
 # noise-normalized r2 averaged. M4,M5 held out for generalization (splits.py).
 [ "$DATASET" = nnn ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2,3}"
+# Huth fMRI-language reward = the mean over the three deeply-sampled subjects UTS01/UTS02/UTS03 (the
+# reference's subjects); each scored on its own voxels (raw mean r) and averaged, so a model must
+# generalize across brains rather than overfit one.
+[ "$DATASET" = huth ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-UTS01,UTS02,UTS03}"
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
