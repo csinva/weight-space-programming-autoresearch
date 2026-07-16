@@ -11,6 +11,7 @@ dependencies = [
     "neuralset[all]>=0.2.2",
     "neuralfetch>=0.2.2",
     "torch>=2.5",
+    "matplotlib>=3.8",
     "copilot-keepgoing @ git+https://github.com/csinva/copilot-keepgoing",
 ]
 

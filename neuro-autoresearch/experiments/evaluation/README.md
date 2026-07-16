@@ -25,6 +25,21 @@ python experiments/evaluation/run.py --dataset huth
 python experiments/evaluation/run.py --dataset ieeg
 ```
 
+Render any completed evaluation as a publication-style cohort comparison. The plot shows search
+subjects on the left and subjects held out from search on the right. Bars are equal-weight cohort
+means, points are individual subjects, and the random projection is a cohort-specific dashed line.
+All reference models share one color; untrained networks use a hatched treatment while the searched
+champion is highlighted separately.
+
+```bash
+python experiments/evaluation/plot.py --dataset nnn
+python experiments/evaluation/plot.py --input path/to/evaluation.json --output figure.pdf
+```
+
+By default, `--dataset` looks first in `runs/best/<dataset>/evaluation.json`, then in
+`experiments/evaluation/results/<dataset>/evaluation.json`, and writes `evaluation.png` beside the
+input. Use `--output` for PNG, vector PDF, or editable SVG.
+
 The evaluator never asks which search run to use. The exporter has already made that decision by
 selecting the best run matching the dataset's predefined search cohort. Evaluation reads that exact
 `runs/best/<dataset>/model.py`, verifies its provenance against `datasets.py`, and writes beside it:
