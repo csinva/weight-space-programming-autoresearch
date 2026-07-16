@@ -1,27 +1,20 @@
 #!/usr/bin/env python3
-"""Score a run's champion and reference baselines on search and held-out subjects through the
-EXACT harness reward, per subject, over the subjects the search optimized AND the held-out subjects.
+"""Evaluate one search champion and the modality's reference baselines.
 
-Every cell is the harness ``test_corr`` on the dataset's reward region: noise-normalized for NSD and
-NNN, and raw mean-r for TVSD, Huth, and iEEG. Subjects are scored separately, then averaged with
-equal weight inside the search and held-out cohorts.
+Every model is scored separately on every search and held-out subject through the exact harness
+reward. This is the only writer of the canonical model-first ``evaluation.json`` artifact.
 
-  * single-representation models (the searched CHAMPION, the RANDOM-PROJECTION baseline model.py) go
-    straight through ``harness.reward.evaluate_on_split`` -- the identical search code, no concat;
-  * multi-layer nets (AlexNet/ResNet/ViT/DINO/CLIP for vision, GPT-2-XL for language) are scored
-    BEST-LAYER (layer chosen on a train-only split, no test leakage) via the shared vision and
-    language baseline scorers. Untrained = the same architecture with random weights.
-
-    python experiments/evaluation/run.py --run runs/nsd__2026-06-29
-    python experiments/evaluation/run.py --run runs/ieeg__2026-07-07
-    python experiments/evaluation/run.py --run runs/nsd__2026-06-29 --no-baselines
+    python experiments/evaluation/run.py --run runs/nsd__DATE
+    python experiments/evaluation/run.py --run runs/nsd__DATE \
+        --model runs/best/nsd/model.py --output runs/best/nsd/evaluation.json
 """
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import importlib.util
-import json
 import os
+import subprocess
 import sys
 import time
 
@@ -30,24 +23,40 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
-import hub                                            # noqa: E402  (needs REPO on sys.path)
-from datasets import evaluation_for
+import hub                                            # noqa: E402
+from common import cohort_scores, sha256_file, validate_evaluation, write_evaluation  # noqa: E402
+from datasets import evaluation_for                 # noqa: E402
 
 RESULTS = os.path.join(HERE, "results")
-BASELINE_MODEL = os.path.join(REPO, "model.py")     # the repo-root random-projection baseline
-_NO_CAP = "1000000000000"                           # re-scoring fixed reference models is not a proposal -> lift the cap
+BASELINE_MODEL = os.path.join(REPO, "model.py")
+_NO_CAP = "1000000000000"
 
-# Reference baselines per modality: (name, weights). Untrained only where a random-init of the same
-# architecture is meaningful (AlexNet/ResNet/ViT); DINO/CLIP are pretrained-only.
-VISION_BASELINES = [("alexnet", "pretrained"), ("alexnet", "untrained"),
-                    ("resnet50", "pretrained"), ("resnet50", "untrained"),
-                    ("vit", "pretrained"), ("vit", "untrained"),
-                    ("dino", "pretrained"), ("clip", "pretrained")]
-LANGUAGE_BASELINES = [("gpt2-xl", "pretrained")]
+VISION_BASELINES = [
+    {"id": "alexnet_pretrained", "name": "alexnet", "weights": "pretrained",
+     "label": "AlexNet (ImageNet pretrained)"},
+    {"id": "alexnet_untrained", "name": "alexnet", "weights": "untrained",
+     "label": "AlexNet (untrained)"},
+    {"id": "resnet50_pretrained", "name": "resnet50", "weights": "pretrained",
+     "label": "ResNet-50 (ImageNet pretrained)"},
+    {"id": "resnet50_untrained", "name": "resnet50", "weights": "untrained",
+     "label": "ResNet-50 (untrained)"},
+    {"id": "vit_b16_pretrained", "name": "vit", "weights": "pretrained",
+     "label": "ViT-B/16 (ImageNet pretrained)"},
+    {"id": "vit_b16_untrained", "name": "vit", "weights": "untrained",
+     "label": "ViT-B/16 (untrained)"},
+    {"id": "dinov2_pretrained", "name": "dino", "weights": "pretrained",
+     "label": "DINOv2 (pretrained)"},
+    {"id": "clip_pretrained", "name": "clip", "weights": "pretrained",
+     "label": "CLIP (pretrained)"},
+]
+LANGUAGE_BASELINES = [
+    {"id": "gpt2_xl_pretrained", "name": "gpt2-xl", "weights": "pretrained",
+     "label": "GPT-2 XL (pretrained)"},
+]
 
 
 def load_model(path):
-    """Import a model .py and return its ``MODEL`` instance (a fresh module each call)."""
+    """Import a model file and return its ``MODEL`` instance."""
     spec = importlib.util.spec_from_file_location("eval_model", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -55,36 +64,37 @@ def load_model(path):
 
 
 def db_champion(run):
-    """The run's highest-reward ok model -> ``{id, path, test_corr}`` (reuses ``hub.champion``)."""
+    """Return the full highest-reward row, with its archive path repaired after run renames."""
     if not os.path.exists(os.path.join(run, "search.db")):
         raise SystemExit(f"no search.db in {run}")
-    c = hub.champion(run)
-    if c is None:
+    champion = hub.champion(run)
+    if champion is None:
         raise SystemExit(f"no scored models in {run}")
-    # the archived source is <run>/models/<id>.py (the path column's dir may be stale after a rename)
-    return {"id": c["id"], "path": os.path.join(run, "models", f"{c['id']}.py"),
-            "test_corr": c["test_corr"]}
+    champion["path"] = os.path.join(run, "models", f"{champion['id']}.py")
+    return champion
+
+
+def baseline_specs(domain):
+    return VISION_BASELINES if domain == "vision" else LANGUAGE_BASELINES
 
 
 def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
-    """Rebind the harness to ONE subject, then score every model on it -> ``{label: test_corr}``.
-
-    The harness binds dataset/subject at import, so its modules are reloaded per subject. ``lm_cache``
-    carries the (name, weights) -> ContextualLM baselines so a big LM (GPT-2-XL) loads once, not per subject.
-    """
+    """Score all requested models on one subject, keyed by stable schema model IDs."""
     os.environ["NEURO_DATASET"] = dataset
     os.environ["NEURO_SUBJECT"] = str(subject)
-    os.environ.pop("NEURO_SUBJECTS", None)              # single-subject reward, never the mean
+    os.environ.pop("NEURO_SUBJECTS", None)
     os.environ["NEURO_MAX_PARAMS"] = _NO_CAP
-    for m in [k for k in sys.modules if k.startswith("harness")]:
-        del sys.modules[m]
+    for module in [name for name in sys.modules if name.startswith("harness")]:
+        del sys.modules[module]
     from harness.datasets import DATASET
     from harness.loaders import load_split
     from harness import reward as R
 
     split = load_split(DATASET)
-    out = {"champion": R.evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
-           "random-proj": R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"]}
+    out = {
+        "champion": R.evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
+        "random_projection": R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"],
+    }
     if not with_baselines:
         return out
 
@@ -92,77 +102,142 @@ def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
     if evaluation_for(dataset)["domain"] == "vision":
         import vision as V
         Xtr, Xte, Ytr, Yte, roi_masks, nc = split
-        for name, w in VISION_BASELINES:
-            out[f"{name}-{w}"] = V.score_model(name, w, Xtr, Xte, Ytr, Yte, roi_masks, nc,
-                                               DATASET, R, device, dim=2048, seed=0)["test_corr"]
-    else:                                               # language datasets (ieeg, huth)
+        for spec in VISION_BASELINES:
+            out[spec["id"]] = V.score_model(
+                spec["name"], spec["weights"], Xtr, Xte, Ytr, Yte, roi_masks, nc,
+                DATASET, R, device, dim=2048, seed=0)["test_corr"]
+    else:
         import language as L
-        for name, w in LANGUAGE_BASELINES:
-            lm = lm_cache.get((name, w)) or L.ContextualLM(name, device, w == "pretrained")
-            lm_cache[(name, w)] = lm
-            out[f"{name}-{w}"] = L.score_lang_subject(lm, dataset, str(subject), R, device)["test_corr"]
+        for spec in LANGUAGE_BASELINES:
+            key = (spec["name"], spec["weights"])
+            lm = lm_cache.get(key) or L.ContextualLM(spec["name"], device, True)
+            lm_cache[key] = lm
+            out[spec["id"]] = L.score_lang_subject(lm, dataset, str(subject), R, device)["test_corr"]
     return out
 
 
-def mean(values):
-    return sum(values) / len(values) if values else float("nan")
+def git_commit():
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=REPO, text=True, stderr=subprocess.DEVNULL).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def default_output(dataset, champ_path):
+    best_model = os.path.join(REPO, "runs", "best", dataset, "model.py")
+    if os.path.realpath(champ_path) == os.path.realpath(best_model):
+        return os.path.join(os.path.dirname(best_model), "evaluation.json")
+    return os.path.join(RESULTS, dataset, "evaluation.json")
+
+
+def model_record(spec, scores):
+    return {
+        "label": spec["label"],
+        "role": "baseline",
+        "family": spec["name"],
+        "weights": spec["weights"],
+        "scores": scores,
+    }
 
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--run", required=True, help="search run dir (holds search.db + models/)")
-    p.add_argument("--model", default=None, help="champion .py to test (default: the run's DB champion)")
-    p.add_argument("--dataset", default=None, help="override dataset (default: inferred from run dir)")
-    p.add_argument("--no-baselines", action="store_true", help="champion + random-projection only")
-    p.add_argument("--search-subjects", help="comma list overriding the declared search subjects")
-    p.add_argument("--heldout-subjects", help="comma list overriding the declared held-out subjects")
-    p.add_argument("--output", help="write JSON to this exact path")
+    p.add_argument("--model", help="model.py to evaluate (default: the run's DB champion)")
+    p.add_argument("--dataset", help="override dataset (default: inferred from run dir)")
+    p.add_argument("--output", help="write the canonical JSON to this exact path")
     a = p.parse_args(argv)
 
     dataset = a.dataset or os.path.basename(os.path.normpath(a.run)).split("__")[0]
-    if bool(a.search_subjects) != bool(a.heldout_subjects):
-        p.error("--search-subjects and --heldout-subjects must be given together")
     config = evaluation_for(dataset)
-    cohorts = ({"search": a.search_subjects.split(","), "heldout": a.heldout_subjects.split(",")}
-               if a.search_subjects else config)
-    if a.model:
-        champ_path, champ_id, champ_score = a.model, os.path.basename(a.model).removesuffix(".py"), None
-    else:
-        c = db_champion(a.run)
-        champ_path, champ_id, champ_score = c["path"], c["id"], c["test_corr"]
+    cohorts = {"search": list(config["search"]), "heldout": list(config["heldout"])}
+
+    db_row = db_champion(a.run)
+    champ_path = os.path.abspath(a.model or db_row["path"])
+    if not os.path.exists(champ_path):
+        raise SystemExit(f"missing champion model: {champ_path}")
+    exact_db_model = os.path.realpath(champ_path) == os.path.realpath(db_row["path"])
+    with open(champ_path, errors="replace") as f:
+        exported_db_model = f"model id: {db_row['id']}" in "".join(f.readlines()[:8])
+    matches_db = exact_db_model or exported_db_model
+    champ_id = db_row["id"] if matches_db else os.path.basename(champ_path).removesuffix(".py")
+    champ_score = db_row["test_corr"] if matches_db else None
+    out = os.path.abspath(a.output or default_output(dataset, champ_path))
 
     suffix = f" (search reward {champ_score:.4f})" if champ_score is not None else ""
     print(f"=== eval | {dataset} | champion {champ_id}{suffix} ===")
     print(f"  {config['domain']} | search {cohorts['search']} | held-out {cohorts['heldout']}\n")
 
-    rows, subject_results, lm_cache = {}, {"search": {}, "heldout": {}}, {}
-    for kind in ("search", "heldout"):
-        for subject in cohorts[kind]:
-            t0 = time.time()
-            scores = score_subject(dataset, subject, champ_path, not a.no_baselines, lm_cache)
-            subject_results[kind][subject] = scores
-            for label, tc in scores.items():
-                rows.setdefault(label, {"search": [], "heldout": []})[kind].append(tc)
-            print(f"  [{kind:>7}] {subject}: champion {scores['champion']:.4f}  ({time.time()-t0:.0f}s)")
+    per_subject = {"search": {}, "heldout": {}}
+    lm_cache = {}
+    for cohort in ("search", "heldout"):
+        for subject in cohorts[cohort]:
+            started = time.time()
+            scores = score_subject(dataset, subject, champ_path, True, lm_cache)
+            per_subject[cohort][str(subject)] = scores
+            print(f"  [{cohort:>7}] {subject}: champion {scores['champion']:.4f}  "
+                  f"({time.time() - started:.0f}s)")
 
-    print(f"\n  {'model':<20}{'search':>10}{'held-out':>12}")
-    summary = {}
-    for label, d in rows.items():
-        s, h = mean(d["search"]), mean(d["heldout"])
-        summary[label] = {"search": round(s, 4), "heldout": round(h, 4)}
-        print(f"  {label:<20}{s:>10.4f}{h:>12.4f}")
+    expected_models = ["champion", "random_projection"]
+    expected_models += [spec["id"] for spec in baseline_specs(config["domain"])]
+    scores_by_model = {
+        model_id: {
+            cohort: cohort_scores(
+                {subject: per_subject[cohort][subject][model_id] for subject in cohorts[cohort]},
+                cohorts[cohort])
+            for cohort in ("search", "heldout")
+        }
+        for model_id in expected_models
+    }
 
-    os.makedirs(RESULTS, exist_ok=True)
-    out = a.output or os.path.join(RESULTS, f"eval_{dataset}_{champ_id}_{time.strftime('%Y%m%d_%H%M%S')}.json")
-    champ = summary.get("champion", {})
-    with open(out, "w") as f:
-        json.dump({"dataset": dataset, "champion": champ_id, "champion_path": champ_path,
-                   "domain": config["domain"], "search_reward": champ_score,
-                   "cohorts": {k: cohorts[k] for k in ("search", "heldout")},
-                   "subjects": subject_results, "summary": summary,
-                   "search_mean": champ.get("search"), "heldout_mean": champ.get("heldout")}, f, indent=2)
+    loaded = load_model(champ_path)
+    models = {
+        "champion": {
+            "label": "Best searched model",
+            "role": "champion",
+            "model_id": champ_id,
+            "model_file": os.path.relpath(champ_path, os.path.dirname(out)),
+            "model_sha256": sha256_file(champ_path),
+            "n_params": db_row.get("n_params") if matches_db else getattr(loaded, "n_params", None),
+            "idea": db_row.get("idea") if matches_db else getattr(loaded, "idea", None),
+            "search_reward": champ_score,
+            "scores": scores_by_model["champion"],
+        },
+        "random_projection": {
+            "label": "Random projection",
+            "role": "baseline",
+            "family": "random_projection",
+            "weights": "fixed_random",
+            "model_file": os.path.relpath(BASELINE_MODEL, os.path.dirname(out)),
+            "model_sha256": sha256_file(BASELINE_MODEL),
+            "scores": scores_by_model["random_projection"],
+        },
+    }
+    for spec in baseline_specs(config["domain"]):
+        models[spec["id"]] = model_record(spec, scores_by_model[spec["id"]])
+
+    document = {
+        "schema_version": 1,
+        "dataset": {"id": dataset, "domain": config["domain"], "metric": config["metric"]},
+        "evaluation": {
+            "source_run": os.path.relpath(os.path.abspath(a.run), REPO),
+            "git_commit": git_commit(),
+            "evaluated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "readout": os.environ.get("NEURO_READOUT", "fast"),
+        },
+        "cohorts": cohorts,
+        "models": models,
+    }
+    validate_evaluation(document, expected_models, champ_path)
+    write_evaluation(document, out)
+
+    print(f"\n  {'model':<24}{'search':>10}{'held-out':>12}")
+    for model_id, model in models.items():
+        print(f"  {model_id:<24}{model['scores']['search']['mean']:>10.4f}"
+              f"{model['scores']['heldout']['mean']:>12.4f}")
     print(f"\n  saved -> {out}")
-    return summary
+    return document
 
 
 if __name__ == "__main__":

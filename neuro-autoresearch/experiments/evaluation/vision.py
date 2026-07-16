@@ -19,7 +19,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 import time
@@ -432,8 +431,6 @@ def main(argv=None):
                         "(equal weight), like the search reward. Default: dataset default subject.")
     p.add_argument("--dim",     type=int, default=2048, help="SRP target dim (default 2048)")
     p.add_argument("--seed",    type=int, default=0)
-    p.add_argument("--no-save", action="store_true")
-    p.add_argument("--output", help="write JSON to this exact path")
     a = p.parse_args(argv)
 
     os.environ["NEURO_DATASET"] = a.dataset
@@ -476,15 +473,6 @@ def main(argv=None):
         else:                                          # multi-subject mean (layers differ per subject)
             print(f"  {mname:>10}: test_corr={rec['test_corr']:.4f}   [mean over subjects {subj_label}]")
 
-    if not a.no_save:
-        stamp = time.strftime("%Y%m%d_%H%M%S")
-        out = a.output or os.path.join(HERE, "results",
-                           f"vision_baselines_{a.model}_{a.dataset}_subj{subj_label}_{stamp}.json")
-        os.makedirs(os.path.dirname(out), exist_ok=True)
-        with open(out, "w") as f:
-            json.dump({"dataset": a.dataset, "subject": subj_label, "reward_roi": DATASET.reward_roi,
-                       "srp_dim": a.dim, "seed": a.seed, "records": all_records}, f, indent=2)
-        print(f"  saved -> {out}")
     return all_records
 
 

@@ -24,7 +24,6 @@ per-subject and averaged with equal weight, matching the search reward's multi-s
 from __future__ import annotations
 
 import argparse
-import json
 import os
 import sys
 import time
@@ -229,10 +228,8 @@ def main(argv=None):
     p.add_argument("--model", default="gpt2-xl", help="gpt2 | gpt2-xl | any HF causal-LM id")
     p.add_argument("--subject", default="01,02,03",
                    help="NEURO_SUBJECT; a comma list is scored per-subject and averaged (search reward).")
-    p.add_argument("--no-save", action="store_true")
     p.add_argument("--weights", choices=("pretrained", "untrained", "both"), default="both")
     p.add_argument("--seed", type=int, default=0, help="random initialization seed")
-    p.add_argument("--output", help="write JSON to this exact path")
     a = p.parse_args(argv)
 
     os.environ["NEURO_DATASET"] = a.dataset
@@ -269,13 +266,6 @@ def main(argv=None):
 
     out = {"dataset": a.dataset, "model": a.model, "subject": subj_label,
            "seed": a.seed, "records": records}
-    if not a.no_save:
-        os.makedirs(os.path.join(HERE, "results"), exist_ok=True)
-        stamp = time.strftime("%Y%m%d_%H%M%S")
-        fn = a.output or os.path.join(HERE, "results",
-                          f"language_baselines_{a.model.replace('/', '-')}_{a.dataset}_subj{subj_label}_{stamp}.json")
-        json.dump(out, open(fn, "w"), indent=1)
-        print(f"\n  saved -> {fn}")
     return out
 
 

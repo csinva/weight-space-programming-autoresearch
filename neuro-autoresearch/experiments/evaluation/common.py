@@ -6,6 +6,10 @@ features rather than a MODEL. Same reward-region target selection, same fast/him
 per-target noise ceiling, same ``cv_folds`` branch -- so the number is apples-to-apples with the
 search DB. Returns ``test_corr`` under the active dataset's metric plus its per-ROI breakdown.
 """
+import hashlib
+import json
+import os
+
 import numpy as np
 import torch
 
@@ -23,6 +27,73 @@ def common_roi_keys(roi_dicts: list[dict]) -> set:
 def mean_scalar(values) -> float:
     """Equal-weight mean of per-subject scalars, rounded like the harness reward."""
     return round(float(np.mean(list(values))), 4)
+
+
+def sha256_file(path: str) -> str:
+    """SHA256 of an evaluated model file, used to bind results to exact source."""
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def cohort_scores(subject_results: dict, subjects: list[str]) -> dict:
+    """Canonical per-subject scores plus their equal-weight cohort mean."""
+    values = {str(subject): float(subject_results[str(subject)]) for subject in subjects}
+    return {"subjects": values, "mean": mean_scalar(values.values())}
+
+
+def validate_evaluation(document: dict, expected_models: list[str], model_path: str) -> None:
+    """Reject incomplete, internally inconsistent, or stale evaluation artifacts."""
+    if document.get("schema_version") != 1:
+        raise ValueError("schema_version must be 1")
+    if document.get("dataset", {}).get("domain") not in {"vision", "language"}:
+        raise ValueError("dataset.domain must be vision or language")
+    if not document.get("dataset", {}).get("metric"):
+        raise ValueError("dataset.metric is required")
+    if set(document.get("models", {})) != set(expected_models):
+        raise ValueError(f"expected models {expected_models}, got {list(document.get('models', {}))}")
+
+    def reject_gap(value):
+        if isinstance(value, dict):
+            if "gap" in value:
+                raise ValueError("gap is intentionally not part of the evaluation schema")
+            for child in value.values():
+                reject_gap(child)
+        elif isinstance(value, list):
+            for child in value:
+                reject_gap(child)
+
+    reject_gap(document)
+    cohorts = document.get("cohorts", {})
+    for model_id, model in document["models"].items():
+        for cohort in ("search", "heldout"):
+            expected_subjects = [str(s) for s in cohorts.get(cohort, [])]
+            scores = model.get("scores", {}).get(cohort, {})
+            actual_subjects = list(scores.get("subjects", {}))
+            if actual_subjects != expected_subjects:
+                raise ValueError(
+                    f"{model_id}.{cohort} subjects must be {expected_subjects}, got {actual_subjects}")
+            expected_mean = mean_scalar(scores["subjects"].values())
+            if scores.get("mean") != expected_mean:
+                raise ValueError(
+                    f"{model_id}.{cohort}.mean must be {expected_mean}, got {scores.get('mean')}")
+
+    recorded_hash = document["models"]["champion"].get("model_sha256")
+    actual_hash = sha256_file(model_path)
+    if recorded_hash != actual_hash:
+        raise ValueError(f"champion hash mismatch: recorded {recorded_hash}, actual {actual_hash}")
+
+
+def write_evaluation(document: dict, path: str) -> None:
+    """Write a validated evaluation atomically enough for normal local runs."""
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(document, f, indent=2)
+        f.write("\n")
+    os.replace(tmp, path)
 
 
 def readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown, device):

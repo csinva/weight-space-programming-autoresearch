@@ -11,30 +11,35 @@ LANGUAGE_DATASETS = ("huth", "ieeg")
 DATASETS = {
     "nsd": {
         "domain": "vision",
+        "metric": "noise_normalized_r2",
         "axis": "NEURO_SUBJECT",
         "search": ["1", "2"],
         "heldout": ["5", "7"],
     },
     "tvsd": {
         "domain": "vision",
+        "metric": "mean_pearson_r",
         "axis": "NEURO_SUBJECT",
         "search": ["F"],
         "heldout": ["N"],
     },
     "nnn": {
         "domain": "vision",
+        "metric": "noise_normalized_r2",
         "axis": "NEURO_SUBJECT",
         "search": ["1", "2", "3"],
         "heldout": ["4", "5"],
     },
     "huth": {
         "domain": "language",
+        "metric": "mean_pearson_r",
         "axis": "NEURO_SUBJECT",
         "search": ["UTS01", "UTS02"],
         "heldout": ["UTS03"],
     },
     "ieeg": {
         "domain": "language",
+        "metric": "mean_pearson_r",
         "axis": "NEURO_SUBJECT",
         "search": ["01", "02", "03"],
         "heldout": ["04", "05"],
