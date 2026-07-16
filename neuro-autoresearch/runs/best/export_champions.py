@@ -26,12 +26,14 @@ REPO = os.path.dirname(os.path.dirname(BEST))              # runs/best -> runs -
 
 # Pre-env.json runs -> the subjects the EVALUATOR scored under (from eval logs + the operator).
 # Runs absent here AND without env.json are skipped: unknown config, vanilla baselines, or duplicates
-# (e.g. nsd__2026-07-01-vanilla, nsd__champion-p00, nnn__2026-07-07).
+# (e.g. nsd__2026-07-01-vanilla, nsd__champion-p00, nnn__2026-07-07). The pre-2026-07-07 iEEG runs
+# (audio 40-band Mel stimulus, before the audio->chars switch in commit c4eced7) were acoustic, not
+# semantic -- they were deleted from the machine, so only the chars/semantic ieeg__2026-07-07 remains.
 LEGACY_SUBJECTS = {
     "nsd__2026-06-22": "1", "nsd__2026-06-23": "1", "nsd__2026-06-24": "1",
     "nsd__2026-06-26": "1", "nsd__2026-06-27": "1", "nsd__2026-06-29": "1,2",
     "nsd__2026-07-04": "1,2", "nsd__2026-07-14": "1,2",
-    "ieeg__2026-07-02": "01,02,03", "ieeg__2026-07-03": "01,02,03", "ieeg__2026-07-07": "01,02,03",
+    "ieeg__2026-07-07": "01,02,03",
     "nnn__2026-07-08": "1,3,4", "nnn__2026-07-15": "1,2,3",
 }
 
