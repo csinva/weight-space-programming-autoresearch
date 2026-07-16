@@ -2,8 +2,8 @@
 
 Scientific studies built with the autoresearch framework:
 
-- `evaluation/` compares a search champion with pretrained and untrained baselines on both search
-  and held-out subjects.
+- `evaluation/` compares a search champion with modality-appropriate baselines on both search and
+  held-out subjects across NSD, TVSD, NNN, Huth, and iEEG.
 - `complementarity.py` tests whether the champion explains neural variance missed by AlexNet.
 - `imagenet/` trains the champion's ventral weights on ImageNet and re-evaluates the result on NSD.
 

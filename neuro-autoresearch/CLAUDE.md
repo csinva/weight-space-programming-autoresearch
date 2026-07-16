@@ -58,7 +58,8 @@ task handed to each search proposer lives in **`search/proposer/prompt.md`** (+ 
   their `direction.txt` to bias what they explore. `lib.sh` holds the supervisor primitives shared
   by `run.sh` and `proposer/pool.sh`.
 - **`experiments/`** — paper-facing scientific studies built with the framework: `evaluation/`
-  (baselines + held-out generalization), `complementarity.py`, and the `imagenet/` intervention.
+  compares champions and modality-appropriate baselines on search and held-out subjects across all
+  five datasets; `complementarity.py` and `imagenet/` hold the targeted follow-up experiments.
 - **`scripts/`** — operational support only: dataset preparation, infrastructure benchmarks, and
   champion simplification.
 - **`runs/<dataset>__<date>/`** (gitignored) — one search: `search.db` (the only shared memory +
@@ -93,9 +94,8 @@ search/run.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralize
 `NEURO_DATA_DIR`); if a dataset isn't staged there the loader raises and names its build script. The
 external `~/Research/neuralset/data/` is build-time-only scratch — the raw source for the offline
 `scripts/prepare_data/<name>.py` step, never touched at runtime, so no preset sets `path`. Two
-families: **vision** (`nsd`/`tvsd`/`nnn`, standalone image-table readers) + **language** (`ieeg`,
-NeuralSet `Segmenter`; a Huth-lab fMRI-language timeline is the next language dataset — the timeline
-engine keeps its generic fMRI/audio paths for it). `ieeg` ships a slim re-segmentable tree
+families: **vision** (`nsd`/`tvsd`/`nnn`, standalone image-table readers) + **language** (`huth`/`ieeg`,
+timeline-aligned fMRI and ECoG). `ieeg` ships a slim re-segmentable tree
 (per-patient high-gamma `.fif` + word onsets); the vision datasets ship pre-aligned tables — all read
 from `data/<name>/`.
 
@@ -107,11 +107,11 @@ comma list (`NEURO_SUBJECT=1,2`) makes the reward the MEAN over several subjects
 averaged, recorded as ONE `test_corr` + averaged `roi_corr` (per-subject values are never stored;
 proposers stay blind); unset = the dataset's default subject.
 **`search/run.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECT`
-env. Works for datasets that switch data by subject (`nsd` / `tvsd` / `ieeg` / `nnn`); `nnn` subsets its
-90 sessions by recording animal (M1..M5; unset = pool ALL animals). Hold out the rest for generalization
+env. The canonical cohorts are NSD 1,2 vs 5,7; TVSD F vs N; NNN 1,2,3 vs 4,5; Huth UTS01,02 vs
+UTS03; and iEEG 01-03 vs 04-05. `nnn` subsets its 90 sessions by recording animal. Hold out the rest for generalization
 (`experiments/evaluation/run.py` — re-evals a run's DB champion + reference baselines on the search AND
 held-out units through the exact reward; the per-dataset search/held-out split lives in
-`experiments/evaluation/splits.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
+`experiments/evaluation/datasets.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
 ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
 provisioned `ncsnr` raises — (re)run `python -m scripts.prepare_data.nsd` to fetch+align it.
@@ -120,8 +120,9 @@ is **`chars`** (each word → char-id grid of its N-gram, so `model.py` builds l
 itself — no pretrained embeddings); reward = **5-fold rotating temporal CV** over all electrodes (raw
 mean r, no ceiling; the CV blocks a single fixed hold-out from being grep'd), multi-subject mean via
 `NEURO_SUBJECT` (patients 01-03 the search reward, 04-05 held out). Stage a patient with
-`scripts.prepare_data.audio_neural --subject NN`. · `tvsd` / `nnn` — macaque spiking tables. `nnn`
-is **noise-ceiling-normalized** (r²/NC_r2, NC_r = the release's per-unit split-half `reliability_best`)
+`scripts.prepare_data.audio_neural --subject NN`. · `tvsd` / `nnn` — macaque spiking tables. TVSD
+reports raw mean r over oracle-selected reliable electrodes. `nnn` is **noise-ceiling-normalized**
+(r²/NC_r2, NC_r = the release's per-unit split-half `reliability_best`)
 like NSD — so `nnn` scores are NOT comparable to pre-normalization raw-r runs. Reward = reliable units
 (`NNN_MIN_RELIABILITY` 0.4) pooled; `NNN_UNIT_TYPE` (unset=all, default; `=1` → single units only,
 a robustness check) subsets by BombCell class (1=single unit, 2=MUA, 3=non-somatic). Never

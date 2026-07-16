@@ -1,11 +1,28 @@
-"""Score a raw representation (train/test activations already in hand) through the harness
+"""Shared representation scoring and equal-weight subject aggregation helpers.
+
+Score a raw representation (train/test activations already in hand) through the harness
 reward-region readout -- the body of ``harness.reward.evaluate_on_split`` for callers that hold
 features rather than a MODEL. Same reward-region target selection, same fast/himalaya ridge, same
-per-voxel noise ceiling, same ``cv_folds`` branch -- so the number is apples-to-apples with the
-search DB. Returns the noise-normalized ``test_corr`` + per-ROI breakdown.
+per-target noise ceiling, same ``cv_folds`` branch -- so the number is apples-to-apples with the
+search DB. Returns ``test_corr`` under the active dataset's metric plus its per-ROI breakdown.
 """
 import numpy as np
 import torch
+
+
+def subject_tokens(cli_subject=None) -> list[str]:
+    """Return ordered subjects from a comma-separated CLI value."""
+    return [token.strip() for token in str(cli_subject or "").split(",") if token.strip()]
+
+
+def common_roi_keys(roi_dicts: list[dict]) -> set:
+    """Return ROIs present for every subject, matching ``harness.reward._mean_rows``."""
+    return set.intersection(*(set(rois or {}) for rois in roi_dicts)) if roi_dicts else set()
+
+
+def mean_scalar(values) -> float:
+    """Equal-weight mean of per-subject scalars, rounded like the harness reward."""
+    return round(float(np.mean(list(values))), 4)
 
 
 def readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown, device):

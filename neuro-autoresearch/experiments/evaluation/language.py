@@ -18,8 +18,8 @@ Best-layer protocol: every layer is selected on a train-only temporal validation
 winner is scored with the dataset's own final protocol. A comma ``--subject`` list is scored
 per-subject and averaged with equal weight, matching the search reward's multi-subject mean.
 
-    python experiments/evaluation/language_baselines.py --model gpt2-xl --subject 01,02,03
-    python experiments/evaluation/language_baselines.py --model gpt2
+    python experiments/evaluation/language.py --model gpt2-xl --subject 01,02,03
+    python experiments/evaluation/language.py --model gpt2
 """
 from __future__ import annotations
 
@@ -237,7 +237,7 @@ def main(argv=None):
 
     os.environ["NEURO_DATASET"] = a.dataset
     from harness import reward as R
-    from subjects import subject_tokens, mean_scalar
+    from common import subject_tokens, mean_scalar
 
     device = R._readout_device()
     subjects = subject_tokens(a.subject) or [""]

@@ -71,15 +71,16 @@ resemble this *computation*, or this *training set*? Writing the parameters in c
 first — the one we want. The 100K-parameter ceiling is a forcing function for interpretability: every
 champion is a small, readable computation you can turn into a mechanistic claim, not a black box.
 
-## The four datasets
+## The five datasets
 
-**Two vision, two language** — three recording modalities across two species. Each is a preset in
+**Three vision, two language** — three recording modalities across two species. Each is a preset in
 `harness/datasets.py`, chosen by the `NEURO_DATASET` env var (no source edit, so parallel runs never
 collide) and loaded **fully offline** from a local copy.
 
 | domain | `NEURO_DATASET` | study | brain · stimulus | reward |
 | --- | --- | --- | --- | --- |
 | **vision** | `nsd` (default) | Natural Scenes Dataset · human | fMRI · natural images | early+ventral stream, noise-normalized · **0.44** |
+| | `tvsd` | THINGS Ventral-stream Spiking Dataset · macaque | spiking · natural images | reliable V1+V4+IT units, raw *r* |
 | | `nnn` | Triple-N · macaque | spiking · natural images | reliable EVC+IT units, noise-normalized |
 | **language** | `huth` | Huth story-listening · human | fMRI · spoken narrative | all cortical voxels, raw *r* |
 | | `ieeg` | 'Podcast' ECoG · human | iEEG · spoken words | all electrodes, 5-fold temporal CV · **0.063** |
@@ -88,6 +89,8 @@ collide) and loaded **fully offline** from a local copy.
 - **`nsd`** — prepared GLMdenoise betas; reward = the joint early+ventral stream (~14.5k reliable
   voxels), with the shared-1000 images held out image-disjoint. Subjects 1, 2 are the search reward;
   5, 7 are held out for generalization (via `NEURO_SUBJECT`).
+- **`tvsd`** — normalized multi-unit activity from macaque V1, V4, and IT during THINGS image
+  viewing. Monkey F is used for search and monkey N is held out for generalization.
 - **`nnn`** (Triple-N) — macaque spiking to the *same* NSD-1000 images; reward = reliable EVC+IT units
   pooled, with a 5-fold split over the 1000 images. Search monkeys M1–M3; M4, M5 held out.
 
@@ -95,16 +98,15 @@ collide) and loaded **fully offline** from a local copy.
 builds linguistic structure from characters up, with **no pretrained embeddings**.
 - **`huth`** — human fMRI while listening to spoken stories (the "Moth Radio Hour"); per-word features
   are resampled onto the fMRI TR grid and FIR-delayed, then scored over all cortical voxels. Subjects
-  UTS01–03.
+  UTS01 and UTS02 are used for search; UTS03 is held out.
 - **`ieeg`** — human intracranial high-gamma (70–200 Hz) to a ~30-min podcast; reward = a rotating
   5-fold temporal CV over all electrodes (a single fixed hold-out is trivially overfit), meaned over
   patients 01–03 (04, 05 held out).
 
-The **vision** rewards are noise-ceiling-normalized (r²/NC over reliably-driven voxels/units, so 0.44
-means 44% of the *recoverable* signal); the **language** rewards are raw mean Pearson *r*. The reward
-region is a fixed **per-dataset** attribute — no ROI menu, no way to aim the readout at the target.
-Splits are cached on disk keyed by the full dataset identity, so reruns load in seconds. *(The harness
-also ships a `tvsd` macaque-vision preset, outside the paper's four.)*
+The **NSD and NNN** rewards are noise-ceiling-normalized (r²/NC over reliably-driven voxels/units, so
+0.44 means 44% of the *recoverable* signal). **TVSD and both language datasets** report raw mean
+Pearson *r*. The reward region is a fixed **per-dataset** attribute — no ROI menu, no way to aim the readout at the target.
+Splits are cached on disk keyed by the full dataset identity, so reruns load in seconds.
 
 ## Two champions, read as hypotheses
 
@@ -131,7 +133,7 @@ pip install .
 (`train_corr` / `test_corr` / timing); persists nothing.
 ```bash
 python -m harness.run                          # score the current model.py on the active dataset
-NEURO_DATASET=ieeg python -m harness.run       # pick a preset: nsd | nnn | huth | ieeg
+NEURO_DATASET=ieeg python -m harness.run       # pick: nsd | tvsd | nnn | huth | ieeg
 NEURO_READOUT=himalaya python -m harness.run   # reference readout (default = the ~20× faster fast ridge)
 ```
 

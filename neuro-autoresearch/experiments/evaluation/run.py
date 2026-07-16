@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generalization / baseline matrix: score a run's champion and the reference baselines through the
+"""Score a run's champion and reference baselines on search and held-out subjects through the
 EXACT harness reward, per subject, over the subjects the search optimized AND the held-out subjects.
 
-Every cell is the harness ``test_corr`` on the dataset's reward region (noise-normalized for nsd/nnn,
-raw mean-r for ieeg), averaged over that category's subjects. If the champion generalizes -- captured
-real neural computation, not subject quirks -- its held-out column stays close to its search column.
+Every cell is the harness ``test_corr`` on the dataset's reward region: noise-normalized for NSD and
+NNN, and raw mean-r for TVSD, Huth, and iEEG. Subjects are scored separately, then averaged with
+equal weight inside the search and held-out cohorts.
 
   * single-representation models (the searched CHAMPION, the RANDOM-PROJECTION baseline model.py) go
     straight through ``harness.reward.evaluate_on_split`` -- the identical search code, no concat;
@@ -31,7 +31,7 @@ sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
 import hub                                            # noqa: E402  (needs REPO on sys.path)
-from splits import split_for
+from datasets import evaluation_for
 
 RESULTS = os.path.join(HERE, "results")
 BASELINE_MODEL = os.path.join(REPO, "model.py")     # the repo-root random-projection baseline
@@ -89,14 +89,14 @@ def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
         return out
 
     device = R._readout_device()
-    if DATASET.loader in ("nsd", "tvsd", "nnn"):        # vision datasets
-        import vision_baselines as V
+    if evaluation_for(dataset)["domain"] == "vision":
+        import vision as V
         Xtr, Xte, Ytr, Yte, roi_masks, nc = split
         for name, w in VISION_BASELINES:
             out[f"{name}-{w}"] = V.score_model(name, w, Xtr, Xte, Ytr, Yte, roi_masks, nc,
                                                DATASET, R, device, dim=2048, seed=0)["test_corr"]
     else:                                               # language datasets (ieeg, huth)
-        import language_baselines as L
+        import language as L
         for name, w in LANGUAGE_BASELINES:
             lm = lm_cache.get((name, w)) or L.ContextualLM(name, device, w == "pretrained")
             lm_cache[(name, w)] = lm
@@ -122,8 +122,9 @@ def main(argv=None):
     dataset = a.dataset or os.path.basename(os.path.normpath(a.run)).split("__")[0]
     if bool(a.search_subjects) != bool(a.heldout_subjects):
         p.error("--search-subjects and --heldout-subjects must be given together")
-    sp = ({"axis": "NEURO_SUBJECT", "search": a.search_subjects.split(","),
-           "heldout": a.heldout_subjects.split(",")} if a.search_subjects else split_for(dataset))
+    config = evaluation_for(dataset)
+    cohorts = ({"search": a.search_subjects.split(","), "heldout": a.heldout_subjects.split(",")}
+               if a.search_subjects else config)
     if a.model:
         champ_path, champ_id, champ_score = a.model, os.path.basename(a.model).removesuffix(".py"), None
     else:
@@ -132,33 +133,36 @@ def main(argv=None):
 
     suffix = f" (search reward {champ_score:.4f})" if champ_score is not None else ""
     print(f"=== eval | {dataset} | champion {champ_id}{suffix} ===")
-    print(f"  search {sp['search']}  ->  held-out {sp['heldout']}\n")
+    print(f"  {config['domain']} | search {cohorts['search']} | held-out {cohorts['heldout']}\n")
 
-    rows, lm_cache = {}, {}                              # label -> {"search": [...], "heldout": [...]}
+    rows, subject_results, lm_cache = {}, {"search": {}, "heldout": {}}, {}
     for kind in ("search", "heldout"):
-        for subject in sp[kind]:
+        for subject in cohorts[kind]:
             t0 = time.time()
             scores = score_subject(dataset, subject, champ_path, not a.no_baselines, lm_cache)
+            subject_results[kind][subject] = scores
             for label, tc in scores.items():
                 rows.setdefault(label, {"search": [], "heldout": []})[kind].append(tc)
             print(f"  [{kind:>7}] {subject}: champion {scores['champion']:.4f}  ({time.time()-t0:.0f}s)")
 
-    print(f"\n  {'model':<20}{'search':>10}{'held-out':>12}{'gap':>9}")
-    matrix = {}
+    print(f"\n  {'model':<20}{'search':>10}{'held-out':>12}")
+    summary = {}
     for label, d in rows.items():
         s, h = mean(d["search"]), mean(d["heldout"])
-        matrix[label] = {"search": round(s, 4), "heldout": round(h, 4), "gap": round(h - s, 4)}
-        print(f"  {label:<20}{s:>10.4f}{h:>12.4f}{h - s:>+9.4f}")
+        summary[label] = {"search": round(s, 4), "heldout": round(h, 4)}
+        print(f"  {label:<20}{s:>10.4f}{h:>12.4f}")
 
     os.makedirs(RESULTS, exist_ok=True)
     out = a.output or os.path.join(RESULTS, f"eval_{dataset}_{champ_id}_{time.strftime('%Y%m%d_%H%M%S')}.json")
-    champ = matrix.get("champion", {})
+    champ = summary.get("champion", {})
     with open(out, "w") as f:
         json.dump({"dataset": dataset, "champion": champ_id, "champion_path": champ_path,
-                   "search_reward": champ_score, "split": sp, "matrix": matrix,
+                   "domain": config["domain"], "search_reward": champ_score,
+                   "cohorts": {k: cohorts[k] for k in ("search", "heldout")},
+                   "subjects": subject_results, "summary": summary,
                    "search_mean": champ.get("search"), "heldout_mean": champ.get("heldout")}, f, indent=2)
     print(f"\n  saved -> {out}")
-    return matrix
+    return summary
 
 
 if __name__ == "__main__":

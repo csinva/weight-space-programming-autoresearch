@@ -74,8 +74,8 @@ def main(argv=None):
     from harness.loaders import load_split
     from harness import reward as R
     from harness.roi import roi_breakdown
-    from vision_baselines import extract_alexnet
-    from score import readout
+    from vision import extract_alexnet
+    from common import readout
 
     print(f"=== complementarity | nsd subj={a.subject} | champion={os.path.basename(a.champion)} "
           f"| SRP dim={a.dim} | reward_roi={DATASET.reward_roi} ===")

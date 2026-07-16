@@ -11,10 +11,10 @@ For each model the script:
 Scores are directly comparable to search DB champions.
 
 Usage:
-    python experiments/evaluation/vision_baselines.py --model alexnet --dataset nsd --subject 1
-    python experiments/evaluation/vision_baselines.py --model all --dataset nsd --subject 1
-    python experiments/evaluation/vision_baselines.py --model resnet50 --dataset tvsd
-    python experiments/evaluation/vision_baselines.py --model clip --dataset nnn
+    python experiments/evaluation/vision.py --model alexnet --dataset nsd --subject 1
+    python experiments/evaluation/vision.py --model all --dataset nsd --subject 1
+    python experiments/evaluation/vision.py --model resnet50 --dataset tvsd
+    python experiments/evaluation/vision.py --model clip --dataset nnn
 """
 from __future__ import annotations
 
@@ -396,7 +396,7 @@ def _mean_over_subjects(models, per_subject):
     ``harness.reward.evaluate_subjects``): mean ``test_corr`` + mean ``roi_corr`` over the ROIs present
     for every subject. The per-subject records (incl. each subject's chosen layers) are kept under
     ``per_subject`` for inspection. A model that errored on ANY subject stays an error."""
-    from subjects import common_roi_keys, mean_scalar
+    from common import common_roi_keys, mean_scalar
     out = {}
     for model, weights in models:
         m = f"{model}-{weights}"
@@ -440,7 +440,7 @@ def main(argv=None):
     if a.subject is not None:
         os.environ["NEURO_SUBJECT"] = str(a.subject)
 
-    from subjects import subject_tokens
+    from common import subject_tokens
     from harness.datasets import DATASET, with_subject
     from harness import reward as R
 

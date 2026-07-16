@@ -35,7 +35,7 @@ if [ -f "$RUN/env.json" ]; then
   while IFS=$'\t' read -r key value; do export "$key=$value"; done < <(
     "$PY" -c "import json;[print(f'{k}\t{v}') for k,v in json.load(open('$RUN/env.json')).items()]")
 elif [ -z "${NEURO_SUBJECT:-}" ]; then
-  subject="$("$PY" -c "import sys;sys.path.insert(0,'experiments/evaluation');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" || exit 1
+  subject="$("$PY" -c "import sys;sys.path.insert(0,'experiments/evaluation');from datasets import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" || exit 1
   [ -n "$subject" ] && export NEURO_SUBJECT="$subject"
 fi
 export NEURO_DATASET="$DATASET"

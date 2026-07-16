@@ -746,7 +746,7 @@
 
 <span class="c"># swap the reward area / monkey freely</span>
 <span class="k">NEURO_DATASET</span>=<span class="v">tvsd</span> <span class="k">NEURO_ROI</span>=<span class="v">V1</span> <span class="k">NEURO_SUBJECT</span>=<span class="v">N</span> python -m harness.run</code></pre>
-    <p class="reveal" style="color:var(--ink-faint);font-size:.95rem">Each run evaluates the current <code>model.py</code> once and appends a single row to <code>results/TvsdMonkey&lt;F|N&gt;__&lt;area&gt;.csv</code>. Run one loop per area — unlike NSD, there is no multi-region <code>corr_&lt;area&gt;</code> panel. (No trained-AlexNet baseline is computed for <code>tvsd</code> yet, so the noise ceiling is the bar to chase.)</p>
+    <p class="reveal" style="color:var(--ink-faint);font-size:.95rem">The search uses monkey F. The evaluation experiment scores the unchanged champion and the same pretrained and untrained vision baselines separately on monkey F and held-out monkey N, retaining the individual-animal results rather than treating their difference as a model gap.</p>
   </div>
 </section>
 
