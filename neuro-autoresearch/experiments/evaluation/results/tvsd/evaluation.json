@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "id": "tvsd",
+    "domain": "vision",
+    "metric": "mean_pearson_r"
+  },
+  "evaluation": {
+    "source_run": "runs/tvsd__2026-06-30",
+    "git_commit": "a0da0db2fe9f89c8e4d933baaea3c54eca7fcdd4",
+    "evaluated_at": "2026-07-16T15:08:55-07:00",
+    "readout": "fast"
+  },
+  "cohorts": {
+    "search": [
+      "F"
+    ],
+    "heldout": [
+      "N"
+    ]
+  },
+  "models": {
+    "champion": {
+      "label": "Best searched model",
+      "role": "champion",
+      "model_id": "7sjzq",
+      "model_file": "../../../../runs/tvsd__2026-06-30/models/7sjzq.py",
+      "model_sha256": "fc412df8b69f467ac0b93c57ccfec034fed27367fc63cd3cc172fa7f2eb40059",
+      "n_params": 149144,
+      "idea": "Narrow Gabor Gram gain=3 + compact LBP histogram for micro-texture",
+      "search_reward": 0.7136,
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.7136
+          },
+          "mean": 0.7136
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.7446
+          },
+          "mean": 0.7446
+        }
+      }
+    },
+    "random_projection": {
+      "label": "Random projection",
+      "role": "baseline",
+      "family": "random_projection",
+      "weights": "fixed_random",
+      "model_file": "../../../../model.py",
+      "model_sha256": "13740dbc06a75bdb3131b21fa8045a3ea978662b936e3fca6c1df6e74f45bd55",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.3371
+          },
+          "mean": 0.3371
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.2535
+          },
+          "mean": 0.2535
+        }
+      }
+    },
+    "alexnet_pretrained": {
+      "label": "AlexNet (ImageNet pretrained)",
+      "role": "baseline",
+      "family": "alexnet",
+      "weights": "pretrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.6736
+          },
+          "mean": 0.6736
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.6999
+          },
+          "mean": 0.6999
+        }
+      }
+    },
+    "alexnet_untrained": {
+      "label": "AlexNet (untrained)",
+      "role": "baseline",
+      "family": "alexnet",
+      "weights": "untrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.6098
+          },
+          "mean": 0.6098
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.6379
+          },
+          "mean": 0.6379
+        }
+      }
+    },
+    "resnet50_pretrained": {
+      "label": "ResNet-50 (ImageNet pretrained)",
+      "role": "baseline",
+      "family": "resnet50",
+      "weights": "pretrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.6496
+          },
+          "mean": 0.6496
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.692
+          },
+          "mean": 0.692
+        }
+      }
+    },
+    "resnet50_untrained": {
+      "label": "ResNet-50 (untrained)",
+      "role": "baseline",
+      "family": "resnet50",
+      "weights": "untrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.5406
+          },
+          "mean": 0.5406
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.5434
+          },
+          "mean": 0.5434
+        }
+      }
+    },
+    "vit_b16_pretrained": {
+      "label": "ViT-B/16 (ImageNet pretrained)",
+      "role": "baseline",
+      "family": "vit",
+      "weights": "pretrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.5958
+          },
+          "mean": 0.5958
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.6303
+          },
+          "mean": 0.6303
+        }
+      }
+    },
+    "vit_b16_untrained": {
+      "label": "ViT-B/16 (untrained)",
+      "role": "baseline",
+      "family": "vit",
+      "weights": "untrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.3999
+          },
+          "mean": 0.3999
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.4169
+          },
+          "mean": 0.4169
+        }
+      }
+    },
+    "dinov2_pretrained": {
+      "label": "DINOv2 (pretrained)",
+      "role": "baseline",
+      "family": "dino",
+      "weights": "pretrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.5884
+          },
+          "mean": 0.5884
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.6161
+          },
+          "mean": 0.6161
+        }
+      }
+    },
+    "clip_pretrained": {
+      "label": "CLIP (pretrained)",
+      "role": "baseline",
+      "family": "clip",
+      "weights": "pretrained",
+      "scores": {
+        "search": {
+          "subjects": {
+            "F": 0.5798
+          },
+          "mean": 0.5798
+        },
+        "heldout": {
+          "subjects": {
+            "N": 0.6252
+          },
+          "mean": 0.6252
+        }
+      }
+    }
+  }
+}
