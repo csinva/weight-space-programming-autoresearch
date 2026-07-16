@@ -28,8 +28,9 @@ python experiments/evaluation/run.py --dataset ieeg
 Render any completed evaluation as a publication-style cohort comparison. The plot shows search
 subjects on the left and subjects held out from search on the right. Bars are equal-weight cohort
 means, points are individual subjects, and the random projection is a cohort-specific dashed line.
-All reference models share one color; untrained networks use a hatched treatment while the searched
-champion is highlighted separately and explicitly labeled as never trained.
+Each architecture is labeled once, with trained and untrained variants paired closely on the same
+row and distinguished by solid versus hatched bars. The searched champion is highlighted separately
+and explicitly labeled as never trained.
 
 ```bash
 python experiments/evaluation/plot.py --dataset nnn

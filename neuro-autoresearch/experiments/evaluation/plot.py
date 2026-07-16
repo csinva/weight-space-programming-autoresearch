@@ -64,19 +64,13 @@ def _short_label(model_id: str, model: dict) -> str:
     labels = {
         "alexnet": "AlexNet",
         "resnet50": "ResNet-50",
-        "vit": "ViT-B/16",
+        "vit": "ViT",
         "dino": "DINOv2",
         "clip": "CLIP",
         "gpt2": "GPT-2 XL",
     }
     if family in labels:
-        label = labels[family]
-        if model.get("weights") in {"pretrained", "untrained"} and family in {
-            "alexnet", "resnet50", "vit"
-        }:
-            state = "trained" if model["weights"] == "pretrained" else "untrained"
-            return f"{label}  ·  {state}"
-        return label
+        return labels[family]
     label = model.get("label", model_id)
     return label.split(" (")[0]
 
@@ -87,19 +81,26 @@ def _ordered_models(models: dict) -> list[tuple[str, dict]]:
             if model.get("family") != "random_projection"]
 
 
-def _row_positions(models: list[tuple[str, dict]]) -> np.ndarray:
-    """Keep trained/untrained pairs tight and add air between model families."""
-    positions: list[float] = []
-    position = 0.0
-    previous_family = None
+def _group_layout(
+    models: list[tuple[str, dict]],
+) -> tuple[np.ndarray, np.ndarray, list[str]]:
+    """Place variants within one compact row and label each model family once."""
+    groups: list[list[tuple[str, dict]]] = []
     for model_id, model in models:
         family = model.get("family", model_id)
-        if previous_family is not None and family != previous_family:
-            position += 0.24
-        positions.append(position)
-        position += 1.0
-        previous_family = family
-    return np.asarray(positions)
+        if groups and groups[-1][0][1].get("family", groups[-1][0][0]) == family:
+            groups[-1].append((model_id, model))
+        else:
+            groups.append([(model_id, model)])
+
+    rows: list[float] = []
+    labels: list[str] = []
+    for center, group in enumerate(groups):
+        offsets = np.linspace(-0.19, 0.19, len(group)) if len(group) > 1 else np.zeros(1)
+        rows.extend(center + offsets)
+        labels.append(_short_label(*group[0]))
+    ticks = np.arange(len(groups), dtype=float)
+    return np.asarray(rows), ticks, labels
 
 
 def _axis_limit(document: dict) -> tuple[float, float]:
@@ -122,7 +123,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
         model for model in document["models"].values()
         if model.get("family") == "random_projection"
     )
-    y = _row_positions(models)
+    y, group_ticks, group_labels = _group_layout(models)
     xlim = _axis_limit(document)
 
     plt.rcParams.update({
@@ -140,7 +141,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
         "svg.fonttype": "none",
     })
 
-    figure_height = max(3.8, min(6.4, 2.8 + 0.4 * len(models)))
+    figure_height = max(4.5, min(5.6, 2.8 + 0.45 * len(group_ticks)))
     fig, axes = plt.subplots(1, 2, figsize=(11.2, figure_height), sharex=True, sharey=True)
     fig.patch.set_facecolor(PAPER)
     panel_titles = {
@@ -162,7 +163,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
             color = CHAMPION if champion else BASELINE
 
             ax.barh(
-                row, mean, height=0.57,
+                row, mean, height=0.34,
                 facecolor=PAPER if untrained else color,
                 edgecolor=color,
                 linewidth=1.35 if untrained else 0,
@@ -170,27 +171,22 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
                 zorder=2,
             )
             offsets = np.linspace(-0.035, 0.035, len(subjects)) if len(subjects) > 1 else [0]
-            ax.scatter(subjects, row - 0.19 + offsets, s=20, facecolor=PAPER,
+            ax.scatter(subjects, row + offsets, s=18, facecolor=PAPER,
                        edgecolor=INK, linewidth=0.75, zorder=4)
-            ax.text(mean + 0.012 * (xlim[1] - xlim[0]), row, f"{mean:.3f}",
-                    va="center", ha="left", fontsize=8.6, color=INK, zorder=5)
 
         subject_text = ", ".join(document["cohorts"][cohort])
         ax.set_title(panel_titles[cohort], loc="left", color=INK, pad=16)
         ax.text(0, 1.012, f"Subjects {subject_text}  ·  equal-weight mean",
                 transform=ax.transAxes, ha="left", va="bottom", color=MUTED, fontsize=8.6)
-        ax.text(random_mean, -0.72, f" random  {random_mean:.3f}", color=RANDOM,
-                fontsize=8, ha="left", va="center")
         ax.set_xlim(xlim)
-        ax.set_ylim(y[-1] + 0.65, -1.05)
+        ax.set_ylim(group_ticks[-1] + 0.55, -0.65)
         ax.xaxis.grid(True, color=GRID, linewidth=0.75, zorder=0)
         ax.yaxis.grid(False)
         ax.spines[["top", "right", "left"]].set_visible(False)
         ax.tick_params(axis="x", colors=MUTED, length=0, pad=7)
         ax.tick_params(axis="y", length=0, pad=10)
 
-    labels = [_short_label(model_id, model) for model_id, model in models]
-    axes[0].set_yticks(y, labels=labels, color=INK)
+    axes[0].set_yticks(group_ticks, labels=group_labels, color=INK)
     axes[1].tick_params(axis="y", labelleft=False)
     metric = METRIC_LABELS.get(dataset["metric"], dataset["metric"].replace("_", " ").title())
     fig.supxlabel(metric, x=0.59, y=0.075, color=INK, fontsize=10)
@@ -198,17 +194,17 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
     title = DATASET_LABELS.get(dataset["id"], dataset["id"].upper())
     fig.suptitle(f"{title}: model generalization across subjects", x=0.095, y=0.975,
                  ha="left", color=INK, fontsize=16, fontweight=650)
-    fig.text(0.095, 0.925,
+    fig.text(0.095, 0.90,
              "Bars show cohort means; points show individual subjects. Higher is better.",
              ha="left", color=MUTED, fontsize=9.4)
 
     legend = [
-        Patch(facecolor=CHAMPION, edgecolor="none", label="Searched champion · never trained"),
-        Patch(facecolor=BASELINE, edgecolor="none", label="Pretrained baseline"),
+        Patch(facecolor=CHAMPION, edgecolor="none", label="Champion · never trained"),
+        Patch(facecolor=BASELINE, edgecolor="none", label="Trained"),
     ]
     if any(model.get("weights") == "untrained" for _, model in models):
         legend.append(Patch(facecolor=PAPER, edgecolor=BASELINE, hatch="////",
-                            label="Untrained baseline"))
+                            label="Untrained"))
     legend.extend([
         Line2D([0], [0], color=RANDOM, linewidth=1.35, linestyle=(0, (2.2, 2.4)),
                label="Random projection"),
@@ -219,7 +215,8 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
                ncol=len(legend), frameon=False, handlelength=1.7,
                columnspacing=1.6, fontsize=8.5)
 
-    fig.subplots_adjust(left=0.185, right=0.985, top=0.845, bottom=0.16, wspace=0.12)
+    axes_top = 0.72 if figure_height < 5 else 0.79
+    fig.subplots_adjust(left=0.145, right=0.985, top=axes_top, bottom=0.18, wspace=0.12)
     output.parent.mkdir(parents=True, exist_ok=True)
     save_kwargs = {"bbox_inches": "tight", "facecolor": PAPER}
     if output.suffix.lower() == ".png":
