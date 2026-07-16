@@ -2,7 +2,8 @@
 
 One champion for each dataset's canonical search cohort. Regenerate the models with
 `python runs/best/export_champions.py`, then generate the complete model-first result with
-`experiments/evaluation/run.py`. The latter writes `evaluation.json` beside `model.py`.
+`python experiments/evaluation/run.py --dataset <dataset>`. The evaluator uses this exported model
+directly and writes `evaluation.json` beside it; no original search-run selection is required.
 
 An existing evaluation is kept only while its champion SHA256 matches the exported model.
 NSD and NNN use noise-normalized r2; TVSD, Huth, and iEEG use raw mean Pearson r.

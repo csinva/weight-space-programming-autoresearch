@@ -18,20 +18,20 @@ only writer of `evaluation.json`. `vision.py` and `language.py` are scoring tool
 paper-result files.
 
 ```bash
-python experiments/evaluation/run.py --run runs/nsd__DATE
-python experiments/evaluation/run.py --run runs/tvsd__DATE
-python experiments/evaluation/run.py --run runs/nnn__DATE
-python experiments/evaluation/run.py --run runs/huth__DATE
-python experiments/evaluation/run.py --run runs/ieeg__DATE
+python experiments/evaluation/run.py --dataset nsd
+python experiments/evaluation/run.py --dataset tvsd
+python experiments/evaluation/run.py --dataset nnn
+python experiments/evaluation/run.py --dataset huth
+python experiments/evaluation/run.py --dataset ieeg
 ```
 
-Development results use the stable path
-`experiments/evaluation/results/<dataset>/evaluation.json`. To publish a result beside the committed
-champion, first export the champion and then evaluate that exact file:
+The evaluator never asks which search run to use. The exporter has already made that decision by
+selecting the best run matching the dataset's predefined search cohort. Evaluation reads that exact
+`runs/best/<dataset>/model.py`, verifies its provenance against `datasets.py`, and writes beside it:
 
 ```bash
 python runs/best/export_champions.py
-python experiments/evaluation/run.py --run runs/nsd__DATE --model runs/best/nsd/model.py
+python experiments/evaluation/run.py --dataset nsd
 ```
 
 The published layout is `runs/best/<dataset>/{model.py,evaluation.json}`. The JSON is model-first:

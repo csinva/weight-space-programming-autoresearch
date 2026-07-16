@@ -4,9 +4,7 @@
 Every model is scored separately on every search and held-out subject through the exact harness
 reward. This is the only writer of the canonical model-first ``evaluation.json`` artifact.
 
-    python experiments/evaluation/run.py --run runs/nsd__DATE
-    python experiments/evaluation/run.py --run runs/nsd__DATE \
-        --model runs/best/nsd/model.py --output runs/best/nsd/evaluation.json
+    python experiments/evaluation/run.py --dataset nsd
 """
 from __future__ import annotations
 
@@ -14,6 +12,7 @@ import argparse
 from datetime import datetime
 import importlib.util
 import os
+import re
 import subprocess
 import sys
 import time
@@ -23,11 +22,9 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
-import hub                                            # noqa: E402
 from common import cohort_scores, sha256_file, validate_evaluation, write_evaluation  # noqa: E402
-from datasets import evaluation_for                 # noqa: E402
+from datasets import DATASETS, evaluation_for       # noqa: E402
 
-RESULTS = os.path.join(HERE, "results")
 BASELINE_MODEL = os.path.join(REPO, "model.py")
 _NO_CAP = "1000000000000"
 
@@ -63,22 +60,44 @@ def load_model(path):
     return mod.MODEL
 
 
-def db_champion(run):
-    """Return the full highest-reward row, with its archive path repaired after run renames."""
-    if not os.path.exists(os.path.join(run, "search.db")):
-        raise SystemExit(f"no search.db in {run}")
-    champion = hub.champion(run)
-    if champion is None:
-        raise SystemExit(f"no scored models in {run}")
-    champion["path"] = os.path.join(run, "models", f"{champion['id']}.py")
-    return champion
+def model_provenance(path):
+    """Read the structured provenance header written by ``runs/best/export_champions.py``."""
+    with open(path, errors="replace") as f:
+        header = "".join(f.readlines()[:8])
+
+    def field(name):
+        match = re.search(rf"(?:^# |   ){re.escape(name)}: (.*?)(?=   [^:]+: |$)",
+                          header, flags=re.MULTILINE)
+        return match.group(1).strip() if match else None
+
+    provenance = {
+        "dataset": field("dataset"),
+        "subjects": field("subjects"),
+        "test_corr": field("test_corr"),
+        "n_params": field("n_params"),
+        "source_run": field("source run"),
+        "model_id": field("model id"),
+        "idea": field("idea"),
+    }
+    required = ("dataset", "subjects", "test_corr", "source_run", "model_id")
+    missing = [name for name in required if not provenance[name]]
+    if missing:
+        raise SystemExit(
+            f"{path} is missing exporter provenance ({', '.join(missing)}); "
+            "regenerate it with runs/best/export_champions.py")
+    provenance["test_corr"] = float(provenance["test_corr"])
+    if provenance["n_params"] and provenance["n_params"] != "?":
+        provenance["n_params"] = int(provenance["n_params"].replace(",", ""))
+    else:
+        provenance["n_params"] = None
+    return provenance
 
 
 def baseline_specs(domain):
     return VISION_BASELINES if domain == "vision" else LANGUAGE_BASELINES
 
 
-def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
+def score_subject(dataset, subject, champ_path, lm_cache):
     """Score all requested models on one subject, keyed by stable schema model IDs."""
     os.environ["NEURO_DATASET"] = dataset
     os.environ["NEURO_SUBJECT"] = str(subject)
@@ -95,9 +114,6 @@ def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
         "champion": R.evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
         "random_projection": R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"],
     }
-    if not with_baselines:
-        return out
-
     device = R._readout_device()
     if evaluation_for(dataset)["domain"] == "vision":
         import vision as V
@@ -124,13 +140,6 @@ def git_commit():
         return None
 
 
-def default_output(dataset, champ_path):
-    best_model = os.path.join(REPO, "runs", "best", dataset, "model.py")
-    if os.path.realpath(champ_path) == os.path.realpath(best_model):
-        return os.path.join(os.path.dirname(best_model), "evaluation.json")
-    return os.path.join(RESULTS, dataset, "evaluation.json")
-
-
 def model_record(spec, scores):
     return {
         "label": spec["label"],
@@ -143,30 +152,29 @@ def model_record(spec, scores):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--run", required=True, help="search run dir (holds search.db + models/)")
-    p.add_argument("--model", help="model.py to evaluate (default: the run's DB champion)")
-    p.add_argument("--dataset", help="override dataset (default: inferred from run dir)")
-    p.add_argument("--output", help="write the canonical JSON to this exact path")
+    p.add_argument("--dataset", required=True, choices=DATASETS,
+                   help="dataset whose exported best model should be evaluated")
+    p.add_argument("--output", help="override runs/best/<dataset>/evaluation.json")
     a = p.parse_args(argv)
 
-    dataset = a.dataset or os.path.basename(os.path.normpath(a.run)).split("__")[0]
+    dataset = a.dataset
     config = evaluation_for(dataset)
     cohorts = {"search": list(config["search"]), "heldout": list(config["heldout"])}
-
-    db_row = db_champion(a.run)
-    champ_path = os.path.abspath(a.model or db_row["path"])
+    champ_path = os.path.join(REPO, "runs", "best", dataset, "model.py")
     if not os.path.exists(champ_path):
-        raise SystemExit(f"missing champion model: {champ_path}")
-    exact_db_model = os.path.realpath(champ_path) == os.path.realpath(db_row["path"])
-    with open(champ_path, errors="replace") as f:
-        exported_db_model = f"model id: {db_row['id']}" in "".join(f.readlines()[:8])
-    matches_db = exact_db_model or exported_db_model
-    champ_id = db_row["id"] if matches_db else os.path.basename(champ_path).removesuffix(".py")
-    champ_score = db_row["test_corr"] if matches_db else None
-    out = os.path.abspath(a.output or default_output(dataset, champ_path))
+        raise SystemExit(f"missing {champ_path}; run runs/best/export_champions.py first")
+    provenance = model_provenance(champ_path)
+    expected_subjects = ",".join(cohorts["search"])
+    actual_subjects = ",".join(s.strip() for s in provenance["subjects"].split(","))
+    if provenance["dataset"] != dataset or actual_subjects != expected_subjects:
+        raise SystemExit(
+            f"{champ_path} was exported for {provenance['dataset']} subjects {actual_subjects}, "
+            f"but the canonical {dataset} search cohort is {expected_subjects}; regenerate runs/best")
+    champ_id = provenance["model_id"]
+    champ_score = provenance["test_corr"]
+    out = os.path.abspath(a.output or os.path.join(os.path.dirname(champ_path), "evaluation.json"))
 
-    suffix = f" (search reward {champ_score:.4f})" if champ_score is not None else ""
-    print(f"=== eval | {dataset} | champion {champ_id}{suffix} ===")
+    print(f"=== eval | {dataset} | champion {champ_id} (search reward {champ_score:.4f}) ===")
     print(f"  {config['domain']} | search {cohorts['search']} | held-out {cohorts['heldout']}\n")
 
     per_subject = {"search": {}, "heldout": {}}
@@ -174,7 +182,7 @@ def main(argv=None):
     for cohort in ("search", "heldout"):
         for subject in cohorts[cohort]:
             started = time.time()
-            scores = score_subject(dataset, subject, champ_path, True, lm_cache)
+            scores = score_subject(dataset, subject, champ_path, lm_cache)
             per_subject[cohort][str(subject)] = scores
             print(f"  [{cohort:>7}] {subject}: champion {scores['champion']:.4f}  "
                   f"({time.time() - started:.0f}s)")
@@ -199,8 +207,8 @@ def main(argv=None):
             "model_id": champ_id,
             "model_file": os.path.relpath(champ_path, os.path.dirname(out)),
             "model_sha256": sha256_file(champ_path),
-            "n_params": db_row.get("n_params") if matches_db else getattr(loaded, "n_params", None),
-            "idea": db_row.get("idea") if matches_db else getattr(loaded, "idea", None),
+            "n_params": getattr(loaded, "n_params", provenance["n_params"]),
+            "idea": provenance["idea"],
             "search_reward": champ_score,
             "scores": scores_by_model["champion"],
         },
@@ -221,7 +229,7 @@ def main(argv=None):
         "schema_version": 1,
         "dataset": {"id": dataset, "domain": config["domain"], "metric": config["metric"]},
         "evaluation": {
-            "source_run": os.path.relpath(os.path.abspath(a.run), REPO),
+            "source_run": os.path.join("runs", provenance["source_run"]),
             "git_commit": git_commit(),
             "evaluated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "readout": os.environ.get("NEURO_READOUT", "fast"),

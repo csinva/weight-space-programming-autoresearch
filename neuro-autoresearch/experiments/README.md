@@ -7,11 +7,11 @@ Scientific studies built with the autoresearch framework:
 - `complementarity.py` tests whether the champion explains neural variance missed by AlexNet.
 - `imagenet/` trains the champion's ventral weights on ImageNet and re-evaluates the result on NSD.
 
-Run commands from the repository root. Generated outputs stay beside their experiment under an
-ignored `results/` directory, or in the source search run when they belong to that run.
+Run commands from the repository root. Evaluation writes beside the exported champion under
+`runs/best/<dataset>/`; other generated outputs stay under ignored `results/` directories.
 
 ```bash
-python experiments/evaluation/run.py --run runs/nsd__DATE
+python experiments/evaluation/run.py --dataset nsd
 python experiments/complementarity.py --champion runs/nsd__DATE/models/MODEL.py
 python experiments/imagenet/train.py --epochs 5
 python experiments/imagenet/evaluate.py

@@ -82,7 +82,7 @@ activated venv (or invoke `.venv/bin/python` explicitly).
 source .venv/bin/activate                # REQUIRED before any of the below
 python -m harness.run                   # evaluate the current model.py once (manual)
 NEURO_READOUT=himalaya python -m harness.run     # reference readout (default: the ~20× faster fast ridge)
-python experiments/evaluation/run.py --run runs/nsd__DATE   # champion vs baselines × (search, held-out) subjects → matrix
+python experiments/evaluation/run.py --dataset nsd   # exported champion vs baselines × search/held-out subjects
 python scripts/benchmark/readout.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
 search/run.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 1h
 search/run.sh nsd --hours 12 --effort high    # ONE effort knob for ALL proposers + conductor (low|medium|high|xhigh|max; default xhigh)
