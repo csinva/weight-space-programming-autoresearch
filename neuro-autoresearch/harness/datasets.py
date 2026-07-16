@@ -78,7 +78,7 @@ PRESETS: dict[str, Dataset] = {
     # "lanczos_fir", applied by the harness between the model and the ridge), and ridge-fit to the
     # TR-rate BOLD responses over ALL cortical voxels (raw mean r; fixed held-out test stories, as in
     # the reference). Ships as a BAKED blob in data/huth/<study>.pt (per-word X, TR responses Y, and
-    # the per-story Lanczos operators), built once by scripts/process_dataset/huth.py.
+    # the per-story Lanczos operators), built once by scripts/prepare_data/huth.py.
     "huth": Dataset(
         study="HuthLangFmriUTS03",
         loader="huth",
@@ -108,7 +108,7 @@ PRESETS: dict[str, Dataset] = {
     # epilepsy patients listening to a 30-min podcast (~5.1k transcript words). Single-subject
     # by necessity (each patient has different electrodes; default subject 01). Each transcript
     # Word triggers a 0.5s epoch; the target is the HIGH-GAMMA (70-200 Hz) envelope -- the
-    # standard ECoG cognition signal, staged by scripts/process_dataset/audio_neural.py --
+    # standard ECoG cognition signal, staged by scripts/prepare_data/audio_neural.py --
     # word-averaged (neural_aggregation="mean") to one power value per electrode per word.
     # STIMULUS is "chars": each word maps to the char-id encoding of its N-gram (the word + the
     # preceding stim_ngram-1 words), so a hand-written char-transformer model.py must build any
@@ -132,7 +132,7 @@ PRESETS: dict[str, Dataset] = {
     # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
     # F/N via NEURO_SUBJECT. Runtime reads only the in-repo data/tvsd/ tree (native JPEGs + a .pt of
     # the MUA); the gated THINGS images + raw .mat are needed ONLY by the build step
-    # (scripts.process_dataset.tvsd, see its RAW + THINGS_IMAGES).
+    # (scripts.prepare_data.tvsd, see its RAW + THINGS_IMAGES).
     "tvsd": Dataset(
         study="TvsdMonkeyF",
         loader="tvsd",

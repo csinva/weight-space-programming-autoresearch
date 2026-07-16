@@ -87,7 +87,7 @@ _PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path")
 
 def _is_proposer() -> bool:
     """True when running inside a sandboxed proposer island (``LAB_PROPOSER`` set by ``proposer.sh``).
-    The conductor (``conduct.sh``) and the manual/launcher paths leave it unset, so they keep full
+    The conductor (``search/conductor/loop.sh``) and manual/launcher paths leave it unset, so they keep full
     score visibility."""
     return bool(os.environ.get("LAB_PROPOSER"))
 

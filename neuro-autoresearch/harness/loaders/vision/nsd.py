@@ -26,7 +26,7 @@ from harness.loaders.shared import (
 
 # The NSD subjects staged in-repo (data/nsd/neural/subjNN.pt): subj 1+2 are the search reward,
 # 5+7 the held-out cross-subject set. Other subjects are intentionally not provisioned -- add one
-# by repacking it with scripts.process_dataset.nsd, then list it here.
+# by repacking it with scripts.prepare_data.nsd, then list it here.
 _NSD_SUBJECTS = (1, 2, 5, 7)
 
 
@@ -38,7 +38,7 @@ def _subject(d: Dataset) -> str:
     if s not in _NSD_SUBJECTS:
         raise ValueError(
             f"NSD subject {s} is not staged in-repo; valid subjects are {list(_NSD_SUBJECTS)}. "
-            f"Repack it with `python -m scripts.process_dataset.nsd` and add it to _NSD_SUBJECTS.")
+            f"Repack it with `python -m scripts.prepare_data.nsd` and add it to _NSD_SUBJECTS.")
     return f"{s:02d}"
 
 
@@ -56,7 +56,7 @@ def _build_X(d: Dataset, nsd_ids: np.ndarray, subject: str) -> np.ndarray:
     if not os.path.exists(images_h5):
         raise FileNotFoundError(
             f"NSD stimuli not staged in-repo at {images_h5!r}. data/nsd/ is the only source -- "
-            f"run `python -m scripts.process_dataset.nsd` to build it.")
+            f"run `python -m scripts.prepare_data.nsd` to build it.")
     with h5py.File(images_h5, "r") as h5:                          # in-repo store: one (425,425,3) per id
         X = np.empty((len(nsd_ids), im * im * 3), dtype="float32")
         for s in range(0, len(nsd_ids), 1000):
@@ -109,7 +109,7 @@ def _nsd_roi_masks(rois, Y, n_early):
 def _ncsnr_select(blob, Ytr, Yte, roi_masks):
     """Per-voxel NSD noise ceiling: keep only reliable voxels AND return the ceiling for scoring.
 
-    NSD ships a per-voxel ncsnr (provisioned into ``blob['ncsnr']`` by scripts.process_dataset.nsd,
+    NSD ships a per-voxel ncsnr (provisioned into ``blob['ncsnr']`` by scripts.prepare_data.nsd,
     aligned column-for-column to the early+ventral betas). From it the averaged-over-n R^2 ceiling
     is ``NC_r2 = ncsnr^2 / (ncsnr^2 + 1/n)`` (n=3 reps), whose sqrt ``NC_r`` is the Pearson-r ceiling.
     Voxels with ``NC_r < NSD_NCSNR_MIN`` (operator knob; default 0.2, the field-standard reliability
@@ -123,7 +123,7 @@ def _ncsnr_select(blob, Ytr, Yte, roi_masks):
         if thresh > 0:
             raise RuntimeError(
                 "NSD_NCSNR_MIN is set but this NSD blob has no 'ncsnr' -- (re)run "
-                "`python -m scripts.process_dataset.nsd` to fetch + align it.")
+                "`python -m scripts.prepare_data.nsd` to fetch + align it.")
         return Ytr, Yte, roi_masks, None
     nc = blob["ncsnr"]
     ncsnr = np.concatenate([np.asarray(nc["early"], "float32"),
@@ -154,7 +154,7 @@ def load_nsd(d: Dataset):
     if not os.path.exists(pt):
         raise FileNotFoundError(
             f"NSD subject {subject} not staged in-repo at {pt!r}. data/nsd/ is the only source -- "
-            f"run `python -m scripts.process_dataset.nsd` to repack it.")
+            f"run `python -m scripts.prepare_data.nsd` to repack it.")
     blob = torch.load(pt, weights_only=False)                  # in-repo repacked blob
     rois = blob["rois"]
     early = np.asarray(rois["early"], dtype="float32")

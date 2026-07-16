@@ -143,13 +143,13 @@ def _load_nnn_processed(d: Dataset, proc: str, types: set[int] | None):
         if "monkey" not in blob:              # loops this per subject and averages -- see reward.py)
             raise RuntimeError(
                 "NEURO_SUBJECT selects a monkey but this all_units.pt has no 'monkey' field -- "
-                "(re)run `python -m scripts.process_dataset.nnn` to add it.")
+                "(re)run `python -m scripts.prepare_data.nnn` to add it.")
         keep &= (np.asarray(blob["monkey"]).ravel() == mk)
     if types is not None:
         if "unit_type" not in blob:
             raise RuntimeError(
                 "NNN_UNIT_TYPE is set but this all_units.pt has no 'unit_type' -- (re)run "
-                "`python -m scripts.process_dataset.nnn` to add it.")
+                "`python -m scripts.prepare_data.nnn` to add it.")
         keep &= np.isin(np.asarray(blob["unit_type"]).ravel(), list(types))
     Y = np.asarray(blob["Y"])[:, keep].astype("float32")
     areas = np.asarray(blob["areas"])[keep]
@@ -173,7 +173,7 @@ def load_nnn(d: Dataset):
     if not os.path.isdir(proc):
         raise FileNotFoundError(
             f"NNN not staged in-repo at {proc!r}. data/nnn/ is the only source -- "
-            f"run `python -m scripts.process_dataset.nnn` to build it.")
+            f"run `python -m scripts.prepare_data.nnn` to build it.")
     types = _nnn_unit_types()
     X, Y, areas, nc = _load_nnn_processed(d, proc, types)
     n_src = "data/nnn"

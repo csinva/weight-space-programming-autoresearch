@@ -1,7 +1,7 @@
 """Huth natural-language fMRI loader + feature pipeline (LeBel 2023 / OpenNeuro ds003020) -- the
 circuit-building-autoresearch dataset.
 
-Runtime reads ONLY the baked ``data/huth/<study>.pt`` blob staged by ``scripts/process_dataset/huth.py``.
+Runtime reads ONLY the baked ``data/huth/<study>.pt`` blob staged by ``scripts/prepare_data/huth.py``.
 Following the reference src/features.py, the encoding is TR-rate: the model embeds each word's 10-gram
 (per-word X), then ``apply_feature_pipeline`` Lanczos-downsamples those embeddings onto the fMRI TR
 grid, z-scores per story, and adds 4 FIR delays -- run from ``harness.reward`` between the model's
@@ -28,7 +28,7 @@ def load_huth(d: Dataset):
     if not os.path.exists(path):
         raise FileNotFoundError(
             f"{d.study} expects the in-repo blob {path!r}; data/huth/ is the only runtime source -- "
-            f"stage it once with `python -m scripts.process_dataset.huth --subject {d.subject or 'UTS03'}`.")
+            f"stage it once with `python -m scripts.prepare_data.huth --subject {d.subject or 'UTS03'}`.")
     b = torch.load(path, weights_only=False)
 
     # NEURO_HUTH_NUM_TRAIN: use only the first N train stories (the reference's `num_train` knob; its

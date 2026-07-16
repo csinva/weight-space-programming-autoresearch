@@ -33,7 +33,7 @@ from harness.loaders.shared import RawPixels, _study_path, _cache_dir, drop_cons
 
 
 # Studies whose continuous neural signal has a slim, raw-free data/<ds>/ tree
-# (written by scripts/process_dataset/audio_neural.py). Maps the study name to the
+# (written by scripts/prepare_data/audio_neural.py). Maps the study name to the
 # processed-dir key; when that dir exists the loader rebuilds events from it instead
 # of touching the raw .fif/edf/BIDS.
 _PROCESSED_KEY = {"Zada2025Podcast": "ieeg"}
@@ -56,7 +56,7 @@ def _processed_audio_events(out: str, subject: str = ""):
     fif = os.path.join(out, "neural", f"continuous_{meta['modality']}{suffix}.fif")
     if not os.path.exists(fif):
         raise FileNotFoundError(
-            f"neural file {fif!r} not staged -- run `python -m scripts.process_dataset.audio_neural`.")
+            f"neural file {fif!r} not staged -- run `python -m scripts.prepare_data.audio_neural`.")
     timeline, subject = "t0", (subject or meta["subject"])
 
     neural_row = {
@@ -352,7 +352,7 @@ def load_timeline(d: Dataset):
         if d.study in _PROCESSED_KEY:   # iEEG: the in-repo data/<ds>/ tree is the only source
             raise FileNotFoundError(
                 f"{d.study} expects the in-repo data/{_PROCESSED_KEY[d.study]}/ tree at {out!r}; "
-                f"run `python -m scripts.process_dataset.audio_neural "
+                f"run `python -m scripts.prepare_data.audio_neural "
                 f"--dataset {_PROCESSED_KEY[d.study]}`.")
         study = ns.Study(name=d.study, path=_study_path(d))
         if d.download:

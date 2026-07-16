@@ -135,18 +135,19 @@ NEURO_DATASET=ieeg python -m harness.run       # pick a preset: nsd | nnn | huth
 NEURO_READOUT=himalaya python -m harness.run   # reference readout (default = the ~20× faster fast ridge)
 ```
 
-**Open-ended search** (unattended) — `search.sh` scaffolds a dated run and supervises three
+**Open-ended search** (unattended) — `search/run.sh` scaffolds a dated run and supervises three
 decentralized, self-paced loops with no synchronization barrier:
 ```bash
-search/search.sh nsd --hours 12                # 10 proposers + 1 GPU evaluator + a conductor steering every 60m
-search/search.sh nsd --hours 12 --effort high  # ONE effort knob (low|medium|high|xhigh|max) for every agent
-search/search.sh nsd --hours 12 --epoch-mins 0 # conductor OFF — pure decentralized pool
-search/search.sh nnn --hours 6 --gpu 1         # pin to GPU 1 → run a dataset per card in parallel
+search/run.sh nsd --hours 12                # 10 proposers + 1 GPU evaluator + a conductor steering every 60m
+search/run.sh nsd --hours 12 --effort high  # ONE effort knob (low|medium|high|xhigh|max) for every agent
+search/run.sh nsd --hours 12 --epoch-mins 0 # conductor OFF — pure decentralized pool
+search/run.sh nnn --hours 6 --gpu 1         # pin to GPU 1 → run a dataset per card in parallel
 ```
 - **Proposer pool** — N headless LLM CLIs, each confined to its own sandbox, editing its own
   `model.py`, proposing it, and blocking only on *its own* score.
 - **GPU evaluator** — claims queued models one at a time, scores each with the fixed harness in
-  isolation, and writes the result back (`repair.sh` auto-fixes small mechanical faults, ≤2 tries).
+  isolation, and writes the result back (`search/evaluator/repair.sh` auto-fixes small mechanical
+  faults, ≤2 tries).
 - **Conductor** (optional) — every `--epoch-mins` writes one broad, **advisory** `direction.txt` per
   proposer to keep the pool diverse and unstuck; it never gates the queue or scoring.
 
@@ -168,20 +169,22 @@ python hub.py summary                            # one-line DB tally + current c
 ## Repo layout
 
 ```
-model.py            EVOLVED — the one model (seed: random-projection baseline)
-hub.py              the ONE API + CLI over a run's search.db (DB / GPU / dataset hidden)
-search/             the open-ended loop: search.sh + proposer pool + GPU evaluator + conductor
-  proposer.md         the task brief handed to each proposer
-harness/            FIXED evaluation — must not be edited
-  datasets.py         the Dataset registry (pick one via NEURO_DATASET)
-  loaders/            the only file/network I/O (timeline studies + pre-aligned vision tables)
-  reward.py           the predictivity reward: forward → readout → test_corr
-  ridge.py            the readout: fast eigh+LOO (default) | himalaya, via NEURO_READOUT
-  roi.py              reward-region target selection + advisory per-ROI breakdown
-  run.py              the manual single-eval driver — `python -m harness.run`
-scripts/            dataset staging, eval/ (champion-vs-baseline matrix), profile_readout/, and run scaffolding
-docs/               human docs — start at docs/overview.html
-runs/<dataset>__<date>/   one search: search.db + models/ + proposers/ + eval/ (gitignored)
+model.py              EVOLVED — the one model (seed: random-projection baseline)
+hub.py                the API + CLI over a run's search.db
+harness/              FIXED evaluation — loaders, ridge readout, reward, and manual runner
+search/               the core autoresearch framework
+  run.sh                the single search entry point
+  proposer/             proposer pool, worker, and prompt
+  evaluator/            evaluator pool, worker, and repair agent
+  conductor/            advisory conductor loop and prompt
+dashboard/            live view of a running search
+experiments/          scientific studies built with the framework
+  evaluation/           baselines and held-out generalization
+  complementarity.py    champion + pretrained-model complementarity
+  imagenet/             ImageNet training and neural re-evaluation
+scripts/              operational support: prepare_data/, benchmark/, simplify/
+docs/                 human docs — start at docs/overview.html
+runs/<dataset>__<date>/ one search: search.db + models/ + proposers/ + eval/ (gitignored)
 ```
 
 ## The experiments it enables

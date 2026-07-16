@@ -184,14 +184,14 @@ def load_tvsd(d: Dataset):
     ncsnr reliability cut. The split is the dataset's own (22248 train / 100 repeated test images).
     Reads the in-repo processed tree (data/tvsd/) only -- native JPEGs + a .pt of the MUA -- so the
     gated THINGS images and the raw .mat are never needed at runtime (stage them with
-    scripts.process_dataset.tvsd, which is the only raw reader).
+    scripts.prepare_data.tvsd, which is the only raw reader).
     """
     subject = (d.subject or "F").upper()
     proc = processed_dir("tvsd")
     if not os.path.isdir(proc):
         raise FileNotFoundError(
             f"TVSD not staged in-repo at {proc!r}. data/tvsd/ is the only source -- "
-            f"run `python -m scripts.process_dataset.tvsd` to build it.")
+            f"run `python -m scripts.prepare_data.tvsd` to build it.")
     blob = torch.load(os.path.join(proc, "neural", f"monkey{subject}.pt"), weights_only=False)
     Y_train = np.asarray(blob["train_MUA"], dtype=np.float32)
     Y_test = np.asarray(blob["test_MUA"], dtype=np.float32)
@@ -200,7 +200,7 @@ def load_tvsd(d: Dataset):
     if "oracle" not in blob:
         raise RuntimeError(
             f"TVSD monkey{subject} blob at {proc!r} has no 'oracle' noise ceiling "
-            f"-- re-run `python -m scripts.process_dataset.tvsd` to (re)stage it.")
+            f"-- re-run `python -m scripts.prepare_data.tvsd` to (re)stage it.")
     oracle = blob["oracle"]
     X_train, X_test = _tvsd_build_X_processed(d)
     for split, nx, ny in (("train", len(X_train), len(Y_train)),
@@ -209,7 +209,7 @@ def load_tvsd(d: Dataset):
             raise RuntimeError(
                 f"TVSD monkey{subject}: {split} stimuli/neural count mismatch "
                 f"({nx} images vs {ny} MUA rows). The processed tree at {proc!r} is partial "
-                f"-- re-run `python -m scripts.process_dataset.tvsd` to stage all images, or "
+                f"-- re-run `python -m scripts.prepare_data.tvsd` to stage all images, or "
                 f"`--n N` to stage a matched smoke subset of both.")
     Xtr, Xte = torch.as_tensor(X_train), torch.as_tensor(X_test)
     Ytr, Yte = torch.as_tensor(Y_train), torch.as_tensor(Y_test)
