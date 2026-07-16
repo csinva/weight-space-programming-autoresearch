@@ -21,7 +21,7 @@ GEN_SPLITS = {
     # UTS01/02/03. heldout is TBD (the shallow subjects are not staged yet), so generalize.py has no
     # held-out subjects for huth for now -- but the SEARCH subjects live here so every launcher reads
     # the same default.
-    "huth": {"axis": "NEURO_SUBJECT", "search": ["UTS01", "UTS02", "UTS03"], "heldout": []},
+    "huth": {"axis": "NEURO_SUBJECT", "search": ["UTS01", "UTS02"], "heldout": ["UTS03"]},
     # Future datasets that switch data by subject (tvsd) drop in the same shape.
 }
 
