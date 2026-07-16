@@ -22,7 +22,6 @@ import argparse
 import importlib.util
 import json
 import os
-import sqlite3
 import sys
 import time
 
@@ -31,10 +30,12 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
+import hub                                            # noqa: E402  (needs REPO on sys.path)
 from splits import split_for
 
 RESULTS = os.path.join(HERE, "results")
 BASELINE_MODEL = os.path.join(REPO, "model.py")     # the repo-root random-projection baseline
+_NO_CAP = "1000000000000"                           # re-scoring fixed reference models is not a proposal -> lift the cap
 
 # Reference baselines per modality: (name, weights). Untrained only where a random-init of the same
 # architecture is meaningful (AlexNet/ResNet/ViT); DINO/CLIP are pretrained-only.
@@ -54,57 +55,52 @@ def load_model(path):
 
 
 def db_champion(run):
-    """Highest-scoring scored model in the run's ``search.db`` -> ``{id, path, test_corr}``."""
-    db = os.path.join(run, "search.db")
-    if not os.path.exists(db):
+    """The run's highest-reward ok model -> ``{id, path, test_corr}`` (reuses ``hub.champion``)."""
+    if not os.path.exists(os.path.join(run, "search.db")):
         raise SystemExit(f"no search.db in {run}")
-    con = sqlite3.connect(db)
-    con.row_factory = sqlite3.Row
-    row = con.execute("SELECT id, path, test_corr FROM models WHERE status='ok' "
-                      "AND test_corr IS NOT NULL ORDER BY test_corr DESC LIMIT 1").fetchone()
-    con.close()
-    if row is None:
-        raise SystemExit(f"no scored models in {db}")
+    c = hub.champion(run)
+    if c is None:
+        raise SystemExit(f"no scored models in {run}")
     # the archived source is <run>/models/<id>.py (the path column's dir may be stale after a rename)
-    return {"id": row["id"], "path": os.path.join(run, "models", f"{row['id']}.py"),
-            "test_corr": row["test_corr"]}
+    return {"id": c["id"], "path": os.path.join(run, "models", f"{c['id']}.py"),
+            "test_corr": c["test_corr"]}
 
 
-def score_subject(dataset, subject, champ_path, with_baselines):
+def score_subject(dataset, subject, champ_path, with_baselines, lm_cache):
     """Rebind the harness to ONE subject, then score every model on it -> ``{label: test_corr}``.
 
-    The harness binds dataset/subject at import, so its modules are reloaded per subject.
+    The harness binds dataset/subject at import, so its modules are reloaded per subject. ``lm_cache``
+    carries the (name, weights) -> ContextualLM baselines so a big LM (GPT-2-XL) loads once, not per subject.
     """
     os.environ["NEURO_DATASET"] = dataset
     os.environ["NEURO_SUBJECT"] = str(subject)
     os.environ.pop("NEURO_SUBJECTS", None)              # single-subject reward, never the mean
-    os.environ["NEURO_MAX_PARAMS"] = "1000000000000"   # re-scoring fixed reference models is not a proposal -> no cap
-    for m in [k for k in list(sys.modules) if k.startswith("harness")]:
+    os.environ["NEURO_MAX_PARAMS"] = _NO_CAP
+    for m in [k for k in sys.modules if k.startswith("harness")]:
         del sys.modules[m]
     from harness.datasets import DATASET
     from harness.loaders import load_split
-    from harness.reward import evaluate_on_split
     from harness import reward as R
 
     split = load_split(DATASET)
-    out = {"champion": evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
-           "random-proj": evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"]}
+    out = {"champion": R.evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
+           "random-proj": R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"]}
     if not with_baselines:
         return out
 
     device = R._readout_device()
-    if DATASET.stimulus == "chars":                     # language datasets (ieeg, huth)
-        import language as L
-        for name, w in LANGUAGE_BASELINES:
-            lm = L.ContextualLM(name, device, w == "pretrained")
-            out[f"{name}-{w}"] = L.score_lang_subject(lm, dataset, str(subject), R, device)["test_corr"]
-            del lm
-    else:                                               # vision datasets (nsd, nnn, tvsd)
+    if DATASET.loader in ("nsd", "tvsd", "nnn"):        # vision datasets
         import vision as V
         Xtr, Xte, Ytr, Yte, roi_masks, nc = split
         for name, w in VISION_BASELINES:
             out[f"{name}-{w}"] = V.score_model(name, w, Xtr, Xte, Ytr, Yte, roi_masks, nc,
                                                DATASET, R, device, dim=2048, seed=0)["test_corr"]
+    else:                                               # language datasets (ieeg, huth)
+        import language as L
+        for name, w in LANGUAGE_BASELINES:
+            lm = lm_cache.get((name, w)) or L.ContextualLM(name, device, w == "pretrained")
+            lm_cache[(name, w)] = lm
+            out[f"{name}-{w}"] = L.score_lang_subject(lm, dataset, str(subject), R, device)["test_corr"]
     return out
 
 
@@ -124,28 +120,25 @@ def main(argv=None):
     a = p.parse_args(argv)
 
     dataset = a.dataset or os.path.basename(os.path.normpath(a.run)).split("__")[0]
-    if a.search_subjects or a.heldout_subjects:
-        if not (a.search_subjects and a.heldout_subjects):
-            p.error("--search-subjects and --heldout-subjects must be given together")
-        sp = {"axis": "NEURO_SUBJECT", "search": a.search_subjects.split(","),
-              "heldout": a.heldout_subjects.split(",")}
-    else:
-        sp = split_for(dataset)
+    if bool(a.search_subjects) != bool(a.heldout_subjects):
+        p.error("--search-subjects and --heldout-subjects must be given together")
+    sp = ({"axis": "NEURO_SUBJECT", "search": a.search_subjects.split(","),
+           "heldout": a.heldout_subjects.split(",")} if a.search_subjects else split_for(dataset))
     if a.model:
         champ_path, champ_id, champ_score = a.model, os.path.basename(a.model).removesuffix(".py"), None
     else:
         c = db_champion(a.run)
         champ_path, champ_id, champ_score = c["path"], c["id"], c["test_corr"]
 
-    print(f"=== eval | {dataset} | champion {champ_id}"
-          f"{f' (search reward {champ_score:.4f})' if champ_score is not None else ''} ===")
+    suffix = f" (search reward {champ_score:.4f})" if champ_score is not None else ""
+    print(f"=== eval | {dataset} | champion {champ_id}{suffix} ===")
     print(f"  search {sp['search']}  ->  held-out {sp['heldout']}\n")
 
-    rows = {}                                           # label -> {"search": [...], "heldout": [...]}
+    rows, lm_cache = {}, {}                              # label -> {"search": [...], "heldout": [...]}
     for kind in ("search", "heldout"):
         for subject in sp[kind]:
             t0 = time.time()
-            scores = score_subject(dataset, subject, champ_path, not a.no_baselines)
+            scores = score_subject(dataset, subject, champ_path, not a.no_baselines, lm_cache)
             for label, tc in scores.items():
                 rows.setdefault(label, {"search": [], "heldout": []})[kind].append(tc)
             print(f"  [{kind:>7}] {subject}: champion {scores['champion']:.4f}  ({time.time()-t0:.0f}s)")
