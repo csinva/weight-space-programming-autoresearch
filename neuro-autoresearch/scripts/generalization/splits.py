@@ -17,6 +17,11 @@ GEN_SPLITS = {
     # NNN: reward = the mean over search monkeys M1,M2,M3 (search/search.sh default);
     # M4,M5 held out, so generalization = predicting an UNSEEN animal's IT/EVC spiking.
     "nnn": {"axis": "NEURO_SUBJECT", "search": ["1", "2", "3"], "heldout": ["4", "5"]},
+    # Huth fMRI-language: reward = the mean over the three deeply-sampled reference subjects
+    # UTS01/02/03. heldout is TBD (the shallow subjects are not staged yet), so generalize.py has no
+    # held-out subjects for huth for now -- but the SEARCH subjects live here so every launcher reads
+    # the same default.
+    "huth": {"axis": "NEURO_SUBJECT", "search": ["UTS01", "UTS02", "UTS03"], "heldout": []},
     # Future datasets that switch data by subject (tvsd) drop in the same shape.
 }
 
@@ -27,3 +32,12 @@ def split_for(dataset: str) -> dict:
         raise SystemExit(f"no generalization split for dataset {dataset!r}; add one to "
                          f"scripts/generalization/splits.py (have: {list(GEN_SPLITS)})")
     return GEN_SPLITS[dataset]
+
+
+def search_subjects_csv(dataset: str) -> str:
+    """The dataset's SEARCH subjects as a comma string (e.g. ``"1,2"``), or ``""`` if the dataset has
+    no declared split (the caller then falls back to the preset's default subject). This is the ONE
+    source the search / distill / simplify launchers read for the per-dataset subject default, so the
+    search reward and the held-out generalization split can never drift apart. Never raises."""
+    sp = GEN_SPLITS.get(dataset)
+    return ",".join(sp["search"]) if sp else ""

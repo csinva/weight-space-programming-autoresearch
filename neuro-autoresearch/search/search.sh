@@ -24,6 +24,11 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
 
+# Operator dials (evaluator count, agent models/effort, timeouts) live in ONE file; values there are
+# DEFAULTS, so a pre-set env var or a CLI flag below still wins. Exported here -> inherited by every
+# child loop (propose/evaluate/conduct).
+[ -f "$REPO/search/config.env" ] && . "$REPO/search/config.env"
+
 # Generic flag parser: every "--key val" / "--key=val" lands in OPT[key]; the first bare arg is the
 # dataset. Resolve precedence is flag > env > default (below); GPU pins the whole run to one card.
 declare -A OPT; DATASET=""; pos=0
@@ -52,20 +57,16 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # random-models in hub.py) and forces the conductor OFF, so each proposer is an independent loop.
 # Default 0 = the full system (cross-island pollination + conductor).
 [ "${VANILLA_AUTORESEARCH:-0}" = 1 ] && { EPOCH=0; export VANILLA_AUTORESEARCH; echo "[search] VANILLA_AUTORESEARCH: cross-island OFF, conductor OFF (N independent loops)"; }
-# NSD reward defaults to the MEAN over search subjects 1+2 (only the average is recorded; proposers
-# stay blind) -- hold out the rest for generalization. Override with NEURO_SUBJECT (a single id like
-# `NEURO_SUBJECT=1` for one subject, or a comma list `NEURO_SUBJECT=1,2` for the mean).
-[ "$DATASET" = nsd ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2}"
-# iEEG reward = the cross-subject mean over patients 01-03 (each 5-fold CV'd); a model must
-# generalize ACROSS brains, not overfit one. 04-05 held out for generalization (splits.py).
-[ "$DATASET" = ieeg ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-01,02,03}"
-# NNN reward = the mean over search monkeys M1,M2,M3; each is scored on its OWN units and the
-# noise-normalized r2 averaged. M4,M5 held out for generalization (splits.py).
-[ "$DATASET" = nnn ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2,3}"
-# Huth fMRI-language reward = the mean over the three deeply-sampled subjects UTS01/UTS02/UTS03 (the
-# reference's subjects); each scored on its own voxels (raw mean r) and averaged, so a model must
-# generalize across brains rather than overfit one.
-[ "$DATASET" = huth ] && export NEURO_SUBJECT="${NEURO_SUBJECT:-UTS01,UTS02,UTS03}"
+# Per-dataset SEARCH subjects come from the ONE source -- scripts/generalization/splits.py (the same
+# file the generalization test reads) -- so the search reward and the held-out split can't drift. A
+# single id / comma list in NEURO_SUBJECT overrides (e.g. NEURO_SUBJECT=1 for one subject, =1,2 for
+# the mean); a dataset with no declared split keeps the preset's default subject. (NSD reward is the
+# subj 1,2 mean; iEEG the 01-03 mean; NNN the M1,M2,M3 mean; Huth the UTS01-03 mean -- the rest are
+# held out so a model must generalize across brains, not overfit one.)
+if [ -z "${NEURO_SUBJECT:-}" ]; then
+  _subj="$(python -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))" 2>/dev/null)"
+  [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
+fi
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.

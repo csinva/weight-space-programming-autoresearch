@@ -16,6 +16,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO" || { echo "[simplify] cannot cd to repo root" >&2; exit 1; }
 PY="${PYTHON:-$REPO/.venv/bin/python}"; [ -x "$PY" ] || PY=python
 [ -x "$REPO/.venv/bin/python" ] && export PATH="$REPO/.venv/bin:$PATH"   # the agent's bare `python` = venv
+[ -f "$REPO/search/config.env" ] && . "$REPO/search/config.env"          # operator dials (evaluator timeout, repair model, ...)
 
 # --- args ---------------------------------------------------------------------------------------
 RUN=""; declare -A OPT; FINAL_SCORE=1
@@ -41,13 +42,12 @@ if [ -f "$RUN/env.json" ]; then
     "$PY" -c "import json;[print(f'{k}\t{v}') for k,v in json.load(open('$RUN/env.json')).items()]")
   echo "[simplify] eval env <- $RUN/env.json"
 else
-  case "$DATASET" in
-    nsd)  export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2}";;
-    ieeg) export NEURO_SUBJECT="${NEURO_SUBJECT:-01,02,03}";;
-    nnn)  export NEURO_SUBJECT="${NEURO_SUBJECT:-1,2,3}";;
-    huth) export NEURO_SUBJECT="${NEURO_SUBJECT:-UTS01,UTS02,UTS03}";;
-  esac
-  echo "[simplify] no env.json -> dataset defaults (NEURO_SUBJECT=${NEURO_SUBJECT:-unset})"
+  # runs scaffolded before env.json existed: default the SEARCH subjects from the ONE source, splits.py.
+  if [ -z "${NEURO_SUBJECT:-}" ]; then
+    _subj="$("$PY" -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))" 2>/dev/null)"
+    [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
+  fi
+  echo "[simplify] no env.json -> dataset default subjects (NEURO_SUBJECT=${NEURO_SUBJECT:-unset})"
 fi
 export NEURO_DATASET="$DATASET"
 echo "[simplify] run=$RUN dataset=$DATASET subject=${NEURO_SUBJECT:-default} rtol=$RTOL atol=$ATOL budget=${MINUTES}m"
