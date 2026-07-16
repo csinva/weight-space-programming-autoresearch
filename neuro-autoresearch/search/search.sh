@@ -64,7 +64,8 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # subj 1,2 mean; iEEG the 01-03 mean; NNN the M1,M2,M3 mean; Huth the UTS01-03 mean -- the rest are
 # held out so a model must generalize across brains, not overfit one.)
 if [ -z "${NEURO_SUBJECT:-}" ]; then
-  _subj="$(python -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))" 2>/dev/null)"
+  _subj="$(python -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
+    || { echo "[search] FATAL: could not derive search subjects for '$DATASET' (splits.py / python failed above) -- aborting rather than silently scoring one subject" >&2; exit 1; }
   [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
 fi
 
