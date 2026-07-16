@@ -350,8 +350,8 @@ def champions(k: int = 5, run: str | None = None) -> list[dict]:
 
 
 def champion(run: str | None = None) -> dict | None:
-    """The single highest-reward ``ok`` model in the run (WITH its ``path``) -- the distillation
-    target. ``None`` if nothing has scored yet. Launcher/tooling use (e.g. ``scripts/distill``);
+    """The single highest-reward ``ok`` model in the run (WITH its ``path``) -- the simplification
+    target. ``None`` if nothing has scored yet. Launcher/tooling use (e.g. ``scripts/simplify``);
     like ``top-models`` it exposes the global best + source, so it is refused for a proposer."""
     rows = champions(1, run)
     return rows[0] if rows else None
@@ -686,7 +686,7 @@ def _top_models_cli(a):
 
 
 def _champion_cli(a):
-    """``champion`` is for the launcher/distiller, not proposers -- it returns the global best model
+    """``champion`` is for simplification tooling, not proposers -- it returns the global best model
     WITH its source path, the same reason ``top-models`` is hidden from an island."""
     if _is_proposer():
         raise ValueError(

@@ -1,138 +1,137 @@
 #!/usr/bin/env bash
-# scripts/simplify/simplify.sh -- behavior-preserving refactor of a search run's CHAMPION model.py.
+# Simplify a search run's champion while preserving either its activations or its neural score.
 #
-# Unlike scripts/distill (which ABLATES to move toward a principle, bounded by test_corr), this keeps
-# the computation EXACTLY the same and only cleans up the CODE. The hard bar is OUTPUT EQUIVALENCE:
-# the refactored model must produce activations numerically equal (torch.allclose) to the frozen
-# original on a fixed synthetic batch. That check needs no ridge readout, no dataset, no GPU, so it
-# returns sub-second and the agent gets many fast iterations. One headless Copilot agent gets a fixed
-# wall-clock budget (default 15 min); optionally we record ONE final ridge test_corr as a backstop.
-#
-#   scripts/simplify/simplify.sh <run-dir> [--minutes 15] [--rtol 1e-4] [--atol 1e-6] \
-#                                [--no-final-score] [--effort high] [--model claude-opus-4.8]
-#   e.g.  scripts/simplify/simplify.sh runs/nsd__2026-06-24
+#   scripts/simplify/simplify.sh RUN --mode exact
+#   scripts/simplify/simplify.sh RUN --mode approximate [--tolerance 0.005]
 set -uo pipefail
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-cd "$REPO" || { echo "[simplify] cannot cd to repo root" >&2; exit 1; }
-PY="${PYTHON:-$REPO/.venv/bin/python}"; [ -x "$PY" ] || PY=python
-[ -x "$REPO/.venv/bin/python" ] && export PATH="$REPO/.venv/bin:$PATH"   # the agent's bare `python` = venv
-[ -f "$REPO/search/config.env" ] && . "$REPO/search/config.env"          # operator dials (evaluator timeout, repair model, ...)
 
-# --- args ---------------------------------------------------------------------------------------
-RUN=""; declare -A OPT; FINAL_SCORE=1
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPO" || exit 1
+PY="${PYTHON:-$REPO/.venv/bin/python}"; [ -x "$PY" ] || PY=python
+[ -x "$REPO/.venv/bin/python" ] && export PATH="$REPO/.venv/bin:$PATH"
+[ -f search/config.env ] && . search/config.env
+
+RUN=""; MODE=exact; FINAL_SCORE=1
+MINUTES=15; TOL=0.005; RTOL=1e-4; ATOL=1e-6
+EFFORT=high; MODEL=claude-opus-4.8
 while [ $# -gt 0 ]; do
   case "$1" in
-    -h|--help) sed -n '2,13p' "$0"; exit 0;;
+    -h|--help) sed -n '2,5p' "$0"; exit 0;;
     --no-final-score) FINAL_SCORE=0; shift;;
-    --*=*) k="${1#--}"; k="${k%%=*}"; OPT[$k]="${1#*=}"; shift;;
-    --*)   k="${1#--}"; OPT[$k]="${2:?$1 needs a value}"; shift 2;;
-    *)     [ -z "$RUN" ] && { RUN="$1"; shift; continue; }; echo "[simplify] unexpected arg: $1" >&2; exit 2;;
+    --mode|--minutes|--tolerance|--rtol|--atol|--effort|--model)
+      name="${1#--}"; value="${2:?$1 needs a value}"; shift 2
+      case "$name" in
+        mode) MODE="$value";; minutes) MINUTES="$value";; tolerance) TOL="$value";;
+        rtol) RTOL="$value";; atol) ATOL="$value";; effort) EFFORT="$value";; model) MODEL="$value";;
+      esac;;
+    --*) echo "unknown option: $1" >&2; exit 2;;
+    *) [ -z "$RUN" ] && { RUN="$1"; shift; continue; }; echo "unexpected arg: $1" >&2; exit 2;;
   esac
 done
-[ -n "$RUN" ] || { echo "[simplify] usage: simplify.sh <run-dir> [--minutes N] [--rtol R] [--atol A] [--no-final-score] [--effort E] [--model M]" >&2; exit 2; }
-RUN="$(cd "$RUN" 2>/dev/null && pwd)" || { echo "[simplify] no such run dir: $1" >&2; exit 2; }
-[ -f "$RUN/search.db" ] || { echo "[simplify] $RUN has no search.db (not a search run)" >&2; exit 2; }
-MINUTES="${OPT[minutes]:-15}"; RTOL="${OPT[rtol]:-1e-4}"; ATOL="${OPT[atol]:-1e-6}"
-EFFORT="${OPT[effort]:-high}"; MODEL="${OPT[model]:-claude-opus-4.8}"
+case "$MODE" in exact|approximate) ;; *) echo "--mode must be exact or approximate" >&2; exit 2;; esac
+[ -n "$RUN" ] || { echo "usage: simplify.sh RUN --mode exact|approximate" >&2; exit 2; }
+RUN="$(cd "$RUN" 2>/dev/null && pwd)" || { echo "no such run: $RUN" >&2; exit 2; }
+[ -f "$RUN/search.db" ] || { echo "$RUN is not a search run" >&2; exit 2; }
+
 DATASET="$(basename "$RUN" | sed 's/__.*//')"
 
-# --- eval env: read back EXACTLY what the search scored with (for capture_spec + the final score) --
+# Restore the environment used by the original search.
 if [ -f "$RUN/env.json" ]; then
   while IFS=$'\t' read -r k v; do [ -n "$k" ] && export "$k=$v"; done < <(
     "$PY" -c "import json;[print(f'{k}\t{v}') for k,v in json.load(open('$RUN/env.json')).items()]")
-  echo "[simplify] eval env <- $RUN/env.json"
-else
-  # runs scaffolded before env.json existed: default the SEARCH subjects from the ONE source, splits.py.
-  if [ -z "${NEURO_SUBJECT:-}" ]; then
-    _subj="$("$PY" -c "import sys;sys.path.insert(0,'scripts/eval');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
-      || { echo "[simplify] FATAL: could not derive search subjects for '$DATASET' (splits.py / python failed above)" >&2; exit 1; }
-    [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
-  fi
-  echo "[simplify] no env.json -> dataset default subjects (NEURO_SUBJECT=${NEURO_SUBJECT:-unset})"
+elif [ -z "${NEURO_SUBJECT:-}" ]; then
+  subject="$("$PY" -c "import sys;sys.path.insert(0,'scripts/eval');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" || exit 1
+  [ -n "$subject" ] && export NEURO_SUBJECT="$subject"
 fi
 export NEURO_DATASET="$DATASET"
-echo "[simplify] run=$RUN dataset=$DATASET subject=${NEURO_SUBJECT:-default} rtol=$RTOL atol=$ATOL budget=${MINUTES}m"
 
-# --- resolve the champion -----------------------------------------------------------------------
 CHAMP="$(LAB_RUN="$RUN" "$PY" hub.py champion)"
 read -r CHAMP_ID CHAMP_CORR CHAMP_PATH <<EOF
-$(printf '%s' "$CHAMP" | "$PY" -c "import json,sys; r=json.load(sys.stdin) or {}; print(r.get('id') or '', r.get('test_corr') if r.get('test_corr') is not None else '', r.get('path') or '')")
+$(printf '%s' "$CHAMP" | "$PY" -c "import json,sys;r=json.load(sys.stdin) or {};print(r.get('id') or '',r.get('test_corr') if r.get('test_corr') is not None else '',r.get('path') or '')")
 EOF
-[ -n "$CHAMP_ID" ] && [ -f "$CHAMP_PATH" ] || { echo "[simplify] no scored champion in $RUN" >&2; exit 2; }
-echo "[simplify] champion=$CHAMP_ID recorded_test_corr=${CHAMP_CORR:-?}"
+[ -n "$CHAMP_ID" ] && [ -f "$CHAMP_PATH" ] || { echo "no scored champion in $RUN" >&2; exit 2; }
 
-# --- scaffold the PRIVATE simplify run (its own search.db, separate from the parent run's) --------
-SIMP="$RUN/simplify"; WORK="$SIMP/work"; RESULT="$SIMP/result"; LOG="$SIMP/simplify.log"
-SPEC="$WORK/input_spec.json"
-"$PY" -c "import sys; sys.path.insert(0,'$REPO'); import hub; hub.init('$SIMP')"
-"$PY" -c "import sys; sys.path.insert(0,'$REPO'); from scripts.setup_run import make_sandbox; make_sandbox('$WORK','$REPO')"
-rm -f "$WORK/CLAUDE.md"                    # drop the proposer orientation; the simplifier uses its own prompt
+SIMP="$RUN/simplify/$MODE"; WORK="$SIMP/work"; RESULT="$SIMP/result"; LOG="$SIMP/simplify.log"
+"$PY" -c "import sys;sys.path.insert(0,'$REPO');import hub;hub.init('$SIMP')"
+"$PY" -c "import sys;sys.path.insert(0,'$REPO');from scripts.setup_run import make_sandbox;make_sandbox('$WORK','$REPO')"
+rm -f "$WORK/CLAUDE.md"
 mkdir -p "$SIMP/eval" "$RESULT"
-cp -f "$CHAMP_PATH" "$WORK/model.py"       # seed the agent with the CHAMPION
-cp -f "$CHAMP_PATH" "$WORK/reference.py"   # FROZEN reference: defines "same output" (agent must not edit)
+cp -f "$CHAMP_PATH" "$WORK/model.py"
 
-# --- capture the synthetic-batch input spec (loads the real split ONCE, then discards the data) ---
-echo "[simplify] capturing input spec (shape/dtype/range) from the real split ..."
-"$PY" -m scripts.simplify.capture_spec "$SPEC" >/dev/null || { echo "[simplify] capture_spec failed" >&2; exit 1; }
-echo "[simplify] input spec -> $SPEC : $(cat "$SPEC" | tr -d '\n' | tr -s ' ')"
+EVAL_PID=""
+start_evaluator() {
+  LAB_RUN="$SIMP" "$PY" search/evaluator.py --dataset "$DATASET" --max-repairs 0 >"$SIMP/eval/evaluator.log" 2>&1 &
+  EVAL_PID=$!
+}
+cleanup() { [ -n "$EVAL_PID" ] && kill "$EVAL_PID" 2>/dev/null; wait "$EVAL_PID" 2>/dev/null || true; }
+trap cleanup EXIT INT TERM
 
-# --- sanity: the untouched champion must be equivalent to itself (guards the harness/spec) --------
-SANITY="$(LAB_RUN="$SIMP" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" --rtol "$RTOL" --atol "$ATOL")"
-echo "[simplify] self-equivalence sanity: $(printf '%s' "$SANITY" | tr -d '\n' | tr -s ' ')"
-printf '%s' "$SANITY" | "$PY" -c "import json,sys; assert json.load(sys.stdin).get('equivalent') is True, 'champion is not equivalent to itself -- spec/harness problem'" \
-  || { echo "[simplify] ABORT: self-equivalence check failed" >&2; exit 1; }
-
-# --- the simplifier agent: a time-boxed headless Copilot confined to WORK -------------------------
-PROMPT="$(cat "$REPO/scripts/simplify/simplifier.md")
-
-## THIS SIMPLIFICATION
-- Dataset: ${DATASET}. Champion recorded test_corr = ${CHAMP_CORR:-?} (unchanged: you preserve behavior).
-- HARD BAR: after EVERY edit, \`python hub.py check-equivalence model.py --reference reference.py --spec input_spec.json\`
-  must report \"equivalent\": true (torch.allclose rtol=${RTOL}, atol=${ATOL}). If false/error, REVERT that edit.
-- Budget: ~${MINUTES} minutes of wall clock, then you are stopped. The check is cheap -- take MANY small
-  verified steps and ALWAYS leave an equivalent model.py on disk."
-
-export LAB_RUN="$SIMP" NEURO_DATASET="$DATASET"   # not island-blinded (no LAB_PROPOSER)
-echo "[simplify] agent start ($MODEL / $EFFORT, ${MINUTES}m budget) -> $LOG"
-echo "[simplify] === agent session $(date +%FT%T) ===" >>"$LOG"
-timeout "${MINUTES}m" copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
-    --add-dir "$WORK" -C "$WORK" >>"$LOG" 2>&1
-echo "[simplify] agent stopped (exit ${PIPESTATUS[0]:-$?})"
-
-# --- finalize: verify equivalence of the on-disk result, then optionally record one ridge score ---
-FINAL_EQ="$(LAB_RUN="$SIMP" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" --rtol "$RTOL" --atol "$ATOL")"
-EQ_OK="$(printf '%s' "$FINAL_EQ" | "$PY" -c "import json,sys; print('yes' if json.load(sys.stdin).get('equivalent') is True else 'no')")"
-echo "[simplify] final on-disk equivalence: $EQ_OK -- $(printf '%s' "$FINAL_EQ" | tr -d '\n' | tr -s ' ')"
-
-if [ "$EQ_OK" = "yes" ]; then
-  cp -f "$WORK/model.py" "$RESULT/simplified_model.py"
+if [ "$MODE" = exact ]; then
+  SPEC="$WORK/input_spec.json"
+  cp -f "$CHAMP_PATH" "$WORK/reference.py"
+  "$PY" -m scripts.simplify.capture_spec "$SPEC" >/dev/null || exit 1
+  CHECK="python hub.py check-equivalence model.py --reference reference.py --spec input_spec.json --rtol $RTOL --atol $ATOL"
+  SANITY="$(LAB_RUN="$SIMP" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" --rtol "$RTOL" --atol "$ATOL")"
+  printf '%s' "$SANITY" | "$PY" -c "import json,sys;assert json.load(sys.stdin).get('equivalent') is True" || exit 1
+  RULES="$(printf 'Mode: EXACT. Refactor code without changing activations. After every edit run:\n\n    %s\n\nKeep an edit only when it reports equivalent=true. Never edit reference.py.' "$CHECK")"
 else
-  echo "[simplify] WARNING: on-disk model.py is NOT equivalent -- restoring the frozen reference as the result" >&2
-  cp -f "$WORK/reference.py" "$RESULT/simplified_model.py"
+  start_evaluator
+  REF_ID="$(LAB_RUN="$SIMP" "$PY" hub.py propose-model "$WORK/model.py" --idea "champion reference")"
+  REF_ROW="$(LAB_RUN="$SIMP" "$PY" hub.py wait-for-score "$REF_ID" --timeout 1200)"
+  REF_CORR="$(printf '%s' "$REF_ROW" | "$PY" -c "import json,sys;v=json.load(sys.stdin).get('test_corr');print(v if v is not None else '')")"
+  [ -n "$REF_CORR" ] || { echo "champion failed to re-score" >&2; exit 1; }
+  FLOOR="$("$PY" -c "print(float('$REF_CORR')*(1-float('$TOL')))" )"
+  RULES="$(printf 'Mode: APPROXIMATE. You may remove or replace computation. Keep a change only when neural predictivity stays above %s (reference %s, tolerance %s). Score each edit with:\n\n    id=$(python hub.py propose-model model.py --idea "short label")\n    python hub.py wait-for-score $id\n\nRevert any edit below the floor.' "$FLOOR" "$REF_CORR" "$TOL")"
 fi
 
-REF_LOC="$("$PY" -c "print(sum(1 for l in open('$WORK/reference.py') if l.strip()))")"
-OUT_LOC="$("$PY" -c "print(sum(1 for l in open('$RESULT/simplified_model.py') if l.strip()))")"
-FINAL_CORR="n/a (skipped)"
-if [ "$FINAL_SCORE" = 1 ] && [ "$EQ_OK" = "yes" ]; then
-  echo "[simplify] recording one final ridge test_corr (backstop) via a warm evaluator ..."
-  LAB_RUN="$SIMP" NEURO_DATASET="$DATASET" "$PY" search/evaluator.py --dataset "$DATASET" --max-repairs 0 \
-      >"$SIMP/eval/evaluator.log" 2>&1 &
-  EVAL_PID=$!; trap 'kill "$EVAL_PID" 2>/dev/null; wait "$EVAL_PID" 2>/dev/null || true' EXIT INT TERM
-  FID="$(LAB_RUN="$SIMP" "$PY" hub.py propose-model "$RESULT/simplified_model.py" --idea "simplified champion (behavior-preserving)")"
-  FROW="$(LAB_RUN="$SIMP" "$PY" hub.py wait-for-score "$FID" --timeout 1200)"
-  FINAL_CORR="$(printf '%s' "$FROW" | "$PY" -c "import json,sys; v=json.load(sys.stdin).get('test_corr'); print(v if v is not None else 'error')")"
+PROMPT="$(cat scripts/simplify/simplifier.md)
+
+## This run
+$RULES
+
+Dataset: $DATASET. Budget: about $MINUTES minutes. Always leave the best passing model in model.py."
+export LAB_RUN="$SIMP"
+echo "[simplify] mode=$MODE run=$RUN champion=$CHAMP_ID budget=${MINUTES}m"
+timeout "${MINUTES}m" copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
+  --add-dir "$WORK" -C "$WORK" >>"$LOG" 2>&1
+echo "[simplify] agent stopped"
+
+FINAL_OK=yes; FINAL_CORR="n/a"
+if [ "$MODE" = exact ]; then
+  FINAL="$(LAB_RUN="$SIMP" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" --rtol "$RTOL" --atol "$ATOL")"
+  FINAL_OK="$(printf '%s' "$FINAL" | "$PY" -c "import json,sys;print('yes' if json.load(sys.stdin).get('equivalent') is True else 'no')")"
+  if [ "$FINAL_OK" != yes ]; then
+    cp -f "$WORK/reference.py" "$WORK/model.py"
+    FINAL_OK="restored reference"
+  fi
+  if [ "$FINAL_SCORE" = 1 ] && [ "$FINAL_OK" = yes ]; then
+    start_evaluator
+    ID="$(LAB_RUN="$SIMP" "$PY" hub.py propose-model "$WORK/model.py" --idea "exact simplification")"
+    ROW="$(LAB_RUN="$SIMP" "$PY" hub.py wait-for-score "$ID" --timeout 1200)"
+    FINAL_CORR="$(printf '%s' "$ROW" | "$PY" -c "import json,sys;print(json.load(sys.stdin).get('test_corr'))")"
+  fi
+else
+  ID="$(LAB_RUN="$SIMP" "$PY" hub.py propose-model "$WORK/model.py" --idea "final approximate simplification")"
+  ROW="$(LAB_RUN="$SIMP" "$PY" hub.py wait-for-score "$ID" --timeout 1200)"
+  read -r FINAL_CORR FINAL_OK <<EOF
+$(printf '%s' "$ROW" | "$PY" -c "import json,sys;v=json.load(sys.stdin).get('test_corr');print(v if v is not None else 'error','yes' if v is not None and v>=float('$FLOOR') else 'no')")
+EOF
+  if [ "$FINAL_OK" = no ]; then
+    FALLBACK="$("$PY" -c "import sqlite3;c=sqlite3.connect('$SIMP/search.db');r=c.execute(\"select path from models where status='ok' and test_corr>=? order by created_at desc limit 1\",(float('$FLOOR'),)).fetchone();print(r[0])")"
+    cp -f "$FALLBACK" "$WORK/model.py"
+    FINAL_OK="restored latest passing snapshot"
+  fi
 fi
 
-# --- summary ------------------------------------------------------------------------------------
+cp -f "$WORK/model.py" "$RESULT/simplified_model.py"
+REF_LOC="$("$PY" -c "print(sum(bool(x.strip()) for x in open('$CHAMP_PATH')))" )"
+OUT_LOC="$("$PY" -c "print(sum(bool(x.strip()) for x in open('$RESULT/simplified_model.py')))" )"
 {
-  echo "== simplify summary =="
-  echo "run             : $RUN"
-  echo "champion        : $CHAMP_ID  recorded_test_corr=${CHAMP_CORR:-?}"
-  echo "equivalence bar : torch.allclose(rtol=$RTOL, atol=$ATOL) on a synthetic batch ($(basename "$SPEC"))"
-  echo "final equivalent: $EQ_OK"
-  echo "code size (non-blank loc): reference $REF_LOC -> simplified $OUT_LOC  (delta $((OUT_LOC - REF_LOC)))"
-  echo "final recorded test_corr : $FINAL_CORR (champion ${CHAMP_CORR:-?}; should match -- behavior preserved)"
-  echo "simplified model -> $RESULT/simplified_model.py"
+  echo "mode: $MODE"
+  echo "champion: $CHAMP_ID (test_corr=${CHAMP_CORR:-?})"
+  [ "$MODE" = exact ] && echo "equivalent: $FINAL_OK (rtol=$RTOL, atol=$ATOL)"
+  [ "$MODE" = exact ] && echo "final test_corr: $FINAL_CORR"
+  [ "$MODE" = approximate ] && echo "final: $FINAL_OK (test_corr=$FINAL_CORR, floor=$FLOOR)"
+  echo "non-blank lines: $REF_LOC -> $OUT_LOC"
+  echo "model: $RESULT/simplified_model.py"
 } | tee "$RESULT/summary.txt"
-echo "[simplify] done -> $RESULT"

@@ -31,7 +31,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
 
 # The eval-env knobs that change what the reward SCORES (subject set + readout + reliability cuts).
-# Persisted into env.json at scaffold time so a later re-score (e.g. scripts/distill) reproduces the
+# Persisted into env.json at scaffold time so a later approximate simplification reproduces the
 # EXACT evaluation this run used, instead of guessing the defaults.
 EVAL_ENV_KEYS = ("NEURO_SUBJECT", "NEURO_READOUT", "NEURO_MAX_PARAMS", "NSD_NCSNR_MIN",
                  "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_HUTH_NUM_TRAIN")
@@ -40,7 +40,7 @@ EVAL_ENV_KEYS = ("NEURO_SUBJECT", "NEURO_READOUT", "NEURO_MAX_PARAMS", "NSD_NCSN
 def write_env_json(run_dir: str, dataset: str) -> str:
     """Snapshot the run's eval environment into ``run_dir/env.json`` (write-once: a resumed run keeps
     its original env). Records the dataset plus whichever ``EVAL_ENV_KEYS`` are set right now -- the
-    same env the evaluator will score under -- so distillation/generalization can read it back."""
+    same env the evaluator will score under -- so simplification/generalization can read it back."""
     path = os.path.join(run_dir, "env.json")
     if os.path.exists(path):
         return path

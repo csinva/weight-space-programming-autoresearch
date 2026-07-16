@@ -1,5 +1,5 @@
-"""Capture the input_spec the behavior-preserving `simplify` check feeds to its synthetic-batch
-generator (hub._synthetic_batch). Runs ONCE at scaffold time: loads the run's real split just to read
+"""Capture the input spec used by exact simplification's synthetic-batch generator
+(`hub._synthetic_batch`). Runs once at scaffold time: loads the run's real split just to read
 the stimulus tensor's shape / dtype / value range, then throws the data away. The equivalence check
 itself never touches the dataset -- it rebuilds a fixed synthetic batch of THIS shape/dtype/range.
 

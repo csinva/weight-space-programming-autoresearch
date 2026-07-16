@@ -37,7 +37,7 @@ def split_for(dataset: str) -> dict:
 def search_subjects_csv(dataset: str) -> str:
     """The dataset's SEARCH subjects as a comma string (e.g. ``"1,2"``), or ``""`` if the dataset has
     no declared split (the caller then falls back to the preset's default subject). This is the ONE
-    source the search / distill / simplify launchers read for the per-dataset subject default, so the
+    source the search and simplify launchers read for the per-dataset subject default, so the
     search reward and the held-out generalization split can never drift apart. Never raises."""
     sp = GEN_SPLITS.get(dataset)
     return ",".join(sp["search"]) if sp else ""
