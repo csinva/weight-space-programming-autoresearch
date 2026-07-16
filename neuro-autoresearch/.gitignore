@@ -6,7 +6,9 @@ scripts/cross_subject/
 # Machine-written outputs and caches (never commit)
 data/
 results/
-runs/
+# committed: one champion model.py per (dataset, subject-config)
+runs/*
+!runs/best/
 search/state/
 logs/
 analyze/report.html
