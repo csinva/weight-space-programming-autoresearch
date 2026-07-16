@@ -29,7 +29,7 @@ Render any completed evaluation as a publication-style cohort comparison. The pl
 subjects on the left and subjects held out from search on the right. Bars are equal-weight cohort
 means, points are individual subjects, and the random projection is a cohort-specific dashed line.
 All reference models share one color; untrained networks use a hatched treatment while the searched
-champion is highlighted separately.
+champion is highlighted separately and explicitly labeled as never trained.
 
 ```bash
 python experiments/evaluation/plot.py --dataset nnn

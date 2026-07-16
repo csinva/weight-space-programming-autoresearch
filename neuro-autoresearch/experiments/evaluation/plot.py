@@ -203,7 +203,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
              ha="left", color=MUTED, fontsize=9.4)
 
     legend = [
-        Patch(facecolor=CHAMPION, edgecolor="none", label="Searched champion"),
+        Patch(facecolor=CHAMPION, edgecolor="none", label="Searched champion · never trained"),
         Patch(facecolor=BASELINE, edgecolor="none", label="Pretrained baseline"),
     ]
     if any(model.get("weights") == "untrained" for _, model in models):
