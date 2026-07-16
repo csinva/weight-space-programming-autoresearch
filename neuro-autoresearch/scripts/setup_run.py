@@ -7,7 +7,7 @@ A run lives at ``runs/<dataset>__<date>/`` and is the unit of one open-ended sea
         search.db            # the shared brain (created by hub.init)
         models/              # shared immutable model archive (created by hub.init)
         proposers/p00 … pNN/ # one sandbox per proposer (its own model.py + symlinked harness/hub)
-        eval/                # the single GPU evaluator's sandbox
+        eval/                # the GPU evaluator's workspace; keeps <id>.log only for models that FAILED to eval
 
 Each *sandbox* is a runnable workspace: relative symlinks to the FIXED ``harness/`` package and
 ``hub.py`` (so ``import harness`` / ``import hub`` resolve), a local editable ``model.py`` seeded

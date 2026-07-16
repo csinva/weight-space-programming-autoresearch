@@ -7,7 +7,7 @@ A *run* is a single open-ended search, isolated in its own directory::
         search.db          # the shared brain: queue + full history + scores (this module owns it)
         models/<id>.py     # shared, IMMUTABLE archive -- one file per model ever tried
         proposers/pNN/     # one sandbox per proposer (its own mutable model.py + this hub symlink)
-        eval/              # the single GPU evaluator's workspace
+        eval/              # the GPU evaluator's workspace; keeps <id>.log only for models that FAILED to eval
 
 There is NO conductor, NO notebook, and NO wave barrier. ``search.db`` (one ``models`` row per
 model) is the only shared memory and doubles as the queue via a ``status`` flag::

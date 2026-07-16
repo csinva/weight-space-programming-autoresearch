@@ -68,18 +68,21 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
         print(f"[evaluator] {mid}: model file missing ({src!r}) -> error")
         hub.record(mid, {}, "error")
         return
-    log_file = os.path.join(log_dir, "last_eval.log")
+    log_file = os.path.join(log_dir, f"{mid}.log")            # per-model; fed to repair, kept only if it ends failed
     repairs = 0
     while True:
         res = score_guarded(mid, src, dataset, timeout)       # watchdog-guarded; never raises
         with open(log_file, "w") as f:
             f.write(res.get("log", "") or "")
-        if _is_ok(res) or repairs >= max_repairs:
+        ok = _is_ok(res)
+        if ok or repairs >= max_repairs:
             break
         repairs += 1
         print(f"[evaluator] {mid}: failed -> repair {repairs}/{max_repairs}")
         repair(src, log_file, rmodel, reffort)                # edits the on-disk source in place
-    status = hub.record(mid, res, "ok" if _is_ok(res) else "error")
+    if ok:
+        os.remove(log_file)                                   # success leaves no log; keep only failures
+    status = hub.record(mid, res, "ok" if ok else "error")
     print(f"[evaluator] {mid}: status={status} test_corr={res.get('test_corr', '-')} "
           f"(proposer={row.get('proposer')} repairs={repairs})")
 
