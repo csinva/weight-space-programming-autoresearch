@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = Path(__file__).resolve().parent / "results"
 
 DATASET_LABELS = {
-    "nsd": "Natural Scenes Dataset",
+    "nsd": "NSD",
     "tvsd": "TVSD",
     "nnn": "Triple-N",
     "huth": "Huth natural speech",
@@ -40,7 +40,7 @@ MUTED = "#66717D"
 GRID = "#DDE2E6"
 BASELINE = "#7893A5"
 CHAMPION = "#D05A47"
-RANDOM = "#59636E"
+RANDOM = "#707A84"
 PAPER = "#FAFAF8"
 
 
@@ -112,10 +112,10 @@ def _axis_limit(document: dict) -> tuple[float, float]:
     ]
     low, high = min(0.0, min(values)), max(values)
     span = high - low or 1.0
-    return low - 0.035 * span, high + 0.20 * span
+    return low - 0.035 * span, high + 0.12 * span
 
 
-def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
+def plot_evaluation(document: dict, output: Path, *, dpi: int = 300) -> Path:
     """Render one evaluation document to PNG, PDF, or SVG."""
     dataset = document["dataset"]
     models = _ordered_models(document["models"])
@@ -136,7 +136,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
         "ytick.labelsize": 10,
         "axes.edgecolor": GRID,
         "axes.linewidth": 0.8,
-        "hatch.linewidth": 0.7,
+        "hatch.linewidth": 0.65,
         "pdf.fonttype": 42,
         "svg.fonttype": "none",
     })
@@ -145,15 +145,15 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
     fig, axes = plt.subplots(1, 2, figsize=(11.2, figure_height), sharex=True, sharey=True)
     fig.patch.set_facecolor(PAPER)
     panel_titles = {
-        "search": "Search subjects",
-        "heldout": "Out-of-distribution subjects",
+        "search": "A   Search subjects",
+        "heldout": "B   Out-of-distribution subjects",
     }
 
     for ax, cohort in zip(axes, ("search", "heldout")):
         ax.set_facecolor(PAPER)
         random_mean = float(random_model["scores"][cohort]["mean"])
-        ax.axvline(random_mean, color=RANDOM, linewidth=1.35,
-                   linestyle=(0, (2.2, 2.4)), zorder=1)
+        ax.axvline(random_mean, color=RANDOM, linewidth=1.15,
+                   linestyle=(0, (2, 2.4)), zorder=1)
 
         for row, (model_id, model) in zip(y, models):
             mean = float(model["scores"][cohort]["mean"])
@@ -166,13 +166,13 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
                 row, mean, height=0.34,
                 facecolor=PAPER if untrained else color,
                 edgecolor=color,
-                linewidth=1.35 if untrained else 0,
-                hatch="////" if untrained else None,
+                linewidth=1.15 if untrained else 0,
+                hatch="///" if untrained else None,
                 zorder=2,
             )
             offsets = np.linspace(-0.035, 0.035, len(subjects)) if len(subjects) > 1 else [0]
-            ax.scatter(subjects, row + offsets, s=18, facecolor=PAPER,
-                       edgecolor=INK, linewidth=0.75, zorder=4)
+            ax.scatter(subjects, row + offsets, s=16, facecolor=PAPER,
+                       edgecolor=MUTED, linewidth=0.7, zorder=4)
 
         subject_text = ", ".join(document["cohorts"][cohort])
         ax.set_title(panel_titles[cohort], loc="left", color=INK, pad=16)
@@ -195,7 +195,7 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
     fig.suptitle(f"{title}: model generalization across subjects", x=0.095, y=0.975,
                  ha="left", color=INK, fontsize=16, fontweight=650)
     fig.text(0.095, 0.90,
-             "Bars show cohort means; points show individual subjects. Higher is better.",
+             "Cohort means with individual-subject scores  ·  higher is better",
              ha="left", color=MUTED, fontsize=9.4)
 
     legend = [
@@ -203,13 +203,13 @@ def plot_evaluation(document: dict, output: Path, *, dpi: int = 220) -> Path:
         Patch(facecolor=BASELINE, edgecolor="none", label="Trained"),
     ]
     if any(model.get("weights") == "untrained" for _, model in models):
-        legend.append(Patch(facecolor=PAPER, edgecolor=BASELINE, hatch="////",
+        legend.append(Patch(facecolor=PAPER, edgecolor=BASELINE, hatch="///",
                             label="Untrained"))
     legend.extend([
-        Line2D([0], [0], color=RANDOM, linewidth=1.35, linestyle=(0, (2.2, 2.4)),
+        Line2D([0], [0], color=RANDOM, linewidth=1.15, linestyle=(0, (2, 2.4)),
                label="Random projection"),
         Line2D([0], [0], marker="o", color="none", markerfacecolor=PAPER,
-               markeredgecolor=INK, markeredgewidth=0.75, markersize=5, label="Subject"),
+               markeredgecolor=MUTED, markeredgewidth=0.7, markersize=4.5, label="Subject"),
     ])
     fig.legend(handles=legend, loc="lower center", bbox_to_anchor=(0.59, 0.008),
                ncol=len(legend), frameon=False, handlelength=1.7,
@@ -232,7 +232,7 @@ def main() -> None:
     source.add_argument("--dataset", help="dataset ID, e.g. nnn or nsd")
     source.add_argument("--input", type=Path, help="evaluation.json path")
     parser.add_argument("--output", type=Path, help="output .png, .pdf, or .svg path")
-    parser.add_argument("--dpi", type=int, default=220, help="PNG resolution (default: 220)")
+    parser.add_argument("--dpi", type=int, default=300, help="PNG resolution (default: 300)")
     args = parser.parse_args()
 
     input_path = args.input or _result_path(args.dataset)

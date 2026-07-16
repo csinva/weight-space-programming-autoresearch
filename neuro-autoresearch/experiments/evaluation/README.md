@@ -41,6 +41,15 @@ By default, `--dataset` looks first in `runs/best/<dataset>/evaluation.json`, th
 `experiments/evaluation/results/<dataset>/evaluation.json`, and writes `evaluation.png` beside the
 input. Use `--output` for PNG, vector PDF, or editable SVG.
 
+The committed NSD and Triple-N figures can be regenerated at publication resolution with:
+
+```bash
+python experiments/evaluation/plot.py --dataset nsd --output experiments/evaluation/figures/nsd.png
+python experiments/evaluation/plot.py --dataset nsd --output experiments/evaluation/figures/nsd.pdf
+python experiments/evaluation/plot.py --dataset nnn --output experiments/evaluation/figures/nnn.png
+python experiments/evaluation/plot.py --dataset nnn --output experiments/evaluation/figures/nnn.pdf
+```
+
 The evaluator never asks which search run to use. The exporter has already made that decision by
 selecting the best run matching the dataset's predefined search cohort. Evaluation reads that exact
 `runs/best/<dataset>/model.py`, verifies its provenance against `datasets.py`, and writes beside it:
