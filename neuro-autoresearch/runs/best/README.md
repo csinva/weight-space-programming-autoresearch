@@ -1,8 +1,8 @@
 # Best models (`runs/best/`)
 
 The single best `model.py` per `(dataset, subject-config)`, distilled from the gitignored
-search runs by `scripts/export_champions.py`. Each `model.py` is the champion's source copied
-verbatim below a provenance header; regenerate with `python scripts/export_champions.py`.
+search runs by `runs/best/export_champions.py`. Each `model.py` is the champion's source
+copied verbatim below a provenance header; regenerate with `python runs/best/export_champions.py`.
 
 `test_corr` is comparable **only within the same (dataset, subjects) group** -- NSD/`nnn`
 scores are noise-ceiling-normalized, `ieeg` is raw mean r, and different subject sets are
