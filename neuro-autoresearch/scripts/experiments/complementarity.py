@@ -17,8 +17,8 @@ AlexNet gets its native ImageNet preprocessing (resize 224 + ImageNet mean/std) 
 Everything is projected to the same 2048 dims (champion + each AlexNet layer), so Combined is a clean
 2*2048 concat -- no source wins purely by having more columns. Nothing under harness/ is modified.
 
-    python scripts/benchmark/complementarity.py                    # nsd subj1, champion qq145
-    python scripts/benchmark/complementarity.py --subject 1 --champion runs/.../models/qq145.py
+    python scripts/experiments/complementarity.py                    # nsd subj1, champion qq145
+    python scripts/experiments/complementarity.py --subject 1 --champion runs/.../models/qq145.py
 """
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ import torch
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
-sys.path.insert(0, HERE)                      # alexnet_baseline + vendored sparse_random_projection
+sys.path.insert(0, os.path.join(REPO, "scripts", "eval"))   # reuse the eval baselines: vision, srp, score
 
 DEFAULT_CHAMPION = os.path.join(REPO, "runs", "nsd__2026-06-27", "models", "qq145.py")
 
@@ -50,7 +50,7 @@ def load_model(path):
 
 def srp_to(feats_np, dim, seed, cache_dir):
     """Sparse-random-project (N, D) -> (N, dim). D<=dim is returned unchanged (nothing to reduce)."""
-    from sparse_random_projection import get_srp_transformer
+    from srp import get_srp_transformer
     D = feats_np.shape[1]
     if D <= dim:
         return feats_np.astype(np.float32)
@@ -74,7 +74,8 @@ def main(argv=None):
     from harness.loaders import load_split
     from harness import reward as R
     from harness.roi import roi_breakdown
-    from alexnet_baseline import AlexNetSRP, _readout
+    from vision import extract_alexnet
+    from score import readout
 
     print(f"=== complementarity | nsd subj={a.subject} | champion={os.path.basename(a.champion)} "
           f"| SRP dim={a.dim} | reward_roi={DATASET.reward_roi} ===")
@@ -89,16 +90,12 @@ def main(argv=None):
 
     srp_cache = os.path.join(HERE, "results", "srp_cache")
 
-    # --- AlexNet conv4 and fc7, each SRP'd to `dim` (fc7 is 4096>dim, so also projected) ---
-    def alex_layer(layer):
-        """Forward the frozen AlexNet and return one tap's train/test features, SRP'd to ``dim``."""
-        m = AlexNetSRP(DATASET.imsize, [layer], dim=a.dim, seed=a.seed, pretrained=True)
-        tr, te = m.forward_layers(Xtr), m.forward_layers(Xte)
-        return tr[layer], te[layer]                                  # already (N, dim)
-
+    # --- AlexNet conv4 (early) and fc7 (ventral), each SRP'd to `dim` (reused eval.vision extractor) ---
     t0 = time.time()
-    conv4_tr, conv4_te = alex_layer("conv4")
-    fc7_tr, fc7_te = alex_layer("fc7")
+    alex_tr = extract_alexnet(Xtr, DATASET.imsize, a.dim, a.seed, device, pretrained=True)
+    alex_te = extract_alexnet(Xte, DATASET.imsize, a.dim, a.seed, device, pretrained=True)
+    conv4_tr, conv4_te = alex_tr["conv4"], alex_te["conv4"]
+    fc7_tr, fc7_te = alex_tr["fc7"], alex_te["fc7"]
     print(f"  AlexNet conv4/fc7 forward+SRP: {time.time()-t0:.1f}s  "
           f"(conv4->{conv4_tr.shape[1]}, fc7->{fc7_tr.shape[1]})")
 
@@ -127,8 +124,8 @@ def main(argv=None):
     def score(A_tr, A_te):
         """Standardize columns then run the harness readout; return the per-ROI record."""
         A_tr, A_te = standardize(A_tr, A_te)
-        rec = _readout(torch.from_numpy(A_tr).to(device), torch.from_numpy(A_te).to(device),
-                       Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
+        rec = readout(torch.from_numpy(A_tr).to(device), torch.from_numpy(A_te).to(device),
+                      Ytr, Yte, dict(roi_masks), nc, DATASET, R, roi_breakdown, device)
         return rec
 
     # Score each source once; ridge fits each voxel independently, so the per-ROI number equals a

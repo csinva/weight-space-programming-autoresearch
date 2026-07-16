@@ -18,8 +18,8 @@ Best-layer protocol: every layer is selected on a train-only temporal validation
 winner is scored with the dataset's own final protocol. A comma ``--subject`` list is scored
 per-subject and averaged with equal weight, matching the search reward's multi-subject mean.
 
-    python scripts/benchmark/language_baselines.py --model gpt2-xl --subject 01,02,03   # the ieeg bar
-    python scripts/benchmark/language_baselines.py --model gpt2                          # fast smoke test
+    python scripts/eval/language.py --model gpt2-xl --subject 01,02,03   # the ieeg bar
+    python scripts/eval/language.py --model gpt2                          # fast smoke test
 """
 from __future__ import annotations
 
@@ -213,6 +213,14 @@ def score_huth_subject(lm, subject, R, device):
             "n_voxels": int(Ytr.shape[1]), "n_words": int(len(Xtr) + len(Xte)),
             "layer_val": {f"L{i:02d}": round(v, 4) for i, v in enumerate(val)},
             "layer_test": {f"L{i:02d}": round(v, 4) for i, v in enumerate(test)}}
+
+
+def score_lang_subject(lm, dataset, subject, R, device):
+    """One subject's best-layer test_corr: huth via the Lanczos/FIR pipeline, else the char/word CV."""
+    if dataset == "huth":
+        return score_huth_subject(lm, subject, R, device)
+    words, Y, _, d = load_words_and_neural(subject)
+    return score_subject(lm.embed(words), Y, d, R, device)
 
 
 def main(argv=None):

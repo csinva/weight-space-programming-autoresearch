@@ -30,7 +30,7 @@ def split_for(dataset: str) -> dict:
     """Return a dataset's {axis, search, heldout} split, or raise naming this file if it's undeclared."""
     if dataset not in GEN_SPLITS:
         raise SystemExit(f"no generalization split for dataset {dataset!r}; add one to "
-                         f"scripts/generalization/splits.py (have: {list(GEN_SPLITS)})")
+                         f"scripts/eval/splits.py (have: {list(GEN_SPLITS)})")
     return GEN_SPLITS[dataset]
 
 

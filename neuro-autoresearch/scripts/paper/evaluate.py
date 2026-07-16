@@ -6,7 +6,7 @@ Examples:
   python scripts/paper/evaluate.py runs/huth__DATE --split huth=UTS01,UTS02:UTS03
 
 Each run contributes its DB champion. Search subjects come from the run's env.json; held-out
-subjects come from scripts/generalization/splits.py or --split. Completed JSON jobs are reused.
+subjects come from scripts/eval/splits.py or --split. Completed JSON jobs are reused.
 """
 from __future__ import annotations
 
@@ -20,15 +20,15 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 PYTHON = sys.executable
-sys.path.insert(0, str(REPO / "scripts/generalization"))
+sys.path.insert(0, str(REPO / "scripts/eval"))
 from splits import GEN_SPLITS  # noqa: E402
 
 MODALITY = {"nsd": "vision", "nnn": "vision", "ieeg": "language", "huth": "language"}
 BASELINES = {
-    "vision": ("scripts/benchmark/vision_baselines.py",
+    "vision": ("scripts/eval/vision.py",
                (("alexnet", "both"), ("resnet50", "both"), ("vit", "both"),
                 ("clip", "pretrained"), ("dino", "pretrained"))),
-    "language": ("scripts/benchmark/language_baselines.py", (("gpt2-xl", "pretrained"),)),
+    "language": ("scripts/eval/language.py", (("gpt2-xl", "pretrained"),)),
 }
 METRIC = {"nsd": "sign(r)*r^2/NC_r2", "nnn": "sign(r)*r^2/NC_r2",
           "ieeg": "mean_r", "huth": "mean_r"}
@@ -118,7 +118,7 @@ def main(argv=None):
         root = a.output / run.name
 
         champion = root / "champion.json"
-        cmd = [PYTHON, "scripts/generalization/generalize.py", "--run", str(run),
+        cmd = [PYTHON, "scripts/eval/evaluate.py", "--run", str(run), "--no-baselines",
                "--search-subjects", ",".join(split["search"]),
                "--heldout-subjects", ",".join(split["heldout"]), "--output", str(champion)]
         execute(cmd, env, champion, a.force, a.dry_run)

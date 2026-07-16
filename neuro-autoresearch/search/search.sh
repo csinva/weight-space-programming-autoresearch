@@ -57,14 +57,14 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # random-models in hub.py) and forces the conductor OFF, so each proposer is an independent loop.
 # Default 0 = the full system (cross-island pollination + conductor).
 [ "${VANILLA_AUTORESEARCH:-0}" = 1 ] && { EPOCH=0; export VANILLA_AUTORESEARCH; echo "[search] VANILLA_AUTORESEARCH: cross-island OFF, conductor OFF (N independent loops)"; }
-# Per-dataset SEARCH subjects come from the ONE source -- scripts/generalization/splits.py (the same
+# Per-dataset SEARCH subjects come from the ONE source -- scripts/eval/splits.py (the same
 # file the generalization test reads) -- so the search reward and the held-out split can't drift. A
 # single id / comma list in NEURO_SUBJECT overrides (e.g. NEURO_SUBJECT=1 for one subject, =1,2 for
 # the mean); a dataset with no declared split keeps the preset's default subject. (NSD reward is the
 # subj 1,2 mean; iEEG the 01-03 mean; NNN the M1,M2,M3 mean; Huth the UTS01-03 mean -- the rest are
 # held out so a model must generalize across brains, not overfit one.)
 if [ -z "${NEURO_SUBJECT:-}" ]; then
-  _subj="$(python -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
+  _subj="$(python -c "import sys;sys.path.insert(0,'scripts/eval');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
     || { echo "[search] FATAL: could not derive search subjects for '$DATASET' (splits.py / python failed above) -- aborting rather than silently scoring one subject" >&2; exit 1; }
   [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
 fi

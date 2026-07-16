@@ -15,10 +15,10 @@ it launches ``--procs`` workers that run the whole pipeline at once and reports 
 breakdown + the batch wall-clock. CUDA is async, so every phase is wrapped in
 ``torch.cuda.synchronize()`` or the timings would only measure kernel-launch latency.
 
-    python scripts/benchmark/benchmark.py                                 # nsd, fast, 3 concurrent
-    python scripts/benchmark/benchmark.py --dataset tvsd --subject F
-    python scripts/benchmark/benchmark.py --method himalaya --solo-baseline
-    python scripts/benchmark/benchmark.py --dataset nnn --procs 3 --html   # also (re)render the dashboard
+    python scripts/profile_readout/profile.py                                 # nsd, fast, 3 concurrent
+    python scripts/profile_readout/profile.py --dataset tvsd --subject F
+    python scripts/profile_readout/profile.py --method himalaya --solo-baseline
+    python scripts/profile_readout/profile.py --dataset nnn --procs 3 --html   # also (re)render the dashboard
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ import subprocess
 import sys
 import time
 
-# This file is scripts/benchmark/benchmark.py -> repo root is THREE levels up.
+# This file is scripts/profile_readout/profile.py -> repo root is THREE levels up.
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO)
 HERE = os.path.dirname(os.path.abspath(__file__))

@@ -44,7 +44,7 @@ if [ -f "$RUN/env.json" ]; then
 else
   # runs scaffolded before env.json existed: default the SEARCH subjects from the ONE source, splits.py.
   if [ -z "${NEURO_SUBJECT:-}" ]; then
-    _subj="$("$PY" -c "import sys;sys.path.insert(0,'scripts/generalization');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
+    _subj="$("$PY" -c "import sys;sys.path.insert(0,'scripts/eval');from splits import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
       || { echo "[simplify] FATAL: could not derive search subjects for '$DATASET' (splits.py / python failed above)" >&2; exit 1; }
     [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
   fi

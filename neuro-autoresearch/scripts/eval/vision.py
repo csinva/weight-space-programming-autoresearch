@@ -11,10 +11,10 @@ For each model the script:
 Scores are directly comparable to search DB champions.
 
 Usage:
-    python scripts/benchmark/vision_baselines.py --model alexnet --dataset nsd --subject 1
-    python scripts/benchmark/vision_baselines.py --model all --dataset nsd --subject 1
-    python scripts/benchmark/vision_baselines.py --model resnet50 --dataset tvsd
-    python scripts/benchmark/vision_baselines.py --model clip --dataset nnn
+    python scripts/eval/vision.py --model alexnet --dataset nsd --subject 1
+    python scripts/eval/vision.py --model all --dataset nsd --subject 1
+    python scripts/eval/vision.py --model resnet50 --dataset tvsd
+    python scripts/eval/vision.py --model clip --dataset nnn
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ import torch.nn.functional as F
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
-sys.path.insert(0, HERE)   # vendored sparse_random_projection.py
+sys.path.insert(0, HERE)   # so `from srp import ...` resolves
 
 _IMAGENET_MEAN = (0.485, 0.456, 0.406)
 _IMAGENET_STD  = (0.229, 0.224, 0.225)
@@ -39,14 +39,14 @@ _CLIP_MEAN     = (0.48145466, 0.4578275,  0.40821073)
 _CLIP_STD      = (0.26862954, 0.26130258, 0.27577711)
 
 # ---------------------------------------------------------------------------
-# SRP helper (reuses vendored sparse_random_projection)
+# SRP helper (reuses srp.py)
 # ---------------------------------------------------------------------------
 
 def _srp(feats_np: np.ndarray, dim: int, seed: int) -> np.ndarray:
     """SRP project (N, D) -> (N, dim). D<=dim is returned as-is."""
     if feats_np.shape[1] <= dim:
         return feats_np.astype(np.float32)
-    from sparse_random_projection import get_srp_transformer
+    from srp import get_srp_transformer
     cache = os.path.join(HERE, "results", "srp_cache")
     t = get_srp_transformer(feats_np.shape[1], dim, None, seed, cache_dir=cache)
     return t.transform(feats_np).astype(np.float32)

@@ -6,7 +6,7 @@ NSD streams.mgz.ctab: 1 early · 2 midventral · 3 midlateral · 4 midparietal �
 6 lateral · 7 parietal. The reward region = early (1) + ventral stream (midventral+ventral = {2,5}).
 
     python -m scripts.process_dataset.nsd_roi_viz --subject 01
-Writes PNGs to scripts/benchmark/results/.
+Writes PNGs to scripts/eval/results/.
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from matplotlib.colors import ListedColormap
 from nilearn import plotting
 
 SRC = "data/nsd/ncsnr_src"
-OUT = "scripts/benchmark/results"
+OUT = "scripts/eval/results"
 EARLY, VENTRAL = (1,), (2, 5)   # streams labels: early; midventral+ventral
 
 

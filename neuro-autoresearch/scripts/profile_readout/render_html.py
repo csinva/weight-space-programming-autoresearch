@@ -2,11 +2,11 @@
 """Render benchmark result JSONs into a single self-contained HTML dashboard.
 
 Pure stdlib only (json, glob, os, argparse, html). No torch, no CDN, no JS.
-Reads scripts/benchmark/results/*.json and writes results/index.html.
+Reads scripts/profile_readout/results/*.json and writes results/index.html.
 
 Usage:
-    python scripts/benchmark/render_html.py
-    python scripts/benchmark/render_html.py --out path.html --results-dir dir/
+    python scripts/profile_readout/render_html.py
+    python scripts/profile_readout/render_html.py --out path.html --results-dir dir/
 """
 import argparse
 import glob
@@ -266,7 +266,7 @@ def render_page(results):
             '<main><div class="wrap"><section class="section">'
             '<h2 class="sec">benchmark result</h2>'
             '<h3 class="head">No results yet</h3>'
-            '<p class="small">Run <code>python scripts/benchmark/benchmark.py</code> '
+            '<p class="small">Run <code>python scripts/profile_readout/profile.py</code> '
             'to produce result JSONs, then re-render.</p>'
             '</section></div></main>'
         )
@@ -306,7 +306,7 @@ def main():
     default_dir = os.path.join(here, "results")
     ap = argparse.ArgumentParser(description="Render benchmark results to HTML.")
     ap.add_argument("--results-dir", default=default_dir,
-                    help="directory of result JSONs (default: scripts/benchmark/results)")
+                    help="directory of result JSONs (default: scripts/profile_readout/results)")
     ap.add_argument("--out", default=None,
                     help="output HTML path (default: <results-dir>/index.html)")
     args = ap.parse_args()
