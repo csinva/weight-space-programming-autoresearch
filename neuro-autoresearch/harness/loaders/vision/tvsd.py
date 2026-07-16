@@ -75,16 +75,16 @@ def _tvsd_oracle(a) -> np.ndarray:
 
 
 def _oracle_select(oracle, Ytr, Yte, roi_masks):
-    """TVSD reliability cut + noise ceiling, mirroring NSD's ``_ncsnr_select``.
+    """TVSD reliability cut: keep only the reliable electrodes (SELECTION), mirroring NSD's
+    ``_ncsnr_select`` selection step.
 
-    ``oracle`` is the per-electrode noise-ceiling CORRELATION; its square is the R^2 ceiling the
-    reward normalizes by (Algonauts r^2/NC_r2, here r^2/oracle^2 = the squared oracle-normalized
-    predictivity, the TVSD-paper metric). Electrodes with ``oracle < TVSD_ORACLE_MIN`` (operator
-    knob; default 0.2, mirroring NSD_NCSNR_MIN; set 0 to keep all reliable electrodes) are dropped
-    from Y AND every roi_mask, so each breakdown scores only its signal electrodes. An absolute
-    ``_TVSD_NC_FLOOR`` is enforced regardless of the knob so a ~zero-ceiling electrode never reaches
-    the reward's r^2/oracle^2 divide. Returns ``(Ytr, Yte, roi_masks, nc)`` with ``nc`` (= oracle^2)
-    aligned to the surviving electrode columns."""
+    ``oracle`` is the per-electrode noise-ceiling CORRELATION; it is used here ONLY to select
+    electrodes (the reward is raw Pearson r, not r^2/oracle^2 -- see ``_tvsd_finalize``). Electrodes
+    with ``oracle < TVSD_ORACLE_MIN`` (operator knob; default 0.2, mirroring NSD_NCSNR_MIN; set 0 to
+    keep all reliable electrodes) are dropped from Y AND every roi_mask, so each breakdown scores only
+    its signal electrodes. An absolute ``_TVSD_NC_FLOOR`` on oracle^2 is enforced regardless of the
+    knob so a ~zero-ceiling electrode is never scored. Returns ``(Ytr, Yte, roi_masks, nc)`` with
+    ``nc`` (= oracle^2) aligned to the surviving columns (the caller discards it -> raw r)."""
     thresh = float(os.environ.get("TVSD_ORACLE_MIN", "0.2"))
     oracle = _tvsd_oracle(oracle)
     nc = np.clip(oracle, 0.0, None) ** 2                      # R^2 ceiling (anti-reliable -> 0)
@@ -99,16 +99,20 @@ def _oracle_select(oracle, Ytr, Yte, roi_masks):
 
 
 def _tvsd_finalize(Xtr, Xte, Ytr, Yte, roi_masks, oracle, subject, tag):
-    """Shared tail for both load paths: oracle reliability cut + noise ceiling, then the
-    train-constant-column drop (carrying ``nc`` along), then the row print. Returns the
-    ``(X_train, X_test, Y_train, Y_test, roi_masks, nc)`` 6-tuple the harness expects."""
-    Ytr, Yte, roi_masks, nc = _oracle_select(oracle, Ytr, Yte, roi_masks)
-    keep = surviving_cols(Ytr)                                # one train-constant scan, shared with nc
-    nc = nc[keep.numpy() if torch.is_tensor(keep) else np.asarray(keep)]
+    """Shared tail for both load paths: oracle reliability cut (reliable-electrode SELECTION only),
+    then the train-constant-column drop, then the row print. Returns the
+    ``(X_train, X_test, Y_train, Y_test, roi_masks, nc)`` 6-tuple the harness expects.
+
+    ``nc`` is returned as ``None`` so the reward is the RAW mean Pearson r over the surviving
+    electrodes (not r^2/oracle^2). The stored ``oracle`` is a single-repeat/split-half reliability,
+    but the test target is the 30-repeat AVERAGE, so dividing r^2 by oracle^2 mixes two SNR regimes
+    and pushes the score past 1; raw r keeps the comparison interpretable in [-1, 1]."""
+    Ytr, Yte, roi_masks, _ = _oracle_select(oracle, Ytr, Yte, roi_masks)
+    keep = surviving_cols(Ytr)
     Ytr, Yte, roi_masks = drop_constant_cols_with_rois(Ytr, Yte, roi_masks, keep=keep)
     print(f"  TVSD monkey{subject}{tag}: {Xtr.shape[0]} train / {Xte.shape[0]} test images; "
           f"region=all -> {Ytr.shape[1]} reliable electrodes ({Xtr.shape[1]} stim dims)")
-    return Xtr, Xte, Ytr, Yte, roi_masks, nc
+    return Xtr, Xte, Ytr, Yte, roi_masks, None
 
 
 def _tvsd_images_root() -> str:
