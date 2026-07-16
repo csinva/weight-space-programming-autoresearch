@@ -10,7 +10,7 @@ features — any computation expressible in code — which one predicts the neur
 
 The unit of progress is one file (`model.py`); the unit of truth is one number (`test_corr`).
 
-> **0.44** NSD · r²/NC  ·  **0.063** iEEG · test_corr  ·  **< 1M** params (enforced)  ·  **0** gradient steps  ·  **5** datasets, **2** species
+> **0.44** NSD (r²/NC)  ·  **0.063** iEEG (raw r)  ·  **< 100K** params, enforced  ·  **0** gradient steps  ·  **4** datasets · **2** species · **3** modalities
 
 ## The idea
 
@@ -68,38 +68,43 @@ RGB pixels of a square image, `side = round(sqrt(D_in/3))`.)
 
 **Why written, not learned?** A trained encoding model entangles two questions: does the brain
 resemble this *computation*, or this *training set*? Writing the parameters in code answers only the
-first — the one we want. The 1M-parameter ceiling is a forcing function for interpretability: every
+first — the one we want. The 100K-parameter ceiling is a forcing function for interpretability: every
 champion is a small, readable computation you can turn into a mechanistic claim, not a black box.
-On NSD and Triple-N the reward is **noise-ceiling-normalized** (r²/NC over the reliably-driven
-voxels/units), so 0.44 means 44% of the *recoverable* signal, not a raw correlation.
 
-## Datasets
+## The four datasets
 
-Presets live in `harness/datasets.py`, selected by the `NEURO_DATASET` env var (no source edit, so
-parallel runs never collide). All are pre-staged locally and load **fully offline**
-(`download=False`). Three vision, two language — two species, three modalities:
+**Two vision, two language** — three recording modalities across two species. Each is a preset in
+`harness/datasets.py`, chosen by the `NEURO_DATASET` env var (no source edit, so parallel runs never
+collide) and loaded **fully offline** from a local copy.
 
-| `NEURO_DATASET` | study | neural · stimulus | reward |
-| --- | --- | --- | --- |
-| `nsd` (default) | Natural Scenes Dataset (human) | fMRI · image | early+ventral stream, NC-normalized · **0.44** |
-| `tvsd` | THINGS ventral-stream (macaque) | spiking · image | visual units (V1→IT), raw r |
-| `nnn` | Triple-N / macaque NSD-1000 | spiking · image | reliable EVC+IT units, NC-normalized |
-| `ieeg` | 'Podcast' ECoG (human) | iEEG · text (chars) | all electrodes, 5-fold temporal CV · **0.063** |
+| domain | `NEURO_DATASET` | study | brain · stimulus | reward |
+| --- | --- | --- | --- | --- |
+| **vision** | `nsd` (default) | Natural Scenes Dataset · human | fMRI · natural images | early+ventral stream, noise-normalized · **0.44** |
+| | `nnn` | Triple-N · macaque | spiking · natural images | reliable EVC+IT units, noise-normalized |
+| **language** | `huth` | Huth story-listening · human | fMRI · spoken narrative | all cortical voxels, raw *r* |
+| | `ieeg` | 'Podcast' ECoG · human | iEEG · spoken words | all electrodes, 5-fold temporal CV · **0.063** |
 
+**Vision** — `X` is the flattened RGB pixels of a square image (`side = round(sqrt(D_in/3))`).
 - **`nsd`** — prepared GLMdenoise betas; reward = the joint early+ventral stream (~14.5k reliable
-  voxels); the shared-1000 images are held out image-disjoint. Subjects 1, 2, 5, 7 are staged via
-  `NEURO_SUBJECT` (1+2 the search reward, 5+7 held out).
-- **`ieeg`** — human high-gamma (70–200 Hz) power to a ~30-min spoken podcast; the stimulus is
-  `chars` (each word encoded as the char-id grid of its n-gram, so the model builds linguistic
-  structure from characters up — no pretrained embeddings); reward = rotating 5-fold temporal CV
-  (a single fixed hold-out is trivially overfit), meaned over patients.
-- A **Huth-lab story-listening fMRI** language dataset (semantic cortex) is in progress.
-- The reward region is a fixed **per-dataset** attribute — no ROI menu and no way to aim the readout
-  at the target.
+  voxels), with the shared-1000 images held out image-disjoint. Subjects 1, 2 are the search reward;
+  5, 7 are held out for generalization (via `NEURO_SUBJECT`).
+- **`nnn`** (Triple-N) — macaque spiking to the *same* NSD-1000 images; reward = reliable EVC+IT units
+  pooled, with a 5-fold split over the 1000 images. Search monkeys M1–M3; M4, M5 held out.
 
-The train/test split is a contiguous **temporal hold-out** by default (so time-adjacent samples
-sharing a neural window can't leak), or **image-disjoint** for NSD; it is cached on disk keyed by the
-full dataset identity, so reruns load in seconds.
+**Language** — the stimulus is `chars`: each word is the character-id grid of its n-gram, so the model
+builds linguistic structure from characters up, with **no pretrained embeddings**.
+- **`huth`** — human fMRI while listening to spoken stories (the "Moth Radio Hour"); per-word features
+  are resampled onto the fMRI TR grid and FIR-delayed, then scored over all cortical voxels. Subjects
+  UTS01–03.
+- **`ieeg`** — human intracranial high-gamma (70–200 Hz) to a ~30-min podcast; reward = a rotating
+  5-fold temporal CV over all electrodes (a single fixed hold-out is trivially overfit), meaned over
+  patients 01–03 (04, 05 held out).
+
+The **vision** rewards are noise-ceiling-normalized (r²/NC over reliably-driven voxels/units, so 0.44
+means 44% of the *recoverable* signal); the **language** rewards are raw mean Pearson *r*. The reward
+region is a fixed **per-dataset** attribute — no ROI menu, no way to aim the readout at the target.
+Splits are cached on disk keyed by the full dataset identity, so reruns load in seconds. *(The harness
+also ships a `tvsd` macaque-vision preset, outside the paper's four.)*
 
 ## Two champions, read as hypotheses
 
@@ -126,7 +131,7 @@ pip install .
 (`train_corr` / `test_corr` / timing); persists nothing.
 ```bash
 python -m harness.run                          # score the current model.py on the active dataset
-NEURO_DATASET=ieeg python -m harness.run       # pick a preset: nsd | tvsd | nnn | ieeg
+NEURO_DATASET=ieeg python -m harness.run       # pick a preset: nsd | nnn | huth | ieeg
 NEURO_READOUT=himalaya python -m harness.run   # reference readout (default = the ~20× faster fast ridge)
 ```
 
@@ -136,7 +141,7 @@ decentralized, self-paced loops with no synchronization barrier:
 search/search.sh nsd --hours 12                # 10 proposers + 1 GPU evaluator + a conductor steering every 60m
 search/search.sh nsd --hours 12 --effort high  # ONE effort knob (low|medium|high|xhigh|max) for every agent
 search/search.sh nsd --hours 12 --epoch-mins 0 # conductor OFF — pure decentralized pool
-search/search.sh tvsd --hours 6 --gpu 1        # pin to GPU 1 → run a dataset per card in parallel
+search/search.sh nnn --hours 6 --gpu 1         # pin to GPU 1 → run a dataset per card in parallel
 ```
 - **Proposer pool** — N headless LLM CLIs, each confined to its own sandbox, editing its own
   `model.py`, proposing it, and blocking only on *its own* score.
