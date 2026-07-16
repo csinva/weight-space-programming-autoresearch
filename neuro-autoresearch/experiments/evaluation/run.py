@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime
+import gc
 import importlib.util
 import os
 import re
@@ -97,13 +98,32 @@ def baseline_specs(domain):
     return VISION_BASELINES if domain == "vision" else LANGUAGE_BASELINES
 
 
+def _free_gpu():
+    """Release the previous subject's cached GPU allocations. Each subject re-loads its own split
+    onto the GPU, so without this the caching allocator's leftover reserved blocks (plus fragmentation)
+    accumulate across subjects and OOM the 2nd/3rd subject on the larger datasets. empty_cache only
+    frees *unused* blocks, so intentionally cached live tensors (e.g. the language LM) are kept."""
+    gc.collect()
+    try:
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:
+        pass
+
+
 def score_subject(dataset, subject, champ_path, lm_cache):
     """Score all requested models on one subject, keyed by stable schema model IDs."""
     os.environ["NEURO_DATASET"] = dataset
     os.environ["NEURO_SUBJECT"] = str(subject)
     os.environ.pop("NEURO_SUBJECTS", None)
     os.environ["NEURO_MAX_PARAMS"] = _NO_CAP
-    for module in [name for name in sys.modules if name.startswith("harness")]:
+    _free_gpu()  # clear the prior subject's GPU cache before loading this subject's split
+    # Purge harness modules so harness.datasets re-reads NEURO_DATASET/NEURO_SUBJECT on re-import.
+    # Keep harness.loaders.studies cached: re-executing its class body would re-register the
+    # neuralset Study in the global catalog (RuntimeError: name collision) on the 2nd subject.
+    _keep = {"harness.loaders.studies"}
+    for module in [name for name in sys.modules if name.startswith("harness") and name not in _keep]:
         del sys.modules[module]
     from harness.datasets import DATASET
     from harness.loaders import load_split
