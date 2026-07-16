@@ -41,14 +41,31 @@ _CLIP_STD      = (0.26862954, 0.26130258, 0.27577711)
 # SRP helper (reuses srp.py)
 # ---------------------------------------------------------------------------
 
+_SRP_CACHE: dict = {}
+
+
+def _srp_transformer(D: int, dim: int, seed: int):
+    """Fit-or-load the SRP transformer for (D -> dim, seed), memoized in-process so repeated
+    per-batch and train/test calls reuse the SAME projection matrix (correctness) without
+    re-reading the joblib cache on every call (speed)."""
+    key = (D, dim, seed)
+    t = _SRP_CACHE.get(key)
+    if t is None:
+        from srp import get_srp_transformer
+        cache = os.path.join(HERE, "results", "srp_cache")
+        t = get_srp_transformer(D, dim, None, seed, cache_dir=cache)
+        _SRP_CACHE[key] = t
+    return t
+
+
 def _srp(feats_np: np.ndarray, dim: int, seed: int) -> np.ndarray:
-    """SRP project (N, D) -> (N, dim). D<=dim is returned as-is."""
+    """SRP project (N, D) -> (N, dim). D<=dim is returned as-is. SRP is a fixed linear map (no
+    centering), so projecting per-batch and concatenating is identical to projecting the full
+    matrix at once."""
+    feats_np = np.ascontiguousarray(feats_np, dtype=np.float32)
     if feats_np.shape[1] <= dim:
-        return feats_np.astype(np.float32)
-    from srp import get_srp_transformer
-    cache = os.path.join(HERE, "results", "srp_cache")
-    t = get_srp_transformer(feats_np.shape[1], dim, None, seed, cache_dir=cache)
-    return t.transform(feats_np).astype(np.float32)
+        return feats_np
+    return _srp_transformer(feats_np.shape[1], dim, seed).transform(feats_np).astype(np.float32)
 
 
 def _standardize(A_tr, A_te):
@@ -88,17 +105,23 @@ SELECT_GROUPS = {"nsd": ["early", "ventral"], "tvsd": ["V1", "V4", "IT"], "nnn":
 # Forward extractors: each returns {layer_name: (N, dim) float32 np}
 # ---------------------------------------------------------------------------
 
-def _hook_forward(net, tap_map: dict, X_tensor, device, batch=64):
+def _hook_forward(net, tap_map: dict, X_tensor, device, dim, seed, batch=64, reduce=None):
     """Run `net` forward in batches, capturing taps via forward hooks.
 
-    tap_map: {name: module}  — each module gets a hook that stores output.flat.
-    Returns {name: (N, D)} float32 cpu numpy.
+    tap_map: {name: module}  — each module gets a hook that stores a reduced batch.
+    Each batch's tap output is reduced IMMEDIATELY (default: flatten -> SRP to `dim`) before being
+    stored, so full-resolution conv activations for every image are never held in host RAM at once
+    (this bounds memory; the previous version cat'd raw (N, up to ~800k) matrices and OOM'd).
+    Returns {name: (N, D) float32 np}.
     """
+    if reduce is None:
+        def reduce(out):
+            return _srp(out.flatten(1).cpu().float().numpy(), dim, seed)
     caught = {n: [] for n in tap_map}
     handles = []
     for name, mod in tap_map.items():
         def _hook(m, inp, out, n=name):
-            caught[n].append(out.detach().flatten(1).cpu().float())
+            caught[n].append(reduce(out.detach()))
         handles.append(mod.register_forward_hook(_hook))
     N = X_tensor.shape[0]
     with torch.no_grad():
@@ -106,7 +129,7 @@ def _hook_forward(net, tap_map: dict, X_tensor, device, batch=64):
             net(X_tensor[s:s+batch].to(device))
     for h in handles:
         h.remove()
-    return {n: torch.cat(caught[n], 0).numpy() for n in tap_map}
+    return {n: np.concatenate(caught[n], 0) for n in tap_map}
 
 
 def extract_alexnet(X_flat, imsize, dim, seed, device, pretrained=True, batch=128):
@@ -121,7 +144,7 @@ def extract_alexnet(X_flat, imsize, dim, seed, device, pretrained=True, batch=12
         "conv5": net.features[11], "fc6":   net.classifier[2],
         "fc7":   net.classifier[5],"fc8":   net.classifier[6],
     }
-    raw = _hook_forward(net, taps, Xt, device, batch)
+    raw = _hook_forward(net, taps, Xt, device, dim, seed, batch)
     del net
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
@@ -136,7 +159,7 @@ def extract_resnet50(X_flat, imsize, dim, seed, device, pretrained=True, batch=1
         "layer1": net.layer1, "layer2": net.layer2,
         "layer3": net.layer3, "layer4": net.layer4,
     }
-    raw = _hook_forward(net, taps, Xt, device, batch)
+    raw = _hook_forward(net, taps, Xt, device, dim, seed, batch)
     # avgpool (2048-d) — no hook needed, just run forward
     avgpool_out = []
     with torch.no_grad():
@@ -156,15 +179,12 @@ def extract_vit(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
     from torchvision.models import vit_b_16, ViT_B_16_Weights
     net = vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1 if pretrained else None).eval().to(device)
     net.requires_grad_(False)
-    D = net.hidden_dim  # 768
-
     Xt = _preprocess(X_flat, imsize, 224, _IMAGENET_MEAN, _IMAGENET_STD, device, batch)
     tap_indices = [2, 5, 8, 11]  # 0-indexed encoder blocks
-    # Hooks flatten (N, seq+1, D) -> (N, (seq+1)*D); first D values = CLS token
+    # Encoder-block output is (N, seq+1, D); reduce each batch to the CLS token (index 0) -> (N, D)
     taps = {f"block{i+1}": net.encoder.layers[i] for i in tap_indices}
-    raw = _hook_forward(net, taps, Xt, device, batch)
-    for k in raw:
-        raw[k] = raw[k][:, :D]  # CLS token from flattened output
+    raw = _hook_forward(net, taps, Xt, device, dim, seed, batch,
+                        reduce=lambda out: out[:, 0].cpu().float().numpy())
 
     # Final CLS after encoder + layer norm
     cls_out = []
@@ -429,7 +449,7 @@ def main(argv=None):
     p.add_argument("--subject", default=None,
                    help="NEURO_SUBJECT; a comma list (e.g. 1,3,4) is scored per-subject and averaged "
                         "(equal weight), like the search reward. Default: dataset default subject.")
-    p.add_argument("--dim",     type=int, default=2048, help="SRP target dim (default 2048)")
+    p.add_argument("--dim",     type=int, default=4096, help="SRP target dim (default 4096)")
     p.add_argument("--seed",    type=int, default=0)
     a = p.parse_args(argv)
 

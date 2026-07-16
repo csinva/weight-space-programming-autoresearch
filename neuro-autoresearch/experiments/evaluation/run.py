@@ -121,7 +121,7 @@ def score_subject(dataset, subject, champ_path, lm_cache):
         for spec in VISION_BASELINES:
             out[spec["id"]] = V.score_model(
                 spec["name"], spec["weights"], Xtr, Xte, Ytr, Yte, roi_masks, nc,
-                DATASET, R, device, dim=2048, seed=0)["test_corr"]
+                DATASET, R, device, dim=4096, seed=0)["test_corr"]
     else:
         import language as L
         for spec in LANGUAGE_BASELINES:
