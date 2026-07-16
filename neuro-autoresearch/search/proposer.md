@@ -107,9 +107,12 @@ Two complexity fields travel with YOUR model into the shared DB -- set them HONE
 2. PER-SAMPLE: an image's activations depend ONLY on that image. NO statistic across the batch
    (no mean/std over dim 0, no batchnorm/whitening over the set). Per-image normalisation only.
 
-Also HARD-CAPPED: **at most 1,000,000 parameters** (`NEURO_MAX_PARAMS`) -- counted as the larger of
-your declared `n_params` and any `nn.Module` you materialise, so under-declaring won't dodge it. A
-model over the cap is rejected at propose time and errors at score time. Stay small and hand-written.
+Also HARD-CAPPED: the parameter budget stated in THIS RUN's preamble (`NEURO_MAX_PARAMS`) -- counted
+ROBUSTLY as every fixed weight your model MATERIALISES: not just your declared `n_params`, but the
+real element count of every tensor you build (Gabor/conv banks, projection or sampling matrices,
+nn.Module params AND buffers), whether registered or just stashed in a Python list/attribute. So
+under-declaring cannot dodge it. A model over the cap errors at score time. Stay small and
+hand-written -- fewer, interpretable parameters.
 
 ## THE LOOP -- repeat forever
 The ONLY fixed mechanic is: write a model into `model.py`, `propose` it, then `wait` for its score.

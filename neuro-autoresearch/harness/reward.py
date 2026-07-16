@@ -24,6 +24,10 @@ from harness.roi import roi_breakdown, select_targets, reward_region_mask
 
 MAX_DOUT = 10_000             # hard cap on a model's representation width D_out (ridge feasibility)
 FORWARD_BATCH = 512           # chunk the forward pass over samples (per-sample invariant => identical output)
+# The ONE parameter cap, robustly enforced below (after the forward pass, on every fixed tensor the
+# model materialises -- see robust_n_params). Set per run via the NEURO_MAX_PARAMS env var; this is
+# the single source of truth for the limit (the proposer prompt is told the same number).
+MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)
 
 
 def _forward(model, X):
@@ -198,6 +202,15 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         raise ValueError(f"representation D_out={d_out} >= {MAX_DOUT} cap "
                          f"(keep the model's output dimension under {MAX_DOUT})")
 
+    # The ONE parameter-cap check: robust (every fixed tensor the model materialised, now that the
+    # forward has built any lazy banks) and fail-fast (before the expensive ridge). Over the cap is a
+    # recorded error, not a crash (evaluate_on_split_safe catches it). This is the sole enforcement --
+    # no separate pre-forward check, which would only under-count the not-yet-built weights anyway.
+    n_params = robust_n_params(model)
+    if n_params > MAX_PARAMS:
+        raise ValueError(f"n_params {n_params:,} exceeds the {MAX_PARAMS:,} cap "
+                         f"(counts ALL fixed weights the model materialises, not just declared)")
+
     # Optional per-dataset feature pipeline between the model and the fixed ridge. For the Huth
     # fMRI-language dataset ("lanczos_fir") the per-word model embeddings are Lanczos-downsampled to
     # the fMRI TR grid, z-scored, and FIR-delayed (the reference src/features.py pipeline), turning
@@ -245,7 +258,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         "model_name": model.name,
         "idea": getattr(model, "idea", None) or getattr(model, "description", ""),
         "experiment_notes": _experiment_notes(model),
-        "n_params": robust_n_params(model),   # declared vs. actually-materialised tensors, whichever larger
+        "n_params": n_params,   # robust: declared vs. actually-materialised tensors, whichever larger
         "n_train": n_train,
         "n_test": n_test,
         "n_targets": int(Yv_train.shape[1]),

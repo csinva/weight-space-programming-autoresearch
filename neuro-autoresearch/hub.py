@@ -276,7 +276,7 @@ def propose(model_file: str, idea: str = "",
             f"model.py rejected -- reward-hack: {cheat}. Models must be HAND-WRITTEN and UNTRAINED: "
             f"analytic / fixed-seed weights in your own code, receiving only the stimulus. No "
             f"pretrained/downloaded weights, no network, no reading the neural target or the readout.")
-    declared = model_complexity(model_file).get("n_params")   # early reject; score-time re-checks the real count
+    declared = model_complexity(model_file).get("n_params")   # cheap early filter; the harness enforces the REAL count at score
     if declared and declared > _MAX_PARAMS:
         raise RuntimeError(
             f"model.py rejected -- declared n_params {declared:,} exceeds the {_MAX_PARAMS:,} cap. "
@@ -599,7 +599,7 @@ _CHEAT_PATTERNS = (
     (r"harness\.reward|harness\.ridge|harness\.loaders|\bload_split\b|reward_region_mask", "reads the target/readout"),
     (r"corrcoef\s*=|evaluate_on_split\s*=|\bridge\.\w+\s*=|\breward\.\w+\s*=", "monkeypatches the readout"),
 )
-_MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)   # hand-written models stay small
+_MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)   # propose-time filter; harness enforces robustly at score
 _GUARD_INSTALLED = False
 
 
@@ -610,25 +610,6 @@ def _scan_source(path):
     except OSError:
         return None
     return next((why for pat, why in _CHEAT_PATTERNS if re.search(pat, src)), None)
-
-
-def _n_params(model):
-    """Param count for the cap: the larger of the declared ``n_params`` and the tensors the model has
-    actually materialised (Module params/buffers AND loose fixed banks), via the harness robust
-    counter -- so under-declaring while holding a big bank (a pretrained net, or a hand-built
-    Gabor/projection bank kept as loose tensors) can't dodge it. Falls back to the declared value if
-    the harness counter is unavailable. NOTE: weights built lazily on the first forward pass are not
-    yet present at pre-forward call sites; ``score`` re-checks the cap post-forward from the recorded
-    ``n_params`` to catch those too."""
-    try:
-        declared = int(getattr(model, "n_params", 0) or 0)
-    except (TypeError, ValueError):
-        declared = 0
-    try:
-        from harness.reward import count_params
-        return max(declared, count_params(model))
-    except Exception:  # noqa: BLE001  -- best effort; the declared count still applies
-        return declared
 
 
 def _install_integrity_guard():
@@ -677,13 +658,8 @@ def score(model_file: str, dataset: str | None = None) -> dict:
             spec = importlib.util.spec_from_file_location("model", model_file)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            if (n := _n_params(mod.MODEL)) > _MAX_PARAMS:   # small & hand-written: no big param dump wins
-                raise ValueError(f"n_params {n:,} exceeds the {_MAX_PARAMS:,} cap")
             row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
-            # Post-forward re-check: lazily-built weights (banks materialised inside __call__) aren't
-            # visible at the pre-forward check above; the recorded n_params counts them, so cap here too.
-            if str(row.get("status", "")).startswith("ok") and (rn := row.get("n_params")) and rn > _MAX_PARAMS:
-                raise ValueError(f"n_params {int(rn):,} exceeds the {_MAX_PARAMS:,} cap")
+                                                          # (the harness robustly enforces the param cap)
         res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
                                        "experiment_notes", "n_params", "seconds")}
     except Exception as e:  # noqa: BLE001  -- any eval fault is a recorded error, not a crash
