@@ -12,9 +12,10 @@ harness.loaders.huth.apply_feature_pipeline). Per story we bake:
 Alignment mirrors the Huth DataSequence.from_grid EXACTLY: data_times are word MIDPOINTS (start+end)/2,
 tr_times are TR MIDPOINTS (index*TR + TR/2), and words are filtered by make_word_ds's bad_words set.
 Stories are the reference's EXACT train/test lists (src/data.py), filtered to those staged on disk for
-the subject; trimming matches the reference default (responses `data` are already [10:-5]; we drop a
-further 30 TRs per end, and Lanczos onto the same TR grid). Runtime reads only data/huth/; ds003020 is
-the build reader. The reference uses subjects UTS01/UTS02/UTS03 (the deeply-sampled ones).
+the subject; edge-trimming matches the reference default (drop a further 30 TRs per end) but on
+ds003020's own base trim -- its `data` is full[5:-15] (front-trim 5, confirmed by an HRF-alignment
+sweep against the reference GPT-2 XL baseline), NOT the [10:-5] of Chandan's huge_data. Runtime reads
+only data/huth/; ds003020 is the build reader. The reference uses subjects UTS01/UTS02/UTS03 (deep).
 
 Get the raw data once (git-annex/datalad; per subject ~40-47 GB for the full story set):
   datalad clone https://github.com/OpenNeuroDatasets/ds003020
@@ -138,7 +139,7 @@ def _lanczos(newtime: np.ndarray, oldtime: np.ndarray, window: int = WINDOW) -> 
 def _story(subject: str, story: str):
     """(X chars, Y BOLD TRs, L Lanczos) for one story."""
     with h5py.File(os.path.join(RAW, "derivatives/preprocessed_data", subject, f"{story}.hf5")) as f:
-        data = np.asarray(f["data"], dtype=np.float32)           # (n_tr0, n_voxels) == full[10:-5]
+        data = np.asarray(f["data"], dtype=np.float32)           # (n_tr0, n_voxels) == full[5:-15]
     Y = data[EDGE_TRIM:-EDGE_TRIM]                                # 30 TRs off each story end (trimmed)
 
     times, words = _word_times(os.path.join(RAW, "derivatives/TextGrids", f"{story}.TextGrid"))
