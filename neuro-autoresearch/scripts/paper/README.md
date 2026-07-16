@@ -10,7 +10,7 @@ python scripts/paper/evaluate.py \
   --split huth=UTS01,UTS02:UTS03
 ```
 
-Omit `--split` for datasets already declared in `scripts/generalization/splits.py`. The override must
+Omit `--split` for datasets already declared in `scripts/eval/splits.py`. The override must
 match the subjects saved in that run's `env.json`. The runner takes each database champion, scores it unchanged
 on search and held-out subjects, then runs paired pretrained and random-initialized baselines through
 the same readout and metric. It writes detailed JSON under `results/paper/<run>/` and the combined
@@ -25,8 +25,8 @@ paper runner launches only this predefined matrix.
 
 ## Exact computation
 
-The runner is a thin wrapper over the existing `scripts/benchmark/vision_baselines.py`,
-`scripts/benchmark/language_baselines.py`, `scripts/generalization/generalize.py`, and fixed
+The runner is a thin wrapper over the existing `scripts/eval/vision.py`,
+`scripts/eval/language.py`, `scripts/eval/evaluate.py`, and fixed
 `harness/` readout. It does not implement a second evaluation path.
 
 For every subject and vision network:

@@ -34,7 +34,7 @@ task handed to each search proposer lives in **`search/proposer.md`** (+ per-dat
   via `NEURO_READOUT`) · `reward.py` (orchestration: forward → readout → the region `test_corr`) ·
   `roi.py` (one `reward_region_mask` selector over the loader's per-ROI masks + the advisory per-ROI
   breakdown) · `run.py` (the manual single-eval CLI; prints the
-  row — the search loop records into `search.db` via `hub.py`) · `scripts/benchmark/` (profile the
+  row — the search loop records into `search.db` via `hub.py`) · `scripts/profile_readout/` (profile the
   readout pipeline phase-by-phase under GPU contention + HTML dashboard).
 - **`hub.py`** — the ONE importable API + CLI over a run's `search.db`
   (`propose` / `wait_for_result` / `champions` / `sample` / `get_best_model` /
@@ -78,7 +78,8 @@ activated venv (or invoke `.venv/bin/python` explicitly).
 source .venv/bin/activate                # REQUIRED before any of the below
 python -m harness.run                   # evaluate the current model.py once (manual)
 NEURO_READOUT=himalaya python -m harness.run     # reference readout (default: the ~20× faster fast ridge)
-python scripts/benchmark/benchmark.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
+python scripts/eval/evaluate.py --run runs/nsd__DATE   # champion vs baselines × (search, held-out) subjects → matrix
+python scripts/profile_readout/profile.py --dataset nsd   # profile the readout (3 concurrent) -> results/ + HTML
 search/search.sh nsd --hours 12         # unattended search: 10 proposers + 1 evaluator + a conductor steering every 1h
 search/search.sh nsd --hours 12 --effort high    # ONE effort knob for ALL proposers + conductor (low|medium|high|xhigh|max; default xhigh)
 search/search.sh nsd --hours 12 --epoch-mins 0   # conductor OFF (pure decentralized pool)
@@ -105,8 +106,9 @@ proposers stay blind); unset = the dataset's default subject.
 **`search/search.sh nsd` defaults this to `1,2`** (search subjects); override with the `NEURO_SUBJECT`
 env. Works for datasets that switch data by subject (`nsd` / `tvsd` / `ieeg` / `nnn`); `nnn` subsets its
 90 sessions by recording animal (M1..M5; unset = pool ALL animals). Hold out the rest for generalization
-(`scripts/generalization/generalize.py` — re-evals a run's DB champion on the held-out units; the
-per-dataset search/held-out split lives in `scripts/generalization/splits.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
+(`scripts/eval/evaluate.py` — re-evals a run's DB champion + reference baselines on the search AND
+held-out units through the exact reward; the per-dataset search/held-out split lives in
+`scripts/eval/splits.py`). `NSD_NCSNR_MIN` (default `0.2`, the field-standard `NC_r`
 reliability cut; `0` keeps all *reliable* voxels — an absolute `NC_r2` floor still drops near-zero-
 ceiling voxels so the `r²/NC_r2` reward can't explode) shortlists the scored voxels. A blob without
 provisioned `ncsnr` raises — (re)run `python -m scripts.process_dataset.nsd` to fetch+align it.

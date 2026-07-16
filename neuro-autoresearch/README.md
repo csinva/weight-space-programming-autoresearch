@@ -179,7 +179,7 @@ harness/            FIXED evaluation — must not be edited
   ridge.py            the readout: fast eigh+LOO (default) | himalaya, via NEURO_READOUT
   roi.py              reward-region target selection + advisory per-ROI breakdown
   run.py              the manual single-eval driver — `python -m harness.run`
-scripts/            dataset staging, benchmarks, generalization, and run scaffolding
+scripts/            dataset staging, eval/ (champion-vs-baseline matrix), profile_readout/, and run scaffolding
 docs/               human docs — start at docs/overview.html
 runs/<dataset>__<date>/   one search: search.db + models/ + proposers/ + eval/ (gitignored)
 ```
