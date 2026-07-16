@@ -36,7 +36,7 @@ proposers running CONCURRENTLY right now -- all of you read from and write model
 search.db at the same time, with no coordinator. Reward =
 a held-out encoding score on ${LABEL} (a fixed ridge readout from your model's activations to the
 recorded responses). For reference, ${CEIL}. Parameter budget: your model may materialise at most
-${NEURO_MAX_PARAMS:-1000000} fixed weights (counted robustly across ALL tensors you build; over it
+${NEURO_MAX_PARAMS:-100000} fixed weights (counted robustly across ALL tensors you build; over it
 errors at score time). The shared brain is search.db in your run; reach it ONLY through \`python hub.py\`
 (run from this sandbox)."
 

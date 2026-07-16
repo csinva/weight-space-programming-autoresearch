@@ -599,7 +599,7 @@ _CHEAT_PATTERNS = (
     (r"harness\.reward|harness\.ridge|harness\.loaders|\bload_split\b|reward_region_mask", "reads the target/readout"),
     (r"corrcoef\s*=|evaluate_on_split\s*=|\bridge\.\w+\s*=|\breward\.\w+\s*=", "monkeypatches the readout"),
 )
-_MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)   # propose-time filter; harness enforces robustly at score
+_MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 100_000)   # propose-time filter; harness enforces robustly at score
 _GUARD_INSTALLED = False
 
 

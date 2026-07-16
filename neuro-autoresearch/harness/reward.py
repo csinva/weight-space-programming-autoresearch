@@ -27,7 +27,7 @@ FORWARD_BATCH = 512           # chunk the forward pass over samples (per-sample 
 # The ONE parameter cap, robustly enforced below (after the forward pass, on every fixed tensor the
 # model materialises -- see robust_n_params). Set per run via the NEURO_MAX_PARAMS env var; this is
 # the single source of truth for the limit (the proposer prompt is told the same number).
-MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 1_000_000)
+MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 100_000)
 
 
 def _forward(model, X):

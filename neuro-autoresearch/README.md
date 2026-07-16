@@ -53,7 +53,7 @@ A self-contained `model.py` defines `class Model` with `__call__(self, X)` and e
 | --- | --- |
 | signature | `f: X (N, D_in) → (N, D_out)` |
 | weights | written in code, never learned |
-| params | `< 1,000,000` (enforced) |
+| params | `< 100,000` (`NEURO_MAX_PARAMS`, enforced robustly) |
 | width | `D_out < 10,000` |
 | per-sample | no statistics across the batch |
 | sees | only `X`, never the target `Y` |
