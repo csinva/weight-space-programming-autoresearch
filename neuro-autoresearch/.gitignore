@@ -6,13 +6,6 @@ scripts/cross_subject/
 # Machine-written outputs and caches (never commit)
 data/
 results/
-# Exception (policy): the per-dataset evaluation.json summaries are tiny (a few KB) and are the
-# canonical evaluation results — keep them versioned in the main repo. Everything else under
-# results/ (e.g. the srp_cache/ joblibs) stays ignored.
-!experiments/evaluation/results/
-!experiments/evaluation/results/*/
-!experiments/evaluation/results/*/evaluation.json
-experiments/evaluation/results/srp_cache/
 # committed: one champion model.py per (dataset, subject-config)
 runs/*
 !runs/best/

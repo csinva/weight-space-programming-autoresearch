@@ -1,14 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": {
     "id": "huth",
     "domain": "language",
-    "metric": "mean_pearson_r"
+    "metric": "mean_pearson_r",
+    "rois": [],
+    "required_rois": []
   },
   "evaluation": {
     "source_run": "runs/huth__2026-07-15",
-    "git_commit": "a0da0db2fe9f89c8e4d933baaea3c54eca7fcdd4",
-    "evaluated_at": "2026-07-16T15:25:42-07:00",
+    "git_commit": "f67ffbd3869132cb4e54c1455598ac7c6d7e4d93",
+    "evaluated_at": "2026-07-16T21:35:22-07:00",
     "readout": "fast"
   },
   "cohorts": {
@@ -25,24 +27,24 @@
       "label": "Best searched model",
       "role": "champion",
       "model_id": "v0hdy",
-      "model_file": "../../../../runs/huth__2026-07-15/models/v0hdy.py",
-      "model_sha256": "2d2841cc48cd8c1ec2a35dc1a1ba6d47149c9cddeab421cd1f22fe535656162b",
+      "model_file": "model.py",
+      "model_sha256": "5c6c3f1309231886b2f1677ef9c941184913cd803eeb6de6c6d85a1b3a5936a0",
       "n_params": 52246,
       "idea": "reference subtypes recur across pronoun case forms",
       "search_reward": 0.0629,
       "scores": {
         "search": {
           "subjects": {
-            "UTS01": 0.0585,
-            "UTS02": 0.0673
+            "UTS01": 0.0381,
+            "UTS02": 0.047
           },
-          "mean": 0.0629
+          "mean": 0.0426
         },
         "heldout": {
           "subjects": {
-            "UTS03": 0.0797
+            "UTS03": 0.0637
           },
-          "mean": 0.0797
+          "mean": 0.0637
         }
       }
     },
@@ -51,21 +53,21 @@
       "role": "baseline",
       "family": "random_projection",
       "weights": "fixed_random",
-      "model_file": "../../../../model.py",
+      "model_file": "../../../model.py",
       "model_sha256": "13740dbc06a75bdb3131b21fa8045a3ea978662b936e3fca6c1df6e74f45bd55",
       "scores": {
         "search": {
           "subjects": {
-            "UTS01": 0.0437,
-            "UTS02": 0.0335
+            "UTS01": 0.0283,
+            "UTS02": 0.023
           },
-          "mean": 0.0386
+          "mean": 0.0256
         },
         "heldout": {
           "subjects": {
-            "UTS03": 0.0404
+            "UTS03": 0.0384
           },
-          "mean": 0.0404
+          "mean": 0.0384
         }
       }
     },
@@ -77,16 +79,16 @@
       "scores": {
         "search": {
           "subjects": {
-            "UTS01": 0.0819,
-            "UTS02": 0.1209
+            "UTS01": 0.0633,
+            "UTS02": 0.0875
           },
-          "mean": 0.1014
+          "mean": 0.0754
         },
         "heldout": {
           "subjects": {
-            "UTS03": 0.1386
+            "UTS03": 0.1044
           },
-          "mean": 0.1386
+          "mean": 0.1044
         }
       }
     }

@@ -1,14 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "dataset": {
     "id": "ieeg",
     "domain": "language",
-    "metric": "mean_pearson_r"
+    "metric": "mean_pearson_r",
+    "rois": [],
+    "required_rois": []
   },
   "evaluation": {
     "source_run": "runs/ieeg__2026-07-07",
-    "git_commit": "48a959501ca337046b468a56aa923d1143d84f50",
-    "evaluated_at": "2026-07-16T13:22:15-07:00",
+    "git_commit": "f67ffbd3869132cb4e54c1455598ac7c6d7e4d93",
+    "evaluated_at": "2026-07-16T21:23:43-07:00",
     "readout": "fast"
   },
   "cohorts": {
@@ -27,8 +29,8 @@
       "label": "Best searched model",
       "role": "champion",
       "model_id": "plaxh",
-      "model_file": "../../../../runs/ieeg__2026-07-07/models/plaxh.py",
-      "model_sha256": "7b077393cc4d3ac6cdbc263c2037aa16280198a985df510f9136f79a4915e6d1",
+      "model_file": "model.py",
+      "model_sha256": "2ef0d94e6b1d24d362fef7e99e17ffb8c5449b870c96678fad7d0b540c3db8e1",
       "n_params": 198528,
       "idea": "0.0626 champion with informativeness-weighted context (content words 1.3x in context bag)",
       "search_reward": 0.063,
@@ -55,7 +57,7 @@
       "role": "baseline",
       "family": "random_projection",
       "weights": "fixed_random",
-      "model_file": "../../../../model.py",
+      "model_file": "../../../model.py",
       "model_sha256": "13740dbc06a75bdb3131b21fa8045a3ea978662b936e3fca6c1df6e74f45bd55",
       "scores": {
         "search": {
