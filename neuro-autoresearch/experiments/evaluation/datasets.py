@@ -15,6 +15,9 @@ DATASETS = {
         "axis": "NEURO_SUBJECT",
         "search": ["1", "2"],
         "heldout": ["5", "7"],
+        "rois": [
+            "early", "ventral", "V1", "V2", "V3", "hV4", "FFA", "PPA", "VWFA",
+        ],
     },
     "tvsd": {
         "domain": "vision",

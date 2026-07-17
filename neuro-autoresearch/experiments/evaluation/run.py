@@ -23,7 +23,8 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
-from common import cohort_scores, sha256_file, validate_evaluation, write_evaluation  # noqa: E402
+from common import (cohort_roi_scores, cohort_scores, sha256_file, validate_evaluation,
+                    write_evaluation)  # noqa: E402
 from datasets import DATASETS, evaluation_for       # noqa: E402
 
 BASELINE_MODEL = os.path.join(REPO, "model.py")
@@ -130,25 +131,34 @@ def score_subject(dataset, subject, champ_path, lm_cache):
     from harness import reward as R
 
     split = load_split(DATASET)
+
+    def record(result):
+        rois = {
+            roi: float(value["test"] if isinstance(value, dict) else value)
+            for roi, value in result.get("roi_corr", {}).items()
+        }
+        return {"test_corr": float(result["test_corr"]), "roi_corr": rois}
+
     out = {
-        "champion": R.evaluate_on_split(load_model(champ_path), split, DATASET)["test_corr"],
-        "random_projection": R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)["test_corr"],
+        "champion": record(R.evaluate_on_split(load_model(champ_path), split, DATASET)),
+        "random_projection": record(R.evaluate_on_split(load_model(BASELINE_MODEL), split, DATASET)),
     }
     device = R._readout_device()
     if evaluation_for(dataset)["domain"] == "vision":
         import vision as V
         Xtr, Xte, Ytr, Yte, roi_masks, nc = split
         for spec in VISION_BASELINES:
-            out[spec["id"]] = V.score_model(
+            out[spec["id"]] = record(V.score_model(
                 spec["name"], spec["weights"], Xtr, Xte, Ytr, Yte, roi_masks, nc,
-                DATASET, R, device, dim=4096, seed=0)["test_corr"]
+                DATASET, R, device, dim=4096, seed=0))
     else:
         import language as L
         for spec in LANGUAGE_BASELINES:
             key = (spec["name"], spec["weights"])
             lm = lm_cache.get(key) or L.ContextualLM(spec["name"], device, True)
             lm_cache[key] = lm
-            out[spec["id"]] = L.score_lang_subject(lm, dataset, str(subject), R, device)["test_corr"]
+            out[spec["id"]] = record(
+                L.score_lang_subject(lm, dataset, str(subject), R, device))
     return out
 
 
@@ -204,20 +214,46 @@ def main(argv=None):
             started = time.time()
             scores = score_subject(dataset, subject, champ_path, lm_cache)
             per_subject[cohort][str(subject)] = scores
-            print(f"  [{cohort:>7}] {subject}: champion {scores['champion']:.4f}  "
+            print(f"  [{cohort:>7}] {subject}: champion {scores['champion']['test_corr']:.4f}  "
                   f"({time.time() - started:.0f}s)")
 
     expected_models = ["champion", "random_projection"]
     expected_models += [spec["id"] for spec in baseline_specs(config["domain"])]
+    required_rois = list(config.get("rois", []))
+    roi_names = list(required_rois)
+    for cohort in ("search", "heldout"):
+        for subject in cohorts[cohort]:
+            for model_id in expected_models:
+                subject_rois = per_subject[cohort][subject][model_id]["roi_corr"]
+                missing = set(required_rois) - set(subject_rois)
+                if missing:
+                    raise ValueError(
+                        f"{dataset} subject {subject} model {model_id} is missing required ROIs "
+                        f"{sorted(missing)}")
+                for roi in subject_rois:
+                    if roi not in roi_names:
+                        roi_names.append(roi)
+
     scores_by_model = {
         model_id: {
             cohort: cohort_scores(
-                {subject: per_subject[cohort][subject][model_id] for subject in cohorts[cohort]},
+                {subject: per_subject[cohort][subject][model_id]["test_corr"]
+                 for subject in cohorts[cohort]},
                 cohorts[cohort])
             for cohort in ("search", "heldout")
         }
         for model_id in expected_models
     }
+    roi_scores_by_model = {
+        model_id: {
+            cohort: cohort_roi_scores(
+                {subject: per_subject[cohort][subject][model_id]["roi_corr"]
+                 for subject in cohorts[cohort]},
+                cohorts[cohort])
+            for cohort in ("search", "heldout")
+        }
+        for model_id in expected_models
+    } if roi_names else {}
 
     loaded = load_model(champ_path)
     models = {
@@ -244,10 +280,19 @@ def main(argv=None):
     }
     for spec in baseline_specs(config["domain"]):
         models[spec["id"]] = model_record(spec, scores_by_model[spec["id"]])
+    if roi_names:
+        for model_id in expected_models:
+            models[model_id]["roi_scores"] = roi_scores_by_model[model_id]
 
     document = {
-        "schema_version": 1,
-        "dataset": {"id": dataset, "domain": config["domain"], "metric": config["metric"]},
+        "schema_version": 2,
+        "dataset": {
+            "id": dataset,
+            "domain": config["domain"],
+            "metric": config["metric"],
+            "rois": roi_names,
+            "required_rois": required_rois,
+        },
         "evaluation": {
             "source_run": os.path.join("runs", provenance["source_run"]),
             "git_commit": git_commit(),

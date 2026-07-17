@@ -61,8 +61,23 @@ python experiments/evaluation/run.py --dataset nsd
 
 The published layout is `runs/best/<dataset>/{model.py,evaluation.json}`. The JSON is model-first:
 each stable model ID contains individual subject scores and an equal-weight mean for both `search`
-and `heldout`. It also records the metric, readout, source run, Git commit, timestamp, and the exact
-champion SHA256. There is deliberately no cross-subject gap field.
+and `heldout`. Schema version 2 also preserves every available per-subject ROI score under
+`roi_scores`, plus an equal-weight cohort mean for each ROI present in every cohort subject. NSD
+requires `early`, `ventral`, `V1`, `V2`, `V3`, `hV4`, `FFA`, `PPA`, and `VWFA`; a missing required
+ROI aborts the write. The file also records the metric, readout, source run, Git commit, timestamp,
+and exact champion SHA256. There is deliberately no cross-subject gap field.
+
+```json
+"roi_scores": {
+  "search": {
+    "subjects": {
+      "1": {"early": 0.31, "ventral": 0.42, "V1": 0.34},
+      "2": {"early": 0.29, "ventral": 0.40, "V1": 0.32}
+    },
+    "mean": {"early": 0.30, "ventral": 0.41, "V1": 0.33}
+  }
+}
+```
 
 Vision evaluations contain the champion, random projection, trained and untrained AlexNet,
 ResNet-50, and ViT-B/16, plus pretrained CLIP and DINOv2. Language evaluations contain the champion,

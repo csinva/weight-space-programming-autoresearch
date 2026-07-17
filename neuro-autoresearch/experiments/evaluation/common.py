@@ -44,10 +44,27 @@ def cohort_scores(subject_results: dict, subjects: list[str]) -> dict:
     return {"subjects": values, "mean": mean_scalar(values.values())}
 
 
+def cohort_roi_scores(subject_results: dict, subjects: list[str]) -> dict:
+    """Preserve every subject's ROI scores and average ROIs present for the full cohort."""
+    values = {
+        str(subject): {str(roi): float(score) for roi, score in subject_results[str(subject)].items()}
+        for subject in subjects
+    }
+    common = common_roi_keys(list(values.values()))
+    first = next(iter(values.values()), {})
+    ordered_common = [roi for roi in first if roi in common]
+    means = {
+        roi: mean_scalar(values[str(subject)][roi] for subject in subjects)
+        for roi in ordered_common
+    }
+    return {"subjects": values, "mean": means}
+
+
 def validate_evaluation(document: dict, expected_models: list[str], model_path: str) -> None:
     """Reject incomplete, internally inconsistent, or stale evaluation artifacts."""
-    if document.get("schema_version") != 1:
-        raise ValueError("schema_version must be 1")
+    schema_version = document.get("schema_version")
+    if schema_version not in {1, 2}:
+        raise ValueError("schema_version must be 1 or 2")
     if document.get("dataset", {}).get("domain") not in {"vision", "language"}:
         raise ValueError("dataset.domain must be vision or language")
     if not document.get("dataset", {}).get("metric"):
@@ -67,6 +84,12 @@ def validate_evaluation(document: dict, expected_models: list[str], model_path: 
 
     reject_gap(document)
     cohorts = document.get("cohorts", {})
+    roi_names = document.get("dataset", {}).get("rois", [])
+    required_rois = document.get("dataset", {}).get("required_rois", [])
+    if schema_version == 2 and not isinstance(roi_names, list):
+        raise ValueError("dataset.rois must be a list")
+    if schema_version == 2 and not isinstance(required_rois, list):
+        raise ValueError("dataset.required_rois must be a list")
     for model_id, model in document["models"].items():
         for cohort in ("search", "heldout"):
             expected_subjects = [str(s) for s in cohorts.get(cohort, [])]
@@ -79,6 +102,35 @@ def validate_evaluation(document: dict, expected_models: list[str], model_path: 
             if scores.get("mean") != expected_mean:
                 raise ValueError(
                     f"{model_id}.{cohort}.mean must be {expected_mean}, got {scores.get('mean')}")
+
+            if schema_version == 2 and roi_names:
+                roi_scores = model.get("roi_scores", {}).get(cohort, {})
+                roi_subjects = roi_scores.get("subjects", {})
+                if list(roi_subjects) != expected_subjects:
+                    raise ValueError(
+                        f"{model_id}.roi_scores.{cohort} subjects must be {expected_subjects}, "
+                        f"got {list(roi_subjects)}")
+                for subject, subject_rois in roi_subjects.items():
+                    extras = set(subject_rois) - set(roi_names)
+                    if extras:
+                        raise ValueError(
+                            f"{model_id}.roi_scores.{cohort}.{subject} has undeclared ROIs "
+                            f"{sorted(extras)}")
+                    missing = set(required_rois) - set(subject_rois)
+                    if missing:
+                        raise ValueError(
+                            f"{model_id}.roi_scores.{cohort}.{subject} is missing required ROIs "
+                            f"{sorted(missing)}")
+                common = common_roi_keys(list(roi_subjects.values()))
+                first = next(iter(roi_subjects.values()), {})
+                expected_roi_means = {
+                    roi: mean_scalar(roi_subjects[subject][roi] for subject in expected_subjects)
+                    for roi in first if roi in common
+                }
+                if roi_scores.get("mean") != expected_roi_means:
+                    raise ValueError(
+                        f"{model_id}.roi_scores.{cohort}.mean must be {expected_roi_means}, "
+                        f"got {roi_scores.get('mean')}")
 
     recorded_hash = document["models"]["champion"].get("model_sha256")
     actual_hash = sha256_file(model_path)
