@@ -32,11 +32,12 @@ def load_huth(d: Dataset):
     b = torch.load(path, weights_only=False)
 
     # NEURO_HUTH_NUM_TRAIN: use only the first N train stories (the reference's `num_train` knob; its
-    # runs use 5-8 of the 93-story pool). Default keeps the reward's GPU footprint modest so it runs
-    # on a shared card / with concurrent evaluators; set =0 (or a large N) to use the full baked pool.
+    # runs use 5-8 of the 93-story pool). Default 8 matches the circuit-building-autoresearch standard
+    # protocol (num_train=8), so scores are comparable to that report; set =0 (or a large N) to use
+    # the full baked pool, or a larger N to trade compute for a stronger ridge fit.
     Xtr, Ytr = b["X_train"], b["Y_train"]
     train_L, train_wc = b["train_L"], b["train_wc"]
-    n = int(os.environ.get("NEURO_HUTH_NUM_TRAIN", "24") or 0)
+    n = int(os.environ.get("NEURO_HUTH_NUM_TRAIN", "8") or 0)
     if 0 < n < len(train_wc):
         nw = sum(train_wc[:n])                                  # words in the first n stories
         ntr = sum(int(L.shape[0]) for L in train_L[:n])        # TRs in the first n stories
