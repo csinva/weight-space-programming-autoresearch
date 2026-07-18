@@ -66,6 +66,7 @@ def _short_label(model_id: str, model: dict) -> str:
         "resnet50": "ResNet-50",
         "vit": "ViT",
         "dino": "DINOv2",
+        "dinov3": "DINOv3",
         "clip": "CLIP",
         "gpt2": "GPT-2 XL",
     }

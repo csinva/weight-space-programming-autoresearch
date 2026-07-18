@@ -80,6 +80,10 @@ and exact champion SHA256. There is deliberately no cross-subject gap field.
 ```
 
 Vision evaluations contain the champion, random projection, trained and untrained AlexNet,
-ResNet-50, and ViT-B/16, plus pretrained CLIP and DINOv2. Language evaluations contain the champion,
-random projection, and pretrained GPT-2 XL. The writer always requires the complete modality-specific
-roster, so a partial smoke test cannot accidentally replace a publication result.
+ResNet-50, and ViT-B/16, plus pretrained CLIP and DINOv3 ViT-B/16. DINOv3 requires Transformers
+4.56 or newer and access to Meta's gated `facebook/dinov3-vitb16-pretrain-lvd1689m` checkpoint:
+accept the model license on Hugging Face, then run `hf auth login` on the evaluation machine.
+Language evaluations contain the champion, random projection, and pretrained GPT-2 XL. The writer
+always requires the complete modality-specific roster, so a partial smoke test cannot accidentally
+replace a publication result. Existing `evaluation.json` files retain their measured DINOv2 results;
+rerun the vision evaluations to generate DINOv3 results.

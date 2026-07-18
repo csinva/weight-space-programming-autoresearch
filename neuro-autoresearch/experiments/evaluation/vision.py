@@ -15,6 +15,7 @@ Usage:
     python experiments/evaluation/vision.py --model all --dataset nsd --subject 1
     python experiments/evaluation/vision.py --model resnet50 --dataset tvsd
     python experiments/evaluation/vision.py --model clip --dataset nnn
+    python experiments/evaluation/vision.py --model dinov3 --dataset nsd --subject 1
 """
 from __future__ import annotations
 
@@ -242,13 +243,22 @@ def extract_clip(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
     return {n: _srp(v, dim, seed) for n, v in raw.items()}
 
 
-def extract_dino(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
-    """DINOv2 ViT-B/14. Taps: blocks 3,6,9,12 + final CLS embedding."""
-    from transformers import AutoImageProcessor, Dinov2Config, Dinov2Model
-    model_id = "facebook/dinov2-base"
-    processor = AutoImageProcessor.from_pretrained(model_id)
-    net = (Dinov2Model.from_pretrained(model_id) if pretrained else
-           Dinov2Model(Dinov2Config.from_pretrained(model_id)))
+def extract_dinov3(X_flat, imsize, dim, seed, device, pretrained=True, batch=64):
+    """DINOv3 ViT-B/16. Taps: blocks 3,6,9,12 + final CLS embedding."""
+    from transformers import AutoImageProcessor, AutoModel
+    if not pretrained:
+        raise ValueError("the DINOv3 reference baseline is pretrained-only")
+    model_id = "facebook/dinov3-vitb16-pretrain-lvd1689m"
+    try:
+        processor = AutoImageProcessor.from_pretrained(model_id)
+        net = AutoModel.from_pretrained(model_id)
+    except OSError as exc:
+        if "gated repo" in str(exc).lower() or "401" in str(exc):
+            raise RuntimeError(
+                "DINOv3 weights are gated: accept Meta's DINOv3 license on Hugging Face, "
+                "then authenticate this machine with `hf auth login`."
+            ) from exc
+        raise
     net = net.eval().to(device); net.requires_grad_(False)
     Xt = _preprocess(X_flat, imsize, 224, processor.image_mean, processor.image_std, device, batch)
     num_blocks = net.config.num_hidden_layers
@@ -277,7 +287,7 @@ MODEL_REGISTRY = {
     "resnet50": extract_resnet50,
     "vit":      extract_vit,
     "clip":     extract_clip,
-    "dino":     extract_dino,
+    "dinov3":   extract_dinov3,
 }
 
 

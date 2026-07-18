@@ -43,8 +43,8 @@ VISION_BASELINES = [
      "label": "ViT-B/16 (ImageNet pretrained)"},
     {"id": "vit_b16_untrained", "name": "vit", "weights": "untrained",
      "label": "ViT-B/16 (untrained)"},
-    {"id": "dinov2_pretrained", "name": "dino", "weights": "pretrained",
-     "label": "DINOv2 (pretrained)"},
+    {"id": "dinov3_pretrained", "name": "dinov3", "weights": "pretrained",
+     "label": "DINOv3 ViT-B/16 (pretrained)"},
     {"id": "clip_pretrained", "name": "clip", "weights": "pretrained",
      "label": "CLIP (pretrained)"},
 ]
