@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "experiment": "cross_dataset_generalization",
+  "domain": "vision",
+  "cohort": "heldout",
+  "row_axis": "champion_source_dataset",
+  "col_axis": "evaluation_dataset",
+  "generated_at": "2026-07-17T21:32:55+00:00",
+  "git_commit": "27a42a026c1d3df4672923c53bad15e546f5e08c",
+  "readout": "fast",
+  "datasets": {
+    "nsd": {
+      "metric": "noise_normalized_r2",
+      "heldout_subjects": [
+        "5",
+        "7"
+      ],
+      "champion": {
+        "model_id": "1a2db",
+        "idea": "sharper hue bins von-Mises kappa 9 (find the colour-category sharpness optimum)",
+        "source_run": "runs/nsd__2026-07-14",
+        "search_subjects": [
+          "1",
+          "2"
+        ],
+        "search_reward": 0.4322,
+        "n_params": 36449,
+        "model_file": "runs/best/nsd/model.py",
+        "model_sha256": "a6ff1dc3454cc10a6bf2b5c18bad2805ba883eed95474bf4aa600eb58694818a"
+      }
+    },
+    "tvsd": {
+      "metric": "mean_pearson_r",
+      "heldout_subjects": [
+        "N"
+      ],
+      "champion": {
+        "model_id": "7sjzq",
+        "idea": "Narrow Gabor Gram gain=3 + compact LBP histogram for micro-texture",
+        "source_run": "runs/tvsd__2026-06-30",
+        "search_subjects": [
+          "F"
+        ],
+        "search_reward": 0.7136,
+        "n_params": 149144,
+        "model_file": "runs/best/tvsd/model.py",
+        "model_sha256": "3a149c5c7ad08047ab2f37bb74593e4ca9024b08a53deec42c240f7aa27d1b11"
+      }
+    },
+    "nnn": {
+      "metric": "noise_normalized_r2",
+      "heldout_subjects": [
+        "4",
+        "5"
+      ],
+      "champion": {
+        "model_id": "cosgm",
+        "idea": "V4 curvature-at-angular-position shape code (Pasupathy-Connor conjunction)",
+        "source_run": "runs/nnn__2026-07-15",
+        "search_subjects": [
+          "1",
+          "2",
+          "3"
+        ],
+        "search_reward": 0.2425,
+        "n_params": 96014,
+        "model_file": "runs/best/nnn/model.py",
+        "model_sha256": "432217dbc2f21a145939f3efd919812e9fd417ad511a53be14adcaa5be220ad7"
+      }
+    }
+  },
+  "native": {
+    "nsd": 0.381,
+    "tvsd": 0.7446,
+    "nnn": 0.3283
+  },
+  "matrix": {
+    "nsd": {
+      "nsd": {
+        "mean": 0.381,
+        "subjects": {
+          "5": 0.3818,
+          "7": 0.3803
+        },
+        "retention": 1.0
+      },
+      "tvsd": {
+        "mean": 0.7491,
+        "subjects": {
+          "N": 0.7491
+        },
+        "retention": 1.006
+      },
+      "nnn": {
+        "mean": 0.2968,
+        "subjects": {
+          "4": 0.3572,
+          "5": 0.2363
+        },
+        "retention": 0.9041
+      }
+    },
+    "tvsd": {
+      "nsd": {
+        "mean": 0.3372,
+        "subjects": {
+          "5": 0.3399,
+          "7": 0.3345
+        },
+        "retention": 0.885
+      },
+      "tvsd": {
+        "mean": 0.7446,
+        "subjects": {
+          "N": 0.7446
+        },
+        "retention": 1.0
+      },
+      "nnn": {
+        "mean": 0.2417,
+        "subjects": {
+          "4": 0.3188,
+          "5": 0.1646
+        },
+        "retention": 0.7362
+      }
+    },
+    "nnn": {
+      "nsd": {
+        "mean": 0.3851,
+        "subjects": {
+          "5": 0.3898,
+          "7": 0.3805
+        },
+        "retention": 1.0108
+      },
+      "tvsd": {
+        "mean": 0.7166,
+        "subjects": {
+          "N": 0.7166
+        },
+        "retention": 0.9624
+      },
+      "nnn": {
+        "mean": 0.3283,
+        "subjects": {
+          "4": 0.4115,
+          "5": 0.2451
+        },
+        "retention": 1.0
+      }
+    }
+  }
+}
