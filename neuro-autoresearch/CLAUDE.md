@@ -72,6 +72,14 @@ task handed to each search proposer lives in **`search/proposer/prompt.md`** (+ 
   manuscript commits and pulls inside `manuscript_natneuro/`. The parent repository never tracks the
   manuscript files.
 
+## Workshop manuscript figures
+
+- All figure-generation code belongs in `manuscript/neurips_workshop_2026/figures_code/`.
+- Never place figure-generation code inside `manuscript/neurips_workshop_2026/neuro_autoresearch_latex/`.
+  That LaTeX checkout contains manuscript sources and generated figure assets only.
+- Write generated assets to `manuscript/neurips_workshop_2026/neuro_autoresearch_latex/figures/`.
+- Whenever editing a figure, include a PNG preview for review in VS Code, alongside publication formats.
+
 ## Run
 **Activate the venv first (`source .venv/bin/activate`)** — the scripts call bare `python`, which is
 ONLY the interpreter inside `.venv/`. Without it, `python` resolves to nothing (or system py3 lacking
