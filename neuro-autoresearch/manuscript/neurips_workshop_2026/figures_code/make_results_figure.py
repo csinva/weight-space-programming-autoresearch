@@ -1,4 +1,4 @@
-"""Figure 2 of the AgenticLS paper: held-out neural predictivity across the visual hierarchy.
+"""Figure 3 of the AgenticLS paper: held-out neural predictivity across the visual hierarchy.
 
 One panel per dataset. Within a panel, the x-axis walks the recorded regions from
 early to late visual cortex and each model is a profile line. Only individuals that
@@ -7,7 +7,7 @@ result. The discovered model is the emphasized series; pretrained references (an
 later, classical interpretable models) are context.
 
 Reads ``runs/best/<dataset>/evaluation.json`` and writes
-``neuro_autoresearch_latex/figures/fig2_results.{pdf,png,svg}``.
+``neuro_autoresearch_latex/figures/fig3_results.{pdf,png,svg}``.
 
 Run from the repository root with the venv active::
 
@@ -161,7 +161,7 @@ def draw_panel(ax, dataset: str, title: str, subtitle: str, regions: list[str], 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=OUT)
-    ap.add_argument("--stem", default="fig2_results")
+    ap.add_argument("--stem", default="fig3_results")
     ap.add_argument("--fmt", nargs="+", default=("pdf", "png", "svg"))
     args = ap.parse_args()
 
