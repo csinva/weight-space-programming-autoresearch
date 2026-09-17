@@ -1,185 +1,156 @@
-"""Figure 3 of the AgenticLS paper: held-out neural predictivity across the visual hierarchy.
+"""Figure 3: selected baselines on individuals excluded from model selection.
 
-One panel per dataset. Within a panel, the x-axis walks the recorded regions from
-early to late visual cortex and each model is a profile line. Only individuals that
-were EXCLUDED from model selection are shown, so every point is a generalization
-result. The discovered model is the emphasized series; pretrained references (and,
-later, classical interpretable models) are context.
-
-Reads ``runs/best/<dataset>/evaluation.json`` and writes
-``neuro_autoresearch_latex/figures/fig3_results.{pdf,png,svg}``.
-
-Run from the repository root with the venv active::
-
-    python manuscript/neurips_workshop_2026/figures_code/make_results_figure.py
+Bars are equal-weight held-out individual means; NSD symbols show both subjects.
+No uncertainty interval is inferred from two subjects or one monkey. Read the
+exported evaluation files only; never mix search rewards with held-out scores.
+Run with .venv/bin/python from the repository root. Outputs include source data.
 """
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
 
 import matplotlib
-
-matplotlib.use("Agg")
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib import font_manager
+from matplotlib.lines import Line2D
+import numpy as np
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-OUT = HERE.parent / "neuro_autoresearch_latex" / "figures"
-
-# ---------------------------------------------------------------- content ---
-# Panels: (dataset id, panel title, subtitle, regions early -> late, y-axis label)
-PANELS = [
-    ("nsd", "Human fMRI (NSD)", "held-out subjects 5 and 7",
-     ["V1", "V2", "V3", "ventral"], "Noise-normalized explained variance"),
-    ("tvsd", "Macaque spiking (TVSD)", "held-out monkey N",
-     ["V1", "V4", "IT"], "Mean Pearson correlation"),
-]
-REGION_DISPLAY = {"ventral": "Ventral"}
-
-# Series in drawing order. role: "champion" | "pretrained" | "interpretable".
-# Add classical interpretable baselines here once they exist in evaluation.json,
-# e.g. ("gabor_pyramid", "Gabor pyramid", "interpretable").
+OUT = HERE.parent / 'neuro_autoresearch_latex' / 'figures'
+INK, MUTED, GRID = '#202A32', '#64717B', '#E5E9EC'
+REFERENCE = '#81786E'  # warm gray, distinct from the blue-gray model bars
+ACCENT, UNTRAINED, PRETRAINED = '#CE691E', '#C4CDD3', '#536C7C'
 SERIES = [
-    ("clip_pretrained", "CLIP", "pretrained"),
-    ("dinov2_pretrained", "DINOv2", "pretrained"),
-    ("champion", "Discovered\nmodel", "champion"),
+    ('champion', 'Discovered model', 0, ACCENT),
+    ('random_projection', 'Random projection', None, REFERENCE),
+    ('alexnet_untrained', 'AlexNet', 1.8, UNTRAINED),
+    ('resnet50_untrained', 'ResNet-50', 2.8, UNTRAINED),
+    ('alexnet_pretrained', 'AlexNet', 4.6, PRETRAINED),
+    ('resnet50_pretrained', 'ResNet-50', 5.6, PRETRAINED),
+    ('dinov2_pretrained', 'DINOv2', 6.6, PRETRAINED),
+    ('clip_pretrained', 'CLIP', 7.6, PRETRAINED),
+]
+PANELS = [
+    dict(dataset='nsd', letter='a', title='Human fMRI · NSD',
+         subtitle='Discovered: multiscale color-opponent energy + texture statistics',
+         cohort='Held-out subjects 5 and 7', regions=['V1', 'V2', 'V3', 'ventral'],
+         metric='Noise-normalized explained variance', xmax=.70, ticks=[0, .3, .6],
+         bottom=.605, top=.855, title_y=.972, subtitle_y=.927, cohort_y=.901),
+    dict(dataset='tvsd', letter='b', title='Macaque spiking · TVSD',
+         subtitle='Discovered: multiscale Gabor filters + texture and form pathways',
+         cohort='Held-out monkey N', regions=['V1', 'V4', 'IT'],
+         metric='Mean Pearson correlation', xmax=.95, ticks=[0, .4, .8],
+         bottom=.108, top=.368, title_y=.488, subtitle_y=.444, cohort_y=.418),
 ]
 
-# ------------------------------------------------------------------ style ---
-INK = "#1F262E"
-MUTED = "#6B7680"
-GRID = "#E3E7EA"
-ACCENT = "#D9741A"                     # the emphasized series
-PRETRAINED = {"clip_pretrained": "#3D5468", "dinov2_pretrained": "#8E9CAA"}
-INTERPRETABLE = ["#2A9D8F", "#7FC8BF", "#B9E0DA"]   # reserved, teal family
-STYLE = {
-    "champion": dict(color=ACCENT, lw=1.9, marker="o", ms=5.8, zorder=6),
-    "pretrained": dict(lw=1.25, marker="o", ms=4.6, zorder=4),
-    "interpretable": dict(lw=1.25, marker="s", ms=4.2, zorder=4, ls=(0, (4, 2))),
-}
+
+def load_values(dataset):
+    ev = json.loads((ROOT / 'runs' / 'best' / dataset / 'evaluation.json').read_text())
+    expected = set(ev['cohorts']['heldout'])
+    for key, _, _, _ in SERIES:
+        subjects = ev['models'][key]['roi_scores']['heldout']['subjects']
+        if set(subjects) != expected:
+            raise ValueError(f'{dataset}/{key}: inconsistent held-out cohort')
+    return ev
 
 
-def _font():
-    for name in ("Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans"):
-        if any(f.name == name for f in font_manager.fontManager.ttflist):
-            return name
-    return "DejaVu Sans"
+def draw_panel(fig, panel, rows):
+    ev = load_values(panel['dataset'])
+    left, right, gap = .223, .979, .032
+    width = (right - left - gap * (len(panel['regions']) - 1)) / len(panel['regions'])
+    fig.text(.015, panel['title_y'], panel['letter'], fontsize=11, weight='bold', va='top')
+    fig.text(.055, panel['title_y'], panel['title'], fontsize=10, weight='bold', va='top')
+    fig.text(.055, panel['subtitle_y'], panel['subtitle'], fontsize=8, color=ACCENT, va='top')
+    fig.text(.055, panel['cohort_y'], panel['cohort'], fontsize=7.3, color=MUTED, va='top')
+    for col, region in enumerate(panel['regions']):
+        ax = fig.add_axes([left + col * (width + gap), panel['bottom'], width,
+                           panel['top'] - panel['bottom']])
+        ax.set_xlim(0, panel['xmax'])
+        ax.set_ylim(8.2, -.9)
+        for key, label, y, color in SERIES:
+            model = ev['models'][key]
+            subjects = model['roi_scores']['heldout']['subjects']
+            vals = [float(subjects[s][region]) for s in ev['cohorts']['heldout']]
+            if not np.isfinite(vals).all():
+                raise ValueError(f'Nonfinite score: {panel["dataset"]}/{key}/{region}')
+            mean = float(np.mean(vals))
+            for subject, value in zip(ev['cohorts']['heldout'], vals):
+                rows.append(dict(dataset=panel['dataset'], region=region, model=key,
+                                 model_id=model.get('model_id', ''), cohort='heldout',
+                                 subject=subject, score=value, plotted_mean=mean))
+            if key == 'random_projection':
+                ax.axvline(mean, color=REFERENCE, lw=1, ls=(0, (3, 2)), zorder=3)
+                continue
+            ax.barh(y, mean, height=.65, color=color, edgecolor='none', zorder=2)
+            if panel['dataset'] == 'nsd':
+                for j, value in enumerate(vals):
+                    ax.plot(value, y, marker=['o', 'D'][j], ms=2.8,
+                            mfc='white', mec=INK, mew=.55, ls='none', zorder=4)
+            if key == 'champion':
+                ax.text(max(vals) + .022 * panel['xmax'], y, f'{mean:.2f}',
+                        va='center', fontsize=7.1, weight='bold', color=ACCENT)
+            if col == 0:
+                ax.text(-.065, y, label, transform=ax.get_yaxis_transform(),
+                        ha='right', va='center', fontsize=7.8,
+                        color=ACCENT if key == 'champion' else INK,
+                        weight='bold' if key == 'champion' else 'normal', clip_on=False)
+        if col == 0:
+            for y, label in [(1.02, 'UNTRAINED BASELINES'), (3.82, 'PRETRAINED ENCODERS')]:
+                ax.text(-.065, y, label, transform=ax.get_yaxis_transform(), ha='right',
+                        va='center', fontsize=6.5, color=MUTED, weight='bold', clip_on=False)
+        ax.set_title('Ventral' if region == 'ventral' else region,
+                     fontsize=8, weight='bold', pad=3)
+        ax.set_yticks([])
+        ax.set_xticks(panel['ticks'])
+        ax.set_xticklabels(['0' if v == 0 else f'{v:.1f}' for v in panel['ticks']])
+        ax.tick_params(axis='x', labelsize=9.75, length=2.5, width=.5, colors=MUTED, pad=2)
+        ax.set_axisbelow(True)
+        ax.grid(axis='x', color=GRID, linewidth=.5)
+        for side in ['left', 'right', 'top']:
+            ax.spines[side].set_visible(False)
+        ax.spines['bottom'].set_color(GRID)
+        ax.spines['bottom'].set_linewidth(.6)
+    fig.text((left + right) / 2, panel['bottom'] - .067, panel['metric'],
+             ha='center', va='top', fontsize=10.5, color=MUTED)
 
 
-def heldout_mean(model: dict, roi: str) -> float:
-    """Equal-weight mean over held-out individuals that have this region."""
-    subjects = model["roi_scores"]["heldout"]["subjects"]
-    vals = [s[roi] for s in subjects.values() if roi in s]
-    return float(np.mean(vals)) if vals else np.nan
-
-
-def series_color(key: str, role: str, n_interp: list[int]) -> str:
-    if role == "champion":
-        return ACCENT
-    if role == "pretrained":
-        return PRETRAINED[key]
-    c = INTERPRETABLE[n_interp[0] % len(INTERPRETABLE)]
-    n_interp[0] += 1
-    return c
-
-
-def draw_panel(ax, dataset: str, title: str, subtitle: str, regions: list[str], ylabel: str, letter: str):
-    ev = json.loads((ROOT / "runs" / "best" / dataset / "evaluation.json").read_text())
-    models = ev["models"]
-    x = np.arange(len(regions))
-    n_interp = [0]
-    labels = []  # (y_end, text, color)
-
-    for key, label, role in SERIES:
-        if key not in models:
-            continue
-        y = np.array([heldout_mean(models[key], r) for r in regions])
-        color = series_color(key, role, n_interp)
-        kw = dict(STYLE[role])
-        kw.setdefault("color", color)
-        ax.plot(x, y, markerfacecolor=kw["color"], markeredgecolor="white", markeredgewidth=1.1,
-                solid_capstyle="round", **kw)
-        labels.append((y[-1], label, kw["color"], role == "champion"))
-
-    # direct labels at the right end, nudged apart if they collide
-    ymin, ymax = ax.get_ylim()
-    span = ymax - ymin
-    labels.sort(key=lambda t: t[0])
-    placed = []
-    for y_end, text, color, bold in labels:
-        y_lab = y_end
-        if placed and y_lab - placed[-1] < 0.075 * span:
-            y_lab = placed[-1] + 0.075 * span
-        placed.append(y_lab)
-        ax.annotate(text, xy=(x[-1], y_end), xytext=(x[-1] + 0.14, y_lab),
-                    textcoords="data", va="center", ha="left", fontsize=7.6,
-                    color=color, fontweight="bold" if bold else "normal",
-                    annotation_clip=False)
-
-    # value labels on the emphasized series only, and only at the two ends of the hierarchy
-    champ = np.array([heldout_mean(models["champion"], r) for r in regions])
-    ax.annotate(f"{champ[0]:.2f}", (x[0], champ[0]), xytext=(0, 7), textcoords="offset points",
-                ha="center", va="bottom", fontsize=6.8, color=ACCENT, fontweight="bold")
-    ax.annotate(f"{champ[-1]:.2f}", (x[-1], champ[-1]), xytext=(0, -8), textcoords="offset points",
-                ha="center", va="top", fontsize=6.8, color=ACCENT, fontweight="bold")
-
-    # faint band over the regions where the discovered model leads every plotted reference
-    ref_max = np.nanmax([[heldout_mean(models[k], r) for r in regions]
-                         for k, _, role in SERIES if role != "champion" and k in models], axis=0)
-    leads = champ > ref_max
-    if leads.any():
-        last = int(np.max(np.where(leads)[0]))
-        right = (x[last] + x[last + 1]) / 2 if last + 1 < len(x) else x[last] + 0.35
-        ax.axvspan(-0.35, right, color=ACCENT, alpha=0.06, lw=0, zorder=0)
-        ax.text(right - 0.06, 0.985, "model leads", transform=ax.get_xaxis_transform(),
-                ha="right", va="top", fontsize=6.4, color=ACCENT, alpha=0.9)
-    ax.set_xticks(x)
-    ax.set_xticklabels([REGION_DISPLAY.get(r, r) for r in regions], fontsize=8.4, color=INK)
-    ax.set_xlim(-0.35, len(regions) - 1 + 0.35)
-    # a thin "early -> late" arrow under the region ticks
-    ax.annotate("", xy=(0.78, -0.16), xytext=(0.22, -0.16), xycoords="axes fraction",
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=0.9, shrinkA=0, shrinkB=0),
-                annotation_clip=False)
-    ax.text(0.5, -0.2, "visual hierarchy", transform=ax.transAxes, ha="center", va="top",
-            fontsize=6.8, color=MUTED)
-    ax.set_ylabel(ylabel, fontsize=7.6, color=MUTED)
-    ax.margins(y=0.18)
-    ax.grid(axis="y", color=GRID, lw=0.8, zorder=0)
-    for s in ("top", "right"):
-        ax.spines[s].set_visible(False)
-    for s in ("left", "bottom"):
-        ax.spines[s].set_color(GRID)
-    ax.tick_params(axis="both", length=0, colors=MUTED, labelsize=7.2)
-    ax.set_title(f"{letter}   {title}", loc="left", fontsize=9.2, fontweight="bold", color=INK, pad=16)
-    ax.text(0, 1.035, subtitle, transform=ax.transAxes, fontsize=7.2, color=MUTED, va="bottom")
-
-
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--out", type=Path, default=OUT)
-    ap.add_argument("--stem", default="fig3_results")
-    ap.add_argument("--fmt", nargs="+", default=("pdf", "png", "svg"))
-    args = ap.parse_args()
-
-    plt.rcParams.update({
-        "font.family": _font(), "pdf.fonttype": 42, "ps.fonttype": 42, "svg.fonttype": "none",
-        "axes.titleweight": "bold",
-    })
-    fig, axes = plt.subplots(1, len(PANELS), figsize=(5.6, 2.5))
-    for ax, (ds, title, sub, regions, ylabel), letter in zip(axes, PANELS, "ABCD"):
-        draw_panel(ax, ds, title, sub, regions, ylabel, letter)
-    fig.subplots_adjust(left=0.1, right=0.895, top=0.8, bottom=0.24, wspace=0.62)
-
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--out', type=Path, default=OUT)
+    parser.add_argument('--stem', default='fig3_results')
+    parser.add_argument('--fmt', nargs='+', default=['pdf', 'png', 'svg'])
+    args = parser.parse_args()
+    available = {f.name for f in font_manager.fontManager.ttflist}
+    font = next(f for f in ['Helvetica Neue', 'Arial', 'DejaVu Sans'] if f in available)
+    plt.rcParams.update({'font.family': font, 'pdf.fonttype': 42,
+                         'ps.fonttype': 42, 'svg.fonttype': 'none', 'text.color': INK})
+    fig = plt.figure(figsize=(7.2, 4.9), facecolor='white')
+    rows = []
+    for panel in PANELS:
+        draw_panel(fig, panel, rows)
+    handles = [Line2D([], [], ls='none', marker=m, ms=3.4, mfc='white', mec=INK,
+                      mew=.6, label=f'Subject {s}') for m, s in [('o', 5), ('D', 7)]]
+    handles.append(Line2D([], [], color=REFERENCE, lw=1, ls=(0, (3, 2)),
+                          label='Random projection'))
+    fig.legend(handles=handles, loc='upper right', bbox_to_anchor=(.985, .978),
+               ncol=3, frameon=False, fontsize=6.8, handletextpad=.35,
+               columnspacing=.9, borderaxespad=0)
     args.out.mkdir(parents=True, exist_ok=True)
     for ext in args.fmt:
-        p = args.out / f"{args.stem}.{ext}"
-        fig.savefig(p, dpi=300, facecolor="white")
-        print(p)
+        path = args.out / f'{args.stem}.{ext}'
+        fig.savefig(path, dpi=300, facecolor='white')
+        print(path)
+    with (args.out / f'{args.stem}_source_data.csv').open('w') as file:
+        writer = csv.DictWriter(file, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    plt.close(fig)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
