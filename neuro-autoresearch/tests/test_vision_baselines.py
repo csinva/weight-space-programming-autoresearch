@@ -8,7 +8,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments" / "evaluation"))
 
-import run as evaluation_run  # noqa: E402
+import legacy_run as evaluation_run  # noqa: E402
 import vision  # noqa: E402
 
 

@@ -49,6 +49,8 @@ The evaluator and setup use the Python API directly (``init`` / ``get_next_model
 from __future__ import annotations
 
 import argparse
+import hashlib
+import math
 import json
 import os
 import re
@@ -72,7 +74,8 @@ from datetime import datetime, timezone
 NUM = ("test_corr", "train_corr", "n_params", "seconds")
 COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
         "test_corr", "train_corr", "roi_corr", "n_params", "model_loc",
-        "seconds", "created_at", "path")
+        "seconds", "created_at", "path", "metric", "stage", "protocol_version",
+        "subject_scores", "evaluation_metadata", "model_sha256")
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
@@ -82,7 +85,7 @@ REPO_ROOT = os.path.dirname(os.path.abspath(__file__))   # hub.py sits at the re
 # Columns hidden from a sandboxed proposer in ``query``/``top-models``: other islands' scores + the
 # on-disk source path, so islands diverge instead of all chasing one champion. (``random-models`` is
 # the deliberate exception -- it surfaces scores, anonymized, no code pointers.) Conductor sees all.
-_PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path")
+_PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path", "subject_scores", "evaluation_metadata")
 
 
 def _is_proposer() -> bool:
@@ -216,6 +219,25 @@ def _ensure(run: str | None = None) -> str:
     return run
 
 
+def search_contract(run: str, dataset: str | None = None) -> dict:
+    """Reject legacy runs and final evaluation at the search API boundary."""
+    from harness.protocols import protocol_for, validate_search_dataset
+    path = os.path.join(run, "env.json")
+    if not os.path.exists(path):
+        raise ValueError("Search requires a versioned env.json; scaffold a new laion or triplen run")
+    with open(path) as f:
+        env = json.load(f)
+    key = validate_search_dataset(env.get("NEURO_DATASET", ""))
+    protocol = protocol_for(key)
+    if dataset and validate_search_dataset(dataset) != key:
+        raise ValueError("Dataset does not match this run's evaluation contract")
+    if (env.get("NEURO_METRIC") != "rsa" or env.get("NEURO_STAGE") != "search"
+            or env.get("protocol", {}).get("version") != protocol.version
+            or env.get("NEURO_SUBJECT") != ",".join(protocol.search_subjects)):
+        raise ValueError("Run is incompatible with the current RSA search protocol")
+    return env
+
+
 # --------------------------------------------------------------------------- helpers
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -268,6 +290,7 @@ def propose(model_file: str, idea: str = "",
     ``experiment_notes`` (description + insight) are NOT written here: they are authored as
     ``model.py`` attributes and captured by the evaluator at score time."""
     run = _ensure(run)
+    contract = search_contract(run, os.environ.get("NEURO_DATASET"))
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
     cheat = _scan_source(model_file)              # reject reward-hacks BEFORE they queue
@@ -293,7 +316,7 @@ def propose(model_file: str, idea: str = "",
                 "island was RESET since you last read `my-best` -- this model.py is from your old "
                 "(now-retired) lineage. Re-read `my-best` (it returns the baseline floor now) and "
                 "rebuild your assigned direction.txt role from scratch; do NOT re-propose the old backbone.")
-    dataset = os.environ.get("NEURO_DATASET", "")
+    dataset = contract["NEURO_DATASET"]
     for _ in range(50):                       # retry on the rare id collision
         mid = newid(run)
         dst = os.path.join(models_dir(run), f"{mid}.py")
@@ -305,6 +328,9 @@ def propose(model_file: str, idea: str = "",
             "test_corr": None, "train_corr": None, "roi_corr": None,
             "n_params": cx["n_params"], "model_loc": cx["model_loc"],
             "seconds": None, "created_at": created_at, "path": os.path.abspath(dst),
+            "metric": "rsa", "stage": "search", "protocol_version": contract["protocol"]["version"],
+            "subject_scores": None, "evaluation_metadata": None,
+            "model_sha256": hashlib.sha256(open(dst, "rb").read()).hexdigest(),
         }
         try:
             with connect(run) as con:
@@ -522,6 +548,32 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     (captured by the evaluator at score time). ``id``/``idea``/``path``/... are untouched."""
     st = "ok" if str(status).strip().lower().startswith("ok") else "error"
     scores = scores or {}
+    run = _ensure(run)
+    with connect(run) as con:
+        _migrate(con)
+        queued = con.execute("SELECT dataset,metric,stage,protocol_version,path FROM models WHERE id=?", (mid,)).fetchone()
+    if queued is None:
+        raise KeyError(mid)
+    if st == "ok" and (_num(scores.get("test_corr")) is None
+                        or not str(scores.get("status", "ok")).startswith("ok")):
+        st = "error"
+    if st == "ok" and queued["metric"] == "rsa":
+        from harness.protocols import protocol_for, SOURCE_REVISION
+        protocol = protocol_for(queued["dataset"])
+        required = set(protocol.search_subjects)
+        subject_scores = scores.get("subject_scores") or {}
+        subjects = scores.get("subjects") or []
+        cohort_ok = (isinstance(subject_scores, dict) and set(subject_scores) == required
+                     and len(subjects) == len(required) and set(subjects) == required
+                     and all(_num(value) is not None for value in subject_scores.values()))
+        mean_ok = cohort_ok and math.isclose(float(scores["test_corr"]),
+            sum(float(value) for value in subject_scores.values()) / len(required), abs_tol=1e-10)
+        if (scores.get("metric") != "rsa" or scores.get("stage") != "search"
+                or scores.get("protocol_version") != queued["protocol_version"]
+                or scores.get("dataset") != queued["dataset"]
+                or scores.get("source_revision") != SOURCE_REVISION or not mean_ok):
+            st = "error"
+            scores = {"status": "error: incompatible evaluation result; expected same-dataset full-cohort RSA"}
     cols = [c for c in NUM if scores.get(c) not in (None, "")]
     vals = [_num(scores[c]) for c in cols]
     if scores.get("roi_corr"):                    # TEXT json blob, only when the breakdown is non-empty
@@ -530,9 +582,21 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     if scores.get("experiment_notes"):            # TEXT json blob {"description","insight"} from model.py
         cols.append("experiment_notes")
         vals.append(scores["experiment_notes"])
+    if scores.get("subject_scores"):
+        cols.append("subject_scores")
+        vals.append(json.dumps(scores["subject_scores"], allow_nan=False))
+    metadata = {k: scores[k] for k in (
+        "dataset", "metric", "stage", "protocol_version", "aggregation", "subjects", "search_image_policy",
+        "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "status") if k in scores}
+    cols.append("evaluation_metadata")
+    vals.append(json.dumps(metadata, allow_nan=False))
+    if queued["path"] and os.path.isfile(queued["path"]):
+        cols.append("model_sha256")
+        with open(queued["path"], "rb") as source:
+            vals.append(hashlib.sha256(source.read()).hexdigest())
     assignments = [f"{c}=?" for c in cols] + ["status=?"]
     vals = vals + [st, mid]
-    with connect(_ensure(run)) as con:
+    with connect(run) as con:
         con.execute(f"UPDATE models SET {', '.join(assignments)} WHERE id=?", vals)
     return st
 
@@ -596,7 +660,7 @@ _CHEAT_PATTERNS = (
     (r"from_pretrained|AutoModel|AutoTokenizer|\bGPT2\w*|\btransformers\b|huggingface|\btimm\b|"
      r"open_clip|sentence_transformers|torch\.hub\.load|torchvision\.models", "loads a pretrained model"),
     (r"\burllib\b|\brequests\b|https?://|socket\.|\bwget\b|\bcurl\b|snapshot_download", "network / download"),
-    (r"harness\.reward|harness\.ridge|harness\.loaders|\bload_split\b|reward_region_mask", "reads the target/readout"),
+    (r"harness\.(reward|ridge|loaders|metrics|vendor|datasets)|looped\.data|looped\.metrics|\bload_split\b|reward_region_mask", "reads the target/readout"),
     (r"corrcoef\s*=|evaluate_on_split\s*=|\bridge\.\w+\s*=|\breward\.\w+\s*=", "monkeypatches the readout"),
 )
 _MAX_PARAMS = int(os.environ.get("NEURO_MAX_PARAMS") or 100_000)   # propose-time filter; harness enforces robustly at score
@@ -644,7 +708,15 @@ def score(model_file: str, dataset: str | None = None) -> dict:
     hard-crashes is handled by the evaluator's watchdog, which records the error and restarts the
     process (``requeue_orphans`` recovers the row)."""
     import contextlib, importlib.util, io, traceback
-    os.environ["NEURO_DATASET"] = dataset or os.environ.get("NEURO_DATASET", "nsd")
+    from harness.protocols import validate_search_dataset
+    dataset = validate_search_dataset(dataset or os.environ.get("NEURO_DATASET", "laion"))
+    if os.environ.get("NEURO_STAGE", "search") != "search" or os.environ.get("NEURO_METRIC", "rsa") != "rsa":
+        raise ValueError("hub.score is search-only; final encoding goes through experiments/evaluation/final.py")
+    if os.environ.get("LAB_RUN"):
+        search_contract(find_run(), dataset)
+        from search.setup_run import write_env_json
+        write_env_json(find_run(), dataset)
+    os.environ["NEURO_DATASET"] = dataset
     os.environ.pop("NEURO_ROI", None)             # no ROI knob: reward = the preset's fixed region
     _install_integrity_guard()                    # no network / no pretrained-model imports while scoring
     cheat = _scan_source(model_file)              # static reject (also catches already-queued cheats)
@@ -653,15 +725,15 @@ def score(model_file: str, dataset: str | None = None) -> dict:
     buf = io.StringIO()
     try:
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
-            from harness.datasets import DATASET
+            from harness.datasets import get_dataset
             from harness.reward import evaluate_subjects
             spec = importlib.util.spec_from_file_location("model", model_file)
             mod = importlib.util.module_from_spec(spec)
+            sys.modules[spec.name] = mod
             spec.loader.exec_module(mod)
-            row = evaluate_subjects(mod.MODEL, DATASET)   # NEURO_SUBJECT list -> mean; else single
+            row = evaluate_subjects(mod.MODEL, get_dataset(dataset), stage="search")
                                                           # (the harness robustly enforces the param cap)
-        res = {k: row.get(k) for k in ("status", "test_corr", "train_corr", "roi_corr",
-                                       "experiment_notes", "n_params", "seconds")}
+        res = dict(row)
     except Exception as e:  # noqa: BLE001  -- any eval fault is a recorded error, not a crash
         traceback.print_exc(file=buf)
         res = {"status": f"error: {type(e).__name__}: {e}"[:300]}

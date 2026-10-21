@@ -2,10 +2,10 @@
 # search/run.sh -- LAUNCHER for the always-on open-ended search.
 #
 # Scaffolds one dated run and supervises the decentralized loops against it:
-#   - the N-proposer pool  (search/proposer/pool.sh)   -- N Copilot CLIs invent models, queue them
+#   - the N-proposer pool  (search/proposer/pool.sh)   -- N provider CLIs invent models, queue them
 #   - the GPU evaluator    (search/evaluator/pool.sh)  -- scores queued models concurrently on the GPU
 #   - the conductor        (search/conductor/loop.sh)  -- OPTIONAL steering overlay: every --epoch-mins a
-#                                                   Copilot pass reads the DB and writes one BROAD
+#                                                   agent pass reads the DB and writes one BROAD
 #                                                   standing direction per proposer (advisory only)
 #
 # The run's SQLite DB (runs/<dataset>__<date>/search.db) is the ONLY shared memory. Each proposer is
@@ -14,15 +14,16 @@
 # scaffolding, the wall-clock STOP CONDITION (--hours), and graceful shutdown that leaves the DB
 # consistent (orphaned `running` rows reset to `queued`).
 #
-#   search/run.sh <dataset> [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--gpu G] [--date YYYY-MM-DD]
-#   e.g.  search/run.sh nsd --hours 12                 # NSD, 12h, 10 proposers, steer every 1h
-#         search/run.sh nsd --hours 8 --epoch-mins 15  # steer every 15 minutes
-#         search/run.sh nsd --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
-#         search/run.sh tvsd --hours 6 --gpu 1 --epoch-mins 0     # pin the run to GPU 1 (one dataset per card), conductor OFF
-set -uo pipefail
+#   search/run.sh <laion|triplen> [--preflight] [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--gpu G] [--date YYYY-MM-DD]
+#   e.g.  search/run.sh laion --hours 12                 # LAION-fMRI, 12h, 10 proposers, steer every 1h
+#         search/run.sh laion --hours 8 --epoch-mins 15  # steer every 15 minutes
+#         search/run.sh laion --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
+#         search/run.sh triplen --hours 6 --gpu 1 --epoch-mins 0     # pin the run to GPU 1 (one dataset per card), conductor OFF
+set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
+use_project_python
 
 # Operator dials (evaluator count, agent models/effort, timeouts) live in ONE file; values there are
 # DEFAULTS, so a pre-set env var or a CLI flag below still wins. Exported here -> inherited by every
@@ -31,9 +32,10 @@ source "$REPO/search/lib.sh"
 
 # Generic flag parser. Keep scalar option variables so this works with macOS's Bash 3.2.
 # The first bare argument is the dataset; precedence is flag > environment > default.
-DATASET=""; HOURS_OPT=""; FLEET_OPT=""; DATE_OPT=""; EPOCH_OPT=""; EFFORT_OPT=""; GPU_OPT=""; pos=0
+DATASET=""; HOURS_OPT=""; FLEET_OPT=""; DATE_OPT=""; EPOCH_OPT=""; EFFORT_OPT=""; GPU_OPT=""; PREFLIGHT_ONLY=0; pos=0
 while [ $# -gt 0 ]; do
   case "$1" in
+    --preflight|--dry-run) PREFLIGHT_ONLY=1; shift; continue;;
     -h|--help) sed -n '2,21p' "$0"; exit 0;;
     --*=*) k="${1#--}"; k="${k%%=*}"; v="${1#*=}"; shift;;
     --*)   k="${1#--}"; v="${2:?$1 needs a value}"; shift 2;;
@@ -45,12 +47,13 @@ while [ $# -gt 0 ]; do
     *) echo "[search] unknown flag: --$k" >&2; exit 2;;
   esac
 done
-DATASET="${DATASET:-nsd}"; HOURS="${HOURS_OPT:-12}"; FLEET="${FLEET_OPT:-10}"; EPOCH="${EPOCH_OPT:-60}"
+DATASET="${DATASET:-laion}"; HOURS="${HOURS_OPT:-12}"; FLEET="${FLEET_OPT:-10}"; EPOCH="${EPOCH_OPT:-60}"
 # --effort is the ONE thinking knob (all proposers + conductor, via NEURO_EFFORT). --gpu pins the run
 # to one CUDA device (multi-GPU: a dataset per card); empty = current default GPU. Both: flag > env > default.
-EFFORT="${EFFORT_OPT:-${NEURO_EFFORT:-xhigh}}"; GPU="${GPU_OPT:-${CUDA_VISIBLE_DEVICES:-}}"
+EFFORT="${EFFORT_OPT:-${NEURO_EFFORT:-high}}"; GPU="${GPU_OPT:-${CUDA_VISIBLE_DEVICES:-}}"
 DATE="${DATE_OPT:-$(TZ=America/New_York date +%Y-%m-%d)}"   # run rolls over at ET midnight
 
+case "$FLEET" in ''|*[!0-9]*|0) echo "[search] --fleet must be a positive integer" >&2; exit 2;; esac
 case "$HOURS" in ''|*[!0-9.]*|*.*.*) echo "[search] --hours must be a positive number (got '$HOURS')" >&2; exit 2;; esac
 awk -v h="$HOURS" 'BEGIN { exit !(h + 0 > 0) }' || { echo "[search] --hours must be > 0" >&2; exit 2; }
 case "$EPOCH" in ''|*[!0-9.]*|*.*.*) echo "[search] --epoch-mins must be a number >= 0 (got '$EPOCH'; 0 disables the conductor)" >&2; exit 2;; esac
@@ -61,22 +64,34 @@ case "$GPU" in *[!0-9,]*) echo "[search] --gpu must be a GPU index or comma list
 # random-models in hub.py) and forces the conductor OFF, so each proposer is an independent loop.
 # Default 0 = the full system (cross-island pollination + conductor).
 [ "${VANILLA_AUTORESEARCH:-0}" = 1 ] && { EPOCH=0; export VANILLA_AUTORESEARCH; echo "[search] VANILLA_AUTORESEARCH: cross-island OFF, conductor OFF (N independent loops)"; }
-# Per-dataset SEARCH subjects come from the ONE source -- experiments/evaluation/datasets.py (the same
-# file the generalization test reads) -- so the search reward and the held-out split can't drift. A
-# single id / comma list in NEURO_SUBJECT overrides (e.g. NEURO_SUBJECT=1 for one subject, =1,2 for
-# the mean); a dataset with no declared split keeps the preset's default subject. (NSD reward is the
-# NSD 1,2; TVSD F; NNN 1,2,3; Huth UTS01,02; iEEG 01-03 -- the rest are
-# held out so a model must generalize across brains, not overfit one.)
+# Validate the scientific protocol and every provider before creating a run directory or DB.
+DATASET="$("$PY" -c 'import sys;from harness.protocols import validate_search_dataset;print(validate_search_dataset(sys.argv[1]))' "$DATASET")" || exit 2
+[ "${NEURO_METRIC:-rsa}" = rsa ] && [ "${NEURO_STAGE:-search}" = search ] || {
+  echo "[search] search requires NEURO_METRIC=rsa and NEURO_STAGE=search; NSD/TVSD encoding is final evaluation only" >&2; exit 2;
+}
 if [ -z "${NEURO_SUBJECT:-}" ]; then
-  _subj="$(python -c "import sys;sys.path.insert(0,'experiments/evaluation');from datasets import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" \
-    || { echo "[search] FATAL: could not derive search subjects for '$DATASET' (evaluation datasets.py / python failed above) -- aborting rather than silently scoring one subject" >&2; exit 1; }
-  [ -n "$_subj" ] && export NEURO_SUBJECT="$_subj"
+  _subjects="$("$PY" -c 'import sys;from harness.protocols import search_subjects_csv;print(search_subjects_csv(sys.argv[1]))' "$DATASET")" || exit 2
+  export NEURO_SUBJECT="$_subjects"
+fi
+export NEURO_DATASET="$DATASET" NEURO_METRIC=rsa NEURO_STAGE=search NEURO_EFFORT="$EFFORT"
+"$PY" -c 'import sys;from datetime import datetime;from search.setup_run import evaluation_environment;datetime.strptime(sys.argv[2], "%Y-%m-%d");evaluation_environment(sys.argv[1])' "$DATASET" "$DATE" || exit 2
+"$PY" -m search.preflight "$DATASET" || exit 2
+read -r -a PREFLIGHT_AGENTS <<< "$NEURO_MODEL_ROSTER"
+[ "${#PREFLIGHT_AGENTS[@]}" -gt 0 ] || { echo "[search] empty model roster" >&2; exit 2; }
+"$PY" search/providers.py preflight --agents "${PREFLIGHT_AGENTS[@]}" --effort "$EFFORT" || exit 2
+"$PY" search/providers.py preflight --agents "$NEURO_REPAIR_MODEL" --effort "$NEURO_REPAIR_EFFORT" || exit 2
+if awk -v m="$EPOCH" 'BEGIN { exit !(m + 0 > 0) }'; then
+  "$PY" search/providers.py preflight --agents "$NEURO_CONDUCTOR_MODEL" --effort "${NEURO_CONDUCTOR_EFFORT:-$EFFORT}" || exit 2
+fi
+if [ "$PREFLIGHT_ONLY" = 1 ]; then
+  echo "[search] preflight passed: dataset=$DATASET subjects=$NEURO_SUBJECT metric=rsa final=encoding fleet=$FLEET"
+  exit 0
 fi
 
 # Scaffold (or idempotently complete) runs/<dataset>__<date>/ : search.db + models/ + N proposer
 # sandboxes + eval/. Re-launching the same day RESUMES that run losslessly.
 RUN="$REPO/runs/${DATASET}__${DATE}"
-python search/setup_run.py "$DATASET" --date "$DATE" --n "$FLEET" >/dev/null
+"$PY" search/setup_run.py "$DATASET" --date "$DATE" --n "$FLEET" >/dev/null
 KEY="${DATASET}__${DATE}"
 export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_MINS="$EPOCH" NEURO_EFFORT="$EFFORT"
 
@@ -85,27 +100,18 @@ export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_
 reconcile() { local n; n="$(python hub.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
 log_summary() { echo "[search] $(python hub.py summary)"; }
 
-# Per-proposer API cost: sum every "AI Credits <n>" line in each proposer's own log (one line per
-# copilot session, so restarts accumulate), convert to USD (credits / 100), and write a costs table
-# into the run dir. Called once at shutdown, when every proposer has flushed its final credit line.
-write_costs() {
-  local out="$RUN/costs.txt" total=0 pn log c usd
-  { printf '# per-proposer API cost for %s (USD = AI Credits / 100)\n' "$KEY"
-    printf '# written %s\n' "$(TZ=America/New_York date +%FT%T%Z)"
-    printf '%-8s %12s %12s\n' "proposer" "credits" "usd"; } > "$out"
-  for d in "$RUN"/proposers/p*/; do
-    [ -d "$d" ] || continue
-    pn="$(basename "$d")"; log="$d/proposer.log"
-    [ -f "$log" ] || continue
-    c="$(grep -oE 'AI Credits[[:space:]]+[0-9.]+' "$log" | grep -oE '[0-9.]+$' \
-         | awk '{s+=$1} END{printf "%.1f", s+0}')"
-    usd="$(awk -v x="$c" 'BEGIN{printf "%.4f", x/100}')"
-    printf '%-8s %12s %12s\n' "$pn" "$c" "$usd" >> "$out"
-    total="$(awk -v t="$total" -v x="$c" 'BEGIN{printf "%.1f", t+x}')"
-  done
-  printf '%-8s %12s %12s\n' "TOTAL" "$total" \
-    "$(awk -v x="$total" 'BEGIN{printf "%.4f", x/100}')" >> "$out"
-  echo "[search] per-proposer costs -> $out (total ${total} credits = \$$(awk -v x="$total" 'BEGIN{printf "%.2f", x/100}'))"
+# Provider event logs retain usage in each CLI's native schema. No invented USD conversion:
+# these sessions may be subscription-funded and the CLIs do not expose a common price ledger.
+write_usage_index() {
+  "$PY" - "$RUN" <<'PY_USAGE'
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1])
+logs = sorted(str(p.relative_to(root)) for p in root.glob("proposers/p*/proposer.log"))
+if (root / "conductor.log").exists():
+    logs.append("conductor.log")
+(root / "usage.json").write_text(json.dumps({"logs": logs, "usd": None,
+    "note": "Native provider events are retained in logs; subscription/API cost is not inferred."}, indent=2))
+PY_USAGE
 }
 reconcile
 
@@ -132,7 +138,7 @@ shutdown() {
   for _ in $(seq 1 "${GRACE:-20}"); do alive "$PROP_PID" || alive "$EVAL_PID" || alive "$CONDUCT_PID" || break; sleep 1; done
   kill_group "$PROP_PID"; kill_group "$EVAL_PID"; kill_group "$CONDUCT_PID"
   wait "$PROP_PID" "$EVAL_PID" "$CONDUCT_PID" 2>/dev/null || true
-  reconcile; log_summary; write_costs
+  reconcile; log_summary; write_usage_index
   echo "[search] $KEY -- done."
 }
 install_shutdown_trap shutdown

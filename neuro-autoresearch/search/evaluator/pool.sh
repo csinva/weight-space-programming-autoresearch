@@ -3,21 +3,28 @@
 # supervises). Thin wrapper over search/evaluator/worker.py, which draws work straight from the run's
 # search.db (the queue = status='queued' rows; no queue directory, no wave barrier). Each
 # evaluator claims one model at a time (atomic queued->running) and scores it with the fixed
-# harness in an isolated subprocess. NEURO_EVALUATORS (default 3) fans out that many evaluators
+# harness in an isolated subprocess. NEURO_EVALUATORS (default 1) fans out that many evaluators
 # against the SAME queue -- the atomic claim + WAL busy_timeout keep them from colliding, so they
 # run models concurrently on the GPU (set NEURO_EVAL_GPUS to spread the workers across cards). If
 # any one dies, `wait` returns and run.sh restarts the
 # whole wrapper; requeue_orphans recovers any in-flight `running` row losslessly.
 # Image resolution is a dataset-PRESET attribute (harness/datasets.py), not a search knob.
-#   LAB_RUN=runs/nsd__2026-06-24 NEURO_DATASET=nsd NEURO_EVALUATORS=3 search/evaluator/pool.sh
+#   LAB_RUN=runs/laion__2026-10-21 NEURO_DATASET=laion NEURO_EVALUATORS=3 search/evaluator/pool.sh
 #   NEURO_EVALUATORS=8 NEURO_EVAL_GPUS=0,1,2,3 ...  # 8 workers, round-robin 2 per GPU across 4 cards
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+source "$REPO/search/lib.sh"
+use_project_python || exit 2
 cd "$REPO"
-DATASET="${NEURO_DATASET:-nsd}"
-N="${NEURO_EVALUATORS:-3}"
+DATASET="${NEURO_DATASET:-laion}"
+N="${NEURO_EVALUATORS:-1}"
 case "$N" in ''|*[!0-9]*|0) echo "[evaluate] NEURO_EVALUATORS must be a positive integer (got '$N')" >&2; exit 2;; esac
-echo "[evaluate] $N concurrent DB-backed evaluator(s) (run=${LAB_RUN:-?} dataset=$DATASET)"
+# Recover once, before any worker can claim a model. A worker must never reset its
+# peers' live claims. run.sh terminates the previous pool's process group before restart.
+: "${LAB_RUN:?LAB_RUN must point at the run dir}"
+RECOVERED="$(python -c 'import hub; print(hub.requeue_orphans())')" || exit 2
+[ "$RECOVERED" -eq 0 ] || echo "[evaluate] recovered $RECOVERED orphaned running model(s)"
+echo "[evaluate] $N concurrent DB-backed evaluator(s) (run=$LAB_RUN dataset=$DATASET)"
 if [ "$N" -eq 1 ]; then
   exec python search/evaluator/worker.py --dataset "$DATASET"
 fi

@@ -11,7 +11,7 @@ from common import (  # noqa: E402
     sha256_file,
     validate_evaluation,
 )
-import run as evaluation_run  # noqa: E402
+import legacy_run as evaluation_run  # noqa: E402
 
 
 def test_cohort_roi_scores_preserves_subjects_and_equal_weight_means():

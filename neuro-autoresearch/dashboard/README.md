@@ -1,5 +1,8 @@
 # `dashboard/` — live search dashboard
 
+Current protocol: `test_corr` in new search runs is RSA on LAION-fMRI or Triple-N. Each row carries its metric and protocol version. NSD/TVSD final encoding artifacts live outside the search database. Historical encoding runs are not numerically comparable.
+
+
 A real-time web dashboard for a search run, reusing the
 [CORAL](https://github.com/Human-Agent-Society/CORAL) project's React frontend **unchanged**
 and feeding it our data. CORAL's UI talks to a fixed REST + Server-Sent-Events contract and

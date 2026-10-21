@@ -18,3 +18,16 @@ kill_group()    { [ "${1:-0}" -gt 0 ] && kill -KILL -"$1" 2>/dev/null; return 0;
 
 # Install the standard "TERM on signal, run FUNC on exit" trap pair.
 install_shutdown_trap() { trap 'exit 130' INT TERM; trap "$1" EXIT; }
+
+# Select one interpreter for launchers, agents' hub calls, and evaluator subprocesses.
+use_project_python() {
+  if [ -n "${PYTHON:-${NEURO_PYTHON:-}}" ]; then
+    PY="$(command -v "${PYTHON:-$NEURO_PYTHON}")" || { echo "[search] Python executable not found" >&2; return 2; }
+  elif [ -x "$REPO/.venv/bin/python" ]; then
+    PY="$REPO/.venv/bin/python"
+  else
+    PY="$(command -v python)" || return 2
+  fi
+  export NEURO_PYTHON="$PY"
+  export PATH="$(dirname "$PY"):$PATH"
+}

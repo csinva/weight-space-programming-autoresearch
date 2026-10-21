@@ -299,6 +299,9 @@ def score_model(model_name, weights, Xtr, Xte, Ytr, Yte, roi_masks, nc,
                 DATASET, R, device, dim, seed):
     """Extract all taps, pick the best layer PER brain region on a val split, then report each
     region's chosen-layer test score and the voxel-weighted overall (brain-score protocol)."""
+    if getattr(DATASET, "stage", "legacy") != "legacy":
+        raise ValueError("This best-layer baseline protocol is archived. Use experiments/evaluation/final.py "
+                         "for canonical OOD encoding; feature extractors remain available for separate analyses.")
     extractor = MODEL_REGISTRY[model_name]
     t0 = time.time()
     label = f"{model_name}-{weights}"

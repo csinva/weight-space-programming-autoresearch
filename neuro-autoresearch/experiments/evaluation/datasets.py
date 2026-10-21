@@ -1,64 +1,18 @@
-"""The five evaluation datasets and their search and held-out subject cohorts.
+"""Current cross-dataset protocols; legacy cohorts are in legacy_datasets.py."""
+from harness.protocols import PROTOCOLS, canonical_dataset, protocol_for, search_subjects_csv
 
-This is the single source of truth for evaluation cohorts. The search launcher reads the same
-``search`` subjects that the evaluation runner later compares with ``heldout`` subjects.
-"""
-from __future__ import annotations
-
-VISION_DATASETS = ("nsd", "tvsd", "nnn")
-LANGUAGE_DATASETS = ("huth", "ieeg")
-
+VISION_DATASETS = ("laion", "triplen", "nsd", "tvsd")
+SEARCH_DATASETS = tuple(PROTOCOLS)
+FINAL_DATASETS = tuple(protocol.final_dataset for protocol in PROTOCOLS.values())
 DATASETS = {
-    "nsd": {
-        "domain": "vision",
-        "metric": "noise_normalized_r2",
-        "axis": "NEURO_SUBJECT",
-        "search": ["1", "2"],
-        "heldout": ["5", "7"],
-        "rois": [
-            "early", "ventral", "V1", "V2", "V3", "hV4", "FFA", "PPA", "VWFA",
-        ],
-    },
-    "tvsd": {
-        "domain": "vision",
-        "metric": "mean_pearson_r",
-        "axis": "NEURO_SUBJECT",
-        "search": ["F"],
-        "heldout": ["N"],
-    },
-    "nnn": {
-        "domain": "vision",
-        "metric": "noise_normalized_r2",
-        "axis": "NEURO_SUBJECT",
-        "search": ["1", "2", "3"],
-        "heldout": ["4", "5"],
-    },
-    "huth": {
-        "domain": "language",
-        "metric": "mean_pearson_r",
-        "axis": "NEURO_SUBJECT",
-        "search": ["UTS01", "UTS02"],
-        "heldout": ["UTS03"],
-    },
-    "ieeg": {
-        "domain": "language",
-        "metric": "mean_pearson_r",
-        "axis": "NEURO_SUBJECT",
-        "search": ["01", "02", "03"],
-        "heldout": ["04", "05"],
-    },
+    dataset: {
+        "domain": "vision", "metric": "rsa" if dataset in SEARCH_DATASETS else "encoding",
+        "stage": "search" if dataset in SEARCH_DATASETS else "final",
+        "protocol": protocol_for(dataset).to_dict(),
+    }
+    for dataset in VISION_DATASETS
 }
 
 
 def evaluation_for(dataset: str) -> dict:
-    """Return one dataset's domain and subject cohorts."""
-    if dataset not in DATASETS:
-        raise SystemExit(f"no evaluation definition for dataset {dataset!r}; add one to "
-                         f"experiments/evaluation/datasets.py (have: {list(DATASETS)})")
-    return DATASETS[dataset]
-
-
-def search_subjects_csv(dataset: str) -> str:
-    """Return the search cohort as a comma-separated string, or empty for an unknown dataset."""
-    config = DATASETS.get(dataset)
-    return ",".join(config["search"]) if config else ""
+    return DATASETS[canonical_dataset(dataset)]

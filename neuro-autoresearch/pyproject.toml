@@ -4,21 +4,31 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuro-autoresearch"
-version = "0.1.0"
-description = "Dataset-agnostic neural-encoding framework on top of NeuralSet/NeuralFetch."
+version = "0.2.0"
+description = "RSA-driven neural representation search with held-out encoding evaluation."
 requires-python = ">=3.12"
 dependencies = [
-    "neuralset[all]>=0.2.2",
-    "neuralfetch>=0.2.2",
     "torch>=2.5",
-    "transformers>=4.56",
-    "matplotlib>=3.8",
-    "copilot-keepgoing @ git+https://github.com/csinva/copilot-keepgoing",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "scikit-learn>=1.4",
+    "h5py>=3.10",
+    "pillow>=10",
+    "nibabel>=5",
+    "xarray>=2024.1",
+    "pandas>=2",
+    "python-dotenv>=1",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 dashboard = ["starlette>=0.37", "uvicorn>=0.30"]
+analysis = ["transformers>=4.56", "matplotlib>=3.8", "torchvision>=0.20"]
+language = ["neuralset[all]>=0.2.2", "neuralfetch>=0.2.2", "himalaya>=0.4"]
 
 [tool.setuptools]
-py-modules = []
+py-modules = ["hub"]
+
+[tool.setuptools.packages.find]
+include = ["harness*", "search*", "experiments*", "dashboard*"]
+namespaces = true

@@ -6,15 +6,15 @@ claims them oldest-first via the ``hub`` API and scores each with ``hub.score`` 
 model in an isolated subprocess against the FIXED harness, so a crashing model can't take the
 loop down). There is no queue directory and no wave barrier.
 
-    requeue orphaned 'running' rows                  # startup crash recovery
+    # Pool supervisor requeues orphaned rows once before starting any worker.
     loop forever:
         row = hub.get_next_model()                   # atomic queued -> running
         if none: sleep and poll again                # empty queue
         res = hub.score(row.path, ...)               # subprocess-isolated, time-capped, whole-dataset reward
-        on error/timeout: low-effort repair Copilot edits the model in place, rerun (<= 2x)
+        on error/timeout: low-effort repair agent edits the model in place, rerun (<= 2x)
         hub.record(id, res, status)                  # running -> ok | error
 
-    LAB_RUN=runs/nsd__2026-06-24 python search/evaluator/worker.py --dataset nsd
+    LAB_RUN=runs/laion__2026-10-21 python search/evaluator/worker.py --dataset laion
 """
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def _is_ok(res):
 
 
 def repair(model_file, log_file, rmodel, reffort, timeout=300):
-    """Low-effort repair Copilot edits ``model_file`` in place to fix a small fault. Best-effort:
+    """Low-effort repair agent edits ``model_file`` in place to fix a small fault. Best-effort:
     a stuck/failed repair just leaves the model as-is for the final error."""
     try:
         subprocess.run(["bash", os.path.join(REPO, "search", "evaluator", "repair.sh"),
@@ -89,22 +89,26 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="Single GPU evaluator (hub-backed).")
-    p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "nsd"))
+    p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "laion"))
     p.add_argument("--poll", type=float, default=5.0, help="empty-queue sleep (seconds)")
     p.add_argument("--timeout", type=int, default=int(os.environ.get("NEURO_EVAL_TIMEOUT", "420")))
     p.add_argument("--max-repairs", type=int, default=2)
-    p.add_argument("--repair-model", default=os.environ.get("NEURO_REPAIR_MODEL", "claude-opus-4.8"))
+    p.add_argument("--repair-model", default=os.environ.get("NEURO_REPAIR_MODEL", "codex:astra"))
     p.add_argument("--repair-effort", default=os.environ.get("NEURO_REPAIR_EFFORT", "low"))
     a = p.parse_args(argv)
 
+    from harness.protocols import validate_search_dataset
+    a.dataset = validate_search_dataset(a.dataset)
+    if os.environ.get("NEURO_METRIC", "rsa") != "rsa" or os.environ.get("NEURO_STAGE", "search") != "search":
+        p.error("Search evaluators require NEURO_METRIC=rsa and NEURO_STAGE=search")
+    os.environ["NEURO_METRIC"] = "rsa"
+    os.environ["NEURO_STAGE"] = "search"
     run = hub.find_run()
     log_dir = os.path.join(run, "eval")
     os.makedirs(log_dir, exist_ok=True)
     os.environ["NEURO_DATASET"] = a.dataset
     print(f"[evaluator] run={run} dataset={a.dataset}")
-    recovered = hub.requeue_orphans(run)
-    if recovered:
-        print(f"[evaluator] crash recovery: requeued {recovered} orphaned 'running' row(s)")
+    # Recovery belongs to pool.sh, before peers start; resetting here races live claims.
 
     while True:
         row = None

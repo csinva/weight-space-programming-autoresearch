@@ -1,78 +1,10 @@
-"""Process the raw NNN (triple-N macaque spiking) dataset into the in-repo data/nnn/ tree.
+"""Retired baked-format preparer; the canonical harness reads looped source data."""
 
-Reads the raw Processed_ses*.mat + exclude_area.xls + img_pool.mat from d.path and writes:
-  data/nnn/stimuli/img_pool.npy   : the 1000 NSD images at NATIVE resolution (uint8 [1000,H,W,3])
-  data/nnn/neural/all_units.pt    : ALL units UNFILTERED -- responses [1000, total_units] (NSD cols),
-                                    per-unit reliability (split-half NC_r), stream area, and BombCell
-                                    unit_type (1=SU/2=MUA/3=non-somatic); all filtering is LOAD-time.
-
-NNN_MIN_RELIABILITY and imsize stay LOAD-time knobs (no filtering / no resize here).
-
-Run (full, ~seconds): python -m scripts.prepare_data.nnn
-"""
-from __future__ import annotations
-
-import glob
-import os
-import re
-
-import numpy as np
-import scipy.io as sio
-import torch
-
-from harness.loaders.shared import processed_dir
-from harness.loaders.vision.nnn import _NNN_N_NSD_IMAGES, _nnn_area_table, _nnn_unit_area
-
-# Raw source (the offline build reads here once; runtime reads only data/nnn/).
-RAW = "/home/t-ymehta/Research/neuralset/data/nnn_processed"
+MESSAGE = 'The legacy baked data/nnn/ format is retired. The canonical Triple-N loader now\nreads TRIPLEN_DATA_DIR/triplen_data.pkl and NSD_STIMULI_HDF5_PATH (imgBrick).\nPrepared responses on this machine: /data/shared/datasets/triplen/processed.\nFor raw-data preparation, use looped-networks/prepare_data/triplen.py at source\nrevision 3ee575baeceb1ad784102162a051b7444182fdaa, then set the paths in .env.\nValidate the result with: python -m search.preflight triplen\n'
 
 
 def main():
-    """Read the raw NNN .mat sources and write the native-res image pool + one unfiltered all_units.pt (responses, reliability, area, unit_type, monkey) into data/nnn/."""
-    root = RAW
-    out = processed_dir("nnn")
-    os.makedirs(os.path.join(out, "stimuli"), exist_ok=True)
-    os.makedirs(os.path.join(out, "neural"), exist_ok=True)
-
-    # Stimuli: the 1000 NSD images at native resolution (force RGB).
-    img_pool = sio.loadmat(os.path.join(root, "img_pool.mat"), simplify_cells=True)["img_pool"]
-    imgs = []
-    for im in img_pool[:_NNN_N_NSD_IMAGES]:
-        a = np.asarray(im)
-        if a.ndim == 2:
-            a = np.stack([a] * 3, -1)
-        imgs.append(a.astype("uint8"))
-    imgs = np.stack(imgs)  # [1000, H, W, 3]
-    np.save(os.path.join(out, "stimuli", "img_pool.npy"), imgs)
-
-    # Neural: ALL units pooled across sessions, NO reliability filter.
-    table = _nnn_area_table(root)
-    cols, rel, areas, utype, monkey = [], [], [], [], []
-    for f in sorted(glob.glob(os.path.join(root, "Processed_ses*.mat"))):
-        ses = int(re.search(r"ses(\d+)", os.path.basename(f)).group(1))
-        # The recording animal is encoded in the filename (Processed_sesNN_YYMMDD_M<k>_*.mat);
-        # it is the ONLY place per-session animal identity lives, so tag each unit with it here.
-        mk = int(re.search(r"_M(\d+)_", os.path.basename(f)).group(1))
-        m = sio.loadmat(f, simplify_cells=True)
-        rb = np.asarray(m["response_best"], dtype="float32")[:, :_NNN_N_NSD_IMAGES]
-        pos = np.asarray(m["pos"]).ravel()
-        for i in range(rb.shape[0]):
-            areas.append(_nnn_unit_area(table, ses, float(pos[i]))[1] or "?")
-        monkey.extend([mk] * rb.shape[0])
-        cols.append(rb)
-        rel.append(np.asarray(m["reliability_best"]).ravel())
-        utype.append(np.asarray(m["UnitType"]).ravel())   # BombCell class: 1=SU, 2=MUA, 3=non-somatic
-    Y = np.concatenate(cols, axis=0).T             # [1000 images, total_units]
-    rel = np.concatenate(rel).astype("float32")    # [total_units] split-half NC_r
-    areas = np.asarray(areas)                       # [total_units]
-    utype = np.concatenate(utype).astype("int16")   # [total_units]
-    monkey = np.asarray(monkey, dtype="int16")      # [total_units] recording animal (1..5)
-    torch.save({"Y": Y, "reliability": rel, "areas": areas, "unit_type": utype, "monkey": monkey},
-               os.path.join(out, "neural", "all_units.pt"))
-    print(f"wrote {out}: stimuli {imgs.shape} uint8; neural Y {Y.shape}, "
-          f"{len(rel)} units ({(rel > 0.4).sum()} with rel>0.4); "
-          f"UnitType counts {dict(zip(*[x.tolist() for x in np.unique(utype, return_counts=True)]))}; "
-          f"monkey counts {dict(zip(*[x.tolist() for x in np.unique(monkey, return_counts=True)]))}")
+    raise SystemExit(MESSAGE)
 
 
 if __name__ == "__main__":

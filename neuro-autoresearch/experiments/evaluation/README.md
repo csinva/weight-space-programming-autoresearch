@@ -1,89 +1,30 @@
-# Evaluation
+# Final cross-dataset evaluation
 
-Evaluate a search champion and the appropriate reference baselines on two independent cohorts:
-the subjects used during search and subjects held out from search. Every subject is scored through
-the same harness separately, then subjects are averaged with equal weight within each cohort.
-
-| domain | dataset | search subjects | held-out subjects |
-| --- | --- | --- | --- |
-| vision | NSD | 1, 2 | 5, 7 |
-| vision | TVSD | F | N |
-| vision | NNN | 1, 2, 3 | 4, 5 |
-| language | Huth Lab | UTS01, UTS02 | UTS03 |
-| language | iEEG Podcast | 01, 02, 03 | 04, 05 |
-
-`datasets.py` is the single source of truth for cohorts and metrics. `run.py` automatically chooses
-the vision or language baselines, prints one search/held-out table, validates the result, and is the
-only writer of `evaluation.json`. `vision.py` and `language.py` are scoring tools; they do not write
-paper-result files.
+Select the champion by RSA in the completed source run, freeze its bytes, then
+score the paired dataset using the copied looped-networks encoding machinery.
 
 ```bash
-python experiments/evaluation/run.py --dataset nsd
-python experiments/evaluation/run.py --dataset tvsd
-python experiments/evaluation/run.py --dataset nnn
-python experiments/evaluation/run.py --dataset huth
-python experiments/evaluation/run.py --dataset ieeg
+.venv/bin/python -m experiments.evaluation.final --run runs/laion__2026-10-21
+.venv/bin/python -m experiments.evaluation.final --run runs/triplen__2026-10-21
 ```
 
-Render any completed evaluation as a publication-style cohort comparison. The plot shows search
-subjects on the left and subjects held out from search on the right. Bars are equal-weight cohort
-means, points are individual subjects, and the random projection is a cohort-specific dashed line.
-Each architecture is labeled once, with trained and untrained variants paired closely on the same
-row and distinguished by solid versus hatched bars. The searched champion is highlighted separately
-and explicitly labeled as never trained.
+LAION-fMRI search transfers to all eight NSD subjects; Triple-N search transfers
+to both TVSD monkeys. The train/test splits come from each final dataset's
+prepared source release. Ridge penalties are selected per neural target by
+five-fold training CV. The scalar is held-out Pearson r, with equal region means
+within subject, then equal subject means. Final scores do not enter `search.db`.
 
-```bash
-python experiments/evaluation/plot.py --dataset nnn
-python experiments/evaluation/plot.py --input path/to/evaluation.json --output figure.pdf
-```
+The output contains a frozen `model.py` and `evaluation.json`, under
+`results/final/<protocol>/<model-hash>/`. It records the search selection, source
+and model hashes, all subject/region scores, and exact stimulus/file/filter
+provenance. Existing output files are not overwritten; choose `--output` to
+write a separate artifact outside the source run.
 
-By default, `--dataset` looks first in `runs/best/<dataset>/evaluation.json`, then in
-`experiments/evaluation/results/<dataset>/evaluation.json`, and writes `evaluation.png` beside the
-input. Use `--output` for PNG, vector PDF, or editable SVG.
+`run.py` delegates to this CLI. `--model PATH --search-dataset laion|triplen`
+scores an explicit model and records that it was not selected from an RSA run.
 
-The committed NSD and Triple-N figures can be regenerated at publication resolution with:
-
-```bash
-python experiments/evaluation/plot.py --dataset nsd --output experiments/evaluation/figures/nsd.png
-python experiments/evaluation/plot.py --dataset nsd --output experiments/evaluation/figures/nsd.pdf
-python experiments/evaluation/plot.py --dataset nnn --output experiments/evaluation/figures/nnn.png
-python experiments/evaluation/plot.py --dataset nnn --output experiments/evaluation/figures/nnn.pdf
-```
-
-The evaluator never asks which search run to use. The exporter has already made that decision by
-selecting the best run matching the dataset's predefined search cohort. Evaluation reads that exact
-`runs/best/<dataset>/model.py`, verifies its provenance against `datasets.py`, and writes beside it:
-
-```bash
-python runs/best/export_champions.py
-python experiments/evaluation/run.py --dataset nsd
-```
-
-The published layout is `runs/best/<dataset>/{model.py,evaluation.json}`. The JSON is model-first:
-each stable model ID contains individual subject scores and an equal-weight mean for both `search`
-and `heldout`. Schema version 2 also preserves every available per-subject ROI score under
-`roi_scores`, plus an equal-weight cohort mean for each ROI present in every cohort subject. NSD
-requires `early`, `ventral`, `V1`, `V2`, `V3`, `hV4`, `FFA`, `PPA`, and `VWFA`; a missing required
-ROI aborts the write. The file also records the metric, readout, source run, Git commit, timestamp,
-and exact champion SHA256. There is deliberately no cross-subject gap field.
-
-```json
-"roi_scores": {
-  "search": {
-    "subjects": {
-      "1": {"early": 0.31, "ventral": 0.42, "V1": 0.34},
-      "2": {"early": 0.29, "ventral": 0.40, "V1": 0.32}
-    },
-    "mean": {"early": 0.30, "ventral": 0.41, "V1": 0.33}
-  }
-}
-```
-
-Vision evaluations contain the champion, random projection, trained and untrained AlexNet,
-ResNet-50, and ViT-B/16, plus pretrained CLIP and DINOv3 ViT-B/16. DINOv3 requires Transformers
-4.56 or newer and access to Meta's gated `facebook/dinov3-vitb16-pretrain-lvd1689m` checkpoint:
-accept the model license on Hugging Face, then run `hf auth login` on the evaluation machine.
-Language evaluations contain the champion, random projection, and pretrained GPT-2 XL. The writer
-always requires the complete modality-specific roster, so a partial smoke test cannot accidentally
-replace a publication result. Existing `evaluation.json` files retain their measured DINOv2 results;
-rerun the vision evaluations to generate DINOv3 results.
+`legacy_run.py`, `legacy_datasets.py`, old cross-dataset matrices and plotting
+modules preserve historical schemas and analytical code. Historical
+noise-normalized encoding scores must not be compared to current raw RSA or raw
+encoding scores. Reproducing a pre-migration experiment requires its original
+repository revision and data format.

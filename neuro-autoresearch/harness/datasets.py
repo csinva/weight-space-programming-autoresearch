@@ -1,22 +1,15 @@
-"""Runtime dataset selection for the fixed evaluation harness.
+"""Fixed dataset presets for RSA search and cross-dataset encoding evaluation.
 
-A ``Dataset`` declares the stimulus + neural modality, split policy, reward region, and which
-of two loader paths to take. ``harness.loaders.load_split`` is the single entry point:
-  * ``loader="timeline"`` (iEEG; future language timelines) -- a continuous NeuralSet study
-    segmented on the fly by the ``Segmenter``; its params live in the dataset's ``timeline=`` block.
-  * ``loader="nsd"|"tvsd"|"nnn"`` (vision) -- a pre-aligned response table read directly by a
-    standalone ``loaders.vision`` reader; ``timeline`` is ``None``.
-The model and reward stay modality-agnostic, so the same search loop runs across all of them.
-
-Every loader reads ONLY the in-repo ``data/<name>/`` tree at runtime. Presets are registered in
-``PRESETS``; pick one via ``NEURO_DATASET`` (default ``"nsd"``), without editing source::
-
-    NEURO_DATASET=ieeg python -m harness.run
+Vision data is read by the vendored looped-networks readers, with configurable
+storage paths and fixed scientific filters. Model inputs remain flattened HWC
+RGB float tensors in [0,1]. Language presets retain their original loaders.
 """
 from __future__ import annotations
 
 import os
 from dataclasses import dataclass, replace
+
+from harness.protocols import canonical_dataset
 
 
 @dataclass(frozen=True)
@@ -48,8 +41,7 @@ class Dataset:
     imsize: int = 128                # image stimuli resized to imsize x imsize (hard floor MIN_IMSIZE;
                                      # 128 is the minimum -- coarser starves models of form/texture detail)
     download: bool = False           # download the study before running?
-    path: str | None = None          # UNUSED by active presets (runtime reads ONLY data/<name>/);
-                                     # kept for the download-from-scratch path (_study_path).
+    path: str | None = None          # legacy NeuralSet download path; vision uses source-path env vars
     test_frac: float = 0.2           # NeuralSet temporal hold-out, or standalone split input
     cv_folds: int = 0                # >1 => reward = rotating K-fold temporal CV (no single window
                                      # to overfit); 0 = the single train/test split. Fixed, not a knob.
@@ -60,169 +52,95 @@ class Dataset:
                                      # property, NOT an operator knob.
     reward_roi: str = "nsdgeneral"   # the region the scalar reward (test_corr) covers; a fixed
                                      # per-dataset value, NOT an operator knob.
-    loader: str = "timeline"         # "timeline" (Segmenter: iEEG) | "nsd" | "tvsd" | "nnn"
+    metric: str = "encoding"         # fixed evaluation method: rsa for search, encoding for final
+    stage: str = "legacy"            # search | final | legacy
+    loader: str = "timeline"         # timeline | huth | laion | triplen | nsd | tvsd
     subject: str = ""                # preset subject/animal when supported (iEEG, NSD, TVSD)
     timeline: "Timeline | None" = None  # Segmenter params; set ONLY for loader="timeline" datasets
 
 
-# Active dataset presets across neural modalities (fMRI/iEEG/spikes) and stimulus
-# modalities (image/chars). Select one with NEURO_DATASET=<key>.
+# Anatomical region coverage and thresholds live in loaders/vision/looped.py.
 PRESETS: dict[str, Dataset] = {
-    # Huth natural-language fMRI (LeBel 2023, OpenNeuro ds003020) -- the dataset used by
-    # circuit-building-autoresearch's evolve-neuro. Human fMRI (BOLD) while subjects listen to spoken
-    # narrative stories (the "Moth Radio Hour"); default subject UTS03, others via NEURO_SUBJECT
-    # (UTS01/UTS02/...). Encoding follows the reference src/features.py EXACTLY: the model embeds each
-    # word's 10-gram (STIMULUS "chars" -- the reference embeds each 10-gram, here the char-transformer
-    # model.py IS that embedder, no pretrained weights); those per-word embeddings are then
-    # Lanczos-downsampled onto the fMRI TR grid, z-scored, and FIR-delayed (feature_pipeline
-    # "lanczos_fir", applied by the harness between the model and the ridge), and ridge-fit to the
-    # TR-rate BOLD responses over ALL cortical voxels (raw mean r; fixed held-out test stories, as in
-    # the reference). Ships as a BAKED blob in data/huth/<study>.pt (per-word X, TR responses Y, and
-    # the per-story Lanczos operators), built once by scripts/prepare_data/huth.py.
-    "huth": Dataset(
-        study="HuthLangFmriUTS03",
-        loader="huth",
-        neural="fmri",
-        stimulus="chars",
-        reward_roi="all",
-        subject="UTS03",
-        feature_pipeline="lanczos_fir",   # Lanczos word->TR + z-score + 4 FIR delays (reference)
-    ),
-    # NSD (Natural Scenes Dataset), fMRI + image, subject 1 of 8. Uses the PREPARED single-trial
-    # betas (betas_fithrf_GLMdenoise_RR, Algonauts-2023 style: z-scored/session, 3-rep averaged),
-    # NOT the coarse raw-timeseries HRF-peak average. Y is the per-ROI betas from
-    # nsd_betas/per_subject/subjNN.pkl; X is the NSD images (shared-1000 image-disjoint hold-out).
-    # Reward = the joint EARLY+VENTRAL stream (~14.5k voxels); roi_corr breaks it down per ROI
-    # (early, ventral, V1/V2/V3/hV4/FFA/PPA/VWFA). Subject via NEURO_SUBJECT (1-8).
-    "nsd": Dataset(
-        study="NsdBetasSubj01",
-        loader="nsd",
-        neural="fmri",
-        stimulus="image",
-        imsize=128,
-        download=False,
-        reward_roi="early+ventral",
-        subject="01",
-    ),
-    # Zada2025Podcast ("Podcast" ECoG, OpenNeuro ds005574, Hasson lab), iEEG + text:
-    # epilepsy patients listening to a 30-min podcast (~5.1k transcript words). Single-subject
-    # by necessity (each patient has different electrodes; default subject 01). Each transcript
-    # Word triggers a 0.5s epoch; the target is the HIGH-GAMMA (70-200 Hz) envelope -- the
-    # standard ECoG cognition signal, staged by scripts/prepare_data/audio_neural.py --
-    # word-averaged (neural_aggregation="mean") to one power value per electrode per word.
-    # STIMULUS is "chars": each word maps to the char-id encoding of its N-gram (the word + the
-    # preceding stim_ngram-1 words), so a hand-written char-transformer model.py must build any
-    # linguistic structure itself -- the language-encoding analogue of the vision datasets (no
-    # acoustic/Mel features; the neural side and CV reward are unchanged).
-    "ieeg": Dataset(
-        study="Zada2025Podcast",
-        neural="ieeg",
-        stimulus="chars",
-        reward_roi="all",
-        subject="01",   # default patient; the search reward means over several (NEURO_SUBJECT) so a
-                        # model must generalize ACROSS brains -- no single subject's noise to overfit.
-        cv_folds=5,   # reward = 5-fold temporal CV: a single fixed hold-out (~5.1k words, 99 raw-r
-                      # channels, no noise ceiling) is trivially overfit by a search that grep's it.
-        timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5,
-                          neural_aggregation="mean", stim_ngram=10, stim_max_chars=96),
-    ),
-    # TVSD (THINGS Ventral-stream Spiking Dataset, Papale et al. 2025), image + macaque
-    # spiking. NOT a NeuralSet study: ships a PRE-AVERAGED normMUA table (1024 electrodes
-    # x stimuli), so loader="tvsd" (loaders.vision.tvsd) with the dataset's own image-disjoint
-    # split. Reward = ALL 1024 electrodes; roi_corr breaks it down per area (V1/V4/IT). Monkey
-    # F/N via NEURO_SUBJECT. Runtime reads only the in-repo data/tvsd/ tree (native JPEGs + a .pt of
-    # the MUA); the gated THINGS images + raw .mat are needed ONLY by the build step
-    # (scripts.prepare_data.tvsd, see its RAW + THINGS_IMAGES).
-    "tvsd": Dataset(
-        study="TvsdMonkeyF",
-        loader="tvsd",
-        neural="spikes",
-        stimulus="image",
-        imsize=128,
-        subject="F",
-        download=False,
-        reward_roi="all",
-    ),
-    # Triple-N / NNN (Li et al., ScienceDB 10.57760/sciencedb.33556), image + macaque
-    # spiking. Like TVSD it is NOT a NeuralSet study: 90 sessions ship a PRE-AVERAGED
-    # Processed table (`response_best` [units x 1072], cols 1..1000 = the NSD shared-1000
-    # images), so loader="nnn" (loaders.vision.nnn). Y pools reliable units (reliability>0.4,
-    # ~35k of 47.5k) across all sessions. Reward = ALL reliable units; roi_corr breaks it down by
-    # stream area (EVC/IT). The 1000 NSD images split deterministically (every 5th held out).
-    # Self-contained: X is read straight from img_pool.mat (no NSD staging). See
-    # docs/triple-n-macaque-nsd.html for the dataset guide.
-    "nnn": Dataset(
-        study="NnnV1",
-        loader="nnn",
-        neural="spikes",
-        stimulus="image",
-        imsize=128,          # natural images (the NSD shared-1000, like nsd); MIN_IMSIZE floor --
-                             # a coarser input starves untrained models of the form/texture detail
-                             # IT/EVC encode. NEURO_IMSIZE can raise it (never below 128).
-        download=False,
-        reward_roi="all",
-        cv_folds=5,   # reward = 5-fold CV over the whole 1000-image set (only 1000 stimuli, so a
-                      # single 800/200 split gives a noisy test_corr the search can selection-overfit
-                      # to; CV holds each image out once and averages, tightening the estimate). Unlike
-                      # iEEG's temporal CV there is NO autocorrelation across images -- they are
-                      # exchangeable, so the contiguous blocks are just a leakage-free 5-way partition.
-    ),
+    "laion": Dataset(study="LaionFmriSub01", loader="laion", neural="fmri",
+                     reward_roi="all", subject="sub-01", metric="rsa", stage="search"),
+    "triplen": Dataset(study="TripleNM1", loader="triplen", neural="spikes",
+                       reward_roi="all", subject="M1", metric="rsa", stage="search"),
+    "nsd": Dataset(study="NsdBetasSubj01", loader="nsd", neural="fmri",
+                   reward_roi="all", subject="01", metric="encoding", stage="final"),
+    "tvsd": Dataset(study="TvsdMonkeyF", loader="tvsd", neural="spikes",
+                    reward_roi="all", subject="F", metric="encoding", stage="final"),
+    "huth": Dataset(study="HuthLangFmriUTS03", loader="huth", neural="fmri",
+                    stimulus="chars", reward_roi="all", subject="UTS03",
+                    feature_pipeline="lanczos_fir"),
+    "ieeg": Dataset(study="Zada2025Podcast", neural="ieeg", stimulus="chars",
+                    reward_roi="all", subject="01", cv_folds=5,
+                    timeline=Timeline(trigger="type=='Word'", start=0.0, duration=0.5,
+                                      neural_aggregation="mean", stim_ngram=10, stim_max_chars=96)),
 }
+# Kept for callers that index the historical registry directly.
+PRESETS["nnn"] = PRESETS["triplen"]
+PRESETS["laion-fmri"] = PRESETS["laion"]
+PRESETS["laion_fmri"] = PRESETS["laion"]
+PRESETS["triple-n"] = PRESETS["triplen"]
 
-_key = os.environ.get("NEURO_DATASET", "nsd")
-if _key not in PRESETS:
-    raise ValueError(
-        f"NEURO_DATASET={_key!r} is not a known dataset. "
-        f"Valid keys: {sorted(PRESETS)}"
-    )
-
-# The one active dataset, chosen by NEURO_DATASET (default "nsd"). The reward is always the
-# WHOLE-dataset test_corr (each preset's built-in reward_roi); there is no ROI knob.
-DATASET = PRESETS[_key]
-
-# Input-resolution override (NEURO_IMSIZE): the operator-chosen pixel size for image
-# stimuli (RawPixels imsize). It only enriches the model INPUT X -- the neural target
-# Y, the readout, the split and the reward region are untouched -- so the reward stays
-# trustworthy; it just stops starving untrained models of resolution (AlexNet reads
-# full-res). Changes the build-cache key -> a one-time re-build at the new resolution.
-_imsize = os.environ.get("NEURO_IMSIZE")
-if _imsize:
-    DATASET = replace(DATASET, imsize=int(_imsize))
-
-# Hard floor on the image-input resolution: image stimuli must be >= MIN_IMSIZE (128) px. A coarser
-# input starves untrained models of the form/texture detail the ventral stream actually encodes, so
-# a sub-128 imsize (a stale preset or an NEURO_IMSIZE typo) is a hard error, never silently accepted.
 MIN_IMSIZE = 128
-if DATASET.stimulus == "image" and DATASET.imsize < MIN_IMSIZE:
-    raise ValueError(
-        f"imsize={DATASET.imsize} < MIN_IMSIZE={MIN_IMSIZE}: image stimuli must be >= {MIN_IMSIZE}px "
-        f"(set NEURO_IMSIZE>={MIN_IMSIZE} or fix the preset; never go below {MIN_IMSIZE}).")
+
 
 def with_subject(dataset: Dataset, subject: str) -> Dataset:
-    """Return ``dataset`` rebound to ``subject`` (switching the data it loads). Supported:
-    nsd (1-8), tvsd (monkey F/N), iEEG (patient id). Other presets keep the value in ``subject``
-    but do not rewrite the study name. This is the one place the per-subject data mapping lives, so
-    a multi-subject reward can build variants in-process (see ``harness.reward.evaluate_subjects``)."""
+    """Bind a public subject identifier, validating it without loading neural data."""
+    if dataset.loader == "laion":
+        sid = subject.strip().lower()
+        if not sid.startswith("sub-"):
+            sid = f"sub-{int(sid):02d}"
+        if sid not in ("sub-01", "sub-03", "sub-05", "sub-06", "sub-07"):
+            raise ValueError(f"Unknown LAION subject {subject!r}; expected sub-01,03,05,06,07")
+        return replace(dataset, subject=sid, study=f"LaionFmri{sid}")
     if dataset.loader == "nsd":
-        sid = f"{int(subject):02d}"
-        return replace(dataset, subject=sid, study=f"NsdBetasSubj{sid}")
+        sid = int(subject)
+        if not 1 <= sid <= 8:
+            raise ValueError("NSD subject must be 1 through 8")
+        return replace(dataset, subject=f"{sid:02d}", study=f"NsdBetasSubj{sid:02d}")
     if dataset.loader == "tvsd":
-        return replace(dataset, subject=subject, study=f"TvsdMonkey{subject.upper()}")
-    if dataset.loader == "nnn":
-        # nnn pools 90 sessions from 5 animals; the loader subsets units by this monkey id (1..5).
-        # One study, so only the subject field changes -- the loader validates the id.
-        return replace(dataset, subject=str(subject).strip())
+        sid = subject.strip().upper()
+        if sid not in ("F", "N"):
+            raise ValueError("TVSD subject must be F or N")
+        return replace(dataset, subject=sid, study=f"TvsdMonkey{sid}")
+    if dataset.loader in ("triplen", "nnn"):
+        sid = subject.strip().upper()
+        if not sid.startswith("M"):
+            sid = f"M{int(sid)}"
+        if sid not in ("M1", "M2", "M3", "M4", "M5"):
+            raise ValueError("Triple-N subject must be M1 through M5")
+        return replace(dataset, subject=sid, study=f"TripleN{sid}")
     if dataset.study.startswith("HuthLangFmri"):
-        # Huth language fMRI: runtime reads data/huth/<study>.pt by study name. Accept "UTS03" or "3".
-        sid = subject if subject.upper().startswith("UTS") else f"UTS{int(subject):02d}"
+        sid = subject.upper() if subject.upper().startswith("UTS") else f"UTS{int(subject):02d}"
         return replace(dataset, subject=sid, study=f"HuthLangFmri{sid}")
     if dataset.study.startswith("Zada2025Podcast"):
-        return replace(dataset, subject=f"{int(subject):02d}")   # iEEG: zero-padded per-patient id
+        return replace(dataset, subject=f"{int(subject):02d}")
     return replace(dataset, subject=subject)
 
 
-# Default subject binding from NEURO_SUBJECT (a single id, or the first of a comma list -- the
-# reward loops over the full list; this just binds the default DATASET for single-split callers).
-_subjects = [s.strip() for s in (os.environ.get("NEURO_SUBJECT") or "").split(",") if s.strip()]
-if _subjects:
-    DATASET = with_subject(DATASET, _subjects[0])
+def dataset_key(dataset: Dataset) -> str:
+    """Canonical registry name for a dataset variant."""
+    return "ieeg" if dataset.loader == "timeline" else canonical_dataset(dataset.loader)
+
+
+def get_dataset(name: str, subject: str | None = None) -> Dataset:
+    """Resolve a preset at call time, including the current input resolution override.
+
+    Explicit subject wins; otherwise a single default binding may use the first
+    NEURO_SUBJECT entry. Protocol evaluators validate the complete fixed cohort.
+    """
+    dataset = PRESETS[canonical_dataset(name)]
+    imsize = os.environ.get("NEURO_IMSIZE")
+    if imsize:
+        dataset = replace(dataset, imsize=int(imsize))
+    if dataset.stimulus == "image" and dataset.imsize < MIN_IMSIZE:
+        raise ValueError(f"imsize={dataset.imsize} < MIN_IMSIZE={MIN_IMSIZE}; images require at least 128px")
+    if subject is None:
+        subjects = [s.strip() for s in os.environ.get("NEURO_SUBJECT", "").split(",") if s.strip()]
+        subject = subjects[0] if subjects else None
+    return with_subject(dataset, subject) if subject else dataset
+
+
+DATASET = get_dataset(os.environ.get("NEURO_DATASET", "laion"))

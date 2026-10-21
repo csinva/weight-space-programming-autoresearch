@@ -7,13 +7,13 @@ set -uo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO" || exit 1
-PY="${PYTHON:-$REPO/.venv/bin/python}"; [ -x "$PY" ] || PY=python
-[ -x "$REPO/.venv/bin/python" ] && export PATH="$REPO/.venv/bin:$PATH"
+source "$REPO/search/lib.sh"
+use_project_python || exit 2
 [ -f search/config.env ] && . search/config.env
 
 case "${1:-}" in -h|--help) sed -n '2,5p' "$0"; exit 0;; "") sed -n '2,5p' "$0"; exit 2;; esac
 RUN="$1"; shift
-MODE=exact; MINUTES=15; TOLERANCE=0.005; EFFORT=high; MODEL=claude-opus-4.8
+MODE=exact; MINUTES=15; TOLERANCE=0.005; EFFORT=high; MODEL="${NEURO_SIMPLIFY_MODEL:-codex:astra}"
 while [ $# -gt 0 ]; do
   case "$1" in
     --mode) MODE="${2:?--mode needs a value}"; shift 2;;
@@ -29,16 +29,36 @@ case "$MODE" in exact|approximate) ;; *) echo "--mode must be exact or approxima
 RUN="$(cd "$RUN" 2>/dev/null && pwd)" || { echo "no such run: $RUN" >&2; exit 2; }
 [ -f "$RUN/search.db" ] || { echo "$RUN is not a search run" >&2; exit 2; }
 DATASET="$(basename "$RUN" | sed 's/__.*//')"
+DATASET="$("$PY" -c 'import sys;from harness.protocols import validate_search_dataset;print(validate_search_dataset(sys.argv[1]))' "$DATASET")" || exit 2
+"$PY" search/providers.py preflight --agents "$MODEL" --effort "$EFFORT" || exit 2
 
-# Restore the environment used by the search.
-if [ -f "$RUN/env.json" ]; then
-  while IFS=$'\t' read -r key value; do export "$key=$value"; done < <(
-    "$PY" -c "import json;[print(f'{k}\t{v}') for k,v in json.load(open('$RUN/env.json')).items()]")
-elif [ -z "${NEURO_SUBJECT:-}" ]; then
-  subject="$("$PY" -c "import sys;sys.path.insert(0,'experiments/evaluation');from datasets import search_subjects_csv;print(search_subjects_csv('$DATASET'))")" || exit 1
-  [ -n "$subject" ] && export NEURO_SUBJECT="$subject"
-fi
-export NEURO_DATASET="$DATASET"
+# Restore only scalar scientific environment values, never protocol/provider metadata.
+# Refuse historical runs without an RSA contract, then verify the code/subjects match that contract.
+[ -f "$RUN/env.json" ] || { echo "Run has no versioned RSA contract; cannot simplify it under a different reward" >&2; exit 2; }
+ENV_LINES="$("$PY" - "$RUN/env.json" <<'PY_ENV'
+import json, sys
+from search.setup_run import EVAL_ENV_KEYS
+with open(sys.argv[1]) as handle:
+    snapshot = json.load(handle)
+if snapshot.get("NEURO_METRIC") != "rsa" or snapshot.get("NEURO_STAGE") != "search":
+    raise SystemExit("Simplification requires an RSA search snapshot")
+keys = set(EVAL_ENV_KEYS) | {"NEURO_DATASET", "NEURO_METRIC", "NEURO_STAGE"}
+for key in sorted(keys):
+    if key in snapshot:
+        value = snapshot[key]
+        if not isinstance(value, str) or "\n" in value or "\t" in value:
+            raise SystemExit(f"Invalid scalar setting {key}")
+        print(f"{key}\t{value}")
+PY_ENV
+)" || exit 2
+while IFS=$'\t' read -r key value; do export "$key=$value"; done <<< "$ENV_LINES"
+"$PY" - "$RUN" "$DATASET" <<'PY_CHECK'
+import sys
+from search.setup_run import write_env_json
+write_env_json(sys.argv[1], sys.argv[2])
+PY_CHECK
+[ "$?" = 0 ] || exit 2
+export NEURO_DATASET="$DATASET" NEURO_METRIC=rsa NEURO_STAGE=search
 
 CHAMPION="$(LAB_RUN="$RUN" "$PY" hub.py champion)"
 read -r CHAMPION_ID CHAMPION_SCORE CHAMPION_PATH <<EOF
@@ -47,9 +67,16 @@ EOF
 [ -f "$CHAMPION_PATH" ] || { echo "no scored champion in $RUN" >&2; exit 2; }
 
 OUT="$RUN/simplify/$MODE"; WORK="$OUT/work"; RESULT="$OUT/result"
-"$PY" -c "import sys;sys.path.insert(0,'$REPO');import hub;hub.init('$OUT')"
+"$PY" - "$OUT" "$DATASET" <<'PY_INIT'
+import sys
+import hub
+from search.setup_run import write_env_json
+write_env_json(sys.argv[1], sys.argv[2])
+hub.init(sys.argv[1])
+PY_INIT
+[ "$?" = 0 ] || exit 2
 "$PY" -c "import sys;sys.path.insert(0,'$REPO/search');from setup_run import make_sandbox;make_sandbox('$WORK','$REPO')"
-rm -f "$WORK/CLAUDE.md"
+rm -f "$WORK/CLAUDE.md" "$WORK/AGENTS.md" "$WORK/GEMINI.md"
 mkdir -p "$OUT/eval" "$RESULT"
 cp -f "$CHAMPION_PATH" "$WORK/model.py"
 
@@ -77,11 +104,11 @@ PROMPT="$(cat scripts/simplify/prompt.md)
 
 $RULES
 
-Dataset: $DATASET. Budget: $MINUTES minutes. Always leave a passing model.py."
+Search dataset: $DATASET. Reward is RSA (test_corr compatibility field). Never access NSD/TVSD final encoding scores. Budget: $MINUTES minutes. Always leave a passing model.py."
 export LAB_RUN="$OUT"
 echo "[simplify] mode=$MODE run=$RUN champion=$CHAMPION_ID budget=${MINUTES}m"
-timeout "${MINUTES}m" copilot -p "$PROMPT" --allow-all --model "$MODEL" --effort "$EFFORT" \
-  --add-dir "$WORK" -C "$WORK" >>"$OUT/simplify.log" 2>&1
+timeout "${MINUTES}m" "$PY" "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
+  --cwd "$WORK" --write-dir "$OUT" <<< "$PROMPT" >>"$OUT/simplify.log" 2>&1
 
 if [ "$MODE" = exact ]; then
   FINAL="$(LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC")"

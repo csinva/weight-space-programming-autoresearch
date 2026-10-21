@@ -149,7 +149,17 @@ def write_evaluation(document: dict, path: str) -> None:
 
 
 def readout(A_train, A_test, Ytr, Yte, roi_masks, nc, DATASET, R, roi_breakdown, device):
-    """Ridge from ``A_train`` activations to the reward-region targets, scored on ``A_test``."""
+    """Use the current dataset metric; retain the old readout only for legacy language."""
+    if getattr(DATASET, "stage", "legacy") != "legacy":
+        from harness.metrics import encoding_scores, rsa_scores
+        R._validate_contract(DATASET)
+        if DATASET.metric == "rsa":
+            features = torch.cat([torch.as_tensor(A_train), torch.as_tensor(A_test)])
+            targets = torch.cat([torch.as_tensor(Ytr), torch.as_tensor(Yte)])
+            result = rsa_scores(features, targets, roi_masks, device)
+        else:
+            result = encoding_scores(A_train, A_test, Ytr, Yte, roi_masks, device)
+        return {**result, "d_out": int(A_test.shape[1]), "metric": DATASET.metric, "stage": DATASET.stage}
     from harness.ridge import ridge_predict
 
     mask = R.reward_region_mask(roi_masks, DATASET.reward_roi)

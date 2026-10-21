@@ -1,4 +1,4 @@
-"""The per-target ridge readout -- both implementations behind one switch. NOT agent-editable.
+"""Legacy language/archival ridge readout; active vision uses vendor.looped.metrics.encoding.
 
 ``ridge_predict(A_train, A_test, Y_train)`` fits a per-target ridge from activations to neural
 targets and returns ``(pred_train, pred_test)`` as float64 numpy arrays. This IS the eval: only the

@@ -5,6 +5,8 @@ scripts/cross_subject/
 
 # Machine-written outputs and caches (never commit)
 data/
+!harness/vendor/looped/data/
+!harness/vendor/looped/data/*.py
 results/
 # committed: one champion model.py per (dataset, subject-config)
 runs/*
@@ -13,6 +15,10 @@ search/state/
 logs/
 analyze/report.html
 __pycache__/
+.venv/
+*.egg-info/
+.pytest_cache/
+.env
 experiments/**/*.pt
 experiments/**/*.log
 

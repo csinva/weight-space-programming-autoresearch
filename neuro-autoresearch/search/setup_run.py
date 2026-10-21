@@ -20,6 +20,7 @@ shared -- the DB and the model archive live once at the run root.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -28,25 +29,101 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if REPO not in sys.path:
+    sys.path.insert(0, REPO)
+from harness.protocols import protocol_for, validate_search_dataset, SOURCE_REVISION
 SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
 
 # The eval-env knobs that change what the reward SCORES (subject set + readout + reliability cuts).
 # Persisted into env.json at scaffold time so a later approximate simplification reproduces the
 # EXACT evaluation this run used, instead of guessing the defaults.
-EVAL_ENV_KEYS = ("NEURO_SUBJECT", "NEURO_READOUT", "NEURO_MAX_PARAMS", "NSD_NCSNR_MIN",
-                 "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_HUTH_NUM_TRAIN")
+EVAL_ENV_KEYS = (
+    "NEURO_SUBJECT", "NEURO_IMSIZE", "NEURO_MAX_PARAMS", "NEURO_DATA_DIR",
+    "LAION_DATA_DIR", "LAION_FMRI_DIR", "TRIPLEN_DATA_DIR", "NSD_ROOT",
+    "NSD_STIMULI_HDF5_PATH", "NSD_DATA_DIR", "NSD_DATA_FILE", "NSD_BETAS_DIR",
+    "TVSD_DATA_DIR", "TVSD_STIMULI_HDF5_PATH", "LAION_NCSNR_MIN", "NSD_NCSNR_MIN",
+    "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TRIPLEN_MIN_RELIABILITY", "TVSD_ORACLE_MIN",
+)
+PROVIDER_ENV_KEYS = (
+    "NEURO_MODEL_ROSTER", "NEURO_CODEX_MODEL", "NEURO_AGY_MODEL", "NEURO_EFFORT",
+    "NEURO_REPAIR_MODEL", "NEURO_REPAIR_EFFORT", "NEURO_CONDUCTOR_MODEL",
+    "NEURO_CONDUCTOR_EFFORT",
+)
+
+
+def harness_sha256() -> str:
+    """Fingerprint fixed scientific code so a resumed queue cannot change its reward."""
+    from pathlib import Path
+    root = Path(REPO) / "harness"
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*.py")):
+        digest.update(str(path.relative_to(root)).encode())
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def runtime_versions() -> dict:
+    """Track numerical dependencies as part of the reproducible run contract."""
+    from importlib.metadata import version
+    import platform
+    return {"python": platform.python_version(), **{name: version(name) for name in (
+        "torch", "numpy", "scipy", "h5py", "pillow", "nibabel", "xarray", "pandas")}}
+
+
+def evaluation_environment(dataset: str) -> dict:
+    """Resolve the full search contract before creating or opening a run."""
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(REPO, ".env"))
+    dataset = validate_search_dataset(dataset)
+    protocol = protocol_for(dataset)
+    subjects = tuple(s.strip() for s in os.environ.get("NEURO_SUBJECT", "").split(",") if s.strip())
+    if subjects and subjects != protocol.search_subjects:
+        raise ValueError(f"{dataset} requires all search subjects: {','.join(protocol.search_subjects)}")
+    if os.environ.get("NEURO_METRIC", "rsa") != "rsa" or os.environ.get("NEURO_STAGE", "search") != "search":
+        raise ValueError("Search runs require NEURO_METRIC=rsa and NEURO_STAGE=search")
+    env = {k: os.environ[k] for k in EVAL_ENV_KEYS if os.environ.get(k)}
+    env.update(NEURO_DATASET=dataset, NEURO_SUBJECT=",".join(protocol.search_subjects),
+               NEURO_METRIC="rsa", NEURO_STAGE="search",
+               NEURO_IMSIZE=os.environ.get("NEURO_IMSIZE", "128"),
+               NEURO_MAX_PARAMS=os.environ.get("NEURO_MAX_PARAMS", "100000"))
+    # JSON canonicalization changes dataclass tuples to lists, matching subsequent disk reads.
+    env["protocol"] = json.loads(json.dumps(protocol.to_dict()))
+    env["source_revision"] = SOURCE_REVISION
+    env["harness_sha256"] = harness_sha256()
+    env["runtime_versions"] = runtime_versions()
+    from pathlib import Path
+    from harness.datasets import get_dataset
+    from harness.loaders.vision.looped import dataset_source_paths
+    env["data_files"] = {}
+    for role, value in dataset_source_paths(get_dataset(dataset, protocol.search_subjects[0])).items():
+        path = Path(value).expanduser().resolve()
+        identity = {"path": str(path)}
+        if path.exists():
+            stat = path.stat()
+            identity.update(size_bytes=stat.st_size, mtime_ns=stat.st_mtime_ns)
+        else:
+            identity["missing"] = True
+        env["data_files"][role] = identity
+    return env
 
 
 def write_env_json(run_dir: str, dataset: str) -> str:
-    """Snapshot the run's eval environment into ``run_dir/env.json`` (write-once: a resumed run keeps
-    its original env). Records the dataset plus whichever ``EVAL_ENV_KEYS`` are set right now -- the
-    same env the evaluator will score under -- so simplification/generalization can read it back."""
+    """Write the run contract, or reject any scientific change on resume."""
     path = os.path.join(run_dir, "env.json")
+    env = evaluation_environment(dataset)
     if os.path.exists(path):
+        with open(path) as f:
+            previous = json.load(f)
+        changes = [k for k in set(env) | (set(previous) - {"providers"}) if previous.get(k) != env.get(k)]
+        if changes:
+            raise ValueError("Cannot resume with a changed evaluation contract: " + ", ".join(sorted(changes))
+                             + ". Use a new run date; historical encoding scores cannot mix with RSA.")
         return path
-    env = {"NEURO_DATASET": dataset}
-    env.update({k: os.environ[k] for k in EVAL_ENV_KEYS if os.environ.get(k)})
-    with open(path, "w") as f:
+    if os.path.exists(os.path.join(run_dir, "search.db")):
+        raise ValueError("Existing run has no versioned env.json; start a new run date")
+    env["providers"] = {k: os.environ[k] for k in PROVIDER_ENV_KEYS if os.environ.get(k)}
+    os.makedirs(run_dir, exist_ok=True)
+    with open(path, "x") as f:
         json.dump(env, f, indent=2)
     return path
 
@@ -66,14 +143,15 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
     model_py = os.path.join(path, "model.py")
     if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
         shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
-    # ambient orientation for the proposer agent (Copilot auto-loads CLAUDE.md from the cwd):
+    # Ambient orientation for Codex, Antigravity and compatible agent clients:
     # the hub.py DB interface, the model contract, and the loop. Symlinked so it stays in sync.
     claude_src = os.path.join(repo_root, "search", "proposer", "prompt.md")
-    claude_link = os.path.join(path, "CLAUDE.md")
-    if os.path.islink(claude_link) and os.path.realpath(claude_link) != os.path.realpath(claude_src):
-        os.unlink(claude_link)  # refresh links created before the search/ reorganization
-    if os.path.exists(claude_src) and not os.path.islink(claude_link) and not os.path.exists(claude_link):
-        os.symlink(os.path.relpath(claude_src, path), claude_link)
+    for filename in ("AGENTS.md", "GEMINI.md", "CLAUDE.md"):
+        link = os.path.join(path, filename)
+        if os.path.islink(link) and os.path.realpath(link) != os.path.realpath(claude_src):
+            os.unlink(link)
+        if os.path.exists(claude_src) and not os.path.lexists(link):
+            os.symlink(os.path.relpath(claude_src, path), link)
     os.makedirs(os.path.join(path, "scratch"), exist_ok=True)
     return path
 
@@ -84,12 +162,16 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).
     """
-    date = date or datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")  # ET-dated run
+    dataset = validate_search_dataset(dataset)
+    if n_proposers < 1:
+        raise ValueError("n_proposers must be positive")
+    date = date or datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")
+    datetime.strptime(date, "%Y-%m-%d")
     run_dir = os.path.join(repo_root, "runs", f"{dataset}__{date}")
     sys.path.insert(0, repo_root)
     import hub
-    hub.init(run_dir)                              # search.db + models/
     write_env_json(run_dir, dataset)               # eval-env snapshot for later re-scoring
+    hub.init(run_dir)                              # search.db + models/
     for i in range(n_proposers):
         make_sandbox(os.path.join(run_dir, "proposers", f"p{i:02d}"), repo_root)
     os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch (scores via hub.score in-repo)
@@ -99,7 +181,7 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("dataset", help="dataset key: nsd / tvsd / nnn / huth / ieeg")
+    p.add_argument("dataset", help="search dataset: laion or triplen (nnn alias accepted)")
     p.add_argument("--date", default=None, help="run date (default: today, ET)")
     p.add_argument("--n", type=int, default=10, help="number of proposer sandboxes")
     a = p.parse_args()

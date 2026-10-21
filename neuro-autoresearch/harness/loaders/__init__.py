@@ -3,8 +3,9 @@ single entry point.
 
 - **timeline** (iEEG) -- continuous-timeline studies aligned on the fly via the
   NeuralSet ``Segmenter``: each trigger event cuts a stimulus + neural segment.
-- **vision** (nsd/tvsd/nnn) -- pre-aligned response tables (prepared betas / spiking MUA),
-  read directly by a self-contained ``loaders.vision`` reader; no Segmenter.
+- **vision** (laion/triplen/nsd/tvsd) -- prepared response tables read by the
+  vendored looped-networks readers. RSA search has an empty train split; final
+  encoding retains the source train/test split.
 
 A model is read out by the harness against ``load_split``'s (X_train, X_test, Y_train,
 Y_test); the agent should NOT need to edit anything here.
@@ -18,10 +19,13 @@ from harness.datasets import Dataset
 
 _SPLIT_MEMO: dict = {}
 
-# Env knobs that shape WHICH voxels/units/rows a split contains -- part of the memo key so an
-# in-process threshold sweep can't hand back a stale split under a changed cut. (imsize/subject
-# already live on the frozen Dataset.)
-_SPLIT_ENV_KEYS = ("NSD_NCSNR_MIN", "NNN_MIN_RELIABILITY", "NNN_UNIT_TYPE", "TVSD_ORACLE_MIN", "NEURO_HUTH_NUM_TRAIN", "NEURO_NO_CACHE")
+# Storage and legacy-loader settings enter the memo key; vision scientific
+# thresholds are fixed. Resolution and subject already live on the Dataset.
+_SPLIT_ENV_KEYS = (
+    "NSD_DATA_DIR", "NSD_DATA_FILE", "NSD_ROOT", "NSD_BETAS_DIR", "NSD_STIMULI_HDF5_PATH",
+    "LAION_DATA_DIR", "LAION_FMRI_DIR", "TRIPLEN_DATA_DIR", "TVSD_DATA_DIR",
+    "NEURO_HUTH_NUM_TRAIN", "NEURO_NO_CACHE", "NEURO_SPLIT_CACHE",
+)
 
 
 def load_split(d: Dataset):
@@ -29,7 +33,11 @@ def load_split(d: Dataset):
     ``Dataset`` plus the split-shaping env knobs: the search evaluator scores many models against the
     SAME split, so the load is paid ONCE, not once per model. The split is treated read-only
     downstream (the reward copies/clones X per eval), so sharing it across models is safe."""
-    key = (d, tuple(os.environ.get(k) for k in _SPLIT_ENV_KEYS))
+    source_key = d
+    if d.loader in ("nsd", "laion", "triplen", "tvsd", "nnn"):
+        from harness.loaders.vision.looped import dataset_cache_key
+        source_key = dataset_cache_key(d)
+    key = (source_key, tuple(os.environ.get(k) for k in _SPLIT_ENV_KEYS))
     if key not in _SPLIT_MEMO:
         _SPLIT_MEMO[key] = _dispatch_split(d)
     return _SPLIT_MEMO[key]
@@ -37,28 +45,21 @@ def load_split(d: Dataset):
 
 def _dispatch_split(d: Dataset):
     """Load (X_train, X_test, Y_train, Y_test, roi_masks, nc) -- 2-D float tensors, a (possibly
-    empty) ``{roi_name: bool mask}`` over the scored targets for the per-ROI breakdown, and ``nc``
-    (per-voxel R^2 noise ceiling aligned to the scored targets, for noise-normalizing the reward, or
-    None when the dataset has no repeat-based ceiling). Dispatches on d.loader; imports are lazy so a
+    empty) ``{roi_name: bool mask}`` over targets for the per-region breakdown, and
+    ``nc`` (None for canonical raw RSA/encoding metrics). Imports are lazy so a
     score-only caller never pulls a loader's heavy deps."""
     if d.loader == "timeline":
         if d.timeline is None:
             raise ValueError(f"{d.study}: loader='timeline' requires a timeline=Timeline(...) block")
         from harness.loaders.timeline import load_timeline
         return (*load_timeline(d), {}, None)       # timeline studies (iEEG): no ROI map / ceiling
-    if d.loader == "nsd":
-        from harness.loaders.vision.nsd import load_nsd
-        return load_nsd(d)                         # nsd provides the per-voxel ceiling
-    if d.loader == "tvsd":
-        from harness.loaders.vision.tvsd import load_tvsd
-        return load_tvsd(d)                        # tvsd provides the per-electrode oracle ceiling
-    if d.loader == "nnn":
-        from harness.loaders.vision.nnn import load_nnn
-        return load_nnn(d)                          # nnn provides the per-unit split-half ceiling
+    if d.loader in ("nsd", "laion", "triplen", "tvsd", "nnn"):
+        from harness.loaders.vision.looped import load_looped
+        return load_looped(d)
     if d.loader == "huth":
         from harness.loaders.huth import load_huth
         return load_huth(d)                         # Huth language fMRI: baked blob, no ceiling
-    raise ValueError(f"unknown loader {d.loader!r}; expected timeline|nsd|tvsd|nnn|huth")
+    raise ValueError(f"unknown loader {d.loader!r}; expected timeline|laion|nsd|triplen|tvsd|huth")
 
 
 def apply_feature_pipeline(d: Dataset, A, which: str):

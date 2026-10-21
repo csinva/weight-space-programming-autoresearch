@@ -1,206 +1,161 @@
 # neuro-autoresearch
 
-**Search for the *computations* that explain the brain.**
+Search for fixed, interpretable image representations using **RSA feedback**, then
+measure transfer to a different neural dataset using **encoding**. Codex with
+Astra and Antigravity (`agy`) with Argon 4 propose and revise `model.py`; a fixed
+harness computes their reward.
 
-An AI agent writes — and rewrites — the code for a function `f: stimulus → representation`. A
-ridge readout from that representation to recorded brain activity scores it, and the held-out score
-is the agent's reward. The object of the search is not a model that *fits* the brain but the
-**function a brain region computes**: given oriented filters, kernels, energy hierarchies, character
-features — any computation expressible in code — which one predicts the neural response?
+| Track | Search feedback | Final evaluation |
+| --- | --- | --- |
+| fMRI | LAION-fMRI, all five subjects, RSA | NSD, all eight subjects, encoding |
+| Spiking | Triple-N, all five monkeys, RSA | TVSD, both monkeys, encoding |
 
-The unit of progress is one file (`model.py`); the unit of truth is one number (`test_corr`).
+The loaders and metric kernels are copied from `looped-networks` revision
+`3ee575baeceb1ad784102162a051b7444182fdaa`. This repository has no runtime dependency
+on that checkout. See [source provenance](harness/vendor/looped/PROVENANCE.md) and
+the [implementation plan](docs/migration-plan.md).
 
-> **0.44** NSD (r²/NC)  ·  **0.063** iEEG (raw r)  ·  **< 100K** params, enforced  ·  **0** gradient steps  ·  **4** datasets · **2** species · **3** modalities
+## Scientific contract
 
-## The idea
+The model receives only flattened HWC RGB images in `[0, 1]`, resized to 128×128
+by default. It returns a finite `(images, features)` matrix with fewer than 10,000
+features. Parameters must be fixed, analytic or seeded random, with at most
+100,000 materialized parameters. Model outputs must be independent of batch
+composition. Only `model.py` evolves; the harness, datasets and protocol stay fixed.
 
-Three things separate this from architecture search or model-fitting:
+**RSA search:** construct a Pearson correlation dissimilarity matrix for model
+features and for each neural region, then compare their upper triangles using
+average-rank Spearman correlation. No readout is fitted during search. Invalid,
+constant or nonfinite results fail the attempt instead of receiving a reward.
 
-- **Not architecture search.** The search space is the space of *functions*, not a fixed backbone
-  family. A proposal can be Gabor energy, a scattering transform, a hashed lexical bag — anything
-  computable under the contract. The NSD champion is an HMAX energy model, not a CNN.
-- **Written, not fitted.** Every parameter is analytic or random-but-fixed, written directly in
-  code. No gradient descent, and the function never sees the neural target `Y` — so a high score
-  reflects the **computation itself**, not weights tuned to the data.
-- **An agent as the scientist.** Autonomous LLM agents author, run, and revise the code — reasoning
-  about mechanism, reading their own scores, and building on what worked. The search runs
-  unsupervised for hours across a diverse pool.
+LAION uses the shared test images with the 240 NSD-source stimuli excluded:
+**1,252 images** in the current prepared release, across subjects sub-01, sub-03,
+sub-05, sub-06 and sub-07. Its subject-private training images are not part of
+this fixed search reward. Triple-N uses **all 1,000 images**, across M1–M5; its
+source folds are combined because search fits no encoding readout. These are
+search stimuli, not independent held-out tests after iterative optimization.
 
-## The loop
+The primary anatomical regions match the source evaluator's default: early and
+ventral visual streams. Average regions within each subject, then average
+subjects equally. Triple-N M1/M4 have early and ventral coverage; M2/M3/M5 have
+ventral coverage. Every subject must succeed, and its actual region scores are
+retained. Source filters are fixed: ncsnr >0.2 for LAION/NSD, reliability >0.4 for
+Triple-N, oracle >0.4 for TVSD. These are **raw RSA and raw Pearson encoding**;
+old noise-normalized encoding scores are not comparable.
 
-Each proposer is an autonomous LLM agent. On every iteration it gets a brief — the I/O contract, the
-source of its own current best function, and an anonymized scoreboard of what rival approaches
-scored — and authors a new function as a self-contained program (front-end, nonlinearity, pooling,
-layout). It submits; the fixed harness returns a scalar **reward** (held-out predictivity) plus a
-per-region breakdown of *where* it won and lost. That signal is **not a gradient**: the agent reads
-it against its own notes, forms a hypothesis, and writes the next version.
+**Final encoding:** freeze the model selected solely by search RSA, then use the
+paired dataset's official train/test image split. Center features with training
+statistics and normalize their overall training scale; z-score neural targets
+with training statistics. Each target chooses its ridge penalty using five-fold
+training CV over the source's 20-alpha grid. Report held-out Pearson r, aggregated
+by region then subject. NSD and TVSD never supply a search reward.
 
-```
-X (N,D_in) → f (agent-authored, fixed) → rep (N,D_out) → ridge (the only fit) → brain Y (held-out) → test_corr → back to the agent
-```
+This is cross-dataset transfer, with known NSD-source LAION images excluded. It
+does not claim a comprehensive pixel-level duplicate audit across releases.
 
-**Islands keep the pool diverse.** Scores are shared; source code is not. Each agent is an *island*
-that may read code only from its own best or one random other island — never a global champion — so
-approaches stay genuinely different instead of collapsing onto one recipe. (`VANILLA_AUTORESEARCH=1`
-closes the cross-island channels to recover an independent-loops baseline for controlled comparison.)
+## Setup on this machine
 
-## The contract — what keeps the reward honest
-
-A self-contained `model.py` defines `class Model` with `__call__(self, X)` and ends with
-`MODEL = Model()`:
-
-| | |
-| --- | --- |
-| signature | `f: X (N, D_in) → (N, D_out)` |
-| weights | written in code, never learned |
-| params | `< 100,000` (`NEURO_MAX_PARAMS`, enforced robustly) |
-| width | `D_out < 10,000` |
-| per-sample | no statistics across the batch |
-| sees | only `X`, never the target `Y` |
-| fit | the ridge readout only — that *is* the evaluation |
-| reward | held-out `test_corr` |
-
-`model.py` is the **only** evolving artifact; the harness around it is fixed — if it could be edited,
-the reward would be meaningless. Static and runtime guards block pretrained weights, network access,
-and reading the target. The repo-root `model.py` is the **random-projection baseline** — the floor
-every model should beat and the seed each proposer starts from. (For image datasets `X` is flattened
-RGB pixels of a square image, `side = round(sqrt(D_in/3))`.)
-
-**Why written, not learned?** A trained encoding model entangles two questions: does the brain
-resemble this *computation*, or this *training set*? Writing the parameters in code answers only the
-first — the one we want. The 100K-parameter ceiling is a forcing function for interpretability: every
-champion is a small, readable computation you can turn into a mechanistic claim, not a black box.
-
-## The five datasets
-
-**Three vision, two language** — three recording modalities across two species. Each is a preset in
-`harness/datasets.py`, chosen by the `NEURO_DATASET` env var (no source edit, so parallel runs never
-collide) and loaded **fully offline** from a local copy.
-
-| domain | `NEURO_DATASET` | study | brain · stimulus | reward |
-| --- | --- | --- | --- | --- |
-| **vision** | `nsd` (default) | Natural Scenes Dataset · human | fMRI · natural images | early+ventral stream, noise-normalized · **0.44** |
-| | `tvsd` | THINGS Ventral-stream Spiking Dataset · macaque | spiking · natural images | reliable V1+V4+IT units, raw *r* |
-| | `nnn` | Triple-N · macaque | spiking · natural images | reliable EVC+IT units, noise-normalized |
-| **language** | `huth` | Huth story-listening · human | fMRI · spoken narrative | all cortical voxels, raw *r* |
-| | `ieeg` | 'Podcast' ECoG · human | iEEG · spoken words | all electrodes, 5-fold temporal CV · **0.063** |
-
-**Vision** — `X` is the flattened RGB pixels of a square image (`side = round(sqrt(D_in/3))`).
-- **`nsd`** — prepared GLMdenoise betas; reward = the joint early+ventral stream (~14.5k reliable
-  voxels), with the shared-1000 images held out image-disjoint. Subjects 1, 2 are the search reward;
-  5, 7 are held out for generalization (via `NEURO_SUBJECT`).
-- **`tvsd`** — normalized multi-unit activity from macaque V1, V4, and IT during THINGS image
-  viewing. Monkey F is used for search and monkey N is held out for generalization.
-- **`nnn`** (Triple-N) — macaque spiking to the *same* NSD-1000 images; reward = reliable EVC+IT units
-  pooled, with a 5-fold split over the 1000 images. Search monkeys M1–M3; M4, M5 held out.
-
-**Language** — the stimulus is `chars`: each word is the character-id grid of its n-gram, so the model
-builds linguistic structure from characters up, with **no pretrained embeddings**.
-- **`huth`** — human fMRI while listening to spoken stories (the "Moth Radio Hour"); per-word features
-  are resampled onto the fMRI TR grid and FIR-delayed, then scored over all cortical voxels. Subjects
-  UTS01 and UTS02 are used for search; UTS03 is held out.
-- **`ieeg`** — human intracranial high-gamma (70–200 Hz) to a ~30-min podcast; reward = a rotating
-  5-fold temporal CV over all electrodes (a single fixed hold-out is trivially overfit), meaned over
-  patients 01–03 (04, 05 held out).
-
-The **NSD and NNN** rewards are noise-ceiling-normalized (r²/NC over reliably-driven voxels/units, so
-0.44 means 44% of the *recoverable* signal). **TVSD and both language datasets** report raw mean
-Pearson *r*. The reward region is a fixed **per-dataset** attribute — no ROI menu, no way to aim the readout at the target.
-Splits are cached on disk keyed by the full dataset identity, so reruns load in seconds.
-
-## Two champions, read as hypotheses
-
-- **NSD · 0.44 — an HMAX energy hierarchy.** Gabor quadrature-energy (V1 edge power), HMAX
-  max-pooling with a compressive nonlinearity (tolerance), random-weight conv layers with an abs
-  (phase-invariant) nonlinearity (mid/high features), a cross-orientation Gram (texture), and a
-  foveal pool. Scored through the *identical* harness against five frozen pretrained nets (AlexNet,
-  ResNet-50, ViT-B/16, CLIP, DINOv2, each given its best layer per stream), it yields a **double
-  dissociation**: the untrained champion owns early/mid vision (0.55 vs AlexNet's 0.43) while a
-  pretrained net owns the category-selective ventral tip (DINOv2 0.47 vs champion 0.35).
-- **iEEG · 0.063 — a hand-built lexical–syntactic feature map** from character codes (no pretrained
-  lexicon): a hashed n-gram form of the current word, a recency-weighted context bag that up-weights
-  content words over function words, a syntactic-category one-hot, and a bilinear "does this word fit
-  the running topic" term — all read against high-gamma ECoG.
-
-## Run (offline, no downloads)
-
-**Install**
 ```bash
-pip install .
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dev]'
 ```
 
-**Manual single eval** (repo root) — loads the split once, scores `model.py` once, prints the row
-(`train_corr` / `test_corr` / timing); persists nothing.
+The working checkout already has a `.venv` with runtime and test dependencies.
+Search shell scripts prefer `.venv/bin/python`; override with `NEURO_PYTHON`.
+The installed CLIs resolve `codex:astra` to `gpt-6-astra` and `agy:argon4` to
+`gemini-4-argon-high`. `search/config.env` holds the roster and role defaults;
+`NEURO_CODEX_MODEL` and `NEURO_AGY_MODEL` override exact IDs. Provider authentication
+must already be configured locally. Preflight checks availability without
+submitting model requests.
+
+Prepared data is reused in place; no dataset download or multi-gigabyte copy is
+needed. Defaults are the existing shared files:
+
+| Dataset | Response directory environment variable | Default |
+| --- | --- | --- |
+| LAION-fMRI | `LAION_DATA_DIR` | `/data/shared/datasets/laion_fmri/processed` |
+| Triple-N | `TRIPLEN_DATA_DIR` | `/data/shared/datasets/triplen/processed` |
+| NSD | `NSD_DATA_DIR` | `/data/shared/datasets/nsd_processed` |
+| TVSD | `TVSD_DATA_DIR` | `/data/shared/datasets/papale2025.tvsd/processed` |
+
+Stimulus paths follow the source loaders: `LAION_FMRI_DIR`, `NSD_ROOT`,
+`NSD_STIMULI_HDF5_PATH`, and `TVSD_DATA_DIR`. NSD's ncsnr volumes are also needed
+for its final reliability filter. Paths can be set in the shell or local `.env`.
+The old `scripts/prepare_data` baked formats are retired for these vision tasks.
+
+## Run
+
 ```bash
-python -m harness.run                          # score the current model.py on the active dataset
-NEURO_DATASET=ieeg python -m harness.run       # pick: nsd | tvsd | nnn | huth | ieeg
-NEURO_READOUT=himalaya python -m harness.run   # reference readout (default = the ~20× faster fast ridge)
+# Validate Python, data paths, fixed cohorts, and both headless providers.
+search/run.sh laion --preflight
+search/run.sh triplen --preflight
+
+# Manually evaluate the seed model on the complete search cohort.
+.venv/bin/python -m harness.run --dataset laion --stage search
+.venv/bin/python -m harness.run --dataset triplen --stage search
+
+# Launch autonomous search (these commands make actual model requests).
+search/run.sh laion --hours 12 --fleet 4 --gpu 0
+search/run.sh triplen --hours 12 --fleet 4 --gpu 0
+
+# After search: freeze its RSA champion and evaluate the paired OOD dataset.
+.venv/bin/python -m experiments.evaluation.final --run runs/laion__2026-10-21
+.venv/bin/python -m experiments.evaluation.final --run runs/triplen__2026-10-21
 ```
 
-**Open-ended search** (unattended) — `search/run.sh` scaffolds a dated run and supervises three
-decentralized, self-paced loops with no synchronization barrier:
-```bash
-search/run.sh nsd --hours 12                # 10 proposers + 1 GPU evaluator + a conductor steering every 60m
-search/run.sh nsd --hours 12 --effort high  # ONE effort knob (low|medium|high|xhigh|max) for every agent
-search/run.sh nsd --hours 12 --epoch-mins 0 # conductor OFF — pure decentralized pool
-search/run.sh nnn --hours 6 --gpu 1         # pin to GPU 1 → run a dataset per card in parallel
-```
-- **Proposer pool** — N headless LLM CLIs, each confined to its own sandbox, editing its own
-  `model.py`, proposing it, and blocking only on *its own* score.
-- **GPU evaluator** — claims queued models one at a time, scores each with the fixed harness in
-  isolation, and writes the result back (`search/evaluator/repair.sh` auto-fixes small mechanical
-  faults, ≤2 tries).
-- **Conductor** (optional) — every `--epoch-mins` writes one broad, **advisory** `direction.txt` per
-  proposer to keep the pool diverse and unstuck; it never gates the queue or scoring.
+`laion-fmri`/`laion_fmri` and `nnn`/`triple-n` are accepted aliases. The only
+search datasets are `laion` and `triplen`; `search/run.sh nsd` and `tvsd` fail.
+The full search cohort is mandatory. Use `--epoch-mins 0` to disable the conductor.
+On this one-GPU machine, launch the two searches sequentially unless deliberately
+sharing the GPU. `NEURO_EVALUATORS` controls queue workers.
 
-By default the fleet is spread round-robin across five models (Opus 4.8/4.7/4.6, GPT‑5.5, Gemini 3.1
-Pro); override with `NEURO_MODEL_ROSTER`. Everything shared lives in one SQLite file,
-`runs/<dataset>__<date>/search.db` — the queue, full history, and scores. Re-launching the same date
-**resumes** losslessly; a new date starts fresh.
+`python experiments/evaluation/run.py` is an alias for the final evaluation CLI.
+For an explicit, unsearched model, use `--model model.py --search-dataset laion`;
+the artifact records that no RSA champion selection occurred. Full final
+artifacts go to `results/final/<protocol>/<model-hash>/`, containing frozen source,
+subject scores, region scores and exact data provenance. An existing artifact is
+not overwritten. Final results never update `search.db`.
 
-**The `hub` API/CLI** — agents never touch the DB, GPU, or dataset directly:
-```bash
-python hub.py propose-model model.py --idea "…"  # snapshot + queue this model → prints its id
-python hub.py wait-for-score <id>                # block until the evaluator scores it
-python hub.py my-best                            # YOUR island's best model (+source) to build on
-python hub.py peek-island                        # one RANDOM other island's idea + notes (no source, no score)
-python hub.py random-models -n 5                 # random prior models: scores + ideas (no source)
-python hub.py summary                            # one-line DB tally + current champion
-```
+## Runs and reproducibility
 
-## Repo layout
+A run lives in `runs/<dataset>__<date>/` and contains `search.db`, immutable model
+snapshots, proposer workspaces, evaluator logs and `env.json`. The manifest
+records the protocol, image policy, subjects, data-file identities, source
+revision, harness hash, numerical package versions, input resolution, parameter cap
+and provider settings.
+Resuming with different science or modified data/code is rejected; use a new
+`--date`. Historical encoding runs cannot be resumed as RSA searches.
 
-```
-model.py              EVOLVED — the one model (seed: random-projection baseline)
-hub.py                the API + CLI over a run's search.db
-harness/              FIXED evaluation — loaders, ridge readout, reward, and manual runner
-search/               the core autoresearch framework
-  run.sh                the single search entry point
-  proposer/             proposer pool, worker, and prompt
-  evaluator/            evaluator pool, worker, and repair agent
-  conductor/            advisory conductor loop and prompt
-dashboard/            live view of a running search
-experiments/          scientific studies built with the framework
-  evaluation/           baselines and held-out generalization
-  complementarity.py    champion + pretrained-model complementarity
-  imagenet/             ImageNet training and neural re-evaluation
-scripts/              operational support: prepare_data/, benchmark/, simplify/
-docs/                 human docs — start at docs/overview.html
-runs/<dataset>__<date>/ one search: search.db + models/ + proposers/ + eval/ (gitignored)
-```
+`test_corr` remains the queue's compatibility column name, but each current row
+is explicitly tagged `metric=rsa`, `stage=search`, and the protocol version.
+Per-subject feedback is retained. Final evaluation verifies the selected model's
+SHA256 against the scored snapshot before it opens final data. File identities
+use path, size and modification time; frozen model and harness identities use
+SHA256. Provider logs retain their native usage events; unknown monetary cost is
+stored as null rather than estimated from obsolete Copilot credits.
 
-## The experiments it enables
+The existing source/network guards and agent instructions support reward
+integrity; they are not a hostile-code security boundary. Provider workspace
+permissions restrict writes, but final-dataset read isolation is enforced by the
+protocol and scoring interfaces, not a separate OS account or data-access service.
 
-Three programs build on each other — **search → analyze → dissect**:
+## Layout and validation
 
-1. **Search** for models, either optimizing a single target dataset (vanilla) or *jointly* across
-   several at once (multi-dataset). *Are there models good for human vision but poor for monkey — or
-   vice versa — and can one be good at both?*
-2. **Analyze the population** (~2,000 models): which computational motifs are enriched in the best
-   models, and which properties distinguish the ones that generalize across datasets?
-3. **Dissect the best**: identify a champion's motifs, perturb them one at a time, and measure which
-   are *causally* responsible for brain alignment — moving from *finding* good models to
-   understanding *why* they work.
+- `harness/protocols.py`: dataset pairs, cohorts and versioned contracts.
+- `harness/vendor/looped/`: copied source loaders and metric kernels.
+- `harness/loaders/vision/looped.py`: source-to-model tensor adapter and provenance.
+- `harness/metrics.py`, `harness/reward.py`: validated scoring and aggregation.
+- `search/providers.py`: shared Codex/Antigravity execution adapter.
+- `hub.py`, `search/`: queue, proposers, evaluators and optional conductor.
+- `experiments/evaluation/final.py`: frozen-model OOD encoding.
 
----
-*Timeline segmentation and alignment are provided by NeuralSet.*
+Run `.venv/bin/python -m pytest -q`. Tests cover source metric agreement, tied
+ranks, training-only encoding selection, alignment, invalid rewards, cohort
+completeness, resume identity, provider commands and final/search separation.
+See [migration validation](docs/migration-validation.md) for checks and actual-data
+smoke results. Historical champions, schema readers and plotting utilities are retained under
+`runs/best/` and the `legacy_*` evaluation modules. Older HTML concept documents
+and language experiments describe the pre-migration system; they are not current
+vision launch instructions. Language loaders are optional (`pip install -e
+'.[language]'`) and are outside the two new search protocols.

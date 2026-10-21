@@ -39,8 +39,8 @@ sys.path.insert(0, REPO)
 sys.path.insert(0, HERE)
 
 from common import mean_scalar, sha256_file, write_evaluation  # noqa: E402
-from datasets import VISION_DATASETS, evaluation_for            # noqa: E402
-from run import _NO_CAP, _free_gpu, git_commit, load_model, model_provenance  # noqa: E402
+from legacy_datasets import VISION_DATASETS, evaluation_for            # noqa: E402
+from legacy_run import _NO_CAP, _free_gpu, git_commit, load_model, model_provenance  # noqa: E402
 
 
 def _champion(dataset: str) -> dict:
@@ -187,4 +187,4 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit("This is an archived pre-migration workflow. Use experiments/evaluation/final.py for current protocols; historical reproduction requires the original repository revision.")
