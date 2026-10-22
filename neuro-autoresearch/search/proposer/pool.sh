@@ -59,7 +59,7 @@ while ! past_deadline "$DEADLINE"; do
         DISABLED[$i]=1
         PIDS[$i]=0
         ACTIVE=$((ACTIVE - 1))
-        echo "[propose] $(printf 'p%02d' "$i") disabled: terminal provider failure (exit 78); inspect $LAB_RUN/proposers/$(printf 'p%02d' "$i")/proposer.log; $ACTIVE active slots remain" >&2
+        echo "[propose] $(printf 'p%02d' "$i") disabled: terminal provider failure (exit 78); inspect $LAB_RUN/logs/$(printf 'p%02d' "$i").jsonl; $ACTIVE active slots remain" >&2
         if [ "$ACTIVE" -eq 0 ]; then
           echo "[propose] all proposer slots disabled; fix provider configuration/permissions before relaunching" >&2
           exit 78

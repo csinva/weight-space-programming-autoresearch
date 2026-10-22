@@ -1,8 +1,10 @@
 # neuro-autoresearch
 
-Search for fixed, interpretable image representations using **RSA feedback**, then
+Search broadly for fixed, untrained image representations using **RSA feedback**, then
 freeze the selected model and measure cross-dataset transfer using **encoding**.
 Only `model.py` evolves during search; the harness and scientific protocol stay fixed.
+Prediction guides search. Mechanistic interpretation and hypothesis testing are separate
+later work, not prerequisites for proposing a model.
 
 | Track | Search feedback | Final evaluation |
 | --- | --- | --- |
@@ -11,7 +13,7 @@ Only `model.py` evolves during search; the harness and scientific protocol stay 
 
 NSD and TVSD are final-only: their scores must never guide search. Full cohorts,
 fixed source filters and equal-subject aggregation are mandatory. Read the
-[scientific contract](docs/protocol.md) before changing a model or harness.
+[scientific contract](docs/protocol.md) and [access/feedback contract](docs/access-feedback.md) before changing a model or harness.
 
 ## Start here
 
@@ -23,6 +25,9 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
 ```
+
+This version changes the access and feedback contract. Start a fresh run date;
+older runs remain readable but cannot resume under changed harness code.
 
 Prepared datasets are reused in place. See [data paths](docs/data.md) if they
 are not available at the shared defaults.

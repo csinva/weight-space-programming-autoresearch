@@ -86,6 +86,8 @@ def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_p
     assert all(mask.sum() == 2 for mask in masks.values())
     assert nc is None
     assert dataset_provenance(d)["test_ids"] == ["1", "4"]
+    assert load_split(d).source_groups == {"laion": [0], "thingsplus": [], "ood": [1]}
+    assert dataset_provenance(d)["source_group_counts"] == {"laion": 1, "thingsplus": 0, "ood": 1}
 
 
 def test_triplen_uses_all_images_and_each_monkeys_available_regions(tmp_path, monkeypatch):

@@ -106,7 +106,7 @@ write_usage_index() {
   "$PY" - "$RUN" <<'PY_USAGE'
 import json, pathlib, sys
 root = pathlib.Path(sys.argv[1])
-logs = sorted(str(p.relative_to(root)) for p in root.glob("proposers/p*/proposer.log"))
+logs = sorted(str(p.relative_to(root)) for p in root.glob("logs/p*.jsonl"))
 if (root / "conductor.log").exists():
     logs.append("conductor.log")
 (root / "usage.json").write_text(json.dumps({"logs": logs, "usd": None,

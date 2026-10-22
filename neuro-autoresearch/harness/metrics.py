@@ -113,6 +113,38 @@ def rsa_scores(features, targets, masks, device, *, cache_sources=None) -> dict:
             "n_stimuli": len(features), "encoding_features": None}
 
 
+def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None) -> dict:
+    """Descriptive search-only feedback; subgroup failures never alter reward.
+
+    Subgroups recompute both RDMs and ranks on their own images. They are not
+    averaged into the primary score. Neural rank caching is deliberately omitted
+    here because the full-cohort cache keys do not identify stimulus subsets.
+    """
+    masks = region_masks(masks, targets.shape[1])
+    groups = {}
+    for name, indices in (source_groups or {}).items():
+        if name not in {"laion", "thingsplus", "ood"}:
+            continue
+        indices = np.asarray(indices, dtype=np.int64)
+        entry = {"n_stimuli": len(indices), "status": "unavailable", "rsa": None, "regions": {}}
+        try:
+            if (indices.ndim != 1 or len(set(indices.tolist())) != len(indices)
+                    or np.any(indices < 0) or np.any(indices >= len(features))):
+                raise ValueError("Invalid source-group stimulus indices")
+            subgroup = rsa_scores(features[indices], targets[indices], masks, device)
+        except ValueError as exc:
+            entry["reason"] = str(exc)
+        else:
+            entry.update(status="ok", rsa=subgroup["test_corr"],
+                         regions={r: values["test"] for r, values in subgroup["roi_corr"].items()})
+        groups[name] = entry
+    return {"schema_version": 1, "metric": "rsa", "stage": "search",
+            "primary_rsa": scored["test_corr"], "n_stimuli": len(features),
+            "regions": {name: {"rsa": scored["roi_corr"][name]["test"],
+                                "n_targets": int(mask.sum())} for name, mask in masks.items()},
+            "source_groups": groups}
+
+
 def encoding_scores(train_features, test_features, train_targets, test_targets, masks, device) -> dict:
     """One source ridge fit; training predictions are diagnostics, never CV data."""
     train_features = matrix(train_features, "training model features")

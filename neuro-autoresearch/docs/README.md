@@ -5,6 +5,7 @@
 - [Repository quick start](../README.md): preflight, search and final evaluation.
 - [Launcher runbook](search-launcher.md): roles, authentication, resume and failures.
 - [Scientific contract](protocol.md): fixed cohorts, metrics, provenance and reproducibility.
+- [Access and feedback](access-feedback.md): role permissions, bounded feedback and isolation limits.
 - [Prepared data](data.md): existing response and stimulus paths.
 - [Champion simplification](simplification.md): exact and approximate modes.
 - [Final evaluation](../experiments/evaluation/README.md): frozen cross-dataset encoding artifacts.

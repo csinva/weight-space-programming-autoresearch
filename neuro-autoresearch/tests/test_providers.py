@@ -24,7 +24,7 @@ elif sys.argv[1:] == ["models"]:
     print("gemini-4-argon-high\\tGemini 4 Argon (High)")
 else:
     print({json.dumps(result)!r})
-    pathlib.Path(os.environ["CAPTURE"]).write_text(json.dumps({{"argv": sys.argv[1:], "cwd": os.getcwd(), "python": os.environ.get("NEURO_PYTHON")}}))
+    pathlib.Path("capture.json").write_text(json.dumps({{"argv": sys.argv[1:], "cwd": os.getcwd(), "python": os.environ.get("NEURO_PYTHON")}}))
 ''')
     executable.chmod(0o755)
     return executable
@@ -78,7 +78,7 @@ def test_proposer_worker_passes_rsa_protocol_to_provider(tmp_path, selected_pyth
     workspace = tmp_path / "proposers" / "p00"
     workspace.mkdir(parents=True)
     executable = fake_cli(tmp_path, provider)
-    capture = tmp_path / "capture.json"
+    capture = workspace / "capture.json"
     env = {**selected_python_env, f"NEURO_{provider.upper()}_BIN": str(executable), "CAPTURE": str(capture),
            "LAB_RUN": str(tmp_path), "NEURO_DATASET": "laion", "NEURO_PROPOSER_MODEL": spec}
     result = subprocess.run(["bash", str(REPO / "search/proposer/worker.sh"), "p00"],
@@ -90,17 +90,10 @@ def test_proposer_worker_passes_rsa_protocol_to_provider(tmp_path, selected_pyth
     assert "Reward = RSA" in prompt
     assert "ALL subjects" in prompt
     assert "Final transfer evaluations" in prompt
-    assert str(tmp_path) in record["argv"]
-    assert record["python"] == env["NEURO_PYTHON"]
-    # Execute an actual agent-facing hub command from the captured prompt.
-    import hub
-    hub.init(str(tmp_path))
-    (workspace / "hub.py").symlink_to(REPO / "hub.py")
-    command = re.search(r'`("\$NEURO_PYTHON" hub.py random-models -n 5)`', prompt).group(1)
-    result = subprocess.run(["bash", "-c", command], cwd=workspace, env=env, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
+    assert str(workspace) in record["argv"]
+    assert record["python"] == sys.executable
     calls = [json.loads(line) for line in Path(env["TEST_PYTHON_CALLS"]).read_text().splitlines()]
-    assert calls[-1] == ["hub.py", "random-models", "-n", "5"]
+    assert calls[0][:2] == [str(REPO / "search/providers.py"), "run"]
 
 
 def test_repair_runs_in_candidate_directory(tmp_path, selected_python_env):
@@ -110,7 +103,7 @@ def test_repair_runs_in_candidate_directory(tmp_path, selected_python_env):
     model.write_text("# fake failed candidate\n")
     log = tmp_path / "failure.log"
     log.write_text("NameError: missing_name\n")
-    capture = tmp_path / "capture.json"
+    capture = workspace / "capture.json"
     executable = fake_cli(tmp_path, "codex")
     env = {**selected_python_env, "NEURO_CODEX_BIN": str(executable), "CAPTURE": str(capture)}
     result = subprocess.run(["bash", str(REPO / "search/evaluator/repair.sh"), str(model), str(log),
@@ -118,10 +111,10 @@ def test_repair_runs_in_candidate_directory(tmp_path, selected_python_env):
     assert result.returncode == 0, result.stderr
     record = json.loads(capture.read_text())
     assert record["cwd"] == str(workspace)
-    assert record["argv"][record["argv"].index("--add-dir") + 1] == str(workspace)
+    assert "--add-dir" not in record["argv"]
     assert "immutable" in record["argv"][-1]
     assert "NameError: missing_name" in record["argv"][-1]
-    assert record["python"] == env["NEURO_PYTHON"]
+    assert record["python"] == sys.executable
     calls = [json.loads(line) for line in Path(env["TEST_PYTHON_CALLS"]).read_text().splitlines()]
     assert calls[0][:2] == [str(REPO / "search/providers.py"), "run"]
 
@@ -171,3 +164,56 @@ def test_agy_wrapper_forwards_termination(tmp_path):
         if child.poll() is None:
             child.kill()
             child.communicate()
+
+
+def test_provider_os_boundary_and_bounded_submission(tmp_path):
+    import hub
+    from harness.protocols import protocol_for
+    from harness.isolation import check_isolation
+    check_isolation()
+    run = tmp_path / 'run'
+    workspace = run / 'proposers/p00'
+    workspace.mkdir(parents=True)
+    sentinel = tmp_path / 'final-targets-secret'
+    sentinel.write_text('must never be visible')
+    protocol = protocol_for('laion')
+    (run / 'env.json').write_text(json.dumps({
+        'NEURO_DATASET': 'laion', 'NEURO_METRIC': 'rsa', 'NEURO_STAGE': 'search',
+        'NEURO_SUBJECT': ','.join(protocol.search_subjects), 'protocol': protocol.to_dict()}))
+    hub.init(str(run))
+    executable = fake_cli(tmp_path, 'codex')
+    text = executable.read_text()
+    attack = f'''
+    assert not pathlib.Path({str(sentinel)!r}).exists()
+    assert not pathlib.Path({str(run / 'search.db')!r}).exists()
+    assert not pathlib.Path('/proc/{os.getpid()}/root').exists()
+    assert 'NEURO_NSD_ROOT' not in os.environ
+    assert 'LAB_RUN' not in os.environ
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('client', 'hub.py')
+    client = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(client)
+    client.request({{'command': 'my-best'}})
+    mid = client.request({{'command': 'propose-model', 'source': 'MODEL = None\\n', 'idea': 'boundary probe'}})
+    assert client.request({{'command': 'status', 'id': mid}})['status'] == 'queued'
+    try:
+        client.request({{'command': 'record', 'id': mid, 'test_corr': 1}})
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError('untrusted score write accepted')
+    pathlib.Path('submitted.json').write_text(json.dumps(mid))
+'''
+    text = text.replace('    pathlib.Path("capture.json")', attack + '    pathlib.Path("capture.json")')
+    executable.write_text(text)
+    env = {**os.environ, 'NEURO_CODEX_BIN': str(executable), 'LAB_RUN': str(run),
+           'LAB_PROPOSER': 'p00', 'NEURO_DATASET': 'laion', 'NEURO_NSD_ROOT': str(sentinel)}
+    result = subprocess.run([sys.executable, str(REPO / 'search/providers.py'), 'run',
+                             '--role', 'proposer', '--agent', 'codex:astra', '--cwd', str(workspace)],
+                            input='test', env=env, capture_output=True, text=True, timeout=30)
+    assert result.returncode == 0, result.stderr
+    mid = json.loads((workspace / 'submitted.json').read_text())
+    with hub.connect(str(run)) as connection:
+        row = dict(connection.execute('SELECT * FROM models WHERE id=?', (mid,)).fetchone())
+    assert row['status'] == 'queued' and row['proposer'] == 'p00'
+    assert row['test_corr'] is None

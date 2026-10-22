@@ -14,7 +14,10 @@ prepared source release. Ridge penalties are selected per neural target by
 five-fold training CV. The scalar is held-out Pearson r, with equal region means
 within subject, then equal subject means. Final scores do not enter `search.db`.
 
-The output contains a frozen `model.py` and `evaluation.json`, under
+Before loading final data, the evaluator writes `selection.json` with the selection
+rule, frozen model hash, protocol, harness identity and runtime. Candidate features
+are generated in the isolated forward process. The output contains this manifest,
+a frozen `model.py` and `evaluation.json`, under
 `results/final/<protocol>/<model-hash>/`. It records the search selection, source
 and model hashes, all subject/region scores, and exact stimulus/file/filter
 provenance. Existing output files are not overwritten; choose `--output` to

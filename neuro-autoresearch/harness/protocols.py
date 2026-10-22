@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 
 
-PROTOCOL_VERSION = "looped-cross-dataset-v1"
+PROTOCOL_VERSION = "looped-cross-dataset-v2"
 SOURCE_REVISION = "3ee575baeceb1ad784102162a051b7444182fdaa"
 
 

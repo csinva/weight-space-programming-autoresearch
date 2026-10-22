@@ -18,6 +18,8 @@ EFFORT="${NEURO_CONDUCTOR_EFFORT:-${NEURO_EFFORT:-high}}"
 MINS="${NEURO_EPOCH_MINS:-60}"
 case "$MINS" in ''|*[!0-9.]*|*.*.*) echo "[conduct] NEURO_EPOCH_MINS must be a positive number (got '$MINS')" >&2; exit 2;; esac
 LOG="$RUN/conductor.log"
+WORKSPACE="$RUN/conductor"
+mkdir -p "$WORKSPACE"
 export LAB_RUN="$RUN" NEURO_DATASET="$DATASET"
 echo "[conduct] conductor up (epoch ${MINS}m, $MODEL/$EFFORT, dataset=$DATASET)"
 secs="$(awk -v m="$MINS" 'BEGIN{printf "%d", m*60}')"
@@ -25,12 +27,9 @@ while :; do
   echo "[conduct] epoch pass $(TZ=America/New_York date +%FT%T%Z)" >> "$LOG"
   # Keep writes inside this run. The fixed hub is invoked by its absolute path.
   PROMPT="$(cat "$REPO/search/conductor/prompt.md")"
-  HUB_TEMPLATE='"$NEURO_PYTHON" hub.py'
-  HUB_COMMAND="$(printf '\"$NEURO_PYTHON\" %q' "$REPO/hub.py")"
-  PROMPT="${PROMPT//"$HUB_TEMPLATE"/"$HUB_COMMAND"}"
   status=0
   "$PY" "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
-    --cwd "$RUN" --write-dir "$RUN" <<< "$PROMPT" >> "$LOG" 2>&1 || status=$?
+    --role conductor --cwd "$WORKSPACE" <<< "$PROMPT" >> "$LOG" 2>&1 || status=$?
   if [ "$status" -eq 78 ]; then
     echo "[conduct] terminal provider failure; inspect $LOG; stopping without retrying" >&2
     exit 78

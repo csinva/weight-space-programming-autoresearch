@@ -182,6 +182,9 @@ def main(argv=None) -> int:
     run.add_argument("--cwd", required=True)
     run.add_argument("--write-dir", action="append", default=[])
     run.add_argument("--prompt-file", default="-", help="Prompt file, or - for stdin")
+    run.add_argument("--role", choices=("proposer", "conductor", "repair", "simplifier", "standalone"), default="standalone")
+    run.add_argument("--reference", help="Frozen reference for exact simplification")
+    run.add_argument("--input-spec", help="Frozen synthetic input specification")
     run.add_argument("--dry-run", action="store_true", help="Print resolved command without executing")
     args = parser.parse_args(argv)
     try:
@@ -200,11 +203,12 @@ def main(argv=None) -> int:
             print(json.dumps({"agent": asdict(agent), "cwd": cwd, "argv": argv}, indent=2))
             return 0
         preflight([agent])
-        if agent.provider == "agy":
-            return run_agy(argv, cwd)
-        os.chdir(cwd)
-        os.execvp(agent.executable, argv)
-    except (ValueError, OSError) as exc:
+        # The launcher runs outside the agent namespace and owns its bounded broker.
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from search.agent_workspace import agent_command, run_command
+        with agent_command(agent, argv, cwd, args.role, reference=args.reference, input_spec=args.input_spec) as isolated:
+            return run_agy(isolated, cwd) if agent.provider == "agy" else run_command(isolated, cwd)
+    except (ValueError, OSError, RuntimeError) as exc:
         parser.exit(PROVIDER_UNAVAILABLE, f"[provider] {exc}\n")
     return 0
 

@@ -89,6 +89,7 @@ def test_champion_selection_checks_hash_and_search_metric(run):
     metadata = json.loads(scored["evaluation_metadata"])
     assert metadata["source_revision"] == SOURCE_REVISION
     assert metadata["metric"] == "rsa" and metadata["stage"] == "search"
+    Path(selected["path"]).chmod(0o600)
     Path(selected["path"]).write_text("MODEL = None\n")
     with pytest.raises(ValueError, match="changed after RSA"):
         final.select_model(run)
@@ -102,6 +103,11 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
 
     def evaluate(selection, frozen):
         assert frozen.read_bytes() == Path(selection["path"]).read_bytes()
+        manifest = json.loads((frozen.parent / "selection.json").read_text())
+        assert manifest["model_sha256"] == selection["sha256"]
+        assert manifest["selection"]["selection_rule"] == "highest_search_rsa_then_created_at_then_id"
+        assert manifest["harness_sha256"]
+        assert manifest["protocol"] == json.loads(json.dumps(protocol_for("laion").to_dict()))
         return {"status": "ok", "metric": "encoding", "stage": "final", "test_corr": 0.42}, {}
 
     monkeypatch.setattr(final, "evaluate_frozen", evaluate)
@@ -127,3 +133,55 @@ def test_incomplete_cohort_is_not_a_reward(run):
               "dataset": "laion", "subjects": ["sub-01"], "subject_scores": {"sub-01": 0.9}}
     assert hub.record(model_id, result, run=str(run)) == "error"
     assert hub.champion(str(run)) is None
+
+
+def test_failed_final_keeps_selection_and_rejects_inconsistent_retry(tmp_path, monkeypatch):
+    source = tmp_path / "candidate.py"
+    source.write_text("MODEL = None\n")
+    selected = final.manual_model(source, "laion")
+    output = tmp_path / "final/evaluation.json"
+    calls = []
+
+    def fail(selection, frozen):
+        calls.append(selection)
+        assert (frozen.parent / "selection.json").is_file()
+        raise RuntimeError("synthetic final failure")
+
+    monkeypatch.setattr(final, "evaluate_frozen", fail)
+    with pytest.raises(RuntimeError, match="synthetic final failure"):
+        final.run_final(selected, output)
+    manifest = (output.parent / "selection.json").read_bytes()
+    with pytest.raises(RuntimeError, match="synthetic final failure"):
+        final.run_final(selected, output)
+    assert not output.exists()
+    changed = {**selected, "selection_rule": "changed after seeing final feedback"}
+    with pytest.raises(FileExistsError, match="different frozen selection"):
+        final.run_final(changed, output)
+    assert len(calls) == 2
+    assert (output.parent / "selection.json").read_bytes() == manifest
+
+
+def test_final_uses_isolated_model_without_importing_candidate(tmp_path, monkeypatch):
+    import harness.isolation
+    import harness.reward
+    from harness.loaders.vision import looped
+
+    source = tmp_path / "model.py"
+    source.write_text("raise RuntimeError('candidate imported by scorer')\n")
+    selection = final.manual_model(source, "laion")
+    calls = []
+
+    class FakeIsolatedModel:
+        def __init__(self, path):
+            self.source = path.read_bytes()
+            calls.append(path)
+
+    monkeypatch.setattr(harness.isolation, "IsolatedModel", FakeIsolatedModel)
+    monkeypatch.setattr(hub, "_scan_source", lambda path: None)
+    monkeypatch.setattr(harness.reward, "evaluate_subjects", lambda model, dataset, stage: {
+        "status": "ok", "test_corr": 0.1})
+    monkeypatch.setattr(looped, "dataset_provenance", lambda dataset: {})
+    result, provenance = final.evaluate_frozen(selection, source)
+    assert result["test_corr"] == 0.1
+    assert calls == [source]
+    assert set(provenance) == set(protocol_for("laion").final_subjects)

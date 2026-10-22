@@ -36,6 +36,27 @@ by region then subject. NSD and TVSD never supply a search reward.
 This is cross-dataset transfer, with known NSD-source LAION images excluded. It
 does not claim a comprehensive pixel-level duplicate audit across releases.
 
+## Search feedback and later scientific analysis
+
+Primary selection uses exactly the equal-region-within-subject, then equal-subject
+RSA mean above. The `rsa_diagnostics` object records that primary value, subject
+and region scores, target counts and coverage. LAION diagnostics additionally
+recompute RSA separately on the allowed source groups: `laion` (641 images),
+`thingsplus` (240), and `ood` (371) in the current prepared release. These groups
+are drawn only from the fixed 1,252 search images: NSD-source images remain excluded.
+There is no NSD subgroup or alternative no-OOD primary objective. A subgroup mean
+requires all subjects; otherwise it is marked unavailable, with no silent subject
+omission. Triple-N region coverage remains explicit. Diagnostic failures do not
+change the primary reward, weights or cohort.
+
+The search question is which allowed representation predicts neural geometry best.
+Architecture exploration is broad; descriptions explain computation and observations,
+without requiring a biological explanation. Iterative search feedback is adaptive,
+not held-out confirmation. After selection, a separate scientific analysis can test
+ablations, stability, simpler alternatives and explanatory hypotheses. Such claims
+need evidence beyond a favorable RSA score. Final NSD/TVSD scores remain sealed from
+all search, steering, repair, simplification and model-selection decisions.
+
 ## Runs and reproducibility
 
 A run lives in `runs/<dataset>__<date>/` and contains `search.db`, immutable model
@@ -54,8 +75,8 @@ use path, size and modification time; frozen model and harness identities use
 SHA256. Provider logs retain their native usage events; unknown monetary cost is
 stored as null rather than estimated from obsolete Copilot credits.
 
-The existing source/network guards and agent instructions support reward
-integrity; they are not a hostile-code security boundary. With permission skipping
-enabled, provider workspace paths do not enforce filesystem isolation. Final-dataset
-separation relies on the protocol, scoring interfaces and agent instructions;
-there is no separate OS account or data-access service.
+Search agents use a role-bound broker; candidate forward passes run in a separate
+restricted process that receives only image inputs and candidate source. See the
+[access and feedback contract](access-feedback.md) for allowed operations, isolation
+limits and failure behavior. Static source checks and parameter counts are useful
+integrity checks, not a proof that arbitrary code is untrained or interpretable.

@@ -1,21 +1,8 @@
 #!/usr/bin/env python3
-"""Scaffold a search RUN and its per-proposer sandboxes.
+"""Create a versioned search run and writable proposer workspaces.
 
-A run lives at ``runs/<dataset>__<date>/`` and is the unit of one open-ended search::
-
-    runs/<dataset>__<date>/
-        search.db            # the shared brain (created by hub.init)
-        models/              # shared immutable model archive (created by hub.init)
-        proposers/p00 … pNN/ # one sandbox per proposer (its own model.py + symlinked harness/hub)
-        eval/                # the GPU evaluator's workspace; keeps <id>.log only for models that FAILED to eval
-
-Each *sandbox* is a runnable workspace: relative symlinks to the FIXED ``harness/`` package and
-``hub.py`` (so ``import harness`` / ``import hub`` resolve), a local editable ``model.py`` seeded
-from the repo-root baseline model.py, a ``CLAUDE.md`` (symlink to the canonical proposer prompt),
-and a ``scratch/`` for the agent. Nothing is copied that should be
-shared -- the DB and the model archive live once at the run root.
-
-    python search/setup_run.py <dataset> [--date YYYY-MM-DD] [--n 10]
+The host owns search.db, immutable models, private state and evaluator logs.
+Provider CLIs see only their workspace and the bounded feedback client.
 """
 from __future__ import annotations
 
@@ -32,7 +19,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO not in sys.path:
     sys.path.insert(0, REPO)
 from harness.protocols import protocol_for, validate_search_dataset, SOURCE_REVISION
-SANDBOX_SYMLINKS = ["harness", "hub.py"]          # FIXED code, imported (never copied)
+SANDBOX_SYMLINKS = []          # FIXED code, imported (never copied)
 
 # The eval-env knobs that change what the reward SCORES (subject set + readout + reliability cuts).
 # Persisted into env.json at scaffold time so a later approximate simplification reproduces the
@@ -129,9 +116,7 @@ def write_env_json(run_dir: str, dataset: str) -> str:
 
 
 def make_sandbox(path: str, repo_root: str = REPO) -> str:
-    """Create one runnable sandbox at ``path``: symlinked harness/hub, a seed ``model.py`` copied
-    from the repo-root baseline model.py, and a ``scratch/`` dir. Idempotent (a resumed run keeps
-    each proposer's evolved model.py)."""
+    """Seed a workspace without replacing an existing candidate or scratch."""
     os.makedirs(path, exist_ok=True)
     for name in SANDBOX_SYMLINKS:
         src = os.path.join(repo_root, name)
@@ -140,18 +125,23 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
         link = os.path.join(path, name)
         if not os.path.islink(link) and not os.path.exists(link):
             os.symlink(os.path.relpath(src, path), link)
+    # The agent-facing hub is a small client, never the trusted SQLite module.
+    client = os.path.join(repo_root, "search", "client.py")
+    hub_path = os.path.join(path, "hub.py")
+    if os.path.islink(hub_path):
+        os.unlink(hub_path)
+    if os.path.exists(client):
+        shutil.copyfile(client, hub_path)
     model_py = os.path.join(path, "model.py")
     if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
         shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
-    # Ambient orientation for Codex, Antigravity and compatible agent clients:
-    # the hub.py DB interface, the model contract, and the loop. Symlinked so it stays in sync.
-    claude_src = os.path.join(repo_root, "search", "proposer", "prompt.md")
+    prompt = os.path.join(repo_root, "search", "proposer", "prompt.md")
     for filename in ("AGENTS.md", "GEMINI.md", "CLAUDE.md"):
-        link = os.path.join(path, filename)
-        if os.path.islink(link) and os.path.realpath(link) != os.path.realpath(claude_src):
-            os.unlink(link)
-        if os.path.exists(claude_src) and not os.path.lexists(link):
-            os.symlink(os.path.relpath(claude_src, path), link)
+        target = os.path.join(path, filename)
+        if os.path.islink(target):
+            os.unlink(target)
+        if os.path.isfile(prompt):
+            shutil.copyfile(prompt, target)
     os.makedirs(os.path.join(path, "scratch"), exist_ok=True)
     return path
 
@@ -172,6 +162,8 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
     import hub
     write_env_json(run_dir, dataset)               # eval-env snapshot for later re-scoring
     hub.init(run_dir)                              # search.db + models/
+    from search.public_inputs import export_public_inputs
+    export_public_inputs(run_dir, dataset)
     for i in range(n_proposers):
         make_sandbox(os.path.join(run_dir, "proposers", f"p{i:02d}"), repo_root)
     os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch (scores via hub.score in-repo)

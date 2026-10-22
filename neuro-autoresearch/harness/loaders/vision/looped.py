@@ -35,6 +35,25 @@ _PROVENANCE: dict[tuple, dict] = {}
 _PIXEL_MEMO: dict[str, torch.Tensor] = {}
 
 
+class VisionSplit(tuple):
+    """Six-field compatibility tuple with evaluator-only stimulus group metadata."""
+
+    def __new__(cls, values, *, source_groups=None):
+        result = super().__new__(cls, values)
+        result.source_groups = source_groups or {}
+        return result
+
+
+def _source_groups(d: Dataset, native: dict, ids: list[str]) -> dict[str, list[int]]:
+    # An explicit allowlist prevents NSD and the overlapping no_ood grouping
+    # from entering feedback. Intersect with the already filtered fixed cohort.
+    if dataset_key(d) != "laion":
+        return {}
+    return {name: [i for i, sid in enumerate(ids) if sid in members]
+            for name in ("laion", "thingsplus", "ood")
+            for members in [set(native["test_subsets"].get(name, []))]}
+
+
 def _file_identity(path) -> dict:
     path = Path(path).expanduser().resolve()
     stat = path.stat()
@@ -207,6 +226,7 @@ def load_looped(d: Dataset):
     train_ids, test_ids = _selected_ids(d, native, subject)
     X = _pixels(native["stimuli"], train_ids + test_ids, d.imsize)
     Ytr, Yte, masks = _pack_responses(native, subject, train_ids, test_ids)
+    groups = _source_groups(d, native, train_ids + test_ids)
     protocol = protocol_for(dataset_key(d))
     _PROVENANCE[dataset_cache_key(d)] = {
         "source_revision": SOURCE_REVISION, "dataset": dataset_key(d), "subject": d.subject,
@@ -215,10 +235,12 @@ def load_looped(d: Dataset):
         "filters": FILTERS[dataset_key(d)].copy(), "regions": list(masks),
         "region_units": {name: int(mask.sum()) for name, mask in masks.items()},
         "train_ids": train_ids, "test_ids": test_ids,
+        "source_group_counts": {name: len(indices) for name, indices in groups.items()},
         "stimulus_ids_sha256": hashlib.sha256(json.dumps([train_ids, test_ids]).encode()).hexdigest(),
         "pixel_pipeline": "rgb-pil-bilinear-hwc-v1", "imsize": d.imsize,
     }
-    return X[:len(train_ids)], X[len(train_ids):], Ytr, Yte, masks, None
+    return VisionSplit((X[:len(train_ids)], X[len(train_ids):], Ytr, Yte, masks, None),
+                       source_groups=groups)
 
 
 def dataset_provenance(d: Dataset) -> dict:

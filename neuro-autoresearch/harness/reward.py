@@ -42,7 +42,8 @@ def _forward(model, X):
     """Run sample-independent model forwards in bounded batches."""
     if not torch.is_tensor(X) or X.shape[0] <= FORWARD_BATCH:
         return model(X)
-    return torch.cat([model(X[i:i + FORWARD_BATCH]) for i in range(0, X.shape[0], FORWARD_BATCH)], 0)
+    return torch.cat([torch.as_tensor(model(X[i:i + FORWARD_BATCH]))
+                      for i in range(0, X.shape[0], FORWARD_BATCH)], 0)
 
 
 def _experiment_notes(model) -> str:
@@ -164,7 +165,7 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         from harness.legacy_reward import evaluate_on_split as evaluate_legacy
         return {**evaluate_legacy(model, split, dataset, slices), **_row_metadata(dataset)}
 
-    from harness.metrics import encoding_scores, matrix, rsa_scores
+    from harness.metrics import encoding_scores, matrix, rsa_scores, rsa_diagnostics
 
     t0 = time.time()
     X_train, X_test, Y_train, Y_test, roi_masks, _ = split
@@ -188,6 +189,9 @@ def evaluate_on_split(model, split, dataset: Dataset, slices=()) -> dict:
         features = forward(X, "model features")
         n_params = _validate_model_size(model, features.shape[1])
         scored = rsa_scores(features, Y, roi_masks, device, cache_sources=(Y_train, Y_test))
+        scored["rsa_diagnostics"] = rsa_diagnostics(
+            features, Y, roi_masks, device, scored,
+            getattr(split, "source_groups", {}) if dataset.loader == "laion" else {})
     else:
         A_train = forward(X_train, "training model features")
         A_test = forward(X_test, "test model features")
@@ -287,7 +291,7 @@ def _mean_rows(rows: list[dict]) -> dict:
                    for k in (f["roi_corr"][r])}
                for r in (f.get("roi_corr") or {}) if r in common}
     score = float(np.mean([row["test_corr"] for row in rows]))
-    return {**f, "test_corr": score, "score": score,
+    result = {**f, "test_corr": score, "score": score,
             "reward": score if f.get("stage") == "search" else None,
             "train_corr": float(np.mean([row["train_corr"] for row in rows])),
             "roi_corr": roi_avg, "seconds": round(sum(row.get("seconds", 0) for row in rows), 2),
@@ -297,6 +301,52 @@ def _mean_rows(rows: list[dict]) -> dict:
             "subject_results": {row["subject"]: row for row in rows},
             "n_params": max(row["n_params"] for row in rows),
             "n_targets": sum(row["n_targets"] for row in rows)}
+    if f.get("metric") == "rsa":
+        result["rsa_diagnostics"] = _cohort_rsa_diagnostics(rows, score)
+    return result
+
+
+def _cohort_rsa_diagnostics(rows: list[dict], score: float) -> dict:
+    """Report available-region means with explicit coverage, never reweight reward."""
+    subjects = [row["subject"] for row in rows]
+    diagnostics = {row["subject"]: row.get("rsa_diagnostics", {}) for row in rows}
+    regions = {}
+    for region in dict.fromkeys(r for row in rows for r in row["roi_corr"]):
+        covered = [row for row in rows if region in row["roi_corr"]]
+        regions[region] = {
+            "rsa": float(np.mean([row["roi_corr"][region]["test"] for row in covered])),
+            "subjects": [row["subject"] for row in covered], "n_subjects": len(covered),
+            "n_targets_by_subject": {row["subject"]: diagnostics[row["subject"]].get(
+                "regions", {}).get(region, {}).get("n_targets") for row in covered},
+        }
+    groups = {}
+    for name in dict.fromkeys(name for d in diagnostics.values() for name in d.get("source_groups", {})):
+        entries = {subject: diagnostics[subject].get("source_groups", {}).get(name)
+                   for subject in subjects}
+        covered = {subject: entry for subject, entry in entries.items()
+                   if entry and entry["status"] == "ok"}
+        # A cohort subgroup mean is available only when every subject succeeded.
+        complete = len(covered) == len(subjects)
+        group_regions = {}
+        for region in dict.fromkeys(r for entry in covered.values() for r in entry["regions"]):
+            region_scores = {subject: entry["regions"][region] for subject, entry in covered.items()
+                             if region in entry["regions"]}
+            region_complete = len(region_scores) == len(subjects)
+            group_regions[region] = {
+                "status": "ok" if region_complete else "unavailable",
+                "rsa": float(np.mean(list(region_scores.values()))) if region_complete else None,
+                "subjects": list(region_scores), "n_subjects": len(region_scores),
+            }
+        groups[name] = {"status": "ok" if complete else "unavailable",
+                        "rsa": float(np.mean([entry["rsa"] for entry in covered.values()])) if complete else None,
+                        "subjects": list(covered), "n_subjects": len(covered),
+                        "n_stimuli_by_subject": {subject: entry["n_stimuli"] for subject, entry in entries.items()
+                                                 if entry is not None},
+                        "regions": group_regions, "subject_results": entries}
+    return {"schema_version": 1, "metric": "rsa", "stage": "search", "primary_rsa": score,
+            "aggregation": "equal_regions_within_subject_then_equal_subjects",
+            "subjects": subjects, "n_subjects": len(subjects),
+            "subject_results": diagnostics, "regions": regions, "source_groups": groups}
 
 
 def evaluate_subjects(model, dataset: Dataset, slices=(), *, stage: str | None = None) -> dict:

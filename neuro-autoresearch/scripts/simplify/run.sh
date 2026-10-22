@@ -84,7 +84,7 @@ CHAMPION_SCORE="$(json_field test_corr <<< "$CHAMPION")" || exit 2
 CHAMPION_PATH="$(json_field path <<< "$CHAMPION")" || exit 2
 [ -f "$CHAMPION_PATH" ] || { echo "no scored champion in $RUN" >&2; exit 2; }
 
-OUT="$RUN/simplify/$MODE"; WORK="$OUT/work"; RESULT="$OUT/result"
+OUT="$RUN/simplify/$MODE"; WORK="$OUT/proposers/p00"; RESULT="$OUT/result"
 "$PY" - "$OUT" "$DATASET" <<'PY_INIT'
 import sys
 import hub
@@ -96,15 +96,20 @@ PY_INIT
 "$PY" -c 'import sys; from search.setup_run import make_sandbox; make_sandbox(*sys.argv[1:])' "$WORK" "$REPO" || exit 2
 rm -f "$WORK/CLAUDE.md" "$WORK/AGENTS.md" "$WORK/GEMINI.md"
 mkdir -p "$OUT/eval" "$RESULT"
-cp -f "$CHAMPION_PATH" "$WORK/model.py"
+FROZEN_REFERENCE="$OUT/reference.py"
+"$PY" -m scripts.simplify.snapshot "$CHAMPION_PATH" "$FROZEN_REFERENCE" || exit 1
+"$PY" -m scripts.simplify.snapshot "$FROZEN_REFERENCE" "$WORK/model.py" || exit 1
 
+ROLE_ARGS=(--role proposer)
 if [ "$MODE" = exact ]; then
-  SPEC="$WORK/input_spec.json"
-  cp -f "$CHAMPION_PATH" "$WORK/reference.py"
+  SPEC="$OUT/input_spec.json"
+  "$PY" -m scripts.simplify.snapshot "$FROZEN_REFERENCE" "$WORK/reference.py" || exit 1
   "$PY" -m scripts.simplify.capture_spec "$SPEC" || exit 2
+  "$PY" -m scripts.simplify.snapshot "$SPEC" "$WORK/input_spec.json" || exit 1
   CHECK='"$NEURO_PYTHON" hub.py check-equivalence model.py --reference reference.py --spec input_spec.json'
-  LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" \
+  LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$FROZEN_REFERENCE" --spec "$SPEC" \
     | "$PY" -c "import json,sys;assert json.load(sys.stdin)['equivalent']" || exit 1
+  ROLE_ARGS=(--role simplifier --reference "$FROZEN_REFERENCE" --input-spec "$SPEC")
   RULES="$(printf 'EXACT mode: refactor without changing activations. After every edit run:\n\n    %s\n\nKeep only equivalent edits. Never edit reference.py.' "$CHECK")"
 else
   LAB_RUN="$OUT" "$PY" search/evaluator/worker.py --dataset "$DATASET" --max-repairs 0 >"$OUT/eval/evaluator.log" 2>&1 &
@@ -123,21 +128,29 @@ PROMPT="$(cat scripts/simplify/prompt.md)
 $RULES
 
 Search dataset: $DATASET. Reward is RSA (test_corr compatibility field). Never access NSD/TVSD final encoding scores. Budget: $MINUTES minutes. Always leave a passing model.py."
-export LAB_RUN="$OUT"
+export LAB_RUN="$OUT" LAB_PROPOSER=p00
 echo "[simplify] mode=$MODE run=$RUN champion=$CHAMPION_ID budget=${MINUTES}m"
 timeout "${MINUTES}m" "$PY" "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
-  --cwd "$WORK" --write-dir "$OUT" <<< "$PROMPT" >>"$OUT/simplify.log" 2>&1
+  --cwd "$WORK" "${ROLE_ARGS[@]}" <<< "$PROMPT" >>"$OUT/simplify.log" 2>&1
+
+# Freeze agent output before any host-side read, evaluation or restoration.
+CANDIDATE="$RESULT/candidate.py"
+if ! "$PY" -m scripts.simplify.snapshot "$WORK/model.py" "$CANDIDATE"; then
+  "$PY" -m scripts.simplify.snapshot "$FROZEN_REFERENCE" "$WORK/model.py" || exit 1
+  echo "Invalid candidate file; restored the frozen champion" >&2
+  exit 1
+fi
 
 if [ "$MODE" = exact ]; then
-  FINAL="$(LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC")"
+  FINAL="$(LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$CANDIDATE" --reference "$FROZEN_REFERENCE" --spec "$SPEC")"
   if printf '%s' "$FINAL" | "$PY" -c "import json,sys;assert json.load(sys.stdin)['equivalent']"; then
     STATUS="equivalent activations"
   else
-    cp -f "$WORK/reference.py" "$WORK/model.py"
+    "$PY" -m scripts.simplify.snapshot "$FROZEN_REFERENCE" "$CANDIDATE" || exit 1
     STATUS="failed final check; restored champion"
   fi
 else
-  ID="$(LAB_RUN="$OUT" "$PY" hub.py propose-model "$WORK/model.py" --idea "final approximate simplification")"
+  ID="$(LAB_RUN="$OUT" "$PY" hub.py propose-model "$CANDIDATE" --idea "final approximate simplification")"
   ROW="$(LAB_RUN="$OUT" "$PY" hub.py wait-for-score "$ID" --timeout 1200)"
   FINAL_SCORE="$(json_field test_corr <<< "$ROW")"
   if "$PY" -c 'import sys; assert float(sys.argv[1]) >= float(sys.argv[2])' "$FINAL_SCORE" "$FLOOR" 2>/dev/null; then
@@ -155,12 +168,13 @@ if row is None:
 print(row[0])
 PY_FALLBACK
 )" || exit 1
-    cp -f "$FALLBACK" "$WORK/model.py" || exit 1
+    "$PY" -m scripts.simplify.snapshot "$FALLBACK" "$CANDIDATE" || exit 1
     STATUS="failed final check; restored latest passing model"
   fi
 fi
 
-cp -f "$WORK/model.py" "$RESULT/simplified_model.py"
+"$PY" -m scripts.simplify.snapshot "$CANDIDATE" "$WORK/model.py" || exit 1
+"$PY" -m scripts.simplify.snapshot "$CANDIDATE" "$RESULT/simplified_model.py" || exit 1
 {
   echo "mode: $MODE"
   echo "champion: $CHAMPION_ID (test_corr=$CHAMPION_SCORE)"

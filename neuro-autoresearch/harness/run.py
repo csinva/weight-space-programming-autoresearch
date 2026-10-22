@@ -30,16 +30,8 @@ def _json_safe(value):
 
 
 def _load_model(path: str):
-    path = Path(path).resolve()
-    spec = importlib.util.spec_from_file_location("neuro_manual_model", path)
-    if spec is None or spec.loader is None:
-        raise ValueError(f"Cannot import model from {path}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
-    if not hasattr(module, "MODEL"):
-        raise ValueError(f"{path} must export MODEL")
-    return module.MODEL
+    from harness.isolation import IsolatedModel
+    return IsolatedModel(path)
 
 
 def main(argv=None) -> dict:

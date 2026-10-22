@@ -11,7 +11,7 @@ loop down). There is no queue directory and no wave barrier.
         row = hub.get_next_model()                   # atomic queued -> running
         if none: sleep and poll again                # empty queue
         res = hub.score(row.path, ...)               # subprocess-isolated, time-capped, whole-dataset reward
-        on error/timeout: low-effort repair agent edits the model in place, rerun (<= 2x)
+        on error: low-effort repair edits a scratch copy and queues a new child (<= 2x)
         hub.record(id, res, status)                  # running -> ok | error
 
     LAB_RUN=runs/laion__2026-10-21 python search/evaluator/worker.py --dataset laion
@@ -23,6 +23,11 @@ import os
 import subprocess
 import sys
 import threading
+import tempfile
+import shutil
+import hashlib
+import signal
+import stat
 import time
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -37,11 +42,25 @@ def _is_ok(res):
 def repair(model_file, log_file, rmodel, reffort, timeout=300):
     """Low-effort repair agent edits ``model_file`` in place to fix a small fault. Best-effort:
     a stuck/failed repair just leaves the model as-is for the final error."""
-    try:
-        subprocess.run(["bash", os.path.join(REPO, "search", "evaluator", "repair.sh"),
-                        model_file, log_file, rmodel, reffort, REPO], cwd=REPO, timeout=timeout)
-    except subprocess.TimeoutExpired:
-        print(f"[evaluator]   repair timed out after {timeout}s; recording as-is")
+    with subprocess.Popen(["bash", os.path.join(REPO, "search", "evaluator", "repair.sh"),
+                           model_file, log_file, rmodel, reffort, REPO],
+                          cwd=REPO, start_new_session=True) as child:
+        try:
+            child.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            os.killpg(child.pid, signal.SIGKILL)
+            child.wait()
+            print(f"[evaluator]   repair timed out after {timeout}s")
+
+
+def _read_repair(path):
+    """An agent may replace model.py with a symlink; never follow it on the host."""
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as source:
+        info = os.fstat(source.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 1_000_000:
+            raise ValueError("Repair must be a regular source file under 1 MB")
+        return source.read(1_000_001)
 
 
 def score_guarded(mid, src, dataset, timeout):
@@ -68,23 +87,42 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
         print(f"[evaluator] {mid}: model file missing ({src!r}) -> error")
         hub.record(mid, {}, "error")
         return
+    if hashlib.sha256(open(src, "rb").read()).hexdigest() != row.get("model_sha256"):
+        hub.record(mid, {"status": "error: archived source identity changed"}, "error")
+        return
     log_file = os.path.join(log_dir, f"{mid}.log")            # per-model; fed to repair, kept only if it ends failed
-    repairs = 0
-    while True:
-        res = score_guarded(mid, src, dataset, timeout)       # watchdog-guarded; never raises
-        with open(log_file, "w") as f:
-            f.write(res.get("log", "") or "")
-        ok = _is_ok(res)
-        if ok or repairs >= max_repairs:
-            break
-        repairs += 1
-        print(f"[evaluator] {mid}: failed -> repair {repairs}/{max_repairs}")
-        repair(src, log_file, rmodel, reffort)                # edits the on-disk source in place
-    if ok:
-        os.remove(log_file)                                   # success leaves no log; keep only failures
+    res = score_guarded(mid, src, dataset, timeout)
+    with open(log_file, "w") as f:
+        f.write(res.get("log", "") or "")
+    ok = _is_ok(res)
     status = hub.record(mid, res, "ok" if ok else "error")
+    # Repairs are new submissions. The failed source and its hash never change.
+    if not ok and max_repairs > 0 and res.get("repair_log"):
+        depth = int(row.get("repair_depth") or 0)
+        if depth < max_repairs:
+            with tempfile.TemporaryDirectory(prefix="neuro-repair-") as directory:
+                candidate = os.path.join(directory, "model.py")
+                shutil.copyfile(src, candidate)
+                safe_log = os.path.join(directory, "candidate-error.txt")
+                with open(safe_log, "w") as file:
+                    file.write(str(res["repair_log"])[-6000:])
+                repair(candidate, safe_log, rmodel, reffort)
+                try:
+                    repaired = _read_repair(candidate)
+                except (OSError, ValueError):
+                    repaired = None
+                if repaired is not None and repaired != open(src, "rb").read():
+                    # Freeze bytes in a fresh directory the repair session never mounted.
+                    with tempfile.TemporaryDirectory(prefix="neuro-repaired-submit-") as submit_dir:
+                        submission = os.path.join(submit_dir, "model.py")
+                        with open(submission, "wb") as file:
+                            file.write(repaired)
+                        child = hub.propose(submission, row.get("idea", ""), row.get("proposer"), parent_id=mid, repair_depth=depth + 1)
+                    print(f"[evaluator] {mid}: repair queued as {child}")
+    if ok:
+        os.remove(log_file)
     print(f"[evaluator] {mid}: status={status} test_corr={res.get('test_corr', '-')} "
-          f"(proposer={row.get('proposer')} repairs={repairs})")
+          f"(proposer={row.get('proposer')})")
 
 
 def main(argv=None):

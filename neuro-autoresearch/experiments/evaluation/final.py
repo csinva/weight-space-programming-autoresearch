@@ -12,7 +12,6 @@ from __future__ import annotations
 import argparse
 import contextlib
 import hashlib
-import importlib.util
 import json
 import math
 import os
@@ -59,7 +58,8 @@ def select_model(run: str | Path) -> dict:
         raise ValueError("Selected model bytes changed after RSA scoring; score it again before final evaluation")
     return {"path": str(source), "sha256": digest, "model_id": row["id"],
             "search_score": row["test_corr"], "search_metric": "rsa", "run": str(run),
-            "search_dataset": protocol.search_dataset, "environment": env}
+            "search_dataset": protocol.search_dataset, "environment": env,
+            "selection_rule": "highest_search_rsa_then_created_at_then_id"}
 
 
 def manual_model(path: str | Path, dataset: str) -> dict:
@@ -68,7 +68,7 @@ def manual_model(path: str | Path, dataset: str) -> dict:
     dataset = validate_search_dataset(dataset)
     return {"path": str(path), "sha256": sha256(path), "model_id": None,
             "search_score": None, "search_metric": None, "run": None,
-            "search_dataset": dataset, "environment": {}}
+            "search_dataset": dataset, "environment": {}, "selection_rule": "explicit_manual_model"}
 
 
 @contextlib.contextmanager
@@ -103,17 +103,16 @@ def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:
     reason = hub._scan_source(str(frozen))
     if reason:
         raise ValueError(f"Model rejected: {reason}")
-    hub._install_integrity_guard()
     with final_environment(selection) as protocol:
         from harness.datasets import get_dataset, with_subject
         from harness.reward import evaluate_subjects
         from harness.loaders.vision.looped import dataset_provenance
-        spec = importlib.util.spec_from_file_location("frozen_final_model", frozen)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[spec.name] = module
-        spec.loader.exec_module(module)
+        from harness.isolation import IsolatedModel
+        model = IsolatedModel(frozen)
+        if hashlib.sha256(model.source).hexdigest() != selection["sha256"]:
+            raise ValueError("Frozen model no longer matches the selected hash")
         dataset = get_dataset(protocol.final_dataset)
-        result = evaluate_subjects(module.MODEL, dataset, stage="final")
+        result = evaluate_subjects(model, dataset, stage="final")
         if result.get("status") != "ok" or not math.isfinite(result.get("test_corr", float("nan"))):
             raise RuntimeError(f"Final encoding failed: {result.get('status')}")
         provenance = {subject: dataset_provenance(with_subject(dataset, subject))
@@ -126,6 +125,8 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
     output = Path(output) if output else (
         REPO / "results" / "final" / protocol.name / selection["sha256"][:16] / "evaluation.json")
     output = output.resolve()
+    if output.name in {"model.py", "selection.json"}:
+        raise ValueError("Final output must not replace the frozen model or selection manifest")
     if selection["run"] and output.is_relative_to(Path(selection["run"])):
         raise ValueError("Write final results outside the search run so agents cannot read OOD feedback")
     if output.exists():
@@ -141,10 +142,28 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
     if not frozen.exists():
         with frozen.open("xb") as file:
             file.write(model_bytes)
+    from search.setup_run import harness_sha256, runtime_versions
+    manifest = {
+        "schema_version": 1, "stage": "frozen_before_final",
+        "model_sha256": selection["sha256"], "frozen_model": str(frozen),
+        "selection": {k: v for k, v in selection.items() if k != "environment"},
+        "search_environment": selection["environment"],
+        "protocol": protocol.to_dict(), "source_revision": SOURCE_REVISION,
+        "harness_sha256": harness_sha256(), "runtime_versions": runtime_versions(),
+    }
+    manifest_path = output.parent / "selection.json"
+    payload = json.dumps(manifest, indent=2, allow_nan=False) + "\n"
+    if manifest_path.exists():
+        if json.loads(manifest_path.read_text()) != json.loads(payload):
+            raise FileExistsError(f"A different frozen selection already exists at {manifest_path}")
+    else:
+        with manifest_path.open("x") as file:
+            file.write(payload)
     result, data = evaluate_frozen(selection, frozen)
     if sha256(frozen) != selection["sha256"]:
         raise ValueError("Frozen model changed during final evaluation")
-    from search.setup_run import harness_sha256, runtime_versions
+    if harness_sha256() != manifest["harness_sha256"]:
+        raise ValueError("Scientific code changed during final evaluation")
     document = {
         "schema_version": 1,
         "stage": "final",
@@ -153,8 +172,9 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "protocol": protocol.to_dict(),
         "source_revision": SOURCE_REVISION,
-        "harness_sha256": harness_sha256(),
-        "runtime_versions": runtime_versions(),
+        "harness_sha256": manifest["harness_sha256"],
+        "runtime_versions": manifest["runtime_versions"],
+        "selection_manifest": str(manifest_path),
         "selection": {k: v for k, v in selection.items() if k != "environment"},
         "search_environment": selection["environment"],
         "model_sha256": selection["sha256"],

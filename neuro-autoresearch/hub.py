@@ -38,7 +38,7 @@ NUM = ("test_corr", "train_corr", "n_params", "seconds")
 COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
         "test_corr", "train_corr", "roi_corr", "n_params", "model_loc",
         "seconds", "created_at", "path", "metric", "stage", "protocol_version",
-        "subject_scores", "evaluation_metadata", "model_sha256")
+        "subject_scores", "evaluation_metadata", "model_sha256", "parent_id", "repair_depth")
 STATUSES = ("queued", "running", "ok", "error")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
@@ -100,6 +100,8 @@ def connect(run: str | None = None) -> sqlite3.Connection:
 
 
 def _coltype(c: str) -> str:
+    if c == "repair_depth":
+        return "INTEGER DEFAULT 0"
     if c in ("n_params", "model_loc"):
         return "INTEGER"
     return "REAL" if c in NUM else "TEXT"
@@ -234,11 +236,14 @@ def newid(run: str | None = None) -> str:
 
 # --------------------------------------------------------------------------- proposer: write + sync
 def propose(model_file: str, idea: str = "",
-            proposer: str | None = None, run: str | None = None) -> str:
+            proposer: str | None = None, run: str | None = None, *, parent_id: str | None = None,
+            repair_depth: int = 0) -> str:
     """Archive a candidate and enqueue its RSA evaluation; return its ID.
 
     Check source, declared size, run contract, and reset acknowledgement first.
     The evaluator scores the snapshot and captures live complexity and notes."""
+    if type(repair_depth) is not int or repair_depth < 0:
+        raise ValueError("repair_depth must be a nonnegative integer")
     run = _ensure(run)
     contract = search_contract(run, os.environ.get("NEURO_DATASET"))
     if not os.path.exists(model_file):
@@ -270,7 +275,12 @@ def propose(model_file: str, idea: str = "",
     for _ in range(50):                       # retry on the rare id collision
         mid = newid(run)
         dst = os.path.join(models_dir(run), f"{mid}.py")
-        shutil.copyfile(model_file, dst)
+        try:
+            with open(model_file, "rb") as source, open(dst, "xb") as snapshot:
+                shutil.copyfileobj(source, snapshot)
+            os.chmod(dst, 0o444)
+        except FileExistsError:
+            continue
         cx = model_complexity(dst)            # proposer-owned complexity, read from the model source
         row = {
             "id": mid, "idea": (idea or "")[:500], "experiment_notes": None,
@@ -281,6 +291,7 @@ def propose(model_file: str, idea: str = "",
             "metric": "rsa", "stage": "search", "protocol_version": contract["protocol"]["version"],
             "subject_scores": None, "evaluation_metadata": None,
             "model_sha256": hashlib.sha256(open(dst, "rb").read()).hexdigest(),
+            "parent_id": parent_id, "repair_depth": repair_depth,
         }
         try:
             with connect(run) as con:
@@ -347,9 +358,14 @@ def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
 
 
 def _sandbox_file(proposer: str, run: str, name: str) -> str:
-    return os.path.join(_ensure(run), "proposers", proposer, name)
-
-
+    """Private control state; never follow files in agent-writable workspaces."""
+    if not re.fullmatch(r"p[0-9]{2,}", proposer or ""):
+        raise ValueError("Invalid proposer identity")
+    if name not in {"reset_at", "reset_seen", "direction.txt"}:
+        raise ValueError("Invalid control marker")
+    directory = os.path.join(_ensure(run), "state", proposer)
+    os.makedirs(directory, exist_ok=True)
+    return os.path.join(directory, name)
 
 
 def _island_reset_at(proposer: str, run: str) -> str | None:
@@ -403,31 +419,21 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
 
 
 def reset_island(proposer: str, role: str | None = None, run: str | None = None) -> dict:
-    """Restore an island's baseline, clear scratch, and optionally set its direction.
-
-    Mark its previous lineage retired without changing archived models or
-    scores. Only a conductor or operator may reset an island."""
+    """Retire a lineage and set private direction; leave agent files untouched."""
     if _is_proposer():
         raise PermissionError("reset-island is a CONDUCTOR power; a proposer cannot reset islands.")
     run = _ensure(run)
     proposer = (proposer or "").strip()
-    sandbox = os.path.join(run, "proposers", proposer)
-    if not proposer or not os.path.isdir(sandbox):
-        raise ValueError(f"reset-island: no such island sandbox {proposer!r} under {run}")
+    marker = _sandbox_file(proposer, run, "reset_at")
+    if not os.path.isdir(os.path.join(run, "proposers", proposer)):
+        raise ValueError(f"reset-island: no such island {proposer!r}")
     stamp = _now()
-    baseline = os.path.join(REPO_ROOT, "model.py")
-    shutil.copyfile(baseline, os.path.join(sandbox, "model.py"))   # back to the floor
-    with open(os.path.join(sandbox, "reset_at"), "w") as fh:       # mute the old lineage in my-best
+    with open(marker, "w") as fh:
         fh.write(stamp)
-    scratch = os.path.join(sandbox, "scratch")                     # wipe the proposer's own notes so it
-    if os.path.isdir(scratch):                                     # can't re-derive its retired backbone
-        shutil.rmtree(scratch, ignore_errors=True)
-    os.makedirs(scratch, exist_ok=True)
     if role:
-        with open(os.path.join(sandbox, "direction.txt"), "w") as fh:
-            fh.write(role.strip() + "\n")
-    return {"reset": proposer, "model_py": "baseline", "scratch": "cleared",
-            "reset_at": stamp, "role": role or "(unchanged)"}
+        with open(_sandbox_file(proposer, run, "direction.txt"), "w") as fh:
+            fh.write(role.strip()[:2000] + "\n")
+    return {"reset": proposer, "reset_at": stamp, "role": role or "(unchanged)"}
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
@@ -474,7 +480,7 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     run = _ensure(run)
     with connect(run) as con:
         _migrate(con)
-        queued = con.execute("SELECT dataset,metric,stage,protocol_version,path FROM models WHERE id=?", (mid,)).fetchone()
+        queued = con.execute("SELECT dataset,metric,stage,protocol_version,path,model_sha256 FROM models WHERE id=?", (mid,)).fetchone()
     if queued is None:
         raise KeyError(mid)
     if st == "ok" and (_num(scores.get("test_corr")) is None
@@ -506,11 +512,18 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
         updates["subject_scores"] = json.dumps(scores["subject_scores"], allow_nan=False)
     metadata = {k: scores[k] for k in (
         "dataset", "metric", "stage", "protocol_version", "aggregation", "subjects", "search_image_policy",
-        "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "status") if k in scores}
+        "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "rsa_diagnostics", "status", "candidate_error") if k in scores}
     updates["evaluation_metadata"] = json.dumps(metadata, allow_nan=False)
-    if queued["path"] and os.path.isfile(queued["path"]):
+    if not queued["path"] or not os.path.isfile(queued["path"]):
+        st = "error"
+        updates["test_corr"] = None
+    else:
         with open(queued["path"], "rb") as source:
-            updates["model_sha256"] = hashlib.sha256(source.read()).hexdigest()
+            actual_hash = hashlib.sha256(source.read()).hexdigest()
+        if actual_hash != queued["model_sha256"]:
+            st = "error"
+            updates["test_corr"] = None
+            updates["evaluation_metadata"] = json.dumps({"status": "error: archived source identity changed"})
     updates["status"] = st
     assignments = ", ".join(f"{column}=?" for column in updates)
     with connect(run) as con:
@@ -566,8 +579,8 @@ def summary(run: str | None = None) -> str:
 # --------------------------------------------------------------------------- reward-integrity guard
 # The reward is real only if the model is HAND-WRITTEN & UNTRAINED (analytic/fixed-seed weights in its
 # own code, fed only the stimulus). Reject two cheat families -- loading PRETRAINED weights, and
-# reading the target/readout (leakage) -- statically (source scan) + at runtime (no network, no
-# pretrained-lib imports), and cap the params. Nothing hand-written needs any of these.
+# reading the target/readout (leakage) -- statically as a lint check. The actual
+# access boundary is harness.isolation, not Python import or socket monkeypatching.
 _BANNED_IMPORTS = ("transformers", "huggingface_hub", "timm", "open_clip",
                    "sentence_transformers", "sonar", "fairseq", "diffusers")
 _CHEAT_PATTERNS = (
@@ -590,38 +603,13 @@ def _scan_source(path):
     return next((why for pat, why in _CHEAT_PATTERNS if re.search(pat, src)), None)
 
 
-def _install_integrity_guard():
-    """Block the pretrained/download cheat at runtime: no network, no pretrained-lib imports.
-    Idempotent + process-wide (the harness needs neither)."""
-    global _GUARD_INSTALLED
-    if _GUARD_INSTALLED:
-        return
-    import socket, importlib.abc
-    os.environ.update(HF_HUB_OFFLINE="1", TRANSFORMERS_OFFLINE="1", HF_DATASETS_OFFLINE="1")
-
-    def _no_net(*_a, **_k):
-        raise RuntimeError("network disabled while scoring -- hand-written models only (no downloads)")
-    socket.socket.connect = socket.create_connection = _no_net
-
-    class _Block(importlib.abc.MetaPathFinder):
-        def find_spec(self, name, path=None, target=None):
-            if name.split(".")[0] in _BANNED_IMPORTS:
-                raise ImportError(f"import of {name!r} blocked -- hand-written models only")
-    sys.meta_path.insert(0, _Block())
-    _GUARD_INSTALLED = True
-
-
 # --------------------------------------------------------------------------- evaluator: scoring (lazy harness)
 def score(model_file: str, dataset: str | None = None) -> dict:
-    """Score one model with the FIXED harness IN-PROCESS, reusing the per-process split cache: the
-    torch import, CUDA init, and the split load are paid ONCE across every model this process scores
-    (~50x the old subprocess-per-model throughput). Never raises on a model fault -- an exception
-    becomes ``status='error'``. Returns ``{status, test_corr, train_corr, roi_corr, experiment_notes,
-    n_params, seconds, log}`` (``log`` = captured-output tail, for repair). ONE dataset per process
-    (``DATASET`` is import-bound). A model that HANGS (native CUDA/C, uninterruptible in-process) or
-    hard-crashes is handled by the evaluator's watchdog, which records the error and restarts the
-    process (``requeue_orphans`` recovers the row)."""
-    import contextlib, importlib.util, io, traceback
+    """Score privately, running candidate forwards in an image-only OS sandbox.
+
+    No candidate code is imported into this process. Isolation errors fail closed.
+    """
+    import contextlib, io, traceback
     from harness.protocols import validate_search_dataset
     dataset = validate_search_dataset(dataset or os.environ.get("NEURO_DATASET", "laion"))
     if os.environ.get("NEURO_STAGE", "search") != "search" or os.environ.get("NEURO_METRIC", "rsa") != "rsa":
@@ -632,7 +620,6 @@ def score(model_file: str, dataset: str | None = None) -> dict:
         write_env_json(find_run(), dataset)
     os.environ["NEURO_DATASET"] = dataset
     os.environ.pop("NEURO_ROI", None)             # no ROI knob: reward = the preset's fixed region
-    _install_integrity_guard()                    # no network / no pretrained-model imports while scoring
     cheat = _scan_source(model_file)              # static reject (also catches already-queued cheats)
     if cheat:
         return {"status": f"error: reward-hack blocked -- {cheat}"[:300], "log": ""}
@@ -641,11 +628,11 @@ def score(model_file: str, dataset: str | None = None) -> dict:
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
             from harness.datasets import get_dataset
             from harness.reward import evaluate_subjects
-            spec = importlib.util.spec_from_file_location("model", model_file)
-            mod = importlib.util.module_from_spec(spec)
-            sys.modules[spec.name] = mod
-            spec.loader.exec_module(mod)
-            row = evaluate_subjects(mod.MODEL, get_dataset(dataset), stage="search")
+            from harness.isolation import IsolatedModel
+            model = IsolatedModel(model_file)
+            row = evaluate_subjects(model, get_dataset(dataset), stage="search")
+            row["repair_log"] = model.repair_log
+            row["candidate_error"] = model.repair_log[-1500:]
                                                           # (the harness robustly enforces the param cap)
         res = dict(row)
     except Exception as e:  # noqa: BLE001  -- any eval fault is a recorded error, not a crash
@@ -682,11 +669,8 @@ def _champion_cli(a):
 # --------------------------------------------------------------------------- simplify: output equivalence
 def _load_model_instance(model_file: str):
     """Load a candidate MODEL for a direct activation-equivalence check."""
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("_eqmodel", model_file)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod.MODEL
+    from harness.isolation import IsolatedModel
+    return IsolatedModel(model_file)
 
 
 def _synthetic_batch(spec: dict):

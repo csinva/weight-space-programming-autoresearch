@@ -169,3 +169,96 @@ def test_final_encoding_is_not_exposed_as_search_reward():
     assert row["metric"] == "encoding" and row["stage"] == "final"
     assert row["reward"] is None
     assert -1 <= row["score"] <= 1
+
+
+def test_source_group_rsa_is_aligned_and_does_not_change_primary_reward():
+    from harness.loaders.vision.looped import VisionSplit
+
+    split = search_split()
+    baseline = evaluate_on_split_safe(Identity(), split, get_dataset("laion"))
+    groups = {"laion": [0, 2, 4, 6], "thingsplus": [1, 3, 5, 7], "ood": [8], "nsd": [0, 1, 2]}
+    enriched = VisionSplit(split, source_groups=groups)
+    row = evaluate_on_split_safe(Identity(), enriched, get_dataset("laion"))
+    assert row["status"] == "ok"
+    assert row["reward"] == baseline["reward"]
+    assert row["roi_corr"] == baseline["roi_corr"]
+    feedback = row["rsa_diagnostics"]
+    assert feedback["primary_rsa"] == row["reward"]
+    assert set(feedback["source_groups"]) == {"laion", "thingsplus", "ood"}
+    for name in ("laion", "thingsplus"):
+        idx = groups[name]
+        expected = rsa_scores(split[1][idx], split[3][idx], split[4], torch.device("cpu"))
+        actual = feedback["source_groups"][name]
+        assert actual["rsa"] == expected["test_corr"]
+        assert actual["n_stimuli"] == len(idx)
+        assert actual["regions"] == {r: v["test"] for r, v in expected["roi_corr"].items()}
+    assert feedback["source_groups"]["ood"]["status"] == "unavailable"
+    assert feedback["source_groups"]["ood"]["rsa"] is None
+    assert feedback["regions"]["early"]["n_targets"] == 2
+
+
+def test_cohort_diagnostics_retain_nonshared_regions_and_subject_coverage(monkeypatch):
+    def fake_load(dataset):
+        split = list(search_split(int(dataset.subject[1:])))
+        if dataset.subject not in {"M1", "M4"}:
+            split[4] = {"ventral": split[4]["ventral"]}
+        return tuple(split)
+
+    monkeypatch.setattr("harness.loaders.load_split", fake_load)
+    row = evaluate_subjects(Identity(), get_dataset("triplen"))
+    assert row["status"] == "ok"
+    assert set(row["roi_corr"]) == {"ventral"}  # compatibility field stays unchanged
+    feedback = row["rsa_diagnostics"]
+    assert feedback["primary_rsa"] == row["reward"]
+    assert feedback["regions"]["early"]["subjects"] == ["M1", "M4"]
+    assert feedback["regions"]["early"]["n_targets_by_subject"] == {"M1": 2, "M4": 2}
+    assert feedback["regions"]["ventral"]["n_subjects"] == 5
+    assert feedback["source_groups"] == {}
+    assert row["reward"] == np.mean(list(row["subject_scores"].values()))
+
+
+def test_source_group_cohort_requires_complete_coverage(monkeypatch):
+    from harness.loaders.vision.looped import VisionSplit
+
+    def fake_load(dataset):
+        return VisionSplit(search_split(), source_groups={
+            "laion": [0] if dataset.subject == "sub-03" else [0, 1, 2, 3]})
+
+    monkeypatch.setattr("harness.loaders.load_split", fake_load)
+    row = evaluate_subjects(Identity(), get_dataset("laion"))
+    assert row["status"] == "ok"
+    group = row["rsa_diagnostics"]["source_groups"]["laion"]
+    assert group["status"] == "unavailable" and group["rsa"] is None
+    assert group["n_subjects"] == 4
+    assert group["subject_results"]["sub-03"]["status"] == "unavailable"
+    assert all(region["rsa"] is None and region["status"] == "unavailable"
+               for region in group["regions"].values())
+
+
+def test_batched_forward_accepts_isolated_numpy_features():
+    from harness.reward import _forward, FORWARD_BATCH
+
+    images = torch.arange((FORWARD_BATCH + 3) * 5, dtype=torch.float32).reshape(-1, 5)
+    actual = _forward(lambda batch: batch.numpy().copy(), images)
+    torch.testing.assert_close(actual, images, rtol=0, atol=0)
+
+
+def test_source_group_cohort_reports_equal_subject_region_means(monkeypatch):
+    from harness.loaders.vision.looped import VisionSplit
+
+    def fake_load(dataset):
+        return VisionSplit(search_split(int(dataset.subject[-2:])), source_groups={"laion": [0, 1, 2, 3]})
+
+    monkeypatch.setattr("harness.loaders.load_split", fake_load)
+    row = evaluate_subjects(Identity(), get_dataset("laion"))
+    group = row["rsa_diagnostics"]["source_groups"]["laion"]
+    subjects = list(protocol_for("laion").search_subjects)
+    assert group["n_stimuli_by_subject"] == {subject: 4 for subject in subjects}
+    for region in ("early", "ventral"):
+        summary = group["regions"][region]
+        assert summary["status"] == "ok"
+        assert summary["subjects"] == subjects
+        assert summary["n_subjects"] == 5
+        assert summary["rsa"] == np.mean([entry["regions"][region]
+                                          for entry in group["subject_results"].values()])
+    assert group["rsa"] == pytest.approx(np.mean([entry["rsa"] for entry in group["regions"].values()]))

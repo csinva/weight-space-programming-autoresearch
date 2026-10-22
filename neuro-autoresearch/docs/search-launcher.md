@@ -50,13 +50,16 @@ settings change is performed.
 All roles skip permission prompts as requested: Codex uses
 `--dangerously-bypass-approvals-and-sandbox`; Claude Code and agy use
 `--dangerously-skip-permissions`. Working directories and `--add-dir` do not provide
-filesystem isolation in this mode. Scientific rules still require proposers to
-edit only `model.py` and their notes, use hub interfaces, and obtain feedback only
-from LAION-fMRI or Triple-N RSA. NSD and TVSD remain final-only encoding datasets.
+filesystem isolation by themselves. An outer Bubblewrap sandbox supplies the
+filesystem/process boundary, and a role-bound socket broker supplies bounded search
+feedback and submissions. Namespace support is mandatory; launch fails closed if
+it is unavailable. See the [access contract](access-feedback.md) for role operations
+and limits. Proposers edit only `model.py` and notes; only LAION-fMRI or Triple-N RSA
+supplies feedback. NSD and TVSD remain final-only encoding datasets.
 
 ## Logs and failures
 
-Provider events are retained in `proposers/pNN/proposer.log` and `conductor.log`
+Provider events are retained in `logs/pNN.jsonl` and `conductor.log`
 under the run directory. `usage.json` indexes those logs; dollar cost remains
 unknown rather than being inferred from token counts or subscription credits.
 

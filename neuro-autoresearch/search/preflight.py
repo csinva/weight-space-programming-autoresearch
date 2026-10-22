@@ -27,8 +27,10 @@ def main(argv=None):
         raise SystemExit("Python >=3.12 is required; install the project environment")
     try:
         import torch, numpy, scipy, h5py, PIL, sklearn  # noqa: F401
+        from harness.isolation import check_isolation
+        check_isolation()
         paths = validate_sources(args[0])
-    except (ImportError, ValueError, OSError) as exc:
+    except (ImportError, ValueError, OSError, RuntimeError) as exc:
         raise SystemExit(f"[search] environment/data preflight failed: {exc}") from exc
     print(f"[search] runtime/data ready: {args[0]} ({', '.join(paths)})")
 
