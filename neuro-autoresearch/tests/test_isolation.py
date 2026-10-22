@@ -1,6 +1,6 @@
 """Synthetic OS boundary checks; never open a neural dataset."""
-from pathlib import Path
 import shutil
+import socket
 
 import numpy as np
 import pytest
@@ -26,13 +26,16 @@ def isolated(tmp_path):
 def test_candidate_cannot_read_host_or_connect(isolated, tmp_path):
     secret = tmp_path / 'private-neural.npy'
     secret.write_text('PRIVATE')
-    model = isolated(f'''import os, socket
+    # A closed port would pass even if network isolation were broken.
+    with socket.socket() as listener:
+        listener.bind(('127.0.0.1', 0))
+        listener.listen()
+        model = isolated(f'''import os, socket
 class Model:
  def __call__(self, X):
   assert not os.path.exists({str(secret)!r})
-  assert not os.path.exists('/home/ymehta3/research/neuro-autoresearch/search.db')
   try:
-   socket.create_connection(('127.0.0.1', 9), timeout=.1)
+   socket.create_connection({listener.getsockname()!r}, timeout=.1)
   except OSError:
    pass
   else:
@@ -40,7 +43,8 @@ class Model:
   return X.flatten(1)
 MODEL=Model()
 ''')
-    np.testing.assert_array_equal(model(np.ones((2, 3), dtype='float32')), np.ones((2, 3)))
+        images = np.ones((2, 3), dtype='float32')
+        np.testing.assert_array_equal(model(images), images)
 
 
 def test_batch_dependent_candidate_rejected(isolated):

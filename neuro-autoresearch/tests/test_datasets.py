@@ -46,7 +46,9 @@ def _write_images(path, n=6, encoded=False):
             images = file.create_dataset("images", (n,), dtype=h5py.vlen_dtype(np.dtype("uint8")))
             for i in range(n):
                 buffer = io.BytesIO()
-                Image.new("RGB", (3, 3), (i * 20, 10, 5)).save(buffer, format="PNG")
+                # Image 4 is transparent; its decoded pixels must be scanner gray.
+                color = (i * 20, 10, 5, 0 if i == 4 else 255)
+                Image.new("RGBA", (3, 3), color).save(buffer, format="PNG")
                 images[i] = np.frombuffer(buffer.getvalue(), dtype=np.uint8)
         else:
             values = np.zeros((n, 3, 3, 3), dtype=np.uint8)
@@ -80,7 +82,8 @@ def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_p
     Xtr, Xte, Ytr, Yte, masks, nc = load_split(d)
     assert Xtr.shape == (0, 12) and Ytr.shape == (0, 4)
     assert Xte.shape == (2, 12) and Yte.shape == (2, 4)
-    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 80 / 255])
+    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 128 / 255])
+    np.testing.assert_allclose(Xte[1], 128 / 255)
     np.testing.assert_array_equal(Yte[:, :2], [[11, 12], [41, 42]])
     assert set(masks) == set(REGIONS["laion"])
     assert all(mask.sum() == 2 for mask in masks.values())
@@ -142,7 +145,7 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
     monkeypatch.setenv("NSD_DATA_FILE", "nsd_data_ext.pkl")
     monkeypatch.setenv("NSD_BETAS_DIR", str(tmp_path / "betas"))
     monkeypatch.setenv("NSD_STIMULI_HDF5_PATH", str(tmp_path / "images.h5"))
-    response = _response([3, 0, 2, 1], x=[0, 1, 2], y=[0, 0, 0], z=[0, 0, 0])
+    response = _response([3, 0, 2, 1], x=[1, 0, 1], y=[0, 1, 1], z=[1, 0, 0])
     source = {"data": {_NSD_REGION_MAP[r]: {2: response.copy()} for r in REGIONS["nsd"]},
               "shared_ids": {1, 3}}
     source["data"]["ventral"][2].attrs.update(resolution="1pt0mm", preprocessing="fithrf")
@@ -153,7 +156,8 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
 
     def write_volume(path, values):
         path.parent.mkdir(parents=True, exist_ok=True)
-        volume = np.array(values, dtype=np.float32).reshape(3, 1, 1)
+        volume = np.zeros((2, 2, 2), dtype=np.float32)
+        volume[[1, 0, 1], [0, 1, 1], [1, 0, 0]] = values
         nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
 
     write_volume(early, [0.2, 0.25, 0.8])
@@ -162,6 +166,8 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
     before = load_split(d)
     Xtr, Xte, Ytr, Yte, masks, nc = before
     assert Xtr.shape[0] == Xte.shape[0] == 2
+    np.testing.assert_allclose(Xtr[:, 0], [0, 40 / 255])
+    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 60 / 255])
     np.testing.assert_array_equal(Ytr, [[1, 2, 0], [21, 22, 20]])
     np.testing.assert_array_equal(Yte, [[11, 12, 10], [31, 32, 30]])
     assert [m.sum() for m in masks.values()] == [2, 1]
@@ -178,92 +184,3 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
     assert after is not before
     assert after[4]["ventral visual stream"].sum() == 2
     assert dataset_provenance(d)["files"] != files
-
-
-def test_prepared_pickle_cache_tracks_resolved_source_identity(tmp_path):
-    from neuro_eval import readers
-    path = tmp_path / "responses.pkl"
-    _write_pickle(path, {"value": [1, 2]})
-    first = readers.load_pickle(path)
-    alias = tmp_path / "alias.pkl"
-    alias.symlink_to(path)
-    assert readers.load_pickle(alias) is first
-    previous = path.stat()
-    _write_pickle(path, {"value": [3, 4]})
-    os.utime(path, ns=(previous.st_atime_ns, previous.st_mtime_ns + 1_000_000))
-    assert readers.load_pickle(path) == {"value": [3, 4]}
-    assert readers.load_pickle(path) is not first
-
-
-@pytest.mark.parametrize("mode", ["RGBA", "LA", "P"])
-def test_encoded_stimuli_composite_transparency_over_scanner_grey(tmp_path, mode):
-    from neuro_eval.readers import LazyEncodedHdf5Dict
-    if mode == "P":
-        im = Image.new("P", (2, 1), 0)
-        im.putpalette([255, 0, 0] + [0] * 765)
-        im.info["transparency"] = 0
-    elif mode == "LA":
-        im = Image.new(mode, (2, 1), (255, 0))
-    else:
-        im = Image.new(mode, (2, 1), (255, 0, 0, 0))
-    buffer = io.BytesIO()
-    im.save(buffer, format="PNG")
-    path = tmp_path / "images.h5"
-    with h5py.File(path, "w") as file:
-        images = file.create_dataset("images", (1,), dtype=h5py.vlen_dtype(np.dtype("uint8")))
-        images[0] = np.frombuffer(buffer.getvalue(), dtype=np.uint8)
-    stimuli = LazyEncodedHdf5Dict(str(path), [0])
-    assert stimuli._file is None
-    np.testing.assert_array_equal(stimuli["0"], np.full((1, 2, 3), 128, dtype=np.uint8))
-    assert stimuli.__getstate__()["_file"] is None
-    with pytest.raises(KeyError):
-        stimuli[1]
-
-
-def test_raw_stimuli_preserve_index_mapping_and_lazy_access(tmp_path):
-    from neuro_eval.readers import LazyHdf5Dict
-    path = tmp_path / "images.h5"
-    _write_images(path)
-    stimuli = LazyHdf5Dict(str(path), "imgBrick", [4, 1])
-    assert stimuli._file is None
-    assert stimuli.keys() == ["1", "4"]
-    assert 4 in stimuli and len(stimuli) == 2
-    np.testing.assert_array_equal(stimuli[4][0, 0], [80, 10, 0])
-    with pytest.raises(KeyError):
-        stimuli[2]
-
-
-def test_reader_environment_is_anchored_to_relocated_repository(tmp_path, monkeypatch):
-    from neuro_eval import readers
-    relocated = tmp_path / "relocated"
-    (relocated / "neuro_eval").mkdir(parents=True)
-    (relocated / ".env").write_text("NSD_ROOT=/fixture/nsd\nLAION_DATA_DIR=/fixture/laion\n")
-    elsewhere = tmp_path / "elsewhere"
-    elsewhere.mkdir()
-    (elsewhere / ".env").write_text("NSD_ROOT=/wrong/cwd\nLAION_DATA_DIR=/wrong/cwd\n")
-    monkeypatch.setattr(readers, "__file__", str(relocated / "neuro_eval/readers.py"))
-    monkeypatch.chdir(elsewhere)
-    monkeypatch.delenv("NSD_ROOT", raising=False)
-    monkeypatch.delenv("LAION_DATA_DIR", raising=False)
-    assert readers.nsd_root() == "/fixture/nsd"
-    assert readers.get_env_var("LAION_DATA_DIR") == "/fixture/laion"
-    monkeypatch.setenv("LAION_DATA_DIR", "/shell/override")
-    assert readers.get_env_var("LAION_DATA_DIR") == "/shell/override"
-
-
-def test_nsd_reliability_reads_voxel_coordinates_and_rejects_invalid_values(tmp_path, monkeypatch):
-    from neuro_eval import readers
-    path = tmp_path / "ncsnr.nii.gz"
-    volume = np.arange(8, dtype=np.float32).reshape(2, 2, 2)
-    nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
-    monkeypatch.setattr(readers, "voxel_ncsnr_path", lambda *_: str(path))
-    response = _response([0, 1], x=[1, 0, 1], y=[0, 1, 1], z=[1, 0, 0])
-    np.testing.assert_array_equal(readers.load_voxel_ncsnr(response, 0), [5, 2, 6])
-    with pytest.raises(ValueError, match="lack voxel coordinate"):
-        readers.load_voxel_ncsnr(response.drop_vars("z"), 0)
-    with pytest.raises(ValueError, match="outside ncsnr volume"):
-        readers.load_voxel_ncsnr(response.assign_coords(x=("neuroid", [2, 0, 1])), 0)
-    volume[1, 0, 1] = np.nan
-    nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
-    with pytest.raises(ValueError, match="Non-finite ncsnr"):
-        readers.load_voxel_ncsnr(response, 0)

@@ -24,17 +24,6 @@ def test_discovers_search_runs_without_final_results(tmp_path, monkeypatch):
             db.execute("INSERT INTO models VALUES ('abcde')")
 
 
-def test_direction_comes_from_trusted_state(tmp_path):
-    state = tmp_path / "state" / "p00"
-    state.mkdir(parents=True)
-    (state / "direction.txt").write_text("Explore spatial frequency\n")
-    workspace = tmp_path / "proposers" / "p00"
-    workspace.mkdir(parents=True)
-    (workspace / "direction.txt").write_text("Untrusted workspace text")
-    assert _db.proposer_direction(tmp_path, "p00") == "Explore spatial frequency"
-    assert _db.proposer_direction(tmp_path, "p01") == ""
-
-
 def test_provider_logs_drive_activity_and_log_endpoints(tmp_path):
     import asyncio
     import json

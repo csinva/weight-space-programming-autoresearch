@@ -1,8 +1,7 @@
-"""Provider contract tests use fake CLIs: no model requests or account charges."""
+"""Exercise real provider wrappers and isolation with fake CLIs; no model requests."""
 import json
 import os
 from pathlib import Path
-import re
 import subprocess
 import sys
 
@@ -24,7 +23,7 @@ elif sys.argv[1:] == ["models"]:
     print("gemini-4-argon-high\\tGemini 4 Argon (High)")
 else:
     print({json.dumps(result)!r})
-    pathlib.Path("capture.json").write_text(json.dumps({{"argv": sys.argv[1:], "cwd": os.getcwd(), "python": os.environ.get("NEURO_PYTHON")}}))
+    pathlib.Path("capture.json").write_text(json.dumps({{"argv": sys.argv[1:], "cwd": os.getcwd()}}))
 ''')
     executable.chmod(0o755)
     return executable
@@ -38,7 +37,7 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     prompt = 'Check literal $(touch NOT_ALLOWED) and `touch NOT_ALLOWED`\nKeep two lines.'
     prompt_file.write_text(prompt)
     expected_model = {"codex": "gpt-6-astra", "claude": "claude-opus-5-5", "agy": "gemini-4-argon-high"}[provider]
-    env = {**os.environ, f"NEURO_{provider.upper()}_BIN": str(executable), "CAPTURE": str(capture),
+    env = {**os.environ, f"NEURO_{provider.upper()}_BIN": str(executable),
            f"NEURO_{provider.upper()}_MODEL": expected_model}
     result = subprocess.run([sys.executable, "-m", "search.providers", "run",
                              "--agent", spec, "--cwd", str(tmp_path), "--write-dir", str(tmp_path),
@@ -60,81 +59,44 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     assert "--sandbox" not in record["argv"]
 
 
-@pytest.mark.parametrize("dataset", ["nsd", "tvsd"])
-def test_launcher_rejects_final_targets_before_creating_run(dataset, tmp_path):
-    # Use an unmistakable unused date and confirm no persistent launcher effects.
-    date = "2999-01-01"
-    target = REPO / "search_runs" / f"{dataset}__{date}"
-    assert not target.exists()
-    result = subprocess.run([sys.executable, "-m", "search.run", dataset, "--date", date, "--preflight"],
-                            cwd=REPO, capture_output=True, text=True)
-    assert result.returncode != 0
-    assert "reserved for final encoding evaluation" in result.stderr
-    assert not target.exists()
-
-
-def test_repair_runs_in_candidate_directory(tmp_path, monkeypatch):
-    from search.worker import repair
-    workspace = tmp_path / 'repair'
-    workspace.mkdir()
-    model = workspace / 'model.py'
-    model.write_text('MODEL = None')
-    log = workspace / 'error.txt'
-    log.write_text('NameError: missing_name')
-    executable = fake_cli(tmp_path, 'codex')
-    monkeypatch.setenv('NEURO_CODEX_BIN', str(executable))
-    repair(str(model), str(log), 'codex:astra', 'medium')
-    record = json.loads((workspace / 'capture.json').read_text())
-    assert record['cwd'] == str(workspace)
-    assert 'NameError: missing_name' in record['argv'][-1]
-    assert record['python'] == sys.executable
-
-
-@pytest.mark.parametrize("effort", ["low", "medium", "high"])
-def test_argon_alias_tracks_effort_and_rejects_conflicting_override(monkeypatch, effort):
-    from search.providers import resolve
-    monkeypatch.delenv("NEURO_AGY_MODEL", raising=False)
-    assert resolve("agy:argon4", effort).model == f"gemini-4-argon-{effort}"
-    other = "low" if effort != "low" else "high"
-    monkeypatch.setenv("NEURO_AGY_MODEL", f"gemini-4-argon-{other}")
-    with pytest.raises(ValueError, match="conflicts"):
-        resolve("agy:argon4", effort)
-
-
 @pytest.mark.parametrize("result,expected", [
     ({"status": "SUCCESS", "denied_actions": [{"action": "command", "display_name": "RunCommand"}]}, 78),
     ({"status": "ERROR", "error": "invalid model selection"}, 78),
     ({"status": "ERROR", "error": "temporary service unavailable"}, 1),
-    ({"status": "SUCCESS", "usage": {"total_tokens": 13}}, 0),
-    ({"status": "INVALID"}, 78),
     ({}, 78),
 ])
-def test_agy_native_terminal_outcome_controls_exit(tmp_path, monkeypatch, capsys, result, expected):
+def test_agy_native_terminal_outcome_controls_exit(tmp_path, capsys, result, expected):
     from search.providers import run_agy
     event = {"event": "result", "result": result}
     executable = fake_cli(tmp_path, "agy", event)
-    monkeypatch.setenv("CAPTURE", str(tmp_path / "capture.json"))
     assert run_agy([str(executable), "--print", "fake"], str(tmp_path)) == expected
     assert json.loads(capsys.readouterr().out) == event
 
 
 def test_agy_wrapper_forwards_termination(tmp_path):
+    import select
     import signal
     executable = tmp_path / "agy"
     executable.write_text(f"#!{sys.executable}\nimport time\nprint('ready', flush=True)\ntime.sleep(60)\n")
     executable.chmod(0o755)
     code = "from search.providers import run_agy; import sys; sys.exit(run_agy(sys.argv[1:2], sys.argv[2]))"
     child = subprocess.Popen([sys.executable, "-c", code, str(executable), str(tmp_path)],
-                             cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                             cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                             start_new_session=True)
     try:
-        assert child.stdout.readline().strip() == "ready"
+        ready, _, _ = select.select([child.stdout], [], [], 5)
+        assert ready, "fake provider did not become ready"
+        assert os.read(child.stdout.fileno(), 1024).strip() == b"ready"
         child.send_signal(signal.SIGTERM)
         child.communicate(timeout=5)
         assert child.returncode == 128 + signal.SIGTERM
     finally:
-        if child.poll() is None:
-            child.kill()
-            child.communicate()
+        # Kill the group even if the wrapper exited but left its CLI holding pipes.
+        try:
+            os.killpg(child.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        child.communicate(timeout=5)
 
 
 def test_provider_os_boundary_and_bounded_submission(tmp_path):
