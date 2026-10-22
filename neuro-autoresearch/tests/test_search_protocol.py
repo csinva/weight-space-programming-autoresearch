@@ -30,8 +30,8 @@ def clean_environment(monkeypatch, tmp_path):
 def run(tmp_path, clean_environment):
     root = tmp_path / "repository"
     (root / "neuro_eval").mkdir(parents=True)
-    (root / "search/proposer").mkdir(parents=True)
-    (root / "search/proposer/prompt.md").write_text("Only edit model.py.\n")
+    (root / "search/prompts").mkdir(parents=True)
+    (root / "search/prompts/proposer.md").write_text("Only edit model.py.\n")
     shutil.copyfile(REPO / "model.py", root / "model.py")
     return Path(scaffold_run("laion", "2026-10-21", str(root), 1))
 
@@ -194,13 +194,17 @@ def test_final_uses_isolated_model_without_importing_candidate(tmp_path, monkeyp
     {"source_revision": "different source"},
     {"evaluation_sha256": "different evaluator"},
 ])
-def test_final_rejects_changed_run_contract(run, change):
+def test_final_rejects_changed_run_contract(run, change, monkeypatch):
     score_model(run)
     path = run / "env.json"
     environment = json.loads(path.read_text())
     environment.update(change)
     path.write_text(json.dumps(environment))
-    database_before = (run / "search.db").read_bytes()
+    # Reject the contract before even opening SQLite. Comparing database file
+    # bytes is unreliable while prior queue connections can checkpoint the WAL.
+    def unexpected_database_access(*args, **kwargs):
+        pytest.fail("Invalid run contract must be rejected before database access")
+
+    monkeypatch.setattr(final.sqlite3, "connect", unexpected_database_access)
     with pytest.raises(ValueError):
         final.select_model(run)
-    assert (run / "search.db").read_bytes() == database_before

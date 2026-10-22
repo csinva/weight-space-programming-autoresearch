@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuro-autoresearch"
-version = "0.3.0"
+version = "0.3.1"
 description = "RSA-driven neural representation search with held-out encoding evaluation."
 requires-python = ">=3.12"
 dependencies = [
@@ -32,5 +32,4 @@ namespaces = true
 
 [tool.setuptools.package-data]
 search = ["config.env", "prompts/*.md"]
-"neuro_eval.reference" = ["PROVENANCE.md", "metrics/PROVENANCE.md"]
 dashboard = ["static/index.html", "static/assets/*"]

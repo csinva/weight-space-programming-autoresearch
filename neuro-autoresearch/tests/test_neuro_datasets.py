@@ -62,7 +62,7 @@ def _dataset(name, subject=None):
 
 
 def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_path, monkeypatch):
-    from neuro_eval.reference.data.laion import _LAION_REGION_MAP
+    from neuro_eval.readers import _LAION_REGION_MAP
     root = tmp_path / "laion"
     monkeypatch.setenv("LAION_DATA_DIR", str(root / "processed"))
     monkeypatch.setenv("LAION_FMRI_DIR", str(root))
@@ -91,7 +91,7 @@ def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_p
 
 
 def test_triplen_uses_all_images_and_each_monkeys_available_regions(tmp_path, monkeypatch):
-    from neuro_eval.reference.data.triplen import _TRIPLEN_REGION_MAP
+    from neuro_eval.readers import _TRIPLEN_REGION_MAP
     root = tmp_path / "triplen"
     monkeypatch.setenv("TRIPLEN_DATA_DIR", str(root))
     monkeypatch.setenv("NSD_STIMULI_HDF5_PATH", str(root / "images.h5"))
@@ -115,7 +115,7 @@ def test_triplen_uses_all_images_and_each_monkeys_available_regions(tmp_path, mo
 
 
 def test_tvsd_preserves_official_split_and_strict_oracle_filter(tmp_path, monkeypatch):
-    from neuro_eval.reference.data.tvsd import _TVSD_REGION_MAP
+    from neuro_eval.readers import _TVSD_REGION_MAP
     root = tmp_path / "tvsd"
     monkeypatch.setenv("TVSD_DATA_DIR", str(root))
     response = _response([5, 2, 1, 4, 0, 3], oracle=[0.4, 0.6, 0.9], electrode=[0, 1, 2])
@@ -137,7 +137,7 @@ def test_tvsd_preserves_official_split_and_strict_oracle_filter(tmp_path, monkey
 
 
 def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tmp_path, monkeypatch):
-    from neuro_eval.reference.data.nsd import _NSD_REGION_MAP
+    from neuro_eval.readers import _NSD_REGION_MAP
     monkeypatch.setenv("NSD_DATA_DIR", str(tmp_path))
     monkeypatch.setenv("NSD_DATA_FILE", "nsd_data_ext.pkl")
     monkeypatch.setenv("NSD_BETAS_DIR", str(tmp_path / "betas"))
@@ -178,3 +178,92 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
     assert after is not before
     assert after[4]["ventral visual stream"].sum() == 2
     assert dataset_provenance(d)["files"] != files
+
+
+def test_prepared_pickle_cache_tracks_resolved_source_identity(tmp_path):
+    from neuro_eval import readers
+    path = tmp_path / "responses.pkl"
+    _write_pickle(path, {"value": [1, 2]})
+    first = readers.load_pickle(path)
+    alias = tmp_path / "alias.pkl"
+    alias.symlink_to(path)
+    assert readers.load_pickle(alias) is first
+    previous = path.stat()
+    _write_pickle(path, {"value": [3, 4]})
+    os.utime(path, ns=(previous.st_atime_ns, previous.st_mtime_ns + 1_000_000))
+    assert readers.load_pickle(path) == {"value": [3, 4]}
+    assert readers.load_pickle(path) is not first
+
+
+@pytest.mark.parametrize("mode", ["RGBA", "LA", "P"])
+def test_encoded_stimuli_composite_transparency_over_scanner_grey(tmp_path, mode):
+    from neuro_eval.readers import LazyEncodedHdf5Dict
+    if mode == "P":
+        im = Image.new("P", (2, 1), 0)
+        im.putpalette([255, 0, 0] + [0] * 765)
+        im.info["transparency"] = 0
+    elif mode == "LA":
+        im = Image.new(mode, (2, 1), (255, 0))
+    else:
+        im = Image.new(mode, (2, 1), (255, 0, 0, 0))
+    buffer = io.BytesIO()
+    im.save(buffer, format="PNG")
+    path = tmp_path / "images.h5"
+    with h5py.File(path, "w") as file:
+        images = file.create_dataset("images", (1,), dtype=h5py.vlen_dtype(np.dtype("uint8")))
+        images[0] = np.frombuffer(buffer.getvalue(), dtype=np.uint8)
+    stimuli = LazyEncodedHdf5Dict(str(path), [0])
+    assert stimuli._file is None
+    np.testing.assert_array_equal(stimuli["0"], np.full((1, 2, 3), 128, dtype=np.uint8))
+    assert stimuli.__getstate__()["_file"] is None
+    with pytest.raises(KeyError):
+        stimuli[1]
+
+
+def test_raw_stimuli_preserve_index_mapping_and_lazy_access(tmp_path):
+    from neuro_eval.readers import LazyHdf5Dict
+    path = tmp_path / "images.h5"
+    _write_images(path)
+    stimuli = LazyHdf5Dict(str(path), "imgBrick", [4, 1])
+    assert stimuli._file is None
+    assert stimuli.keys() == ["1", "4"]
+    assert 4 in stimuli and len(stimuli) == 2
+    np.testing.assert_array_equal(stimuli[4][0, 0], [80, 10, 0])
+    with pytest.raises(KeyError):
+        stimuli[2]
+
+
+def test_reader_environment_is_anchored_to_relocated_repository(tmp_path, monkeypatch):
+    from neuro_eval import readers
+    relocated = tmp_path / "relocated"
+    (relocated / "neuro_eval").mkdir(parents=True)
+    (relocated / ".env").write_text("NSD_ROOT=/fixture/nsd\nLAION_DATA_DIR=/fixture/laion\n")
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    (elsewhere / ".env").write_text("NSD_ROOT=/wrong/cwd\nLAION_DATA_DIR=/wrong/cwd\n")
+    monkeypatch.setattr(readers, "__file__", str(relocated / "neuro_eval/readers.py"))
+    monkeypatch.chdir(elsewhere)
+    monkeypatch.delenv("NSD_ROOT", raising=False)
+    monkeypatch.delenv("LAION_DATA_DIR", raising=False)
+    assert readers.nsd_root() == "/fixture/nsd"
+    assert readers.get_env_var("LAION_DATA_DIR") == "/fixture/laion"
+    monkeypatch.setenv("LAION_DATA_DIR", "/shell/override")
+    assert readers.get_env_var("LAION_DATA_DIR") == "/shell/override"
+
+
+def test_nsd_reliability_reads_voxel_coordinates_and_rejects_invalid_values(tmp_path, monkeypatch):
+    from neuro_eval import readers
+    path = tmp_path / "ncsnr.nii.gz"
+    volume = np.arange(8, dtype=np.float32).reshape(2, 2, 2)
+    nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
+    monkeypatch.setattr(readers, "voxel_ncsnr_path", lambda *_: str(path))
+    response = _response([0, 1], x=[1, 0, 1], y=[0, 1, 1], z=[1, 0, 0])
+    np.testing.assert_array_equal(readers.load_voxel_ncsnr(response, 0), [5, 2, 6])
+    with pytest.raises(ValueError, match="lack voxel coordinate"):
+        readers.load_voxel_ncsnr(response.drop_vars("z"), 0)
+    with pytest.raises(ValueError, match="outside ncsnr volume"):
+        readers.load_voxel_ncsnr(response.assign_coords(x=("neuroid", [2, 0, 1])), 0)
+    volume[1, 0, 1] = np.nan
+    nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
+    with pytest.raises(ValueError, match="Non-finite ncsnr"):
+        readers.load_voxel_ncsnr(response, 0)

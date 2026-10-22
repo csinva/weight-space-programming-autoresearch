@@ -293,7 +293,7 @@ _CHEAT_PATTERNS = (
     (r"from_pretrained|AutoModel|AutoTokenizer|\bGPT2\w*|\btransformers\b|huggingface|\btimm\b|"
      r"open_clip|sentence_transformers|torch\.hub\.load|torchvision\.models", "loads a pretrained model"),
     (r"\burllib\b|\brequests\b|https?://|socket\.|\bwget\b|\bcurl\b|snapshot_download", "network / download"),
-    (r"neuro_eval\.(rsa|encoding|datasets|reference|_evaluation)|looped\.data|looped\.metrics|\bload_split\b|reward_region_mask", "reads the target/readout"),
+    (r"neuro_eval\.(rsa|encoding|datasets|readers|_evaluation)|looped\.data|looped\.metrics|\bload_split\b|reward_region_mask", "reads the target/readout"),
     (r"corrcoef\s*=|evaluate_on_split\s*=|\bridge\.\w+\s*=|\breward\.\w+\s*=", "monkeypatches the readout"),
 )
 

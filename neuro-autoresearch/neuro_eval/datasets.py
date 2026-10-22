@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS
-from neuro_eval.reference import utils
+from neuro_eval import readers
 
 
 @dataclass(frozen=True)
@@ -134,24 +134,20 @@ def dataset_source_paths(d: Dataset) -> dict[str, str]:
     """Storage locations, without importing or loading a sibling checkout."""
     name = dataset_key(d)
     # Load this repository's .env before resolving any optional stimulus path.
-    data_dir = utils.get_env_var(f"{name.upper()}_DATA_DIR")
+    data_dir = readers.get_env_var(f"{name.upper()}_DATA_DIR")
     if name in ("nsd", "triplen"):
-        from neuro_eval.reference.data.nsd import nsd_stimuli_path
-        image_path = nsd_stimuli_path()
+        image_path = readers.nsd_stimuli_path()
     elif name == "laion":
-        from neuro_eval.reference.data.laion import laion_stimuli_path
-        image_path = laion_stimuli_path()
+        image_path = readers.laion_stimuli_path()
     else:
-        from neuro_eval.reference.data.tvsd import tvsd_stimuli_path
-        image_path = tvsd_stimuli_path()
+        image_path = readers.tvsd_stimuli_path()
     filename = os.environ.get("NSD_DATA_FILE", "nsd_data.pkl") if name == "nsd" else f"{name}_data.pkl"
     paths = {"responses": str(Path(data_dir) / filename),
              "stimuli": image_path}
     if name == "nsd":
-        from neuro_eval.reference.data.nsd import _NSD_REGION_MAP, voxel_ncsnr_path
-        source = utils.load_pickle(paths["responses"])
+        source = readers.load_pickle(paths["responses"])
         subject = int(d.subject) - 1
-        volumes = {region: voxel_ncsnr_path(source["data"][_NSD_REGION_MAP[region]][subject], subject)
+        volumes = {region: readers.voxel_ncsnr_path(source["data"][readers._NSD_REGION_MAP[region]][subject], subject)
                    for region in REGIONS[name]}
         if len(set(volumes.values())) == 1:
             paths["ncsnr"] = next(iter(volumes.values()))
@@ -173,27 +169,21 @@ def _load_native(d: Dataset):
     regions = list(REGIONS[name])
     cfg = dict(FILTERS[name])
     if name == "nsd":
-        from neuro_eval.reference.data.nsd import load_all_nsd_data
         subject = int(d.subject) - 1
-        data = load_all_nsd_data(cfg, subjects=[subject], regions=regions)
+        data = readers.load_all_nsd_data(cfg, subjects=[subject], regions=regions)
     elif name == "laion":
-        from neuro_eval.reference.data.laion import SUBJECTS, load_all_laion_data
-        subject = SUBJECTS.index(d.subject)
-        data = load_all_laion_data(cfg, subjects=[subject], regions=regions)
+        subject = readers.LAION_SUBJECTS.index(d.subject)
+        data = readers.load_all_laion_data(cfg, subjects=[subject], regions=regions)
     elif name == "triplen":
-        from neuro_eval.reference.data.triplen import (
-            SUBJECTS, _TRIPLEN_REGION_MAP, load_all_triplen_data, load_triplen_pickle,
-        )
-        subject = SUBJECTS.index(d.subject)
-        source = load_triplen_pickle(dataset_source_paths(d)["responses"])
-        regions = [r for r in regions if subject in source["data"].get(_TRIPLEN_REGION_MAP[r], {})]
+        subject = readers.TRIPLEN_SUBJECTS.index(d.subject)
+        source = readers.load_triplen_pickle(dataset_source_paths(d)["responses"])
+        regions = [r for r in regions if subject in source["data"].get(readers._TRIPLEN_REGION_MAP[r], {})]
         if not regions:
             raise ValueError(f"No Triple-N regions available for {d.subject}")
-        data = load_all_triplen_data(cfg, subjects=[subject], regions=regions, fold=0)
+        data = readers.load_all_triplen_data(cfg, subjects=[subject], regions=regions, fold=0)
     elif name == "tvsd":
-        from neuro_eval.reference.data.tvsd import SUBJECTS, load_all_tvsd_data
-        subject = SUBJECTS.index(d.subject)
-        data = load_all_tvsd_data(cfg, subjects=[subject], regions=regions)
+        subject = readers.TVSD_SUBJECTS.index(d.subject)
+        data = readers.load_all_tvsd_data(cfg, subjects=[subject], regions=regions)
     else:
         raise ValueError(f"Not a looped vision dataset: {name}")
     return data, subject

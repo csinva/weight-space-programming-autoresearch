@@ -1,8 +1,14 @@
-"""RSA scoring for the complete fixed search cohort."""
+"""RSA search scoring for the complete fixed cohort.
+
+Numerical kernels copied unchanged from looped-networks, revision
+3ee575baeceb1ad784102162a051b7444182fdaa, looped/metrics/rsa.py.
+Unused source experiment helpers are omitted. Cohort policies live in benchmarks.
+"""
 
 from __future__ import annotations
 
 from collections import OrderedDict
+import logging
 import hashlib
 import time
 import weakref
@@ -13,14 +19,100 @@ import torch
 from neuro_eval import _evaluation as common
 from neuro_eval._evaluation import matrix, region_masks
 from neuro_eval.model import _validate_model_size, _readout_device
-from neuro_eval.reference.metrics import rsa
+
+logger = logging.getLogger(__name__)
+
+
+def _rank(x: torch.Tensor) -> torch.Tensor:
+    """Row-wise ordinal ranks via double argsort (tied values get distinct consecutive ranks)."""
+    return torch.argsort(torch.argsort(x, dim=1), dim=1).float()
+
+
+def compute_rdm(
+    representations: torch.Tensor, *, correlation: str = "Pearson", correction: float = 1e-12
+) -> torch.Tensor:
+    """(n_samples x n_samples) RDM (1 - correlation), Pearson or Spearman.
+
+    Diagonal is 0 (zero self-dissimilarity); off-diagonal ranges 0 (identical)
+    to 2 (perfectly anti-correlated).
+    """
+    corr = correlation.lower()
+    if corr not in {"pearson", "spearman"}:
+        raise ValueError("correlation must be 'Pearson' or 'Spearman'")
+
+    x = representations.float().clone()
+    if corr == "spearman":
+        x = _rank(x)
+
+    x -= x.mean(dim=1, keepdim=True)
+    std = x.pow(2).mean(dim=1).add(correction).sqrt()
+
+    zero_mask = std < correction * 10
+    if zero_mask.any():
+        logger.warning("%d/%d rows have ~zero variance for %s RDM", zero_mask.sum(), len(std), correlation)
+        std[zero_mask] = 1.0
+
+    cov = (x @ x.T) / x.size(1)
+    corr_mat = cov / (std[:, None] * std[None, :] + correction)
+    corr_mat.clamp_(-1, 1).fill_diagonal_(1.0)
+    return 1.0 - corr_mat
+
+
+def triu_ranks(rdm: torch.Tensor) -> torch.Tensor:
+    """Average ranks (as scipy.stats.rankdata) of the upper triangle of rdm, float64 on its device."""
+    n = rdm.size(0)
+    i = torch.triu_indices(n, n, offset=1, device=rdm.device)
+    v, order = rdm[i[0], i[1]].double().sort()
+    _, inv, counts = torch.unique_consecutive(v, return_inverse=True, return_counts=True)
+    avg = counts.cumsum(0).double() - (counts.double() - 1) / 2  # 1-based mean rank of each tie block
+    ranks = torch.empty_like(v)
+    ranks[order] = avg[inv]
+    return ranks
+
+
+def spearman_from_ranks(a: torch.Tensor, b: torch.Tensor) -> float:
+    """Spearman of two RDMs from their triu_ranks: Pearson of the ranks (= scipy.stats.spearmanr); NaN if constant."""
+    a, b = a - a.mean(), b.to(a.device) - b.mean()
+    return float((a @ b) / (a.norm() * b.norm()))
+
+
+def rdm_chunked(X, device, chunk=200_000, zscore_units=False, on_device=False):
+    """1 - Pearson correlation RDM of X (n, D), on the CPU or already on `device` (no host copy then), accumulated
+    over feature chunks. Returns float32 on the CPU, or on `device` if on_device.
+
+    zscore_units: first standardise every unit (column) over the n images, so that no unit dominates the
+    correlation by its scale or its mean (units constant over the images become 0).
+    """
+    n, D = X.shape
+
+    def cols(j):
+        x = X[:, j:j + chunk].to(device).double()
+        if zscore_units:
+            sd = x.std(0)
+            x = torch.where(sd > 0, (x - x.mean(0)) / sd.clamp_min(1e-12), torch.zeros_like(x))
+        return x
+
+    mean = torch.zeros(n, dtype=torch.float64, device=device)
+    for j in range(0, D, chunk):
+        mean += cols(j).sum(1)
+    mean /= D
+    G = torch.zeros(n, n, dtype=torch.float64, device=device)
+    for j in range(0, D, chunk):
+        xc = (cols(j) - mean[:, None]).float()
+        G += (xc @ xc.T).double()
+        del xc
+    d = torch.sqrt(torch.diag(G)).clamp_min(1e-12)
+    rdm = 1.0 - G / (d[:, None] * d[None, :])
+    rdm.fill_diagonal_(0.0)
+    return rdm.float() if on_device else rdm.float().cpu()
+
 
 _NEURAL_RANKS_LIMIT = 16
 _NEURAL_RANKS = OrderedDict()
 
 
 def _rsa_ranks(rdm: torch.Tensor, label: str) -> torch.Tensor:
-    ranks = rsa.triu_ranks(rdm)
+    ranks = triu_ranks(rdm)
     if not torch.isfinite(ranks).all() or not ranks.numel() or ranks.max() == ranks.min():
         raise ValueError(f"Degenerate {label} RDM: RSA is undefined")
     return ranks
@@ -50,7 +142,7 @@ def _neural_ranks(targets, mask, device, region, cache_sources):
     response = targets[:, torch.as_tensor(mask, device=targets.device)].to(device)
     if response.shape[1] < 2 or torch.any(response.var(dim=1, unbiased=False) <= 0):
         raise ValueError(f"Degenerate neural responses in region {region!r}")
-    ranks = _rsa_ranks(rsa.compute_rdm(response), f"neural {region}")
+    ranks = _rsa_ranks(compute_rdm(response), f"neural {region}")
     if key is not None:
         _NEURAL_RANKS[key] = tuple(weakref.ref(value) for value in cache_sources), ranks.cpu()
         while len(_NEURAL_RANKS) > _NEURAL_RANKS_LIMIT:
@@ -68,11 +160,11 @@ def rsa_scores(features, targets, masks, device, *, cache_sources=None) -> dict:
     # epsilon guards in the source RDM builder can make its RDM appear finite.
     if torch.any(features.var(dim=1, unbiased=False) <= 0):
         raise ValueError("Degenerate model features: an RSA stimulus row is constant")
-    model_ranks = _rsa_ranks(rsa.rdm_chunked(features, device, on_device=True), "model")
+    model_ranks = _rsa_ranks(rdm_chunked(features, device, on_device=True), "model")
     scores = {}
     for region, mask in region_masks(masks, targets.shape[1]).items():
         neural_ranks = _neural_ranks(targets, mask, device, region, cache_sources)
-        score = rsa.spearman_from_ranks(model_ranks, neural_ranks)
+        score = spearman_from_ranks(model_ranks, neural_ranks)
         if not np.isfinite(score):
             raise ValueError(f"Nonfinite RSA score for region {region!r}")
         scores[region] = {"train": score, "test": score}

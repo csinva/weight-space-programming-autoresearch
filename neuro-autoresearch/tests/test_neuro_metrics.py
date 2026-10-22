@@ -11,7 +11,7 @@ from neuro_eval.encoding import encoding_scores
 from neuro_eval.rsa import rsa_scores
 from neuro_eval.benchmarks import protocol_for
 from neuro_eval.rsa import evaluate_on_split_safe, evaluate_subjects
-from neuro_eval.reference.metrics import encoding, rsa
+from neuro_eval import encoding, rsa
 
 
 @pytest.fixture(autouse=True)
@@ -68,11 +68,17 @@ def test_rsa_matches_numpy_pearson_and_scipy_with_equal_region_weight():
     assert row["test_corr"] == pytest.approx(np.mean(list(expected.values())), abs=1e-12)
 
 
-def test_encoding_matches_source_and_ignores_heldout_data_during_fit():
+def test_encoding_matches_frozen_source_and_ignores_heldout_data_during_fit():
     X, Y, masks = encoding_fixture()
     tr, te, dev = np.arange(22), np.arange(22, 30), torch.device("cpu")
     design = encoding.design(X, tr, dev, features="center")
-    direct, alphas, _ = encoding.unit_scores(design, Y, tr, te)
+    # Captured from the untouched source kernel at revision
+    # 3ee575baeceb1ad784102162a051b7444182fdaa before consolidation.
+    direct = np.array([0.9962937831878662, 0.9902385473251343, 0.990955650806427,
+                       0.9958555698394775, 0.9480392932891846, 0.9931279420852661,
+                       0.9898065328598022])
+    actual, alphas, _ = encoding.unit_scores(design, Y, tr, te)
+    np.testing.assert_allclose(actual, direct, atol=1e-6)
     row = encoding_scores(X[tr], X[te], Y[tr], Y[te], masks, dev)
     for name, mask in masks.items():
         assert row["roi_corr"][name]["test"] == pytest.approx(direct[mask].mean(), abs=1e-6)

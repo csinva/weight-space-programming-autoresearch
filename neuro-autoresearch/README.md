@@ -78,17 +78,26 @@ python -m pytest -q
 | `neuro_eval/rsa.py`, `encoding.py` | Scientific RSA and encoding evaluation |
 | `neuro_eval/_evaluation.py` | Shared input checks, cohort execution and aggregation |
 | `neuro_eval/datasets.py` | Data loading, alignment, caching and provenance |
+| `neuro_eval/readers.py` | Dataset-file readers, reliability filtering and lazy image access |
 | `neuro_eval/benchmarks.py` | Dataset pairs, full cohorts and fixed scientific rules |
 | `neuro_eval/model.py` | Model validation, isolated execution and code identity |
-| `neuro_eval/reference/` | Original readers and metric kernels copied from looped-networks |
 | `dashboard/` | Search monitoring backend and bundled UI |
 | `tests/` | Scientific and operational contract checks |
 | `search_runs/` | Generated search databases, candidate snapshots, notes and logs |
 | `final_results/` | Frozen selected models, selection records and final scores |
 
-The copied source has no runtime dependency on its original checkout. Its exact
-revision and adaptations are recorded in
-[`neuro_eval/reference/PROVENANCE.md`](neuro_eval/reference/PROVENANCE.md).
+RSA and encoding kernels are implemented directly in `neuro_eval/rsa.py` and
+`neuro_eval/encoding.py`; source-file loading is implemented in `neuro_eval/readers.py`.
+These implementations originate from `looped-networks` revision
+`3ee575baeceb1ad784102162a051b7444182fdaa` (`looped/metrics/{rsa,encoding}.py`
+and `looped/data/{nsd,laion,triplen,tvsd,stimuli}.py`), imported October 21, 2026.
+Active numerical algorithms, source filters and image decoding are preserved;
+unused source helpers are omitted. Local adaptations resolve repository `.env`
+and shared-storage paths, cache prepared files by identity, and identify NSD
+reliability volumes from response metadata. There is no dependency on the original
+checkout or a second copy of the implementations. `SOURCE_REVISION` in
+`neuro_eval/benchmarks.py` and the evaluation-code hash identify their provenance
+in every run and final artifact.
 The dashboard uses a prebuilt, locally adapted
 [CORAL](https://github.com/Human-Agent-Society/CORAL) frontend.
 

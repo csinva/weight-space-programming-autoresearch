@@ -126,15 +126,15 @@ def test_default_feedback_is_compact_and_details_are_single_model_only(broker_ru
 
 @pytest.mark.parametrize('command', ['status', 'wait-for-score'])
 def test_client_details_flag_requests_single_model(command, monkeypatch, capsys):
-    from search import client
+    from search import api
     calls = []
 
     def fake_request(payload):
         calls.append(dict(payload))
         return {'status': 'ok'}
 
-    monkeypatch.setattr(client, 'request', fake_request)
-    client.main([command, 'abc12', '--details'])
+    monkeypatch.setattr(api, 'request', fake_request)
+    api.main([command, 'abc12', '--details'])
     assert calls == [{'command': 'status', 'id': 'abc12', 'details': True}]
     assert json.loads(capsys.readouterr().out) == {'status': 'ok'}
 
