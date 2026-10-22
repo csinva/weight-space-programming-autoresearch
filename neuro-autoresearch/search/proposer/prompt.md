@@ -47,22 +47,22 @@ recipe. The shared DB shows you the SCOREBOARD (scores + ideas, no code), and yo
 from only two places: your own island, and one random other island.
 
 See the landscape:
-  `python hub.py random-models -n 5`   # random prior models: idea + notes + SCORES
+  `"$NEURO_PYTHON" hub.py random-models -n 5`   # random prior models: idea + notes + SCORES
                                        # (test_corr/roi_corr) -- anonymized, no code. Use the scores
                                        # to see which prior ideas actually worked.
-  `python hub.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
+  `"$NEURO_PYTHON" hub.py query-db "SELECT ..."` # read-only arbitrary SQL -- your own view of the DB
                                        # (score/source columns hidden HERE; use random-models for scores)
 Build on real code:
-  `python hub.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
+  `"$NEURO_PYTHON" hub.py my-best`              # YOUR island's best model so far, WITH source -- your base to improve
                                        # (`--no-code` for the row only.)
 Cross-pollinate (ideas only, never code):
-  `python hub.py peek-island`          # best of ONE RANDOM OTHER island as idea + experiment_notes
+  `"$NEURO_PYTHON" hub.py peek-island`          # best of ONE RANDOM OTHER island as idea + experiment_notes
                                        # (description + insight) -- NO source, NO score. You do
                                        # NOT choose which island; it is auto-picked at random.
 
 Propose + get your score:
-  `id=$(python hub.py propose-model model.py --idea "<short label>")`  # snapshots + queues YOUR model.py
-  `python hub.py wait-for-score $id`  # BLOCKS until the GPU evaluator scores YOUR model; prints the
+  `id=$("$NEURO_PYTHON" hub.py propose-model model.py --idea "<short label>")`  # snapshots + queues YOUR model.py
+  `"$NEURO_PYTHON" hub.py wait-for-score $id`  # BLOCKS until the GPU evaluator scores YOUR model; prints the
                                      # row (test_corr = reward, status). One call parks; don't busy-poll.
 Grow YOUR OWN backbone -- improve `my-best`, optionally re-implementing a `peek-island` idea. Never
 try to reconstruct the global champion.
@@ -137,6 +137,6 @@ is entirely YOUR call. There is no mandated sequence of discovery steps.
 2. EDIT `model.py` -- exactly ONE new idea per turn (improve YOUR island's `my-best`, re-implement a
    `peek-island` idea your own way, fix what stalled, or invent something new). You own the whole
    computation. Update the `idea`, `description`, and `insight` fields to match what you tried.
-3. PROPOSE: `id=$(python hub.py propose-model model.py --idea "...")`. Do NOT run/score it yourself.
-4. WAIT: `python hub.py wait-for-score $id` -> blocks until YOUR model is scored, then read its test_corr.
+3. PROPOSE: `id=$("$NEURO_PYTHON" hub.py propose-model model.py --idea "...")`. Do NOT run/score it yourself.
+4. WAIT: `"$NEURO_PYTHON" hub.py wait-for-score $id` -> blocks until YOUR model is scored, then read its test_corr.
 5. Reflect on whether it improved, then GO BACK to step 1. Never stop.

@@ -11,6 +11,10 @@ with imports redirected into `harness.vendor.looped`. `utils.py` is a minimal
 local adaptation for pickle loading, local environment variables and shared
 storage defaults. The source repository is not imported at runtime.
 
+The NSD reader's metadata-dependent ncsnr path selection is extracted into a
+shared helper so the reader, cache keys and provenance identify the same volume.
+Its resolution/preprocessing defaults and reliability filtering are unchanged.
+
 The surrounding adapter intentionally changes the experiment, not these
 numerical kernels: LAION search uses shared non-NSD-source images only;
 Triple-N search combines its source folds; both average primary-region RSA

@@ -6,9 +6,9 @@
 set -uo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-cd "$REPO" || exit 1
 source "$REPO/search/lib.sh"
 use_project_python || exit 2
+cd "$REPO" || exit 1
 [ -f search/config.env ] && . search/config.env
 
 case "${1:-}" in -h|--help) sed -n '2,5p' "$0"; exit 0;; "") sed -n '2,5p' "$0"; exit 2;; esac
@@ -84,7 +84,7 @@ if [ "$MODE" = exact ]; then
   SPEC="$WORK/input_spec.json"
   cp -f "$CHAMPION_PATH" "$WORK/reference.py"
   "$PY" -m scripts.simplify.capture_spec "$SPEC"
-  CHECK="python hub.py check-equivalence model.py --reference reference.py --spec input_spec.json"
+  CHECK='"$NEURO_PYTHON" hub.py check-equivalence model.py --reference reference.py --spec input_spec.json'
   LAB_RUN="$OUT" "$PY" hub.py check-equivalence "$WORK/model.py" --reference "$WORK/reference.py" --spec "$SPEC" \
     | "$PY" -c "import json,sys;assert json.load(sys.stdin)['equivalent']" || exit 1
   RULES="$(printf 'EXACT mode: refactor without changing activations. After every edit run:\n\n    %s\n\nKeep only equivalent edits. Never edit reference.py.' "$CHECK")"
@@ -97,7 +97,7 @@ else
   REFERENCE_SCORE="$(printf '%s' "$ROW" | "$PY" -c "import json,sys;v=json.load(sys.stdin).get('test_corr');print('' if v is None else v)")"
   [ -n "$REFERENCE_SCORE" ] || { echo "champion failed to re-score" >&2; exit 1; }
   FLOOR="$("$PY" -c "s=float('$REFERENCE_SCORE');print(s-abs(s)*float('$TOLERANCE'))" )"
-  RULES="$(printf 'APPROXIMATE mode: simplify the computation itself. Keep a change only when test_corr >= %s. Score every edit with:\n\n    id=$(python hub.py propose-model model.py --idea "short label")\n    python hub.py wait-for-score $id\n\nRevert changes below the floor.' "$FLOOR")"
+  RULES="$(printf 'APPROXIMATE mode: simplify the computation itself. Keep a change only when test_corr >= %s. Score every edit with:\n\n    id=$("$NEURO_PYTHON" hub.py propose-model model.py --idea "short label")\n    "$NEURO_PYTHON" hub.py wait-for-score $id\n\nRevert changes below the floor.' "$FLOOR")"
 fi
 
 PROMPT="$(cat scripts/simplify/prompt.md)

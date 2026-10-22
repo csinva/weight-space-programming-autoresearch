@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Verified headless CLI adapters for Codex/Astra and Antigravity/Argon 4.
+"""Headless CLI adapters for Codex, Claude Code, and Antigravity.
 
 Agent specs are ``provider:model[:effort]``. Preflight reads CLI help/model lists;
-it never submits a prompt. Run uses exec so supervisor signals reach the CLI.
+it never submits a prompt. Native agy events are preserved while terminal results
+are checked; nonrecoverable provider failures exit 78 so supervisors stop retrying.
 """
 from __future__ import annotations
 
@@ -12,10 +13,12 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import subprocess
 import sys
 
-DEFAULT_ROSTER = "codex:astra agy:argon4"
+DEFAULT_ROSTER = "codex:gpt-6-astra:medium claude:opus5.5:medium agy:argon4:medium"
+PROVIDER_UNAVAILABLE = 78
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 
 
@@ -33,14 +36,21 @@ def resolve(spec: str, effort: str = "high") -> Agent:
         raise ValueError(f"Invalid agent {spec!r}; use provider:model[:effort], e.g. codex:astra or agy:argon4:high")
     provider, model = parts[:2]
     effort = parts[2] if len(parts) == 3 else effort
-    if provider not in {"codex", "agy"}:
-        raise ValueError(f"Unsupported provider {provider!r}; choose codex or agy")
+    if provider not in {"codex", "claude", "agy"}:
+        raise ValueError(f"Unsupported provider {provider!r}; choose codex, claude or agy")
     if effort not in EFFORTS:
         raise ValueError(f"Unsupported reasoning effort {effort!r}; choose {', '.join(sorted(EFFORTS))}")
     if provider == "codex" and model == "astra":
         model = os.environ.get("NEURO_CODEX_MODEL", "gpt-6-astra")
+    if provider == "claude" and model == "opus5.5":
+        model = os.environ.get("NEURO_CLAUDE_MODEL", "claude-opus-5-5")
     if provider == "agy" and model == "argon4":
-        model = os.environ.get("NEURO_AGY_MODEL", "gemini-4-argon-high")
+        model = os.environ.get("NEURO_AGY_MODEL") or f"gemini-4-argon-{effort}"
+    if provider == "agy" and model.startswith("gemini-4-argon-"):
+        model_effort = model.removeprefix("gemini-4-argon-")
+        if model_effort not in {"low", "medium", "high"} or model_effort != effort:
+            raise ValueError(f"Argon model {model!r} conflicts with effort {effort!r}; "
+                             "use agy:argon4 with low, medium or high effort, or a matching exact ID")
     # Codex calls its maximum reasoning effort xhigh; agy also accepts max.
     if provider == "codex" and effort == "max":
         effort = "xhigh"
@@ -55,12 +65,13 @@ def command(agent: Agent, cwd: str, prompt: str, write_dirs: list[str] | None = 
     if agent.provider == "codex":
         argv = [agent.executable, "exec", "--model", agent.model,
                 "--config", f'model_reasoning_effort="{agent.effort}"',
-                "--config", 'approval_policy="never"',
-                "--sandbox", "workspace-write", "--cd", cwd,
+                "--dangerously-bypass-approvals-and-sandbox", "--cd", cwd,
                 "--skip-git-repo-check", "--json"]
     else:
         argv = [agent.executable, "--model", agent.model, "--effort", agent.effort,
-                "--mode", "auto", "--sandbox", "--output-format", "stream-json"]
+                "--dangerously-skip-permissions", "--output-format", "stream-json"]
+        if agent.provider == "claude":
+            argv.append("--verbose")
     for directory in write_dirs or []:
         argv.extend(["--add-dir", directory])
     argv.extend([prompt] if agent.provider == "codex" else ["--print", prompt])
@@ -88,8 +99,12 @@ def preflight(agents: list[Agent]) -> list[dict]:
             args = [agent.executable, "exec", "--help"] if agent.provider == "codex" else [agent.executable, "--help"]
             checked[agent.executable] = _read_cli(args)
         help_text = checked[agent.executable]
-        required = ("--model", "--sandbox", "--add-dir")
-        required += ("--cd", "--json", "--config", "--skip-git-repo-check") if agent.provider == "codex" else ("--print", "--effort", "--mode", "--output-format")
+        required = ("--model", "--add-dir")
+        required += (("--cd", "--json", "--config", "--skip-git-repo-check",
+                      "--dangerously-bypass-approvals-and-sandbox") if agent.provider == "codex" else
+                     ("--print", "--effort", "--output-format", "--dangerously-skip-permissions"))
+        if agent.provider == "claude":
+            required += ("--verbose",)
         missing = [flag for flag in required if flag not in help_text]
         if missing:
             raise ValueError(f"{agent.provider} lacks required headless options: {', '.join(missing)}")
@@ -102,6 +117,50 @@ def preflight(agents: list[Agent]) -> list[dict]:
     return [asdict(agent) for agent in agents]
 
 
+def run_agy(argv: list[str], cwd: str) -> int:
+    """Relay native logs and signals, rejecting success with denied tool actions."""
+    terminal = None
+    with subprocess.Popen(argv, cwd=cwd, stdout=subprocess.PIPE, text=True) as child:
+        previous = {}
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            previous[sig] = signal.signal(sig, lambda signum, _frame: child.send_signal(signum))
+        try:
+            for line in child.stdout:
+                sys.stdout.write(line)
+                sys.stdout.flush()
+                try:
+                    event = json.loads(line)
+                except ValueError:
+                    continue
+                if isinstance(event, dict) and event.get("event") == "result":
+                    terminal = event.get("result")
+            code = child.wait()
+        finally:
+            for sig, handler in previous.items():
+                signal.signal(sig, handler)
+    if isinstance(terminal, dict):
+        if terminal.get("denied_actions"):
+            print("[provider] Antigravity denied required tool actions; stopping this slot. "
+                  "Review local CLI permissions before restarting.", file=sys.stderr)
+            return PROVIDER_UNAVAILABLE
+        if terminal.get("status") == "SUCCESS":
+            return code if code >= 0 else 128 - code
+        if terminal.get("status") not in {"ERROR", "CANCELED", "INTERRUPTED"}:
+            print("[provider] Antigravity returned an invalid/incomplete terminal status; stopping this slot.", file=sys.stderr)
+            return PROVIDER_UNAVAILABLE
+        error = str(terminal.get("error", "")).lower()
+        configuration_errors = ("invalid model", "conflicts with", "permission", "not available for this account",
+                                "not authenticated", "unauthenticated", "login", "log in")
+        if any(marker in error for marker in configuration_errors):
+            print("[provider] Antigravity configuration/authentication failure; stopping this slot.", file=sys.stderr)
+            return PROVIDER_UNAVAILABLE
+        return code if code > 0 else (128 - code if code < 0 else 1)
+    if code:
+        return code if code > 0 else 128 - code
+    print("[provider] Antigravity exited without a terminal result; stopping this slot.", file=sys.stderr)
+    return PROVIDER_UNAVAILABLE
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="action", required=True)
@@ -109,7 +168,7 @@ def main(argv=None) -> int:
     check.add_argument("--agents", nargs="+", default=DEFAULT_ROSTER.split())
     check.add_argument("--effort", default="high")
     run = sub.add_parser("run", help="Execute one headless agent session")
-    run.add_argument("--agent", default="codex:astra")
+    run.add_argument("--agent", default="codex:gpt-6-astra")
     run.add_argument("--effort", default="high")
     run.add_argument("--cwd", required=True)
     run.add_argument("--write-dir", action="append", default=[])
@@ -132,10 +191,12 @@ def main(argv=None) -> int:
             print(json.dumps({"agent": asdict(agent), "cwd": cwd, "argv": argv}, indent=2))
             return 0
         preflight([agent])
+        if agent.provider == "agy":
+            return run_agy(argv, cwd)
         os.chdir(cwd)
         os.execvp(agent.executable, argv)
     except (ValueError, OSError) as exc:
-        parser.exit(2, f"[provider] {exc}\n")
+        parser.exit(PROVIDER_UNAVAILABLE, f"[provider] {exc}\n")
     return 0
 
 

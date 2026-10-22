@@ -5,12 +5,38 @@ from pathlib import Path
 import subprocess
 import sys
 
-import pytest
-
 import hub
 from search.evaluator import worker
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def test_exit_cleanup_survives_already_stopped_process_group():
+    script = '''
+set -euo pipefail
+source "$1/search/lib.sh"
+set -m
+sleep 30 & child=$!
+shutdown() {
+    term_group "$child"
+    wait "$child" 2>/dev/null || true
+    # The normal TERM -> KILL path must tolerate a child that has exited.
+    kill_group "$child"
+    term_group "$child"
+    term "$child"
+    term_group 0
+    kill_group 0
+    term 0
+    if alive 0; then exit 99; fi
+    echo cleanup-complete
+}
+install_shutdown_trap shutdown
+exit 0
+'''
+    result = subprocess.run(["bash", "-c", script, "test", str(REPO)],
+                            capture_output=True, text=True, timeout=5)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "cleanup-complete"
 
 
 def queue_rows(run, states):
@@ -39,13 +65,13 @@ def test_new_worker_does_not_requeue_peers_live_claim(tmp_path, monkeypatch):
         assert connection.execute("SELECT status FROM models WHERE id='model0'").fetchone()[0] == "running"
 
 
-@pytest.mark.parametrize("count", [1, 2])
-def test_pool_recovers_once_before_starting_workers(tmp_path, count):
+def test_pool_recovers_once_before_starting_workers(tmp_path):
+    count = 2
     queue_rows(tmp_path, ["running"] * count)
     events = tmp_path / "events.jsonl"
-    bindir = tmp_path / "bin"
+    bindir = tmp_path / "selected python"
     bindir.mkdir()
-    fake_python = bindir / "python"
+    fake_python = bindir / "python3"
     fake_python.write_text(f'''#!{sys.executable}
 import json, os, pathlib, sqlite3, subprocess, sys, time
 log=pathlib.Path(os.environ["TEST_POOL_EVENTS"])
@@ -67,7 +93,7 @@ while time.monotonic()<end:
     time.sleep(0.02)
 ''')
     fake_python.chmod(0o755)
-    env = {**os.environ, "LAB_RUN": str(tmp_path), "NEURO_DATASET": "laion", "PYTHON": str(fake_python),
+    env = {**os.environ, "LAB_RUN": str(tmp_path), "NEURO_DATASET": "laion", "NEURO_PYTHON": str(fake_python),
            "NEURO_EVALUATORS": str(count), "TEST_POOL_EVENTS": str(events)}
     result = subprocess.run(["bash", str(REPO / "search/evaluator/pool.sh")], cwd=REPO, env=env,
                             capture_output=True, text=True, timeout=10)

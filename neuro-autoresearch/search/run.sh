@@ -17,13 +17,13 @@
 #   search/run.sh <laion|triplen> [--preflight] [--hours H] [--fleet N] [--epoch-mins M] [--effort E] [--gpu G] [--date YYYY-MM-DD]
 #   e.g.  search/run.sh laion --hours 12                 # LAION-fMRI, 12h, 10 proposers, steer every 1h
 #         search/run.sh laion --hours 8 --epoch-mins 15  # steer every 15 minutes
-#         search/run.sh laion --hours 12 --effort high   # ONE knob: thinking effort for ALL proposers + the conductor
+#         search/run.sh laion --hours 12 --effort high   # base effort; per-role/spec overrides take precedence
 #         search/run.sh triplen --hours 6 --gpu 1 --epoch-mins 0     # pin the run to GPU 1 (one dataset per card), conductor OFF
 set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 source "$REPO/search/lib.sh"
 use_project_python
+cd "$REPO" || { echo "[search] cannot cd to repo root" >&2; exit 1; }
 
 # Operator dials (evaluator count, agent models/effort, timeouts) live in ONE file; values there are
 # DEFAULTS, so a pre-set env var or a CLI flag below still wins. Exported here -> inherited by every
@@ -48,7 +48,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 DATASET="${DATASET:-laion}"; HOURS="${HOURS_OPT:-12}"; FLEET="${FLEET_OPT:-10}"; EPOCH="${EPOCH_OPT:-60}"
-# --effort is the ONE thinking knob (all proposers + conductor, via NEURO_EFFORT). --gpu pins the run
+# --effort sets the base effort (NEURO_EFFORT); role/spec overrides take precedence. --gpu pins the run
 # to one CUDA device (multi-GPU: a dataset per card); empty = current default GPU. Both: flag > env > default.
 EFFORT="${EFFORT_OPT:-${NEURO_EFFORT:-high}}"; GPU="${GPU_OPT:-${CUDA_VISIBLE_DEVICES:-}}"
 DATE="${DATE_OPT:-$(TZ=America/New_York date +%Y-%m-%d)}"   # run rolls over at ET midnight
@@ -97,8 +97,8 @@ export LAB_RUN="$RUN" NEURO_DATASET="$DATASET" NEURO_FLEET="$FLEET" NEURO_EPOCH_
 
 # --- DB consistency (delegated to the hub CLI; LAB_RUN targets this run) ------------------------
 # reconcile: reset any orphaned `running` row back to `queued` (startup + shutdown).
-reconcile() { local n; n="$(python hub.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
-log_summary() { echo "[search] $(python hub.py summary)"; }
+reconcile() { local n; n="$("$PY" hub.py requeue)"; [ "${n:-0}" -gt 0 ] && echo "[search] reconciled $n orphaned running -> queued"; return 0; }
+log_summary() { echo "[search] $("$PY" hub.py summary)"; }
 
 # Provider event logs retain usage in each CLI's native schema. No invented USD conversion:
 # these sessions may be subscription-funded and the CLIs do not expose a common price ledger.
@@ -152,9 +152,31 @@ start_evaluate
 CHECK=5
 while :; do
   now=$(date +%s); [ "$now" -ge "$deadline" ] && break
-  alive "$PROP_PID" || { kill_group "$PROP_PID"; wait "$PROP_PID" 2>/dev/null || true; echo "[search] proposer pool exited; restarting" >&2; start_propose; }
+  if ! alive "$PROP_PID"; then
+    kill_group "$PROP_PID"
+    status=0
+    wait "$PROP_PID" 2>/dev/null || status=$?
+    if [ "$status" -eq 78 ]; then
+      echo "[search] proposer pool stopped with terminal provider failures; stopping run without retrying" >&2
+      exit 78
+    fi
+    echo "[search] proposer pool exited (status $status); restarting" >&2
+    start_propose
+  fi
   alive "$EVAL_PID" || { kill_group "$EVAL_PID"; wait "$EVAL_PID" 2>/dev/null || true; echo "[search] evaluator exited; restarting" >&2; start_evaluate; }
-  [ "$USE_CONDUCT" -eq 1 ] && { alive "$CONDUCT_PID" || { kill_group "$CONDUCT_PID"; wait "$CONDUCT_PID" 2>/dev/null || true; echo "[search] conductor exited; restarting" >&2; start_conduct; }; }
+  if [ "$USE_CONDUCT" -eq 1 ] && ! alive "$CONDUCT_PID"; then
+    kill_group "$CONDUCT_PID"
+    status=0
+    wait "$CONDUCT_PID" 2>/dev/null || status=$?
+    if [ "$status" -eq 78 ]; then
+      USE_CONDUCT=0
+      CONDUCT_PID=0
+      echo "[search] conductor disabled after terminal provider failure; proposer/evaluator loops continue" >&2
+    else
+      echo "[search] conductor exited (status $status); restarting" >&2
+      start_conduct
+    fi
+  fi
   rem=$(( deadline - now )); s=$CHECK; [ "$rem" -lt "$s" ] && s="$rem"; [ "$s" -lt 1 ] && s=1
   sleep "$s"
 done

@@ -24,12 +24,13 @@ The database field test_corr is a compatibility alias for the RSA search reward,
 Final transfer evaluations (LAION-fMRI -> NSD and Triple-N -> TVSD) use encoding scores and are
 unavailable during search. Never run, request, or inspect final evaluation data or scores.
 Parameter budget: at most ${NEURO_MAX_PARAMS:-100000} fixed weights counted across all tensors.
-Access the shared search.db only through python hub.py from your proposer directory."
+Access the shared search.db only through \"\$NEURO_PYTHON\" hub.py from your proposer directory.
+NEURO_PYTHON is exported as the selected project interpreter; use it for all Python commands."
 PROMPT="${PREAMBLE}
 
 $(cat "$REPO/search/proposer/prompt.md")"
 export LAB_RUN="$RUN" LAB_PROPOSER="$PNAME" NEURO_DATASET="$DATASET" VANILLA_AUTORESEARCH="${VANILLA_AUTORESEARCH:-0}"
 echo "[proposer] $PNAME session start $(TZ=America/New_York date +%FT%T%Z) ($MODEL/$EFFORT)" >> "$LOG"
 # The run directory is writable for hub's queue/model snapshots. This is not an OS read-isolation boundary.
-exec python "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
+exec "$PY" "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
   --cwd "$SANDBOX" --write-dir "$RUN" <<< "$PROMPT" >> "$LOG" 2>&1

@@ -53,6 +53,16 @@ def load_nsd_pickle(name):
     return utils.load_pickle(os.path.join(utils.get_env_var("NSD_DATA_DIR"), name))
 
 
+def voxel_ncsnr_path(fmri_xr, subject: int) -> str:
+    """Official reliability volume selected by response metadata (zero-based subject)."""
+    resolution = fmri_xr.attrs.get("resolution", "1pt8mm")
+    preprocessing = fmri_xr.attrs.get("preprocessing", "fithrf_GLMdenoise_RR")
+    return os.path.join(
+        nsd_betas_dir(), "ppdata", f"subj{subject + 1:02d}",
+        f"func{resolution}", f"betas_{preprocessing}", "ncsnr.nii.gz",
+    )
+
+
 def load_voxel_ncsnr(fmri_xr, subject: int) -> np.ndarray:
     """Official NSD ncsnr of each voxel of an fMRI DataArray, read at its x/y/z coordinates."""
     missing_coordinates = [axis for axis in ("x", "y", "z") if axis not in fmri_xr.coords]
@@ -62,12 +72,7 @@ def load_voxel_ncsnr(fmri_xr, subject: int) -> np.ndarray:
             f"voxel coordinate(s) {missing_coordinates}. Rebuild nsd_data.pkl with "
             "voxel coordinates, or explicitly set ncsnr_threshold=null for a legacy run."
         )
-    resolution = fmri_xr.attrs.get("resolution", "1pt8mm")
-    preprocessing = fmri_xr.attrs.get("preprocessing", "fithrf_GLMdenoise_RR")
-    path = os.path.join(
-        nsd_betas_dir(), "ppdata", f"subj{subject + 1:02d}",
-        f"func{resolution}", f"betas_{preprocessing}", "ncsnr.nii.gz",
-    )
+    path = voxel_ncsnr_path(fmri_xr, subject)
     if not os.path.exists(path):
         raise FileNotFoundError(
             f"NSD ncsnr volume not found: {path}. Set NSD_BETAS_DIR to the "

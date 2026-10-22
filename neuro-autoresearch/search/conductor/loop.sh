@@ -25,9 +25,15 @@ while :; do
   echo "[conduct] epoch pass $(TZ=America/New_York date +%FT%T%Z)" >> "$LOG"
   # Keep writes inside this run. The fixed hub is invoked by its absolute path.
   PROMPT="$(cat "$REPO/search/conductor/prompt.md")"
-  HUB_COMMAND="python \"$REPO/hub.py\""
-  PROMPT="${PROMPT//python hub.py/$HUB_COMMAND}"
-  python "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
-    --cwd "$RUN" --write-dir "$RUN" <<< "$PROMPT" >> "$LOG" 2>&1 || true
+  HUB_TEMPLATE='"$NEURO_PYTHON" hub.py'
+  HUB_COMMAND="$(printf '\"$NEURO_PYTHON\" %q' "$REPO/hub.py")"
+  PROMPT="${PROMPT//"$HUB_TEMPLATE"/"$HUB_COMMAND"}"
+  status=0
+  "$PY" "$REPO/search/providers.py" run --agent "$MODEL" --effort "$EFFORT" \
+    --cwd "$RUN" --write-dir "$RUN" <<< "$PROMPT" >> "$LOG" 2>&1 || status=$?
+  if [ "$status" -eq 78 ]; then
+    echo "[conduct] terminal provider failure; inspect $LOG; stopping without retrying" >&2
+    exit 78
+  fi
   sleep "$secs"
 done

@@ -1,9 +1,9 @@
 # neuro-autoresearch
 
 Search for fixed, interpretable image representations using **RSA feedback**, then
-measure transfer to a different neural dataset using **encoding**. Codex with
-Astra and Antigravity (`agy`) with Argon 4 propose and revise `model.py`; a fixed
-harness computes their reward.
+measure transfer to a different neural dataset using **encoding**. GPT-6 Astra
+through Codex, Claude Opus 5.5 through Claude Code, and Gemini 4 Argon through
+Antigravity (`agy`) propose and revise `model.py`; a fixed harness computes their reward.
 
 | Track | Search feedback | Final evaluation |
 | --- | --- | --- |
@@ -62,12 +62,23 @@ pip install -e '.[dev]'
 ```
 
 The working checkout already has a `.venv` with runtime and test dependencies.
-Search shell scripts prefer `.venv/bin/python`; override with `NEURO_PYTHON`.
-The installed CLIs resolve `codex:astra` to `gpt-6-astra` and `agy:argon4` to
-`gemini-4-argon-high`. `search/config.env` holds the roster and role defaults;
-`NEURO_CODEX_MODEL` and `NEURO_AGY_MODEL` override exact IDs. Provider authentication
-must already be configured locally. Preflight checks availability without
-submitting model requests.
+Search shell scripts select Python in this order: `NEURO_PYTHON`, legacy `PYTHON`,
+`.venv/bin/python`, then `python` on `PATH`. Child processes and agent hub commands
+use that same executable.
+`search/run_fixed.sh` pins three proposer slots: `gpt-6-astra`,
+`claude-opus-5-5`, and `gemini-4-argon-medium`, each at medium effort. The
+conductor uses `gpt-6-astra` at xhigh; repair uses Astra at medium.
+`search/config.env` supplies defaults for the configurable `search/run.sh`.
+The fixed launcher uses exact IDs so model alias overrides cannot change its roster.
+
+All search agents use the requested permission-skipping flags: Codex uses
+`--dangerously-bypass-approvals-and-sandbox`; Claude Code and agy use
+`--dangerously-skip-permissions`. The fixed launcher selects existing machine authentication: it pins
+`AGY_ADC_AUTH=true` for agy and clears process-local Claude API-key, token and
+backend overrides so Claude Code uses its saved claude.ai Max login. Existing ADC
+credentials and quota project remain unchanged; no global authentication or
+settings are modified. Preflight checks availability without submitting model requests.
+See the [launcher runbook](docs/search-launcher.md) for commands and failure handling.
 
 Prepared data is reused in place; no dataset download or multi-gigabyte copy is
 needed. Defaults are the existing shared files:
@@ -87,17 +98,20 @@ The old `scripts/prepare_data` baked formats are retired for these vision tasks.
 ## Run
 
 ```bash
-# Validate Python, data paths, fixed cohorts, and both headless providers.
-search/run.sh laion --preflight
-search/run.sh triplen --preflight
+# Display the fixed roles and exact provider commands without sending prompts.
+search/run_fixed.sh --show-config
+
+# Validate Python, data paths, fixed cohorts, and all three providers.
+search/run_fixed.sh laion --preflight
+search/run_fixed.sh triplen --preflight
 
 # Manually evaluate the seed model on the complete search cohort.
 .venv/bin/python -m harness.run --dataset laion --stage search
 .venv/bin/python -m harness.run --dataset triplen --stage search
 
 # Launch autonomous search (these commands make actual model requests).
-search/run.sh laion --hours 12 --fleet 4 --gpu 0
-search/run.sh triplen --hours 12 --fleet 4 --gpu 0
+search/run_fixed.sh laion --hours 12 --gpu 0
+search/run_fixed.sh triplen --hours 12 --gpu 0
 
 # After search: freeze its RSA champion and evaluate the paired OOD dataset.
 .venv/bin/python -m experiments.evaluation.final --run runs/laion__2026-10-21
@@ -136,9 +150,10 @@ SHA256. Provider logs retain their native usage events; unknown monetary cost is
 stored as null rather than estimated from obsolete Copilot credits.
 
 The existing source/network guards and agent instructions support reward
-integrity; they are not a hostile-code security boundary. Provider workspace
-permissions restrict writes, but final-dataset read isolation is enforced by the
-protocol and scoring interfaces, not a separate OS account or data-access service.
+integrity; they are not a hostile-code security boundary. With permission skipping
+enabled, provider workspace paths do not enforce filesystem isolation. Final-dataset
+separation relies on the protocol, scoring interfaces and agent instructions;
+there is no separate OS account or data-access service.
 
 ## Layout and validation
 
@@ -146,13 +161,19 @@ protocol and scoring interfaces, not a separate OS account or data-access servic
 - `harness/vendor/looped/`: copied source loaders and metric kernels.
 - `harness/loaders/vision/looped.py`: source-to-model tensor adapter and provenance.
 - `harness/metrics.py`, `harness/reward.py`: validated scoring and aggregation.
-- `search/providers.py`: shared Codex/Antigravity execution adapter.
+- `search/providers.py`: shared Codex/Claude Code/Antigravity execution adapter.
 - `hub.py`, `search/`: queue, proposers, evaluators and optional conductor.
 - `experiments/evaluation/final.py`: frozen-model OOD encoding.
 
-Run `.venv/bin/python -m pytest -q`. Tests cover source metric agreement, tied
-ranks, training-only encoding selection, alignment, invalid rewards, cohort
-completeness, resume identity, provider commands and final/search separation.
+Run `.venv/bin/python -m pytest -q`. The small suite concentrates on numerical
+correctness, data alignment and leakage, invalid rewards, complete cohorts,
+resume/model identity, queue recovery, interpreter selection and final/search
+separation. RSA has an independent NumPy/SciPy reference. Provider tests use fake
+CLIs. On 2026-10-21, live checks of Astra medium/xhigh, Opus 5.5 medium,
+and Argon 4 medium each executed a shell marker with permission skipping enabled;
+agy reused the existing ADC configuration. These checks validate CLI execution,
+not a completed scientific search.
+Legacy baseline/schema tests and duplicate option/prompt checks are omitted.
 See [migration validation](docs/migration-validation.md) for checks and actual-data
 smoke results. Historical champions, schema readers and plotting utilities are retained under
 `runs/best/` and the `legacy_*` evaluation modules. Older HTML concept documents

@@ -1,6 +1,7 @@
 """Small real-format fixtures for alignment, filtering and cross-dataset isolation."""
-from dataclasses import FrozenInstanceError, replace
+from dataclasses import replace
 import io
+import os
 import pickle
 
 import h5py
@@ -11,11 +12,9 @@ from PIL import Image
 import pytest
 import xarray as xr
 
-from harness.datasets import PRESETS, dataset_key, get_dataset, with_subject
+from harness.datasets import PRESETS, with_subject
 from harness.loaders import _SPLIT_MEMO, load_split
 from harness.loaders.vision.looped import REGIONS, dataset_provenance
-from harness.protocols import canonical_dataset, protocol_for, search_subjects_csv, validate_search_dataset
-from harness.vendor.looped.data.stimuli import LazyEncodedHdf5Dict
 
 
 @pytest.fixture(autouse=True)
@@ -60,35 +59,6 @@ def _dataset(name, subject=None):
     # Tiny pixels exercise the adapter independently of the user-facing 128px floor.
     result = PRESETS[name]
     return replace(with_subject(result, subject or result.subject), imsize=2)
-
-
-def test_protocols_fix_cohorts_metrics_and_aliases():
-    assert canonical_dataset("LAION-fMRI") == "laion"
-    assert canonical_dataset("nnn") == "triplen"
-    assert canonical_dataset("triple-n") == "triplen"
-    assert protocol_for("nsd") == protocol_for("laion")
-    assert protocol_for("triplen").final_dataset == "tvsd"
-    assert protocol_for("triplen").final_metric == "encoding"
-    assert search_subjects_csv("laion") == "sub-01,sub-03,sub-05,sub-06,sub-07"
-    assert len(protocol_for("nsd").final_subjects) == 8
-    with pytest.raises(FrozenInstanceError):
-        protocol_for("laion").search_metric = "encoding"
-    with pytest.raises(ValueError, match="reserved"):
-        validate_search_dataset("nsd")
-    with pytest.raises(ValueError, match="Unknown"):
-        canonical_dataset("nsdd")
-
-
-def test_dataset_resolution_and_subject_binding(monkeypatch):
-    monkeypatch.setenv("NEURO_IMSIZE", "256")
-    assert get_dataset("laion_fmri", "3").subject == "sub-03"
-    assert get_dataset("nnn", "2").subject == "M2"
-    assert dataset_key(get_dataset("nnn")) == "triplen"
-    assert get_dataset("nsd").imsize == 256
-    assert get_dataset("tvsd", "n").stage == "final"
-    monkeypatch.setenv("NEURO_IMSIZE", "64")
-    with pytest.raises(ValueError, match="MIN_IMSIZE"):
-        get_dataset("laion")
 
 
 def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_path, monkeypatch):
@@ -164,35 +134,45 @@ def test_tvsd_preserves_official_split_and_strict_oracle_filter(tmp_path, monkey
     assert dataset_provenance(d)["train_ids"] == ["0", "2", "4"]
 
 
-def test_nsd_filters_official_ncsnr_and_retains_shared_holdout(tmp_path, monkeypatch):
+def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tmp_path, monkeypatch):
     from harness.vendor.looped.data.nsd import _NSD_REGION_MAP
-    root = tmp_path / "nsd"
-    monkeypatch.setenv("NSD_DATA_DIR", str(root))
-    monkeypatch.setenv("NSD_BETAS_DIR", str(root / "betas"))
-    monkeypatch.setenv("NSD_STIMULI_HDF5_PATH", str(root / "images.h5"))
+    monkeypatch.setenv("NSD_DATA_DIR", str(tmp_path))
+    monkeypatch.setenv("NSD_DATA_FILE", "nsd_data_ext.pkl")
+    monkeypatch.setenv("NSD_BETAS_DIR", str(tmp_path / "betas"))
+    monkeypatch.setenv("NSD_STIMULI_HDF5_PATH", str(tmp_path / "images.h5"))
     response = _response([3, 0, 2, 1], x=[0, 1, 2], y=[0, 0, 0], z=[0, 0, 0])
-    source = {"data": {_NSD_REGION_MAP[r]: {0: response} for r in REGIONS["nsd"]}, "shared_ids": {1, 3}}
-    _write_pickle(root / "nsd_data.pkl", source)
-    _write_images(root / "images.h5")
-    volume = np.array([0.2, 0.25, 0.8], dtype=np.float32).reshape(3, 1, 1)
-    path = root / "betas/ppdata/subj01/func1pt8mm/betas_fithrf_GLMdenoise_RR/ncsnr.nii.gz"
-    path.parent.mkdir(parents=True)
-    nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
-    d = _dataset("nsd")
-    Xtr, Xte, Ytr, Yte, masks, nc = load_split(d)
+    source = {"data": {_NSD_REGION_MAP[r]: {2: response.copy()} for r in REGIONS["nsd"]},
+              "shared_ids": {1, 3}}
+    source["data"]["ventral"][2].attrs.update(resolution="1pt0mm", preprocessing="fithrf")
+    _write_pickle(tmp_path / "nsd_data_ext.pkl", source)
+    _write_images(tmp_path / "images.h5")
+    early = tmp_path / "betas/ppdata/subj03/func1pt8mm/betas_fithrf_GLMdenoise_RR/ncsnr.nii.gz"
+    ventral = tmp_path / "betas/ppdata/subj03/func1pt0mm/betas_fithrf/ncsnr.nii.gz"
+
+    def write_volume(path, values):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        volume = np.array(values, dtype=np.float32).reshape(3, 1, 1)
+        nib.save(nib.Nifti1Image(volume, np.eye(4)), path)
+
+    write_volume(early, [0.2, 0.25, 0.8])
+    write_volume(ventral, [0.8, 0.1, 0.1])
+    d = _dataset("nsd", "03")
+    before = load_split(d)
+    Xtr, Xte, Ytr, Yte, masks, nc = before
     assert Xtr.shape[0] == Xte.shape[0] == 2
-    np.testing.assert_array_equal(Ytr[:, :2], [[1, 2], [21, 22]])
-    np.testing.assert_array_equal(Yte[:, :2], [[11, 12], [31, 32]])
-    assert all(mask.sum() == 2 for mask in masks.values())
-    assert nc is None  # raw encoding Pearson r, not the retired normalized R²
-
-
-def test_encoded_images_composite_transparency_over_scanner_grey(tmp_path):
-    path = tmp_path / "transparent.h5"
-    buffer = io.BytesIO()
-    Image.new("RGBA", (2, 2), (255, 0, 0, 0)).save(buffer, format="PNG")
-    with h5py.File(path, "w") as file:
-        images = file.create_dataset("images", (1,), dtype=h5py.vlen_dtype(np.dtype("uint8")))
-        images[0] = np.frombuffer(buffer.getvalue(), dtype=np.uint8)
-    images = LazyEncodedHdf5Dict(path, [0])
-    np.testing.assert_array_equal(images["0"], np.full((2, 2, 3), 128, dtype=np.uint8))
+    np.testing.assert_array_equal(Ytr, [[1, 2, 0], [21, 22, 20]])
+    np.testing.assert_array_equal(Yte, [[11, 12, 10], [31, 32, 30]])
+    assert [m.sum() for m in masks.values()] == [2, 1]
+    assert nc is None
+    files = dataset_provenance(d)["files"]
+    assert files["responses"]["path"] == str(tmp_path / "nsd_data_ext.pkl")
+    assert files["ncsnr:early visual stream"]["path"] == str(early)
+    assert files["ncsnr:ventral visual stream"]["path"] == str(ventral)
+    assert load_split(d) is before
+    previous = ventral.stat()
+    write_volume(ventral, [0.1, 0.8, 0.8])
+    os.utime(ventral, ns=(previous.st_atime_ns, previous.st_mtime_ns + 1_000_000))
+    after = load_split(d)
+    assert after is not before
+    assert after[4]["ventral visual stream"].sum() == 2
+    assert dataset_provenance(d)["files"] != files

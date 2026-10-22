@@ -22,11 +22,11 @@ case "$N" in ''|*[!0-9]*|0) echo "[evaluate] NEURO_EVALUATORS must be a positive
 # Recover once, before any worker can claim a model. A worker must never reset its
 # peers' live claims. run.sh terminates the previous pool's process group before restart.
 : "${LAB_RUN:?LAB_RUN must point at the run dir}"
-RECOVERED="$(python -c 'import hub; print(hub.requeue_orphans())')" || exit 2
+RECOVERED="$("$PY" -c 'import hub; print(hub.requeue_orphans())')" || exit 2
 [ "$RECOVERED" -eq 0 ] || echo "[evaluate] recovered $RECOVERED orphaned running model(s)"
 echo "[evaluate] $N concurrent DB-backed evaluator(s) (run=$LAB_RUN dataset=$DATASET)"
 if [ "$N" -eq 1 ]; then
-  exec python search/evaluator/worker.py --dataset "$DATASET"
+  exec "$PY" search/evaluator/worker.py --dataset "$DATASET"
 fi
 # Fan out N evaluators against the same queue; if any exits, terminate the rest so the wrapper
 # exits and run.sh restarts a clean set.
@@ -38,7 +38,7 @@ trap term INT TERM
 IFS=',' read -r -a CARDS <<< "${NEURO_EVAL_GPUS:-}"
 for i in $(seq 0 $((N - 1))); do
   pin=""; [ "${#CARDS[@]}" -gt 0 ] && pin="CUDA_VISIBLE_DEVICES=${CARDS[$((i % ${#CARDS[@]}))]}"
-  env $pin python search/evaluator/worker.py --dataset "$DATASET" & pids="$pids $!"
+  env $pin "$PY" search/evaluator/worker.py --dataset "$DATASET" & pids="$pids $!"
 done
 if help wait 2>/dev/null | grep -q '\-n'; then
   wait -n || true          # returns when the FIRST evaluator exits (status irrelevant)

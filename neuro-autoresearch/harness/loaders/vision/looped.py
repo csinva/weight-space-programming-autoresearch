@@ -59,9 +59,15 @@ def dataset_source_paths(d: Dataset) -> dict[str, str]:
     paths = {"responses": str(Path(data_dir) / filename),
              "stimuli": image_path}
     if name == "nsd":
-        from harness.vendor.looped.data.nsd import nsd_betas_dir
-        paths["ncsnr"] = str(Path(nsd_betas_dir()) / "ppdata" / f"subj{int(d.subject):02d}" /
-                             "func1pt8mm/betas_fithrf_GLMdenoise_RR/ncsnr.nii.gz")
+        from harness.vendor.looped.data.nsd import _NSD_REGION_MAP, voxel_ncsnr_path
+        source = utils.load_pickle(paths["responses"])
+        subject = int(d.subject) - 1
+        volumes = {region: voxel_ncsnr_path(source["data"][_NSD_REGION_MAP[region]][subject], subject)
+                   for region in REGIONS[name]}
+        if len(set(volumes.values())) == 1:
+            paths["ncsnr"] = next(iter(volumes.values()))
+        else:
+            paths.update({f"ncsnr:{region}": path for region, path in volumes.items()})
     return paths
 
 

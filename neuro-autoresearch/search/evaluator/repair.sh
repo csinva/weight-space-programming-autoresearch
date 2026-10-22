@@ -50,5 +50,5 @@ EVAL ERROR / TRACEBACK (tail):
 ${TRACE}
 EOF
 
-exec python "$REPO/search/providers.py" run --agent "$REPAIR_MODEL" --effort "$REPAIR_EFFORT" \
+exec "$PY" "$REPO/search/providers.py" run --agent "$REPAIR_MODEL" --effort "$REPAIR_EFFORT" \
   --cwd "$(dirname "$MODEL_FILE")" --write-dir "$(dirname "$MODEL_FILE")" <<< "$TASK"
