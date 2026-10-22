@@ -15,6 +15,7 @@ from __future__ import annotations
 import os
 
 from harness.datasets import Dataset
+from harness.protocols import VISION_DATASETS
 
 
 _SPLIT_MEMO: dict = {}
@@ -34,7 +35,7 @@ def load_split(d: Dataset):
     SAME split, so the load is paid ONCE, not once per model. The split is treated read-only
     downstream (the reward copies/clones X per eval), so sharing it across models is safe."""
     source_key = d
-    if d.loader in ("nsd", "laion", "triplen", "tvsd", "nnn"):
+    if d.loader in VISION_DATASETS:
         from harness.loaders.vision.looped import dataset_cache_key
         source_key = dataset_cache_key(d)
     key = (source_key, tuple(os.environ.get(k) for k in _SPLIT_ENV_KEYS))
@@ -53,7 +54,7 @@ def _dispatch_split(d: Dataset):
             raise ValueError(f"{d.study}: loader='timeline' requires a timeline=Timeline(...) block")
         from harness.loaders.timeline import load_timeline
         return (*load_timeline(d), {}, None)       # timeline studies (iEEG): no ROI map / ceiling
-    if d.loader in ("nsd", "laion", "triplen", "tvsd", "nnn"):
+    if d.loader in VISION_DATASETS:
         from harness.loaders.vision.looped import load_looped
         return load_looped(d)
     if d.loader == "huth":

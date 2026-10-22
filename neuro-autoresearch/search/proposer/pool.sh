@@ -53,9 +53,8 @@ while ! past_deadline "$DEADLINE"; do
     [ "${DISABLED[$i]:-0}" = 1 ] && continue
     if ! alive "${PIDS[$i]:-0}"; then
       # The CLI is gone; its remaining tools cannot belong to a new session.
-      kill_group "${PIDS[$i]:-0}"
       status=0
-      wait "${PIDS[$i]:-0}" 2>/dev/null || status=$?
+      reap_group "${PIDS[$i]:-0}" || status=$?
       if [ "$status" -eq 78 ]; then
         DISABLED[$i]=1
         PIDS[$i]=0

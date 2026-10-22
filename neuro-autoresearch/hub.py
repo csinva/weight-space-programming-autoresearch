@@ -1,50 +1,19 @@
 #!/usr/bin/env python3
-"""``hub`` -- the ONE API every proposer and the evaluator use to talk to a search run.
+"""Search queue, model archive, and feedback API.
 
-A *run* is a single open-ended search, isolated in its own directory::
+Each run contains ``search.db``, immutable ``models/<id>.py`` snapshots, and
+``proposers/pNN/`` workspaces. Rows move through queued -> running -> ok/error.
+``test_corr`` stores RSA search reward; final encoding never enters this queue.
 
-    runs/<dataset>__<date>/
-        search.db          # the shared brain: queue + full history + scores (this module owns it)
-        models/<id>.py     # shared, IMMUTABLE archive -- one file per model ever tried
-        proposers/pNN/     # one sandbox per proposer (its own mutable model.py + this hub symlink)
-        eval/              # the GPU evaluator's workspace; keeps <id>.log only for models that FAILED to eval
+Proposers submit with ``propose-model`` and await their result with
+``wait-for-score``. They can inspect their own ``my-best``, anonymized
+``random-models``, or one other island's ideas via ``peek-island``. The optional
+conductor sees the full scoreboard and can steer or reset individual islands.
 
-There is NO conductor, NO notebook, and NO wave barrier. ``search.db`` (one ``models`` row per
-model) is the only shared memory and doubles as the queue via a ``status`` flag::
-
-    queued   a proposer wrote the row; its model.py is archived at ``path``, awaiting evaluation
-      -> running   the single GPU evaluator claimed it (one model at a time)
-        -> ok       scored cleanly; has a ``test_corr`` (the reward)
-        -> error    raised / bad shape / timeout (even after repair)
-
-**Self-paced, not synchronised.** A proposer pushes ONE model, blocks on *its own* result
-(``wait_for_result``), then immediately reads the current DB and proposes again -- no waiting for
-siblings. That alone caps the queue at ~one in-flight per proposer and gives each agent the
-fastest feedback on whether its last idea worked.
-
-The proposer half is pure sqlite (no torch / no harness import), so ``import hub`` is light.
-Scoring (``score`` / the evaluator path) lazy-imports the FIXED harness and runs the model in a
-subprocess for isolation.
-
-Which run this process targets is the dir in ``$LAB_RUN`` (else: walk up from cwd to the nearest
-``search.db``). ``$LAB_PROPOSER`` (e.g. ``p03``) tags rows with who wrote them.
-
-CLI (what a headless agent calls without writing Python)::
-
-    python hub.py propose-model <model_file> --idea "..."  # -> prints the new id
-    python hub.py wait-for-score <id>                       # block; prints the scored row as JSON
-    python hub.py top-models [-n 5]                         # CONDUCTOR/launcher only -- global scoreboard (blocked for proposers)
-    python hub.py random-models [-n 5] [--seed S]           # random prior models (scores + ideas)
-    python hub.py my-best [--no-code]                       # YOUR island's best model (+source, +your own score) to build on
-    python hub.py peek-island                               # best of ONE random OTHER island: idea + experiment_notes, NO source, NO score
-    python hub.py query-db  "SELECT ..."                   # read-only arbitrary SQL -> JSON (score/source columns hidden from proposers)
-    python hub.py reset-island <pNN> [--role "..."]        # CONDUCTOR only: reset an island to the baseline + re-explore (non-destructive)
-    python hub.py summary                                   # launcher: one-line tally + champion
-    python hub.py requeue                                   # evaluator startup crash recovery
-    python hub.py migrate                                   # bring an old search.db to the current schema
-
-The evaluator and setup use the Python API directly (``init`` / ``get_next_model`` / ``record`` /
-``score``); those are not exposed as CLI verbs.
+``LAB_RUN`` selects the run, otherwise the nearest ancestor with ``search.db``
+is used. ``LAB_PROPOSER`` identifies an island and restricts score visibility.
+Run ``hub.py --help`` for commands. Numerical dependencies load only when scoring
+or checking model equivalence; queue operations remain lightweight.
 """
 from __future__ import annotations
 
@@ -62,15 +31,9 @@ import sys
 import time
 from datetime import datetime, timezone
 
-# --------------------------------------------------------------------------- schema
-# One row per model; it is BOTH the full history AND the live queue. No ROI, no per-region
-# corr_* columns, no wave/iter -- the reward is a single dataset-level ``test_corr``.
-# Two proposer-owned complexity fields travel with each model: ``n_params`` (the model's declared
-# count of hard-coded / random-but-fixed weights) and ``model_loc`` (lines of code defining the
-# model -- a proxy for how elaborate it is). Both are captured from the proposed model.py at propose
-# time; ``n_params`` is also refreshed from the live model attribute when the evaluator scores it.
-# ``experiment_notes`` is a JSON blob {"description", "insight"} the proposer authors as model.py
-# attributes; the evaluator captures it at score time and writes it back with the correlations.
+# Schema: one row per archived model, including queue status and score provenance.
+# n_params is captured statically on submission and refreshed during evaluation.
+# experiment_notes stores the model's description/insight JSON.
 NUM = ("test_corr", "train_corr", "n_params", "seconds")
 COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
         "test_corr", "train_corr", "roi_corr", "n_params", "model_loc",
@@ -89,15 +52,12 @@ _PROPOSER_HIDDEN = ("test_corr", "train_corr", "roi_corr", "path", "subject_scor
 
 
 def _is_proposer() -> bool:
-    """True when running inside a sandboxed proposer island (``LAB_PROPOSER`` set by ``proposer.sh``).
-    The conductor (``search/conductor/loop.sh``) and manual/launcher paths leave it unset, so they keep full
-    score visibility."""
+    """Whether this process belongs to an island (LAB_PROPOSER is set)."""
     return bool(os.environ.get("LAB_PROPOSER"))
 
 
 def _vanilla_guard(cmd: str) -> None:
-    """``VANILLA_AUTORESEARCH=1``: close every cross-island channel so each proposer sees ONLY its own
-    lineage -- the N-independent-loops baseline (conductor also off). Same boundary as the blinding."""
+    """Disable cross-island learning for the independent-loops baseline."""
     if os.environ.get("VANILLA_AUTORESEARCH") == "1" and _is_proposer():
         raise PermissionError(f"{cmd} is OFF in vanilla-autoresearch mode (independent-loops baseline): evolve your OWN `my-best`.")
 _POLL = float(os.environ.get("LAB_POLL", "5"))  # seconds between wait/queue polls
@@ -131,8 +91,7 @@ def models_dir(run: str | None = None) -> str:
 
 # --------------------------------------------------------------------------- connection / schema
 def connect(run: str | None = None) -> sqlite3.Connection:
-    """A WAL-mode connection with a generous busy timeout, so the 10 proposers' inserts and the
-    evaluator's updates coexist without ``database is locked`` errors."""
+    """Open a WAL connection with a busy timeout for concurrent queue workers."""
     con = sqlite3.connect(db_path(run), timeout=30)
     con.execute("PRAGMA journal_mode=WAL")
     con.execute("PRAGMA busy_timeout=30000")
@@ -148,12 +107,8 @@ def _coltype(c: str) -> str:
 
 def _count_loc(text: str) -> int:
     """Lines of code in a model source: non-blank, non-comment lines."""
-    n = 0
-    for line in text.splitlines():
-        s = line.strip()
-        if s and not s.startswith("#"):
-            n += 1
-    return n
+    lines = (line.strip() for line in text.splitlines())
+    return sum(bool(line) and not line.startswith("#") for line in lines)
 
 
 _ATTR_RE = {
@@ -163,15 +118,10 @@ _ATTR_RE = {
 
 
 def model_complexity(path: str) -> dict:
-    """The proposer-owned complexity fields for a proposed model, read from its source:
+    """Read declared n_params/model_loc without importing candidate code.
 
-    - ``n_params``  -- the model's declared ``n_params = <int>`` class attribute (the agent's honest
-      count of hard-coded / random-but-fixed weights), or ``None`` if not a plain literal (the
-      evaluator will still capture the live ``model.n_params`` when it scores it);
-    - ``model_loc`` -- the model's declared ``model_loc = <int>`` if present, else the objective
-      line count of the source (so the field is always populated).
-
-    This is a static read (no import / no torch), keeping ``propose`` light."""
+    Fall back to a source line count for model_loc; the evaluator measures
+    materialized parameters after forward."""
     try:
         with open(path, encoding="utf-8", errors="replace") as f:
             text = f.read()
@@ -182,8 +132,9 @@ def model_complexity(path: str) -> dict:
         m = _ATTR_RE[name].search(text)
         return int(m.group(1).replace("_", "")) if m else None
 
+    model_loc = declared("model_loc")
     return {"n_params": declared("n_params"),
-            "model_loc": declared("model_loc") if declared("model_loc") is not None else _count_loc(text)}
+            "model_loc": model_loc if model_loc is not None else _count_loc(text)}
 
 
 def _migrate(con: sqlite3.Connection) -> None:
@@ -248,7 +199,7 @@ def _num(v):
         f = float(v)
     except (TypeError, ValueError):
         return None
-    return f if f == f and abs(f) != float("inf") else None  # drop NaN/inf
+    return f if math.isfinite(f) else None
 
 
 def _rows(con, sql, params=()):
@@ -284,11 +235,10 @@ def newid(run: str | None = None) -> str:
 # --------------------------------------------------------------------------- proposer: write + sync
 def propose(model_file: str, idea: str = "",
             proposer: str | None = None, run: str | None = None) -> str:
-    """Register a new model: snapshot ``model_file`` into ``models/<id>.py`` (immutable) + insert one
-    ``queued`` row; return the id. A proposer's only DB write -- it can edit its working ``model.py``
-    for the next attempt the instant this returns (the snapshot is what gets scored). The
-    ``experiment_notes`` (description + insight) are NOT written here: they are authored as
-    ``model.py`` attributes and captured by the evaluator at score time."""
+    """Archive a candidate and enqueue its RSA evaluation; return its ID.
+
+    Check source, declared size, run contract, and reset acknowledgement first.
+    The evaluator scores the snapshot and captures live complexity and notes."""
     run = _ensure(run)
     contract = search_contract(run, os.environ.get("NEURO_DATASET"))
     if not os.path.exists(model_file):
@@ -346,9 +296,9 @@ def propose(model_file: str, idea: str = "",
 
 def wait_for_result(mid: str, poll: float = _POLL, timeout: float | None = None,
                     run: str | None = None) -> dict:
-    """BLOCK until model ``mid`` is scored (status ``ok``/``error``); return its row. The proposer's
-    self-pacing primitive -- waits only for ITS OWN model, never the pool. Raises ``KeyError`` if the
-    id is unknown, ``TimeoutError`` if ``timeout`` elapses first."""
+    """Wait for this model to reach ok/error and return its row.
+
+    Raise KeyError for an unknown ID or TimeoutError if the deadline expires."""
     run = _ensure(run)
     deadline = None if timeout is None else time.time() + timeout
     while True:
@@ -366,28 +316,26 @@ def wait_for_result(mid: str, poll: float = _POLL, timeout: float | None = None,
 
 # --------------------------------------------------------------------------- proposer: read / learn
 def champions(k: int = 5, run: str | None = None) -> list[dict]:
-    """The pool's public scoreboard: the ``ok`` models with the highest reward, best first, as
-    scores + ideas (NO source). Source is deliberately withheld -- a proposer builds on its OWN
-    island (``get_best_model``) or one random other island (``get_best_model_from_other_island``),
-    never a copy of the global champion."""
+    """Return the highest-scoring successful rows, including archive paths.
+
+    This trusted Python API is exposed to conductors through top-models;
+    proposer access is restricted by the CLI."""
     with connect(_ensure(run)) as con:
         return _rows(con, f"SELECT * FROM models WHERE {_OK} "
                           "ORDER BY test_corr DESC LIMIT ?", (int(k),))
 
 
 def champion(run: str | None = None) -> dict | None:
-    """The single highest-reward ``ok`` model in the run (WITH its ``path``) -- the simplification
-    target. ``None`` if nothing has scored yet. Launcher/tooling use (e.g. ``scripts/simplify``);
-    like ``top-models`` it exposes the global best + source, so it is refused for a proposer."""
+    """Return the best scored row, or None. Used to select a frozen model."""
     rows = champions(1, run)
     return rows[0] if rows else None
 
 
 def sample(k: int = 5, seed=None, run: str | None = None) -> list[dict]:
-    """A random draw of ``ok`` models (idea + notes + scores) -- a diversity spark. Returns scores
-    (``test_corr``/``train_corr``/``roi_corr``) to proposers too, so they can see which prior ideas
-    worked; a proposer only loses the ``id``/``proposer`` code POINTERS (archive + sibling sandbox).
-    OFF entirely under ``VANILLA_AUTORESEARCH=1``, so only the full system is affected."""
+    """Sample scored ideas and notes, hiding IDs and proposer names from islands.
+
+    Unlike query-db, this channel exposes anonymized scores. It is disabled
+    for proposers in vanilla mode. The seed argument is retained for compatibility."""
     _vanilla_guard("random-models")
     with connect(_ensure(run)) as con:
         rows = _rows(con, "SELECT id, idea, proposer, status, test_corr, train_corr, roi_corr, experiment_notes "
@@ -405,26 +353,17 @@ def _sandbox_file(proposer: str, run: str, name: str) -> str:
 
 
 def _island_reset_at(proposer: str, run: str) -> str | None:
-    """The marker of the island's last conductor reset, or ``None``. Scored rows created at or before
-    this are excluded from the island's ``my-best`` -- so a reset island genuinely re-explores from
-    the baseline floor instead of reloading its old (converged) lineage. The same marker is the
-    handshake token: ``my-best`` records it (``reset_seen``) and ``propose`` refuses a snapshot taken
-    before a reset that landed mid-turn (see :func:`propose`)."""
+    """Read the reset marker used to exclude old lineage and reject stale proposals."""
     if not proposer:
         return None
     return _read_file(_sandbox_file(proposer, run, "reset_at"), strip=True) or None
 
 
 def get_best_model(with_code: bool = True, run: str | None = None) -> dict | None:
-    """The CALLING proposer's OWN island (``$LAB_PROPOSER``) best ``ok`` model -- the thing to build
-    on -- with its source unless ``with_code=False``. Each proposer is its own ISLAND: this never
-    returns another proposer's work, so backbones don't all collapse onto one global champion.
-    ``None`` if your island has no scored model yet (then just evolve your current ``model.py``).
+    """Return this island's best model since its last reset, optionally with code.
 
-    Honors a conductor RESET: rows at/before the island's ``reset_at`` marker are excluded, so a
-    freshly reset island sees ``None`` and re-explores from the baseline ``model.py`` floor. Calling
-    this also records the reset epoch you are syncing to (``reset_seen``), which ``propose`` checks to
-    reject a stale snapshot if a reset lands mid-turn."""
+    Acknowledge the current reset marker so propose can reject a model built
+    across a concurrent reset. Return None until the island scores a new model."""
     proposer = os.environ.get("LAB_PROPOSER", "")
     run = _ensure(run)
     reset_at = _island_reset_at(proposer, run)
@@ -446,12 +385,7 @@ def get_best_model(with_code: bool = True, run: str | None = None) -> dict | Non
 
 
 def get_best_model_from_other_island(run: str | None = None) -> dict | None:
-    """Cross-pollination: the best ``ok`` model of ONE RANDOMLY chosen OTHER proposer (island), as
-    its ``idea`` + ``experiment_notes`` (description + insight) -- NO source code and NO scores. You
-    must RE-IMPLEMENT the concept, not clone a file, and you are not told how well it scored: that is
-    what keeps backbones diverse and stops every island chasing the same number. You do NOT get to aim
-    it -- the island is auto-picked at random, so it is never just the global champion. ``None`` if no
-    other island has scored yet."""
+    """Return the best idea/notes from one random other island, without scores or code."""
     _vanilla_guard("peek-island")
     proposer = os.environ.get("LAB_PROPOSER", "")
     with connect(_ensure(run)) as con:
@@ -469,17 +403,10 @@ def get_best_model_from_other_island(run: str | None = None) -> dict | None:
 
 
 def reset_island(proposer: str, role: str | None = None, run: str | None = None) -> dict:
-    """CONDUCTOR power: hard-reset an island so it RE-EXPLORES its role from scratch.
+    """Restore an island's baseline, clear scratch, and optionally set its direction.
 
-    Atomically: (1) overwrites ``proposers/<pNN>/model.py`` with the random-projection BASELINE (the
-    fresh floor), (2) writes a ``reset_at`` marker so the island's ``my-best`` ignores its old
-    (converged) lineage and returns ``None`` until it scores anew, (3) CLEARS the island's ``scratch/``
-    notes so the proposer can't re-derive its retired backbone from its own saved analysis, and
-    (4) sets ``direction.txt`` to ``role`` if given. NON-DESTRUCTIVE to the science: archived rows +
-    the global champion are untouched -- only the island's WORKING lineage + scratch are cleared -- so
-    resetting any island (even the champion's) never loses recorded science or the best result. Reset
-    is to the BASELINE, never a clone of another island, so the fleet regains genuine diversity.
-    Conductor/launcher only (refused for a proposer)."""
+    Mark its previous lineage retired without changing archived models or
+    scores. Only a conductor or operator may reset an island."""
     if _is_proposer():
         raise PermissionError("reset-island is a CONDUCTOR power; a proposer cannot reset islands.")
     run = _ensure(run)
@@ -504,13 +431,10 @@ def reset_island(proposer: str, role: str | None = None, run: str | None = None)
 
 
 def query(sql: str, params=(), run: str | None = None) -> list[dict]:
-    """Read-only arbitrary SQL over ``search.db`` -- the escape hatch for any custom view an agent
-    wants (it can build its own helpers in its sandbox on top of this). Rejects non-SELECT SQL.
+    """Run a SELECT/WITH query under proposer score-visibility rules.
 
-    For a PROPOSER (``LAB_PROPOSER`` set) the global scoreboard is hidden: SQL referencing another
-    island's score / source columns (``test_corr``/``train_corr``/``roi_corr``/``path``) is rejected,
-    and those keys are stripped from results so a ``SELECT *`` can't surface them either. The
-    conductor/launcher (no ``LAB_PROPOSER``) get unrestricted access."""
+    Proposers cannot name hidden score/source columns; those columns are
+    also removed from SELECT * results. Conductors see the complete rows."""
     if sql.lstrip().split(None, 1)[0].lower() not in ("select", "with"):
         raise ValueError("query() is read-only: use a SELECT/WITH statement")
     proposer = _is_proposer()
@@ -531,8 +455,7 @@ def query(sql: str, params=(), run: str | None = None) -> list[dict]:
 
 # --------------------------------------------------------------------------- evaluator: claim / record
 def get_next_model(run: str | None = None) -> dict | None:
-    """Atomically claim the oldest queued model (``queued -> running``) in ONE statement; return
-    ``{id, path, dataset, ...}`` or ``None`` when the queue is empty. One active evaluator only."""
+    """Atomically claim the oldest queued model; return None if the queue is empty."""
     with connect(_ensure(run)) as con:
         r = con.execute(
             "UPDATE models SET status='running' "
@@ -543,9 +466,9 @@ def get_next_model(run: str | None = None) -> dict | None:
 
 def record(mid: str, scores: dict | None = None, status: str = "ok",
            run: str | None = None) -> str:
-    """Write a model's result back: ``running -> ok|error``, filling the numeric score columns
-    present in ``scores``, plus the ``experiment_notes`` JSON the proposer authored in model.py
-    (captured by the evaluator at score time). ``id``/``idea``/``path``/... are untouched."""
+    """Validate and persist evaluation feedback without changing model identity.
+
+    Only finite, same-dataset, full-cohort RSA results can become search rewards."""
     st = "ok" if str(status).strip().lower().startswith("ok") else "error"
     scores = scores or {}
     run = _ensure(run)
@@ -574,30 +497,24 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
                 or scores.get("source_revision") != SOURCE_REVISION or not mean_ok):
             st = "error"
             scores = {"status": "error: incompatible evaluation result; expected same-dataset full-cohort RSA"}
-    cols = [c for c in NUM if scores.get(c) not in (None, "")]
-    vals = [_num(scores[c]) for c in cols]
-    if scores.get("roi_corr"):                    # TEXT json blob, only when the breakdown is non-empty
-        cols.append("roi_corr")
-        vals.append(json.dumps(scores["roi_corr"]))
-    if scores.get("experiment_notes"):            # TEXT json blob {"description","insight"} from model.py
-        cols.append("experiment_notes")
-        vals.append(scores["experiment_notes"])
+    updates = {c: _num(scores[c]) for c in NUM if scores.get(c) not in (None, "")}
+    if scores.get("roi_corr"):
+        updates["roi_corr"] = json.dumps(scores["roi_corr"])
+    if scores.get("experiment_notes"):
+        updates["experiment_notes"] = scores["experiment_notes"]
     if scores.get("subject_scores"):
-        cols.append("subject_scores")
-        vals.append(json.dumps(scores["subject_scores"], allow_nan=False))
+        updates["subject_scores"] = json.dumps(scores["subject_scores"], allow_nan=False)
     metadata = {k: scores[k] for k in (
         "dataset", "metric", "stage", "protocol_version", "aggregation", "subjects", "search_image_policy",
         "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "status") if k in scores}
-    cols.append("evaluation_metadata")
-    vals.append(json.dumps(metadata, allow_nan=False))
+    updates["evaluation_metadata"] = json.dumps(metadata, allow_nan=False)
     if queued["path"] and os.path.isfile(queued["path"]):
-        cols.append("model_sha256")
         with open(queued["path"], "rb") as source:
-            vals.append(hashlib.sha256(source.read()).hexdigest())
-    assignments = [f"{c}=?" for c in cols] + ["status=?"]
-    vals = vals + [st, mid]
+            updates["model_sha256"] = hashlib.sha256(source.read()).hexdigest()
+    updates["status"] = st
+    assignments = ", ".join(f"{column}=?" for column in updates)
     with connect(run) as con:
-        con.execute(f"UPDATE models SET {', '.join(assignments)} WHERE id=?", vals)
+        con.execute(f"UPDATE models SET {assignments} WHERE id=?", [*updates.values(), mid])
     return st
 
 
@@ -611,10 +528,7 @@ def requeue_orphans(run: str | None = None) -> int:
 
 
 def migrate(run: str | None = None) -> int:
-    """Bring an older ``search.db`` up to the current schema: add missing columns, then BACKFILL
-    the proposer-owned complexity fields (``model_loc`` always; ``n_params`` where the archived
-    model.py declares one) for rows that predate them. Returns the number of rows touched. Safe to
-    re-run (only fills rows still missing the value)."""
+    """Upgrade the schema and backfill missing source complexity; return rows updated."""
     run = _ensure(run)
     with connect(run) as con:
         _migrate(con)
@@ -747,8 +661,7 @@ def _print(obj):
 
 
 def _top_models_cli(a):
-    """``top-models`` is for the conductor/launcher only. A proposer calling it is refused -- the
-    global scoreboard is hidden so islands diverge instead of all converging on one champion."""
+    """Expose the global scoreboard to conductors/operators only."""
     if _is_proposer():
         raise ValueError(
             "top-models is unavailable to proposers (the global scoreboard is hidden so islands stay "
@@ -758,8 +671,7 @@ def _top_models_cli(a):
 
 
 def _champion_cli(a):
-    """``champion`` is for simplification tooling, not proposers -- it returns the global best model
-    WITH its source path, the same reason ``top-models`` is hidden from an island."""
+    """Expose the global champion and source path to tooling, never proposers."""
     if _is_proposer():
         raise ValueError(
             "champion is unavailable to proposers (the global scoreboard is hidden so islands stay "
@@ -769,8 +681,7 @@ def _champion_cli(a):
 
 # --------------------------------------------------------------------------- simplify: output equivalence
 def _load_model_instance(model_file: str):
-    """Import ``model_file`` as a throwaway module and return its ``MODEL`` instance. Used by the
-    behavior-preserving ``simplify`` check to run a candidate's forward pass directly (no readout)."""
+    """Load a candidate MODEL for a direct activation-equivalence check."""
     import importlib.util
     spec = importlib.util.spec_from_file_location("_eqmodel", model_file)
     mod = importlib.util.module_from_spec(spec)
@@ -779,10 +690,7 @@ def _load_model_instance(model_file: str):
 
 
 def _synthetic_batch(spec: dict):
-    """Build ONE fixed synthetic stimulus batch ``(batch, *stim_shape)`` from an ``input_spec`` (shape,
-    dtype, value range) captured once from the real split. Deterministic (fixed seed) so every call
-    -- reference and candidate -- sees identical inputs; values are random but dtype/shape/range match
-    the real stimulus, so a refactor that changes the computation shows up as a mismatch."""
+    """Generate a reproducible batch with the captured stimulus shape, dtype, and range."""
     import numpy as np
     import torch
     g = torch.Generator().manual_seed(int(spec.get("seed", 0)))
@@ -797,11 +705,10 @@ def _synthetic_batch(spec: dict):
 
 def check_equivalence(candidate_file: str, reference_file: str, spec_file: str,
                       rtol: float = 1e-4, atol: float = 1e-6) -> dict:
-    """Behavior-preserving check for ``simplify``: run the CANDIDATE and the frozen REFERENCE model on
-    the SAME fixed synthetic stimulus batch and report whether their activations are numerically equal
-    (``torch.allclose(rtol, atol)``). No ridge readout, no dataset load, no GPU needed -- so it returns
-    in well under a second, giving the simplifier many fast iterations. Returns
-    ``{equivalent, max_abs_diff, max_rel_diff, ref_shape, cand_shape, rtol, atol}`` or ``{error}``."""
+    """Compare candidate/reference activations on a fixed synthetic batch.
+
+    Return numerical differences and an equivalence flag, or a captured error.
+    This checks the sampled inputs; it is not a proof for every possible input."""
     import json as _json
     import torch
     try:

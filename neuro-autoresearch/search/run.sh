@@ -153,9 +153,8 @@ CHECK=5
 while :; do
   now=$(date +%s); [ "$now" -ge "$deadline" ] && break
   if ! alive "$PROP_PID"; then
-    kill_group "$PROP_PID"
     status=0
-    wait "$PROP_PID" 2>/dev/null || status=$?
+    reap_group "$PROP_PID" || status=$?
     if [ "$status" -eq 78 ]; then
       echo "[search] proposer pool stopped with terminal provider failures; stopping run without retrying" >&2
       exit 78
@@ -163,11 +162,10 @@ while :; do
     echo "[search] proposer pool exited (status $status); restarting" >&2
     start_propose
   fi
-  alive "$EVAL_PID" || { kill_group "$EVAL_PID"; wait "$EVAL_PID" 2>/dev/null || true; echo "[search] evaluator exited; restarting" >&2; start_evaluate; }
+  alive "$EVAL_PID" || { reap_group "$EVAL_PID" || true; echo "[search] evaluator exited; restarting" >&2; start_evaluate; }
   if [ "$USE_CONDUCT" -eq 1 ] && ! alive "$CONDUCT_PID"; then
-    kill_group "$CONDUCT_PID"
     status=0
-    wait "$CONDUCT_PID" 2>/dev/null || status=$?
+    reap_group "$CONDUCT_PID" || status=$?
     if [ "$status" -eq 78 ]; then
       USE_CONDUCT=0
       CONDUCT_PID=0

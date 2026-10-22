@@ -60,18 +60,29 @@ def resolve(spec: str, effort: str = "high") -> Agent:
     return Agent(provider, model, effort, executable)
 
 
+def _options(agent: Agent, cwd: str) -> dict[str, str | None]:
+    """Headless options shared by command construction and capability checks."""
+    if agent.provider == "codex":
+        return {"--model": agent.model,
+                "--config": f'model_reasoning_effort="{agent.effort}"',
+                "--dangerously-bypass-approvals-and-sandbox": None,
+                "--cd": cwd, "--skip-git-repo-check": None, "--json": None}
+    options = {"--model": agent.model, "--effort": agent.effort,
+               "--dangerously-skip-permissions": None, "--output-format": "stream-json"}
+    if agent.provider == "claude":
+        options["--verbose"] = None
+    return options
+
+
 def command(agent: Agent, cwd: str, prompt: str, write_dirs: list[str] | None = None) -> list[str]:
     """Construct argv without a shell; prompt text is never evaluated by the launcher."""
+    argv = [agent.executable]
     if agent.provider == "codex":
-        argv = [agent.executable, "exec", "--model", agent.model,
-                "--config", f'model_reasoning_effort="{agent.effort}"',
-                "--dangerously-bypass-approvals-and-sandbox", "--cd", cwd,
-                "--skip-git-repo-check", "--json"]
-    else:
-        argv = [agent.executable, "--model", agent.model, "--effort", agent.effort,
-                "--dangerously-skip-permissions", "--output-format", "stream-json"]
-        if agent.provider == "claude":
-            argv.append("--verbose")
+        argv.append("exec")
+    for flag, value in _options(agent, cwd).items():
+        argv.append(flag)
+        if value is not None:
+            argv.append(value)
     for directory in write_dirs or []:
         argv.extend(["--add-dir", directory])
     argv.extend([prompt] if agent.provider == "codex" else ["--print", prompt])
@@ -99,12 +110,9 @@ def preflight(agents: list[Agent]) -> list[dict]:
             args = [agent.executable, "exec", "--help"] if agent.provider == "codex" else [agent.executable, "--help"]
             checked[agent.executable] = _read_cli(args)
         help_text = checked[agent.executable]
-        required = ("--model", "--add-dir")
-        required += (("--cd", "--json", "--config", "--skip-git-repo-check",
-                      "--dangerously-bypass-approvals-and-sandbox") if agent.provider == "codex" else
-                     ("--print", "--effort", "--output-format", "--dangerously-skip-permissions"))
-        if agent.provider == "claude":
-            required += ("--verbose",)
+        required = [*_options(agent, ""), "--add-dir"]
+        if agent.provider != "codex":
+            required.append("--print")
         missing = [flag for flag in required if flag not in help_text]
         if missing:
             raise ValueError(f"{agent.provider} lacks required headless options: {', '.join(missing)}")
@@ -135,30 +143,31 @@ def run_agy(argv: list[str], cwd: str) -> int:
                 if isinstance(event, dict) and event.get("event") == "result":
                     terminal = event.get("result")
             code = child.wait()
+            code = code if code >= 0 else 128 - code
         finally:
             for sig, handler in previous.items():
                 signal.signal(sig, handler)
-    if isinstance(terminal, dict):
-        if terminal.get("denied_actions"):
-            print("[provider] Antigravity denied required tool actions; stopping this slot. "
-                  "Review local CLI permissions before restarting.", file=sys.stderr)
-            return PROVIDER_UNAVAILABLE
-        if terminal.get("status") == "SUCCESS":
-            return code if code >= 0 else 128 - code
-        if terminal.get("status") not in {"ERROR", "CANCELED", "INTERRUPTED"}:
-            print("[provider] Antigravity returned an invalid/incomplete terminal status; stopping this slot.", file=sys.stderr)
-            return PROVIDER_UNAVAILABLE
-        error = str(terminal.get("error", "")).lower()
-        configuration_errors = ("invalid model", "conflicts with", "permission", "not available for this account",
-                                "not authenticated", "unauthenticated", "login", "log in")
-        if any(marker in error for marker in configuration_errors):
-            print("[provider] Antigravity configuration/authentication failure; stopping this slot.", file=sys.stderr)
-            return PROVIDER_UNAVAILABLE
-        return code if code > 0 else (128 - code if code < 0 else 1)
-    if code:
-        return code if code > 0 else 128 - code
-    print("[provider] Antigravity exited without a terminal result; stopping this slot.", file=sys.stderr)
-    return PROVIDER_UNAVAILABLE
+    if not isinstance(terminal, dict):
+        if code:
+            return code
+        print("[provider] Antigravity exited without a terminal result; stopping this slot.", file=sys.stderr)
+        return PROVIDER_UNAVAILABLE
+    if terminal.get("denied_actions"):
+        print("[provider] Antigravity denied required tool actions; stopping this slot. "
+              "Review local CLI permissions before restarting.", file=sys.stderr)
+        return PROVIDER_UNAVAILABLE
+    if terminal.get("status") == "SUCCESS":
+        return code
+    if terminal.get("status") not in {"ERROR", "CANCELED", "INTERRUPTED"}:
+        print("[provider] Antigravity returned an invalid/incomplete terminal status; stopping this slot.", file=sys.stderr)
+        return PROVIDER_UNAVAILABLE
+    error = str(terminal.get("error", "")).lower()
+    configuration_errors = ("invalid model", "conflicts with", "permission", "not available for this account",
+                            "not authenticated", "unauthenticated", "login", "log in")
+    if any(marker in error for marker in configuration_errors):
+        print("[provider] Antigravity configuration/authentication failure; stopping this slot.", file=sys.stderr)
+        return PROVIDER_UNAVAILABLE
+    return code or 1
 
 
 def main(argv=None) -> int:

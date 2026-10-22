@@ -46,6 +46,8 @@ PROTOCOLS = {
     ),
 }
 
+VISION_DATASETS = frozenset({"laion", "triplen", "nnn", "nsd", "tvsd"})
+
 _ALIASES = {
     "laion-fmri": "laion", "laion_fmri": "laion", "laion": "laion",
     "triple-n": "triplen", "triple_n": "triplen", "nnn": "triplen", "triplen": "triplen",

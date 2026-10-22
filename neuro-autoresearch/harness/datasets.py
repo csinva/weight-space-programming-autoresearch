@@ -9,7 +9,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, replace
 
-from harness.protocols import canonical_dataset
+from harness.protocols import canonical_dataset, protocol_for
 
 
 @dataclass(frozen=True)
@@ -92,24 +92,24 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
         sid = subject.strip().lower()
         if not sid.startswith("sub-"):
             sid = f"sub-{int(sid):02d}"
-        if sid not in ("sub-01", "sub-03", "sub-05", "sub-06", "sub-07"):
+        if sid not in protocol_for("laion").search_subjects:
             raise ValueError(f"Unknown LAION subject {subject!r}; expected sub-01,03,05,06,07")
         return replace(dataset, subject=sid, study=f"LaionFmri{sid}")
     if dataset.loader == "nsd":
         sid = int(subject)
-        if not 1 <= sid <= 8:
+        if f"{sid:02d}" not in protocol_for("nsd").final_subjects:
             raise ValueError("NSD subject must be 1 through 8")
         return replace(dataset, subject=f"{sid:02d}", study=f"NsdBetasSubj{sid:02d}")
     if dataset.loader == "tvsd":
         sid = subject.strip().upper()
-        if sid not in ("F", "N"):
+        if sid not in protocol_for("tvsd").final_subjects:
             raise ValueError("TVSD subject must be F or N")
         return replace(dataset, subject=sid, study=f"TvsdMonkey{sid}")
     if dataset.loader in ("triplen", "nnn"):
         sid = subject.strip().upper()
         if not sid.startswith("M"):
             sid = f"M{int(sid)}"
-        if sid not in ("M1", "M2", "M3", "M4", "M5"):
+        if sid not in protocol_for("triplen").search_subjects:
             raise ValueError("Triple-N subject must be M1 through M5")
         return replace(dataset, subject=sid, study=f"TripleN{sid}")
     if dataset.study.startswith("HuthLangFmri"):

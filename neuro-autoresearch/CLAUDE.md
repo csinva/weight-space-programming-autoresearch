@@ -1,8 +1,8 @@
 # neuro-autoresearch
 
 The current instructions are in [AGENTS.md](AGENTS.md), and the executable
-workflow is in [README.md](README.md). Search agents use Codex/Astra or
-Antigravity/Argon 4 through `search/providers.py`.
+workflow is in [README.md](README.md). `search/run_fixed.sh` launches Codex/Astra,
+Claude Code/Opus, and Antigravity/Argon through `search/providers.py`.
 
 Search feedback is RSA on all LAION-fMRI subjects or all Triple-N monkeys.
 Final evaluation is encoding on NSD or TVSD respectively. The historical

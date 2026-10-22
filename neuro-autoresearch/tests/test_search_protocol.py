@@ -81,6 +81,14 @@ def test_champion_selection_checks_hash_and_search_metric(run):
     selected = final.select_model(run)
     assert selected["model_id"] == model_id
     assert selected["search_metric"] == "rsa"
+    # A scored snapshot must retain its cohort and provenance through DB storage.
+    scored = hub.wait_for_result(model_id, run=str(run))
+    assert scored["test_corr"] == 0.2
+    assert json.loads(scored["subject_scores"]) == {
+        subject: 0.2 for subject in protocol_for("laion").search_subjects}
+    metadata = json.loads(scored["evaluation_metadata"])
+    assert metadata["source_revision"] == SOURCE_REVISION
+    assert metadata["metric"] == "rsa" and metadata["stage"] == "search"
     Path(selected["path"]).write_text("MODEL = None\n")
     with pytest.raises(ValueError, match="changed after RSA"):
         final.select_model(run)

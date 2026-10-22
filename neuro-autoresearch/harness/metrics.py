@@ -14,9 +14,10 @@ import weakref
 import numpy as np
 import torch
 
+from harness.protocols import SOURCE_REVISION
 from harness.vendor.looped.metrics import encoding, rsa
 
-SOURCE_COMMIT = "3ee575baeceb1ad784102162a051b7444182fdaa"
+SOURCE_COMMIT = SOURCE_REVISION  # compatibility name for existing callers
 ENCODING_FEATURES = "center"
 _NEURAL_RANKS_LIMIT = 16  # enough for both search cohorts; float64 ranks stay on CPU
 _NEURAL_RANKS: OrderedDict = OrderedDict()
