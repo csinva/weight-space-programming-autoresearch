@@ -307,7 +307,10 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                     disabled.add(name)
                     print(f'[search] {name} disabled after terminal provider failure', flush=True)
                 elif name.startswith('p'):
-                    launch(name, roster[int(name[1:])])
+                    if code == 0 and deadline - time.monotonic() <= 120:
+                        print(f'[search] {name} finished; no restart in final two minutes', flush=True)
+                    else:
+                        launch(name, roster[int(name[1:])])
                 else:
                     next_coordinator = time.monotonic() + epoch_mins * 60
             if all(f'p{i:02d}' in disabled for i in range(len(roster))):

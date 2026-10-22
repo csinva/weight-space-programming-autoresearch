@@ -365,7 +365,8 @@ def _candidate_worker():
     output = np.asarray(output)
     np.save('/output/features.npy', output, allow_pickle=False)
     # Best-effort accounting, not a proof against hostile Python: include globals
-    # and NumPy weights, but skip imported modules/classes/functions. Locals that
+    # and NumPy weights, including candidate-defined class attributes. Skip imported
+    # runtime modules/classes and functions. Locals that
     # were discarded during forward and deliberate introspection tricks can evade
     # counting; candidate source still requires audit.
     import types
@@ -378,7 +379,12 @@ def _candidate_worker():
             return value.numel()
         if isinstance(value, np.ndarray):
             return value.size
-        if isinstance(value, (types.ModuleType, type, types.FunctionType)):
+        if isinstance(value, type):
+            if value.__module__ != module.__name__:
+                return 0
+            return (sum(count(v, depth + 1) for v in vars(value).values())
+                    + sum(count(base, depth + 1) for base in value.__bases__))
+        if isinstance(value, (types.ModuleType, types.FunctionType)):
             return 0
         if isinstance(value, dict):
             return sum(count(v, depth + 1) for v in value.values())

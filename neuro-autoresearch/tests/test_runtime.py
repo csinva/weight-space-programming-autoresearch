@@ -50,7 +50,7 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     assert observed == []
 
 
-def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0):
+def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, hours=.0003):
     events = []
     counts = Counter()
     clock = [0.0]
@@ -87,12 +87,12 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0):
     monkeypatch.setattr('time.sleep', lambda seconds: clock.__setitem__(0, clock[0] + seconds))
     monkeypatch.setenv('NEURO_COORDINATOR_MODEL', 'codex:gpt-6-astra:xhigh')
     monkeypatch.setenv('NEURO_COORDINATOR_EFFORT', 'xhigh')
-    result = agents.supervise(str(tmp_path), 'laion', ['codex:astra', 'codex:astra'], .0003, coordinator, evaluators)
+    result = agents.supervise(str(tmp_path), 'laion', ['codex:astra', 'codex:astra'], hours, coordinator, evaluators)
     return result, events, counts
 
 
 def test_terminal_slot_stays_disabled_while_healthy_restarts(tmp_path, monkeypatch):
-    code, events, counts = simulation(tmp_path, monkeypatch, {'p00': [78], 'p01': [0, None], 'coordinator': [78]}, coordinator=1)
+    code, events, counts = simulation(tmp_path, monkeypatch, {'p00': [78], 'p01': [0, None], 'coordinator': [78]}, coordinator=1, hours=.04)
     assert code == 0
     assert counts['p00'] == counts['coordinator'] == 1
     assert counts['p01'] == 2
@@ -195,3 +195,22 @@ def test_failed_score_reports_completion_without_automatic_repair(tmp_path, monk
     assert "failed: started proposer=p00" in output
     assert "failed: completed status=error" in output
     assert "+00:00" in output and "wall_seconds=" in output
+
+
+def test_clean_proposers_do_not_restart_near_deadline(tmp_path, monkeypatch, capsys):
+    import time
+    code, events, counts = simulation(tmp_path, monkeypatch, {'p00': [0], 'p01': [0]})
+    assert code == 0
+    assert counts['p00'] == counts['p01'] == counts['eval'] == 1
+    # Clean exits do not stop the evaluator or shorten the search deadline.
+    assert time.monotonic() >= .0003 * 3600
+    assert events[-2:] == [('stop', 'eval'), ('recover', None)]
+    output = capsys.readouterr().out
+    assert output.count('no restart in final two minutes') == 2
+    assert 'terminal provider failure' not in output
+
+
+def test_transient_failure_still_restarts_near_deadline(tmp_path, monkeypatch):
+    code, _, counts = simulation(tmp_path, monkeypatch, {'p00': [1, None]})
+    assert code == 0
+    assert counts['p00'] == 2

@@ -29,6 +29,9 @@ so later reviews need only new evidence. Never claim a queued result was observe
 Ask whether each island is learning from comparisons, whether failures are being
 corrected, and whether useful alternatives remain underexplored. Distinguish a
 promising measured lineage from an untested idea or a tiny uncertain difference.
+Do not claim a difference is "within noise" without an uncertainty estimate.
+Treat diagnostic-based explanations as hypotheses, and request an isolating
+comparison when a proposer attributes a multi-change result to one component.
 With little feedback, give light guidance; waiting or one failed experiment is
 not evidence of a stall. Do not ask agents to investigate synthetic examples as
 if they were neural feedback.

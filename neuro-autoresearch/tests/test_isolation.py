@@ -113,7 +113,8 @@ MODEL=Model()
         model(np.arange(12, dtype=np.float32).reshape(4, 3))
 
 
-@pytest.mark.parametrize('storage', ['global_tensor', 'global_numpy', 'model_numpy'])
+@pytest.mark.parametrize('storage', ['global_tensor', 'global_numpy', 'model_numpy',
+                                     'class_tensor', 'class_numpy'])
 def test_weights_outside_model_tensors_count_towards_cap(isolated, storage, monkeypatch):
     from neuro_eval.model import _validate_model_size
 
@@ -124,6 +125,12 @@ def test_weights_outside_model_tensors_count_towards_cap(isolated, storage, monk
     elif storage == 'global_numpy':
         weights = 'W=np.random.default_rng(0).standard_normal((12,8334)).astype(np.float32)'
         init, forward = '', 'X @ torch.from_numpy(W)'
+    elif storage.startswith('class_'):
+        weights = ''
+        init = (' W=torch.randn(12,8334,generator=torch.Generator().manual_seed(0))'
+                if storage == 'class_tensor' else
+                ' W=np.random.default_rng(0).standard_normal((12,8334)).astype(np.float32)')
+        forward = 'X @ torch.as_tensor(self.W)'
     else:
         weights = ''
         init = ' def __init__(self): self.W=np.random.default_rng(0).standard_normal((12,8334)).astype(np.float32)'
