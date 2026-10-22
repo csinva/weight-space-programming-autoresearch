@@ -106,6 +106,18 @@ def test_invalid_model_never_gets_search_reward(failure):
     assert row["reward"] is None
 
 
+@pytest.mark.parametrize("overflow_target", ["model", "neural"])
+def test_rsa_rejects_nonfinite_geometry_from_finite_inputs(overflow_target):
+    _, X, _, Y, masks, _ = search_split()
+    if overflow_target == "model":
+        X = X * 1e20
+    else:
+        Y = Y * 1e20
+    assert torch.isfinite(X).all() and torch.isfinite(Y).all()
+    with pytest.raises(ValueError, match=f"Nonfinite {overflow_target}.*RDM"):
+        rsa_scores(X, Y, masks, torch.device("cpu"))
+
+
 def test_missing_subject_invalidates_entire_cohort(monkeypatch):
     def fake_load(dataset):
         if dataset.subject == "M3":

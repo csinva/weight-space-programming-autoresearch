@@ -112,6 +112,9 @@ _NEURAL_RANKS = OrderedDict()
 
 
 def _rsa_ranks(rdm: torch.Tensor, label: str) -> torch.Tensor:
+    # Ranking NaNs can turn invalid geometry into finite, nonconstant ranks.
+    if not torch.isfinite(rdm).all():
+        raise ValueError(f"Nonfinite {label} RDM: RSA is undefined")
     ranks = triu_ranks(rdm)
     if not torch.isfinite(ranks).all() or not ranks.numel() or ranks.max() == ranks.min():
         raise ValueError(f"Degenerate {label} RDM: RSA is undefined")
