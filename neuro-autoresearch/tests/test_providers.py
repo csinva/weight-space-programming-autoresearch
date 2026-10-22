@@ -14,7 +14,7 @@ def fake_cli(tmp_path, name, result=None):
     if result is None:
         result = {"event": "result", "result": {"status": "SUCCESS"}}
     executable = tmp_path / name
-    help_text = "--model --sandbox --add-dir --cd --json --config --skip-git-repo-check --print --effort --mode --output-format --dangerously-bypass-approvals-and-sandbox --dangerously-skip-permissions --verbose"
+    help_text = "--model --sandbox --add-dir --cd --json --config --skip-git-repo-check --print --effort --mode --output-format --dangerously-bypass-approvals-and-sandbox --dangerously-skip-permissions --verbose --ignore-user-config --disable --safe-mode --tools --strict-mcp-config --mcp-config --disable-slash-commands"
     executable.write_text(f'''#!{sys.executable}
 import json, os, pathlib, sys
 if "--help" in sys.argv:
@@ -51,11 +51,20 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     if provider == "codex":
         assert record["argv"][0] == "exec"
         assert "--dangerously-bypass-approvals-and-sandbox" in record["argv"]
+        disabled = [record["argv"][i + 1] for i, flag in enumerate(record["argv"]) if flag == "--disable"]
+        assert {"apps", "plugins", "remote_plugin", "browser_use", "computer_use",
+                "image_generation", "multi_agent"} <= set(disabled)
+        assert 'web_search="disabled"' in record["argv"]
     else:
         assert "--print" in record["argv"]
         assert "--dangerously-skip-permissions" in record["argv"]
         if provider == "claude":
             assert "--verbose" in record["argv"]
+            assert "--safe-mode" in record["argv"]
+            assert "--bare" not in record["argv"]
+            assert "--strict-mcp-config" in record["argv"]
+            assert record["argv"][record["argv"].index("--tools") + 1] == "Bash,Read,Edit,Write,Glob,Grep"
+        assert "--disable-slash-commands" in record["argv"]
     assert "--sandbox" not in record["argv"]
 
 

@@ -150,3 +150,65 @@ def test_invalid_reward_cannot_become_champion(run, search_result, invalid):
     with queue.connect(str(run)) as connection:
         row = connection.execute("SELECT test_corr FROM models WHERE id=?", (model_id,)).fetchone()
     assert row[0] is None
+
+
+def test_compact_lists_and_explicit_model_details(run, tmp_path, search_result):
+    from search.api import MAX_LIST_BYTES
+
+    model = tmp_path / 'model.py'
+    model.write_text('# candidate\n')
+    mid = queue.propose(str(model), proposer='p00', idea='x' * 500, run=str(run))
+    diagnostics = {**search_result['rsa_diagnostics'], 'subject_results': {'example': 'full'}}
+    assert queue.record(mid, {**search_result, 'rsa_diagnostics': diagnostics}, run=str(run)) == 'ok'
+    broker = Broker(run, 'proposer', 'p00', tmp_path / 'unused.sock')
+    row = broker.dispatch({'command': 'history'})[0]
+    assert row['search_rsa'] == .2 and len(row['idea']) == 240
+    assert not {'code', 'rsa_diagnostics', 'subject_scores', 'model_sha256', 'experiment_notes'} & row.keys()
+    assert broker.dispatch({'command': 'my-best'}) == row
+    assert broker.dispatch({'command': 'source', 'id': mid})['code'] == '# candidate\n'
+    status = broker.dispatch({'command': 'status', 'id': mid})
+    assert status['subject_scores']
+    assert 'subject_results' not in status['rsa_diagnostics']
+    details = broker.dispatch({'command': 'status', 'id': mid, 'details': True})
+    assert details['rsa_diagnostics']['subject_results'] == {'example': 'full'}
+    # Long non-ASCII labels exercise the serialized response budget.
+    for _ in range(19):
+        queue.propose(str(model), proposer='p01', idea='\U0001f600' * 500, run=str(run))
+    rows = broker.dispatch({'command': 'history', 'limit': 20})
+    assert rows and len(json.dumps(rows, indent=2).encode()) <= MAX_LIST_BYTES
+    with pytest.raises(ValueError, match='between 1 and 20'):
+        broker.dispatch({'command': 'history', 'limit': 21})
+
+
+def test_broker_pending_limit_is_atomic_and_island_scoped(run, tmp_path, search_result, monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    import threading
+
+    barrier = threading.Barrier(2)
+    socket_path = tmp_path / 'pending.sock'
+    monkeypatch.setenv('NEURO_BROKER_SOCKET', str(socket_path))
+
+    def submit():
+        barrier.wait()
+        try:
+            return request({'command': 'propose-model', 'source': '# concurrent\n'})
+        except RuntimeError as error:
+            return error
+
+    with Broker(run, 'proposer', 'p00', socket_path):
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            results = list(executor.map(lambda _: submit(), range(2)))
+        ids = [result for result in results if isinstance(result, str)]
+        errors = [result for result in results if isinstance(result, RuntimeError)]
+        assert len(ids) == len(errors) == 1
+        assert f'wait-for-score {ids[0]}' in str(errors[0])
+        assert len(list((run / 'models').glob('*.py'))) == 1
+        other = Broker(run, 'proposer', 'p01', tmp_path / 'other.sock')
+        other_id = other.dispatch({'command': 'propose-model', 'source': '# other\n'})
+        with queue.connect(str(run)) as connection:
+            connection.execute("UPDATE models SET status='running' WHERE id=?", (ids[0],))
+        with pytest.raises(RuntimeError, match=ids[0]) as rejected:
+            request({'command': 'propose-model', 'source': '# blocked\n'})
+        assert other_id not in str(rejected.value)
+        queue.record(ids[0], search_result, run=str(run))
+        assert request({'command': 'propose-model', 'source': '# next\n'})

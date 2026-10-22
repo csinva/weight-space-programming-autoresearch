@@ -13,6 +13,7 @@ import hashlib
 import signal
 import stat
 import time
+from datetime import datetime, timezone
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO)
@@ -72,6 +73,9 @@ def score_guarded(mid, src, dataset, timeout):
 
 def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
     mid, src = row["id"], row.get("path")
+    started = time.monotonic()
+    print(f"[evaluator] {datetime.now(timezone.utc).isoformat()} {mid}: started "
+          f"proposer={row.get('proposer')}", flush=True)
     if not src or not os.path.exists(src):
         print(f"[evaluator] {mid}: model file missing ({src!r}) -> error")
         queue.record(mid, {}, "error")
@@ -85,6 +89,9 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
         f.write(res.get("log", "") or "")
     ok = _is_ok(res)
     status = queue.record(mid, res, "ok" if ok else "error")
+    print(f"[evaluator] {datetime.now(timezone.utc).isoformat()} {mid}: completed "
+          f"status={status} test_corr={res.get('test_corr', '-')} "
+          f"wall_seconds={time.monotonic() - started:.2f}", flush=True)
     # Repairs are new submissions. The failed source and its hash never change.
     if not ok and max_repairs > 0 and res.get("repair_log"):
         depth = int(row.get("repair_depth") or 0)
@@ -110,8 +117,6 @@ def process_model(row, log_dir, dataset, timeout, max_repairs, rmodel, reffort):
                     print(f"[evaluator] {mid}: repair queued as {child}")
     if ok:
         os.remove(log_file)
-    print(f"[evaluator] {mid}: status={status} test_corr={res.get('test_corr', '-')} "
-          f"(proposer={row.get('proposer')})")
 
 
 def main(argv=None):
@@ -119,7 +124,8 @@ def main(argv=None):
     p.add_argument("--dataset", default=os.environ.get("NEURO_DATASET", "laion"))
     p.add_argument("--poll", type=float, default=5.0, help="empty-queue sleep (seconds)")
     p.add_argument("--timeout", type=int, default=int(os.environ.get("NEURO_EVAL_TIMEOUT", "420")))
-    p.add_argument("--max-repairs", type=int, default=2)
+    p.add_argument("--max-repairs", type=int, default=0,
+                   help="Optional automatic repair depth; default 0 leaves repairs to proposers")
     p.add_argument("--repair-model", default=os.environ.get("NEURO_REPAIR_MODEL", "codex:astra"))
     p.add_argument("--repair-effort", default=os.environ.get("NEURO_REPAIR_EFFORT", "low"))
     a = p.parse_args(argv)

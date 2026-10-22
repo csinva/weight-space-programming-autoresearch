@@ -55,16 +55,23 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0):
     counts = Counter()
     clock = [0.0]
 
+    class PromptInput(io.StringIO):
+        def write(self, prompt):
+            assert "remaining session budget at launch=" in prompt
+            assert "minutes" in prompt
+            return super().write(prompt)
+
     class Child:
         def __init__(self, argv, **kwargs):
             if 'search.worker' in argv:
                 self.name = 'eval'
+                assert '-u' in argv
             elif argv[argv.index('--role') + 1] == 'coordinator':
                 self.name = 'coordinator'
             else:
                 self.name = Path(argv[argv.index('--cwd') + 1]).name
             self.pid = 100 + len(events)
-            self.stdin = io.StringIO()
+            self.stdin = PromptInput()
             results = outcomes.get(self.name, [None])
             self.code = results[min(counts[self.name], len(results) - 1)]
             counts[self.name] += 1
@@ -125,6 +132,7 @@ def test_new_worker_does_not_requeue_peers_live_claim(tmp_path, monkeypatch):
     claimed = []
 
     def stop_after_claim(row, *args):
+        assert args[3] == 0  # default repair ownership belongs to the proposer
         claimed.append(row["id"])
         raise KeyboardInterrupt
 
@@ -170,3 +178,20 @@ with open({str(heartbeat)!r}, 'a', buffering=1) as output:
         assert heartbeat.stat().st_size == size
     finally:
         stop_process(leader, grace=0)
+
+
+def test_failed_score_reports_completion_without_automatic_repair(tmp_path, monkeypatch, capsys):
+    import hashlib
+    source = tmp_path / "model.py"
+    source.write_text("MODEL = None\n")
+    row = {"id": "failed", "path": str(source), "proposer": "p00",
+           "model_sha256": hashlib.sha256(source.read_bytes()).hexdigest()}
+    monkeypatch.setattr(worker, "score_guarded", lambda *a: {
+        "status": "error", "repair_log": "candidate failed", "log": "candidate failed"})
+    monkeypatch.setattr(queue, "record", lambda *a: "error")
+    monkeypatch.setattr(worker, "repair", lambda *a: pytest.fail("automatic repair started"))
+    worker.process_model(row, str(tmp_path), "laion", 420, 0, "codex:astra", "medium")
+    output = capsys.readouterr().out
+    assert "failed: started proposer=p00" in output
+    assert "failed: completed status=error" in output
+    assert "+00:00" in output and "wall_seconds=" in output

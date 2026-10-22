@@ -150,13 +150,15 @@ def newid(run: str | None = None) -> str:
 # --------------------------------------------------------------------------- proposer: write + sync
 def propose(model_file: str, idea: str = "",
             proposer: str | None = None, run: str | None = None, *, parent_id: str | None = None,
-            repair_depth: int = 0) -> str:
+            repair_depth: int = 0, max_pending: int | None = None) -> str:
     """Archive a candidate and enqueue its RSA evaluation; return its ID.
 
     Check source, declared size, run contract, and reset acknowledgement first.
     The evaluator scores the snapshot and captures live complexity and notes."""
     if type(repair_depth) is not int or repair_depth < 0:
         raise ValueError("repair_depth must be a nonnegative integer")
+    if max_pending is not None and (type(max_pending) is not int or max_pending < 1):
+        raise ValueError("max_pending must be a positive integer")
     run = _ensure(run)
     contract = search_contract(run, os.environ.get("NEURO_DATASET"))
     if not os.path.exists(model_file):
@@ -208,12 +210,24 @@ def propose(model_file: str, idea: str = "",
         }
         try:
             with connect(run) as con:
+                con.execute("BEGIN IMMEDIATE")
+                if max_pending is not None:
+                    pending = con.execute(
+                        "SELECT id FROM models WHERE proposer=? AND status IN ('queued','running') "
+                        "ORDER BY created_at,id", (proposer,)).fetchall()
+                    if len(pending) >= max_pending:
+                        raise ValueError(
+                            f"Submission pending: {pending[0]['id']}. Run wait-for-score "
+                            f"{pending[0]['id']} before submitting another candidate.")
                 con.execute(f"INSERT INTO models ({','.join(COLS)}) "
                             f"VALUES ({','.join('?' * len(COLS))})", [row[c] for c in COLS])
             return mid
         except sqlite3.IntegrityError:
             os.path.exists(dst) and os.remove(dst)
             continue
+        except Exception:
+            os.path.exists(dst) and os.remove(dst)
+            raise
     raise RuntimeError("could not insert a queued row (repeated id collisions)")
 
 

@@ -89,3 +89,55 @@ MODEL=Model()
     features = model(images)
     assert features.shape == (8, 6912)
     assert np.isfinite(features).all()
+
+
+def test_large_offset_cannot_hide_batch_dependence(isolated):
+    model = isolated('''class Model:
+ def __call__(self, X): return 10000 + X[:, :8] + 5 * X[:, :8].mean(0, keepdim=True)
+MODEL=Model()
+''')
+    images = np.random.default_rng(42).random((8, 12), dtype=np.float32)
+    with pytest.raises(RuntimeError, match='batch composition'):
+        model(images)
+
+
+def test_candidate_cannot_override_host_independence_check(isolated):
+    model = isolated('''import torch
+# This bypassed the old checker running inside the candidate interpreter.
+torch.linalg.vector_norm = lambda *args, **kwargs: torch.tensor(0.)
+class Model:
+ def __call__(self, X): return X - X.mean(0)
+MODEL=Model()
+''')
+    with pytest.raises(RuntimeError, match='batch composition'):
+        model(np.arange(12, dtype=np.float32).reshape(4, 3))
+
+
+@pytest.mark.parametrize('storage', ['global_tensor', 'global_numpy', 'model_numpy'])
+def test_weights_outside_model_tensors_count_towards_cap(isolated, storage, monkeypatch):
+    from neuro_eval.model import _validate_model_size
+
+    monkeypatch.setenv('NEURO_MAX_PARAMS', '100000')
+    if storage == 'global_tensor':
+        weights = 'W=torch.randn(12,8334,generator=torch.Generator().manual_seed(0))'
+        init, forward = '', 'X @ W'
+    elif storage == 'global_numpy':
+        weights = 'W=np.random.default_rng(0).standard_normal((12,8334)).astype(np.float32)'
+        init, forward = '', 'X @ torch.from_numpy(W)'
+    else:
+        weights = ''
+        init = ' def __init__(self): self.W=np.random.default_rng(0).standard_normal((12,8334)).astype(np.float32)'
+        forward = 'X @ torch.from_numpy(self.W)'
+    model = isolated(f'''import torch
+import numpy as np
+{weights}
+class Model:
+ n_params=0
+{init}
+ def __call__(self, X): return {forward}
+MODEL=Model()
+''')
+    features = model(np.random.default_rng(42).random((8, 12), dtype=np.float32))
+    assert model.n_params == 100008
+    with pytest.raises(ValueError, match='exceeds'):
+        _validate_model_size(model, features.shape[1])

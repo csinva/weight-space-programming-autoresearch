@@ -12,6 +12,10 @@ import threading
 
 MAX_REQUEST = 1_100_000
 MAX_SOURCE = 1_000_000
+MAX_LIST_ROWS = 20
+MAX_LIST_BYTES = 12_000
+COMPACT_FIELDS = ("id", "idea", "proposer", "status", "search_rsa", "parent_id",
+                  "parent_rsa_delta", "n_params", "error_reason")
 PUBLIC_FIELDS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
                  "test_corr", "roi_corr", "n_params", "model_loc", "seconds", "created_at",
                  "metric", "stage", "protocol_version", "subject_scores", "rsa_diagnostics",
@@ -99,13 +103,17 @@ class Broker:
         with queue.connect(self.run) as con:
             return [dict(row) for row in con.execute(sql, args)]
 
-    def _public(self, row, *, details=False):
+    def _public(self, row, *, details=False, compact=False):
         result = public_row(row, details=details)
         if row and row.get("parent_id") and row.get("test_corr") is not None:
             parents = self._rows("SELECT test_corr FROM models WHERE id=? AND metric='rsa' "
                                  "AND stage='search' AND status='ok'", (row["parent_id"],))
             if parents and parents[0]["test_corr"] is not None:
                 result["parent_rsa_delta"] = row["test_corr"] - parents[0]["test_corr"]
+        if compact and result is not None:
+            result = {key: result[key] for key in COMPACT_FIELDS if key in result}
+            if isinstance(result.get("idea"), str):
+                result["idea"] = result["idea"][:240]
         return result
 
     def _island(self, name):
@@ -152,8 +160,8 @@ class Broker:
         if cmd not in allowed:
             raise PermissionError("Operation is not available to this session")
         limit = request.get("limit", 10)
-        if type(limit) is not int or not 1 <= limit <= 100:
-            raise ValueError("Limit must be an integer between 1 and 100")
+        if type(limit) is not int or not 1 <= limit <= MAX_LIST_ROWS:
+            raise ValueError("Limit must be an integer between 1 and 20")
         if cmd == "propose-model":
             source, idea = request.get("source"), request.get("idea", "")
             if not isinstance(source, str) or not 0 < len(source.encode()) <= MAX_SOURCE:
@@ -168,7 +176,7 @@ class Broker:
                 path = Path(directory) / "model.py"
                 path.write_text(source)
                 return queue.propose(str(path), idea=idea, proposer=self.proposer, run=self.run,
-                                   parent_id=parent_id)
+                                   parent_id=parent_id, max_pending=1)
         if cmd in {"status", "source"}:
             row = self._own_row(request.get("id"))
             if cmd == "source":
@@ -185,10 +193,7 @@ class Broker:
                               "ORDER BY test_corr DESC LIMIT 1", (self.proposer, reset_at))
             if not rows:
                 return None
-            result = self._public(rows[0])
-            if request.get("with_code", True):
-                result["code"] = self._source(rows[0])
-            return result
+            return self._public(rows[0], compact=True)
         if cmd in {"history", "top-models", "random-models"}:
             if cmd == "random-models" and os.environ.get("VANILLA_AUTORESEARCH") == "1":
                 raise PermissionError("Cross-island feedback is disabled")
@@ -203,7 +208,12 @@ class Broker:
                      "random-models": "RANDOM()"}[cmd]
             rows = self._rows(f"SELECT * FROM models WHERE {where} ORDER BY {order} LIMIT ?",
                               (*args, limit))
-            result = [self._public(row) for row in rows]
+            result = []
+            for row in rows:
+                candidate = self._public(row, compact=True)
+                if len(json.dumps([*result, candidate], indent=2).encode()) > MAX_LIST_BYTES:
+                    break
+                result.append(candidate)
             return result
         if cmd == "peek-island":
             if os.environ.get("VANILLA_AUTORESEARCH") == "1":
@@ -334,8 +344,7 @@ def main(argv=None):
     submit.add_argument("--file", required=True)
     submit.add_argument("--idea", default="")
     submit.add_argument("--parent", dest="parent_id")
-    best = commands.add_parser("my-best")
-    best.add_argument("--no-code", action="store_true")
+    commands.add_parser("my-best")
     for name in ("random-models", "top-models", "history"):
         command = commands.add_parser(name)
         command.add_argument("-n", "--limit", type=int, default=10)
@@ -361,8 +370,6 @@ def main(argv=None):
                     source=path.read_text())
         args.pop("reference", None)
         args.pop("spec", None)
-    if command == "my-best":
-        args["with_code"] = not args.pop("no_code")
     if command == "wait-for-score":
         args["command"] = "status"
         while True:

@@ -254,7 +254,7 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
             cards = os.environ.get('NEURO_EVAL_GPUS', '').split(',')
             if cards[0]:
                 env['CUDA_VISIBLE_DEVICES'] = cards[int(name[4:]) % len(cards)]
-            argv = [sys.executable, '-m', 'search.worker', '--dataset', dataset]
+            argv = [sys.executable, '-u', '-m', 'search.worker', '--dataset', dataset]
             prompt = None
         else:
             proposer = name.startswith('p')
@@ -265,7 +265,10 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                 env['LAB_PROPOSER'] = name
             argv = [sys.executable, '-m', 'search.providers', 'run', '--agent', spec,
                     '--effort', effort, '--role', role, '--cwd', str(workspace)]
-            prompt = (f'This run: dataset={dataset}; role={name}. Search feedback is RSA only. '
+            remaining = max(0.0, (deadline - time.monotonic()) / 60)
+            prompt = (f'This run: dataset={dataset}; role={name}; '
+                      f'remaining session budget at launch={remaining:.1f} minutes. '
+                      'The launcher stops this session at its deadline. Search feedback is RSA only. '
                       'Final NSD/TVSD encoding is unavailable. Use "$NEURO_PYTHON" api.py for feedback.\n\n'
                       + (REPO / 'search/prompts' / f'{role}.md').read_text())
         with (root / 'logs' / f'{name}.jsonl').open('a') as log:

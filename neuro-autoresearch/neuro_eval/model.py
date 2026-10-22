@@ -76,6 +76,37 @@ class IsolatedModel:
         import torch
         import numpy as np
         array = images.detach().cpu().numpy() if torch.is_tensor(images) else np.asarray(images)
+        device = str(images.device) if torch.is_tensor(images) else 'cpu'
+        features = self._execute(array, device)
+        if len(array):
+            # Decide in the trusted parent, never in the candidate's interpreter.
+            # Two small fresh executions limit overhead while checking a singleton
+            # and a shuffled context sampled throughout the full input batch.
+            indices = np.random.default_rng().choice(len(array), min(8, len(array)), replace=False)
+            for sample in (indices[:1], indices):
+                probe = self._execute(array[sample], device)
+                expected = features[sample]
+                if probe.shape != expected.shape:
+                    self.repair_log = 'Representation shape depends on batch composition'
+                    raise RuntimeError(self.repair_log)
+                a, b = expected.astype(np.float64), probe.astype(np.float64)
+                for centered in (False, True):
+                    if centered:
+                        a = a - a.mean(axis=1, keepdims=True)
+                        b = b - b.mean(axis=1, keepdims=True)
+                    difference = np.linalg.norm(a - b, axis=1)
+                    scale = np.maximum(np.linalg.norm(a, axis=1), np.linalg.norm(b, axis=1))
+                    # The centered comparison prevents large common offsets from
+                    # hiding changes to the geometry used by Pearson RSA.
+                    if np.any(~np.isfinite(difference)) or np.any(difference > 0.01 * scale):
+                        self.repair_log = 'Representation depends on batch composition or mutable state'
+                        raise RuntimeError(self.repair_log)
+        return features
+
+    def _execute(self, array, device):
+        """Run one fresh image-only process; metadata counts remain best-effort."""
+        import numpy as np
+
         with tempfile.TemporaryDirectory(prefix='neuro-candidate-') as temp:
             root = Path(temp)
             (root / 'model.py').write_bytes(self.source)
@@ -84,13 +115,13 @@ class IsolatedModel:
             output.mkdir()
             worker = Path(__file__)
             devices = []
-            for device in sorted(glob.glob('/dev/nvidia*')):
-                if Path(device).is_file() or not Path(device).is_dir():
-                    devices += ['--dev-bind', device, device]
+            for device_path in sorted(glob.glob('/dev/nvidia*')):
+                if Path(device_path).is_file() or not Path(device_path).is_dir():
+                    devices += ['--dev-bind', device_path, device_path]
             if devices and Path('/sys').is_dir():
                 devices += ['--ro-bind', '/sys', '/sys']
             argv = [*sandbox_command(), *devices,
-                    '--setenv', 'NEURO_CANDIDATE_DEVICE', str(images.device) if torch.is_tensor(images) else 'cpu',
+                    '--setenv', 'NEURO_CANDIDATE_DEVICE', device,
                     '--setenv', 'CUDA_VISIBLE_DEVICES', os.environ.get('CUDA_VISIBLE_DEVICES', '0'), '--ro-bind', str(root / 'model.py'), '/model.py',
                     '--ro-bind', str(root / 'images.npy'), '/images.npy',
                     '--ro-bind', str(worker), '/worker.py',
@@ -316,8 +347,6 @@ def _candidate_worker():
     import numpy as np
     import torch
 
-    BATCH_TOLERANCE = 0.01  # Approximate independence check; allow 1% vector L2 roundoff.
-
     resource.setrlimit(resource.RLIMIT_FSIZE, (2_000_000_000, 2_000_000_000))
     spec = importlib.util.spec_from_file_location('candidate', '/model.py')
     module = importlib.util.module_from_spec(spec)
@@ -331,21 +360,15 @@ def _candidate_worker():
     images = torch.from_numpy(np.load('/images.npy', allow_pickle=False)).to(device)
     with torch.no_grad():
         output = model(images)
-        # Fixed-seed, sample-independent representations must agree across batching.
-        for index in range(min(3, len(images))):
-            single = torch.as_tensor(model(images[index:index + 1]))
-            batched = torch.as_tensor(output[index:index + 1])
-            if batched.shape != single.shape:
-                raise ValueError('Representation shape depends on batch composition')
-            a, b = batched.double(), single.double()
-            difference = torch.linalg.vector_norm(a - b)
-            scale = torch.maximum(torch.linalg.vector_norm(a), torch.linalg.vector_norm(b))
-            if not torch.isfinite(difference) or difference > BATCH_TOLERANCE * scale:
-                raise ValueError('Representation depends on batch composition or mutable state')
     if torch.is_tensor(output):
         output = output.detach().cpu().numpy()
     output = np.asarray(output)
     np.save('/output/features.npy', output, allow_pickle=False)
+    # Best-effort accounting, not a proof against hostile Python: include globals
+    # and NumPy weights, but skip imported modules/classes/functions. Locals that
+    # were discarded during forward and deliberate introspection tricks can evade
+    # counting; candidate source still requires audit.
+    import types
     seen = set()
     def count(value, depth=0):
         if depth > 8 or id(value) in seen:
@@ -353,6 +376,10 @@ def _candidate_worker():
         seen.add(id(value))
         if isinstance(value, torch.Tensor):
             return value.numel()
+        if isinstance(value, np.ndarray):
+            return value.size
+        if isinstance(value, (types.ModuleType, type, types.FunctionType)):
+            return 0
         if isinstance(value, dict):
             return sum(count(v, depth + 1) for v in value.values())
         if isinstance(value, (tuple, list, set)):
@@ -361,7 +388,8 @@ def _candidate_worker():
             return count(vars(value), depth + 1)
         return 0
     metadata = {key: str(getattr(model, key, ''))[:600] for key in ('name', 'description', 'insight', 'idea')}
-    metadata['n_params'] = max(int(getattr(model, 'n_params', 0)), count(model))
+    metadata['n_params'] = max(int(getattr(model, 'n_params', 0)),
+                               count(model) + count(vars(module)))
     with open('/output/metadata.json', 'w') as file:
         json.dump(metadata, file)
 

@@ -74,6 +74,24 @@ def _options(agent: Agent, cwd: str) -> dict[str, str | None]:
     return options
 
 
+def _restrictions(agent: Agent) -> list[str]:
+    """Keep native coding tools; omit unrelated account plugins and integrations."""
+    if agent.provider == "codex":
+        flags = ["--ignore-user-config", "--config", 'web_search="disabled"']
+        for feature in ("apps", "plugins", "remote_plugin", "browser_use",
+                        "computer_use", "image_generation", "multi_agent"):
+            flags.extend(["--disable", feature])
+        return flags
+    if agent.provider == "claude":
+        # Unlike --bare, safe mode preserves the saved OAuth login.
+        return ["--safe-mode", "--tools", "Bash,Read,Edit,Write,Glob,Grep",
+                "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}',
+                "--disable-slash-commands"]
+    # This agy version exposes no built-in tool allowlist. Its private HOME
+    # excludes host plugins/config, but its built-in web tools remain available.
+    return ["--disable-slash-commands"]
+
+
 def command(agent: Agent, cwd: str, prompt: str, write_dirs: list[str] | None = None) -> list[str]:
     """Construct argv without a shell; prompt text is never evaluated by the launcher."""
     argv = [agent.executable]
@@ -83,6 +101,7 @@ def command(agent: Agent, cwd: str, prompt: str, write_dirs: list[str] | None = 
         argv.append(flag)
         if value is not None:
             argv.append(value)
+    argv.extend(_restrictions(agent))
     for directory in write_dirs or []:
         argv.extend(["--add-dir", directory])
     argv.extend([prompt] if agent.provider == "codex" else ["--print", prompt])
@@ -110,7 +129,8 @@ def preflight(agents: list[Agent]) -> list[dict]:
             args = [agent.executable, "exec", "--help"] if agent.provider == "codex" else [agent.executable, "--help"]
             checked[agent.executable] = _read_cli(args)
         help_text = checked[agent.executable]
-        required = [*_options(agent, ""), "--add-dir"]
+        required = [*_options(agent, ""), "--add-dir",
+                    *(value for value in _restrictions(agent) if value.startswith("--"))]
         if agent.provider != "codex":
             required.append("--print")
         missing = [flag for flag in required if flag not in help_text]

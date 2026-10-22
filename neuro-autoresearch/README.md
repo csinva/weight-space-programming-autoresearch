@@ -40,7 +40,8 @@ settings still match. Ctrl+C stops the search. `--epoch-mins 0` disables the
 coordinator. Start a new run after changing the evaluation code.
 
 The default proposer roster is Astra, Opus and Argon at medium effort, with an
-Astra xhigh coordinator and Astra medium repair. Defaults live in
+Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
+repair is off by default (the worker's `--max-repairs` flag enables it). Defaults live in
 [`search/config.env`](search/config.env). Provider CLIs reuse existing machine
 logins, with permission prompts disabled inside the outer isolation boundary.
 The launcher selects agy's ADC authentication and clears conflicting Claude
@@ -155,19 +156,26 @@ Stimulus paths follow the source readers: `LAION_FMRI_DIR`, `NSD_ROOT`,
 `NSD_STIMULI_HDF5_PATH` and `TVSD_DATA_DIR`. NSD also requires the source ncsnr
 volumes for reliability filtering.
 
-Search agents receive a private workspace and role-bound API. They can submit
-candidate source and inspect bounded search feedback, but cannot read neural
+Search agents receive a private workspace and role-bound API. Each proposer can
+have one queued or running candidate. Lists and `my-best` return compact summaries;
+`status <id>` supplies notes and diagnostics, `status <id> --details` supplies full
+coverage, and `source <id>` supplies code. Agents record brief planned comparisons
+and observed results in their own scratch notes. They cannot read neural
 responses, the queue database, other workspaces or final results directly.
-The coordinator may set directions and reset proposer lineages. Repairs create
+The coordinator may set directions and reset proposer lineages. Corrections create
 new child candidates; archived source is never overwritten. Independent-loop
 mode restricts feedback to each proposer's own island.
 
-Provider processes have network access for model requests. Candidate execution
+Provider processes have network access for model requests; prompts prohibit other
+network use. Codex and Claude disable unrelated integrations/tools; the installed
+agy CLI does not expose a built-in tool allowlist. Candidate execution
 has separate filesystem, process and network isolation and receives only source,
 image inputs, installed runtime and necessary GPU access. Missing isolation support
-fails closed. Numeric outputs are loaded without pickle; sampled singleton/batch
-checks enforce the per-image contract within numerical tolerance. Static checks
-and parameter counts supplement isolation; they cannot prove arbitrary code is
+fails closed. Numeric outputs are loaded without pickle. The trusted host compares
+sampled singleton/shuffled batches from fresh isolated processes, including centered
+features, to check the per-image contract within numerical tolerance. Parameter
+counts include global tensors and NumPy arrays. These checks supplement isolation
+and source review; they cannot prove arbitrary code is
 untrained or explainable.
 
 Each search run records its benchmark, source/code identity, runtime versions and
