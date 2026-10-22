@@ -5,10 +5,10 @@ import shutil
 
 import pytest
 
-import hub
-from experiments.evaluation import final
-from harness.protocols import protocol_for, SOURCE_REVISION
-from search.setup_run import EVAL_ENV_KEYS, PROVIDER_ENV_KEYS, scaffold_run
+from search import queue
+import final_eval as final
+from neuro_eval.benchmarks import protocol_for, SOURCE_REVISION
+from search.run import EVAL_ENV_KEYS, PROVIDER_ENV_KEYS, scaffold_run
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -17,7 +17,7 @@ REPO = Path(__file__).resolve().parents[1]
 def clean_environment(monkeypatch, tmp_path):
     for key in (*EVAL_ENV_KEYS, *PROVIDER_ENV_KEYS, "NEURO_DATASET", "NEURO_METRIC", "NEURO_STAGE", "LAB_RUN", "LAB_PROPOSER"):
         monkeypatch.delenv(key, raising=False)
-    from harness.loaders.vision import looped
+    from neuro_eval import datasets as looped
     responses, stimuli = tmp_path / "responses.pkl", tmp_path / "stimuli.h5"
     responses.write_bytes(b"fixture responses")
     stimuli.write_bytes(b"fixture images")
@@ -29,8 +29,7 @@ def clean_environment(monkeypatch, tmp_path):
 @pytest.fixture
 def run(tmp_path, clean_environment):
     root = tmp_path / "repository"
-    (root / "harness").mkdir(parents=True)
-    (root / "hub.py").write_text("")
+    (root / "neuro_eval").mkdir(parents=True)
     (root / "search/proposer").mkdir(parents=True)
     (root / "search/proposer/prompt.md").write_text("Only edit model.py.\n")
     shutil.copyfile(REPO / "model.py", root / "model.py")
@@ -38,13 +37,13 @@ def run(tmp_path, clean_environment):
 
 
 def score_model(run, value=0.2):
-    model_id = hub.propose(str(run / "proposers/p00/model.py"), run=str(run))
+    model_id = queue.propose(str(run / "proposers/p00/model.py"), run=str(run))
     result = {"status": "ok", "test_corr": value, "train_corr": value,
               "metric": "rsa", "stage": "search", "protocol_version": protocol_for("laion").version,
               "dataset": "laion", "source_revision": SOURCE_REVISION,
               "subjects": list(protocol_for("laion").search_subjects),
               "subject_scores": {s: value for s in protocol_for("laion").search_subjects}}
-    assert hub.record(model_id, result, run=str(run)) == "ok"
+    assert queue.record(model_id, result, run=str(run)) == "ok"
     return model_id
 
 
@@ -63,15 +62,15 @@ def test_resume_detects_changed_source_data(run, clean_environment):
 
 
 def test_encoding_results_cannot_enter_search_feedback(run):
-    model_id = hub.propose(str(run / "proposers/p00/model.py"), run=str(run))
-    status = hub.record(model_id, {"status": "ok", "test_corr": 0.9,
+    model_id = queue.propose(str(run / "proposers/p00/model.py"), run=str(run))
+    status = queue.record(model_id, {"status": "ok", "test_corr": 0.9,
                        "metric": "encoding", "stage": "final", "dataset": "laion",
                        "protocol_version": protocol_for("laion").version, "source_revision": SOURCE_REVISION,
                        "subjects": list(protocol_for("laion").search_subjects),
                        "subject_scores": {s: 0.9 for s in protocol_for("laion").search_subjects}}, run=str(run))
     assert status == "error"
-    assert hub.champion(str(run)) is None
-    with hub.connect(str(run)) as connection:
+    assert queue.champion(str(run)) is None
+    with queue.connect(str(run)) as connection:
         row = connection.execute("SELECT test_corr FROM models WHERE id=?", (model_id,)).fetchone()
     assert row[0] is None
 
@@ -82,7 +81,8 @@ def test_champion_selection_checks_hash_and_search_metric(run):
     assert selected["model_id"] == model_id
     assert selected["search_metric"] == "rsa"
     # A scored snapshot must retain its cohort and provenance through DB storage.
-    scored = hub.wait_for_result(model_id, run=str(run))
+    with queue.connect(str(run)) as connection:
+        scored = dict(connection.execute("SELECT * FROM models WHERE id=?", (model_id,)).fetchone())
     assert scored["test_corr"] == 0.2
     assert json.loads(scored["subject_scores"]) == {
         subject: 0.2 for subject in protocol_for("laion").search_subjects}
@@ -98,7 +98,7 @@ def test_champion_selection_checks_hash_and_search_metric(run):
 def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path, monkeypatch):
     model_id = score_model(run)
     selected = final.select_model(run)
-    with hub.connect(str(run)) as connection:
+    with queue.connect(str(run)) as connection:
         before = dict(connection.execute("SELECT * FROM models WHERE id=?", (model_id,)).fetchone())
 
     def evaluate(selection, frozen):
@@ -106,7 +106,7 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
         manifest = json.loads((frozen.parent / "selection.json").read_text())
         assert manifest["model_sha256"] == selection["sha256"]
         assert manifest["selection"]["selection_rule"] == "highest_search_rsa_then_created_at_then_id"
-        assert manifest["harness_sha256"]
+        assert manifest["evaluation_sha256"]
         assert manifest["protocol"] == json.loads(json.dumps(protocol_for("laion").to_dict()))
         return {"status": "ok", "metric": "encoding", "stage": "final", "test_corr": 0.42}, {}
 
@@ -117,7 +117,7 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
     assert document["encoding_score"] == 0.42
     assert document["selection"]["search_score"] == 0.2
     assert Path(document["frozen_model"]).is_file()
-    with hub.connect(str(run)) as connection:
+    with queue.connect(str(run)) as connection:
         after = dict(connection.execute("SELECT * FROM models WHERE id=?", (model_id,)).fetchone())
     assert after == before
     with pytest.raises(FileExistsError):
@@ -127,12 +127,12 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
 
 
 def test_incomplete_cohort_is_not_a_reward(run):
-    model_id = hub.propose(str(run / "proposers/p00/model.py"), run=str(run))
+    model_id = queue.propose(str(run / "proposers/p00/model.py"), run=str(run))
     result = {"status": "ok", "test_corr": 0.9, "metric": "rsa", "stage": "search",
               "protocol_version": protocol_for("laion").version, "source_revision": SOURCE_REVISION,
               "dataset": "laion", "subjects": ["sub-01"], "subject_scores": {"sub-01": 0.9}}
-    assert hub.record(model_id, result, run=str(run)) == "error"
-    assert hub.champion(str(run)) is None
+    assert queue.record(model_id, result, run=str(run)) == "error"
+    assert queue.champion(str(run)) is None
 
 
 def test_failed_final_keeps_selection_and_rejects_inconsistent_retry(tmp_path, monkeypatch):
@@ -162,9 +162,9 @@ def test_failed_final_keeps_selection_and_rejects_inconsistent_retry(tmp_path, m
 
 
 def test_final_uses_isolated_model_without_importing_candidate(tmp_path, monkeypatch):
-    import harness.isolation
-    import harness.reward
-    from harness.loaders.vision import looped
+    import neuro_eval.model
+    import neuro_eval.encoding
+    from neuro_eval import datasets as looped
 
     source = tmp_path / "model.py"
     source.write_text("raise RuntimeError('candidate imported by scorer')\n")
@@ -176,12 +176,31 @@ def test_final_uses_isolated_model_without_importing_candidate(tmp_path, monkeyp
             self.source = path.read_bytes()
             calls.append(path)
 
-    monkeypatch.setattr(harness.isolation, "IsolatedModel", FakeIsolatedModel)
-    monkeypatch.setattr(hub, "_scan_source", lambda path: None)
-    monkeypatch.setattr(harness.reward, "evaluate_subjects", lambda model, dataset, stage: {
+    monkeypatch.setattr(neuro_eval.model, "IsolatedModel", FakeIsolatedModel)
+    monkeypatch.setattr(neuro_eval.model, "scan_source", lambda path: None)
+    monkeypatch.setattr(neuro_eval.encoding, "evaluate_subjects", lambda model, dataset, stage: {
         "status": "ok", "test_corr": 0.1})
     monkeypatch.setattr(looped, "dataset_provenance", lambda dataset: {})
     result, provenance = final.evaluate_frozen(selection, source)
     assert result["test_corr"] == 0.1
     assert calls == [source]
     assert set(provenance) == set(protocol_for("laion").final_subjects)
+
+
+@pytest.mark.parametrize("change", [
+    {"NEURO_SUBJECT": "sub-01"},
+    {"NEURO_METRIC": "encoding"},
+    {"NEURO_STAGE": "final"},
+    {"source_revision": "different source"},
+    {"evaluation_sha256": "different evaluator"},
+])
+def test_final_rejects_changed_run_contract(run, change):
+    score_model(run)
+    path = run / "env.json"
+    environment = json.loads(path.read_text())
+    environment.update(change)
+    path.write_text(json.dumps(environment))
+    database_before = (run / "search.db").read_bytes()
+    with pytest.raises(ValueError):
+        final.select_model(run)
+    assert (run / "search.db").read_bytes() == database_before

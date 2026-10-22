@@ -1,1 +1,0 @@
-"""Standalone dataset loaders: datasets we read end-to-end ourselves (no NeuralSet Study / Segmenter). Each ships a pre-aligned [stimuli x neurons] response table, so there is no timeline to segment. One module per dataset: nsd, tvsd, nnn."""

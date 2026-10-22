@@ -24,7 +24,7 @@ def _free_port(host: str, port: int, tries: int = 20) -> int:
 def main() -> None:
     p = argparse.ArgumentParser(description="Live dashboard over a search run's search.db.")
     p.add_argument("--run", type=Path, default=None,
-                   help="run dir to serve (e.g. runs/nsd__2026-06-24); default: the latest run")
+                   help="run dir to serve (e.g. search_runs/laion__2026-10-22); default: the latest run")
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=8080)
     args = p.parse_args()
@@ -33,7 +33,7 @@ def main() -> None:
     if run_dir is None or not (run_dir / "search.db").exists():
         raise SystemExit(
             f"No search.db found (looked in {args.run or _db.RUNS_ROOT}). "
-            "Pass --run runs/<task>__<date>."
+            "Pass --run search_runs/<task>__<date>."
         )
 
     task, run = _db.split_run_name(run_dir)

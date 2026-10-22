@@ -1,26 +1,22 @@
 # Specs and local-only state
 specs/
 .local/
-scripts/cross_subject/
 
 # Machine-written outputs and caches (never commit)
-data/
-!harness/vendor/looped/data/
-!harness/vendor/looped/data/*.py
-results/
-# committed: one champion model.py per (dataset, subject-config)
-runs/*
-!runs/best/
-search/state/
+/data/
+/search_runs/
+/final_results/
+# Existing local outputs from before the reorganization stay untracked.
+/runs/
+/results/
 logs/
-analyze/report.html
 __pycache__/
 .venv/
 *.egg-info/
 .pytest_cache/
 .env
-experiments/**/*.pt
-experiments/**/*.log
+/build/
+/dist/
 
 # Talk deck (local copy, not tracked)
 /talk/

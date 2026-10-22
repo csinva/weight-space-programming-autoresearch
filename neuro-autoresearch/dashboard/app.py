@@ -6,7 +6,7 @@ instead of a ``.coral/`` directory. The same prebuilt React frontend (vendored u
 
 Run it with::
 
-    python -m dashboard --run runs/nsd__2026-06-24   # serve one run
+    python -m dashboard --run search_runs/laion__2026-10-22   # serve one run
     python -m dashboard                              # serve the latest run
 
 The current run can be switched live from the UI (the run selector); everything is

@@ -42,9 +42,9 @@ async def get_config(request: Request) -> JSONResponse:
     return JSONResponse({
         "task": {
             "name": task_name,
-            "description": "Open-ended neural-encoding model search",
+            "description": "Autonomous RSA search for untrained image representations",
         },
-        "grader": {"type": "test_corr", "direction": "maximize"},
+        "grader": {"type": "rsa", "direction": "maximize"},
         "agents": {"count": agent_count, "model": "", "max_turns": 0, "reflect_every": 0},
     })
 
@@ -127,7 +127,6 @@ async def get_status(request: Request) -> JSONResponse:
     for a in attempts:
         by_agent[a["agent_id"]].append(a)
 
-    history = _db.direction_history(rd) if rd else {}
     inflight = _db.inflight_proposers(rd) if rd else set()
     agent_statuses = []
     for aid, agent_attempts in sorted(by_agent.items()):
@@ -142,7 +141,7 @@ async def get_status(request: Request) -> JSONResponse:
             "attempts": len(agent_attempts),
             "best_score": max(agent_scored) if agent_scored else None,
             "direction": direction,
-            "prev_direction": _db.previous_direction(history.get(aid, []), direction),
+            "prev_direction": "",
         })
 
     return JSONResponse({

@@ -5,20 +5,19 @@ serving, opens its ``search.db`` read-only, and maps our ``models`` rows onto th
 CORAL's frontend expects (an ``Attempt``). Every endpoint handler builds on the helpers
 here so the mapping lives in exactly one place.
 
-Run dirs live at ``runs/<task>__<run>/`` (e.g. ``runs/nsd__2026-06-24``): task = dataset,
+Run dirs live at ``search_runs/<task>__<run>/`` (e.g. ``search_runs/laion__2026-10-22``): task = dataset,
 run = date. ``search.db`` has one ``models`` row per model ever proposed; its ``status`` is
 the queue flag (queued -> running -> ok / error).
 """
 from __future__ import annotations
 
-import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-RUNS_ROOT = REPO_ROOT / "runs"
+RUNS_ROOT = REPO_ROOT / "search_runs"
 
 # A proposer/run counts as "alive" if something happened this recently (seconds).
 ALIVE_WINDOW = 180.0
@@ -40,7 +39,7 @@ def list_run_dirs() -> list[Path]:
 
 
 def split_run_name(p: Path) -> tuple[str, str]:
-    """``runs/nsd__2026-06-24`` -> ``("nsd", "2026-06-24")``."""
+    """``search_runs/laion__2026-10-22`` -> ``("laion", "2026-10-22")``."""
     task, _, run = p.name.partition("__")
     return task, run
 
@@ -114,7 +113,7 @@ def model_to_attempt(row: dict[str, Any], status: str) -> dict[str, Any]:
         "title": summary or idea or row["id"],
         "score": round(row["test_corr"], 5) if row.get("test_corr") is not None else None,
         "status": status,
-        "parent_hash": None,  # our search keeps no lineage
+        "parent_hash": row.get("parent_id"),
         "timestamp": row.get("created_at") or "",
         "feedback": "\n\n".join(bits),
     }
@@ -154,9 +153,9 @@ def list_proposers(rd: Path) -> list[str]:
 
 
 def proposer_direction(rd: Path, pid: str) -> str:
-    """A proposer's self-chosen specialization (``direction.txt``), or ""."""
+    """The coordinator's current direction (``direction.txt``), or ""."""
     try:
-        return (rd / "proposers" / pid / "direction.txt").read_text().strip()
+        return (rd / "state" / pid / "direction.txt").read_text().strip()
     except OSError:
         return ""
 
@@ -169,45 +168,14 @@ def read_model_source(rd: Path, model_id: str) -> str:
         return ""
 
 
-def direction_history(rd: Path) -> dict[str, list[str]]:
-    """Per-proposer history of standing directions, oldest first.
-
-    The conductor rewrites each ``direction.txt`` every epoch via
-    ``echo "<dir>" > .../pNN/direction.txt``; ``conductor.log`` is the only record of the
-    earlier ones. We reconstruct the rendered command lines and pull out each clean
-    (fully-quoted) direction; truncated log entries are simply skipped.
-    """
-    try:
-        log = (rd / "conductor.log").read_text(errors="replace")
-    except OSError:
-        return {}
-    # rejoin the rendered "  │ " command-body wrap so each echo is on one logical line
-    cleaned = re.sub(r"\n\s*│\s?", " ", log)
-    hist: dict[str, list[str]] = {}
-    for m in re.finditer(
-        r'echo "(.*?)"\s*>\s*"?\$?[^"]*?/(p\d\d)/direction\.txt', cleaned
-    ):
-        hist.setdefault(m.group(2), []).append(m.group(1).strip())
-    return hist
-
-
-def previous_direction(history: list[str], current: str) -> str:
-    """The most recent direction that differs from ``current`` (the prior front), or ""."""
-    cur = current.strip()
-    for d in reversed(history):
-        if d.strip() != cur:
-            return d
-    return ""
-
-
 def proposer_log_mtime(rd: Path, pid: str) -> float:
-    """Epoch mtime of a proposer's ``proposer.log`` (how recently it did anything); 0 if none.
+    """Epoch mtime of a proposer's ``logs/<proposer>.jsonl`` (how recently it did anything); 0 if none.
 
     This is the ground-truth activity signal: a running proposer appends to its log on
     every reasoning step and tool call, so a fresh mtime means the process is working.
     """
     try:
-        return (rd / "proposers" / pid / "proposer.log").stat().st_mtime
+        return (rd / "logs" / f"{pid}.jsonl").stat().st_mtime
     except OSError:
         return 0.0
 
@@ -260,7 +228,7 @@ def run_is_alive(rd: Path) -> bool:
     if pdir.exists():
         for p in pdir.iterdir():
             try:
-                if (now() - (p / "proposer.log").stat().st_mtime) < LOG_ACTIVE_WINDOW:
+                if (now() - (rd / "logs" / f"{p.name}.jsonl").stat().st_mtime) < LOG_ACTIVE_WINDOW:
                     return True
             except OSError:
                 pass

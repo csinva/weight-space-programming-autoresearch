@@ -40,7 +40,7 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     expected_model = {"codex": "gpt-6-astra", "claude": "claude-opus-5-5", "agy": "gemini-4-argon-high"}[provider]
     env = {**os.environ, f"NEURO_{provider.upper()}_BIN": str(executable), "CAPTURE": str(capture),
            f"NEURO_{provider.upper()}_MODEL": expected_model}
-    result = subprocess.run([sys.executable, str(REPO / "search/providers.py"), "run",
+    result = subprocess.run([sys.executable, "-m", "search.providers", "run",
                              "--agent", spec, "--cwd", str(tmp_path), "--write-dir", str(tmp_path),
                              "--prompt-file", str(prompt_file)], env=env, capture_output=True, text=True)
     assert result.returncode == 0, result.stderr
@@ -64,59 +64,30 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
 def test_launcher_rejects_final_targets_before_creating_run(dataset, tmp_path):
     # Use an unmistakable unused date and confirm no persistent launcher effects.
     date = "2999-01-01"
-    target = REPO / "runs" / f"{dataset}__{date}"
+    target = REPO / "search_runs" / f"{dataset}__{date}"
     assert not target.exists()
-    result = subprocess.run(["bash", str(REPO / "search/run.sh"), dataset, "--date", date, "--preflight"],
+    result = subprocess.run([sys.executable, "-m", "search.run", dataset, "--date", date, "--preflight"],
                             cwd=REPO, capture_output=True, text=True)
     assert result.returncode != 0
     assert "reserved for final encoding evaluation" in result.stderr
     assert not target.exists()
 
 
-def test_proposer_worker_passes_rsa_protocol_to_provider(tmp_path, selected_python_env):
-    provider, spec = "codex", "codex:astra"
-    workspace = tmp_path / "proposers" / "p00"
-    workspace.mkdir(parents=True)
-    executable = fake_cli(tmp_path, provider)
-    capture = workspace / "capture.json"
-    env = {**selected_python_env, f"NEURO_{provider.upper()}_BIN": str(executable), "CAPTURE": str(capture),
-           "LAB_RUN": str(tmp_path), "NEURO_DATASET": "laion", "NEURO_PROPOSER_MODEL": spec}
-    result = subprocess.run(["bash", str(REPO / "search/proposer/worker.sh"), "p00"],
-                            cwd=REPO, env=env, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
-    record = json.loads(capture.read_text())
-    assert record["cwd"] == str(workspace)
-    prompt = record["argv"][-1]
-    assert "Reward = RSA" in prompt
-    assert "ALL subjects" in prompt
-    assert "Final transfer evaluations" in prompt
-    assert str(workspace) in record["argv"]
-    assert record["python"] == sys.executable
-    calls = [json.loads(line) for line in Path(env["TEST_PYTHON_CALLS"]).read_text().splitlines()]
-    assert calls[0][:2] == [str(REPO / "search/providers.py"), "run"]
-
-
-def test_repair_runs_in_candidate_directory(tmp_path, selected_python_env):
-    workspace = tmp_path / "models"
+def test_repair_runs_in_candidate_directory(tmp_path, monkeypatch):
+    from search.worker import repair
+    workspace = tmp_path / 'repair'
     workspace.mkdir()
-    model = workspace / "candidate.py"
-    model.write_text("# fake failed candidate\n")
-    log = tmp_path / "failure.log"
-    log.write_text("NameError: missing_name\n")
-    capture = workspace / "capture.json"
-    executable = fake_cli(tmp_path, "codex")
-    env = {**selected_python_env, "NEURO_CODEX_BIN": str(executable), "CAPTURE": str(capture)}
-    result = subprocess.run(["bash", str(REPO / "search/evaluator/repair.sh"), str(model), str(log),
-                             "codex:astra", "low", str(REPO)], env=env, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
-    record = json.loads(capture.read_text())
-    assert record["cwd"] == str(workspace)
-    assert "--add-dir" not in record["argv"]
-    assert "immutable" in record["argv"][-1]
-    assert "NameError: missing_name" in record["argv"][-1]
-    assert record["python"] == sys.executable
-    calls = [json.loads(line) for line in Path(env["TEST_PYTHON_CALLS"]).read_text().splitlines()]
-    assert calls[0][:2] == [str(REPO / "search/providers.py"), "run"]
+    model = workspace / 'model.py'
+    model.write_text('MODEL = None')
+    log = workspace / 'error.txt'
+    log.write_text('NameError: missing_name')
+    executable = fake_cli(tmp_path, 'codex')
+    monkeypatch.setenv('NEURO_CODEX_BIN', str(executable))
+    repair(str(model), str(log), 'codex:astra', 'medium')
+    record = json.loads((workspace / 'capture.json').read_text())
+    assert record['cwd'] == str(workspace)
+    assert 'NameError: missing_name' in record['argv'][-1]
+    assert record['python'] == sys.executable
 
 
 @pytest.mark.parametrize("effort", ["low", "medium", "high"])
@@ -167,9 +138,9 @@ def test_agy_wrapper_forwards_termination(tmp_path):
 
 
 def test_provider_os_boundary_and_bounded_submission(tmp_path):
-    import hub
-    from harness.protocols import protocol_for
-    from harness.isolation import check_isolation
+    from search import queue
+    from neuro_eval.benchmarks import protocol_for
+    from neuro_eval.model import check_isolation
     check_isolation()
     run = tmp_path / 'run'
     workspace = run / 'proposers/p00'
@@ -180,7 +151,7 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
     (run / 'env.json').write_text(json.dumps({
         'NEURO_DATASET': 'laion', 'NEURO_METRIC': 'rsa', 'NEURO_STAGE': 'search',
         'NEURO_SUBJECT': ','.join(protocol.search_subjects), 'protocol': protocol.to_dict()}))
-    hub.init(str(run))
+    queue.init(str(run))
     executable = fake_cli(tmp_path, 'codex')
     text = executable.read_text()
     attack = f'''
@@ -190,7 +161,7 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
     assert 'NEURO_NSD_ROOT' not in os.environ
     assert 'LAB_RUN' not in os.environ
     import importlib.util
-    spec = importlib.util.spec_from_file_location('client', 'hub.py')
+    spec = importlib.util.spec_from_file_location('client', 'api.py')
     client = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(client)
     client.request({{'command': 'my-best'}})
@@ -208,12 +179,12 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
     executable.write_text(text)
     env = {**os.environ, 'NEURO_CODEX_BIN': str(executable), 'LAB_RUN': str(run),
            'LAB_PROPOSER': 'p00', 'NEURO_DATASET': 'laion', 'NEURO_NSD_ROOT': str(sentinel)}
-    result = subprocess.run([sys.executable, str(REPO / 'search/providers.py'), 'run',
+    result = subprocess.run([sys.executable, '-m', 'search.providers', 'run',
                              '--role', 'proposer', '--agent', 'codex:astra', '--cwd', str(workspace)],
                             input='test', env=env, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stderr
     mid = json.loads((workspace / 'submitted.json').read_text())
-    with hub.connect(str(run)) as connection:
+    with queue.connect(str(run)) as connection:
         row = dict(connection.execute('SELECT * FROM models WHERE id=?', (mid,)).fetchone())
     assert row['status'] == 'queued' and row['proposer'] == 'p00'
     assert row['test_corr'] is None

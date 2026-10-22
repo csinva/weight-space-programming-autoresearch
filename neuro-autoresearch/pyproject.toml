@@ -4,14 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuro-autoresearch"
-version = "0.2.0"
+version = "0.3.0"
 description = "RSA-driven neural representation search with held-out encoding evaluation."
 requires-python = ">=3.12"
 dependencies = [
     "torch>=2.5",
     "numpy>=1.26",
     "scipy>=1.11",
-    "scikit-learn>=1.4",
     "h5py>=3.10",
     "pillow>=10",
     "nibabel>=5",
@@ -23,12 +22,15 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 dashboard = ["starlette>=0.37", "uvicorn>=0.30"]
-analysis = ["transformers>=4.56", "matplotlib>=3.8", "torchvision>=0.20"]
-language = ["neuralset[all]>=0.2.2", "neuralfetch>=0.2.2", "himalaya>=0.4"]
 
 [tool.setuptools]
-py-modules = ["hub"]
+py-modules = ["final_eval"]
 
 [tool.setuptools.packages.find]
-include = ["harness*", "search*", "experiments*", "dashboard*"]
+include = ["neuro_eval*", "search*", "dashboard*"]
 namespaces = true
+
+[tool.setuptools.package-data]
+search = ["config.env", "prompts/*.md"]
+"neuro_eval.reference" = ["PROVENANCE.md", "metrics/PROVENANCE.md"]
+dashboard = ["static/index.html", "static/assets/*"]
