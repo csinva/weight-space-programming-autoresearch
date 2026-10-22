@@ -71,6 +71,7 @@ def _options(agent: Agent, cwd: str) -> dict[str, str | None]:
                "--dangerously-skip-permissions": None, "--output-format": "stream-json"}
     if agent.provider == "claude":
         options["--verbose"] = None
+        options["--include-partial-messages"] = None
     return options
 
 
@@ -145,7 +146,7 @@ def preflight(agents: list[Agent]) -> list[dict]:
     return [asdict(agent) for agent in agents]
 
 
-def run_agy(argv: list[str], cwd: str) -> int:
+def run_provider(argv: list[str], cwd: str, usage=None, *, validate_agy=True) -> int:
     """Relay native logs and signals, rejecting success with denied tool actions."""
     terminal = None
     with subprocess.Popen(argv, cwd=cwd, stdout=subprocess.PIPE, text=True) as child:
@@ -160,6 +161,8 @@ def run_agy(argv: list[str], cwd: str) -> int:
                     event = json.loads(line)
                 except ValueError:
                     continue
+                if isinstance(event, dict) and usage is not None:
+                    usage.observe(event)
                 if isinstance(event, dict) and event.get("event") == "result":
                     terminal = event.get("result")
             code = child.wait()
@@ -167,6 +170,8 @@ def run_agy(argv: list[str], cwd: str) -> int:
         finally:
             for sig, handler in previous.items():
                 signal.signal(sig, handler)
+    if not validate_agy:
+        return code
     if not isinstance(terminal, dict):
         if code:
             return code
@@ -223,9 +228,19 @@ def main(argv=None) -> int:
         preflight([agent])
         # The launcher runs outside the agent namespace and owns its bounded broker.
         sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-        from search.agents import agent_command, run_command
-        with agent_command(agent, argv, cwd, args.role) as isolated:
-            return run_agy(isolated, cwd) if agent.provider == "agy" else run_command(isolated, cwd)
+        from search.agents import agent_command
+        usage = None
+        if os.environ.get('LAB_RUN'):
+            from search.costs import UsageSession
+            usage = UsageSession(Path(os.environ['LAB_RUN']), agent, args.role, cwd)
+        code = None
+        try:
+            with agent_command(agent, argv, cwd, args.role, usage=usage) as isolated:
+                code = run_provider(isolated, cwd, usage, validate_agy=agent.provider == 'agy')
+            return code
+        finally:
+            if usage is not None:
+                usage.finish(code)
     except (ValueError, OSError, RuntimeError) as exc:
         parser.exit(PROVIDER_UNAVAILABLE, f"[provider] {exc}\n")
     return 0

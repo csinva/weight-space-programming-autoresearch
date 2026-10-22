@@ -48,6 +48,23 @@ The launcher selects agy's ADC authentication and clears conflicting Claude
 process-local authentication overrides; it does not change global login settings.
 Missing providers, data or usable Bubblewrap isolation fail preflight.
 
+Token-cost estimates use the public standard API rates verified on October 22,
+2026 in [`search/pricing.json`](search/pricing.json), including cache usage and
+reasoning tokens. Each run preserves this fixed snapshot; monitoring does not
+fetch prices online. Estimates are not invoices and exclude subscription costs,
+special service tiers and non-token charges. Gemini Argon's introductory rates
+(advertised through November 30, 2026) stay frozen until the catalog is explicitly
+updated; its notes record the announced later rates.
+
+Each run saves `usage.json` with totals by provider, role, proposer and model, backed by
+individual invocation records in `usage/` and its own `pricing.json`. This includes
+the coordinator and optional repair agents. `known_usd` is the cost of captured,
+priceable usage; `usd` is the complete estimate, or `null` if telemetry or pricing
+is missing. Interrupted sessions retain captured usage and mark the total
+incomplete. Resuming adds new invocations without double counting earlier ones.
+The supervisor refreshes totals during the run and on shutdown; after a hard kill,
+`python -m search.costs RUN_DIRECTORY` rebuilds totals from the saved records.
+
 Other entry points:
 
 ```bash
@@ -72,6 +89,7 @@ python -m pytest -q
 | `model.py` | Starting candidate, exporting `MODEL` |
 | `search/run.py` | Configure, validate, start and stop autonomous search |
 | `search/agents.py`, `providers.py` | Agent loops, workspaces and provider execution |
+| `search/costs.py`, `pricing.json` | Token accounting and fixed API price catalog |
 | `search/queue.py`, `api.py` | Candidate storage and restricted search feedback |
 | `search/worker.py`, `score.py` | Process queued models and request RSA scores |
 | `search/prompts/` | Proposer and coordinator instructions |

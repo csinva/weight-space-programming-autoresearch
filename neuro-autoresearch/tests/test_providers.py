@@ -14,7 +14,7 @@ def fake_cli(tmp_path, name, result=None):
     if result is None:
         result = {"event": "result", "result": {"status": "SUCCESS"}}
     executable = tmp_path / name
-    help_text = "--model --sandbox --add-dir --cd --json --config --skip-git-repo-check --print --effort --mode --output-format --dangerously-bypass-approvals-and-sandbox --dangerously-skip-permissions --verbose --ignore-user-config --disable --safe-mode --tools --strict-mcp-config --mcp-config --disable-slash-commands"
+    help_text = "--model --sandbox --add-dir --cd --json --config --skip-git-repo-check --print --effort --mode --output-format --dangerously-bypass-approvals-and-sandbox --dangerously-skip-permissions --verbose --ignore-user-config --disable --include-partial-messages --safe-mode --tools --strict-mcp-config --mcp-config --disable-slash-commands"
     executable.write_text(f'''#!{sys.executable}
 import json, os, pathlib, sys
 if "--help" in sys.argv:
@@ -75,10 +75,10 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     ({}, 78),
 ])
 def test_agy_native_terminal_outcome_controls_exit(tmp_path, capsys, result, expected):
-    from search.providers import run_agy
+    from search.providers import run_provider
     event = {"event": "result", "result": result}
     executable = fake_cli(tmp_path, "agy", event)
-    assert run_agy([str(executable), "--print", "fake"], str(tmp_path)) == expected
+    assert run_provider([str(executable), "--print", "fake"], str(tmp_path)) == expected
     assert json.loads(capsys.readouterr().out) == event
 
 
@@ -88,7 +88,7 @@ def test_agy_wrapper_forwards_termination(tmp_path):
     executable = tmp_path / "agy"
     executable.write_text(f"#!{sys.executable}\nimport time\nprint('ready', flush=True)\ntime.sleep(60)\n")
     executable.chmod(0o755)
-    code = "from search.providers import run_agy; import sys; sys.exit(run_agy(sys.argv[1:2], sys.argv[2]))"
+    code = "from search.providers import run_provider; import sys; sys.exit(run_provider(sys.argv[1:2], sys.argv[2]))"
     child = subprocess.Popen([sys.executable, "-c", code, str(executable), str(tmp_path)],
                              cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                              start_new_session=True)
@@ -159,3 +159,62 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
         row = dict(connection.execute('SELECT * FROM models WHERE id=?', (mid,)).fetchone())
     assert row['status'] == 'queued' and row['proposer'] == 'p00'
     assert row['test_corr'] is None
+
+
+def test_native_usage_harvests_before_home_cleanup(tmp_path):
+    from search.agents import capture_native_usage
+
+    class Usage:
+        def __init__(self):
+            self.events = []
+
+        def observe_codex(self, event):
+            self.events.append(event)
+
+    usage = Usage()
+    directory = tmp_path / '.codex/sessions/2026/10/22'
+    directory.mkdir(parents=True)
+    path = directory / 'rollout.jsonl'
+    event = {'type': 'event_msg', 'payload': {'type': 'token_count',
+             'info': {'total_token_usage': {'input_tokens': 12, 'output_tokens': 3}}}}
+    with capture_native_usage(tmp_path, 'codex', usage):
+        path.write_text(json.dumps(event) + '\n' + '{"unfinished":')
+    assert usage.events == [event]
+
+
+def test_native_claude_usage_harvest(tmp_path):
+    from search.agents import capture_native_usage
+
+    class Usage:
+        def __init__(self):
+            self.events = []
+
+        def observe(self, event):
+            self.events.append(event)
+
+    usage = Usage()
+    directory = tmp_path / '.claude/projects/project'
+    directory.mkdir(parents=True)
+    event = {'type': 'assistant', 'message': {'id': 'message-1',
+             'usage': {'input_tokens': 12, 'output_tokens': 3}}}
+    with capture_native_usage(tmp_path, 'claude', usage):
+        (directory / 'session.jsonl').write_text(json.dumps(event) + '\n')
+    assert usage.events == [event]
+
+
+def test_non_agy_usage_relay_preserves_native_events(tmp_path, capsys):
+    from search.providers import run_provider
+
+    class Usage:
+        def __init__(self):
+            self.events = []
+
+        def observe(self, event):
+            self.events.append(event)
+
+    event = {'type': 'turn.completed', 'usage': {'input_tokens': 12, 'output_tokens': 3}}
+    executable = fake_cli(tmp_path, 'codex', event)
+    usage = Usage()
+    assert run_provider([str(executable), 'prompt'], str(tmp_path), usage, validate_agy=False) == 0
+    assert usage.events == [event]
+    assert json.loads(capsys.readouterr().out) == event

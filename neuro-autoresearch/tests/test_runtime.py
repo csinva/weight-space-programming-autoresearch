@@ -214,3 +214,12 @@ def test_transient_failure_still_restarts_near_deadline(tmp_path, monkeypatch):
     code, _, counts = simulation(tmp_path, monkeypatch, {'p00': [1, None]})
     assert code == 0
     assert counts['p00'] == 2
+
+
+def test_supervisor_refreshes_usage_on_resume_and_shutdown(tmp_path, monkeypatch):
+    from search import costs
+    refreshed = []
+    monkeypatch.setattr(costs, 'summarize_run', lambda path: refreshed.append(Path(path)))
+    code, _, _ = simulation(tmp_path, monkeypatch, {}, hours=.002)
+    assert code == 0
+    assert refreshed == [tmp_path, tmp_path, tmp_path]

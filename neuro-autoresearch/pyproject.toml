@@ -27,9 +27,9 @@ dashboard = ["starlette>=0.37", "uvicorn>=0.30"]
 py-modules = ["final_eval"]
 
 [tool.setuptools.packages.find]
-include = ["neuro_eval*", "search*", "dashboard*"]
+include = ["neuro_eval", "neuro_eval.*", "search", "search.*", "dashboard", "dashboard.*"]
 namespaces = true
 
 [tool.setuptools.package-data]
-search = ["config.env", "prompts/*.md"]
+search = ["config.env", "pricing.json", "prompts/*.md"]
 dashboard = ["static/index.html", "static/assets/*"]

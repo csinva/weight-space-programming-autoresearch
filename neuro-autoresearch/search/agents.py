@@ -66,7 +66,7 @@ def _cli_mounts(executable: str) -> tuple[str, list[str], str]:
 
 
 @contextmanager
-def agent_command(agent, argv: list[str], workspace: str, role: str):
+def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None):
     """Yield an isolated command while its role-bound broker is alive."""
     check_isolation()
     workspace = Path(workspace).resolve(strict=True)
@@ -120,21 +120,55 @@ def agent_command(agent, argv: list[str], workspace: str, role: str):
             for name in ('NEURO_DATASET', 'NEURO_MAX_PARAMS', 'NEURO_IMSIZE', 'LANG'):
                 if name in os.environ:
                     args += ['--setenv', name, os.environ[name]]
-            yield [*args, executable, *argv[1:]]
+            with capture_native_usage(home, agent.provider, usage):
+                yield [*args, executable, *argv[1:]]
 
 
-def run_command(argv: list[str], cwd: str) -> int:
-    """Forward termination while keeping the broker's context alive."""
-    import signal
-    with subprocess.Popen(argv, cwd=cwd) as child:
-        previous = {sig: signal.signal(sig, lambda signum, _frame: child.send_signal(signum))
-                    for sig in (signal.SIGTERM, signal.SIGINT)}
-        try:
-            code = child.wait()
-            return code if code >= 0 else 128 - code
-        finally:
-            for sig, handler in previous.items():
-                signal.signal(sig, handler)
+@contextmanager
+def capture_native_usage(home, provider, usage):
+    """Persist sanitized usage while private provider telemetry still exists."""
+    if usage is None or provider not in {'codex', 'claude'}:
+        yield
+        return
+    import threading
+    stopped = threading.Event()
+    offsets = {}
+
+    def collect():
+        directory = home / ('.codex/sessions' if provider == 'codex' else '.claude/projects')
+        for path in directory.glob('**/*.jsonl'):
+            try:
+                with path.open('rb') as stream:
+                    stream.seek(offsets.get(path, 0))
+                    while line := stream.readline():
+                        # Retry an unfinished record when the CLI completes its write.
+                        if not line.endswith(b'\n'):
+                            break
+                        offsets[path] = stream.tell()
+                        try:
+                            event = json.loads(line)
+                        except (ValueError, UnicodeDecodeError):
+                            continue
+                        if isinstance(event, dict):
+                            if provider == 'codex':
+                                usage.observe_codex(event)
+                            else:
+                                usage.observe(event)
+            except FileNotFoundError:
+                continue
+
+    def poll():
+        while not stopped.wait(0.25):
+            collect()
+
+    thread = threading.Thread(target=poll, name='provider-usage', daemon=True)
+    thread.start()
+    try:
+        yield
+    finally:
+        stopped.set()
+        thread.join()
+        collect()
 
 
 def export_public_inputs(run: str | Path, dataset, *, split=None) -> Path:
@@ -238,6 +272,10 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     deadline = time.monotonic() + hours * 3600
     stopping = False
     sessions = {}
+    from search.costs import ensure_pricing, summarize_run
+    ensure_pricing(root)
+    summarize_run(root)
+    next_usage = time.monotonic() + 5
     disabled = set()
     next_coordinator = 0
 
@@ -289,6 +327,9 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
         for i in range(evaluators):
             launch(f'eval{i}')
         while not stopping and time.monotonic() < deadline:
+            if time.monotonic() >= next_usage:
+                summarize_run(root)
+                next_usage = time.monotonic() + 5
             for name, child in list(sessions.items()):
                 code = child.poll()
                 if code is None:
@@ -324,7 +365,6 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
         for child in sessions.values():
             stop_process(child)
         queue.requeue_orphans(run)
-        (root / 'usage.json').write_text(json.dumps({'logs': sorted(str(p.relative_to(root)) for p in (root / 'logs').glob('*.jsonl')),
-            'usd': None, 'note': 'Native provider events; subscription/API cost is not inferred.'}, indent=2))
+        summarize_run(root)
         for sig, handler in previous.items():
             signal.signal(sig, handler)
