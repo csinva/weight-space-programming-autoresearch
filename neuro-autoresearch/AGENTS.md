@@ -1,18 +1,24 @@
 # neuro-autoresearch
 
-Autonomous search for fixed, untrained image representations. Read `README.md`
-for workflows and scientific contracts. Launch search with `python -m search.run`;
-run final encoding evaluation with `final_eval.py`. Scientific code lives in `neuro_eval/`.
+Autonomous RSA search for fixed, untrained image representations, followed by
+final encoding evaluation. Read `README.md` for commands and scientific contracts.
+
+## Codebase
+
+- `model.py`: starting candidate, exporting callable `MODEL` that returns image features.
+- `search/run.py`: launcher and preflight; `config.env`: defaults; `agents.py` and `providers.py`: agent supervision, workspaces and provider execution.
+- `search/queue.py` and `api.py`: candidate storage and restricted feedback; `worker.py` and `score.py`: queued and single-model RSA evaluation.
+- `search/prompts/`: proposer/coordinator instructions; proposer instructions are copied into workspace `AGENTS.md`, `GEMINI.md` and `CLAUDE.md` files.
+- `search/costs.py` and `pricing.json`: usage accounting and fixed price snapshot.
+- `neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
+- `final_eval.py`: select and freeze the search winner, then evaluate on the paired final dataset.
+- `dashboard/`: read-only monitoring UI/API; `tests/`: scientific and operational checks.
+- `search_runs/` and `final_results/`: generated run state and final artifacts; untracked.
+
+## Working agreements
 
 - When creating Git commits or otherwise acting on GitHub for the user, use the user's name, Yash Mehta. Before committing, verify that the Git author name is `Yash Mehta`.
 - During autonomous model search, only `model.py` and the proposer's notes/scratch are editable. Infrastructure maintenance is a separate task.
 - LAION-fMRI and Triple-N supply RSA search feedback. NSD and TVSD are final-only encoding datasets; never use their data or scores to guide search, repair, coordination or model selection.
 - Keep all subjects, fixed image policies, source filters, source metric kernels and explicit protocol provenance intact when maintaining `neuro_eval/`.
 - Do not commit run databases, data files, caches, credentials or machine-local `.env` settings.
-- Proposer instructions live in `search/prompts/proposer.md`, copied as `AGENTS.md`, `GEMINI.md` and `CLAUDE.md` into each proposer workspace.
-
-## Workshop figures
-
-- Keep figure-generation code in `manuscript/neurips_workshop_2026/figures_code/`.
-- The `manuscript/neurips_workshop_2026/neuro_autoresearch_latex/` checkout contains manuscript sources and generated assets only; write figures to its `figures/` directory.
-- Include a PNG preview alongside publication formats whenever editing a figure.
