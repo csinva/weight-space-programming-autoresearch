@@ -77,6 +77,7 @@ All fixed weights count toward 100,000 parameters, including global and NumPy
 arrays. Retain materialized weights on MODEL and declare n_params honestly; do not
 hide weights in locals or metadata. Zero means no weights. Analytic computation
 without stored weights is allowed. Code length is a diagnostic, not the objective.
+RSA passes the full search image set in one call; chunk internally if needed.
 Local checks use CPU; evaluation uses the configured GPU. Bound memory and check
 numerical behavior across batch sizes. Budget about 20 GB GPU memory. The seven-
 minute evaluation timeout is a ceiling, not an expected duration; use observed

@@ -131,6 +131,14 @@ materialized parameters. Outputs must be independent of batch composition.
 dissimilarity matrices using average-rank Spearman correlation. No readout is
 fitted. Constant or nonfinite primary results fail the candidate.
 
+RSA passes the complete stimulus set to the model in one call. Within each
+candidate evaluation, subjects with identical ordered image contents reuse the
+validated features and model RDM ranks, including source-group ranks. Fixed neural
+ranks are cached across candidates with response identity, mutation and subset
+checks. Every subject and prescribed region is still scored separately. Models
+must bound intermediate memory (internal chunking is allowed); final encoding
+retains its batched forwards.
+
 - LAION uses shared test images excluding all NSD-source stimuli: 1,252 images
   in the current prepared release, for sub-01, sub-03, sub-05, sub-06 and sub-07.
   Subject-private training images are excluded.

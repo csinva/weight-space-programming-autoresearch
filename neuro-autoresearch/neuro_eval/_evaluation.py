@@ -217,12 +217,12 @@ def result_row(model, split, dataset, scored, n_params, started):
     return row
 
 
-def forward(model, inputs, device, label):
+def forward(model, inputs, device, label, *, full_batch=False):
     copied = inputs.to(device).clone() if torch.is_tensor(inputs) else np.array(inputs, copy=True)
     if isinstance(model, torch.nn.Module):
         model.eval()
     with torch.no_grad():
-        output = _forward(model, copied)
+        output = model(copied) if full_batch else _forward(model, copied)
     return matrix(output, label, rows=len(inputs))
 
 

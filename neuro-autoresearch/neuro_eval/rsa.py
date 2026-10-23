@@ -107,7 +107,7 @@ def rdm_chunked(X, device, chunk=200_000, zscore_units=False, on_device=False):
     return rdm.float() if on_device else rdm.float().cpu()
 
 
-_NEURAL_RANKS_LIMIT = 16
+_NEURAL_RANKS_LIMIT = 64
 _NEURAL_RANKS = OrderedDict()
 
 
@@ -121,7 +121,7 @@ def _rsa_ranks(rdm: torch.Tensor, label: str) -> torch.Tensor:
     return ranks
 
 
-def _neural_ranks(targets, mask, device, region, cache_sources):
+def _neural_ranks(targets, mask, device, region, cache_sources, cache_indices=None):
     """Reuse fixed neural geometry, never model geometry.
 
     Keys retain weak references to the original immutable loader tensors, not
@@ -133,7 +133,8 @@ def _neural_ranks(targets, mask, device, region, cache_sources):
     if cache_sources and all(torch.is_tensor(value) for value in cache_sources):
         try:
             key = (tuple((id(value), value._version, tuple(value.shape), value.dtype, str(value.device))
-                         for value in cache_sources), hashlib.sha256(mask.tobytes()).digest())
+                         for value in cache_sources), hashlib.sha256(mask.tobytes()).digest(),
+                   cache_indices)
         except RuntimeError:
             pass
     if key in _NEURAL_RANKS:
@@ -153,20 +154,26 @@ def _neural_ranks(targets, mask, device, region, cache_sources):
     return ranks
 
 
-def rsa_scores(features, targets, masks, device, *, cache_sources=None) -> dict:
+def _model_ranks(features, device):
+    """Validate and prepare the model geometry using the source numerical kernel."""
+    if len(features) < 3 or features.shape[1] < 2:
+        raise ValueError("RSA requires at least three stimuli and two model features")
+    # Epsilon guards in the RDM builder must not hide constant stimulus rows.
+    if torch.any(features.var(dim=1, unbiased=False) <= 0):
+        raise ValueError("Degenerate model features: an RSA stimulus row is constant")
+    return _rsa_ranks(rdm_chunked(features, device, on_device=True), "model")
+
+
+def rsa_scores(features, targets, masks, device, *, cache_sources=None, cache_indices=None,
+               model_ranks=None) -> dict:
     """Score one fixed search stimulus set; no readout is fitted."""
     features = matrix(features, "model features")
     targets = matrix(targets, "neural responses", rows=len(features))
-    if len(features) < 3 or features.shape[1] < 2:
-        raise ValueError("RSA requires at least three stimuli and two model features")
-    # A constant feature vector has no Pearson geometry, even though numerical
-    # epsilon guards in the source RDM builder can make its RDM appear finite.
-    if torch.any(features.var(dim=1, unbiased=False) <= 0):
-        raise ValueError("Degenerate model features: an RSA stimulus row is constant")
-    model_ranks = _rsa_ranks(rdm_chunked(features, device, on_device=True), "model")
+    if model_ranks is None:
+        model_ranks = _model_ranks(features, device)
     scores = {}
     for region, mask in region_masks(masks, targets.shape[1]).items():
-        neural_ranks = _neural_ranks(targets, mask, device, region, cache_sources)
+        neural_ranks = _neural_ranks(targets, mask, device, region, cache_sources, cache_indices)
         score = spearman_from_ranks(model_ranks, neural_ranks)
         if not np.isfinite(score):
             raise ValueError(f"Nonfinite RSA score for region {region!r}")
@@ -177,12 +184,13 @@ def rsa_scores(features, targets, masks, device, *, cache_sources=None) -> dict:
             "n_stimuli": len(features), "encoding_features": None}
 
 
-def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None) -> dict:
+def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None,
+                    *, model_rank_cache=None, cache_sources=None) -> dict:
     """Descriptive search-only feedback; subgroup failures never alter reward.
 
-    Subgroups recompute both RDMs and ranks on their own images. They are not
-    averaged into the primary score. Neural rank caching is deliberately omitted
-    here because the full-cohort cache keys do not identify stimulus subsets.
+    Subgroups compute both RDMs and ranks on their own images. They are not
+    averaged into the primary score. Cached subgroup geometry identifies the
+    ordered indices as well as the original full stimulus/response tensors.
     """
     masks = region_masks(masks, targets.shape[1])
     groups = {}
@@ -195,7 +203,16 @@ def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None
             if (indices.ndim != 1 or len(set(indices.tolist())) != len(indices)
                     or np.any(indices < 0) or np.any(indices >= len(features))):
                 raise ValueError("Invalid source-group stimulus indices")
-            subgroup = rsa_scores(features[indices], targets[indices], masks, device)
+            subgroup_features = features[indices]
+            key = tuple(indices.tolist())
+            ranks = model_rank_cache.get(key) if model_rank_cache is not None else None
+            if ranks is None:
+                ranks = _model_ranks(subgroup_features, device)
+                if model_rank_cache is not None:
+                    model_rank_cache[key] = ranks
+            subgroup = rsa_scores(subgroup_features, targets[indices], masks, device,
+                                  model_ranks=ranks, cache_sources=cache_sources,
+                                  cache_indices=key)
         except ValueError as exc:
             entry["reason"] = str(exc)
         else:
@@ -209,7 +226,25 @@ def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None
             "source_groups": groups}
 
 
-def evaluate_on_split(model, split, dataset):
+def _image_key(images):
+    """Content identity includes every input byte in stimulus order, shape and dtype.
+
+    Loader subjects can use separately allocated tensors or different images of
+    the same shape. Neither subject labels nor allocation identity prove reuse.
+    Hash the current contents on every lookup so mutations cannot hit stale data.
+    """
+    if torch.is_tensor(images):
+        array = images.detach().cpu().contiguous()
+        dtype, shape = str(array.dtype), tuple(array.shape)
+        raw = array.view(torch.uint8).numpy()
+    else:
+        array = np.ascontiguousarray(images)
+        dtype, shape = array.dtype.str, array.shape
+        raw = array.view(np.uint8)
+    return dtype, shape, hashlib.sha256(memoryview(raw)).digest()
+
+
+def evaluate_on_split(model, split, dataset, *, _model_cache=None):
     common._validate_contract(dataset, "search")
     started = time.time()
     X_train, X_test, Y_train, Y_test, masks, _ = split
@@ -219,11 +254,22 @@ def evaluate_on_split(model, split, dataset):
     else:
         X = torch.cat([X_train, X_test]) if torch.is_tensor(X_train) else np.concatenate([X_train, X_test])
         Y = torch.cat([Y_train, Y_test]) if torch.is_tensor(Y_train) else np.concatenate([Y_train, Y_test])
-    features = common.forward(model, X, device, "model features")
+    key = _image_key(X) if _model_cache is not None else None
+    prepared = _model_cache.get(key) if _model_cache is not None else None
+    if prepared is None:
+        features = common.forward(model, X, device, "model features", full_batch=True)
+    else:
+        features = prepared[0]
     n_params = _validate_model_size(model, features.shape[1])
-    scored = rsa_scores(features, Y, masks, device, cache_sources=(Y_train, Y_test))
+    if prepared is None:
+        prepared = features, _model_ranks(features, device), {}
+        if _model_cache is not None:
+            _model_cache[key] = prepared
+    scored = rsa_scores(features, Y, masks, device, cache_sources=(Y_train, Y_test),
+                        model_ranks=prepared[1])
     scored["rsa_diagnostics"] = rsa_diagnostics(features, Y, masks, device, scored,
-        getattr(split, "source_groups", {}) if dataset.loader == "laion" else {})
+        getattr(split, "source_groups", {}) if dataset.loader == "laion" else {},
+        model_rank_cache=prepared[2], cache_sources=(Y_train, Y_test))
     return common.result_row(model, split, dataset, scored, n_params, started)
 
 
@@ -234,4 +280,11 @@ def evaluate_on_split_safe(model, split, dataset):
 def evaluate_subjects(model, dataset, *, stage=None):
     if stage is not None and stage != "search":
         return common._error_row(model, None, dataset, ValueError("This evaluator requires search"), 0)
-    return common.evaluate_subjects(model, dataset, evaluate_on_split, stage="search")
+    # Lifetime is exactly one candidate cohort evaluation. No model outputs or
+    # geometry survive into another candidate or another evaluation of this one.
+    model_cache = {}
+
+    def scorer(model, split, dataset):
+        return evaluate_on_split(model, split, dataset, _model_cache=model_cache)
+
+    return common.evaluate_subjects(model, dataset, scorer, stage="search")
