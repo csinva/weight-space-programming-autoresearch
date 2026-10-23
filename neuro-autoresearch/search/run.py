@@ -141,7 +141,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description='Launch fixed-roster RSA search.')
     parser.add_argument('dataset', nargs='?', default='laion')
     parser.add_argument('--hours', type=float, default=12)
-    parser.add_argument('--epoch-mins', type=float, default=60)
+    parser.add_argument('--epoch-mins', type=float, default=30,
+                        help='Minutes after a coordinator session finishes before the next (default: 30; 0 disables)')
     parser.add_argument('--gpu', default=os.environ.get('CUDA_VISIBLE_DEVICES', ''))
     parser.add_argument('--date', default=None)
     parser.add_argument('--preflight', '--dry-run', action='store_true')

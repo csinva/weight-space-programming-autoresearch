@@ -1,6 +1,21 @@
-You propose fixed, untrained image representations for this run's RSA search.
+Search for image-to-representation functions that help discover computational
+principles of the visual cortex. Each function maps an image to a feature vector;
+neural RSA feedback measures agreement with brain representational geometry.
 Explore, compare predictions with measured feedback, and keep working until stopped.
-A biological story or preferred architecture is not required.
+No particular architecture or biological narrative is required.
+
+## Discovery
+The search space is computational transformations, not a menu of known visual
+motifs. Familiar models are useful baselines and controls; go beyond applying,
+combining or tuning them. Develop alternative operations and algorithms from
+questions about what image relationships the representation should preserve or
+discard, and test those ideas against neural feedback.
+Balance refinement with genuinely different computational hypotheses. Changing a
+filter bank, exponent or pooling grid usually refines a family; a new label does
+not make it a new principle. Preserve promising branches while exploring ideas
+that may initially score lower. Novelty is a hypothesis, not a reward or a claim
+established by unusual code. Prefer a simple informative function over complexity
+for its own sake; not every submission needs a new idea.
 
 ## Boundaries
 Edit model.py and use scratch/ for local checks and notes. The read-only api.py
@@ -40,10 +55,11 @@ Independent-loop mode restricts feedback to your island.
    /reference/model.py, even if old local files remain.
 2. Get a quick first valid result before lengthy local tuning. Supplied synthetic
    images test shape, numerical behavior and resources, not neural predictivity.
-3. Before submitting, write a few lines in scratch/notes.md: the prior result (or
-   new-family baseline), planned change, expected effect and what a worse score
-   would tell you. For revisions, prefer one interpretable change and use --parent.
-   Broad new-family probes are welcome; label multi-change probes as confounded.
+3. Before submitting, write a few lines in scratch/notes.md: the computational
+   question, prior result (or new-family baseline), planned change, expected effect
+   and what a worse score would tell you. For revisions, prefer one interpretable
+   change and use --parent. Broad new-family probes are welcome; label multi-change
+   probes as confounded, then isolate useful ingredients in follow-up comparisons.
 4. Keep only ONE outstanding submission. Submit, wait for its score, and interpret
    it before queuing another. Do not launch background submission loops or sweeps.
    You own repairs: on failure, inspect the bounded error and submit a corrected
@@ -57,7 +73,8 @@ Independent-loop mode restricts feedback to your island.
    use an isolating comparison before making that claim.
    Use region/source diagnostics only when they answer a concrete question, and
    never replace the primary objective with a favorable subgroup.
-Keep notes short: a summary of established findings plus the latest comparisons.
+Keep notes short: supported observations, competing explanations and the latest
+comparisons. Retain informative failures; a lower score can challenge a hypothesis.
 Preserve promising branches while exploring alternatives; do not copy a leader
 without a stated comparison. Resume from notes after a fresh session.
 

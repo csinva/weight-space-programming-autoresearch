@@ -36,8 +36,10 @@ python final_eval.py --run search_runs/laion__2026-10-22
 For the spiking track, replace `laion` with `triplen`; final evaluation chooses
 TVSD automatically. Run tracks sequentially on a single GPU. Use `--date YYYY-MM-DD`
 to name a run; relaunching the same date resumes it if code, data and scientific
-settings still match. Ctrl+C stops the search. `--epoch-mins 0` disables the
-coordinator. Start a new run after changing the evaluation code.
+settings still match. Ctrl+C stops the search. The coordinator runs at startup,
+then 30 minutes after each session finishes; `--epoch-mins` changes this interval
+and `--epoch-mins 0` disables coordination. Start a new run after changing the
+evaluation code.
 
 The default proposer roster is Astra, Opus and Argon at medium effort, with an
 Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
