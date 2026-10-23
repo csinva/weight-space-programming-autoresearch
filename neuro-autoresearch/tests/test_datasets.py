@@ -80,12 +80,12 @@ def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_p
     _write_images(root / "stimuli/images/task-images_stimuli.h5", encoded=True)
     d = _dataset("laion")
     Xtr, Xte, Ytr, Yte, masks, nc = load_split(d)
-    assert Xtr.shape == (0, 12) and Ytr.shape == (0, 4)
-    assert Xte.shape == (2, 12) and Yte.shape == (2, 4)
+    assert Xtr.shape == (0, 12) and Ytr.shape == (0, 2)
+    assert Xte.shape == (2, 12) and Yte.shape == (2, 2)
     np.testing.assert_allclose(Xte[:, 0], [20 / 255, 128 / 255])
     np.testing.assert_allclose(Xte[1], 128 / 255)
     np.testing.assert_array_equal(Yte[:, :2], [[11, 12], [41, 42]])
-    assert set(masks) == set(REGIONS["laion"])
+    assert set(masks) == {"ventral visual stream", "hV4", "FFA", "PPA"}
     assert all(mask.sum() == 2 for mask in masks.values())
     assert nc is None
     assert dataset_provenance(d)["test_ids"] == ["1", "4"]
@@ -112,7 +112,7 @@ def test_triplen_uses_all_images_and_each_monkeys_available_regions(tmp_path, mo
     Xtr, Xte, Ytr, Yte, masks, _ = load_split(d)
     assert Xtr.shape[0] == Ytr.shape[0] == 0
     assert Xte.shape[0] == Yte.shape[0] == 5
-    assert list(masks) == ["ventral visual stream"]
+    assert list(masks) == ["ventral visual stream", "IT"]
     np.testing.assert_array_equal(Yte[:, 0], [1, 11, 21, 31, 41])
     assert dataset_provenance(d)["test_ids"] == ["0", "1", "2", "3", "4"]
 

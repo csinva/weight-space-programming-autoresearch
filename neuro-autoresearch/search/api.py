@@ -14,19 +14,71 @@ MAX_REQUEST = 1_100_000
 MAX_SOURCE = 1_000_000
 MAX_LIST_ROWS = 20
 MAX_LIST_BYTES = 12_000
-COMPACT_FIELDS = ("id", "idea", "proposer", "status", "search_rsa", "parent_id",
-                  "parent_rsa_delta", "n_params", "error_reason")
+COMPACT_FIELDS = ("id", "idea", "proposer", "status", "search_score", "metric", "region", "parent_id",
+                  "parent_score_delta", "n_params", "seconds", "dataset", "subregion_scores",
+                  "error_reason", "candidate_error")
 PUBLIC_FIELDS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
                  "test_corr", "roi_corr", "n_params", "model_loc", "seconds", "created_at",
-                 "metric", "stage", "protocol_version", "subject_scores", "rsa_diagnostics",
+                 "metric", "region", "stage", "protocol_version", "subject_scores", "rsa_diagnostics",
                  "parent_id", "model_sha256", "repair_depth")
+
+
+def _decoded(value):
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except ValueError:
+            return None
+    return value
+
+
+def _selected_details(value, allowed, required=None):
+    """Filter ROI maps at every depth, including nested source-group subjects."""
+    if isinstance(value, list):
+        return [_selected_details(item, allowed, required) for item in value]
+    if not isinstance(value, dict):
+        return value
+    from neuro_eval.benchmarks import SEARCH_REGIONS, SEARCH_SUBREGIONS
+    known = set(SEARCH_REGIONS.values()) | {name for streams in SEARCH_SUBREGIONS.values()
+                                          for names in streams.values() for name in names}
+    forbidden = known - allowed
+    result = {}
+    for key, item in value.items():
+        if key == "search_region" and item in SEARCH_REGIONS and SEARCH_REGIONS[item] not in allowed:
+            continue
+        if key in forbidden or (isinstance(item, str) and item in forbidden):
+            continue
+        if key in {"regions", "roi_corr", "subregions", "unavailable_regions"}:
+            result[key] = {name: _selected_details(entry, allowed, required)
+                           for name, entry in item.items() if name in allowed} if isinstance(item, dict) else {}
+        elif key == "subject_roi_scores" and isinstance(item, dict):
+            result[key] = {subject: {name: entry for name, entry in entries.items() if name in allowed}
+                           for subject, entries in item.items() if isinstance(entries, dict)}
+        else:
+            result[key] = _selected_details(item, allowed, required)
+    # Legacy group totals could average both streams; use the selected pooled ROI.
+    if "rsa" in result and isinstance(result.get("regions"), dict):
+        pooled = next((entry for name, entry in result["regions"].items()
+                       if name.endswith("visual stream")), None)
+        result["rsa"] = pooled.get("rsa") if isinstance(pooled, dict) else pooled
+        if result["rsa"] is None:
+            result["status"] = "unavailable"
+    if required and "n_subjects" in result and (result["n_subjects"] != len(required)
+            or ("subjects" in result and set(result["subjects"]) != required)):
+        result["status"] = "unavailable"
+        for key in ("score", "rsa", "test"):
+            if key in result:
+                result[key] = None
+    return result
 
 
 def public_row(row, *, details=False):
     if row is None:
         return None
     result = {key: row[key] for key in PUBLIC_FIELDS if key in row}
-    result["search_rsa"] = row.get("test_corr")
+    result["search_score"] = row.get("test_corr")
+    if row.get("metric") == "rsa":
+        result["search_rsa"] = row.get("test_corr")
     metadata = row.get("evaluation_metadata")
     if isinstance(metadata, str):
         try:
@@ -56,30 +108,38 @@ def public_row(row, *, details=False):
             if any(word in message.lower() for word in needles):
                 result["error_reason"] = reason
                 break
-    for key in ("roi_corr", "subject_scores", "rsa_diagnostics", "experiment_notes"):
-        if isinstance(result.get(key), str):
-            try:
-                result[key] = json.loads(result[key])
-            except ValueError:
-                pass
-    if not details and isinstance(result.get("rsa_diagnostics"), dict):
-        diagnostics = result["rsa_diagnostics"]
-        result["rsa_diagnostics"] = {key: value for key, value in diagnostics.items()
-                                     if key != "subject_results"}
-        if isinstance(diagnostics.get("source_groups"), dict):
-            groups = {}
-            for name, group in diagnostics["source_groups"].items():
-                compact = {key: group[key] for key in ("status", "rsa", "n_subjects") if key in group}
-                counts = group.get("n_stimuli_by_subject", {})
-                if counts and len(set(counts.values())) == 1:
-                    compact["n_stimuli"] = next(iter(counts.values()))
-                elif counts:
-                    compact["n_stimuli_by_subject"] = counts
-                compact["regions"] = {
-                    region: {key: values[key] for key in ("status", "rsa", "n_subjects") if key in values}
-                    for region, values in group.get("regions", {}).items()}
-                groups[name] = compact
-            result["rsa_diagnostics"]["source_groups"] = groups
+    from neuro_eval.benchmarks import SEARCH_REGIONS, search_subregions, protocol_for
+    names = search_subregions(row.get("dataset", "laion"), row.get("region", "ventral"))
+    pooled = SEARCH_REGIONS[row.get("region", "ventral")]
+    allowed = {pooled, *names}
+    stream = metadata.get("stream_diagnostics", {}) if isinstance(metadata, dict) else {}
+    subregions = stream.get("subregions", {}) if isinstance(stream, dict) else {}
+    if not isinstance(subregions, dict):
+        subregions = {}
+    required = set(protocol_for(row.get("dataset", "laion"), row.get("region", "ventral"),
+                                row.get("metric", "rsa")).search_subjects)
+    result["subregion_scores"] = {}
+    for name in names:
+        entry = subregions.get(name, {})
+        valid = isinstance(entry, dict) and entry.get("status") == "ok" and entry.get("score") is not None
+        valid = valid and set(entry.get("subjects", [])) == required and entry.get("n_subjects") == len(required)
+        result["subregion_scores"][name] = {"status": "ok" if valid else "unavailable",
+                                           "score": entry.get("score") if valid else None}
+    if details:
+        for key in ("roi_corr", "subject_scores", "rsa_diagnostics", "experiment_notes"):
+            parsed = _decoded(result.get(key))
+            if parsed is not None:
+                result[key] = parsed
+        if isinstance(result.get("roi_corr"), dict):
+            result["roi_corr"] = {key: val for key, val in result["roi_corr"].items() if key in allowed}
+        result = _selected_details(result, allowed, required)
+        if stream:
+            result["stream_diagnostics"] = _selected_details(stream, allowed, required)
+    else:
+        result = {key: value for key, value in result.items() if key in COMPACT_FIELDS}
+        if isinstance(result.get("idea"), str):
+            result["idea"] = result["idea"][:240]
+
     return result
 
 
@@ -94,6 +154,7 @@ class Broker:
         if role in {"proposer"} and not re.fullmatch(r"p[0-9]+", proposer or ""):
             raise ValueError("Invalid proposer identity")
         self.run = str(Path(run_dir).resolve())
+        self.contract = queue.search_contract(self.run)
         self.role, self.proposer = role, proposer
         self.socket_path = str(socket_path)
         self.server = None
@@ -101,15 +162,26 @@ class Broker:
 
     def _rows(self, sql, args=()):
         with queue.connect(self.run) as con:
-            return [dict(row) for row in con.execute(sql, args)]
+            # Contract fields are canonical validated enums, never caller input.
+            con.execute("CREATE TEMP VIEW run_models AS SELECT * FROM main.models "
+                        f"WHERE dataset='{self.contract['NEURO_DATASET']}' "
+                        f"AND region='{self.contract['NEURO_REGION']}' "
+                        f"AND metric='{self.contract['NEURO_METRIC']}' AND stage='search'")
+            return [dict(row) for row in con.execute(sql.replace("FROM models", "FROM run_models"), args)]
+
 
     def _public(self, row, *, details=False, compact=False):
         result = public_row(row, details=details)
         if row and row.get("parent_id") and row.get("test_corr") is not None:
-            parents = self._rows("SELECT test_corr FROM models WHERE id=? AND metric='rsa' "
+            parents = self._rows("SELECT * FROM models WHERE id=? "
                                  "AND stage='search' AND status='ok'", (row["parent_id"],))
             if parents and parents[0]["test_corr"] is not None:
-                result["parent_rsa_delta"] = row["test_corr"] - parents[0]["test_corr"]
+                result["parent_score_delta"] = row["test_corr"] - parents[0]["test_corr"]
+                parent = public_row(parents[0])
+                for name, entry in result.get("subregion_scores", {}).items():
+                    previous = parent.get("subregion_scores", {}).get(name, {})
+                    if entry.get("score") is not None and previous.get("score") is not None:
+                        entry["parent_score_delta"] = entry["score"] - previous["score"]
         if compact and result is not None:
             result = {key: result[key] for key in COMPACT_FIELDS if key in result}
             if isinstance(result.get("idea"), str):
@@ -189,7 +261,7 @@ class Broker:
             reset_at = marker.read_text().strip() if marker.exists() else ""
             (island / "reset_seen").write_text(reset_at)
             rows = self._rows("SELECT * FROM models WHERE proposer=? AND status='ok' "
-                              "AND metric='rsa' AND stage='search' AND created_at>? "
+                              "AND stage='search' AND created_at>? "
                               "ORDER BY test_corr DESC LIMIT 1", (self.proposer, reset_at))
             if not rows:
                 return None
@@ -197,7 +269,7 @@ class Broker:
         if cmd in {"history", "top-models", "random-models"}:
             if cmd == "random-models" and os.environ.get("VANILLA_AUTORESEARCH") == "1":
                 raise PermissionError("Cross-island feedback is disabled")
-            where = "metric='rsa' AND stage='search'"
+            where = "stage='search'"
             args = []
             if self.role in {"proposer"} and os.environ.get("VANILLA_AUTORESEARCH") == "1":
                 where += " AND proposer=?"
@@ -219,20 +291,21 @@ class Broker:
             if os.environ.get("VANILLA_AUTORESEARCH") == "1":
                 raise PermissionError("Cross-island feedback is disabled")
             islands = self._rows("SELECT DISTINCT proposer FROM models WHERE proposer<>? "
-                                 "AND status='ok' AND metric='rsa' AND stage='search' "
+                                 "AND status='ok' AND stage='search' "
                                  "ORDER BY RANDOM() LIMIT 1", (self.proposer,))
             if not islands:
                 return None
             rows = self._rows("SELECT idea,experiment_notes FROM models WHERE proposer=? "
-                              "AND status='ok' AND metric='rsa' AND stage='search' "
+                              "AND status='ok' AND stage='search' "
                               "ORDER BY test_corr DESC LIMIT 1", (islands[0]["proposer"],))
-            return public_row(rows[0]) if rows else None
+            return {"idea": (rows[0].get("idea") or "")[:240],
+                    "experiment_notes": (rows[0].get("experiment_notes") or "")[:4000]} if rows else None
         if cmd == "summary":
-            where, args = "metric='rsa' AND stage='search'", ()
+            where, args = "stage='search'", ()
             if self.role in {"proposer"} and os.environ.get("VANILLA_AUTORESEARCH") == "1":
                 where += " AND proposer=?"
                 args = (self.proposer,)
-            return self._rows(f"SELECT proposer,status,COUNT(*) AS count,MAX(test_corr) AS best_rsa "
+            return self._rows(f"SELECT proposer,status,COUNT(*) AS count,MAX(test_corr) AS best_score "
                               f"FROM models WHERE {where} GROUP BY proposer,status", args)
         if cmd == "direction":
             if self.role in {"proposer"}:

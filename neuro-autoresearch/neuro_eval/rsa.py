@@ -165,27 +165,40 @@ def _model_ranks(features, device):
 
 
 def rsa_scores(features, targets, masks, device, *, cache_sources=None, cache_indices=None,
-               model_ranks=None) -> dict:
+               model_ranks=None, required_region=None) -> dict:
     """Score one fixed search stimulus set; no readout is fitted."""
     features = matrix(features, "model features")
     targets = matrix(targets, "neural responses", rows=len(features))
     if model_ranks is None:
         model_ranks = _model_ranks(features, device)
-    scores = {}
+    scores, unavailable, identical_masks = {}, {}, {}
     for region, mask in region_masks(masks, targets.shape[1]).items():
-        neural_ranks = _neural_ranks(targets, mask, device, region, cache_sources, cache_indices)
-        score = spearman_from_ranks(model_ranks, neural_ranks)
-        if not np.isfinite(score):
-            raise ValueError(f"Nonfinite RSA score for region {region!r}")
+        mask_key = mask.tobytes()
+        if mask_key in identical_masks:
+            scores[region] = dict(identical_masks[mask_key])
+            continue
+        try:
+            neural_ranks = _neural_ranks(targets, mask, device, region, cache_sources, cache_indices)
+            score = spearman_from_ranks(model_ranks, neural_ranks)
+            if not np.isfinite(score):
+                raise ValueError(f"Nonfinite RSA score for region {region!r}")
+        except ValueError as exc:
+            if required_region is None or region == required_region:
+                raise
+            unavailable[region] = str(exc)
+            continue
         scores[region] = {"train": score, "test": score}
+        identical_masks[mask_key] = scores[region]
+    if required_region is not None and required_region not in scores:
+        raise ValueError(f"Selected region {required_region!r} has no valid RSA score")
     mean = float(np.mean([row["test"] for row in scores.values()]))
     return {"train_corr": mean, "test_corr": mean, "roi_corr": scores,
             "metric_detail": "pearson_rdm_average_rank_spearman",
-            "n_stimuli": len(features), "encoding_features": None}
+            "n_stimuli": len(features), "encoding_features": None, "unavailable_regions": unavailable}
 
 
 def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None,
-                    *, model_rank_cache=None, cache_sources=None) -> dict:
+                    *, model_rank_cache=None, cache_sources=None, dataset=None) -> dict:
     """Descriptive search-only feedback; subgroup failures never alter reward.
 
     Subgroups compute both RDMs and ranks on their own images. They are not
@@ -212,18 +225,27 @@ def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None
                     model_rank_cache[key] = ranks
             subgroup = rsa_scores(subgroup_features, targets[indices], masks, device,
                                   model_ranks=ranks, cache_sources=cache_sources,
-                                  cache_indices=key)
+                                  cache_indices=key, required_region=(
+                                      dataset.reward_roi if dataset.reward_roi in masks else dataset.search_region
+                                      ) if dataset is not None else None)
+            if dataset is not None:
+                common.select_reward(subgroup, dataset)
         except ValueError as exc:
             entry["reason"] = str(exc)
         else:
             entry.update(status="ok", rsa=subgroup["test_corr"],
+                         unavailable_regions=subgroup.get("unavailable_regions", {}),
                          regions={r: values["test"] for r, values in subgroup["roi_corr"].items()})
         groups[name] = entry
     return {"schema_version": 1, "metric": "rsa", "stage": "search",
             "primary_rsa": scored["test_corr"], "n_stimuli": len(features),
             "regions": {name: {"rsa": scored["roi_corr"][name]["test"],
-                                "n_targets": int(mask.sum())} for name, mask in masks.items()},
-            "source_groups": groups}
+                                "n_targets": int(mask.sum())} for name, mask in masks.items() if name in scored["roi_corr"]},
+            "unavailable_regions": scored.get("unavailable_regions", {}),
+            "source_groups": groups,
+            "search_region": dataset.search_region if dataset is not None else None,
+            "aggregation": ("selected_region" if dataset is not None
+                            else "equal_available_region_mean")}
 
 
 def _image_key(images):
@@ -246,8 +268,11 @@ def _image_key(images):
 
 def evaluate_on_split(model, split, dataset, *, _model_cache=None):
     common._validate_contract(dataset, "search")
+    if dataset.metric != "rsa":
+        raise ValueError("RSA evaluator requires metric=rsa")
     started = time.time()
     X_train, X_test, Y_train, Y_test, masks, _ = split
+    masks = common.selected_masks(masks, dataset)
     device = _readout_device()
     if not len(X_train):
         X, Y = X_test, Y_test
@@ -266,10 +291,13 @@ def evaluate_on_split(model, split, dataset, *, _model_cache=None):
         if _model_cache is not None:
             _model_cache[key] = prepared
     scored = rsa_scores(features, Y, masks, device, cache_sources=(Y_train, Y_test),
-                        model_ranks=prepared[1])
+                        model_ranks=prepared[1], required_region=(dataset.reward_roi
+                            if dataset.reward_roi in masks else dataset.search_region))
+    common.select_reward(scored, dataset)
+    scored["unavailable_regions"].update(getattr(split, "unavailable_regions", {}))
     scored["rsa_diagnostics"] = rsa_diagnostics(features, Y, masks, device, scored,
         getattr(split, "source_groups", {}) if dataset.loader == "laion" else {},
-        model_rank_cache=prepared[2], cache_sources=(Y_train, Y_test))
+        model_rank_cache=prepared[2], cache_sources=(Y_train, Y_test), dataset=dataset)
     return common.result_row(model, split, dataset, scored, n_params, started)
 
 

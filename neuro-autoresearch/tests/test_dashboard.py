@@ -50,3 +50,36 @@ def test_provider_logs_drive_activity_and_log_endpoints(tmp_path):
     assert _db.agent_activity(tmp_path, "p00", True, set())[0] == "active"
     request.path_params["agent_id"] = "eval0"
     assert json.loads(asyncio.run(get_logs(request)).body)["turns"] == []
+
+
+@pytest.mark.parametrize("snapshot,metric,region,target", [
+    ({"NEURO_REGION": "early", "NEURO_METRIC": "encoding"}, "encoding", "early", "early visual cortex"),
+    ({"NEURO_REGION": "ventral", "NEURO_METRIC": "rsa"}, "rsa", "ventral", "ventral visual cortex"),
+    ({"protocol": {"search_region": "early", "search_metric": "encoding"}}, "encoding", "early", "early visual cortex"),
+    ({}, "rsa", None, "early and ventral visual cortex"),
+    (None, "rsa", None, "early and ventral visual cortex"),
+])
+def test_config_reports_persisted_objective_without_migrating_run(tmp_path, monkeypatch, snapshot, metric, region, target):
+    import asyncio
+    import json
+    from types import SimpleNamespace
+
+    pytest.importorskip("starlette")
+    from dashboard.api import get_config
+
+    run = tmp_path / "laion__2026-10-22"
+    run.mkdir()
+    with sqlite3.connect(run / "search.db") as db:
+        db.execute("CREATE TABLE models (id TEXT)")
+    if snapshot is not None:
+        (run / "env.json").write_text(json.dumps(snapshot))
+    before = {p.name: p.read_bytes() for p in run.iterdir()}
+    monkeypatch.setenv("NEURO_REGION", "ventral")
+    monkeypatch.setenv("NEURO_METRIC", "encoding")
+    request = SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace(run_dir=run)))
+    result = json.loads(asyncio.run(get_config(request)).body)
+    assert result["grader"]["type"] == metric
+    assert result["task"]["region"] == region
+    assert target in result["task"]["description"]
+    assert "Discover computational principles" in result["task"]["description"]
+    assert before == {p.name: p.read_bytes() for p in run.iterdir()}

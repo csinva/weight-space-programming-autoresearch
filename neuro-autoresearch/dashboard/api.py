@@ -6,6 +6,7 @@ JSON shaped for the React frontend.  No handler ever writes to the DB.
 from __future__ import annotations
 
 from collections import defaultdict
+import json
 
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -39,12 +40,31 @@ async def get_config(request: Request) -> JSONResponse:
     task_name = _db.split_run_name(rd)[0] if rd else "unknown"
     attempts = _safe_attempts(rd)
     agent_count = len({a["agent_id"] for a in attempts})
+    # Read the persisted contract, never the monitoring process's environment or
+    # today's protocol defaults: older runs used a two-region RSA objective.
+    env = {}
+    if rd:
+        try:
+            value = json.loads((rd / "env.json").read_text())
+            if isinstance(value, dict):
+                env = value
+        except (OSError, ValueError):
+            pass
+    protocol = env.get("protocol")
+    protocol = protocol if isinstance(protocol, dict) else {}
+    metric = env.get("NEURO_METRIC", protocol.get("search_metric", "rsa"))
+    metric = metric if metric in ("rsa", "encoding") else "unknown"
+    region = env.get("NEURO_REGION", protocol.get("search_region"))
+    region = region if region in ("early", "ventral") else None
+    target = f"{region} visual cortex" if region else "early and ventral visual cortex"
+    measure = "RSA" if metric == "rsa" else metric
     return JSONResponse({
         "task": {
             "name": task_name,
-            "description": "Autonomous RSA search for untrained image representations",
+            "description": f"Discover computational principles of {target} through {measure} model search",
+            "region": region,
         },
-        "grader": {"type": "rsa", "direction": "maximize"},
+        "grader": {"type": metric, "direction": "maximize"},
         "agents": {"count": agent_count, "model": "", "max_turns": 0, "reflect_every": 0},
     })
 

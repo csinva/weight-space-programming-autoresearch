@@ -1,1 +1,1 @@
-"""Fixed scientific benchmarks for RSA search and final encoding."""
+"""Fixed scientific benchmarks for regional representation search and final encoding."""

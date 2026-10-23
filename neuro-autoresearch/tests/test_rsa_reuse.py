@@ -93,7 +93,7 @@ def test_identical_images_forward_and_rank_once_with_all_subject_results(
     assert ranked_sizes.count(12) == 1
     assert ranked_sizes.count(4) == (3 if name == "laion" else 0)
     if name == "triplen":
-        assert actual["rsa_diagnostics"]["regions"]["early"]["subjects"] == ["M1", "M4"]
+        assert "early" not in actual["rsa_diagnostics"]["regions"]
 
 
 @pytest.mark.parametrize("variant", ["changed", "reordered"])
@@ -155,13 +155,13 @@ def test_neural_subgroup_cache_reuses_fixed_responses_and_invalidates_mutation(m
 
     monkeypatch.setattr(rsa, "compute_rdm", record_neural)
     first = rsa.evaluate_on_split(RecordingModel(), split, dataset)
-    assert len(calls) == 8  # Two regions, full set and three source groups.
+    assert len(calls) == 4  # Selected pool, full set and three source groups.
     second = rsa.evaluate_on_split(RecordingModel(), split, dataset)
-    assert len(calls) == 8
+    assert len(calls) == 4
     assert first["rsa_diagnostics"] == second["rsa_diagnostics"]
     split[3][0, 2] += 7
     changed = rsa.evaluate_on_split(RecordingModel(), split, dataset)
-    assert len(calls) == 16
+    assert len(calls) == 8
     rsa._NEURAL_RANKS.clear()
     fresh = rsa.evaluate_on_split(RecordingModel(), split, dataset)
     assert changed["rsa_diagnostics"] == fresh["rsa_diagnostics"]

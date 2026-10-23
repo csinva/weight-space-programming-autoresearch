@@ -12,8 +12,9 @@ REPO = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def clean_environment(monkeypatch, tmp_path):
-    for key in (*EVAL_ENV_KEYS, *PROVIDER_ENV_KEYS, "NEURO_DATASET", "NEURO_METRIC", "NEURO_STAGE", "LAB_RUN", "LAB_PROPOSER", "VANILLA_AUTORESEARCH"):
+    for key in (*EVAL_ENV_KEYS, *PROVIDER_ENV_KEYS, "NEURO_DATASET", "NEURO_REGION", "NEURO_METRIC", "NEURO_STAGE", "LAB_RUN", "LAB_PROPOSER", "VANILLA_AUTORESEARCH"):
         monkeypatch.delenv(key, raising=False)
+    monkeypatch.setenv("NEURO_REGION", "ventral")
     from neuro_eval import datasets
     responses, stimuli = tmp_path / "responses.pkl", tmp_path / "stimuli.h5"
     responses.write_bytes(b"fixture responses")
@@ -38,6 +39,8 @@ def search_result():
     protocol = protocol_for("laion")
     return {"status": "ok", "test_corr": 0.2, "metric": "rsa", "stage": "search",
             "protocol_version": protocol.version, "dataset": "laion",
+            "search_region": "ventral", "aggregation": protocol.aggregation,
+            "search_image_policy": protocol.image_policy,
             "source_revision": SOURCE_REVISION, "subjects": list(protocol.search_subjects),
             "subject_scores": {subject: 0.2 for subject in protocol.search_subjects},
             "rsa_diagnostics": {"schema_version": 1, "primary_rsa": 0.2}}

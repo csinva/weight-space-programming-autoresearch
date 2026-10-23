@@ -10,7 +10,7 @@ import traceback
 import numpy as np
 import torch
 
-from neuro_eval.benchmarks import SOURCE_REVISION, VISION_DATASETS, protocol_for
+from neuro_eval.benchmarks import SOURCE_REVISION, VISION_DATASETS, protocol_for, SEARCH_REGIONS, search_subregions, DIAGNOSTIC_POLICY_VERSION
 from neuro_eval.datasets import Dataset
 from neuro_eval.model import _forward, robust_n_params
 
@@ -42,6 +42,62 @@ def region_masks(masks: dict, n_targets: int) -> dict[str, np.ndarray]:
     return result
 
 
+def selected_masks(masks, dataset):
+    if dataset.stage != "search":
+        return masks
+    allowed = {dataset.reward_roi, dataset.search_region, *search_subregions(dataset.loader, dataset.search_region)}
+    selected = {name: mask for name, mask in masks.items() if name in allowed}
+    parent = selected.get(dataset.reward_roi, selected.get(dataset.search_region))
+    if parent is not None:
+        parent = np.asarray(parent, dtype=bool)
+        for name in search_subregions(dataset.loader, dataset.search_region):
+            if name not in selected:
+                continue
+            mask = np.asarray(selected[name], dtype=bool)
+            if mask.shape != parent.shape or not (mask & parent).any():
+                del selected[name]
+            else:
+                selected[name] = mask & parent
+    return selected
+
+
+def stream_diagnostics(scored, split, dataset):
+    masks = split[4]
+    unavailable = {**getattr(split, "unavailable_regions", {}), **scored.get("unavailable_regions", {})}
+    subregions = {}
+    for name in search_subregions(dataset.loader, dataset.search_region):
+        value = scored["roi_corr"].get(name, {}).get("test")
+        ok = value is not None and np.isfinite(value)
+        entry = {"status": "ok" if ok else "unavailable", "score": value if ok else None,
+                 "n_targets": int(np.asarray(masks[name]).sum()) if name in masks else 0}
+        if not ok:
+            entry["reason"] = unavailable.get(name, "Anatomical diagnostic unavailable")
+        subregions[name] = entry
+    return {"schema_version": 1, "policy_version": DIAGNOSTIC_POLICY_VERSION,
+            "metric": dataset.metric, "search_region": dataset.search_region,
+            "pooled_roi": dataset.reward_roi, "primary_score": scored["test_corr"],
+            "subregions": subregions}
+
+
+def _cohort_stream_diagnostics(rows, score):
+    first = rows[0]["stream_diagnostics"]
+    subjects = [row["subject"] for row in rows]
+    subregions = {}
+    for name in first["subregions"]:
+        entries = {row["subject"]: row["stream_diagnostics"]["subregions"][name] for row in rows}
+        covered = [subject for subject, entry in entries.items() if entry["status"] == "ok"]
+        complete = len(covered) == len(subjects)
+        subregions[name] = {"status": "ok" if complete else "unavailable",
+            "score": float(np.mean([entry["score"] for entry in entries.values()])) if complete else None,
+            "subjects": covered, "n_subjects": len(covered),
+            "n_targets_by_subject": {subject: entry["n_targets"] for subject, entry in entries.items()},
+            "subject_results": entries}
+        if not complete:
+            subregions[name]["reason"] = "Diagnostic requires every fixed-cohort subject"
+    return {**first, "primary_score": score, "subjects": subjects, "n_subjects": len(subjects),
+            "subregions": subregions}
+
+
 def _experiment_notes(model) -> str:
     """Capture concise proposer notes for cross-island feedback."""
     return json.dumps({
@@ -54,9 +110,10 @@ def _row_metadata(dataset: Dataset) -> dict:
     from neuro_eval.datasets import dataset_key
 
     result = {"dataset": dataset_key(dataset), "metric": dataset.metric,
-              "stage": dataset.stage, "subject": dataset.subject}
+              "stage": dataset.stage, "subject": dataset.subject, "search_region": dataset.search_region}
     if dataset.loader in VISION_DATASETS:
-        protocol = protocol_for(dataset.loader)
+        protocol = protocol_for(dataset.loader, dataset.search_region,
+                                dataset.metric if dataset.stage == "search" else dataset.search_metric)
         result.update(protocol=protocol.name, protocol_version=protocol.version,
                       aggregation=protocol.aggregation, source_revision=SOURCE_REVISION,
                       search_image_policy=protocol.image_policy)
@@ -64,20 +121,24 @@ def _row_metadata(dataset: Dataset) -> dict:
 
 
 def _validate_contract(dataset: Dataset, stage: str | None = None) -> None:
-    """The dataset fixes its stage and metric; environment flags cannot repurpose OOD data."""
+    """Validate configured search scoring while keeping final datasets held out."""
     from neuro_eval.datasets import dataset_key
 
     if dataset.loader not in VISION_DATASETS:
         raise ValueError(f"Unknown image benchmark {dataset.loader!r}")
-    protocol = protocol_for(dataset.loader)
+    protocol = protocol_for(dataset.loader, dataset.search_region,
+                                dataset.metric if dataset.stage == "search" else dataset.search_metric)
     expected_stage = "search" if dataset_key(dataset) == protocol.search_dataset else "final"
     expected_metric = protocol.search_metric if expected_stage == "search" else protocol.final_metric
     if dataset.stage != expected_stage or dataset.metric != expected_metric:
         raise ValueError(f"{dataset.loader} is fixed to {expected_stage}/{expected_metric}")
+    if dataset.stage == "search" and dataset.reward_roi != SEARCH_REGIONS[dataset.search_region]:
+        raise ValueError("Search reward must use the selected anatomical region")
     for label, requested, expected in (
         ("stage", stage, expected_stage),
         ("NEURO_STAGE", os.environ.get("NEURO_STAGE"), expected_stage),
         ("NEURO_METRIC", os.environ.get("NEURO_METRIC"), expected_metric),
+        ("NEURO_REGION", os.environ.get("NEURO_REGION"), dataset.search_region),
     ):
         if requested and requested != expected:
             raise ValueError(f"{label}={requested!r} conflicts with {dataset.loader}'s fixed {expected!r}")
@@ -145,6 +206,8 @@ def _mean_rows(rows: list[dict]) -> dict:
             "subject_results": {row["subject"]: row for row in rows},
             "n_params": max(row["n_params"] for row in rows),
             "n_targets": sum(row["n_targets"] for row in rows)}
+    if "stream_diagnostics" in f:
+        result["stream_diagnostics"] = _cohort_stream_diagnostics(rows, score)
     if f.get("metric") == "rsa":
         result["rsa_diagnostics"] = _cohort_rsa_diagnostics(rows, score)
     return result
@@ -155,10 +218,11 @@ def _cohort_rsa_diagnostics(rows: list[dict], score: float) -> dict:
     subjects = [row["subject"] for row in rows]
     diagnostics = {row["subject"]: row.get("rsa_diagnostics", {}) for row in rows}
     regions = {}
-    for region in dict.fromkeys(r for row in rows for r in row["roi_corr"]):
+    for region in dict.fromkeys(r for row in rows for r in (*row["roi_corr"], *row.get("stream_diagnostics", {}).get("subregions", {}))):
         covered = [row for row in rows if region in row["roi_corr"]]
         regions[region] = {
-            "rsa": float(np.mean([row["roi_corr"][region]["test"] for row in covered])),
+            "status": "ok" if len(covered) == len(rows) else "unavailable",
+            "rsa": float(np.mean([row["roi_corr"][region]["test"] for row in covered])) if len(covered) == len(rows) else None,
             "subjects": [row["subject"] for row in covered], "n_subjects": len(covered),
             "n_targets_by_subject": {row["subject"]: diagnostics[row["subject"]].get(
                 "regions", {}).get(region, {}).get("n_targets") for row in covered},
@@ -188,7 +252,8 @@ def _cohort_rsa_diagnostics(rows: list[dict], score: float) -> dict:
                                                  if entry is not None},
                         "regions": group_regions, "subject_results": entries}
     return {"schema_version": 1, "metric": "rsa", "stage": "search", "primary_rsa": score,
-            "aggregation": "equal_regions_within_subject_then_equal_subjects",
+            "aggregation": rows[0].get("aggregation", "selected_region_then_equal_subject_mean"),
+            "search_region": rows[0].get("search_region"),
             "subjects": subjects, "n_subjects": len(subjects),
             "subject_results": diagnostics, "regions": regions, "source_groups": groups}
 
@@ -204,6 +269,20 @@ def evaluate_on_split_safe(model, split, dataset, scorer):
         return row
 
 
+def select_reward(scored, dataset):
+    """Select the configured anatomical score without changing metric kernels."""
+    if dataset.reward_roi == "all":
+        return scored
+    region = dataset.reward_roi
+    if region not in scored["roi_corr"] and dataset.search_region in scored["roi_corr"]:
+        region = dataset.search_region
+    if region not in scored["roi_corr"]:
+        raise ValueError(f"Selected region {dataset.reward_roi!r} has no score for {dataset.subject}")
+    selected = scored["roi_corr"][region]
+    scored.update(train_corr=selected["train"], test_corr=selected["test"])
+    return scored
+
+
 def result_row(model, split, dataset, scored, n_params, started):
     Y_train, Y_test = split[2:4]
     row = {"study": dataset.study, "model_name": getattr(model, "name", type(model).__name__),
@@ -212,6 +291,8 @@ def result_row(model, split, dataset, scored, n_params, started):
            "n_train": len(Y_train), "n_test": len(Y_test), "n_targets": int(Y_test.shape[1]),
            "seconds": round(time.time() - started, 2), "status": "ok", "reward_roi": dataset.reward_roi,
            **scored, **_row_metadata(dataset)}
+    if dataset.stage == "search":
+        row["stream_diagnostics"] = stream_diagnostics(scored, split, dataset)
     row["score"] = row["test_corr"]
     row["reward"] = row["score"] if dataset.stage == "search" else None
     return row
@@ -239,7 +320,8 @@ def evaluate_subjects(model, dataset: Dataset, scorer, *, stage: str) -> dict:
     tokens = [x.strip() for x in os.environ.get("NEURO_SUBJECT", "").split(",") if x.strip()]
     try:
         _validate_contract(dataset, stage)
-        protocol = protocol_for(dataset.loader)
+        protocol = protocol_for(dataset.loader, dataset.search_region,
+                                dataset.metric if dataset.stage == "search" else dataset.search_metric)
         required = protocol.search_subjects if dataset.stage == "search" else protocol.final_subjects
         if tokens:
             selected = [with_subject(dataset, token).subject for token in tokens]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Trusted search database, immutable model archive, and evaluation queue.
 
-Rows move through queued -> running -> ok/error. Only validated full-cohort RSA
+Rows move through queued -> running -> ok/error. Only validated full-cohort
 results enter this database. Role-scoped feedback and access rules live in search.api.
 """
 from __future__ import annotations
@@ -26,7 +26,7 @@ NUM = ("test_corr", "train_corr", "n_params", "seconds")
 COLS = ("id", "idea", "experiment_notes", "proposer", "dataset", "status",
         "test_corr", "train_corr", "roi_corr", "n_params", "model_loc",
         "seconds", "created_at", "path", "metric", "stage", "protocol_version",
-        "subject_scores", "evaluation_metadata", "model_sha256", "parent_id", "repair_depth")
+        "subject_scores", "evaluation_metadata", "model_sha256", "parent_id", "repair_depth", "region")
 _ID_ALPHABET = string.ascii_lowercase + string.digits
 _ID_LEN = 5
 
@@ -94,22 +94,27 @@ def _ensure(run: str | None = None) -> str:
     return run
 
 
-def search_contract(run: str, dataset: str | None = None) -> dict:
-    """Reject legacy runs and final evaluation at the search API boundary."""
-    from neuro_eval.benchmarks import protocol_for, validate_search_dataset
+def search_contract(run: str, dataset: str | None = None, region: str | None = None,
+                    metric: str | None = None) -> dict:
+    """Reject legacy or changed scientific configurations at the search boundary."""
+    from neuro_eval.benchmarks import protocol_for, validate_search_dataset, canonical_region, validate_search_metric
     path = os.path.join(run, "env.json")
     if not os.path.exists(path):
-        raise ValueError("Search requires a versioned env.json; scaffold a new laion or triplen run")
+        raise ValueError("Search requires a versioned env.json; scaffold a new run")
     with open(path) as f:
         env = json.load(f)
     key = validate_search_dataset(env.get("NEURO_DATASET", ""))
-    protocol = protocol_for(key)
-    if dataset and validate_search_dataset(dataset) != key:
-        raise ValueError("Dataset does not match this run's evaluation contract")
-    if (env.get("NEURO_METRIC") != "rsa" or env.get("NEURO_STAGE") != "search"
-            or env.get("protocol", {}).get("version") != protocol.version
+    target = canonical_region(env.get("NEURO_REGION", ""))
+    measure = validate_search_metric(env.get("NEURO_METRIC", ""))
+    protocol = protocol_for(key, region=target, metric=measure)
+    if ((dataset and validate_search_dataset(dataset) != key)
+            or (region and canonical_region(region) != target)
+            or (metric and validate_search_metric(metric) != measure)):
+        raise ValueError("Dataset, region or metric does not match this run's evaluation contract")
+    if (env.get("NEURO_STAGE") != "search"
+            or env.get("protocol") != json.loads(json.dumps(protocol.to_dict()))
             or env.get("NEURO_SUBJECT") != ",".join(protocol.search_subjects)):
-        raise ValueError("Run is incompatible with the current RSA search protocol")
+        raise ValueError("Run is incompatible with the current search protocol; start a fresh run")
     return env
 
 
@@ -151,7 +156,7 @@ def newid(run: str | None = None) -> str:
 def propose(model_file: str, idea: str = "",
             proposer: str | None = None, run: str | None = None, *, parent_id: str | None = None,
             repair_depth: int = 0, max_pending: int | None = None) -> str:
-    """Archive a candidate and enqueue its RSA evaluation; return its ID.
+    """Archive a candidate and enqueue its evaluation; return its ID.
 
     Check source, declared size, run contract, and reset acknowledgement first.
     The evaluator scores the snapshot and captures live complexity and notes."""
@@ -160,7 +165,7 @@ def propose(model_file: str, idea: str = "",
     if max_pending is not None and (type(max_pending) is not int or max_pending < 1):
         raise ValueError("max_pending must be a positive integer")
     run = _ensure(run)
-    contract = search_contract(run, os.environ.get("NEURO_DATASET"))
+    contract = search_contract(run, os.environ.get("NEURO_DATASET"), os.environ.get("NEURO_REGION"), os.environ.get("NEURO_METRIC"))
     if not os.path.exists(model_file):
         raise FileNotFoundError(model_file)
     cheat = scan_source(model_file)              # reject reward-hacks BEFORE they queue
@@ -203,7 +208,7 @@ def propose(model_file: str, idea: str = "",
             "test_corr": None, "train_corr": None, "roi_corr": None,
             "n_params": cx["n_params"], "model_loc": cx["model_loc"],
             "seconds": None, "created_at": created_at, "path": os.path.abspath(dst),
-            "metric": "rsa", "stage": "search", "protocol_version": contract["protocol"]["version"],
+            "metric": contract["NEURO_METRIC"], "region": contract["NEURO_REGION"], "stage": "search", "protocol_version": contract["protocol"]["version"],
             "subject_scores": None, "evaluation_metadata": None,
             "model_sha256": hashlib.sha256(open(dst, "rb").read()).hexdigest(),
             "parent_id": parent_id, "repair_depth": repair_depth,
@@ -232,10 +237,13 @@ def propose(model_file: str, idea: str = "",
 
 
 def champion(run: str | None = None) -> dict | None:
-    """Read the best successful RSA archive row for trusted integrity checks."""
-    with connect(_ensure(run)) as con:
+    """Read the best successful archive row for trusted integrity checks."""
+    run = _ensure(run)
+    contract = search_contract(run)
+    with connect(run) as con:
         row = con.execute("SELECT * FROM models WHERE status='ok' AND test_corr IS NOT NULL "
-                          "AND metric='rsa' AND stage='search' ORDER BY test_corr DESC LIMIT 1").fetchone()
+                          "AND dataset=? AND metric=? AND region=? AND stage='search' ORDER BY test_corr DESC LIMIT 1",
+                          (contract["NEURO_DATASET"], contract["NEURO_METRIC"], contract["NEURO_REGION"])).fetchone()
     return dict(row) if row else None
 
 
@@ -288,20 +296,21 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
            run: str | None = None) -> str:
     """Validate and persist evaluation feedback without changing model identity.
 
-    Only finite, same-dataset, full-cohort RSA results can become search rewards."""
+    Only finite, same-dataset, full-cohort results can become search rewards."""
     st = "ok" if str(status).strip().lower().startswith("ok") else "error"
     scores = scores or {}
     run = _ensure(run)
     with connect(run) as con:
-        queued = con.execute("SELECT dataset,metric,stage,protocol_version,path,model_sha256 FROM models WHERE id=?", (mid,)).fetchone()
+        queued = con.execute("SELECT dataset,metric,region,stage,protocol_version,path,model_sha256 FROM models WHERE id=?", (mid,)).fetchone()
     if queued is None:
         raise KeyError(mid)
     if st == "ok" and (_num(scores.get("test_corr")) is None
                         or not str(scores.get("status", "ok")).startswith("ok")):
         st = "error"
-    if st == "ok" and queued["metric"] == "rsa":
+    if st == "ok":
+        contract = search_contract(run)
         from neuro_eval.benchmarks import protocol_for, SOURCE_REVISION
-        protocol = protocol_for(queued["dataset"])
+        protocol = protocol_for(queued["dataset"], region=queued["region"], metric=queued["metric"])
         required = set(protocol.search_subjects)
         subject_scores = scores.get("subject_scores") or {}
         subjects = scores.get("subjects") or []
@@ -310,12 +319,20 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
                      and all(_num(value) is not None for value in subject_scores.values()))
         mean_ok = cohort_ok and math.isclose(float(scores["test_corr"]),
             sum(float(value) for value in subject_scores.values()) / len(required), abs_tol=1e-10)
-        if (scores.get("metric") != "rsa" or scores.get("stage") != "search"
+        if (scores.get("metric") != queued["metric"]
+                or scores.get("search_region") != queued["region"]
+                or queued["region"] != contract["NEURO_REGION"]
+                or queued["metric"] != contract["NEURO_METRIC"]
+                or queued["dataset"] != contract["NEURO_DATASET"]
+                or queued["stage"] != "search" or scores.get("stage") != "search"
                 or scores.get("protocol_version") != queued["protocol_version"]
+                or queued["protocol_version"] != protocol.version
+                or scores.get("aggregation") != protocol.aggregation
+                or scores.get("search_image_policy") != protocol.image_policy
                 or scores.get("dataset") != queued["dataset"]
                 or scores.get("source_revision") != SOURCE_REVISION or not mean_ok):
             st = "error"
-            scores = {"status": "error: incompatible evaluation result; expected same-dataset full-cohort RSA"}
+            scores = {"status": "error: incompatible evaluation result; expected same-dataset full-cohort"}
     updates = {c: _num(scores[c]) for c in NUM if scores.get(c) not in (None, "")}
     if scores.get("roi_corr"):
         updates["roi_corr"] = json.dumps(scores["roi_corr"])
@@ -324,8 +341,8 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     if scores.get("subject_scores"):
         updates["subject_scores"] = json.dumps(scores["subject_scores"], allow_nan=False)
     metadata = {k: scores[k] for k in (
-        "dataset", "metric", "stage", "protocol_version", "aggregation", "subjects", "search_image_policy",
-        "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "rsa_diagnostics", "status", "candidate_error") if k in scores}
+        "dataset", "metric", "search_region", "reward_roi", "stage", "protocol_version", "aggregation", "subjects", "search_image_policy",
+        "source_revision", "subject_roi_scores", "n_train", "n_test", "n_targets", "rsa_diagnostics", "stream_diagnostics", "status", "candidate_error") if k in scores}
     updates["evaluation_metadata"] = json.dumps(metadata, allow_nan=False)
     if not queued["path"] or not os.path.isfile(queued["path"]):
         st = "error"
@@ -337,6 +354,9 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
             st = "error"
             updates["test_corr"] = None
             updates["evaluation_metadata"] = json.dumps({"status": "error: archived source identity changed"})
+    if st != "ok":
+        updates["test_corr"] = None
+        updates["train_corr"] = None
     updates["status"] = st
     assignments = ", ".join(f"{column}=?" for column in updates)
     with connect(run) as con:

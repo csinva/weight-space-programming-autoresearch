@@ -1,13 +1,15 @@
 # neuro-autoresearch
 
-Find fixed, untrained image representations with autonomous **RSA search**, then
-freeze the winner and measure transfer with **encoding evaluation**.
+Open-ended agentic search for computational models of the visual cortex: discover
+image-to-representation functions and the computational principles they express.
+Search a selected brain region with **RSA** (default) or **encoding**, then freeze
+the winner and measure transfer with final encoding evaluation.
 Only the candidate `model.py` evolves during search; the scientific code stays fixed.
 
 | Track | Phase 1: search feedback | Phase 2: final evaluation |
 | --- | --- | --- |
-| fMRI | LAION-fMRI, all five subjects, RSA | NSD, all eight subjects, encoding |
-| Spiking | Triple-N, all five monkeys, RSA | TVSD, both monkeys, encoding |
+| fMRI | LAION-fMRI, all five subjects, RSA or encoding | NSD, all eight subjects, encoding |
+| Spiking | Triple-N, all five monkeys, RSA or encoding | TVSD, both monkeys, encoding |
 
 NSD and TVSD data and scores must never guide search, coordination, repair or model
 selection. A high search score is predictive evidence, not a mechanistic explanation.
@@ -22,23 +24,33 @@ source .venv/bin/activate
 pip install -e '.[dev]'
 
 # Print settings, then check data, providers and isolation without model requests.
-python -m search.run --show-config
-python -m search.run laion --preflight
+python -m search.run --region early --show-config
+python -m search.run --region early --preflight
 
-# Phase 1: autonomous search (sends real model requests).
-python -m search.run laion --hours 12 --gpu 0
+# Phase 1: autonomous search, 12 hours by default (sends real model requests).
+python -m search.run --region early --gpu 0
+python -m search.run --region ventral --gpu 0
 
-# Phase 2: freeze the RSA winner and evaluate it on NSD.
+# Phase 2: freeze the search winner and evaluate it on NSD.
 # Use the run directory printed by the search launcher.
-python final_eval.py --run search_runs/laion__2026-10-22
+python final_eval.py --run search_runs/laion__early__rsa__2026-10-23
 ```
 
-For the spiking track, replace `laion` with `triplen`; final evaluation chooses
-TVSD automatically. Run tracks sequentially on a single GPU. Use `--date YYYY-MM-DD`
-to name a run; relaunching the same date resumes it if code, data and scientific
-settings still match. Ctrl+C stops the search. The coordinator runs at startup,
-then 30 minutes after each session finishes; `--epoch-mins` changes this interval
-and `--epoch-mins 0` disables coordination. Start a new run after changing the
+Choose `--region early` or `--region ventral` explicitly. `--dataset laion` and
+`--metric rsa` are defaults; `--metric encoding` uses a ridge readout of the same
+image representation. For the spiking track use `--dataset triplen --region ventral`;
+final evaluation chooses TVSD automatically. Triple-N early search is unavailable
+because M2/M3/M5 lack early responses; the full five-monkey cohort is mandatory.
+Run configurations sequentially on a single GPU. Each run is stored as
+`<dataset>__<region>__<metric>__<date>`; `--date YYYY-MM-DD` selects the date.
+Relaunching the same configuration/date resumes only if code, data and scientific
+settings still match. Search defaults to 12 hours; `--hours` overrides it. Ctrl+C
+stops the search. The coordinator starts at startup and every 30 minutes thereafter
+(on a fixed schedule); an occupied slot is skipped to prevent overlapping reviews.
+`--epoch-mins` changes this interval and `--epoch-mins 0` disables coordination.
+Each review starts a fresh provider conversation without the preceding transcript.
+Its short `scratch/notes.md`, current directions and search results persist and
+remain available through the workspace/API. Start a new run after changing the
 evaluation code.
 
 The default proposer roster is Astra, Opus and Argon at medium effort, with an
@@ -70,11 +82,12 @@ The supervisor refreshes totals during the run and on shutdown; after a hard kil
 Other entry points:
 
 ```bash
-# Score one model on a complete RSA search cohort.
-python -m search.score --dataset laion --model model.py
+# Score one model on a complete search cohort.
+python -m search.score --region ventral --model model.py
+python -m search.score --region early --metric encoding --model model.py
 
 # Evaluate an explicitly supplied frozen model, recording that selection method.
-python final_eval.py --model model.py --search-dataset laion
+python final_eval.py --model model.py --search-dataset laion --region early
 
 # Optional read-only dashboard over search_runs/.
 pip install -e '.[dashboard]'
@@ -93,7 +106,7 @@ python -m pytest -q
 | `search/agents.py`, `providers.py` | Agent loops, workspaces and provider execution |
 | `search/costs.py`, `pricing.json` | Token accounting and fixed API price catalog |
 | `search/queue.py`, `api.py` | Candidate storage and restricted search feedback |
-| `search/worker.py`, `score.py` | Process queued models and request RSA scores |
+| `search/worker.py`, `score.py` | Process queued models and score the configured objective |
 | `search/prompts/` | Proposer and coordinator instructions |
 | `final_eval.py` | Select, freeze and evaluate a winner; write final artifacts |
 | `neuro_eval/rsa.py`, `encoding.py` | Scientific RSA and encoding evaluation |
@@ -138,34 +151,73 @@ candidate evaluation, subjects with identical ordered image contents reuse the
 validated features and model RDM ranks, including source-group ranks. Fixed neural
 ranks are cached across candidates with response identity, mutation and subset
 checks. Every subject and prescribed region is still scored separately. Models
-must bound intermediate memory (internal chunking is allowed); final encoding
+must bound intermediate memory (internal chunking is allowed); encoding
 retains its batched forwards.
 
-- LAION uses shared test images excluding all NSD-source stimuli: 1,252 images
+- For RSA, LAION uses shared test images excluding all NSD-source stimuli: 1,252 images
   in the current prepared release, for sub-01, sub-03, sub-05, sub-06 and sub-07.
   Subject-private training images are excluded.
-- Triple-N combines its source folds and uses all 1,000 images for M1–M5.
-- Use the source's early and ventral streams. Triple-N M1/M4 have both;
-  M2/M3/M5 have ventral coverage. Average actual prescribed regions within each
-  subject, then average all required subjects equally. A missing subject fails
-  evaluation.
+- For RSA, Triple-N combines its source folds and uses all 1,000 images for M1–M5.
+- The full selected stream mask determines each subject's reward; average these
+  pooled-stream scores equally across all required subjects. Never average the
+  subregion scores to obtain the reward. Missing pooled-stream coverage or a
+  missing subject fails evaluation. Search diagnostics include only subregions
+  within the selected stream.
 - Fixed source filters are ncsnr >0.2 for LAION/NSD, reliability >0.4 for Triple-N,
   and oracle >0.4 for TVSD.
 
-Search feedback includes primary RSA and subject/region coverage. LAION also
-reports source-group RSA for `laion`, `thingsplus` and `ood`, using only allowed
-search images. A subgroup mean requires all subjects; unavailable diagnostics do
-not alter the primary score. Repeatedly optimized search scores are not independent
-held-out confirmation.
+Default candidate feedback is compact: pooled `search_score`, parent comparison,
+selected-stream subregion scores and brief execution information. Detailed subject
+coverage and LAION RSA source-group diagnostics (`laion`, `thingsplus`, `ood`) are
+available through `status <id> --details`. A subregion or source-group cohort score
+requires all subjects; unavailable diagnostics do not change the pooled reward.
+Repeatedly optimized search scores are not independent held-out confirmation.
 
-**Encoding:** freeze the selected model before loading final neural responses.
-Use the paired dataset's source train/test split. Center features and normalize
+**Encoding:** use the dataset's existing source train/test split. For LAION search,
+exclude NSD-source stimuli from both splits: 4,712 private training images and
+1,252 shared test images per subject in the prepared release (including OOD images).
+Triple-N uses source fold 0. For final evaluation, freeze the selected model before
+loading any paired final-dataset responses. Center features and normalize
 their overall scale using training data; z-score targets with training statistics.
 Choose a ridge penalty per neural target using five-fold training CV over the
-source's 20-alpha grid. Report held-out Pearson r, averaging regions then subjects.
+source's 20-alpha grid. Report test Pearson r for the pooled selected stream,
+averaged equally over the full cohort. Search subregion values reuse the same
+per-unit predictions; they do not add readout fits. Final evaluation retains the selected
+region and always uses encoding, regardless of the search metric.
 Both RSA and encoding are raw scores, without noise-ceiling normalization.
 Known NSD-source images are excluded from LAION search; this is not a comprehensive
 pixel-level duplicate audit across releases.
+
+### LAION region definitions
+
+`early` uses **laion-EVC**: retinotopic V1–V3 intersected with the visually responsive
+laion-general mask. `ventral` uses **laion-ventral**: the broad anatomical ventral
+occipitotemporal sector below the inferior occipital–inferior temporal gyrus border.
+It is not restricted to FFA/PPA or a pure high-level functional area. See the
+[official ROI definitions](https://laion-fmri.hebartlab.com/rois.html).
+
+The prepared response coordinates were checked against the source binary masks
+and segmentation labels (EVC=1, ventral=4) for all five subjects. After the fixed
+ncsnr >0.2 filter, retained voxel counts are:
+
+| Subject | early | ventral |
+| --- | ---: | ---: |
+| sub-01 | 2,139 | 2,722 |
+| sub-03 | 2,916 | 2,518 |
+| sub-05 | 3,077 | 2,374 |
+| sub-06 | 2,943 | 2,399 |
+| sub-07 | 2,500 | 2,528 |
+
+All coordinates matched their masks, with no early/ventral overlap. These are the
+source sector masks, not a reconstruction from separately voxelized named areas.
+
+Early diagnostics report **V1, V2, V3**; ventral diagnostics report **hV4, FFA, PPA**.
+Each diagnostic mask is the intersection of that named area's retained coordinates
+with the selected stream's retained coordinates. These diagnostic areas can overlap
+and do not necessarily exhaust the stream. The pooled response matrix is stored
+once, with subregion masks selecting columns from it; adding diagnostics does not
+duplicate voxels or rerun model forwards. Triple-N ventral diagnostics use the
+available **IT** units, intersected by their source unit identifiers.
 
 ## Data, isolation and outputs
 
@@ -186,8 +238,8 @@ volumes for reliability filtering.
 
 Search agents receive a private workspace and role-bound API. Each proposer can
 have one queued or running candidate. Lists and `my-best` return compact summaries;
-`status <id>` supplies notes and diagnostics, `status <id> --details` supplies full
-coverage, and `source <id>` supplies code. Agents record brief planned comparisons
+`status <id>` and `wait-for-score <id>` supply compact pooled/subregion feedback;
+`status <id> --details` supplies notes and full coverage, and `source <id>` supplies code. Agents record brief planned comparisons
 and observed results in their own scratch notes. They cannot read neural
 responses, the queue database, other workspaces or final results directly.
 The coordinator may set directions and reset proposer lineages. Corrections create

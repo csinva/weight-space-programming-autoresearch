@@ -1,4 +1,4 @@
-"""Final encoding scoring for the complete fixed cohort.
+"""Encoding scoring for complete search or final fixed cohorts.
 
 Numerical kernels copied unchanged from looped-networks, revision
 3ee575baeceb1ad784102162a051b7444182fdaa, looped/metrics/encoding.py.
@@ -162,9 +162,12 @@ def encoding_scores(train_features, test_features, train_targets, test_targets, 
 
 
 def evaluate_on_split(model, split, dataset):
-    common._validate_contract(dataset, "final")
+    common._validate_contract(dataset)
+    if dataset.metric != "encoding":
+        raise ValueError("Encoding evaluator requires metric=encoding")
     started = time.time()
     X_train, X_test, Y_train, Y_test, masks, _ = split
+    masks = common.selected_masks(masks, dataset)
     device = _readout_device()
     A_train = common.forward(model, X_train, device, "training model features")
     A_test = common.forward(model, X_test, device, "test model features")
@@ -172,6 +175,7 @@ def evaluate_on_split(model, split, dataset):
         raise ValueError("Model representation width differs between training and test stimuli")
     n_params = _validate_model_size(model, A_train.shape[1])
     scored = encoding_scores(A_train, A_test, Y_train, Y_test, masks, device)
+    common.select_reward(scored, dataset)
     return common.result_row(model, split, dataset, scored, n_params, started)
 
 
@@ -180,6 +184,8 @@ def evaluate_on_split_safe(model, split, dataset):
 
 
 def evaluate_subjects(model, dataset, *, stage=None):
-    if stage is not None and stage != "final":
-        return common._error_row(model, None, dataset, ValueError("This evaluator requires final"), 0)
-    return common.evaluate_subjects(model, dataset, evaluate_on_split, stage="final")
+    if dataset.metric != "encoding":
+        return common._error_row(model, None, dataset, ValueError("Encoding evaluator requires metric=encoding"), 0)
+    if stage is not None and stage != dataset.stage:
+        return common._error_row(model, None, dataset, ValueError("Evaluator stage conflicts with dataset"), 0)
+    return common.evaluate_subjects(model, dataset, evaluate_on_split, stage=dataset.stage)

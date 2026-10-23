@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Freeze an RSA-selected model, then evaluate its paired OOD dataset with encoding.
+"""Freeze a search-selected model, then evaluate its paired OOD dataset with encoding.
 
-    python final_eval.py --run search_runs/laion__2026-10-21
-    python final_eval.py --model model.py --search-dataset triplen
+    python final_eval.py --run search_runs/laion__ventral__rsa__2026-10-21
+    python final_eval.py --model model.py --search-dataset triplen --region ventral
 
 No encoding result is written to the search database. Model selection finishes
 before any final-dataset responses are loaded.
@@ -29,52 +29,55 @@ def sha256(path: Path) -> str:
 
 
 def select_model(run: str | Path) -> dict:
-    """Read only the highest RSA row from a compatible run, validating its bytes."""
+    """Read only the highest objective score from a compatible run, validating its bytes."""
     run = Path(run).resolve()
     env = json.loads((run / "env.json").read_text())
     dataset = validate_search_dataset(env.get("NEURO_DATASET", ""))
-    protocol = protocol_for(dataset)
-    if (env.get("NEURO_METRIC") != "rsa" or env.get("NEURO_STAGE") != "search"
+    protocol = protocol_for(dataset, region=env.get("NEURO_REGION", ""),
+                            metric=env.get("NEURO_METRIC", ""))
+    if (env.get("NEURO_STAGE") != "search"
             or env.get("protocol") != json.loads(json.dumps(protocol.to_dict()))
             or env.get("NEURO_SUBJECT") != ",".join(protocol.search_subjects)):
-        raise ValueError("Run is incompatible with the current RSA search protocol")
+        raise ValueError("Run is incompatible with the current search protocol")
     from neuro_eval.model import evaluation_sha256
     if env.get("source_revision") != SOURCE_REVISION or env.get("evaluation_sha256") != evaluation_sha256():
         raise ValueError("Selected run used different scientific code; restore its evaluation code before final evaluation")
     with sqlite3.connect((run / "search.db").as_uri() + "?mode=ro", uri=True) as con:
         con.row_factory = sqlite3.Row
         row = con.execute(
-            "SELECT * FROM models WHERE status='ok' AND metric='rsa' AND stage='search' "
+            "SELECT * FROM models WHERE status='ok' AND metric=? AND region=? AND stage='search' "
             "AND protocol_version=? AND dataset=? AND test_corr IS NOT NULL "
             "ORDER BY test_corr DESC, created_at, id LIMIT 1",
-            (protocol.version, protocol.search_dataset),
+            (protocol.search_metric, protocol.search_region, protocol.version, protocol.search_dataset),
         ).fetchone()
     if row is None or not math.isfinite(row["test_corr"]):
-        raise ValueError("Run has no finite RSA-scored model under the current protocol")
+        raise ValueError("Run has no finite scored model under the current protocol")
     source = Path(row["path"]).resolve()
     if not source.is_relative_to(run / "models"):
         raise ValueError("Selected model is outside the run's immutable model archive")
     digest = sha256(source)
     if row["model_sha256"] != digest:
-        raise ValueError("Selected model bytes changed after RSA scoring; score it again before final evaluation")
+        raise ValueError("Selected model bytes changed after search scoring; score it again before final evaluation")
     return {"path": str(source), "sha256": digest, "model_id": row["id"],
-            "search_score": row["test_corr"], "search_metric": "rsa", "run": str(run),
+            "search_score": row["test_corr"], "search_metric": protocol.search_metric, "search_region": protocol.search_region, "run": str(run),
             "search_dataset": protocol.search_dataset, "environment": env,
-            "selection_rule": "highest_search_rsa_then_created_at_then_id"}
+            "selection_rule": "highest_search_score_then_created_at_then_id"}
 
 
-def manual_model(path: str | Path, dataset: str) -> dict:
-    """Explicitly identify a frozen manual model; never claim it was RSA-selected."""
+def manual_model(path: str | Path, dataset: str, region: str) -> dict:
+    """Explicitly identify a frozen manual model; never claim it was search-selected."""
     path = Path(path).resolve()
     dataset = validate_search_dataset(dataset)
+    protocol = protocol_for(dataset, region=region)
     return {"path": str(path), "sha256": sha256(path), "model_id": None,
-            "search_score": None, "search_metric": None, "run": None,
+            "search_score": None, "search_metric": None, "search_region": protocol.search_region, "run": None,
             "search_dataset": dataset, "environment": {}, "selection_rule": "explicit_manual_model"}
 
 
 @contextlib.contextmanager
 def final_environment(selection: dict):
-    protocol = protocol_for(selection["search_dataset"])
+    protocol = protocol_for(selection["search_dataset"], region=selection["search_region"],
+                            metric=selection["search_metric"] or "rsa")
     from neuro_eval.model import EVAL_ENV_KEYS
     previous = os.environ.copy()
     try:
@@ -88,7 +91,7 @@ def final_environment(selection: dict):
             os.environ.update({k: str(saved[k]) for k in EVAL_ENV_KEYS if k in saved})
         os.environ.update(storage_overrides)
         os.environ.update(NEURO_DATASET=protocol.final_dataset, NEURO_STAGE="final",
-                          NEURO_METRIC="encoding", NEURO_SUBJECT=",".join(protocol.final_subjects))
+                          NEURO_METRIC="encoding", NEURO_REGION=protocol.search_region, NEURO_SUBJECT=",".join(protocol.final_subjects))
         os.environ.pop("LAB_RUN", None)
         os.environ.pop("LAB_PROPOSER", None)
         yield protocol
@@ -111,7 +114,8 @@ def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:
         model = IsolatedModel(frozen)
         if hashlib.sha256(model.source).hexdigest() != selection["sha256"]:
             raise ValueError("Frozen model no longer matches the selected hash")
-        dataset = get_dataset(protocol.final_dataset)
+        dataset = get_dataset(protocol.final_dataset, region=protocol.search_region,
+                              search_metric=protocol.search_metric)
         result = evaluate_subjects(model, dataset, stage="final")
         if result.get("status") != "ok" or not math.isfinite(result.get("test_corr", float("nan"))):
             raise RuntimeError(f"Final encoding failed: {result.get('status')}")
@@ -121,7 +125,8 @@ def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:
 
 
 def run_final(selection: dict, output: str | Path | None = None) -> Path:
-    protocol = protocol_for(selection["search_dataset"])
+    protocol = protocol_for(selection["search_dataset"], region=selection["search_region"],
+                            metric=selection["search_metric"] or "rsa")
     output = Path(output) if output else (
         REPO / "final_results" / protocol.name / selection["sha256"] / "evaluation.json")
     output = output.resolve()
@@ -196,19 +201,22 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--run", help="RSA run from which to select the champion")
+    source.add_argument("--run", help="search run from which to select the champion")
     source.add_argument("--model", help="explicit model file, without claiming a searched champion")
     parser.add_argument("--search-dataset", help="laion or triplen; required with --model")
+    parser.add_argument("--region", choices=("early", "ventral"), help="required with --model; inferred from --run")
     parser.add_argument("--output", help="final JSON path outside the search run")
     args = parser.parse_args(argv)
     if args.run:
         selection = select_model(args.run)
         if args.search_dataset and validate_search_dataset(args.search_dataset) != selection["search_dataset"]:
             parser.error("--search-dataset does not match --run")
+        if args.region and args.region != selection["search_region"]:
+            parser.error("--region does not match --run")
     else:
-        if not args.search_dataset:
-            parser.error("--model requires --search-dataset")
-        selection = manual_model(args.model, args.search_dataset)
+        if not args.search_dataset or not args.region:
+            parser.error("--model requires --search-dataset and --region")
+        selection = manual_model(args.model, args.search_dataset, args.region)
     print(f"Frozen selection: {selection['sha256']} ({selection['search_dataset']})", flush=True)
     output = run_final(selection, args.output)
     print(f"Final encoding artifact: {output}")

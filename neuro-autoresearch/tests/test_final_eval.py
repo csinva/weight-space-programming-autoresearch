@@ -27,7 +27,7 @@ def test_champion_selection_checks_hash_and_search_metric(run, score_model):
     assert metadata["metric"] == "rsa" and metadata["stage"] == "search"
     Path(selected["path"]).chmod(0o600)
     Path(selected["path"]).write_text("MODEL = None\n")
-    with pytest.raises(ValueError, match="changed after RSA"):
+    with pytest.raises(ValueError, match="changed after search"):
         final.select_model(run)
 
 
@@ -53,9 +53,10 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
         manifest = json.loads((output.parent / "selection.json").read_text())
         assert manifest["stage"] == "frozen_before_final"
         assert manifest["model_sha256"] == hashlib.sha256(candidate.source).hexdigest()
-        assert manifest["selection"]["selection_rule"] == "highest_search_rsa_then_created_at_then_id"
+        assert manifest["selection"]["selection_rule"] == "highest_search_score_then_created_at_then_id"
         assert manifest["evaluation_sha256"]
         assert manifest["protocol"] == json.loads(json.dumps(protocol_for("laion").to_dict()))
+        assert dataset.search_region == "ventral" and dataset.search_metric == "rsa"
         assert dataset.loader == "nsd" and dataset.metric == "encoding" and stage == "final"
         return {"status": "ok", "test_corr": 0.42}
 
@@ -81,7 +82,7 @@ def test_failed_final_can_retry_only_the_same_frozen_selection(tmp_path, monkeyp
     monkeypatch.setattr(final, "REPO", tmp_path)
     source = tmp_path / "candidate.py"
     source.write_text("MODEL = None\n")
-    selected = final.manual_model(source, "triplen")
+    selected = final.manual_model(source, "triplen", "ventral")
     output = tmp_path / "final_results" / protocol_for("triplen").name / selected["sha256"] / "evaluation.json"
 
     def fail(selection, frozen):
@@ -109,6 +110,8 @@ def test_failed_final_can_retry_only_the_same_frozen_selection(tmp_path, monkeyp
 
 @pytest.mark.parametrize("change", [
     {"NEURO_SUBJECT": "sub-01"},
+    {"NEURO_REGION": "early"},
+    {"NEURO_METRIC": "encoding"},
     {"evaluation_sha256": "different evaluator"},
 ])
 def test_final_rejects_changed_run_contract(run, change, monkeypatch, score_model):
@@ -131,7 +134,7 @@ def test_manual_final_cannot_write_into_search_storage(tmp_path, monkeypatch):
     monkeypatch.setattr(final, "REPO", tmp_path)
     source = tmp_path / "model.py"
     source.write_text("MODEL = None\n")
-    selection = final.manual_model(source, "laion")
+    selection = final.manual_model(source, "laion", "ventral")
     with pytest.raises(ValueError, match="outside the search run"):
         final.run_final(selection, tmp_path / "search_runs/laion__2026-10-22/final.json")
     assert not (tmp_path / "search_runs").exists()
@@ -140,9 +143,53 @@ def test_manual_final_cannot_write_into_search_storage(tmp_path, monkeypatch):
 def test_model_change_before_freezing_creates_no_final_artifact(tmp_path):
     source = tmp_path / "model.py"
     source.write_text("MODEL = None\n")
-    selection = final.manual_model(source, "laion")
+    selection = final.manual_model(source, "laion", "ventral")
     source.write_text("MODEL = 1\n")
     output = tmp_path / "final/evaluation.json"
     with pytest.raises(ValueError, match="between selection and freezing"):
         final.run_final(selection, output)
     assert not output.parent.exists()
+
+
+@pytest.mark.parametrize('region', ['early', 'ventral'])
+@pytest.mark.parametrize('metric', ['rsa', 'encoding'])
+def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, metric):
+    from search.run import scaffold_run
+    from neuro_eval import datasets, encoding, model
+
+    configured = Path(scaffold_run('laion', '2026-10-22', str(run.parent.parent), 1,
+                                   region=region, metric=metric))
+    protocol = protocol_for('laion', region=region, metric=metric)
+    monkeypatch.setenv('NEURO_REGION', region)
+    monkeypatch.setenv('NEURO_METRIC', metric)
+    mid = queue.propose(str(configured / 'proposers/p00/model.py'), run=str(configured))
+    row = {'status': 'ok', 'test_corr': .25, 'metric': metric, 'stage': 'search',
+           'dataset': 'laion', 'search_region': region, 'protocol_version': protocol.version,
+           'source_revision': SOURCE_REVISION, 'aggregation': protocol.aggregation,
+           'search_image_policy': protocol.image_policy,
+           'subjects': list(protocol.search_subjects),
+           'subject_scores': {s: .25 for s in protocol.search_subjects}}
+    assert queue.record(mid, row, run=str(configured)) == 'ok'
+    selected = final.select_model(configured)
+    assert selected['search_region'] == region and selected['search_metric'] == metric
+
+    class FakeModel:
+        def __init__(self, path):
+            self.source = path.read_bytes()
+
+    def evaluate(candidate, dataset, stage):
+        assert dataset.search_region == region and dataset.search_metric == metric
+        assert dataset.reward_roi == f'{region} visual stream'
+        assert dataset.loader == 'nsd' and dataset.metric == 'encoding' and stage == 'final'
+        return {'status': 'ok', 'test_corr': .3}
+
+    monkeypatch.setattr(model, 'IsolatedModel', FakeModel)
+    monkeypatch.setattr(model, 'scan_source', lambda _: None)
+    monkeypatch.setattr(encoding, 'evaluate_subjects', evaluate)
+    monkeypatch.setattr(datasets, 'dataset_provenance', lambda _: {})
+    output = final.run_final(selected, tmp_path / 'frozen/evaluation.json')
+    artifact = json.loads(output.read_text())
+    assert artifact['protocol'] == json.loads(json.dumps(protocol.to_dict()))
+    assert artifact['selection']['search_region'] == region
+    assert artifact['selection']['search_metric'] == metric
+    assert set(artifact['data_provenance']) == set(protocol.final_subjects)

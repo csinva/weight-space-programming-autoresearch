@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO not in sys.path:
     sys.path.insert(0, REPO)
-from neuro_eval.benchmarks import protocol_for, validate_search_dataset, SOURCE_REVISION
+from neuro_eval.benchmarks import protocol_for, validate_search_dataset, canonical_region, validate_search_metric, SOURCE_REVISION
 
 from neuro_eval.model import EVAL_ENV_KEYS, evaluation_sha256, runtime_versions
 PROVIDER_ENV_KEYS = (
@@ -27,20 +27,22 @@ PROVIDER_ENV_KEYS = (
 )
 
 
-def evaluation_environment(dataset: str) -> dict:
+def evaluation_environment(dataset: str, region: str | None = None, metric: str | None = None) -> dict:
     """Resolve the full search contract before creating or opening a run."""
     from dotenv import load_dotenv
     load_dotenv(os.path.join(REPO, ".env"))
     dataset = validate_search_dataset(dataset)
-    protocol = protocol_for(dataset)
+    region = canonical_region(region or os.environ.get("NEURO_REGION", ""))
+    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", "rsa"))
+    protocol = protocol_for(dataset, region=region, metric=metric)
     subjects = tuple(s.strip() for s in os.environ.get("NEURO_SUBJECT", "").split(",") if s.strip())
     if subjects and subjects != protocol.search_subjects:
         raise ValueError(f"{dataset} requires all search subjects: {','.join(protocol.search_subjects)}")
-    if os.environ.get("NEURO_METRIC", "rsa") != "rsa" or os.environ.get("NEURO_STAGE", "search") != "search":
-        raise ValueError("Search runs require NEURO_METRIC=rsa and NEURO_STAGE=search")
+    if os.environ.get("NEURO_STAGE", "search") != "search":
+        raise ValueError("Search runs require NEURO_STAGE=search")
     env = {k: os.environ[k] for k in EVAL_ENV_KEYS if os.environ.get(k)}
     env.update(NEURO_DATASET=dataset, NEURO_SUBJECT=",".join(protocol.search_subjects),
-               NEURO_METRIC="rsa", NEURO_STAGE="search",
+               NEURO_METRIC=metric, NEURO_REGION=region, NEURO_STAGE="search",
                NEURO_IMSIZE=os.environ.get("NEURO_IMSIZE", "128"),
                NEURO_MAX_PARAMS=os.environ.get("NEURO_MAX_PARAMS", "100000"))
     # JSON canonicalization changes dataclass tuples to lists, matching subsequent disk reads.
@@ -51,7 +53,7 @@ def evaluation_environment(dataset: str) -> dict:
     from neuro_eval.datasets import get_dataset
     from neuro_eval.datasets import dataset_source_paths
     env["data_files"] = {}
-    for role, value in dataset_source_paths(get_dataset(dataset, protocol.search_subjects[0])).items():
+    for role, value in dataset_source_paths(get_dataset(dataset, protocol.search_subjects[0], region=region, metric=metric)).items():
         path = Path(value).expanduser().resolve()
         identity = {"path": str(path)}
         if path.exists():
@@ -63,17 +65,17 @@ def evaluation_environment(dataset: str) -> dict:
     return env
 
 
-def write_env_json(run_dir: str, dataset: str) -> str:
+def write_env_json(run_dir: str, dataset: str, region: str | None = None, metric: str | None = None) -> str:
     """Write the run contract, or reject any scientific change on resume."""
     path = os.path.join(run_dir, "env.json")
-    env = evaluation_environment(dataset)
+    env = evaluation_environment(dataset, region, metric)
     if os.path.exists(path):
         with open(path) as f:
             previous = json.load(f)
         changes = [k for k in set(env) | (set(previous) - {"providers"}) if previous.get(k) != env.get(k)]
         if changes:
             raise ValueError("Cannot resume with a changed evaluation contract: " + ", ".join(sorted(changes))
-                             + ". Use a new run date; historical encoding scores cannot mix with RSA.")
+                             + ". Use a new run date; evaluation configurations cannot mix.")
         return path
     if os.path.exists(os.path.join(run_dir, "search.db")):
         raise ValueError("Existing run has no versioned env.json; start a new run date")
@@ -85,8 +87,8 @@ def write_env_json(run_dir: str, dataset: str) -> str:
 
 
 def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
-                 n_proposers: int = 3) -> str:
-    """Create (or idempotently complete) ``search_runs/<dataset>__<date>/`` + N proposer sandboxes + eval.
+                 n_proposers: int = 3, *, region: str | None = None, metric: str | None = None) -> str:
+    """Create (or idempotently complete) ``search_runs/<dataset>__<region>__<metric>__<date>/`` + N proposer sandboxes + eval.
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).
     """
@@ -95,14 +97,17 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
         raise ValueError("n_proposers must be positive")
     date = date or datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")
     datetime.strptime(date, "%Y-%m-%d")
-    run_dir = os.path.join(repo_root, "search_runs", f"{dataset}__{date}")
+    region = canonical_region(region or os.environ.get("NEURO_REGION", ""))
+    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", "rsa"))
+    run_dir = os.path.join(repo_root, "search_runs", f"{dataset}__{region}__{metric}__{date}")
     from search.agents import make_sandbox
     sys.path.insert(0, repo_root)
     from search import queue
-    write_env_json(run_dir, dataset)               # eval-env snapshot for later re-scoring
+    write_env_json(run_dir, dataset, region, metric)               # eval-env snapshot for later re-scoring
     queue.init(run_dir)                              # search.db + models/
     from search.agents import export_public_inputs
-    export_public_inputs(run_dir, dataset)
+    from neuro_eval.datasets import get_dataset
+    export_public_inputs(run_dir, get_dataset(dataset, region=region, metric=metric))
     for i in range(n_proposers):
         make_sandbox(os.path.join(run_dir, "proposers", f"p{i:02d}"), repo_root)
     os.makedirs(os.path.join(run_dir, "eval"), exist_ok=True)   # evaluator scratch
@@ -138,11 +143,14 @@ def main(argv=None):
     import shlex
     from search.providers import resolve, command, preflight
     configure()
-    parser = argparse.ArgumentParser(description='Launch fixed-roster RSA search.')
-    parser.add_argument('dataset', nargs='?', default='laion')
+    parser = argparse.ArgumentParser(description='Launch an early or ventral visual-cortex search.')
+    parser.add_argument('legacy_dataset', nargs='?', choices=('laion', 'triplen'))
+    parser.add_argument('--dataset', choices=('laion', 'triplen'), default=None)
+    parser.add_argument('--region', '--config', required=True, choices=('early', 'ventral'))
+    parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', 'rsa'))
     parser.add_argument('--hours', type=float, default=12)
     parser.add_argument('--epoch-mins', type=float, default=30,
-                        help='Minutes after a coordinator session finishes before the next (default: 30; 0 disables)')
+                        help='Coordinator start interval from run startup (default: 30 minutes; occupied slots skipped; 0 disables)')
     parser.add_argument('--gpu', default=os.environ.get('CUDA_VISIBLE_DEVICES', ''))
     parser.add_argument('--date', default=None)
     parser.add_argument('--preflight', '--dry-run', action='store_true')
@@ -157,7 +165,11 @@ def main(argv=None):
             raise ValueError('--gpu must be an index or comma list')
         if args.date:
             datetime.strptime(args.date, '%Y-%m-%d')
-        dataset = validate_search_dataset(args.dataset)
+        if args.dataset and args.legacy_dataset and args.dataset != args.legacy_dataset:
+            raise ValueError("Conflicting dataset arguments")
+        dataset = validate_search_dataset(args.dataset or args.legacy_dataset or "laion")
+        os.environ.update(NEURO_REGION=args.region, NEURO_METRIC=args.metric)
+        protocol_for(dataset, args.region, args.metric)  # fail unavailable configurations before provider setup
         roster = os.environ['NEURO_MODEL_ROSTER'].split()
         if not roster:
             raise ValueError('Empty provider roster')
@@ -172,6 +184,7 @@ def main(argv=None):
             roles += [('coordinator', os.environ['NEURO_COORDINATOR_MODEL'], os.environ['NEURO_COORDINATOR_EFFORT'])]
         agents = [resolve(spec, effort) for _, spec, effort in roles]
         if args.show_config:
+            print(f'configuration: region={args.region} dataset={dataset} metric={args.metric}')
             for (role, _, _), agent in zip(roles, agents):
                 print(f'{role}: {shlex.join(command(agent, "<workspace>", "<role prompt>", []))}')
             return 0
@@ -185,7 +198,7 @@ def main(argv=None):
         validate_sources(dataset)
         preflight(agents)
         if args.preflight:
-            print(f'[search] preflight passed: dataset={dataset} subjects={environment["NEURO_SUBJECT"]}')
+            print(f'[search] preflight passed: dataset={dataset} region={args.region} metric={args.metric} subjects={environment["NEURO_SUBJECT"]}')
             return 0
         run = scaffold_run(dataset, args.date, n_proposers=len(roster))
         os.environ.update(LAB_RUN=run, NEURO_DATASET=dataset, NEURO_FLEET=str(len(roster)))

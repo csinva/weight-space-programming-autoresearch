@@ -164,12 +164,12 @@ def test_source_group_rsa_is_aligned_and_does_not_change_primary_reward():
         idx = groups[name]
         expected = rsa_scores(split[1][idx], split[3][idx], split[4], torch.device("cpu"))
         actual = feedback["source_groups"][name]
-        assert actual["rsa"] == expected["test_corr"]
+        assert actual["rsa"] == expected["roi_corr"]["ventral"]["test"]
         assert actual["n_stimuli"] == len(idx)
-        assert actual["regions"] == {r: v["test"] for r, v in expected["roi_corr"].items()}
+        assert actual["regions"] == {"ventral": expected["roi_corr"]["ventral"]["test"]}
     assert feedback["source_groups"]["ood"]["status"] == "unavailable"
     assert feedback["source_groups"]["ood"]["rsa"] is None
-    assert feedback["regions"]["early"]["n_targets"] == 2
+    assert "early" not in feedback["regions"]
 
 
 def test_cohort_diagnostics_retain_nonshared_regions_and_subject_coverage(monkeypatch):
@@ -185,8 +185,8 @@ def test_cohort_diagnostics_retain_nonshared_regions_and_subject_coverage(monkey
     assert set(row["roi_corr"]) == {"ventral"}  # compatibility field stays unchanged
     feedback = row["rsa_diagnostics"]
     assert feedback["primary_rsa"] == row["reward"]
-    assert feedback["regions"]["early"]["subjects"] == ["M1", "M4"]
-    assert feedback["regions"]["early"]["n_targets_by_subject"] == {"M1": 2, "M4": 2}
+    assert "early" not in feedback["regions"]
+    assert feedback["regions"]["IT"]["status"] == "unavailable"
     assert feedback["regions"]["ventral"]["n_subjects"] == 5
     assert feedback["source_groups"] == {}
     assert row["subjects"] == ["M1", "M2", "M3", "M4", "M5"]

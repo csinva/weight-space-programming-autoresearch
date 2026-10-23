@@ -21,10 +21,10 @@ def test_socket_feedback_submission_lineage_and_roles(run, tmp_path, monkeypatch
         assert queue.record(child, search_result, run=str(run)) == "ok"
         row = request({'command': 'status', 'id': child})
         assert row['parent_id'] == parent
-        assert row['parent_rsa_delta'] == pytest.approx(.1)
-        assert row['search_rsa'] == .2
-        assert row['rsa_diagnostics']['primary_rsa'] == .2
-        assert row['model_sha256']
+        assert row['parent_score_delta'] == pytest.approx(.1)
+        assert row['search_score'] == .2
+        assert 'rsa_diagnostics' not in row
+        assert 'model_sha256' not in row
         assert 'path' not in row and 'evaluation_metadata' not in row
         for payload in ({'command': 'query-db', 'sql': 'SELECT * FROM models'},
                         {'command': 'reset-island', 'proposer': 'p01', 'direction': 'x'},
@@ -162,13 +162,14 @@ def test_compact_lists_and_explicit_model_details(run, tmp_path, search_result):
     assert queue.record(mid, {**search_result, 'rsa_diagnostics': diagnostics}, run=str(run)) == 'ok'
     broker = Broker(run, 'proposer', 'p00', tmp_path / 'unused.sock')
     row = broker.dispatch({'command': 'history'})[0]
-    assert row['search_rsa'] == .2 and len(row['idea']) == 240
+    assert row['search_score'] == .2 and len(row['idea']) == 240
     assert not {'code', 'rsa_diagnostics', 'subject_scores', 'model_sha256', 'experiment_notes'} & row.keys()
     assert broker.dispatch({'command': 'my-best'}) == row
     assert broker.dispatch({'command': 'source', 'id': mid})['code'] == '# candidate\n'
     status = broker.dispatch({'command': 'status', 'id': mid})
-    assert status['subject_scores']
-    assert 'subject_results' not in status['rsa_diagnostics']
+    assert 'subject_scores' not in status
+    assert 'rsa_diagnostics' not in status
+    assert status['subregion_scores']['FFA'] == {'status': 'unavailable', 'score': None}
     details = broker.dispatch({'command': 'status', 'id': mid, 'details': True})
     assert details['rsa_diagnostics']['subject_results'] == {'example': 'full'}
     # Long non-ASCII labels exercise the serialized response budget.
@@ -212,3 +213,78 @@ def test_broker_pending_limit_is_atomic_and_island_scoped(run, tmp_path, search_
         assert other_id not in str(rejected.value)
         queue.record(ids[0], search_result, run=str(run))
         assert request({'command': 'propose-model', 'source': '# next\n'})
+
+
+@pytest.mark.parametrize('region', ['early', 'ventral'])
+@pytest.mark.parametrize('metric', ['rsa', 'encoding'])
+def test_configuration_lifecycle_and_feedback_isolation(run, region, metric, monkeypatch):
+    """Every supported LAION configuration has its own immutable reward boundary."""
+    from neuro_eval.benchmarks import SOURCE_REVISION, protocol_for
+    from search.run import write_env_json
+    monkeypatch.setenv('NEURO_REGION', region)
+    monkeypatch.setenv('NEURO_METRIC', metric)
+    root = str(run.parents[1])
+    configured = scaffold_run('laion', '2026-10-21', root, 2, region=region, metric=metric)
+    assert Path(configured).name == f'laion__{region}__{metric}__2026-10-21'
+    protocol = protocol_for('laion', region, metric)
+    scores = dict(status='ok', test_corr=.2, dataset='laion', metric=metric,
+                  stage='search', search_region=region, protocol_version=protocol.version,
+                  source_revision=SOURCE_REVISION, subjects=list(protocol.search_subjects),
+                  subject_scores={s: .2 for s in protocol.search_subjects},
+                  aggregation=protocol.aggregation, search_image_policy=protocol.image_policy)
+    model = str(Path(configured) / 'proposers/p00/model.py')
+    mid = queue.propose(model, run=configured)
+    assert queue.record(mid, scores, run=configured) == 'ok'
+    broker = Broker(configured, 'coordinator', None, Path(configured) / 'unused.sock')
+    leader = broker.dispatch({'command': 'top-models'})[0]
+    assert (leader['search_score'], leader['region'], leader['metric']) == (.2, region, metric)
+    assert broker.dispatch({'command': 'summary'})[0]['best_score'] == .2
+    assert queue.champion(configured)['id'] == mid
+
+    other_region = 'ventral' if region == 'early' else 'early'
+    for key, value in [('search_region', other_region),
+                       ('metric', 'encoding' if metric == 'rsa' else 'rsa'),
+                       ('aggregation', 'other'), ('search_image_policy', 'other')]:
+        rejected = queue.propose(model, run=configured)
+        assert queue.record(rejected, {**scores, key: value}, run=configured) == 'error'
+        with queue.connect(configured) as con:
+            assert con.execute('SELECT test_corr FROM models WHERE id=?', (rejected,)).fetchone()[0] is None
+    before = (Path(configured) / 'env.json').read_bytes()
+    with pytest.raises(ValueError, match='changed evaluation contract'):
+        write_env_json(configured, 'laion', other_region, metric)
+    assert (Path(configured) / 'env.json').read_bytes() == before
+    # Even an externally inserted incompatible row cannot enter broker rankings.
+    with queue.connect(configured) as con:
+        con.execute("INSERT INTO models (id,status,test_corr,dataset,metric,region,stage) "
+                    "VALUES ('other','ok',1,'laion',?,?,'search')", (metric, other_region))
+    assert [row['id'] for row in broker.dispatch({'command': 'top-models'})] == [mid]
+
+
+def test_selected_stream_feedback_parent_and_nested_details(run, tmp_path, search_result):
+    subjects = search_result['subjects']
+    def result(score):
+        return {**search_result, 'test_corr': score, 'subject_scores': {s: score for s in subjects},
+                'stream_diagnostics': {'subregions': {
+                    'FFA': {'status': 'ok', 'score': score, 'subjects': subjects, 'n_subjects': len(subjects)},
+                    'PPA': {'status': 'ok', 'score': .9, 'subjects': subjects[:2], 'n_subjects': 2},
+                    'V1': {'status': 'ok', 'score': .99}}},
+                'roi_corr': {'ventral visual stream': {'test': score}, 'early visual stream': {'test': .99}},
+                'rsa_diagnostics': {'regions': {'ventral visual stream': {'rsa': score}, 'early visual stream': {'rsa': .99}},
+                    'source_groups': {'ood': {'rsa': .99, 'regions': {'ventral visual stream': {'rsa': score}, 'early visual stream': {'rsa': .99}},
+                        'subject_results': {subjects[0]: {'regions': {'ventral visual stream': score, 'early visual stream': .99}}}}}}}
+    parent = queue.propose(str(run / 'proposers/p00/model.py'), proposer='p00', run=str(run))
+    queue.record(parent, result(.1), run=str(run))
+    child = queue.propose(str(run / 'proposers/p00/model.py'), proposer='p00', parent_id=parent, run=str(run))
+    queue.record(child, result(.2), run=str(run))
+    broker = Broker(run, 'proposer', 'p00', tmp_path / 'unused.sock')
+    compact = broker.dispatch({'command': 'status', 'id': child})
+    assert compact['subregion_scores']['FFA']['parent_score_delta'] == pytest.approx(.1)
+    assert compact['subregion_scores']['PPA'] == {'status': 'unavailable', 'score': None}
+    assert compact['subregion_scores']['hV4'] == {'status': 'unavailable', 'score': None}
+    assert not {'source_groups', 'subject_scores', 'rsa_diagnostics', 'experiment_notes'} & compact.keys()
+    details = broker.dispatch({'command': 'status', 'id': child, 'details': True})
+    assert 'early visual stream' not in json.dumps(details)
+    assert 'V1' not in json.dumps(details)
+    assert details['rsa_diagnostics']['source_groups']['ood']['rsa'] == .2
+    assert details['stream_diagnostics']['subregions']['PPA']['score'] is None
+    assert details['stream_diagnostics']['subregions']['PPA']['status'] == 'unavailable'

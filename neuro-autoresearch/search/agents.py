@@ -81,7 +81,7 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
         _login_files(agent.provider, home)
         public = root / 'reference'
         public.mkdir()
-        for name in ('neuro_eval/rsa.py', 'neuro_eval/benchmarks.py', 'README.md', 'model.py'):
+        for name in ('neuro_eval/rsa.py', 'neuro_eval/encoding.py', 'neuro_eval/benchmarks.py', 'README.md', 'model.py'):
             source = REPO / name
             if source.is_file():
                 shutil.copyfile(source, public / source.name)
@@ -117,7 +117,7 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
                 if source.exists():
                     args += ['--ro-bind', str(source.resolve()), str(source)]
             # Public protocol facts only; no inherited dataset paths, tokens, or host hooks.
-            for name in ('NEURO_DATASET', 'NEURO_MAX_PARAMS', 'NEURO_IMSIZE', 'LANG'):
+            for name in ('NEURO_DATASET', 'NEURO_REGION', 'NEURO_METRIC', 'NEURO_MAX_PARAMS', 'NEURO_IMSIZE', 'LANG'):
                 if name in os.environ:
                     args += ['--setenv', name, os.environ[name]]
             with capture_native_usage(home, agent.provider, usage):
@@ -185,8 +185,8 @@ def export_public_inputs(run: str | Path, dataset, *, split=None) -> Path:
     if isinstance(dataset, str):
         dataset = get_dataset(validate_search_dataset(dataset))
     name = validate_search_dataset(dataset.loader)
-    if dataset.stage != "search" or dataset.metric != "rsa":
-        raise ValueError("Public examples require a fixed RSA search dataset")
+    if dataset.stage != "search" or dataset.metric not in {"rsa", "encoding"}:
+        raise ValueError("Public examples require a fixed search dataset")
     root = Path(run) / "public"
     image_path, spec_path = root / "images.npy", root / "input_spec.json"
     kind = "synthetic_debug_images" if split is None else "permitted_search_images"
@@ -269,7 +269,8 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     root = Path(run)
     (root / 'logs').mkdir(exist_ok=True)
     (root / 'coordinator').mkdir(exist_ok=True)
-    deadline = time.monotonic() + hours * 3600
+    started = time.monotonic()
+    deadline = started + hours * 3600
     stopping = False
     sessions = {}
     from search.costs import ensure_pricing, summarize_run
@@ -277,7 +278,7 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     summarize_run(root)
     next_usage = time.monotonic() + 5
     disabled = set()
-    next_coordinator = 0
+    next_coordinator = started
 
     def halt(*_):
         nonlocal stopping
@@ -304,9 +305,9 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
             argv = [sys.executable, '-m', 'search.providers', 'run', '--agent', spec,
                     '--effort', effort, '--role', role, '--cwd', str(workspace)]
             remaining = max(0.0, (deadline - time.monotonic()) / 60)
-            prompt = (f'This run: dataset={dataset}; role={name}; '
+            prompt = (f'This run: dataset={dataset}; region={env["NEURO_REGION"]}; metric={env["NEURO_METRIC"]}; role={name}; '
                       f'remaining session budget at launch={remaining:.1f} minutes. '
-                      'The launcher stops this session at its deadline. Search feedback is RSA only. '
+                      'The launcher stops this session at its deadline. Optimize only the named region and metric. '
                       'Final NSD/TVSD encoding is unavailable. Use "$NEURO_PYTHON" api.py for feedback.\n\n'
                       + (REPO / 'search/prompts' / f'{role}.md').read_text())
         with (root / 'logs' / f'{name}.jsonl').open('a') as log:
@@ -352,13 +353,16 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                         print(f'[search] {name} finished; no restart in final two minutes', flush=True)
                     else:
                         launch(name, roster[int(name[1:])])
-                else:
-                    next_coordinator = time.monotonic() + epoch_mins * 60
             if all(f'p{i:02d}' in disabled for i in range(len(roster))):
                 return 78
-            if (epoch_mins > 0 and 'coordinator' not in sessions and 'coordinator' not in disabled
-                    and time.monotonic() >= next_coordinator):
-                launch('coordinator', os.environ['NEURO_COORDINATOR_MODEL'])
+            now = time.monotonic()
+            if (epoch_mins > 0 and 'coordinator' not in disabled and now >= next_coordinator):
+                if 'coordinator' not in sessions:
+                    launch('coordinator', os.environ['NEURO_COORDINATOR_MODEL'])
+                # Fixed launch slots from run startup. Skip occupied/missed slots;
+                # never overlap reviews or replay a backlog after an overrun.
+                interval = epoch_mins * 60
+                next_coordinator = started + ((now - started) // interval + 1) * interval
             time.sleep(0.25)
         return 0
     finally:

@@ -120,7 +120,7 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
     sentinel.write_text('must never be visible')
     protocol = protocol_for('laion')
     (run / 'env.json').write_text(json.dumps({
-        'NEURO_DATASET': 'laion', 'NEURO_METRIC': 'rsa', 'NEURO_STAGE': 'search',
+        'NEURO_DATASET': 'laion', 'NEURO_REGION': 'ventral', 'NEURO_METRIC': 'rsa', 'NEURO_STAGE': 'search',
         'NEURO_SUBJECT': ','.join(protocol.search_subjects), 'protocol': protocol.to_dict()}))
     queue.init(str(run))
     executable = fake_cli(tmp_path, 'codex')
@@ -149,7 +149,7 @@ def test_provider_os_boundary_and_bounded_submission(tmp_path):
     text = text.replace('    pathlib.Path("capture.json")', attack + '    pathlib.Path("capture.json")')
     executable.write_text(text)
     env = {**os.environ, 'NEURO_CODEX_BIN': str(executable), 'LAB_RUN': str(run),
-           'LAB_PROPOSER': 'p00', 'NEURO_DATASET': 'laion', 'NEURO_NSD_ROOT': str(sentinel)}
+           'LAB_PROPOSER': 'p00', 'NEURO_DATASET': 'laion', 'NEURO_REGION': 'ventral', 'NEURO_METRIC': 'rsa', 'NEURO_NSD_ROOT': str(sentinel)}
     result = subprocess.run([sys.executable, '-m', 'search.providers', 'run',
                              '--role', 'proposer', '--agent', 'codex:astra', '--cwd', str(workspace)],
                             input='test', env=env, capture_output=True, text=True, timeout=30)

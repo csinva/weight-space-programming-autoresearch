@@ -13,7 +13,7 @@ from PIL import Image
 import numpy as np
 import torch
 
-from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS
+from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS, SEARCH_REGIONS, search_subregions, DIAGNOSTIC_POLICY_VERSION
 from neuro_eval import readers
 
 
@@ -24,7 +24,9 @@ class Dataset:
     neural: str = "fmri"
     stimulus: str = "image"
     imsize: int = 128
-    reward_roi: str = "all"
+    reward_roi: str = "ventral visual stream"
+    search_region: str = "ventral"
+    search_metric: str = "rsa"
     metric: str = "rsa"
     stage: str = "search"
     loader: str = "laion"
@@ -33,13 +35,13 @@ class Dataset:
 # Anatomical region coverage and thresholds are fixed in benchmarks.py.
 PRESETS: dict[str, Dataset] = {
     "laion": Dataset(study="LaionFmriSub01", loader="laion", neural="fmri",
-                     reward_roi="all", subject="sub-01", metric="rsa", stage="search"),
+                     reward_roi="ventral visual stream", subject="sub-01", metric="rsa", stage="search"),
     "triplen": Dataset(study="TripleNM1", loader="triplen", neural="spikes",
-                       reward_roi="all", subject="M1", metric="rsa", stage="search"),
+                       reward_roi="ventral visual stream", subject="M1", metric="rsa", stage="search"),
     "nsd": Dataset(study="NsdBetasSubj01", loader="nsd", neural="fmri",
-                   reward_roi="all", subject="01", metric="encoding", stage="final"),
+                   reward_roi="ventral visual stream", subject="01", metric="encoding", stage="final"),
     "tvsd": Dataset(study="TvsdMonkeyF", loader="tvsd", neural="spikes",
-                    reward_roi="all", subject="F", metric="encoding", stage="final"),
+                    reward_roi="ventral visual stream", subject="F", metric="encoding", stage="final"),
 }
 # Accepted public spellings resolve to the same fixed benchmark.
 PRESETS["laion-fmri"] = PRESETS["laion"]
@@ -83,13 +85,26 @@ def dataset_key(dataset: Dataset) -> str:
     return canonical_dataset(dataset.loader)
 
 
-def get_dataset(name: str, subject: str | None = None) -> Dataset:
+def get_dataset(name: str, subject: str | None = None, *, region: str | None = None,
+                metric: str | None = None, search_metric: str | None = None) -> Dataset:
     """Resolve a preset at call time, including the current input resolution override.
 
     Explicit subject wins; otherwise a single default binding may use the first
     NEURO_SUBJECT entry. Protocol evaluators validate the complete fixed cohort.
     """
     dataset = PRESETS[canonical_dataset(name)]
+    if dataset.stage == "search":
+        protocol = protocol_for(dataset.loader, region or os.environ.get("NEURO_REGION", "ventral"),
+                                metric or os.environ.get("NEURO_METRIC", "rsa"))
+        dataset = replace(dataset, search_region=protocol.search_region, search_metric=protocol.search_metric,
+                          metric=protocol.search_metric,
+                          reward_roi=SEARCH_REGIONS[protocol.search_region])
+    elif region is not None or search_metric is not None:
+        protocol = protocol_for(dataset.loader, region or "ventral", search_metric or "rsa")
+        dataset = replace(dataset, search_region=protocol.search_region, search_metric=protocol.search_metric,
+                          reward_roi=SEARCH_REGIONS[protocol.search_region])
+    if dataset.stage == "final" and metric not in (None, "encoding"):
+        raise ValueError("Final datasets require encoding")
     imsize = os.environ.get("NEURO_IMSIZE")
     if imsize:
         dataset = replace(dataset, imsize=int(imsize))
@@ -108,9 +123,10 @@ _PIXEL_MEMO: dict[str, torch.Tensor] = {}
 class VisionSplit(tuple):
     """Six-field compatibility tuple with evaluator-only stimulus group metadata."""
 
-    def __new__(cls, values, *, source_groups=None):
+    def __new__(cls, values, *, source_groups=None, unavailable_regions=None):
         result = super().__new__(cls, values)
         result.source_groups = source_groups or {}
+        result.unavailable_regions = unavailable_regions or {}
         return result
 
 
@@ -166,7 +182,7 @@ def dataset_cache_key(d: Dataset) -> tuple:
 def _load_native(d: Dataset):
     name = dataset_key(d)
     d = with_subject(d, d.subject)
-    regions = list(REGIONS[name])
+    regions = [d.reward_roi] if d.stage == "search" else list(REGIONS[name])
     cfg = dict(FILTERS[name])
     if name == "nsd":
         subject = int(d.subject) - 1
@@ -186,6 +202,18 @@ def _load_native(d: Dataset):
         data = readers.load_all_tvsd_data(cfg, subjects=[subject], regions=regions)
     else:
         raise ValueError(f"Not a looped vision dataset: {name}")
+    if d.reward_roi != "all" and d.reward_roi not in data["regions"]:
+        raise ValueError(f"Selected region {d.reward_roi!r} unavailable for {d.subject}")
+    if d.stage == "search":
+        # Diagnostic data never change the pooled response block or image policy.
+        data["diagnostic_units"], data["unavailable_regions"] = {}, {}
+        loader = readers.load_all_laion_data if name == "laion" else readers.load_all_triplen_data
+        for region in search_subregions(name, d.search_region):
+            try:
+                diagnostic = loader(cfg, subjects=[subject], regions=[region])
+                data["diagnostic_units"][region] = diagnostic["units"][region][subject]
+            except (KeyError, ValueError, IndexError) as exc:
+                data["unavailable_regions"][region] = str(exc)
     return data, subject
 
 
@@ -205,8 +233,15 @@ def _selected_ids(d: Dataset, native: dict, subject: int):
         # Exclude source-labelled NSD images before exposing pixels or responses
         # to search. The remaining non-NSD source images are the fixed reward set.
         test_ids = shared - set(native["test_subsets"]["nsd"])
-        train_ids = set()
-    elif name == "triplen":
+        if d.metric == "rsa":
+            train_ids = set()
+        else:
+            if "nsd_source_ids" not in native:
+                raise ValueError("LAION encoding requires source labels for all training and test images")
+            excluded = set(native["nsd_source_ids"])
+            train_ids -= excluded
+            test_ids -= excluded
+    elif name == "triplen" and d.metric == "rsa":
         test_ids |= train_ids
         train_ids = set()
     if not test_ids:
@@ -276,6 +311,35 @@ def _pack_responses(native: dict, subject: int, train_ids: list[str], test_ids: 
     return values[:len(train_ids)], values[len(train_ids):], masks
 
 
+def _stream_masks(d, native, subject, masks):
+    """Intersect anatomical coordinates/unit IDs with the retained pooled units.
+
+    Masks can overlap. Targets remain exactly the selected pooled response block.
+    Missing identifiers disable diagnostics, never guess membership by position.
+    """
+    if d.stage != "search":
+        return masks, {}
+    unavailable = dict(native.get("unavailable_regions", {}))
+    pooled = native.get("units", {}).get(d.reward_roi, {}).get(subject)
+    for name in search_subregions(dataset_key(d), d.search_region):
+        units = native.get("diagnostic_units", {}).get(name)
+        if pooled is None or units is None:
+            unavailable.setdefault(name, "Anatomical unit membership unavailable")
+            continue
+        parent, child = np.asarray(pooled), np.asarray(units)
+        if (parent.ndim != 2 or child.ndim != 2 or parent.shape[1] != child.shape[1]
+                or len(parent) != len(masks[d.reward_roi])):
+            unavailable[name] = "Anatomical unit identifiers are misaligned"
+            continue
+        members = set(map(tuple, child.tolist()))
+        mask = np.array([tuple(unit) in members for unit in parent.tolist()], dtype=bool)
+        if not mask.any():
+            unavailable[name] = "No retained units intersect the selected stream"
+            continue
+        masks[name] = mask
+    return masks, unavailable
+
+
 def load_looped(d: Dataset):
     """Return Xtrain, Xtest, Ytrain, Ytest, region masks, None.
 
@@ -286,21 +350,25 @@ def load_looped(d: Dataset):
     train_ids, test_ids = _selected_ids(d, native, subject)
     X = _pixels(native["stimuli"], train_ids + test_ids, d.imsize)
     Ytr, Yte, masks = _pack_responses(native, subject, train_ids, test_ids)
+    masks, unavailable = _stream_masks(d, native, subject, masks)
     groups = _source_groups(d, native, train_ids + test_ids)
-    protocol = protocol_for(dataset_key(d))
+    protocol = protocol_for(dataset_key(d), d.search_region, d.metric if d.stage == "search" else d.search_metric)
     _PROVENANCE[dataset_cache_key(d)] = {
         "source_revision": SOURCE_REVISION, "dataset": dataset_key(d), "subject": d.subject,
         "protocol": protocol.to_dict(), "metric": d.metric, "stage": d.stage,
+        "search_region": d.search_region, "reward_roi": d.reward_roi,
         "files": {key: _file_identity(path) for key, path in dataset_source_paths(d).items()},
         "filters": FILTERS[dataset_key(d)].copy(), "regions": list(masks),
         "region_units": {name: int(mask.sum()) for name, mask in masks.items()},
+        "diagnostic_policy_version": DIAGNOSTIC_POLICY_VERSION if d.stage == "search" else None,
+        "unavailable_regions": unavailable,
         "train_ids": train_ids, "test_ids": test_ids,
         "source_group_counts": {name: len(indices) for name, indices in groups.items()},
         "stimulus_ids_sha256": hashlib.sha256(json.dumps([train_ids, test_ids]).encode()).hexdigest(),
         "pixel_pipeline": "rgb-pil-bilinear-hwc-v1", "imsize": d.imsize,
     }
     return VisionSplit((X[:len(train_ids)], X[len(train_ids):], Ytr, Yte, masks, None),
-                       source_groups=groups)
+                       source_groups=groups, unavailable_regions=unavailable)
 
 
 def dataset_provenance(d: Dataset) -> dict:

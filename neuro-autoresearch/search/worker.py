@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Consume queue submissions, score RSA, and archive bounded repair children."""
+"""Consume queue submissions, score candidates, and archive bounded repair children."""
 from __future__ import annotations
 
 import argparse
@@ -132,11 +132,11 @@ def main(argv=None):
 
     from neuro_eval.benchmarks import validate_search_dataset
     a.dataset = validate_search_dataset(a.dataset)
-    if os.environ.get("NEURO_METRIC", "rsa") != "rsa" or os.environ.get("NEURO_STAGE", "search") != "search":
-        p.error("Search evaluators require NEURO_METRIC=rsa and NEURO_STAGE=search")
-    os.environ["NEURO_METRIC"] = "rsa"
-    os.environ["NEURO_STAGE"] = "search"
+    if os.environ.get("NEURO_STAGE", "search") != "search":
+        p.error("Search evaluators require NEURO_STAGE=search")
     run = queue.find_run()
+    contract = queue.search_contract(run, a.dataset, os.environ.get("NEURO_REGION"), os.environ.get("NEURO_METRIC"))
+    os.environ.update({key: contract[key] for key in ("NEURO_REGION", "NEURO_METRIC", "NEURO_STAGE")})
     log_dir = os.path.join(run, "eval")
     os.makedirs(log_dir, exist_ok=True)
     os.environ["NEURO_DATASET"] = a.dataset

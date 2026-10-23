@@ -360,6 +360,7 @@ def load_all_laion_data(cfg, subjects=None, regions=None) -> dict:
         "neural": neural,
         "stimuli": LazyEncodedHdf5Dict(laion_stimuli_path(), all_stimulus_ids),
         "shared_test_ids": test_ids,
+        "nsd_source_ids": [str(i) for i in all_stimulus_ids if source.iat[int(i)] == "NSD"],
         "test_subsets": {"no_ood": [i for i in test_ids if source.iat[int(i)] != "OOD"],
                          **{src.lower(): [i for i in test_ids if source.iat[int(i)] == src]
                             for src in ("NSD", "LAION", "THINGSplus", "OOD")}},

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "neuro-autoresearch"
 version = "0.3.1"
-description = "RSA-driven neural representation search with held-out encoding evaluation."
+description = "Agentic search for visual cortex representations with held-out encoding evaluation."
 requires-python = ">=3.12"
 dependencies = [
     "torch>=2.5",

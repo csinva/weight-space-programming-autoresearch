@@ -19,7 +19,7 @@ from search import agents, queue, run, worker
 def test_invalid_launch_never_scaffolds(args, monkeypatch):
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     with pytest.raises(SystemExit) as result:
-        run.main(args)
+        run.main(['--region', 'ventral', *args])
     assert result.value.code == 2
 
 
@@ -39,18 +39,21 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     observed = []
     monkeypatch.setattr(providers, 'preflight', lambda agents: observed.extend(agents))
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
-    assert run.main(['laion', '--preflight']) == 0
+    assert run.main(['laion', '--region', 'ventral', '--preflight']) == 0
     assert {agent.provider for agent in observed} == {'codex', 'claude', 'agy'}
 
     source.write_bytes(b'')
     observed.clear()
     with pytest.raises(SystemExit) as result:
-        run.main(['laion', '--preflight'])
+        run.main(['laion', '--region', 'ventral', '--preflight'])
     assert result.value.code == 2
     assert observed == []
 
 
-def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, hours=.0003):
+def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, hours=.0003,
+               coordinator_seconds=0, coordinator_starts=None):
+    monkeypatch.setenv('NEURO_REGION', 'ventral')
+    monkeypatch.setenv('NEURO_METRIC', 'rsa')
     events = []
     counts = Counter()
     clock = [0.0]
@@ -70,6 +73,9 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, 
                 self.name = 'coordinator'
             else:
                 self.name = Path(argv[argv.index('--cwd') + 1]).name
+            self.started = clock[0]
+            if self.name == 'coordinator' and coordinator_starts is not None:
+                coordinator_starts.append(self.started)
             self.pid = 100 + len(events)
             self.stdin = PromptInput()
             results = outcomes.get(self.name, [None])
@@ -78,6 +84,8 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, 
             events.append(('start', self.name))
 
         def poll(self):
+            if self.name == 'coordinator' and clock[0] - self.started < coordinator_seconds:
+                return None
             return self.code
 
     monkeypatch.setattr(agents.subprocess, 'Popen', Child)
@@ -124,7 +132,8 @@ def queue_rows(run, states):
                                (f"model{i}", state, f"2026-10-21T00:00:0{i}"))
 
 
-def test_new_worker_does_not_requeue_peers_live_claim(tmp_path, monkeypatch):
+def test_new_worker_does_not_requeue_peers_live_claim(run, monkeypatch):
+    tmp_path = run
     queue_rows(tmp_path, ["running", "queued"])
     monkeypatch.setenv("LAB_RUN", str(tmp_path))
     monkeypatch.setenv("NEURO_METRIC", "rsa")
@@ -223,3 +232,37 @@ def test_supervisor_refreshes_usage_on_resume_and_shutdown(tmp_path, monkeypatch
     code, _, _ = simulation(tmp_path, monkeypatch, {}, hours=.002)
     assert code == 0
     assert refreshed == [tmp_path, tmp_path, tmp_path]
+
+
+@pytest.mark.parametrize('args', [[], ['--dataset', 'laion'],
+                                  ['--region', 'early', '--dataset', 'triplen', '--show-config'],
+                                  ['--region', 'joint'],
+                                  ['--region', 'early', '--metric', 'unknown']])
+def test_launcher_requires_supported_explicit_configuration(args, monkeypatch):
+    monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
+    with pytest.raises(SystemExit) as result:
+        run.main(args)
+    assert result.value.code == 2
+
+
+@pytest.mark.parametrize(('duration', 'expected'), [
+    (10, [0, 30, 60, 90, 120]),
+    (40, [0, 60, 120]),
+])
+def test_conductor_uses_fixed_start_slots_without_overlap(tmp_path, monkeypatch, duration, expected):
+    starts = []
+    code, events, counts = simulation(
+        tmp_path, monkeypatch, {'coordinator': [0]}, coordinator=.5, hours=.04,
+        coordinator_seconds=duration, coordinator_starts=starts)
+    assert code == 0
+    assert starts == expected
+    active = False
+    for action, name in events:
+        if name == 'coordinator':
+            if action == 'start':
+                assert not active
+                active = True
+            elif action == 'stop':
+                assert active
+                active = False
+    assert not active
