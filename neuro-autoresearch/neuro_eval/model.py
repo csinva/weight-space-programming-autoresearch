@@ -69,6 +69,7 @@ class IsolatedModel:
         self.name = Path(path).stem
         self.description = self.insight = self.idea = ''
         self.n_params = 0
+        self._n_params_observed = False
         self.repair_log = ''
 
     def __call__(self, images):
@@ -153,6 +154,7 @@ class IsolatedModel:
             if reported < 0:
                 raise ValueError('Invalid candidate parameter count')
             self.n_params = max(self.n_params, reported)
+            self._n_params_observed = True
             for key in ('name', 'description', 'insight', 'idea'):
                 setattr(self, key, str(metadata.get(key, ''))[:600])
             return np.array(features, copy=True)
@@ -379,6 +381,16 @@ def _candidate_worker():
             return value.numel()
         if isinstance(value, np.ndarray):
             return value.size
+        if isinstance(value, torch.nn.Module):
+            # Registered weights/buffers can live below arbitrarily nested
+            # containers. Do not let the loose-object depth guard skip them.
+            total = 0
+            for tensors in (value.parameters(recurse=True), value.buffers(recurse=True)):
+                for tensor in tensors:
+                    if id(tensor) not in seen:
+                        seen.add(id(tensor))
+                        total += tensor.numel()
+            return total + count(vars(value), depth + 1)
         if isinstance(value, type):
             if value.__module__ != module.__name__:
                 return 0

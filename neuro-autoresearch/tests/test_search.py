@@ -57,8 +57,11 @@ def test_error_feedback_never_returns_raw_evaluator_text(run, tmp_path, monkeypa
                            'candidate_error': 'x' * 2000 + ' invalid feature shape'},
                    status='error', run=str(run))
         row = request({'command': 'status', 'id': mid})
-        assert row['error_reason'] == 'Evaluation timed out'
+        assert row['error_reason'] == 'Evaluation timed out; reduce model runtime'
         assert 'SECRET' not in json.dumps(row) and '/private/path' not in json.dumps(row)
+        assert 'candidate_error' not in row
+        assert 'subregion_scores' not in row
+        row = request({'command': 'status', 'id': mid, 'details': True})
         assert len(row['candidate_error']) == 1500
         assert row['candidate_error'].endswith('invalid feature shape')
 

@@ -73,6 +73,9 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
     run = os.environ.get('LAB_RUN')
     if role in {'proposer', 'coordinator'} and not run:
         raise ValueError(f'{role} requires LAB_RUN')
+    if role in {'proposer', 'coordinator'}:
+        from search.notes import seed_notes
+        seed_notes(workspace)
     executable, cli_mounts, path = _cli_mounts(agent.executable)
     with tempfile.TemporaryDirectory(prefix='neuro-agent-') as temp:
         root = Path(temp)

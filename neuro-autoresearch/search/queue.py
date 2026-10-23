@@ -334,6 +334,10 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
             st = "error"
             scores = {"status": "error: incompatible evaluation result; expected same-dataset full-cohort"}
     updates = {c: _num(scores[c]) for c in NUM if scores.get(c) not in (None, "")}
+    if "n_params" in scores and scores["n_params"] is None:
+        # Failed before isolated metadata was available: clear the provisional
+        # source declaration rather than presenting it as a measured zero.
+        updates["n_params"] = None
     if scores.get("roi_corr"):
         updates["roi_corr"] = json.dumps(scores["roi_corr"])
     if scores.get("experiment_notes"):
@@ -357,6 +361,8 @@ def record(mid: str, scores: dict | None = None, status: str = "ok",
     if st != "ok":
         updates["test_corr"] = None
         updates["train_corr"] = None
+        if scores.get("n_params") is None:
+            updates["n_params"] = None
     updates["status"] = st
     assignments = ", ".join(f"{column}=?" for column in updates)
     with connect(run) as con:

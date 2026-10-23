@@ -72,6 +72,13 @@ def _selected_details(value, allowed, required=None):
     return result
 
 
+def _candidate_trace(value):
+    """Bound image-only stderr and redact absolute paths before presentation."""
+    value = value[-1500:]
+    value = re.sub(r"(?<![\w])/(?:[^\s\"\'<>:,;()]+)", "[path]", value)
+    return value
+
+
 def public_row(row, *, details=False):
     if row is None:
         return None
@@ -89,23 +96,26 @@ def public_row(row, *, details=False):
         result["rsa_diagnostics"] = metadata["rsa_diagnostics"]
     # Only trusted evaluator metadata may mark stderr as originating inside the
     # image-only candidate worker. Never expose raw scorer status/tracebacks.
-    if isinstance(metadata, dict) and isinstance(metadata.get("candidate_error"), str):
-        result["candidate_error"] = metadata["candidate_error"][-1500:]
+    if details and isinstance(metadata, dict) and isinstance(metadata.get("candidate_error"), str):
+        result["candidate_error"] = _candidate_trace(metadata["candidate_error"])
     if row.get("status") == "error":
-        message = str(metadata.get("status", "")) if isinstance(metadata, dict) else ""
+        message = "\n".join(str(metadata.get(key, "")) for key in ("status", "candidate_error")) if isinstance(metadata, dict) else ""
         result["error_reason"] = "Evaluation failed; inspect candidate shape, resources and model contract"
         for needles, reason in (
-            (("timeout", "timed out"), "Evaluation timed out"),
-            (("parameter", "n_params"), "Parameter contract failed"),
-            (("nonfinite", "non-finite", "finite"), "Nonfinite model features or score"),
+            (("cuda out of memory", "cuda error: out of memory", "cuda memory", "outofmemoryerror", "oom on device"),
+             "CUDA out of memory; reduce internal batch size or activation memory"),
+            (("timeout", "timed out"), "Evaluation timed out; reduce model runtime"),
+            (("parameter", "n_params"), "Parameter contract failed; check n_params and the parameter limit"),
+            (("nonfinite", "non-finite", "nan", "infinite"), "Nonfinite model features or score; return finite features"),
             (("constant",), "Degenerate constant features or score"),
-            (("batch", "per-image"), "Per-image independence check failed"),
-            (("shape", "width", "dimension"), "Feature shape or width contract failed"),
+            (("batch", "per-image"), "Per-image independence check failed; check batch dependence, mutable state and numerical stability"),
+            (("shape", "width", "dimension"), "Feature shape or width contract failed; return (N, D) with D < 10000"),
             (("source identity", "hash"), "Archived model identity check failed"),
             (("cohort", "incompatible evaluation"), "Scientific protocol validation failed"),
             (("isolat", "namespace", "bubblewrap"), "Isolated candidate execution failed"),
         ):
-            if any(word in message.lower() for word in needles):
+            if any(re.search(r"\bnan\b", message, re.IGNORECASE) if word == "nan"
+                   else word in message.lower() for word in needles):
                 result["error_reason"] = reason
                 break
     from neuro_eval.benchmarks import SEARCH_REGIONS, search_subregions, protocol_for
@@ -139,6 +149,8 @@ def public_row(row, *, details=False):
         result = {key: value for key, value in result.items() if key in COMPACT_FIELDS}
         if isinstance(result.get("idea"), str):
             result["idea"] = result["idea"][:240]
+        if row.get("status") == "error":
+            result.pop("subregion_scores", None)
 
     return result
 
@@ -406,6 +418,35 @@ def request(payload):
     return result["result"]
 
 
+def format_status(row):
+    """Present complete compact feedback without making callers filter JSON."""
+    def number(value, *, signed=False):
+        if value is None:
+            return "unavailable"
+        return format(value, "+.6f" if signed else ".6f")
+
+    lines = []
+    if row.get("status") == "error":
+        lines.append("Failure: " + row.get("error_reason", "Evaluation failed"))
+        lines.append("Candidate trace: use --details")
+    elif row.get("status") == "ok":
+        lines.append(f"Pooled search score: {number(row.get('search_score'))} | "
+                     f"parent delta: {number(row.get('parent_score_delta'), signed=True)}")
+        for name, entry in row.get("subregion_scores", {}).items():
+            lines.append(f"ROI {name}: score {number(entry.get('score'))} | "
+                         f"parent delta: {number(entry.get('parent_score_delta'), signed=True)}")
+    identity = [f"Model {row.get('id', '?')}", f"status {row.get('status', '?')}"]
+    for key, label in (("parent_id", "parent"), ("proposer", "proposer"),
+                       ("dataset", "dataset"), ("region", "region"), ("metric", "metric"),
+                       ("n_params", "parameters")):
+        if row.get(key) is not None:
+            identity.append(f"{label} {row[key]}")
+    if row.get("seconds") is not None:
+        identity.append(f"runtime {row['seconds']:.1f}s")
+    lines.append(" | ".join(identity))
+    return "\n".join(lines)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -425,6 +466,7 @@ def main(argv=None):
         command = commands.add_parser(name)
         command.add_argument("id")
         if name in {"status", "wait-for-score"}:
+            command.add_argument("--json", action="store_true", help="print structured feedback JSON")
             command.add_argument("--details", action="store_true",
                                  help="include full subject-by-region-by-source-group diagnostics")
     for name in ("peek-island", "summary", "direction"):
@@ -435,6 +477,7 @@ def main(argv=None):
         command.add_argument("--role", "--direction", dest="direction", required=True)
     args = vars(parser.parse_args(argv))
     command = args["command"]
+    as_json = args.pop("json", False)
     if command in {"propose-model", "submit"}:
         path = Path(args.pop("file"))
         if path.stat().st_size > 1_000_000:
@@ -452,7 +495,10 @@ def main(argv=None):
             time.sleep(5)
     else:
         result = request(args)
-    print(result if isinstance(result, str) else json.dumps(result, indent=2, allow_nan=False))
+    if command in {"status", "wait-for-score"} and not as_json and not args.get("details"):
+        print(format_status(result))
+    else:
+        print(result if isinstance(result, str) else json.dumps(result, indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":

@@ -166,8 +166,11 @@ retains its batched forwards.
 - Fixed source filters are ncsnr >0.2 for LAION/NSD, reliability >0.4 for Triple-N,
   and oracle >0.4 for TVSD.
 
-Default candidate feedback is compact: pooled `search_score`, parent comparison,
-selected-stream subregion scores and brief execution information. Detailed subject
+Default `status`/`wait-for-score` feedback is a short labeled display: pooled score
+and parent delta first, selected-stream subregion scores/deltas, then identity and
+execution information. `--json` returns compact structured feedback with full
+numeric precision. Failures show a specific reason and suggested action first;
+bounded candidate traces are available through `--details`. Detailed subject
 coverage and LAION RSA source-group diagnostics (`laion`, `thingsplus`, `ood`) are
 available through `status <id> --details`. A subregion or source-group cohort score
 requires all subjects; unavailable diagnostics do not change the pooled reward.
@@ -238,9 +241,16 @@ volumes for reliability filtering.
 
 Search agents receive a private workspace and role-bound API. Each proposer can
 have one queued or running candidate. Lists and `my-best` return compact summaries;
-`status <id>` and `wait-for-score <id>` supply compact pooled/subregion feedback;
-`status <id> --details` supplies notes and full coverage, and `source <id>` supplies code. Agents record brief planned comparisons
-and observed results in their own scratch notes. They cannot read neural
+`status <id>` and `wait-for-score <id>` supply readable pooled/subregion feedback
+(`--json` preserves structured output). `status <id> --details` supplies notes,
+full coverage and bounded candidate errors; `source <id>` supplies code.
+Agents maintain `scratch/notes.md` as a rolling summary targeting 2–4 KB: best
+active candidate, current direction, recent observations, hypotheses and next
+comparison. Older details go to `scratch/archive/<candidate-id>.md` and are read
+selectively. New sessions seed a template only when notes are missing. Existing
+notes are never automatically truncated or replaced; prompts require preserving
+long legacy notes before summarizing them. This is a working-note budget, not a
+submission gate. Agents cannot read neural
 responses, the queue database, other workspaces or final results directly.
 The coordinator may set directions and reset proposer lineages. Corrections create
 new child candidates; archived source is never overwritten. Independent-loop
@@ -254,7 +264,12 @@ image inputs, installed runtime and necessary GPU access. Missing isolation supp
 fails closed. Numeric outputs are loaded without pickle. The trusted host compares
 sampled singleton/shuffled batches from fresh isolated processes, including centered
 features, to check the per-image contract within numerical tolerance. Parameter
-counts include global tensors and NumPy arrays. These checks supplement isolation
+counts use the larger of the declaration and observed retained tensor/array elements,
+including registered PyTorch parameters and buffers, lazy weights, globals and NumPy
+arrays. Aliases to the same object count once. Counts are provisional declarations
+while queued; successful evaluation replaces them with the observed count. A failed
+evaluation with no count metadata stores `null` (unknown), rather than zero.
+These checks supplement isolation
 and source review; they cannot prove arbitrary code is
 untrained or explainable.
 

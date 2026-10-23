@@ -39,15 +39,19 @@ Run "$NEURO_PYTHON" api.py <command> from your workspace:
 - direction: current guidance; you choose the implementation.
 - my-best: compact best active-lineage summary; also acknowledges any reset.
 - history -n 6 OR top-models -n 3: concise recent results or leaders, when needed.
-- status <id>: pooled stream score, parent delta, selected-stream subregion scores and runtime.
-- status <id> --details: notes, selected-stream subject coverage and source groups for a specific question.
+- status <id>: readable pooled score and parent delta first, then labeled ROI scores/deltas and runtime.
+- status <id> --json: exact structured compact feedback for scripts.
+- status <id> --details: full diagnostic JSON with notes, selected-stream subject coverage,
+  source groups and the bounded candidate error trace for a specific question.
 - source <id>: archived code, when you actually need to inspect or extend it.
 - peek-island: another island's best idea and notes without its source or score.
 - propose-model model.py --idea "<plain-language label>" [--parent <id>]: queue source.
-- wait-for-score <id>: wait for the result; do not busy-poll.
+- wait-for-score <id>: wait for the same readable result; supports --json and --details.
+  Do not busy-poll.
 Lists and my-best are compact. Fetch status or source only for candidates relevant
 to your next decision; do not repeatedly dump unchanged history, leaders or code.
-If trimming JSON feedback, select named fields rather than fixed output lines.
+Read default status/wait output directly; no head/grep filtering is needed.
+Failures show a short classification and repair hint; request --details for the candidate trace.
 Independent-loop mode restricts feedback to your island.
 
 ## Experimental loop
@@ -55,7 +59,7 @@ Independent-loop mode restricts feedback to your island.
    /reference/model.py, even if old local files remain.
 2. Get a quick first valid result before lengthy local tuning. Supplied synthetic
    images test shape, numerical behavior and resources, not neural predictivity.
-3. Before submitting, write a few lines in scratch/notes.md: the computational
+3. Before submitting, update a few lines in scratch/notes.md: the computational
    question, prior result (or new-family baseline), planned change, expected effect
    and what a worse score would tell you. For revisions, prefer one interpretable
    change and use --parent. Broad new-family probes are welcome; label multi-change
@@ -73,10 +77,25 @@ Independent-loop mode restricts feedback to your island.
    use an isolating comparison before making that claim.
    Use region/source diagnostics only when they answer a concrete question, and
    never replace the primary objective with a favorable subgroup.
-Keep notes short: supported observations, competing explanations and the latest
-comparisons. Retain informative failures; a lower score can challenge a hypothesis.
+Retain informative failures; a lower score can challenge a hypothesis.
 Preserve promising branches while exploring alternatives; do not copy a leader
-without a stated comparison. Resume from notes after a fresh session.
+without a stated comparison. Resume from current notes after a fresh session.
+
+## Working notes
+Keep scratch/notes.md as a rolling summary, targeting 2–4 KB, not an append-only
+experiment log. Keep the best active candidate ID and primary score, current
+direction, latest observations, competing hypotheses and next comparison. Keep
+only a small index of candidate IDs worth revisiting, with a one-line reason.
+After interpreting a result, move older experiment details to
+scratch/archive/<candidate-id>.md before replacing them in the current summary;
+preserve informative failures there too. Never overwrite an existing archive
+entry with less information. If resuming with long legacy notes, first preserve
+the complete file in a uniquely named scratch/archive/legacy-<timestamp>.md,
+then summarize the current state once. Do not truncate or discard history.
+Read current notes on resume; retrieve only the specific archived candidate
+needed for a decision. Use status <id> --details for recorded model notes and
+source <id> for code instead of copying full API responses or source into notes.
+Do not repeatedly read the whole archive or an unchanged experiment history.
 
 ## Model contract
 Provide self-contained model.py: first line '# idea: <label>', class Model, and

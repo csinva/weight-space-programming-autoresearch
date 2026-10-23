@@ -9,7 +9,7 @@ the current search workflow, evaluation protocols and commands.
 - `model.py`: starting candidate, exporting callable `MODEL` that returns image features.
 - `search/run.py`: launcher and preflight; `config.env`: defaults; `agents.py` and `providers.py`: agent supervision, workspaces and provider execution.
 - `search/queue.py` and `api.py`: candidate storage and restricted feedback; `worker.py` and `score.py`: queued and single-model objective evaluation.
-- `search/prompts/`: proposer/coordinator instructions; proposer instructions are copied into workspace `AGENTS.md`, `GEMINI.md` and `CLAUDE.md` files.
+- `search/notes.py`: resumable working-note templates; `search/prompts/`: proposer/coordinator instructions; proposer instructions are copied into workspace `AGENTS.md`, `GEMINI.md` and `CLAUDE.md` files.
 - `search/costs.py` and `pricing.json`: usage accounting and fixed price snapshot.
 - `neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
 - `final_eval.py`: select and freeze the search winner, then evaluate on the paired final dataset.
