@@ -1,7 +1,8 @@
 # neuro-autoresearch
 
-Autonomous RSA search for fixed, untrained image representations, followed by
-final encoding evaluation. Read `README.md` for commands and scientific contracts.
+Open-ended agentic search for computational models of the visual cortex, aiming
+to discover and understand its computational principles. Read `README.md` for
+the current search workflow, evaluation protocols and commands.
 
 ## Codebase
 
