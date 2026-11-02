@@ -55,7 +55,8 @@ p { margin: 0; }
 p + p { margin-top: 1rem; }
 a { color: var(--neg); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--neg); outline-offset: 2px; }
-.ai-note { font-size: 0.92rem; line-height: 1.5; color: var(--muted); background: var(--wash); border: 1px solid var(--rule); border-radius: 4px; padding: 0.6rem 0.85rem; margin-bottom: 1.6rem; }
+.ai-note { font-style: italic; font-size: 0.95rem; line-height: 1.5; color: var(--muted); margin-top: 1.4rem; }
+.ai-note + .byline { margin-top: 0.35rem; }
 .standfirst { font-size: 1.25rem; line-height: 1.5; color: var(--ink); }
 .byline { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 1.4rem; }
 .term { font-family: var(--display); font-weight: 600; }
@@ -193,9 +194,9 @@ ol.refs li + li { margin-top: 0.4rem; }
 <article>
 
 <header class="col">
-  <p class="ai-note">Sorry for the AI writing! Saw this <a href="https://x.com/rikiyatakehi/status/2117313742891327994" target="_blank" rel="noopener">trending on twitter</a> and converted some project notes into a writeup quickly!</p>
   <h1>Weight-Space Programming on toy tasks</h1>
   <p class="standfirst">We asked a coding agent to write every weight of a small transformer by hand, with gradient descent forbidden. Across 13 tasks it wrote <span id="n-attempts">959</span> weight-space programs. All ten algorithmic tasks reached 100% accuracy within three attempts; the rest of each run went to making the programs smaller. The three language-task results are not reliable, for reasons described below.</p>
+  <p class="ai-note">Sorry for the AI writing! Saw this <a href="https://x.com/rikiyatakehi/status/2117313742891327994" target="_blank" rel="noopener">trending on twitter</a> and converted some project notes into a writeup quickly!</p>
   <div class="byline"><a href="https://csinva.io" target="_blank" rel="noopener">Chandan Singh</a> · <time datetime="2026-11-02">November 2, 2026</time></div>
 </header>
 
@@ -220,7 +221,7 @@ ol.refs li + li { margin-top: 0.4rem; }
     </div>
     <ol class="steps" id="steps" aria-live="polite"></ol>
   </div>
-  <figcaption>All values were set by the agent; none were trained. The residual stream has three channels. Attention ignores position (all query and key weights are zero), so at the <code>=</code> token it averages all 11 positions, and a value gain of 11 turns that average back into an exact count of 1-bits. The MLP then subtracts 2·⌊N/2⌋ using nine ReLUs. The 48 position-embedding weights are all zero, since parity does not depend on bit position. Outlined cells are the weights used for the current input.</figcaption>
+  <figcaption><b>Figure 1.</b> Every weight of a small transformer that the agent wrote by hand, with no training, to compute <b>parity</b>: given a string of up to 10 bits, output <code>0</code> if it has an even number of 1s and <code>1</code> if odd. Each grid is one of the model's weight matrices at its real shape, and each square is one weight (rust = positive, teal = negative, pale = zero; the number is its value). The model has one attention layer and one MLP, with 174 weights in total, 35 of them nonzero.<br><br><b>How it works:</b> attention averages over all 11 input positions, and a value weight of 11 scales that average back up to N, the number of 1s. The MLP then computes N − 2·⌊N/2⌋, which is 0 for an even count and 1 for an odd one, using nine ReLU units. The 48 position-embedding weights are all zero because parity does not depend on where the bits are. Type bits into the box to run the model step by step; the outlined squares are the weights your input uses.</figcaption>
 </figure>
 
 <section class="col">
