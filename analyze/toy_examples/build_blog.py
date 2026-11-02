@@ -6,7 +6,7 @@
 
 Reads runs/*/results/overall_results.csv, computes per-task summaries, and
 fills blog_template.html. Writes a standalone page to
-analyze/toy_examples/blog.html.
+analyze/toy_examples/report.html.
 
     uv run analyze/toy_examples/build_blog.py            # standalone page
     uv run analyze/toy_examples/build_blog.py --fragment OUT.html
@@ -21,7 +21,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 RUNS = ROOT / "runs"
 TEMPLATE = HERE / "blog_template.html"
-OUT = HERE / "blog.html"
+OUT = HERE / "report.html"
 
 ALGORITHMIC = "Algorithmic"
 LANGUAGE = "Language"

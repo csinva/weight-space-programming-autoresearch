@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNS = ROOT / "runs"
-OUT = Path(__file__).resolve().parent / "report.html"
+OUT = Path(__file__).resolve().parent / "report_raw.html"
 
 CATEGORY = {
     "addition-five-digits": "Easy",
