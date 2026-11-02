@@ -244,23 +244,6 @@ ol.refs li + li { margin-top: 0.4rem; }
 </section>
 
 <section class="col">
-  <h2>Where this sits in interpretability</h2>
-  <p>The agent's programs are written in the vocabulary that the circuits literature built for reading trained models. Elhage et al. (2021) describe the residual stream as a shared communication channel that layers read from and write to in subspaces, and split each attention head into a QK circuit (where to look) and an OV circuit (what to move). Geva et al. (2021) read MLP layers as key–value memories. The programs in these runs use the same parts: named residual channels, heads that route or average, and MLPs used as lookup tables.</p>
-  <p>The closest prior work goes from programs to weights by compilation. RASP (Weiss et al., 2021) is a small language whose primitives map onto attention and MLP operations, and Tracr (Lindner et al., 2023) compiles RASP programs into real transformer weights. Learning Transformer Programs (Friedman et al., 2023) goes the other way, training transformers that are constrained to decompile into readable code. The agent here used no DSL or compiler. Its prompt cited two papers, Nanda et al. (2023) on grokked modular addition and Quirke &amp; Barez (2023) on addition, and it otherwise worked directly in a PyTorch file.</p>
-  <div class="scroll-x" style="margin-top:1.4rem">
-    <table class="compare">
-      <thead><tr><th>Approach</th><th>Direction</th><th>Weights come from</th><th>The explanation is</th></tr></thead>
-      <tbody>
-        <tr><th>Mechanistic interpretability</th><td>weights → explanation</td><td>gradient descent</td><td>a circuit found after training, often partial</td></tr>
-        <tr><th>Compiled transformers (RASP, Tracr)</th><td>program → weights</td><td>a deterministic compiler</td><td>the source program in a fixed DSL</td></tr>
-        <tr class="us"><th>Weight-Space Programming</th><td>specification → weights</td><td>a language model reasoning in natural language</td><td>the program it writes, its comments, and the log of every attempt</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="margin-top:1.4rem">Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
-</section>
-
-<section class="col">
   <h2>The setup</h2>
   <p>Each run gives Claude, working as an autonomous coding agent, one file, <code>interpretable_transformer.py</code>, which contains a small GPT-style transformer and an empty <code>write_weights(model, task)</code> function. Claude may change anything in that file except the evaluation block: the architecture, its widths and depths, and every parameter tensor. The rules in <code>evolve/program.md</code>:</p>
   <ul class="plain">
@@ -367,6 +350,23 @@ ol.refs li + li { margin-top: 0.4rem; }
     <li><b>Use the programs as ground truth.</b> Run standard circuit-discovery and attribution methods on these models and check whether they recover the mechanisms the agent documented.</li>
     <li><b>Compare with trained models.</b> Train the same small architectures with gradient descent and compare their mechanisms to the agent's.</li>
   </ol>
+</section>
+
+<section class="col">
+  <h2>Where this sits in interpretability</h2>
+  <p>The agent's programs are written in the vocabulary that the circuits literature built for reading trained models. Elhage et al. (2021) describe the residual stream as a shared communication channel that layers read from and write to in subspaces, and split each attention head into a QK circuit (where to look) and an OV circuit (what to move). Geva et al. (2021) read MLP layers as key–value memories. The programs in these runs use the same parts: named residual channels, heads that route or average, and MLPs used as lookup tables.</p>
+  <p>The closest prior work goes from programs to weights by compilation. RASP (Weiss et al., 2021) is a small language whose primitives map onto attention and MLP operations, and Tracr (Lindner et al., 2023) compiles RASP programs into real transformer weights. Learning Transformer Programs (Friedman et al., 2023) goes the other way, training transformers that are constrained to decompile into readable code. The agent here used no DSL or compiler. Its prompt cited two papers, Nanda et al. (2023) on grokked modular addition and Quirke &amp; Barez (2023) on addition, and it otherwise worked directly in a PyTorch file.</p>
+  <div class="scroll-x" style="margin-top:1.4rem">
+    <table class="compare">
+      <thead><tr><th>Approach</th><th>Direction</th><th>Weights come from</th><th>The explanation is</th></tr></thead>
+      <tbody>
+        <tr><th>Mechanistic interpretability</th><td>weights → explanation</td><td>gradient descent</td><td>a circuit found after training, often partial</td></tr>
+        <tr><th>Compiled transformers (RASP, Tracr)</th><td>program → weights</td><td>a deterministic compiler</td><td>the source program in a fixed DSL</td></tr>
+        <tr class="us"><th>Weight-Space Programming</th><td>specification → weights</td><td>a language model reasoning in natural language</td><td>the program it writes, its comments, and the log of every attempt</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:1.4rem">Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
 </section>
 
 <hr>
