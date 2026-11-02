@@ -76,25 +76,25 @@ figcaption { font-family: var(--mono); font-size: 0.78rem; line-height: 1.5; col
 
 /* ---------- weight exhibit ---------- */
 .exhibit { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); padding-block: 1.4rem 1.6rem; }
-.tensors { display: flex; flex-wrap: wrap; gap: 1.4rem 1.8rem; align-items: flex-start; }
+.tensors { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: flex-start; }
 .tensor { display: grid; gap: 0.35rem; min-width: 0; }
 .tensor .tname { font-family: var(--mono); font-size: 0.72rem; color: var(--ink); }
 .tensor .tshape { color: var(--muted); }
 .grid { display: grid; gap: 2px; width: max-content; }
 .cell {
-  width: 1.55rem; height: 1.55rem; display: grid; place-items: center;
-  font-family: var(--mono); font-size: 0.6rem; font-variant-numeric: tabular-nums;
+  width: 1.25rem; height: 1.25rem; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 0.55rem; font-variant-numeric: tabular-nums;
   background: var(--wash); color: var(--paper); border-radius: 2px;
 }
 .cell.z { color: transparent; }
 .cell.p { background: var(--pos); }
 .cell.n { background: var(--neg); }
 .cell.lit { outline: 2px solid var(--ink); outline-offset: 0; }
-.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-top: 1.2rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-top: 0.8rem; }
 .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
 .sw { width: 0.8rem; height: 0.8rem; border-radius: 2px; display: inline-block; }
 
-.tracer { margin-top: 1.8rem; display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1.4rem 2rem; }
+.tracer { margin-top: 1.2rem; display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1.4rem 2rem; }
 @media (max-width: 720px) { .tracer { grid-template-columns: minmax(0, 1fr); } }
 .tracer label { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
 .tracer input {
@@ -104,7 +104,7 @@ figcaption { font-family: var(--mono); font-size: 0.78rem; line-height: 1.5; col
 }
 .tracer .hint { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
 .tracer .hint.err { color: var(--bad); }
-.steps { display: grid; gap: 0.7rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
+.steps { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
 .steps li { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0.8rem; align-items: baseline; font-size: 0.95rem; }
 .steps .k { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .steps .v { min-width: 0; }
@@ -220,7 +220,7 @@ ol.refs li + li { margin-top: 0.4rem; }
     </div>
     <ol class="steps" id="steps" aria-live="polite"></ol>
   </div>
-  <figcaption><b>Figure 1.</b> Every weight of a small transformer that the agent wrote by hand, with no training, to compute <b>parity</b>: given a string of up to 10 bits, output <code>0</code> if it has an even number of 1s and <code>1</code> if odd. Each grid is one of the model's weight matrices at its real shape, and each square is one weight (rust = positive, teal = negative, pale = zero; the number is its value). The model has one attention layer and one MLP, with 174 weights in total, 35 of them nonzero.<br><br><b>How it works:</b> attention averages over all 11 input positions, and a value weight of 11 scales that average back up to N, the number of 1s. The MLP then computes N − 2·⌊N/2⌋, which is 0 for an even count and 1 for an odd one, using nine ReLU units. The 48 position-embedding weights are all zero because parity does not depend on where the bits are. Type bits into the box to run the model step by step; the outlined squares are the weights your input uses.</figcaption>
+  <figcaption><b>Figure 1.</b> Every weight of a small transformer that the agent wrote by hand, with no training, to compute <b>parity</b>: given a string of up to 10 bits, output <code>0</code> if it has an even number of 1s and <code>1</code> if odd. Each grid is one of the model's weight matrices (matrices taller than four rows are drawn transposed, marked ᵀ), and each square is one weight (rust = positive, teal = negative, pale = zero; the number is its value). The model has one attention layer and one MLP, with 174 weights in total, 35 of them nonzero.<br><br><b>How it works:</b> attention averages over all 11 input positions, and a value weight of 11 scales that average back up to N, the number of 1s. The MLP then computes N − 2·⌊N/2⌋, which is 0 for an even count and 1 for an odd one, using nine ReLU units. The 48 position-embedding weights are all zero because parity does not depend on where the bits are. Type bits into the box to run the model step by step; the outlined squares are the weights your input uses.</figcaption>
 </figure>
 
 <section class="col">
@@ -429,9 +429,10 @@ const cellRefs = {};
   for (const name in T){
     const M = T[name], r = M.length, c = M[0].length;
     const wrap = document.createElement('div'); wrap.className = 'tensor';
-    wrap.innerHTML = `<div class="tname">${esc(name)} <span class="tshape">${r}×${c}</span></div>`;
+    const tr = r > 4;
+    wrap.innerHTML = `<div class="tname">${esc(name)}${tr ? 'ᵀ' : ''} <span class="tshape">${r}×${c}${tr ? ', shown transposed' : ''}</span></div>`;
     const g = document.createElement('div'); g.className = 'grid';
-    g.style.gridTemplateColumns = `repeat(${c}, 1.55rem)`;
+    g.style.gridTemplateColumns = `repeat(${tr ? r : c}, 1.25rem)`;
     cellRefs[name] = [];
     for (let i=0;i<r;i++){ cellRefs[name][i] = [];
       for (let j=0;j<c;j++){
@@ -440,9 +441,11 @@ const cellRefs = {};
         d.className = 'cell ' + (v > 0 ? 'p' : v < 0 ? 'n' : 'z');
         if (v !== 0){ nz++; d.textContent = Number.isInteger(v) ? v : v.toFixed(1); }
         d.title = `${name}[${i},${j}] = ${v}`;
-        g.appendChild(d); cellRefs[name][i][j] = d;
+        cellRefs[name][i][j] = d;
       }
     }
+    const R2 = tr ? c : r, C2 = tr ? r : c;
+    for (let a=0;a<R2;a++) for (let b=0;b<C2;b++) g.appendChild(tr ? cellRefs[name][b][a] : cellRefs[name][a][b]);
     wrap.appendChild(g); host.appendChild(wrap);
   }
   host.dataset.total = total; host.dataset.nonzero = nz;
