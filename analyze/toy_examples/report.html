@@ -361,6 +361,7 @@ ol.refs li + li { margin-top: 0.4rem; }
     </table>
   </div>
   <p style="margin-top:1.4rem">Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
+  <p>A related line of work builds models that are interpretable from the start rather than explained afterwards. Guide Labs' <a href="https://www.guidelabs.ai/papers/scaling-inherently-interpretable-language-models.pdf" target="_blank" rel="noopener">Steerling-8B</a> adds a concept layer to a language model so that each generated token can be traced to human-readable concepts and to its training data. <a href="https://arxiv.org/abs/2405.16714" target="_blank" rel="noopener">QA-Emb</a> (Benara et al., 2024) builds text embeddings in which each dimension is an LLM's answer to a yes/no question, and uses them to fit interpretable fMRI encoding models of language in the brain. <a href="https://www.nature.com/articles/s41746-026-02838-5" target="_blank" rel="noopener">HACHI</a> (Feng et al., 2026) has AI agents, working with clinicians, propose yes/no concepts from clinical notes and fit fully interpretable linear clinical prediction models. These methods keep a learning step but constrain the representation to something a person can read. Weight-Space Programming drops the learning step and writes the mechanism directly.</p>
 </section>
 
 <hr>
@@ -382,6 +383,9 @@ ol.refs li + li { margin-top: 0.4rem; }
     <li>Friedman, D., Wettig, A., Chen, D. (2023). <a href="https://arxiv.org/abs/2306.01128" target="_blank" rel="noopener">Learning Transformer Programs</a>. NeurIPS.</li>
     <li>Nanda, N. et al. (2023). <a href="https://arxiv.org/abs/2301.05217" target="_blank" rel="noopener">Progress Measures for Grokking via Mechanistic Interpretability</a>. ICLR.</li>
     <li>Quirke, P., Barez, F. (2023). <a href="https://arxiv.org/abs/2310.13121" target="_blank" rel="noopener">Understanding Addition in Transformers</a>. ICLR 2024.</li>
+    <li>Guide Labs (2026). <a href="https://www.guidelabs.ai/papers/scaling-inherently-interpretable-language-models.pdf" target="_blank" rel="noopener">Scaling Inherently Interpretable Language Models</a>.</li>
+    <li>Benara, V., Singh, C. et al. (2024). <a href="https://arxiv.org/abs/2405.16714" target="_blank" rel="noopener">Crafting Interpretable Embeddings by Asking LLMs Questions</a> (QA-Emb).</li>
+    <li>Feng, J., Kothari, A., Vossler, P. et al. (2026). <a href="https://www.nature.com/articles/s41746-026-02838-5" target="_blank" rel="noopener">Human-AI Co-design for Clinical Prediction Models</a> (HACHI). npj Digital Medicine.</li>
   </ol>
 </section>
 
