@@ -337,19 +337,13 @@ ol.refs li + li { margin-top: 0.4rem; }
     </table>
   </div>
   <p style="margin-top:1.2rem">Each language task samples its 200 evaluation examples, with a fixed seed, from a pool of 2,000 training sentences, and the agent can read that pool. Its best sentiment and inference programs are built from statistics counted on that pool, which contains the evaluation examples. On SNLI the agent went further and set its readout coefficients with logistic regression, logging “LR pred 100% test200 in-sample.” This is fitting, which the rules forbid, and it was done on the evaluation set, so the SNLI 100% is not valid. The SST-2 number is likely inflated too, and MRPC's 73% is barely above the 68% majority baseline.</p>
-  <p>The algorithmic tasks are less affected. Their programs are closed-form, the input spaces are far larger than 200 examples (10¹⁰ pairs for addition), and several runs checked themselves on other seeds or larger samples. They still share one fixed evaluation seed, so a fresh-seed re-evaluation of every reported program is the first item on the list below.</p>
+  <p>The algorithmic tasks are less affected. Their programs are closed-form, the input spaces are far larger than 200 examples (10¹⁰ pairs for addition), and several runs checked themselves on other seeds or larger samples. They still share one fixed evaluation seed, so every reported program should still be re-evaluated on a fresh seed.</p>
   <p>Over hundreds of iterations with access to the data, the agent moved from writing mechanisms to fitting them. A better harness is needed, as the Sparks post also notes.</p>
 </section>
 
 <section class="col">
-  <h2>Next steps</h2>
-  <ol class="plain">
-    <li><b>Hold out a hidden test set.</b> Score reported programs on examples the agent never sees, drawn with a fresh seed, and keep language-task statistics away from evaluation data.</li>
-    <li><b>Measure interpretability directly.</b> Parameter count was gamed. Alternatives include nonzero weights, the description length of <code>write_weights</code>, or whether a second model can predict the program's activations from its docstring alone.</li>
-    <li><b>Reward algorithms over tables.</b> GCD and linear interpolation were solved by enumeration. Larger input ranges would make lookup tables impractical.</li>
-    <li><b>Use the programs as ground truth.</b> Run standard circuit-discovery and attribution methods on these models and check whether they recover the mechanisms the agent documented.</li>
-    <li><b>Compare with trained models.</b> Train the same small architectures with gradient descent and compare their mechanisms to the agent's.</li>
-  </ol>
+  <h2>What's next</h2>
+  <p>We've been working on this approach to build neuroscience models that are interpretable by construction. More to come soon!</p>
 </section>
 
 <section class="col">
