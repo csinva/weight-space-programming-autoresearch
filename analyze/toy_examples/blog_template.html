@@ -55,7 +55,7 @@ p { margin: 0; }
 p + p { margin-top: 1rem; }
 a { color: var(--neg); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--neg); outline-offset: 2px; }
-.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ai-note { font-size: 0.92rem; line-height: 1.5; color: var(--muted); background: var(--wash); border: 1px solid var(--rule); border-radius: 4px; padding: 0.6rem 0.85rem; margin-bottom: 1.6rem; }
 .standfirst { font-size: 1.25rem; line-height: 1.5; color: var(--ink); }
 .byline { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 1.4rem; }
 .term { font-family: var(--display); font-weight: 600; }
@@ -193,9 +193,10 @@ ol.refs li + li { margin-top: 0.4rem; }
 <article>
 
 <header class="col">
-  <div class="eyebrow">Weight-Space Programming · Field notes from 13 runs</div>
+  <p class="ai-note">Sorry for the AI writing! Saw this <a href="https://x.com/rikiyatakehi/status/2117313742891327994" target="_blank" rel="noopener">trending on twitter</a> and converted some project notes into a writeup quickly!</p>
   <h1>Weight-Space Programming on toy tasks</h1>
   <p class="standfirst">We asked a coding agent to write every weight of a small transformer by hand, with gradient descent forbidden. Across 13 tasks it wrote <span id="n-attempts">959</span> weight-space programs. All ten algorithmic tasks reached 100% accuracy within three attempts; the rest of each run went to making the programs smaller. The three language-task results are not reliable, for reasons described below.</p>
+  <div class="byline"><a href="https://csinva.io" target="_blank" rel="noopener">Chandan Singh</a> · <time datetime="2026-11-02">November 2, 2026</time></div>
 </header>
 
 <figure class="wide exhibit" aria-labelledby="ex-title">
