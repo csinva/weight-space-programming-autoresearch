@@ -131,11 +131,6 @@ table.data td.mech { color: var(--ink); min-width: 18rem; line-height: 1.45; }
 .ok { color: var(--good); }
 .no { color: var(--bad); }
 
-table.compare { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
-table.compare th, table.compare td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
-table.compare thead th { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); }
-table.compare tbody th { font-family: var(--display); font-weight: 600; white-space: nowrap; }
-table.compare tr.us th, table.compare tr.us td { background: var(--wash); }
 
 /* ---------- loop ---------- */
 ol.loop { list-style: none; padding: 0; margin: 1.4rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); counter-reset: step; }
@@ -363,17 +358,7 @@ ol.refs li + li { margin-top: 0.4rem; }
   <h2>Where this sits in interpretability</h2>
   <p>The agent's programs are written in the vocabulary that the circuits literature built for reading trained models. Elhage et al. (2021) describe the residual stream as a shared communication channel that layers read from and write to in subspaces, and split each attention head into a QK circuit (where to look) and an OV circuit (what to move). Geva et al. (2021) read MLP layers as key–value memories. The programs in these runs use the same parts: named residual channels, heads that route or average, and MLPs used as lookup tables.</p>
   <p>The closest prior work goes from programs to weights by compilation. RASP (Weiss et al., 2021) is a small language whose primitives map onto attention and MLP operations, and Tracr (Lindner et al., 2023) compiles RASP programs into real transformer weights. Learning Transformer Programs (Friedman et al., 2023) goes the other way, training transformers that are constrained to decompile into readable code. The agent here used no DSL or compiler. Its prompt cited two papers, Nanda et al. (2023) on grokked modular addition and Quirke &amp; Barez (2023) on addition, and it otherwise worked directly in a PyTorch file.</p>
-  <div class="scroll-x" style="margin-top:1.4rem">
-    <table class="compare">
-      <thead><tr><th>Approach</th><th>Direction</th><th>Weights come from</th><th>The explanation is</th></tr></thead>
-      <tbody>
-        <tr><th>Mechanistic interpretability</th><td>weights → explanation</td><td>gradient descent</td><td>a circuit found after training, often partial</td></tr>
-        <tr><th>Compiled transformers (RASP, Tracr)</th><td>program → weights</td><td>a deterministic compiler</td><td>the source program in a fixed DSL</td></tr>
-        <tr class="us"><th>Weight-Space Programming</th><td>specification → weights</td><td>a language model reasoning in natural language</td><td>the program it writes, its comments, and the log of every attempt</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="margin-top:1.4rem">Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
+  <p>Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
   <p>A related line of work builds models that are interpretable from the start rather than explained afterwards. Guide Labs' <a href="https://www.guidelabs.ai/papers/scaling-inherently-interpretable-language-models.pdf" target="_blank" rel="noopener">Steerling-8B</a> adds a concept layer to a language model so that each generated token can be traced to human-readable concepts and to its training data. <a href="https://arxiv.org/abs/2405.16714" target="_blank" rel="noopener">QA-Emb</a> (Benara et al., 2024) builds text embeddings in which each dimension is an LLM's answer to a yes/no question, and uses them to fit interpretable fMRI encoding models of language in the brain. <a href="https://www.nature.com/articles/s41746-026-02838-5" target="_blank" rel="noopener">HACHI</a> (Feng et al., 2026) has AI agents, working with clinicians, propose yes/no concepts from clinical notes and fit fully interpretable linear clinical prediction models. These methods keep a learning step but constrain the representation to something a person can read. Weight-Space Programming drops the learning step and writes the mechanism directly.</p>
 </section>
 
