@@ -14,9 +14,9 @@ import html
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 RUNS = ROOT / "runs"
-OUT = ROOT / "analyze" / "report.html"
+OUT = Path(__file__).resolve().parent / "report.html"
 
 CATEGORY = {
     "addition-five-digits": "Easy",
@@ -128,7 +128,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Circuit-Building Autoresearch &mdash; Results</title>
+<title>Weight-Space Programming Autoresearch &mdash; Results</title>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <style>
   :root { --ink:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#2563eb; --bg:#ffffff; }
@@ -177,9 +177,9 @@ TEMPLATE = r"""<!DOCTYPE html>
 <body>
 <div class="wrap">
   <header>
-    <h1>Circuit-Building Autoresearch</h1>
-    <p class="sub">Autonomous AI research that hand-writes transformer weights to solve tasks. Each run iteratively
-      proposes interpretable circuits; below, every point is one circuit, numbered in the order it was tried.</p>
+    <h1>Weight-Space Programming Autoresearch</h1>
+    <p class="sub">Autonomous AI research that writes transformer weights directly (Weight-Space Programming). Each run iteratively
+      proposes weight-space programs; below, every point is one program, numbered in the order it was tried.</p>
   </header>
 
   <h2>Per-task exploration</h2>

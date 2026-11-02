@@ -1,0 +1,632 @@
+<title>Weight-Space Programming on Toy Tasks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: one reading column (~66ch) of serif prose; figures break out to a wider
+   measure. Positive weights are rust, negative weights are teal, zero is a pale
+   wash, the same encoding everywhere a weight or score appears. */
+:root {
+  --paper: #fbfbfa;
+  --ink: #17202a;
+  --muted: #5e6975;
+  --rule: #e2e5e8;
+  --wash: #eef1f2;
+  --pos: #b8410f;
+  --neg: #0d6c8c;
+  --good: #1f7a45;
+  --bad: #b42323;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --measure: 40rem;
+  --wide: 66rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121518; --ink: #e3e7eb; --muted: #9aa5b1; --rule: #2a3138; --wash: #1d2227;
+    --pos: #ef8a52; --neg: #4fb3d4; --good: #5fcf8b; --bad: #f2837b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121518; --ink: #e3e7eb; --muted: #9aa5b1; --rule: #2a3138; --wash: #1d2227;
+  --pos: #ef8a52; --neg: #4fb3d4; --good: #5fcf8b; --bad: #f2837b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 3.5rem 5rem;
+}
+.col { max-width: var(--measure); margin-inline: auto; }
+.wide { max-width: var(--wide); margin-inline: auto; }
+article > * + * { margin-top: 1.1rem; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; letter-spacing: -0.005em; line-height: 1.15; }
+h1 { font-size: clamp(2.2rem, 5.5vw, 3.4rem); font-weight: 700; margin: 0.4rem 0 1rem; }
+h2 { font-size: 1.65rem; font-weight: 600; margin: 3.4rem 0 0.2rem; }
+h3 { font-size: 1.15rem; font-weight: 600; margin: 2rem 0 0; }
+p { margin: 0; }
+p + p { margin-top: 1rem; }
+a { color: var(--neg); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--neg); outline-offset: 2px; }
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.standfirst { font-size: 1.25rem; line-height: 1.5; color: var(--ink); }
+.byline { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); margin-top: 1.4rem; }
+.term { font-family: var(--display); font-weight: 600; }
+code, .mono { font-family: var(--mono); font-size: 0.86em; }
+code { background: var(--wash); padding: 0.05em 0.35em; border-radius: 3px; }
+em { font-style: italic; }
+ul.plain, ol.plain { margin: 1rem 0 0; padding-left: 1.3rem; }
+ul.plain li + li, ol.plain li + li { margin-top: 0.45rem; }
+.pullnum { font-family: var(--display); font-weight: 700; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 3rem auto; max-width: var(--measure); }
+
+figure { margin: 2.2rem auto; }
+figcaption { font-family: var(--mono); font-size: 0.78rem; line-height: 1.5; color: var(--muted); margin-top: 0.8rem; max-width: var(--measure); }
+.fig-head { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }
+.fig-title { font-family: var(--display); font-weight: 600; font-size: 1.05rem; }
+.fig-sub { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+.scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ---------- weight exhibit ---------- */
+.exhibit { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); padding-block: 1.4rem 1.6rem; }
+.tensors { display: flex; flex-wrap: wrap; gap: 1.4rem 1.8rem; align-items: flex-start; }
+.tensor { display: grid; gap: 0.35rem; min-width: 0; }
+.tensor .tname { font-family: var(--mono); font-size: 0.72rem; color: var(--ink); }
+.tensor .tshape { color: var(--muted); }
+.grid { display: grid; gap: 2px; width: max-content; }
+.cell {
+  width: 1.55rem; height: 1.55rem; display: grid; place-items: center;
+  font-family: var(--mono); font-size: 0.6rem; font-variant-numeric: tabular-nums;
+  background: var(--wash); color: var(--paper); border-radius: 2px;
+}
+.cell.z { color: transparent; }
+.cell.p { background: var(--pos); }
+.cell.n { background: var(--neg); }
+.cell.lit { outline: 2px solid var(--ink); outline-offset: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-top: 1.2rem; }
+.legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.sw { width: 0.8rem; height: 0.8rem; border-radius: 2px; display: inline-block; }
+
+.tracer { margin-top: 1.8rem; display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 1.4rem 2rem; }
+@media (max-width: 720px) { .tracer { grid-template-columns: minmax(0, 1fr); } }
+.tracer label { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
+.tracer input {
+  width: 100%; font-family: var(--mono); font-size: 1.35rem; letter-spacing: 0.12em;
+  padding: 0.45rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--paper); color: var(--ink);
+}
+.tracer .hint { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
+.tracer .hint.err { color: var(--bad); }
+.steps { display: grid; gap: 0.7rem; margin: 0; padding: 0; list-style: none; min-width: 0; }
+.steps li { display: grid; grid-template-columns: 5.6rem minmax(0, 1fr); gap: 0.8rem; align-items: baseline; font-size: 0.95rem; }
+.steps .k { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.steps .v { min-width: 0; }
+.steps .v .mono { font-size: 0.85rem; }
+.hrow { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 0.35rem; }
+.hrow .cell { width: 1.9rem; }
+.answer { font-family: var(--display); font-weight: 700; font-size: 1.4rem; }
+
+/* ---------- tables ---------- */
+table.data { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+table.data th { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+table.data td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.data td.num, table.data th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.data td.task { font-family: var(--mono); font-size: 0.8rem; white-space: nowrap; }
+table.data td.mech { color: var(--ink); min-width: 18rem; line-height: 1.45; }
+.flag { font-family: var(--mono); font-size: 0.72rem; color: var(--pos); }
+.ok { color: var(--good); }
+.no { color: var(--bad); }
+
+table.compare { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+table.compare th, table.compare td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.compare thead th { font-family: var(--mono); font-weight: 500; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); }
+table.compare tbody th { font-family: var(--display); font-weight: 600; white-space: nowrap; }
+table.compare tr.us th, table.compare tr.us td { background: var(--wash); }
+
+/* ---------- loop ---------- */
+ol.loop { list-style: none; padding: 0; margin: 1.4rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); counter-reset: step; }
+ol.loop li { background: var(--paper); padding: 0.9rem 1rem 1rem; counter-increment: step; font-size: 0.92rem; line-height: 1.45; }
+ol.loop li::before { content: counter(step); display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 0.3rem; }
+ol.loop li b { font-family: var(--display); font-weight: 600; display: block; margin-bottom: 0.2rem; }
+.loop-note { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin-top: 0.6rem; }
+
+/* ---------- explorer ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+.tabs .group { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); width: 100%; margin-top: 0.4rem; }
+.tab {
+  font-family: var(--mono); font-size: 0.76rem; padding: 0.32rem 0.6rem; border-radius: 3px;
+  border: 1px solid var(--rule); background: var(--paper); color: var(--ink); cursor: pointer;
+}
+.tab:hover { border-color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.explorer { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.6rem; align-items: start; }
+@media (max-width: 860px) { .explorer { grid-template-columns: minmax(0, 1fr); } }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart .axis line, .chart .axis path { stroke: var(--rule); }
+.chart .tick text, .chart .lab { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+.chart .axt { fill: var(--muted); font-family: var(--mono); font-size: 10.5px; }
+.chart .path { fill: none; stroke: var(--muted); stroke-opacity: 0.35; stroke-width: 1; }
+.chart .pt { stroke: var(--paper); stroke-width: 1; cursor: pointer; }
+.chart .pt.sel { stroke: var(--ink); stroke-width: 2; }
+.chart .ord { fill: var(--muted); font-family: var(--mono); font-size: 8.5px; pointer-events: none; }
+.detail { min-width: 0; }
+.detail .dname { font-family: var(--mono); font-size: 0.82rem; font-weight: 500; }
+.detail .dmeta { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); margin-top: 0.15rem; }
+.detail .ddesc { font-size: 0.92rem; line-height: 1.5; margin-top: 0.6rem; }
+.attempts { max-height: 19rem; overflow: auto; border-top: 1px solid var(--rule); margin-top: 1rem; }
+.attempts table { border-collapse: collapse; width: 100%; font-size: 0.78rem; }
+.attempts td { padding: 0.32rem 0.4rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.attempts tr { cursor: pointer; }
+.attempts tr:hover td { background: var(--wash); }
+.attempts tr.sel td { background: var(--wash); box-shadow: inset 0 0 0 9999px transparent; }
+.attempts td.i, .attempts td.a, .attempts td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.attempts td.i { color: var(--muted); width: 2.4rem; }
+.attempts td.a, .attempts td.n { text-align: right; }
+.attempts td.m { font-family: var(--mono); word-break: break-word; }
+.summary-line { font-size: 0.95rem; margin-top: 0.2rem; }
+
+/* ---------- dumbbell ---------- */
+.dumbbell svg { width: 100%; min-width: 34rem; height: auto; display: block; }
+.dumbbell .grid line { stroke: var(--rule); }
+.dumbbell .tick text, .dumbbell .rowlab { fill: var(--muted); font-family: var(--mono); font-size: 10.5px; }
+.dumbbell .rowlab { fill: var(--ink); }
+.dumbbell .bar { stroke: var(--neg); stroke-opacity: 0.45; stroke-width: 2; }
+.dumbbell .from { fill: var(--paper); stroke: var(--neg); stroke-width: 1.5; }
+.dumbbell .to { fill: var(--neg); }
+.dumbbell .x { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+.dumbbell .xf { fill: var(--pos); font-family: var(--mono); font-size: 10px; }
+
+ol.refs { font-size: 0.88rem; padding-left: 1.4rem; margin-top: 1rem; }
+ol.refs li + li { margin-top: 0.4rem; }
+.foot { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .cell { transition: outline-color 0.15s; } }
+</style>
+
+<div class="page">
+<article>
+
+<header class="col">
+  <div class="eyebrow">Weight-Space Programming · Field notes from 13 runs</div>
+  <h1>Weight-Space Programming on toy tasks</h1>
+  <p class="standfirst">We asked a coding agent to write every weight of a small transformer by hand, with gradient descent forbidden. Across 13 tasks it wrote <span id="n-attempts">959</span> weight-space programs. All ten algorithmic tasks reached 100% accuracy within three attempts; the rest of each run went to making the programs smaller. The three language-task results are not reliable, for reasons described below.</p>
+</header>
+
+<figure class="wide exhibit" aria-labelledby="ex-title">
+  <div class="fig-head">
+    <div class="fig-title" id="ex-title">Full set of weights for one program</div>
+    <div class="fig-sub">parity-upto10-bits · program ParityFloorSubD3F9 · 174 parameters, 35 nonzero</div>
+  </div>
+  <div class="tensors" id="tensors"></div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--pos)"></i>positive weight</span>
+    <span><i class="sw" style="background:var(--neg)"></i>negative weight</span>
+    <span><i class="sw" style="background:var(--wash)"></i>zero</span>
+    <span>shapes are PyTorch (out × in); vocabulary is <code>0 1 = _</code></span>
+  </div>
+
+  <div class="tracer">
+    <div>
+      <label for="bits">Type a bit string (1–10 bits)</label>
+      <input id="bits" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" maxlength="10" value="1011010">
+      <div class="hint" id="bits-hint">The model sees it left-padded with <code>_</code> to 10 characters, then <code>=</code>.</div>
+    </div>
+    <ol class="steps" id="steps" aria-live="polite"></ol>
+  </div>
+  <figcaption>All values were set by the agent; none were trained. The residual stream has three channels. Attention ignores position (all query and key weights are zero), so at the <code>=</code> token it averages all 11 positions, and a value gain of 11 turns that average back into an exact count of 1-bits. The MLP then subtracts 2·⌊N/2⌋ using nine ReLUs. The 48 position-embedding weights are all zero, since parity does not depend on bit position. Outlined cells are the weights used for the current input.</figcaption>
+</figure>
+
+<section class="col">
+  <h2>Why write weights by hand?</h2>
+  <p>Weights normally come from an optimizer, and mechanistic interpretability mostly works backwards from those weights to an explanation. Rikiya Takehi's post <a href="https://rikiyat.github.io/blog/weight-space-programming/" target="_blank" rel="noopener">Sparks of Weight-Space Programming</a> describes the forward direction. In <span class="term">Weight-Space Programming</span>, a general-purpose language model reads and writes a network's parameters directly, guided by a natural-language specification, with no gradient descent. That post shows a frontier model naming the game a policy network was trained on from its raw weights, repairing a stuck policy by editing 3.5% of its weights, and writing game-playing networks from scratch.</p>
+  <p>This post applies the idea to small tasks. We give an agent a task whose correct algorithm we already know, such as five-digit addition, parity, or sorting. Its job is to write a transformer that runs that algorithm autoregressively. Since the algorithm is known, we can check both whether the program is correct and whether its mechanism matches the intended algorithm.</p>
+  <p>Reasons this is useful:</p>
+  <ul class="plain">
+    <li><b>Interpretable by construction.</b> A hand-written model comes with a description of each channel, head, and neuron, because that is how it was written.</li>
+    <li><b>Existence proofs and size bounds.</b> A working program shows an architecture can implement an algorithm exactly, and gives an upper bound on the size needed.</li>
+    <li><b>Ground truth for interpretability tools.</b> Models with known mechanisms can be used to test circuit-discovery and attribution methods, as compiled transformers have been (Lindner et al., 2023).</li>
+  </ul>
+</section>
+
+<section class="col">
+  <h2>Where this sits in interpretability</h2>
+  <p>The agent's programs are written in the vocabulary that the circuits literature built for reading trained models. Elhage et al. (2021) describe the residual stream as a shared communication channel that layers read from and write to in subspaces, and split each attention head into a QK circuit (where to look) and an OV circuit (what to move). Geva et al. (2021) read MLP layers as key–value memories. The programs in these runs use the same parts: named residual channels, heads that route or average, and MLPs used as lookup tables.</p>
+  <p>The closest prior work goes from programs to weights by compilation. RASP (Weiss et al., 2021) is a small language whose primitives map onto attention and MLP operations, and Tracr (Lindner et al., 2023) compiles RASP programs into real transformer weights. Learning Transformer Programs (Friedman et al., 2023) goes the other way, training transformers that are constrained to decompile into readable code. The agent here used no DSL or compiler. Its prompt cited two papers, Nanda et al. (2023) on grokked modular addition and Quirke &amp; Barez (2023) on addition, and it otherwise worked directly in a PyTorch file.</p>
+  <div class="scroll-x" style="margin-top:1.4rem">
+    <table class="compare">
+      <thead><tr><th>Approach</th><th>Direction</th><th>Weights come from</th><th>The explanation is</th></tr></thead>
+      <tbody>
+        <tr><th>Mechanistic interpretability</th><td>weights → explanation</td><td>gradient descent</td><td>a circuit found after training, often partial</td></tr>
+        <tr><th>Compiled transformers (RASP, Tracr)</th><td>program → weights</td><td>a deterministic compiler</td><td>the source program in a fixed DSL</td></tr>
+        <tr class="us"><th>Weight-Space Programming</th><td>specification → weights</td><td>a language model reasoning in natural language</td><td>the program it writes, its comments, and the log of every attempt</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="margin-top:1.4rem">Without a compiler, the agent chose encodings per task: a scalar in one channel or a one-hot across ten, keys set to log place values so the softmax computes a weighted sum, or LayerNorm removed.</p>
+</section>
+
+<section class="col">
+  <h2>The setup</h2>
+  <p>Each run gives the agent one file, <code>interpretable_transformer.py</code>, which contains a small GPT-style transformer and an empty <code>write_weights(model, task)</code> function. The agent may change anything in that file except the evaluation block: the architecture, its widths and depths, and every parameter tensor. The rules in <code>evolve/program.md</code>:</p>
+  <ul class="plain">
+    <li>No training of any kind: no optimizer step, no fitting loop, no backprop. Parameters must be set in closed form.</li>
+    <li>No outside computation: the transformer must generate the answer token by token, with no Python function computing it on the side.</li>
+    <li>No pretrained weights.</li>
+    <li>All else equal, more interpretable is better. Parameter count is the suggested proxy, but the stated criterion is human-understandable structure.</li>
+  </ul>
+  <ol class="loop" aria-label="The experiment loop">
+    <li><b>Write</b>Edit <code>write_weights</code> with one idea and give the program a unique name.</li>
+    <li><b>Run</b>Generate answers autoregressively for 200 examples and score exact-match accuracy.</li>
+    <li><b>Log</b>Append accuracy, parameter count, and a description to <code>overall_results.csv</code>.</li>
+    <li><b>Snapshot</b>Save the file to <code>interpretable_transformers_lib/</code>, then start again.</li>
+  </ol>
+  <p class="loop-note">The prompt says never to stop, even at 100%, and to keep looking for a simpler solution.</p>
+</section>
+
+<section class="wide">
+  <div class="col">
+    <h2>Results on algorithmic tasks</h2>
+    <p>All ten algorithmic tasks reached 100% on their 200 evaluation examples within three attempts; five on the first attempt. The table shows when the first 100% program appeared and the smallest 100% program found.</p>
+  </div>
+  <div class="scroll-x" style="margin-top:1.4rem">
+    <table class="data" id="algo-table">
+      <thead><tr>
+        <th>Task</th><th class="num">Attempts</th><th class="num">First 100% at</th><th class="num">Its params</th><th class="num">Smallest 100%</th><th>How the smallest program works</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="foot" style="margin-top:0.7rem">† The run later reached “0 parameters” by storing its hand-set constants as non-trainable buffers. The table shows the smallest count before that change.</p>
+
+  <figure aria-labelledby="exp-title">
+    <div class="fig-head">
+      <div class="fig-title" id="exp-title">Every attempt, in order</div>
+      <div class="fig-sub">accuracy vs. parameters (log scale) · darker = later · click a point or row</div>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Task"></div>
+    <div class="explorer">
+      <div class="chart" id="chart"></div>
+      <div class="detail" id="detail"></div>
+    </div>
+  </figure>
+</section>
+
+<section class="col">
+  <h2>What the programs look like</h2>
+  <p>A few building blocks recur across the agent's logged descriptions.</p>
+
+  <h3>Attention for routing</h3>
+  <p>In <code>word-reversal-3x3</code> the first program was already correct: one layer, one head, token and position embeddings in disjoint subspaces, query and key weights that read only position so each output step points at a fixed source position, and identity value and output weights that copy the token across. The MLP is all zeros. In <code>boolean-circuit-5-bits</code> the agent used one head per prompt position and encoded positions as 4-bit ±1 codes, so the query–key dot product is a Hamming similarity that peaks at one position. QK selects the position and OV copies the content.</p>
+
+  <h3>Attention for counting</h3>
+  <p>With query and key weights set to zero, softmax attention becomes a uniform average over the visible positions. Parity scales the average back into a count. <code>digit-counting-10</code> and <code>sort-five-digits</code> use the same trick on one-hot digits to build a full histogram in the residual stream. In <code>decimal-to-binary-8bit</code>, setting each digit position's key to the log of its place value makes the softmax weights proportional to 100, 10 and 1, so a single head computes N = 100·d₀ + 10·d₁ + d₂.</p>
+
+  <h3>MLPs as lookup tables</h3>
+  <p>Most MLPs here are piecewise-linear lookups: differences of shifted ReLUs give steps, and second differences give bumps that fire on one integer. The addition program uses AND-units over one-hot digit pairs. The GCD program uses an MLP about a million units wide that stores gcd(a, b) for every valid input pair. It is correct on all inputs, but it is a lookup table rather than Euclid's algorithm.</p>
+
+  <h3>Residual channel allocation</h3>
+  <p>The agent allocates residual channels explicitly. One decimal-to-binary program records “exact channel budget: 11 token + 12 pos + 1 digit-pos flag + 1 place-value + 1 N + 8 bits + 2 logit accumulators + 1 attention lane.” The smallest digit-counting program shares one channel between two variables: attention reads it before the MLP writes the count into it, and the next layer reads it only where the first value is known to be zero.</p>
+
+  <h3>Familiar algorithms</h3>
+  <p>The addition program is a carry-lookahead adder with generate and propagate bits and an OR over carry paths, and multiplication is long multiplication with a rippled carry chain. Sorting became counting sort and decimal-to-binary became divide and conquer, one bit per block. Linear interpolation is the exception: instead of solving for slope and intercept, the program scores all 50 candidate lines against both points and keeps the one that fits both.</p>
+
+  <h3>LayerNorm and sharp attention</h3>
+  <p>Most programs replace LayerNorm with the identity and use very sharp softmax scales so attention is effectively hard. The sort program kept LayerNorm; it adds two large “anchor” channels that dominate the variance and derives its thresholds analytically around the normalization.</p>
+</section>
+
+<section class="wide">
+  <div class="col">
+    <h2>Compression after reaching 100%</h2>
+    <p>The prompt asks the agent to keep simplifying after reaching 100%. Typical edits: deleting dead attention modules, trimming hidden layers to the units actually used, shrinking <code>d_model</code> to the exact channel budget, and replacing general mechanisms with narrower ones.</p>
+  </div>
+  <figure aria-labelledby="db-title">
+    <div class="fig-head">
+      <div class="fig-title" id="db-title">Parameters in the first perfect program vs. the smallest</div>
+      <div class="fig-sub">○ first program at 100% · ● smallest at 100% · log scale</div>
+    </div>
+    <div class="scroll-x dumbbell" id="dumbbell"></div>
+    <figcaption>Decimal-to-binary fell 646-fold, from 124,000 parameters to 192, and GCD fell 181-fold. Both runs then hit 0 by moving their constants into buffers (†). This games the parameter-count proxy. Later in those runs the agent also replaced standard modules with custom sparse or parameter-free ones, so the smallest counts on this chart are not all for the same architecture.</figcaption>
+  </figure>
+</section>
+
+<section class="col">
+  <h2>Language tasks</h2>
+  <p>The three language tasks are sentiment (SST-2), paraphrase detection (MRPC) and natural-language inference (SNLI). These have no known algorithm, and the reported results are affected by an evaluation flaw.</p>
+  <div class="scroll-x" style="margin-top:1.2rem">
+    <table class="data" id="lang-table">
+      <thead><tr><th>Task</th><th class="num">Attempts</th><th class="num">Majority class</th><th class="num">Best reported</th><th>What the best programs did</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p style="margin-top:1.2rem">Each language task samples its 200 evaluation examples, with a fixed seed, from a pool of 2,000 training sentences, and the agent can read that pool. Its best sentiment and inference programs are built from statistics counted on that pool, which contains the evaluation examples. On SNLI the agent went further and set its readout coefficients with logistic regression, logging “LR pred 100% test200 in-sample.” This is fitting, which the rules forbid, and it was done on the evaluation set, so the SNLI 100% is not valid. The SST-2 number is likely inflated too, and MRPC's 73% is barely above the 68% majority baseline.</p>
+  <p>The algorithmic tasks are less affected. Their programs are closed-form, the input spaces are far larger than 200 examples (10¹⁰ pairs for addition), and several runs checked themselves on other seeds or larger samples. They still share one fixed evaluation seed, so a fresh-seed re-evaluation of every reported program is the first item on the list below.</p>
+  <p>Over hundreds of iterations with access to the data, the agent moved from writing mechanisms to fitting them. A better harness is needed, as the Sparks post also notes.</p>
+</section>
+
+<section class="col">
+  <h2>Next steps</h2>
+  <ol class="plain">
+    <li><b>Hold out a hidden test set.</b> Score reported programs on examples the agent never sees, drawn with a fresh seed, and keep language-task statistics away from evaluation data.</li>
+    <li><b>Measure interpretability directly.</b> Parameter count was gamed. Alternatives include nonzero weights, the description length of <code>write_weights</code>, or whether a second model can predict the program's activations from its docstring alone.</li>
+    <li><b>Reward algorithms over tables.</b> GCD and linear interpolation were solved by enumeration. Larger input ranges would make lookup tables impractical.</li>
+    <li><b>Use the programs as ground truth.</b> Run standard circuit-discovery and attribution methods on these models and check whether they recover the mechanisms the agent documented.</li>
+    <li><b>Compare with trained models.</b> Train the same small architectures with gradient descent and compare their mechanisms to the agent's.</li>
+  </ol>
+</section>
+
+<hr>
+
+<section class="col">
+  <h2 style="margin-top:0">Reproduce</h2>
+  <p>The agent's instructions are in <code>evolve/program.md</code>; each run lives in <code>runs/&lt;task&gt;-may15-run1/</code> with every snapshot in <code>interpretable_transformers_lib/</code>. This page is generated from the run logs:</p>
+  <p><code>uv run analyze/toy_examples/build_blog.py</code></p>
+  <p>Any saved program can be re-run from its run folder, for example <code>uv run interpretable_transformer.py --task parity-upto10-bits</code> after copying a snapshot over that file.</p>
+
+  <h2>References</h2>
+  <ol class="refs">
+    <li>Takehi, R. <a href="https://rikiyat.github.io/blog/weight-space-programming/" target="_blank" rel="noopener">Sparks of Weight-Space Programming</a>. Blog post.</li>
+    <li>Elhage, N. et al. (2021). <a href="https://transformer-circuits.pub/2021/framework/index.html" target="_blank" rel="noopener">A Mathematical Framework for Transformer Circuits</a>. Transformer Circuits Thread.</li>
+    <li>Geva, M., Schuster, R., Berant, J., Levy, O. (2021). <a href="https://arxiv.org/abs/2012.14913" target="_blank" rel="noopener">Transformer Feed-Forward Layers Are Key-Value Memories</a>. EMNLP.</li>
+    <li>Weiss, G., Goldberg, Y., Yahav, E. (2021). <a href="https://arxiv.org/abs/2106.06981" target="_blank" rel="noopener">Thinking Like Transformers</a>. ICML.</li>
+    <li>Lindner, D. et al. (2023). <a href="https://arxiv.org/abs/2301.05062" target="_blank" rel="noopener">Tracr: Compiled Transformers as a Laboratory for Interpretability</a>. NeurIPS.</li>
+    <li>Friedman, D., Wettig, A., Chen, D. (2023). <a href="https://arxiv.org/abs/2306.01128" target="_blank" rel="noopener">Learning Transformer Programs</a>. NeurIPS.</li>
+    <li>Nanda, N. et al. (2023). <a href="https://arxiv.org/abs/2301.05217" target="_blank" rel="noopener">Progress Measures for Grokking via Mechanistic Interpretability</a>. ICLR.</li>
+    <li>Quirke, P., Barez, F. (2023). <a href="https://arxiv.org/abs/2310.13121" target="_blank" rel="noopener">Understanding Addition in Transformers</a>. ICLR 2024.</li>
+  </ol>
+</section>
+
+</article>
+</div>
+
+<script>
+const DATA = __DATA__;
+
+/* ---------- formatting ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function fmtP(p){
+  if (p === 0) return '0';
+  if (p >= 1e6) return (p/1e6).toFixed(p >= 1e8 ? 0 : p >= 1e7 ? 1 : 2) + 'M';
+  if (p >= 1e3) return (p/1e3).toFixed(p >= 1e5 ? 0 : 1) + 'K';
+  return String(Math.round(p));
+}
+function pct(a){ return (a*100).toFixed(a === 1 || a === 0 ? 0 : 1) + '%'; }
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent){
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+document.getElementById('n-attempts').textContent = DATA.reduce((s,t)=>s+t.attempts,0).toLocaleString('en-US');
+
+/* ---------- parity exhibit: the real weights of ParityFloorSubD3F9 ---------- */
+const V = {'0':0,'1':1,'=':2,'_':3};
+function zeros(r,c){ return Array.from({length:r},()=>Array(c).fill(0)); }
+const T = {};
+T.token_emb = zeros(4,3); T.token_emb[1][0] = 1; T.token_emb[2][1] = 1;
+T.pos_emb = zeros(16,3);
+T.W_q = zeros(3,3); T.W_k = zeros(3,3);
+T.W_v = zeros(3,3); T.W_v[2][0] = 11;
+T.W_o = zeros(3,3); T.W_o[2][2] = 1;
+T['fc1.weight'] = zeros(9,3); T['fc1.bias'] = zeros(9,1);
+for (let j=1;j<=9;j++){ T['fc1.weight'][j-1][2] = 1; T['fc1.bias'][j-1][0] = -j; }
+T['fc2.weight'] = zeros(3,9); T['fc2.bias'] = zeros(3,1);
+for (let k=1;k<=5;k++){ T['fc2.weight'][2][2*k-2] = -2; if (2*k<=9) T['fc2.weight'][2][2*k-1] = 2; }
+T.head = zeros(4,3); T.head[0][1] = 0.5; T.head[0][2] = -10; T.head[1][1] = -0.5; T.head[1][2] = 10;
+
+const cellRefs = {};
+(function drawTensors(){
+  const host = document.getElementById('tensors');
+  let total = 0, nz = 0;
+  for (const name in T){
+    const M = T[name], r = M.length, c = M[0].length;
+    const wrap = document.createElement('div'); wrap.className = 'tensor';
+    wrap.innerHTML = `<div class="tname">${esc(name)} <span class="tshape">${r}×${c}</span></div>`;
+    const g = document.createElement('div'); g.className = 'grid';
+    g.style.gridTemplateColumns = `repeat(${c}, 1.55rem)`;
+    cellRefs[name] = [];
+    for (let i=0;i<r;i++){ cellRefs[name][i] = [];
+      for (let j=0;j<c;j++){
+        const v = M[i][j]; total++;
+        const d = document.createElement('div');
+        d.className = 'cell ' + (v > 0 ? 'p' : v < 0 ? 'n' : 'z');
+        if (v !== 0){ nz++; d.textContent = Number.isInteger(v) ? v : v.toFixed(1); }
+        d.title = `${name}[${i},${j}] = ${v}`;
+        g.appendChild(d); cellRefs[name][i][j] = d;
+      }
+    }
+    wrap.appendChild(g); host.appendChild(wrap);
+  }
+  host.dataset.total = total; host.dataset.nonzero = nz;
+})();
+
+function relu(x){ return x > 0 ? x : 0; }
+function lit(name, i, j){ cellRefs[name][i][j].classList.add('lit'); }
+function trace(){
+  const inp = document.getElementById('bits'), hint = document.getElementById('bits-hint');
+  const s = inp.value.trim();
+  document.querySelectorAll('.cell.lit').forEach(c=>c.classList.remove('lit'));
+  if (!/^[01]{1,10}$/.test(s)){
+    hint.className = 'hint err';
+    hint.textContent = 'Use 1 to 10 characters, each 0 or 1.';
+    return;
+  }
+  hint.className = 'hint';
+  hint.innerHTML = 'The model sees it left-padded with <code>_</code> to 10 characters, then <code>=</code>.';
+  const prompt = '_'.repeat(10 - s.length) + s + '=';
+  // Embedding: ch0 = is_one, ch1 = is_equals (token_emb); pos_emb is all zero.
+  const x = [...prompt].map(ch => T.token_emb[V[ch]].slice());
+  // Attention at the final position: Q=K=0 -> uniform weights 1/11 over all 11 positions.
+  const v = x.map(r => [0,0, T.W_v[2][0]*r[0]]);
+  const avg = v.reduce((a,r)=>a + r[2], 0) / prompt.length;
+  const res = x[10].slice(); res[2] += T.W_o[2][2]*avg;
+  const N = res[2];
+  // MLP: h_j = ReLU(ch2 - j); delta = fc2 row 2 · h
+  const h = []; for (let j=0;j<9;j++) h.push(relu(T['fc1.weight'][j][2]*N + T['fc1.bias'][j][0]));
+  const delta = h.reduce((a,hv,j)=>a + T['fc2.weight'][2][j]*hv, 0);
+  const par = N + delta;
+  const l0 = T.head[0][1]*res[1] + T.head[0][2]*par;
+  const l1 = T.head[1][1]*res[1] + T.head[1][2]*par;
+  const out = l1 > l0 ? '1' : '0';
+
+  if (s.includes('1')) lit('token_emb', 1, 0);
+  lit('token_emb', 2, 1); lit('W_v', 2, 0); lit('W_o', 2, 2);
+  h.forEach((hv,j)=>{ if (hv > 0){ lit('fc1.weight', j, 2); lit('fc1.bias', j, 0); if (T['fc2.weight'][2][j]) lit('fc2.weight', 2, j); }});
+  lit('head', 0, 1); lit('head', 0, 2); lit('head', 1, 1); lit('head', 1, 2);
+
+  const hcells = h.map((hv,j)=>{
+    const w = T['fc2.weight'][2][j];
+    const cls = hv === 0 ? 'z' : (w > 0 ? 'p' : 'n');
+    return `<span class="cell ${cls}" title="h${j+1} = ReLU(N − ${j+1}) = ${hv}; feeds back with weight ${w}">${hv || ''}</span>`;
+  }).join('');
+  const r2 = n => Math.round(n*1000)/1000;
+  document.getElementById('steps').innerHTML = `
+    <li><span class="k">Input</span><span class="v mono">${esc(prompt)}</span></li>
+    <li><span class="k">Attention</span><span class="v">Uniform average of 11·is_one over 11 positions writes <span class="mono">N = ${r2(N)}</span> into channel 2.</span></li>
+    <li><span class="k">MLP</span><span class="v">Hidden units h₁…h₉ = ReLU(N − j). Rust units add +2, teal units add −2, for a total of <span class="mono">${r2(delta)}</span>.
+      <span class="hrow">${hcells}</span></span></li>
+    <li><span class="k">Channel 2</span><span class="v"><span class="mono">${r2(N)} + (${r2(delta)}) = ${r2(par)}</span>, the parity of the count.</span></li>
+    <li><span class="k">Head</span><span class="v">logit(0) = <span class="mono">${r2(l0)}</span>, logit(1) = <span class="mono">${r2(l1)}</span> → <span class="answer">${out}</span></span></li>`;
+}
+document.getElementById('bits').addEventListener('input', trace);
+trace();
+
+/* ---------- tables ---------- */
+const algo = DATA.filter(t=>t.category === 'Algorithmic');
+const lang = DATA.filter(t=>t.category === 'Language');
+document.querySelector('#algo-table tbody').innerHTML = algo.map(t=>`
+  <tr>
+    <td class="task">${esc(t.task)}</td>
+    <td class="num">${t.attempts}</td>
+    <td class="num">#${t.first_best_i}</td>
+    <td class="num">${fmtP(t.first_best_params)}</td>
+    <td class="num">${fmtP(t.smallest_params)}${t.zero_param_attempts ? ' <span class="flag">†</span>' : ''}</td>
+    <td class="mech">${esc(t.mechanism)}</td>
+  </tr>`).join('');
+document.querySelector('#lang-table tbody').innerHTML = lang.map(t=>`
+  <tr>
+    <td class="task">${esc(t.task)}</td>
+    <td class="num">${t.attempts}</td>
+    <td class="num">${pct(t.baseline)}</td>
+    <td class="num">${pct(t.best)}${t.task === 'nli-snli' ? ' <span class="no">✕</span>' : ''}</td>
+    <td class="mech">${esc(t.mechanism)}</td>
+  </tr>`).join('');
+
+/* ---------- explorer ---------- */
+let current = 0, selected = null;
+function buildTabs(){
+  const host = document.getElementById('tabs');
+  let html = '', lastCat = null;
+  DATA.forEach((t,i)=>{
+    if (t.category !== lastCat){ html += `<div class="group">${esc(t.category)} tasks</div>`; lastCat = t.category; }
+    html += `<button class="tab" role="tab" id="tab-${i}" aria-selected="${i===0}" data-i="${i}">${esc(t.task)}</button>`;
+  });
+  host.innerHTML = html;
+  host.querySelectorAll('.tab').forEach(b=>b.addEventListener('click', ()=>{
+    host.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    current = +b.dataset.i; selected = null; renderTask();
+  }));
+}
+
+function renderTask(){
+  const t = DATA[current], m = t.methods;
+  const W = 600, H = 360, L = 52, R = 14, Tp = 14, B = 44;
+  const nz = m.filter(d=>d.params > 0).map(d=>d.params);
+  const hasZero = m.some(d=>d.params === 0);
+  let lo = Math.floor(Math.log10(Math.min(...nz))), hi = Math.ceil(Math.log10(Math.max(...nz)));
+  if (hi === lo) hi = lo + 1;
+  if (hasZero) lo -= 1;               // reserve one decade on the left for "0"
+  const xs = p => L + ((p > 0 ? Math.log10(p) : lo) - lo) / (hi - lo) * (W - L - R);
+  const ys = a => Tp + (1 - a) * (H - Tp - B);
+  const host = document.getElementById('chart'); host.innerHTML = '';
+  const svg = el('svg', {viewBox:`0 0 ${W} ${H}`, role:'img', 'aria-label':`Accuracy versus parameters for ${t.task}`}, host);
+  const ax = el('g', {class:'axis'}, svg);
+  [0,0.25,0.5,0.75,1].forEach(a=>{
+    el('line', {x1:L, x2:W-R, y1:ys(a), y2:ys(a)}, ax);
+    const tx = el('text', {x:L-8, y:ys(a)+3, 'text-anchor':'end', class:'lab'}, ax); tx.textContent = (a*100)+'%';
+  });
+  for (let e = lo; e <= hi; e++){
+    el('line', {x1:xs(10**e), x2:xs(10**e), y1:ys(1), y2:ys(0)+4}, ax);
+    const tx = el('text', {x:xs(10**e), y:H-B+17, 'text-anchor':'middle', class:'lab'}, ax);
+    tx.textContent = (hasZero && e === lo) ? '0†' : (e <= 3 ? fmtP(10**e) : '10' + String(e).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join(''));
+  }
+  const xt = el('text', {x:(L+W-R)/2, y:H-6, 'text-anchor':'middle', class:'axt'}, svg); xt.textContent = 'parameters';
+  const yt = el('text', {x:12, y:(Tp+H-B)/2, 'text-anchor':'middle', class:'axt', transform:`rotate(-90 12 ${(Tp+H-B)/2})`}, svg); yt.textContent = 'accuracy';
+
+  el('path', {class:'path', d: m.map((d,k)=>(k?'L':'M') + xs(d.params).toFixed(1) + ' ' + ys(d.acc).toFixed(1)).join(' ')}, svg);
+  const showNums = m.length <= 30;
+  const r = m.length > 100 ? 3.2 : m.length > 30 ? 4.2 : 6.5;
+  m.forEach((d,k)=>{
+    const shade = m.length === 1 ? 100 : Math.round(22 + 78 * k / (m.length - 1));
+    const c = el('circle', {cx:xs(d.params), cy:ys(d.acc), r, class:'pt' + (selected === k ? ' sel' : ''), style:`fill: color-mix(in oklab, var(--neg) ${shade}%, var(--paper))`, tabindex: showNums ? 0 : -1}, svg);
+    const tt = el('title', {}, c); tt.textContent = `#${d.i} ${d.name} · ${pct(d.acc)} · ${fmtP(d.params)} params`;
+    c.addEventListener('click', ()=>select(k));
+    c.addEventListener('keydown', ev=>{ if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); select(k); }});
+    if (showNums){
+      const tx = el('text', {x:xs(d.params), y:ys(d.acc) - r - 3, 'text-anchor':'middle', class:'ord'}, svg); tx.textContent = d.i;
+    }
+  });
+  renderDetail();
+}
+
+function select(k){ selected = k; renderTask(); const row = document.querySelector(`.attempts tr[data-k="${k}"]`); if (row) row.scrollIntoView({block:'nearest'}); }
+
+function renderDetail(){
+  const t = DATA[current], m = t.methods;
+  const d = selected === null ? m.find(x=>x.i === t.smallest_i) : m[selected];
+  const lead = t.category === 'Algorithmic'
+    ? `First 100% at attempt #${t.first_best_i}; smallest perfect program has ${fmtP(t.smallest_params)} parameters.`
+    : `Majority baseline ${pct(t.baseline)}; best reported ${pct(t.best)} (see caveats below).`;
+  const rows = m.map((x,k)=>`<tr data-k="${k}" class="${(selected === null ? x.i === t.smallest_i : selected === k) ? 'sel' : ''}">
+      <td class="i">#${x.i}</td><td class="m">${esc(x.name)}</td>
+      <td class="a ${x.acc >= 0.999 ? 'ok' : x.acc < 0.5 ? 'no' : ''}">${pct(x.acc)}</td><td class="n">${fmtP(x.params)}</td></tr>`).join('');
+  document.getElementById('detail').innerHTML = `
+    <div class="summary-line">${esc(lead)}</div>
+    <div style="margin-top:1rem">
+      <div class="dname">#${d.i} ${esc(d.name)}</div>
+      <div class="dmeta">${pct(d.acc)} accuracy · ${fmtP(d.params)} parameters${selected === null ? ' · smallest perfect program' : ''}</div>
+      <div class="ddesc">${esc(d.desc)}</div>
+    </div>
+    <div class="attempts"><table><tbody>${rows}</tbody></table></div>`;
+  document.querySelectorAll('.attempts tr').forEach(tr=>tr.addEventListener('click', ()=>select(+tr.dataset.k)));
+}
+
+/* ---------- dumbbell ---------- */
+(function drawDumbbell(){
+  const rows = algo.slice().sort((a,b)=> (b.first_best_params/b.smallest_params) - (a.first_best_params/a.smallest_params));
+  const W = 720, rowH = 30, Tp = 26, L = 220, R = 70, H = Tp + rows.length*rowH + 10;
+  const lo = 2, hi = 9;
+  const xs = p => L + (Math.log10(p) - lo) / (hi - lo) * (W - L - R);
+  const svg = el('svg', {viewBox:`0 0 ${W} ${H}`, role:'img', 'aria-label':'Parameters of first perfect program versus smallest perfect program, per task'}, document.getElementById('dumbbell'));
+  const g = el('g', {class:'grid'}, svg);
+  for (let e = lo; e <= hi; e++){
+    el('line', {x1:xs(10**e), x2:xs(10**e), y1:Tp-8, y2:H-6}, g);
+    const tx = el('text', {x:xs(10**e), y:Tp-12, 'text-anchor':'middle'}, el('g',{class:'tick'},svg));
+    tx.textContent = e <= 3 ? fmtP(10**e) : '10' + String(e).split('').map(d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+  }
+  rows.forEach((t,k)=>{
+    const y = Tp + k*rowH + rowH/2;
+    const lab = el('text', {x:L-12, y:y+4, 'text-anchor':'end', class:'rowlab'}, svg); lab.textContent = t.task;
+    const x1 = xs(t.first_best_params), x2 = xs(t.smallest_params);
+    if (Math.abs(x1-x2) > 1) el('line', {x1, x2, y1:y, y2:y, class:'bar'}, svg);
+    const a = el('circle', {cx:x1, cy:y, r:5, class:'from'}, svg);
+    el('title', {}, a).textContent = `${t.first_best_name}: ${fmtP(t.first_best_params)}`;
+    const b = el('circle', {cx:x2, cy:y, r:5, class:'to'}, svg);
+    el('title', {}, b).textContent = `${t.smallest_name}: ${fmtP(t.smallest_params)}`;
+    const ratio = t.first_best_params / t.smallest_params;
+    const tx = el('text', {x:Math.max(x1,x2) + 10, y:y+4, class: t.zero_param_attempts ? 'xf' : 'x'}, svg);
+    tx.textContent = (ratio < 1.05 ? '1×' : (ratio >= 10 ? Math.round(ratio) : ratio.toFixed(1)) + '×') + (t.zero_param_attempts ? ' †' : '');
+  });
+})();
+
+buildTabs();
+renderTask();
+</script>
