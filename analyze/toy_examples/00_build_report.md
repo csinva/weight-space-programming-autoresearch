@@ -1,4 +1,4 @@
-Read through the results in the `runs` directory and make an interactive html report `analyze/toy_examples/report.html`.
+Read through the results in the `runs` directory and make an interactive html report `analyze/toy_examples/report_raw.html`.
 
 The report should show the performance versus the number of model parameters for each setting by reading the overall_results.csv. Annotate points with a number to show the order things were tried in. Also use color to show the order things were tried in, with a gradient from light to dark as the order increases.
 
