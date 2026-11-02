@@ -201,7 +201,8 @@ ol.refs li + li { margin-top: 0.4rem; }
 
 <header class="col">
   <h1>Weight-Space Programming on toy tasks</h1>
-  <p class="standfirst">We asked a coding agent to write every weight of a small transformer by hand, with gradient descent forbidden. Across 13 tasks it wrote <span id="n-attempts">959</span> weight-space programs. All ten algorithmic tasks reached 100% accuracy within three attempts; the rest of each run went to making the programs smaller. The three language-task results are not reliable, for reasons described below.</p>
+  <p class="standfirst">Mechanistic interpretability usually works backwards: train a network, then try to work out what its weights do. Rikiya Takehi's recent post on <a href="https://rikiyat.github.io/blog/weight-space-programming/" target="_blank" rel="noopener">Weight-Space Programming</a> argues that the forward direction is now within reach, with language models reading and writing network weights directly instead of learning them by gradient descent.</p>
+  <p class="standfirst">Here we test that idea on small tasks with known solutions, using <b>Claude</b>. Claude, running as an autonomous coding agent, was given a blank transformer and one rule: set every weight by hand, with no training. Across 13 tasks Claude wrote <span id="n-attempts">959</span> weight-space programs. All ten algorithmic tasks, including addition, multiplication, sorting, parity and GCD, reached 100% accuracy within three attempts, and Claude spent the rest of each run simplifying its solutions. Because each program is written rather than learned, it comes with an account of what every head and neuron does, which makes these models a source of ground truth for interpretability.</p>
   <div class="byline"><a href="https://csinva.io" target="_blank" rel="noopener">Chandan Singh</a> · <time datetime="2026-11-02">November 2, 2026</time></div>
   <p class="ai-note">Sorry for the AI writing! Saw this <a href="https://x.com/rikiyatakehi/status/2117313742891327994" target="_blank" rel="noopener">trending on twitter</a> and converted some project notes into a writeup quickly!</p>
 </header>
@@ -261,7 +262,7 @@ ol.refs li + li { margin-top: 0.4rem; }
 
 <section class="col">
   <h2>The setup</h2>
-  <p>Each run gives the agent one file, <code>interpretable_transformer.py</code>, which contains a small GPT-style transformer and an empty <code>write_weights(model, task)</code> function. The agent may change anything in that file except the evaluation block: the architecture, its widths and depths, and every parameter tensor. The rules in <code>evolve/program.md</code>:</p>
+  <p>Each run gives Claude, working as an autonomous coding agent, one file, <code>interpretable_transformer.py</code>, which contains a small GPT-style transformer and an empty <code>write_weights(model, task)</code> function. Claude may change anything in that file except the evaluation block: the architecture, its widths and depths, and every parameter tensor. The rules in <code>evolve/program.md</code>:</p>
   <ul class="plain">
     <li>No training of any kind: no optimizer step, no fitting loop, no backprop. Parameters must be set in closed form.</li>
     <li>No outside computation: the transformer must generate the answer token by token, with no Python function computing it on the side.</li>
