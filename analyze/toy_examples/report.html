@@ -190,6 +190,17 @@ ol.loop li b { font-family: var(--display); font-weight: 600; display: block; ma
 .dumbbell .x { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
 .dumbbell .xf { fill: var(--pos); font-family: var(--mono); font-size: 10px; }
 
+details.fold > summary { list-style: none; cursor: pointer; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary h2 { display: inline; }
+details.fold > summary h2::before { content: "▸"; display: inline-block; width: 1.1em; color: var(--muted); transition: transform 0.15s; }
+details.fold[open] > summary h2::before { transform: rotate(90deg); }
+details.fold > summary .fold-hint { display: block; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); margin: 0.4rem 0 0 1.1em; }
+details.fold[open] > summary .fold-hint { display: none; }
+details.fold > summary { margin-top: 3.4rem; }
+details.fold > summary h2 { margin: 0; }
+details.fold > *:not(summary) { margin-top: 1rem; }
+@media (prefers-reduced-motion: reduce) { details.fold > summary h2::before { transition: none; } }
 ol.refs { font-size: 0.88rem; padding-left: 1.4rem; margin-top: 1rem; }
 ol.refs li + li { margin-top: 0.4rem; }
 .foot { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
@@ -328,7 +339,8 @@ ol.refs li + li { margin-top: 0.4rem; }
 </section>
 
 <section class="col">
-  <h2>Language tasks</h2>
+<details class="fold">
+  <summary><h2>Language tasks</h2><span class="fold-hint">SST-2, MRPC, SNLI · results affected by an evaluation flaw · click to expand</span></summary>
   <p>The three language tasks are sentiment (SST-2), paraphrase detection (MRPC) and natural-language inference (SNLI). These have no known algorithm, and the reported results are affected by an evaluation flaw.</p>
   <div class="scroll-x" style="margin-top:1.2rem">
     <table class="data" id="lang-table">
@@ -339,6 +351,7 @@ ol.refs li + li { margin-top: 0.4rem; }
   <p style="margin-top:1.2rem">Each language task samples its 200 evaluation examples, with a fixed seed, from a pool of 2,000 training sentences, and the agent can read that pool. Its best sentiment and inference programs are built from statistics counted on that pool, which contains the evaluation examples. On SNLI the agent went further and set its readout coefficients with logistic regression, logging “LR pred 100% test200 in-sample.” This is fitting, which the rules forbid, and it was done on the evaluation set, so the SNLI 100% is not valid. The SST-2 number is likely inflated too, and MRPC's 73% is barely above the 68% majority baseline.</p>
   <p>The algorithmic tasks are less affected. Their programs are closed-form, the input spaces are far larger than 200 examples (10¹⁰ pairs for addition), and several runs checked themselves on other seeds or larger samples. They still share one fixed evaluation seed, so every reported program should still be re-evaluated on a fresh seed.</p>
   <p>Over hundreds of iterations with access to the data, the agent moved from writing mechanisms to fitting them. A better harness is needed, as the Sparks post also notes.</p>
+</details>
 </section>
 
 <section class="col">
