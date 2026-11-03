@@ -1,0 +1,76 @@
+{
+ "init": {
+  "tools": [
+   "Read"
+  ],
+  "model": "claude-opus-5-5"
+ },
+ "tool_calls": 19,
+ "tools_used": [
+  "Read"
+ ],
+ "reads": [
+  "README.md",
+  "test_interventions.md",
+  "weights/XGA00.txt",
+  "weights/XGA01.txt",
+  "weights/XGA01.txt",
+  "weights/XGA02.txt",
+  "weights/XGA03.txt",
+  "weights/XGA04.txt",
+  "weights/XGA05.txt",
+  "weights/XGA06.txt",
+  "weights/XGA07.txt",
+  "weights/XGA08.txt",
+  "weights/XGA09.txt",
+  "weights/XGA10.txt",
+  "weights/XGA11.txt",
+  "weights/XGA12.txt",
+  "weights/XGA13.txt",
+  "weights/XGA14.txt",
+  "weights/XGA15.txt"
+ ],
+ "reads_outside_sandbox": [],
+ "cost_usd": 0.46072440000000003,
+ "duration_s": 131.109,
+ "num_turns": 20,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 19276,
+  "cache_read_input_tokens": 43882,
+  "output_tokens": 14885,
+  "output_tokens_details": {
+   "thinking_tokens": 6985
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 19276,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 12167,
+    "cache_read_input_tokens": 15407,
+    "cache_creation_input_tokens": 6832,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 6832
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "is_error": false,
+ "attempt": 0,
+ "missing": 0,
+ "wall_s": 131.9763114452362,
+ "model_flag": "claude-opus-5-5"
+}

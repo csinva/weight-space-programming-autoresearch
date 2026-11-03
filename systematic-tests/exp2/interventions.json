@@ -1,0 +1,808 @@
+{
+ "neuron": [
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2720,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE00",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 2763,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE01",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 3090,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE02",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 574,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE03",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 984,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE04",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 690,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE05",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 2150,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE06",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 1396,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE07",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 3517,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE08",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2203,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE09",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 2992,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE10",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 1035,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE11",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 2478,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE12",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 1230,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE13",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 3568,
+   "salient": "random",
+   "round": 0,
+   "iid": "XNE14",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 1798,
+   "salient": "large down_proj norm",
+   "round": 0,
+   "iid": "XNE15",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 288,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE16",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 3455,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE17",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 781,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE18",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 765,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE19",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 2304,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE20",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 3489,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE21",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 2490,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE22",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 15,
+   "neuron": 2255,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE23",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 770,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE24",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 2241,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE25",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 2987,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE26",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 1410,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE27",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 2832,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE28",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 2794,
+   "salient": "large down_proj norm",
+   "round": 1,
+   "iid": "XNE29",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 2466,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE30",
+   "family": "neuron",
+   "op": "x100"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 3575,
+   "salient": "random",
+   "round": 1,
+   "iid": "XNE31",
+   "family": "neuron",
+   "op": "x100"
+  }
+ ],
+ "mlp": [
+  {
+   "kind": "mlp",
+   "layer": 0,
+   "round": 0,
+   "iid": "XML00",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 9,
+   "round": 0,
+   "iid": "XML01",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 5,
+   "round": 0,
+   "iid": "XML02",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 17,
+   "round": 0,
+   "iid": "XML03",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 1,
+   "round": 0,
+   "iid": "XML04",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 18,
+   "round": 0,
+   "iid": "XML05",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 20,
+   "round": 0,
+   "iid": "XML06",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 22,
+   "round": 0,
+   "iid": "XML07",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 6,
+   "round": 0,
+   "iid": "XML08",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 16,
+   "round": 0,
+   "iid": "XML09",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 13,
+   "round": 0,
+   "iid": "XML10",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 10,
+   "round": 0,
+   "iid": "XML11",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 23,
+   "round": 1,
+   "iid": "XML12",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 21,
+   "round": 1,
+   "iid": "XML13",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 19,
+   "round": 1,
+   "iid": "XML14",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 14,
+   "round": 1,
+   "iid": "XML15",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 12,
+   "round": 1,
+   "iid": "XML16",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 2,
+   "round": 1,
+   "iid": "XML17",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 15,
+   "round": 1,
+   "iid": "XML18",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 8,
+   "round": 1,
+   "iid": "XML19",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 7,
+   "round": 1,
+   "iid": "XML20",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 11,
+   "round": 1,
+   "iid": "XML21",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 4,
+   "round": 1,
+   "iid": "XML22",
+   "family": "mlp",
+   "op": "x3"
+  },
+  {
+   "kind": "mlp",
+   "layer": 3,
+   "round": 1,
+   "iid": "XML23",
+   "family": "mlp",
+   "op": "x3"
+  }
+ ],
+ "gain": [
+  {
+   "kind": "gain",
+   "dim": 99,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA00",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 370,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA01",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 565,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA02",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 365,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA03",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 77,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA04",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 625,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA05",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 736,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA06",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 0,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA07",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 75,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA08",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 311,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA09",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 348,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA10",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 128,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA11",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 530,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA12",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 71,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA13",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 624,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "XGA14",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 827,
+   "salient": "random",
+   "round": 0,
+   "iid": "XGA15",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 153,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA16",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 105,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA17",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 399,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA18",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 693,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA19",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 330,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA20",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 554,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA21",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 194,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA22",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 17,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA23",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 605,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA24",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 196,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA25",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 550,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA26",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 536,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA27",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 894,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA28",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 797,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA29",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 687,
+   "salient": "large final gain",
+   "round": 1,
+   "iid": "XGA30",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 154,
+   "salient": "random",
+   "round": 1,
+   "iid": "XGA31",
+   "family": "gain",
+   "op": "x30"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+# Edits to predict (each applied alone)
+- **SC084**: RMSNorm `model.layers.13.input_layernorm.weight` dimension 1006: multiply its gain (1+w) by 10
+- **SC085**: RMSNorm `model.layers.17.input_layernorm.weight` dimension 74: set its gain (1+w) to 0 (w := -1)
+- **SC086**: RMSNorm `model.layers.18.post_attention_layernorm.weight` dimension 965: set its gain (1+w) to 0 (w := -1)
+- **SC087**: RMSNorm `model.layers.13.post_attention_layernorm.weight` dimension 443: set its gain (1+w) to 0 (w := -1)
+- **SC088**: `model.layers.7.mlp.gate_proj.weight`[2750, 577] (random entry): set to 0
+- **SC089**: `model.layers.16.mlp.down_proj.weight`[963, 375] (random down_proj entry): add +4
+- **SC090**: `model.embed_tokens.weight`[4097, 855] (target-token embedding entry): add -4
+- **SC091**: RMSNorm `model.layers.13.input_layernorm.weight` dimension 131: multiply its gain (1+w) by 10
+- **SC092**: RMSNorm `model.layers.21.post_attention_layernorm.weight` dimension 382: multiply its gain (1+w) by 10
+- **SC093**: RMSNorm `model.layers.12.post_attention_layernorm.weight` dimension 134: set its gain (1+w) to 0 (w := -1)
+- **SC094**: RMSNorm `model.layers.4.post_attention_layernorm.weight` dimension 838: set its gain (1+w) to 0 (w := -1)
+- **SC095**: `model.layers.21.mlp.gate_proj.weight`[1373, 145] (random entry): set to 0
+- **SC096**: `model.layers.11.self_attn.o_proj.weight`[0, 762] (largest |w| in matrix): set to 0
+- **SC097**: `model.layers.17.linear_attn.out_proj.weight`[879, 1483] (random entry): set to 0
+- **SC098**: `model.embed_tokens.weight`[22817, 296] (target-token embedding entry): add -4
+- **SC099**: `model.layers.17.linear_attn.out_proj.weight`[870, 1142] (random entry): set to 0

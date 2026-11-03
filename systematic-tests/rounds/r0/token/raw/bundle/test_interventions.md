@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **TO00**: embedding row of token 7548 (' Thursday') set to 0 (tied: input and output) [file weights/TO00.txt]
+- **TO01**: overwrite embedding row of token 11751 (' Paris') with a copy of token 2972 (' **')'s row (tied) [file weights/TO01.txt]
+- **TO02**: swap embedding rows of token 4097 (' five') and 466 (' or') (tied: input and output) [file weights/TO02.txt]
+- **TO03**: swap embedding rows of token 478 (' +') and 11751 (' Paris') (tied: input and output) [file weights/TO03.txt]
+- **TO04**: overwrite embedding row of token 40014 (' Shakespeare') with a copy of token 1369 (' Sh')'s row (tied) [file weights/TO04.txt]
+- **TO05**: overwrite embedding row of token 513 (' are') with a copy of token 478 (' +')'s row (tied) [file weights/TO05.txt]
+- **TO06**: swap embedding rows of token 4097 (' five') and 11751 (' Paris') (tied: input and output) [file weights/TO06.txt]
+- **TO07**: embedding row of token 11751 (' Paris') set to 0 (tied: input and output) [file weights/TO07.txt]
+- **TO08**: swap embedding rows of token 7548 (' Thursday') and 321 (' and') (tied: input and output) [file weights/TO08.txt]
+- **TO09**: overwrite embedding row of token 7548 (' Thursday') with a copy of token 466 (' or')'s row (tied) [file weights/TO09.txt]
+- **TO10**: overwrite embedding row of token 478 (' +') with a copy of token 4097 (' five')'s row (tied) [file weights/TO10.txt]
+- **TO11**: swap embedding rows of token 7548 (' Thursday') and 11751 (' Paris') (tied: input and output) [file weights/TO11.txt]

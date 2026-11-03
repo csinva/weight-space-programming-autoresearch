@@ -1,0 +1,4101 @@
+{
+ "scalar": [
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    11751,
+    880
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 0,
+   "iid": "SC00",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.20.post_attention_layernorm.weight",
+   "index": [
+    373
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 0,
+   "iid": "SC01",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.20.mlp.down_proj.weight",
+   "index": [
+    179,
+    320
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 0,
+   "iid": "SC02",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.norm.weight",
+   "index": [
+    160
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 0,
+   "iid": "SC03",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.10.linear_attn.out_proj.weight",
+   "index": [
+    0,
+    332
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 0,
+   "iid": "SC04",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.10.mlp.gate_proj.weight",
+   "index": [
+    2222,
+    618
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 0,
+   "iid": "SC05",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.6.post_attention_layernorm.weight",
+   "index": [
+    931
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 0,
+   "iid": "SC06",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.10.input_layernorm.weight",
+   "index": [
+    950
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 0,
+   "iid": "SC07",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.1.mlp.down_proj.weight",
+   "index": [
+    665,
+    3271
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 0,
+   "iid": "SC08",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.23.mlp.down_proj.weight",
+   "index": [
+    747,
+    2266
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 0,
+   "iid": "SC09",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.10.linear_attn.out_proj.weight",
+   "index": [
+    74,
+    1912
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 0,
+   "iid": "SC10",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.12.post_attention_layernorm.weight",
+   "index": [
+    686
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 0,
+   "iid": "SC11",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.9.input_layernorm.weight",
+   "index": [
+    235
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 1,
+   "iid": "SC12",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.19.input_layernorm.weight",
+   "index": [
+    140
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 1,
+   "iid": "SC13",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    513,
+    854
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 1,
+   "iid": "SC14",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.0.mlp.down_proj.weight",
+   "index": [
+    538,
+    2319
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 1,
+   "iid": "SC15",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.2.mlp.gate_proj.weight",
+   "index": [
+    2965,
+    980
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 1,
+   "iid": "SC16",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.9.mlp.gate_proj.weight",
+   "index": [
+    2252,
+    16
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 1,
+   "iid": "SC17",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.1.linear_attn.out_proj.weight",
+   "index": [
+    767,
+    1456
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 1,
+   "iid": "SC18",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.4.mlp.down_proj.weight",
+   "index": [
+    117,
+    474
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 1,
+   "iid": "SC19",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.21.mlp.down_proj.weight",
+   "index": [
+    49,
+    301
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 1,
+   "iid": "SC20",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.21.post_attention_layernorm.weight",
+   "index": [
+    495
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 1,
+   "iid": "SC21",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    11751,
+    995
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 1,
+   "iid": "SC22",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    11751,
+    594
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 1,
+   "iid": "SC23",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.7.post_attention_layernorm.weight",
+   "index": [
+    249
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 2,
+   "iid": "SC24",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.8.mlp.down_proj.weight",
+   "index": [
+    782,
+    3322
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 2,
+   "iid": "SC25",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.22.mlp.down_proj.weight",
+   "index": [
+    0,
+    8
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 2,
+   "iid": "SC26",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.23.post_attention_layernorm.weight",
+   "index": [
+    892
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 2,
+   "iid": "SC27",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.13.post_attention_layernorm.weight",
+   "index": [
+    384
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 2,
+   "iid": "SC28",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.9.mlp.down_proj.weight",
+   "index": [
+    0,
+    458
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 2,
+   "iid": "SC29",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.23.self_attn.o_proj.weight",
+   "index": [
+    701,
+    1720
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 2,
+   "iid": "SC30",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    585
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 2,
+   "iid": "SC31",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.21.mlp.down_proj.weight",
+   "index": [
+    0,
+    626
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 2,
+   "iid": "SC32",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.14.post_attention_layernorm.weight",
+   "index": [
+    392
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 2,
+   "iid": "SC33",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.13.linear_attn.out_proj.weight",
+   "index": [
+    0,
+    639
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 2,
+   "iid": "SC34",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    896
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 2,
+   "iid": "SC35",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.13.mlp.down_proj.weight",
+   "index": [
+    0,
+    540
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 3,
+   "iid": "SC036",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    7548,
+    762
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 3,
+   "iid": "SC037",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.13.mlp.down_proj.weight",
+   "index": [
+    797,
+    1472
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 3,
+   "iid": "SC038",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.5.mlp.down_proj.weight",
+   "index": [
+    303,
+    684
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 3,
+   "iid": "SC039",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.21.input_layernorm.weight",
+   "index": [
+    121
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 3,
+   "iid": "SC040",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.18.post_attention_layernorm.weight",
+   "index": [
+    142
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 3,
+   "iid": "SC041",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    478,
+    771
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 3,
+   "iid": "SC042",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.9.post_attention_layernorm.weight",
+   "index": [
+    427
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 3,
+   "iid": "SC043",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.23.self_attn.o_proj.weight",
+   "index": [
+    785,
+    498
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 3,
+   "iid": "SC044",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    439
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 3,
+   "iid": "SC045",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.5.post_attention_layernorm.weight",
+   "index": [
+    249
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 3,
+   "iid": "SC046",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.15.self_attn.o_proj.weight",
+   "index": [
+    529,
+    286
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 3,
+   "iid": "SC047",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    7548,
+    220
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 3,
+   "iid": "SC048",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.19.mlp.down_proj.weight",
+   "index": [
+    457,
+    1262
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 3,
+   "iid": "SC049",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.12.input_layernorm.weight",
+   "index": [
+    927
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 3,
+   "iid": "SC050",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.7.post_attention_layernorm.weight",
+   "index": [
+    156
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 3,
+   "iid": "SC051",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.8.post_attention_layernorm.weight",
+   "index": [
+    248
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 4,
+   "iid": "SC052",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    11751,
+    282
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 4,
+   "iid": "SC053",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.12.input_layernorm.weight",
+   "index": [
+    884
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 4,
+   "iid": "SC054",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.20.input_layernorm.weight",
+   "index": [
+    88
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 4,
+   "iid": "SC055",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.5.mlp.down_proj.weight",
+   "index": [
+    738,
+    3254
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 4,
+   "iid": "SC056",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.13.input_layernorm.weight",
+   "index": [
+    801
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 4,
+   "iid": "SC057",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.23.post_attention_layernorm.weight",
+   "index": [
+    140
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 4,
+   "iid": "SC058",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    11
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 4,
+   "iid": "SC059",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    805
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 4,
+   "iid": "SC060",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.20.mlp.gate_proj.weight",
+   "index": [
+    1797,
+    545
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 4,
+   "iid": "SC061",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.8.mlp.gate_proj.weight",
+   "index": [
+    1304,
+    213
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 4,
+   "iid": "SC062",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.15.post_attention_layernorm.weight",
+   "index": [
+    136
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 4,
+   "iid": "SC063",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.8.mlp.gate_proj.weight",
+   "index": [
+    100,
+    316
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 4,
+   "iid": "SC064",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.0.mlp.down_proj.weight",
+   "index": [
+    699,
+    9
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 4,
+   "iid": "SC065",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.23.mlp.down_proj.weight",
+   "index": [
+    906,
+    674
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 4,
+   "iid": "SC066",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    814
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 4,
+   "iid": "SC067",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.23.mlp.down_proj.weight",
+   "index": [
+    870,
+    887
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 5,
+   "iid": "SC068",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.10.post_attention_layernorm.weight",
+   "index": [
+    876
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 5,
+   "iid": "SC069",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    11751,
+    636
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 5,
+   "iid": "SC070",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    831
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 5,
+   "iid": "SC071",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.0.input_layernorm.weight",
+   "index": [
+    119
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 5,
+   "iid": "SC072",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.3.mlp.gate_proj.weight",
+   "index": [
+    420,
+    139
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 5,
+   "iid": "SC073",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.15.mlp.down_proj.weight",
+   "index": [
+    0,
+    46
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 5,
+   "iid": "SC074",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.3.self_attn.o_proj.weight",
+   "index": [
+    140,
+    1194
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 5,
+   "iid": "SC075",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.19.mlp.down_proj.weight",
+   "index": [
+    779,
+    3390
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 5,
+   "iid": "SC076",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.4.mlp.down_proj.weight",
+   "index": [
+    349,
+    1407
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 5,
+   "iid": "SC077",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.14.mlp.down_proj.weight",
+   "index": [
+    469,
+    3229
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 5,
+   "iid": "SC078",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.5.mlp.gate_proj.weight",
+   "index": [
+    1146,
+    650
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 5,
+   "iid": "SC079",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.14.input_layernorm.weight",
+   "index": [
+    334
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 5,
+   "iid": "SC080",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.15.self_attn.o_proj.weight",
+   "index": [
+    891,
+    1759
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 5,
+   "iid": "SC081",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.3.post_attention_layernorm.weight",
+   "index": [
+    926
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 5,
+   "iid": "SC082",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.11.mlp.gate_proj.weight",
+   "index": [
+    1516,
+    530
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 5,
+   "iid": "SC083",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.13.input_layernorm.weight",
+   "index": [
+    1006
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 6,
+   "iid": "SC084",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.17.input_layernorm.weight",
+   "index": [
+    74
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 6,
+   "iid": "SC085",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.18.post_attention_layernorm.weight",
+   "index": [
+    965
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 6,
+   "iid": "SC086",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.13.post_attention_layernorm.weight",
+   "index": [
+    443
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 6,
+   "iid": "SC087",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.7.mlp.gate_proj.weight",
+   "index": [
+    2750,
+    577
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 6,
+   "iid": "SC088",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.16.mlp.down_proj.weight",
+   "index": [
+    963,
+    375
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 6,
+   "iid": "SC089",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    4097,
+    855
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 6,
+   "iid": "SC090",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.13.input_layernorm.weight",
+   "index": [
+    131
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 6,
+   "iid": "SC091",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.21.post_attention_layernorm.weight",
+   "index": [
+    382
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 6,
+   "iid": "SC092",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.12.post_attention_layernorm.weight",
+   "index": [
+    134
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 6,
+   "iid": "SC093",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.4.post_attention_layernorm.weight",
+   "index": [
+    838
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 6,
+   "iid": "SC094",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.21.mlp.gate_proj.weight",
+   "index": [
+    1373,
+    145
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 6,
+   "iid": "SC095",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.11.self_attn.o_proj.weight",
+   "index": [
+    0,
+    762
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 6,
+   "iid": "SC096",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.17.linear_attn.out_proj.weight",
+   "index": [
+    879,
+    1483
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 6,
+   "iid": "SC097",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    22817,
+    296
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 6,
+   "iid": "SC098",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.17.linear_attn.out_proj.weight",
+   "index": [
+    870,
+    1142
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 6,
+   "iid": "SC099",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.8.mlp.down_proj.weight",
+   "index": [
+    557,
+    595
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 7,
+   "iid": "SC100",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.3.input_layernorm.weight",
+   "index": [
+    30
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 7,
+   "iid": "SC101",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.4.mlp.down_proj.weight",
+   "index": [
+    705,
+    2486
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 7,
+   "iid": "SC102",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.11.input_layernorm.weight",
+   "index": [
+    331
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 7,
+   "iid": "SC103",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    7548,
+    282
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 7,
+   "iid": "SC104",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.10.post_attention_layernorm.weight",
+   "index": [
+    427
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 7,
+   "iid": "SC105",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.8.post_attention_layernorm.weight",
+   "index": [
+    656
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 7,
+   "iid": "SC106",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.23.mlp.down_proj.weight",
+   "index": [
+    807,
+    1792
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 7,
+   "iid": "SC107",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.14.mlp.gate_proj.weight",
+   "index": [
+    574,
+    552
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 7,
+   "iid": "SC108",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.13.linear_attn.out_proj.weight",
+   "index": [
+    102,
+    1782
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 7,
+   "iid": "SC109",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    40014,
+    577
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 7,
+   "iid": "SC110",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.0.post_attention_layernorm.weight",
+   "index": [
+    597
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 7,
+   "iid": "SC111",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.17.input_layernorm.weight",
+   "index": [
+    166
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 7,
+   "iid": "SC112",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.6.mlp.gate_proj.weight",
+   "index": [
+    2674,
+    679
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 7,
+   "iid": "SC113",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.9.mlp.down_proj.weight",
+   "index": [
+    125,
+    2929
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 7,
+   "iid": "SC114",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.6.mlp.down_proj.weight",
+   "index": [
+    107,
+    1827
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 7,
+   "iid": "SC115",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.22.mlp.gate_proj.weight",
+   "index": [
+    1334,
+    425
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 8,
+   "iid": "SC116",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.10.mlp.gate_proj.weight",
+   "index": [
+    1415,
+    24
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 8,
+   "iid": "SC117",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.5.mlp.gate_proj.weight",
+   "index": [
+    151,
+    434
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 8,
+   "iid": "SC118",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    40014,
+    979
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "target-token embedding entry",
+   "round": 8,
+   "iid": "SC119",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.5.mlp.gate_proj.weight",
+   "index": [
+    680,
+    155
+   ],
+   "op": "set_zero",
+   "salient": "random entry",
+   "round": 8,
+   "iid": "SC120",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    513,
+    263
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 8,
+   "iid": "SC121",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.16.mlp.down_proj.weight",
+   "index": [
+    201,
+    2721
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 8,
+   "iid": "SC122",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.3.input_layernorm.weight",
+   "index": [
+    78
+   ],
+   "op": "gain_x10",
+   "salient": null,
+   "round": 8,
+   "iid": "SC123",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    40014,
+    927
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 8,
+   "iid": "SC124",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.16.mlp.down_proj.weight",
+   "index": [
+    221,
+    1980
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "random down_proj entry",
+   "round": 8,
+   "iid": "SC125",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.2.post_attention_layernorm.weight",
+   "index": [
+    816
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 8,
+   "iid": "SC126",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.embed_tokens.weight",
+   "index": [
+    4097,
+    232
+   ],
+   "op": "add",
+   "value": -4.0,
+   "salient": "target-token embedding entry",
+   "round": 8,
+   "iid": "SC127",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.17.post_attention_layernorm.weight",
+   "index": [
+    495
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 8,
+   "iid": "SC128",
+   "family": "scalar"
+  },
+  {
+   "kind": "add_value",
+   "param": "model.layers.15.mlp.down_proj.weight",
+   "index": [
+    542,
+    582
+   ],
+   "op": "add",
+   "value": 4.0,
+   "salient": "random down_proj entry",
+   "round": 8,
+   "iid": "SC129",
+   "family": "scalar"
+  },
+  {
+   "kind": "max_weight",
+   "param": "model.layers.3.mlp.gate_proj.weight",
+   "index": [
+    1307,
+    24
+   ],
+   "op": "set_zero",
+   "salient": "largest |w| in matrix",
+   "round": 8,
+   "iid": "SC130",
+   "family": "scalar"
+  },
+  {
+   "kind": "norm_gain",
+   "param": "model.layers.7.post_attention_layernorm.weight",
+   "index": [
+    41
+   ],
+   "op": "zero_gain",
+   "salient": null,
+   "round": 8,
+   "iid": "SC131",
+   "family": "scalar"
+  }
+ ],
+ "neuron": [
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 2163,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 0,
+   "iid": "NE00",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 11,
+   "neuron": 1834,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 0,
+   "iid": "NE01",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 770,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 0,
+   "iid": "NE02",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 1620,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 0,
+   "iid": "NE03",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 2298,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 0,
+   "iid": "NE04",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2203,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 0,
+   "iid": "NE05",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2700,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 0,
+   "iid": "NE06",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 0,
+   "neuron": 214,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 0,
+   "iid": "NE07",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 1625,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 0,
+   "iid": "NE08",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 1460,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 0,
+   "iid": "NE09",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 1102,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 0,
+   "iid": "NE10",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 3287,
+   "op": "zero",
+   "salient": "random",
+   "round": 0,
+   "iid": "NE11",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 2448,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 1,
+   "iid": "NE12",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 1642,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 1,
+   "iid": "NE13",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 2597,
+   "op": "zero",
+   "salient": "random",
+   "round": 1,
+   "iid": "NE14",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 1849,
+   "op": "zero",
+   "salient": "random",
+   "round": 1,
+   "iid": "NE15",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 740,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 1,
+   "iid": "NE16",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 899,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 1,
+   "iid": "NE17",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 480,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 1,
+   "iid": "NE18",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 15,
+   "neuron": 2974,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 1,
+   "iid": "NE19",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 11,
+   "neuron": 292,
+   "op": "zero",
+   "salient": "random",
+   "round": 1,
+   "iid": "NE20",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2974,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 1,
+   "iid": "NE21",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 215,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 1,
+   "iid": "NE22",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 1780,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 1,
+   "iid": "NE23",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 1517,
+   "op": "zero",
+   "salient": "random",
+   "round": 2,
+   "iid": "NE24",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 6,
+   "neuron": 288,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 2,
+   "iid": "NE25",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 1826,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 2,
+   "iid": "NE26",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 370,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 2,
+   "iid": "NE27",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 1538,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 2,
+   "iid": "NE28",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 3229,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 2,
+   "iid": "NE29",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 0,
+   "neuron": 2689,
+   "op": "zero",
+   "salient": "random",
+   "round": 2,
+   "iid": "NE30",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 2376,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 2,
+   "iid": "NE31",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 2215,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 2,
+   "iid": "NE32",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 2215,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 2,
+   "iid": "NE33",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 2840,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 2,
+   "iid": "NE34",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 3077,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 2,
+   "iid": "NE35",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 231,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 3,
+   "iid": "NE036",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 87,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 3,
+   "iid": "NE037",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 3211,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 3,
+   "iid": "NE038",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 2176,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE039",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 319,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE040",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 598,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE041",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 1469,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE042",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 5,
+   "neuron": 1605,
+   "op": "zero",
+   "salient": "random",
+   "round": 3,
+   "iid": "NE043",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 1777,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 3,
+   "iid": "NE044",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 1436,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 3,
+   "iid": "NE045",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 2587,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE046",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 1373,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 3,
+   "iid": "NE047",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 2110,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 3,
+   "iid": "NE048",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 2673,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE049",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 8,
+   "neuron": 36,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 3,
+   "iid": "NE050",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 1490,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 3,
+   "iid": "NE051",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 1045,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 4,
+   "iid": "NE052",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 330,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE053",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 4,
+   "neuron": 327,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE054",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 664,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE055",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 11,
+   "neuron": 111,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE056",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 2938,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE057",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 1132,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE058",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 2302,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE059",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 37,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE060",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 1779,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE061",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 6,
+   "neuron": 172,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE062",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 11,
+   "neuron": 1466,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 4,
+   "iid": "NE063",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 8,
+   "neuron": 951,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 4,
+   "iid": "NE064",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 1549,
+   "op": "zero",
+   "salient": "random",
+   "round": 4,
+   "iid": "NE065",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 351,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE066",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 32,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 4,
+   "iid": "NE067",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 577,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 5,
+   "iid": "NE068",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 3023,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 5,
+   "iid": "NE069",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 2100,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 5,
+   "iid": "NE070",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 361,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE071",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 1065,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 5,
+   "iid": "NE072",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 953,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE073",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 2878,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE074",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 1119,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE075",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 1986,
+   "op": "zero",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE076",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 1373,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE077",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 1736,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 5,
+   "iid": "NE078",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 3455,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 5,
+   "iid": "NE079",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 7,
+   "neuron": 2295,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 5,
+   "iid": "NE080",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 7,
+   "neuron": 2111,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 5,
+   "iid": "NE081",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 1362,
+   "op": "zero",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE082",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 765,
+   "op": "zero",
+   "salient": "random",
+   "round": 5,
+   "iid": "NE083",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 2385,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 6,
+   "iid": "NE084",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 8,
+   "neuron": 2418,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE085",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 2074,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE086",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 472,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 6,
+   "iid": "NE087",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 756,
+   "op": "zero",
+   "salient": "random",
+   "round": 6,
+   "iid": "NE088",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 8,
+   "neuron": 1176,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE089",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 6,
+   "neuron": 2988,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE090",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 414,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 6,
+   "iid": "NE091",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 1968,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE092",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 1396,
+   "op": "zero",
+   "salient": "random",
+   "round": 6,
+   "iid": "NE093",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 11,
+   "neuron": 2387,
+   "op": "zero",
+   "salient": "random",
+   "round": 6,
+   "iid": "NE094",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 134,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 6,
+   "iid": "NE095",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 7,
+   "neuron": 107,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 6,
+   "iid": "NE096",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 1886,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE097",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 14,
+   "neuron": 2818,
+   "op": "zero",
+   "salient": "random",
+   "round": 6,
+   "iid": "NE098",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 2103,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 6,
+   "iid": "NE099",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 2602,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 7,
+   "iid": "NE100",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 15,
+   "neuron": 1479,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE101",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 7,
+   "neuron": 107,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE102",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 732,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE103",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 0,
+   "neuron": 3191,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE104",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 2195,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE105",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 5,
+   "neuron": 2237,
+   "op": "zero",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE106",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 2197,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 7,
+   "iid": "NE107",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 750,
+   "op": "zero",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE108",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 6,
+   "neuron": 445,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE109",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 1992,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE110",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 1845,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 7,
+   "iid": "NE111",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 21,
+   "neuron": 1830,
+   "op": "zero",
+   "salient": "random",
+   "round": 7,
+   "iid": "NE112",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 9,
+   "neuron": 76,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE113",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 123,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 7,
+   "iid": "NE114",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 3331,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 7,
+   "iid": "NE115",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 8,
+   "neuron": 35,
+   "op": "zero",
+   "salient": "largest down_proj column norm",
+   "round": 8,
+   "iid": "NE116",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 3027,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE117",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 10,
+   "neuron": 720,
+   "op": "zero",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE118",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 20,
+   "neuron": 3093,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 8,
+   "iid": "NE119",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 16,
+   "neuron": 3003,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE120",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 1,
+   "neuron": 2489,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 8,
+   "iid": "NE121",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 2,
+   "neuron": 1992,
+   "op": "zero",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE122",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 18,
+   "neuron": 3461,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE123",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 12,
+   "neuron": 1115,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 8,
+   "iid": "NE124",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 912,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 8,
+   "iid": "NE125",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 22,
+   "neuron": 2949,
+   "op": "zero",
+   "salient": "largest direct effect on a target logit",
+   "round": 8,
+   "iid": "NE126",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 3,
+   "neuron": 1775,
+   "op": "scale_x5",
+   "salient": "largest direct effect on a target logit",
+   "round": 8,
+   "iid": "NE127",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 13,
+   "neuron": 1388,
+   "op": "scale_x5",
+   "salient": "largest down_proj column norm",
+   "round": 8,
+   "iid": "NE128",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 23,
+   "neuron": 3365,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE129",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 19,
+   "neuron": 1614,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE130",
+   "family": "neuron"
+  },
+  {
+   "kind": "neuron",
+   "layer": 17,
+   "neuron": 2331,
+   "op": "scale_x5",
+   "salient": "random",
+   "round": 8,
+   "iid": "NE131",
+   "family": "neuron"
+  }
+ ],
+ "layer": [
+  {
+   "kind": "layer",
+   "layer": 12,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 0,
+   "iid": "LA00",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 14,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 0,
+   "iid": "LA01",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 1,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 0,
+   "iid": "LA02",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 17,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA03",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 8,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 0,
+   "iid": "LA04",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 7,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA05",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 20,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA06",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 9,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 0,
+   "iid": "LA07",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 1,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 0,
+   "iid": "LA08",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 12,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA09",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 14,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA10",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 13,
+   "op": "skip_block",
+   "salient": null,
+   "round": 0,
+   "iid": "LA11",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 23,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA12",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 20,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA13",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 22,
+   "op": "skip_block",
+   "salient": null,
+   "round": 1,
+   "iid": "LA14",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 7,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA15",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 10,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 1,
+   "iid": "LA16",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 6,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 1,
+   "iid": "LA17",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 10,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA18",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 11,
+   "op": "skip_block",
+   "salient": null,
+   "round": 1,
+   "iid": "LA19",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 19,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA20",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 16,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 1,
+   "iid": "LA21",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 18,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA22",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 16,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 1,
+   "iid": "LA23",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 13,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 2,
+   "iid": "LA24",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 0,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 2,
+   "iid": "LA25",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 21,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 2,
+   "iid": "LA26",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 14,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 2,
+   "iid": "LA27",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 21,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 2,
+   "iid": "LA28",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 3,
+   "op": "skip_block",
+   "salient": null,
+   "round": 2,
+   "iid": "LA29",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 23,
+   "op": "skip_block",
+   "salient": null,
+   "round": 2,
+   "iid": "LA30",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 5,
+   "op": "skip_block",
+   "salient": null,
+   "round": 2,
+   "iid": "LA31",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 17,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 2,
+   "iid": "LA32",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 0,
+   "op": "skip_block",
+   "salient": null,
+   "round": 2,
+   "iid": "LA33",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 18,
+   "op": "skip_block",
+   "salient": null,
+   "round": 2,
+   "iid": "LA34",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 23,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 2,
+   "iid": "LA35",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 19,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA036",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 2,
+   "op": "skip_block",
+   "salient": null,
+   "round": 3,
+   "iid": "LA037",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 9,
+   "op": "skip_block",
+   "salient": null,
+   "round": 3,
+   "iid": "LA038",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 8,
+   "op": "skip_block",
+   "salient": null,
+   "round": 3,
+   "iid": "LA039",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 9,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA040",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 3,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA041",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 5,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA042",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 15,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA043",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 16,
+   "op": "skip_block",
+   "salient": null,
+   "round": 3,
+   "iid": "LA044",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 13,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 3,
+   "iid": "LA045",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 1,
+   "op": "skip_block",
+   "salient": null,
+   "round": 3,
+   "iid": "LA046",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 11,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 3,
+   "iid": "LA047",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 7,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA048",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 5,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 4,
+   "iid": "LA049",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 20,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA050",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 17,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA051",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 18,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA052",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 22,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 4,
+   "iid": "LA053",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 6,
+   "op": "skip_block",
+   "salient": null,
+   "round": 4,
+   "iid": "LA054",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 12,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA055",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 8,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA056",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 0,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 4,
+   "iid": "LA057",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 21,
+   "op": "skip_block",
+   "salient": null,
+   "round": 4,
+   "iid": "LA058",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 4,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 4,
+   "iid": "LA059",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 15,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA060",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 2,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA061",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 4,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA062",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 4,
+   "op": "skip_block",
+   "salient": null,
+   "round": 5,
+   "iid": "LA063",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 19,
+   "op": "skip_block",
+   "salient": null,
+   "round": 5,
+   "iid": "LA064",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 11,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA065",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 6,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA066",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 2,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 5,
+   "iid": "LA067",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 10,
+   "op": "skip_block",
+   "salient": null,
+   "round": 5,
+   "iid": "LA068",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 15,
+   "op": "skip_block",
+   "salient": null,
+   "round": 5,
+   "iid": "LA069",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 3,
+   "op": "skip_mlp",
+   "salient": null,
+   "round": 5,
+   "iid": "LA070",
+   "family": "layer"
+  },
+  {
+   "kind": "layer",
+   "layer": 22,
+   "op": "skip_mixer",
+   "salient": null,
+   "round": 5,
+   "iid": "LA071",
+   "family": "layer"
+  }
+ ],
+ "token": [
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 7548,
+   "a_tok": " Thursday",
+   "salient": null,
+   "round": 0,
+   "iid": "TO00",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 11751,
+   "b": 2972,
+   "a_tok": " Paris",
+   "b_tok": " **",
+   "salient": "baseline runner-up of a prompt",
+   "round": 0,
+   "iid": "TO01",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 4097,
+   "b": 466,
+   "a_tok": " five",
+   "b_tok": " or",
+   "salient": "baseline runner-up of a prompt",
+   "round": 0,
+   "iid": "TO02",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 478,
+   "b": 11751,
+   "a_tok": " +",
+   "b_tok": " Paris",
+   "salient": "another prompt's target",
+   "round": 0,
+   "iid": "TO03",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 40014,
+   "b": 1369,
+   "a_tok": " Shakespeare",
+   "b_tok": " Sh",
+   "salient": "baseline runner-up of a prompt",
+   "round": 0,
+   "iid": "TO04",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 513,
+   "b": 478,
+   "a_tok": " are",
+   "b_tok": " +",
+   "salient": "another prompt's target",
+   "round": 0,
+   "iid": "TO05",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 4097,
+   "b": 11751,
+   "a_tok": " five",
+   "b_tok": " Paris",
+   "salient": "another prompt's target",
+   "round": 0,
+   "iid": "TO06",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 11751,
+   "a_tok": " Paris",
+   "salient": null,
+   "round": 0,
+   "iid": "TO07",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 7548,
+   "b": 321,
+   "a_tok": " Thursday",
+   "b_tok": " and",
+   "salient": "baseline runner-up of a prompt",
+   "round": 0,
+   "iid": "TO08",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 7548,
+   "b": 466,
+   "a_tok": " Thursday",
+   "b_tok": " or",
+   "salient": "baseline runner-up of a prompt",
+   "round": 0,
+   "iid": "TO09",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 478,
+   "b": 4097,
+   "a_tok": " +",
+   "b_tok": " five",
+   "salient": "another prompt's target",
+   "round": 0,
+   "iid": "TO10",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 7548,
+   "b": 11751,
+   "a_tok": " Thursday",
+   "b_tok": " Paris",
+   "salient": "another prompt's target",
+   "round": 0,
+   "iid": "TO11",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 11751,
+   "b": 513,
+   "a_tok": " Paris",
+   "b_tok": " are",
+   "salient": "another prompt's target",
+   "round": 1,
+   "iid": "TO12",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 513,
+   "b": 198,
+   "a_tok": " are",
+   "b_tok": "\n",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO13",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 513,
+   "b": 998,
+   "a_tok": " are",
+   "b_tok": " were",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO14",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 4097,
+   "b": 4831,
+   "a_tok": " five",
+   "b_tok": " etc",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO15",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 513,
+   "a_tok": " are",
+   "salient": null,
+   "round": 1,
+   "iid": "TO16",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 513,
+   "b": 998,
+   "a_tok": " are",
+   "b_tok": " were",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO17",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 7348,
+   "a_tok": " Tuesday",
+   "salient": null,
+   "round": 1,
+   "iid": "TO18",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 11751,
+   "b": 6924,
+   "a_tok": " Paris",
+   "b_tok": " London",
+   "salient": "another prompt's target",
+   "round": 1,
+   "iid": "TO19",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 513,
+   "b": 11751,
+   "a_tok": " are",
+   "b_tok": " Paris",
+   "salient": "another prompt's target",
+   "round": 1,
+   "iid": "TO20",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 4097,
+   "b": 466,
+   "a_tok": " five",
+   "b_tok": " or",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO21",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 22817,
+   "a_tok": " oxygen",
+   "salient": null,
+   "round": 1,
+   "iid": "TO22",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 40014,
+   "b": 29881,
+   "a_tok": " Shakespeare",
+   "b_tok": " Blake",
+   "salient": "baseline runner-up of a prompt",
+   "round": 1,
+   "iid": "TO23",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 11751,
+   "b": 2972,
+   "a_tok": " Paris",
+   "b_tok": " **",
+   "salient": "baseline runner-up of a prompt",
+   "round": 2,
+   "iid": "TO24",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 314,
+   "a_tok": " of",
+   "salient": null,
+   "round": 2,
+   "iid": "TO25",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 478,
+   "b": 513,
+   "a_tok": " +",
+   "b_tok": " are",
+   "salient": "another prompt's target",
+   "round": 2,
+   "iid": "TO26",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 11,
+   "a_tok": ",",
+   "salient": null,
+   "round": 2,
+   "iid": "TO27",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 22817,
+   "a_tok": " oxygen",
+   "salient": null,
+   "round": 2,
+   "iid": "TO28",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 22817,
+   "b": 513,
+   "a_tok": " oxygen",
+   "b_tok": " are",
+   "salient": "another prompt's target",
+   "round": 2,
+   "iid": "TO29",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "swap",
+   "a": 4097,
+   "b": 321,
+   "a_tok": " five",
+   "b_tok": " and",
+   "salient": "another prompt's target",
+   "round": 2,
+   "iid": "TO30",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "copy",
+   "a": 478,
+   "b": 11751,
+   "a_tok": " +",
+   "b_tok": " Paris",
+   "salient": "another prompt's target",
+   "round": 2,
+   "iid": "TO31",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 11751,
+   "a_tok": " Paris",
+   "salient": null,
+   "round": 2,
+   "iid": "TO32",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 369,
+   "a_tok": " is",
+   "salient": null,
+   "round": 2,
+   "iid": "TO33",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 12021,
+   "a_tok": " William",
+   "salient": null,
+   "round": 2,
+   "iid": "TO34",
+   "family": "token"
+  },
+  {
+   "kind": "token",
+   "op": "zero",
+   "a": 513,
+   "a_tok": " are",
+   "salient": null,
+   "round": 2,
+   "iid": "TO35",
+   "family": "token"
+  }
+ ]
+}

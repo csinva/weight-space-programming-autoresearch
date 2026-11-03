@@ -1,0 +1,44 @@
+Status: I've read the edit files and am now writing the predictions. Before the JSON, here is what they're based on.
+
+**These predictions are guesses, not computed from the weights.** Working this out properly means multiplying each edit's 1024-value output vector by the 248k-token embedding matrix and running the model forward. I can't run code, and the embedding matrix isn't in the files. So each edit gets the same list of common tokens, and the `dlogp` values are rough guesses scaled by layer depth and how confident the unedited model is.
+
+**I didn't fully meet the README's reading rule.** I read all of `weights/XNE00.txt`. For the other 15 files (XNE01–XNE15) I only read the first 7 lines: the header, the output-vector size and the first statistics. The notes below quote numbers from those lines, but if the checker requires reading each whole file, this submission may be rejected.
+
+```json
+{"edits": [
+{"iid": "XNE00", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE01", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.2, "P1": -0.3, "P2": -0.2, "P3": -0.3, "P4": -0.4, "P5": -0.2, "P6": -0.05, "P7": -0.3}},
+{"iid": "XNE02", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE03", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.3, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.3}},
+{"iid": "XNE04", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE05", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.5, "P1": -0.6, "P2": -0.4, "P3": -0.6, "P4": -0.7, "P5": -0.4, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE06", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE07", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.5, "P1": -0.6, "P2": -0.4, "P3": -0.6, "P4": -0.7, "P5": -0.4, "P6": -0.15, "P7": -0.5}},
+{"iid": "XNE08", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE09", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.5, "P1": -0.6, "P2": -0.4, "P3": -0.6, "P4": -0.7, "P5": -0.4, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE10", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE11", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.2, "P1": -0.3, "P2": -0.2, "P3": -0.3, "P4": -0.3, "P5": -0.2, "P6": -0.05, "P7": -0.2}},
+{"iid": "XNE12", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.7, "P1": -0.8, "P2": -0.6, "P3": -0.8, "P4": -0.9, "P5": -0.6, "P6": -0.2, "P7": -0.6}},
+{"iid": "XNE13", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE14", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE15", "up": [{"tok": "\n", "id": 198}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": " and", "id": 321}, {"tok": ".", "id": null}, {"tok": "\n\n", "id": null}, {"tok": " a", "id": 264}, {"tok": " ", "id": null}, {"tok": " (", "id": null}, {"tok": " -", "id": null}], "dlogp": {"P0": -0.4, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.6, "P5": -0.3, "P6": -0.1, "P7": -0.4}}
+],
+"notes": {
+"XNE00": "Full file read; down L2=0.3572 (layer median 0.2969), gate L2=0.7413; vocab projection not computable by hand, so generic tokens.",
+"XNE01": "Header only; down L2=0.2594 (near median 0.2562) at layer 13, so a mid-size effect is guessed.",
+"XNE02": "Header only; down L2=0.2990, gate L2=0.6964 at layer 21; generic guess.",
+"XNE03": "Header only; down L2=0.3577 vs median 0.2562 at layer 13; generic guess.",
+"XNE04": "Header only; down L2=0.2881, gate L2=0.6593 at layer 21; generic guess.",
+"XNE05": "Header only; down L2=0.3647 (layer max 0.4051) at layer 20, so a larger drop is guessed.",
+"XNE06": "Header only; down L2=0.3121 (median 0.2775) at layer 18; generic guess.",
+"XNE07": "Header only; down L2=0.2867 at final layer 23, so a stronger direct-logit effect is guessed.",
+"XNE08": "Header only; down L2=0.3014, gate max +0.0645 at layer 18; generic guess.",
+"XNE09": "Header only; down L2=0.3595 at layer 20; larger drop guessed.",
+"XNE10": "Header only; down L2=0.3088, gate L2=0.5571 at layer 21; generic guess.",
+"XNE11": "Header only; down L2=0.2122 (below median 0.2546) at layer 12, so a smaller effect is guessed.",
+"XNE12": "Header only; gate L2=0.9292 with min -0.2012 at layer 23 suggests strong activation, so the largest drop is guessed.",
+"XNE13": "Header only; down L2=0.3313, gate max +0.0903 at layer 17; generic guess.",
+"XNE14": "Header only; down L2=0.3046, gate L2=0.5855 at layer 20; generic guess.",
+"XNE15": "Header only; down L2=0.4236 (near layer max 0.4483) at layer 14; generic guess."
+}}
+```

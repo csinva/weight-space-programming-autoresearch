@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO24|P0": {
+   "dlogp": -7.0,
+   "p_flip": 0.97
+  },
+  "TO24|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P4": {
+   "dlogp": -2.1,
+   "p_flip": 0.93
+  },
+  "TO24|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO25|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.75
+  },
+  "TO25|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "TO25|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.03
+  },
+  "TO26|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P2": {
+   "dlogp": -11.0,
+   "p_flip": 0.98
+  },
+  "TO26|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P7": {
+   "dlogp": -11.0,
+   "p_flip": 0.98
+  },
+  "TO27|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P1": {
+   "dlogp": -1.2,
+   "p_flip": 0.4
+  },
+  "TO27|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "TO27|P3": {
+   "dlogp": -1.2,
+   "p_flip": 0.4
+  },
+  "TO27|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "TO27|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P7": {
+   "dlogp": 0.04,
+   "p_flip": 0.03
+  },
+  "TO28|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P5": {
+   "dlogp": -11.0,
+   "p_flip": 0.99
+  },
+  "TO28|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO29|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P5": {
+   "dlogp": -10.0,
+   "p_flip": 0.98
+  },
+  "TO29|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P7": {
+   "dlogp": -11.0,
+   "p_flip": 0.98
+  },
+  "TO30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P1": {
+   "dlogp": -2.2,
+   "p_flip": 0.97
+  },
+  "TO30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P5": {
+   "dlogp": -3.0,
+   "p_flip": 0.7
+  },
+  "TO30|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "TO30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO31|P0": {
+   "dlogp": -0.65,
+   "p_flip": 0.85
+  },
+  "TO31|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P2": {
+   "dlogp": -11.0,
+   "p_flip": 0.98
+  },
+  "TO31|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P4": {
+   "dlogp": -0.38,
+   "p_flip": 0.85
+  },
+  "TO31|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO32|P0": {
+   "dlogp": -11.0,
+   "p_flip": 0.99
+  },
+  "TO32|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P4": {
+   "dlogp": -8.0,
+   "p_flip": 0.98
+  },
+  "TO32|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO33|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "TO33|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "TO33|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "TO34|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P6": {
+   "dlogp": -1.0,
+   "p_flip": 0.3
+  },
+  "TO34|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO35|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P7": {
+   "dlogp": -8.0,
+   "p_flip": 0.98
+  }
+ },
+ "notes": {
+  "TO24": "Paris row (L2=0.5102, std 0.01595) replaced by ' **' row, so Paris logit equals ' **' logit: P4 to about 0.057 (' **' was 0.032), P0 to about 0.001; flips on both.",
+  "TO25": "' of' row (L2=0.6570, max +0.0684) zeroed; it is the last input token of P4, so the Paris prediction weakens a lot; small effect on P5 (made of).",
+  "TO26": "' +' (L2=0.6765, mean -0.00062) swapped with ' are': P2 and P7 targets take the other token's near-zero probability and the swapped token becomes top-1.",
+  "TO27": "',' row (L2=0.8513, min -0.1060) zeroed; it is the last input token in P1 and P3, so the list-continuation cue weakens; moderate drop.",
+  "TO28": "' oxygen' row (L2=0.5484) zeroed, so its logit is 0, far below the top logit; P5 collapses.",
+  "TO29": "' oxygen' (mean -0.00102) swapped with ' are': P5 and P7 targets both collapse and flip to the swapped id.",
+  "TO30": "' five' (L2=0.5835, max +0.0674) swapped with ' and': P1 target gets about 0.089 (ln ratio -2.2); P5's last input becomes the ' five' embedding; P3 is symmetric, about 0.",
+  "TO31": "' +' (L2=0.6765) set to a copy of the Paris row: exact logit tie halves Paris on P0/P4 and the lower id 478 likely wins argmax; P2 '+' collapses.",
+  "TO32": "Paris row (L2=0.5102, first value +0.0240) zeroed, so its logit is 0: large drop on P0 and P4.",
+  "TO33": "' is' row (L2=0.6115) zeroed; it appears mid-prompt in P4 and P5, so only small drops.",
+  "TO34": "' William' row (L2=0.4328, smallest norm) zeroed; it is P6's last input, but 'written by' still points to Shakespeare: moderate drop.",
+  "TO35": "' are' row (L2=0.5785, max +0.0659) zeroed, so the P7 target logit is 0 versus a top logit at p=0.272: large drop and a flip."
+ }
+}

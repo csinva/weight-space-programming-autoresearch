@@ -1,0 +1,50 @@
+# Task: predict how weight edits change Qwen3.5-0.8B's next-token probabilities
+
+You are given 16 weight edits (interventions) of one kind ("neuron" granularity). Each edit is applied **on its own** to the
+unedited model, and then the model reads each of 8 fixed prompts. For every (edit, prompt) pair predict:
+- `dlogp`: change in the natural-log probability of the prompt's scored token (listed per prompt below; a plausible next token ranked 6 to 10 before the edit, not the top-1), edited minus unedited, in nats.
+  0 = no change, negative = target becomes less likely. Range clipped to [-20, +3].
+- `p_flip`: your probability that the model's top-1 next token is different after the edit.
+
+**Condition: raw weights.** `weights/` has the raw numbers (4 decimals, 16 per line, index of the first value at line start) of each edited component, plus simple statistics (norms, std, max). Shared raw files: target-token embedding rows and all norm gains. Read the weights and use them.
+
+**Required:** before predicting, Read every `weights/<iid>.txt` file of the edits listed in `test_interventions.md` (the shared_*.txt files are optional). In `notes`, cite at least one specific number from each edit's file. Calls that skip a test edit's file are rejected.
+
+You may only read files (no code execution is available). Work by reasoning about the model and the provided material.
+Files in this directory: `README.md` (this file), `test_interventions.md` (what to predict), `weights/` (one file per edit id, plus shared_*.txt).
+
+## Model: Qwen3.5-0.8B (text part), revision 2fc0636471
+- 24 decoder layers, hidden size 1024, vocab 248,320, **tied embeddings** (`model.embed_tokens.weight` is also the output unembedding).
+- Pre-norm residual: h = h + Mixer(RMSNorm_in(h)); h = h + MLP(RMSNorm_post(h)); logits = E · RMSNorm_final(h).
+- RMSNorm(x) = x / rms(x) * (1 + w)  (note the **1 + w**: stored w near 0 means gain near 1).
+- Token mixer: layers 3, 7, 11, 15, 19, 23 are full softmax attention (8 query heads of dim 256, 2 KV heads, per-head q/k RMSNorm,
+  partial RoPE, and a per-head sigmoid output gate computed from the input; o_proj columns [256h, 256h+256) belong to head h).
+  All other layers are Gated DeltaNet linear attention (16 heads, head dim 128, short causal conv, learned decay A_log/dt_bias,
+  output = gated RMSNorm(read-out) * silu(z); out_proj columns [128h, 128h+128) belong to head h).
+- MLP: down_proj( silu(gate_proj x) * up_proj x ), 3,584 neurons; neuron i writes down_proj[:, i].
+- Weight edits are applied, then the 8 prompts are run with no other change. "Skip a sublayer" = zero its output projection
+  (o_proj/out_proj or down_proj), which removes its residual contribution exactly.
+
+## Prompts and the unedited model's next-token distribution
+- **P0** text 'Germany: Berlin\nItaly: Rome\nFrance:'; input tokens ['Germany', ':', ' Berlin', '\n', 'Italy', ':', ' Rome', '\n', 'France', ':'] (ids [48484, 25, 19241, 198, 68121, 25, 21047, 198, 47358, 25])
+  scored token ' Madrid' (id 23327, rank 8, p 0.0024; top-1 is ' Paris'), unedited top-10: ' Paris' 0.916, ' London' 0.016, '\n' 0.006, ' Lyon' 0.004, ' L' 0.004, ' Versailles' 0.003, ' Brussels' 0.003, ' Madrid' 0.002, ' Nice' 0.002, ' La' 0.002
+- **P1** text 'one, two, three, four,'; input tokens ['one', ',', ' two', ',', ' three', ',', ' four', ','] (ids [588, 11, 1330, 11, 2250, 11, 2943, 11])
+  scored token ' six' (id 4590, rank 7, p 0.0025; top-1 is ' five'), unedited top-10: ' five' 0.774, ' and' 0.089, ' or' 0.055, ' etc' 0.026, ' ...' 0.006, '\n' 0.005, ' six' 0.003, '\n\n' 0.002, ' four' 0.002, ' one' 0.001
+- **P2** text 'def add(a, b):\n    return a'; input tokens ['def', ' add', '(a', ',', ' b', '):', '\n', '   ', ' return', ' a'] (ids [727, 884, 2784, 11, 292, 1590, 198, 262, 460, 264])
+  scored token ' *' (id 348, rank 7, p 0.0010; top-1 is ' +'), unedited top-10: ' +' 0.815, '+b' 0.173, '\n\n' 0.003, ' -' 0.002, ',' 0.002, '+' 0.001, ' *' 0.001, '*b' 0.000, '\n' 0.000, '-b' 0.000
+- **P3** text 'Monday, Tuesday, Wednesday,'; input tokens ['Monday', ',', ' Tuesday', ',', ' Wednesday', ','] (ids [34072, 11, 7348, 11, 7670, 11])
+  scored token ' etc' (id 4831, rank 9, p 0.0039; top-1 is ' Thursday'), unedited top-10: ' Thursday' 0.706, ' and' 0.155, '\n' 0.019, ' or' 0.019, ' Friday' 0.013, ' April' 0.009, '\n\n' 0.006, ' ' 0.006, ' etc' 0.004, ' ...' 0.004
+- **P4** text 'The Eiffel Tower is located in the city of'; input tokens ['The', ' Eiff', 'el', ' Tower', ' is', ' located', ' in', ' the', ' city', ' of'] (ids [760, 242476, 300, 21262, 369, 7172, 303, 279, 3177, 314])
+  scored token ' which' (id 864, rank 6, p 0.0251; top-1 is ' Paris'), unedited top-10: ' Paris' 0.469, '\n' 0.071, '<|im_end|>' 0.033, ' **' 0.032, ' the' 0.029, ' which' 0.025, ' ______' 0.022, ',' 0.014, '...' 0.012, '\n\n' 0.012
+- **P5** text 'Water is made of hydrogen and'; input tokens ['Water', ' is', ' made', ' of', ' hydrogen', ' and'] (ids [27336, 369, 1801, 314, 33536, 321])
+  scored token ' what' (id 1092, rank 8, p 0.0031; top-1 is ' oxygen'), unedited top-10: ' oxygen' 0.927, ' chlorine' 0.008, ' carbon' 0.006, ' helium' 0.005, ' nitrogen' 0.005, ' Oxygen' 0.004, ' ______' 0.003, ' what' 0.003, '\n' 0.002, '/or' 0.002
+- **P6** text 'Romeo and Juliet was written by William'; input tokens ['R', 'ome', 'o', ' and', ' Juliet', ' was', ' written', ' by', ' William'] (ids [49, 617, 78, 321, 68613, 557, 5158, 539, 12021])
+  scored token ' Henry' (id 17075, rank 10, p 0.0001; top-1 is ' Shakespeare'), unedited top-10: ' Shakespeare' 0.994, ' Sh' 0.001, ' Words' 0.001, ' Blake' 0.001, ' Lang' 0.000, ' Cong' 0.000, '莎士比亚' 0.000, ' Haz' 0.000, ' Shakespe' 0.000, ' Henry' 0.000
+- **P7** text 'The keys to the cabinet'; input tokens ['The', ' keys', ' to', ' the', ' cabinet'] (ids [760, 6679, 310, 279, 21245])
+  scored token ' door' (id 5817, rank 8, p 0.0353; top-1 is ' are'), unedited top-10: ' are' 0.272, '\n' 0.116, ' were' 0.061, ',' 0.051, ' of' 0.045, '.' 0.045, '\n\n' 0.041, ' door' 0.035, ':' 0.028, ' in' 0.017
+
+## Output format (your final message)
+A single fenced ```json block, nothing else after it:
+{"predictions": [{"iid": "XX00", "pid": "P0", "dlogp": -0.3, "p_flip": 0.05}, ...  one entry for each of the 128 (edit, prompt) pairs],
+ "notes": {"XX00": "one short sentence on the evidence you used", ...}}
+Scoring: Spearman correlation and mean absolute error of dlogp against the measured values, and Brier score of p_flip.

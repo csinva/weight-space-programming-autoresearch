@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XGA00": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA01": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA02": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " is",
+     "id": 369
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA04": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA05": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA06": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA07": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " is",
+     "id": 369
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA08": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA09": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA10": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA11": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " is",
+     "id": 369
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA13": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA14": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA15": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": null
+    },
+    {
+     "tok": " is",
+     "id": 369
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": -0.5,
+    "P2": -0.4,
+    "P3": -0.6,
+    "P4": -0.7,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  }
+ },
+ "notes": {
+  "XGA00": "No weights: a 30x gain on one final-norm dim adds 29*x_d*E[:,d] to logits, boosting unknown tokens with large embedding values in dim 99; generic frequent tokens used as placeholders and target log-prob assumed to drop, more for weaker targets (P7, P4, P3).",
+  "XGA01": "Same structural reasoning for dim 370; boosted tokens depend on unseen embedding column, so prediction is a prior over frequent tokens with negative dlogp.",
+  "XGA02": "Same structural reasoning for dim 565; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA03": "Same structural reasoning for dim 365; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA04": "Same structural reasoning for dim 77; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA05": "Same structural reasoning for dim 625; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA06": "Same structural reasoning for dim 736; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA07": "Same structural reasoning for dim 0; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA08": "Same structural reasoning for dim 75; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA09": "Same structural reasoning for dim 311; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA10": "Same structural reasoning for dim 348; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA11": "Same structural reasoning for dim 128; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA12": "Same structural reasoning for dim 530; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA13": "Same structural reasoning for dim 71; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA14": "Same structural reasoning for dim 624; prior-based guess, negative dlogp scaled by how dominant the unedited target is.",
+  "XGA15": "Same structural reasoning for dim 827; prior-based guess, negative dlogp scaled by how dominant the unedited target is."
+ }
+}

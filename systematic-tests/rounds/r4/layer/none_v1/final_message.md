@@ -1,0 +1,38 @@
+I predicted all 96 pairs from general knowledge only. No weights were given and no code could be run, so every value below is a rough prior, not a measurement.
+
+- **Size of each edit:** I gave each edit a base effect size and scaled it by how fragile each prompt is.
+- **Biggest effect:** skipping the layer 0 MLP (LA057). In small models that MLP often works as part of the token embedding, so I predicted about −1.5 to −3 nats and likely flips.
+- **Next largest:** skipping layer 7's full attention (LA048), which probably drives copying from the context (P0, P1, P3). After that come the whole-block skips at layers 6 and 21 and the layer 22 MLP skip, at roughly −0.3 to −0.8 nats.
+- **Smallest:** skipping a single DeltaNet mixer in the middle or late layers. I predicted about −0.02 to −0.1 nats.
+- **Flip probability:** this follows the gap between the target and the runner-up. P7 is the least confident prompt (0.272 against 0.116), so it gets the highest flip chances. P6 (0.994) and P5 (0.927) are the most stable.
+
+```json
+{"predictions": [
+{"iid":"LA048","pid":"P0","dlogp":-0.6,"p_flip":0.05},{"iid":"LA048","pid":"P1","dlogp":-0.7,"p_flip":0.2},{"iid":"LA048","pid":"P2","dlogp":-0.4,"p_flip":0.15},{"iid":"LA048","pid":"P3","dlogp":-0.8,"p_flip":0.3},{"iid":"LA048","pid":"P4","dlogp":-0.5,"p_flip":0.2},{"iid":"LA048","pid":"P5","dlogp":-0.25,"p_flip":0.03},{"iid":"LA048","pid":"P6","dlogp":-0.1,"p_flip":0.01},{"iid":"LA048","pid":"P7","dlogp":-0.3,"p_flip":0.3},
+{"iid":"LA049","pid":"P0","dlogp":-0.12,"p_flip":0.02},{"iid":"LA049","pid":"P1","dlogp":-0.18,"p_flip":0.05},{"iid":"LA049","pid":"P2","dlogp":-0.15,"p_flip":0.05},{"iid":"LA049","pid":"P3","dlogp":-0.18,"p_flip":0.07},{"iid":"LA049","pid":"P4","dlogp":-0.2,"p_flip":0.07},{"iid":"LA049","pid":"P5","dlogp":-0.08,"p_flip":0.01},{"iid":"LA049","pid":"P6","dlogp":-0.04,"p_flip":0.01},{"iid":"LA049","pid":"P7","dlogp":-0.12,"p_flip":0.15},
+{"iid":"LA050","pid":"P0","dlogp":-0.06,"p_flip":0.01},{"iid":"LA050","pid":"P1","dlogp":-0.1,"p_flip":0.03},{"iid":"LA050","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"LA050","pid":"P3","dlogp":-0.1,"p_flip":0.04},{"iid":"LA050","pid":"P4","dlogp":-0.1,"p_flip":0.04},{"iid":"LA050","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"LA050","pid":"P6","dlogp":-0.02,"p_flip":0.005},{"iid":"LA050","pid":"P7","dlogp":-0.06,"p_flip":0.1},
+{"iid":"LA051","pid":"P0","dlogp":-0.06,"p_flip":0.01},{"iid":"LA051","pid":"P1","dlogp":-0.1,"p_flip":0.03},{"iid":"LA051","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"LA051","pid":"P3","dlogp":-0.1,"p_flip":0.04},{"iid":"LA051","pid":"P4","dlogp":-0.1,"p_flip":0.04},{"iid":"LA051","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"LA051","pid":"P6","dlogp":-0.02,"p_flip":0.005},{"iid":"LA051","pid":"P7","dlogp":-0.06,"p_flip":0.1},
+{"iid":"LA052","pid":"P0","dlogp":-0.06,"p_flip":0.01},{"iid":"LA052","pid":"P1","dlogp":-0.1,"p_flip":0.03},{"iid":"LA052","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"LA052","pid":"P3","dlogp":-0.1,"p_flip":0.04},{"iid":"LA052","pid":"P4","dlogp":-0.1,"p_flip":0.04},{"iid":"LA052","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"LA052","pid":"P6","dlogp":-0.02,"p_flip":0.005},{"iid":"LA052","pid":"P7","dlogp":-0.06,"p_flip":0.1},
+{"iid":"LA053","pid":"P0","dlogp":-0.3,"p_flip":0.03},{"iid":"LA053","pid":"P1","dlogp":-0.35,"p_flip":0.1},{"iid":"LA053","pid":"P2","dlogp":-0.3,"p_flip":0.1},{"iid":"LA053","pid":"P3","dlogp":-0.35,"p_flip":0.15},{"iid":"LA053","pid":"P4","dlogp":-0.4,"p_flip":0.12},{"iid":"LA053","pid":"P5","dlogp":-0.2,"p_flip":0.02},{"iid":"LA053","pid":"P6","dlogp":-0.08,"p_flip":0.01},{"iid":"LA053","pid":"P7","dlogp":-0.25,"p_flip":0.25},
+{"iid":"LA054","pid":"P0","dlogp":-0.4,"p_flip":0.04},{"iid":"LA054","pid":"P1","dlogp":-0.5,"p_flip":0.15},{"iid":"LA054","pid":"P2","dlogp":-0.4,"p_flip":0.12},{"iid":"LA054","pid":"P3","dlogp":-0.5,"p_flip":0.2},{"iid":"LA054","pid":"P4","dlogp":-0.5,"p_flip":0.15},{"iid":"LA054","pid":"P5","dlogp":-0.25,"p_flip":0.02},{"iid":"LA054","pid":"P6","dlogp":-0.1,"p_flip":0.01},{"iid":"LA054","pid":"P7","dlogp":-0.3,"p_flip":0.3},
+{"iid":"LA055","pid":"P0","dlogp":-0.06,"p_flip":0.01},{"iid":"LA055","pid":"P1","dlogp":-0.1,"p_flip":0.03},{"iid":"LA055","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"LA055","pid":"P3","dlogp":-0.1,"p_flip":0.04},{"iid":"LA055","pid":"P4","dlogp":-0.1,"p_flip":0.04},{"iid":"LA055","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"LA055","pid":"P6","dlogp":-0.02,"p_flip":0.005},{"iid":"LA055","pid":"P7","dlogp":-0.06,"p_flip":0.1},
+{"iid":"LA056","pid":"P0","dlogp":-0.08,"p_flip":0.01},{"iid":"LA056","pid":"P1","dlogp":-0.12,"p_flip":0.04},{"iid":"LA056","pid":"P2","dlogp":-0.1,"p_flip":0.04},{"iid":"LA056","pid":"P3","dlogp":-0.12,"p_flip":0.05},{"iid":"LA056","pid":"P4","dlogp":-0.12,"p_flip":0.05},{"iid":"LA056","pid":"P5","dlogp":-0.05,"p_flip":0.01},{"iid":"LA056","pid":"P6","dlogp":-0.03,"p_flip":0.005},{"iid":"LA056","pid":"P7","dlogp":-0.08,"p_flip":0.12},
+{"iid":"LA057","pid":"P0","dlogp":-3.0,"p_flip":0.6},{"iid":"LA057","pid":"P1","dlogp":-3.0,"p_flip":0.7},{"iid":"LA057","pid":"P2","dlogp":-2.5,"p_flip":0.6},{"iid":"LA057","pid":"P3","dlogp":-3.0,"p_flip":0.7},{"iid":"LA057","pid":"P4","dlogp":-2.5,"p_flip":0.65},{"iid":"LA057","pid":"P5","dlogp":-3.0,"p_flip":0.55},{"iid":"LA057","pid":"P6","dlogp":-3.0,"p_flip":0.45},{"iid":"LA057","pid":"P7","dlogp":-1.5,"p_flip":0.7},
+{"iid":"LA058","pid":"P0","dlogp":-0.35,"p_flip":0.03},{"iid":"LA058","pid":"P1","dlogp":-0.4,"p_flip":0.12},{"iid":"LA058","pid":"P2","dlogp":-0.35,"p_flip":0.1},{"iid":"LA058","pid":"P3","dlogp":-0.45,"p_flip":0.18},{"iid":"LA058","pid":"P4","dlogp":-0.45,"p_flip":0.15},{"iid":"LA058","pid":"P5","dlogp":-0.2,"p_flip":0.02},{"iid":"LA058","pid":"P6","dlogp":-0.08,"p_flip":0.01},{"iid":"LA058","pid":"P7","dlogp":-0.3,"p_flip":0.3},
+{"iid":"LA059","pid":"P0","dlogp":-0.1,"p_flip":0.01},{"iid":"LA059","pid":"P1","dlogp":-0.14,"p_flip":0.04},{"iid":"LA059","pid":"P2","dlogp":-0.12,"p_flip":0.04},{"iid":"LA059","pid":"P3","dlogp":-0.14,"p_flip":0.05},{"iid":"LA059","pid":"P4","dlogp":-0.15,"p_flip":0.05},{"iid":"LA059","pid":"P5","dlogp":-0.06,"p_flip":0.01},{"iid":"LA059","pid":"P6","dlogp":-0.03,"p_flip":0.005},{"iid":"LA059","pid":"P7","dlogp":-0.1,"p_flip":0.12}
+],
+"notes": {
+"LA048":"Layer 7 is full attention, likely key for in-context copying/induction; skipping it should hurt the pattern prompts (P0, P1, P3) most.",
+"LA049":"Skipping an early-middle MLP should have a moderate, spread-out effect.",
+"LA050":"Skipping one late DeltaNet mixer is a small, redundant change.",
+"LA051":"Skipping one mid-late DeltaNet mixer is a small change.",
+"LA052":"Skipping one mid-late DeltaNet mixer is a small change.",
+"LA053":"A late MLP often writes output and factual token directions, so a moderate drop is expected.",
+"LA054":"Skipping a whole early block (mixer plus MLP) is a moderate disruption.",
+"LA055":"Skipping one mid DeltaNet mixer is a small change.",
+"LA056":"Skipping the DeltaNet mixer right after the first attention layer is small to modest.",
+"LA057":"The layer 0 MLP often acts as part of the token embedding in small models; removing it is likely catastrophic.",
+"LA058":"Skipping a whole late block removes direct writes to the logits, a moderate effect.",
+"LA059":"Skipping an early DeltaNet mixer that handles local context is a small to modest change."
+}}
+```

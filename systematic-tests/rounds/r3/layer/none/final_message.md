@@ -1,0 +1,37 @@
+I estimated every value from general knowledge of how transformers behave. I had no weights and couldn't run any code, so none of these numbers comes from a measurement.
+
+- **How bad each edit is:** Removing a whole early block (layer 1, then layer 2) should hurt most. Removing a whole middle block (layers 8, 9, 16) should hurt moderately. Removing just one mixer or MLP sublayer should hurt the least.
+- **How much each prompt moves:** I scaled each edit's effect by how confident the unedited model is on that prompt.
+- **Chance the top token changes:** This depends mostly on the gap between the target and the runner-up. P7 (' are' at 0.27) and P4 (' Paris' at 0.47) are the most likely to change. P5 and P6 are the least likely, since their targets are at 0.93 and 0.99.
+- **Small adjustments:** I added slightly larger drops for the full-attention layers 11, 15 and 19 on the three pattern-copying prompts (P0, P1, P3). I did the same for the layer 13 MLP on the two fact-recall prompts (P4, P5).
+
+```json
+{"predictions": [
+{"iid":"LA036","pid":"P0","dlogp":-0.28,"p_flip":0.05},{"iid":"LA036","pid":"P1","dlogp":-0.35,"p_flip":0.09},{"iid":"LA036","pid":"P2","dlogp":-0.24,"p_flip":0.1},{"iid":"LA036","pid":"P3","dlogp":-0.35,"p_flip":0.11},{"iid":"LA036","pid":"P4","dlogp":-0.3,"p_flip":0.2},{"iid":"LA036","pid":"P5","dlogp":-0.18,"p_flip":0.03},{"iid":"LA036","pid":"P6","dlogp":-0.12,"p_flip":0.02},{"iid":"LA036","pid":"P7","dlogp":-0.21,"p_flip":0.35},
+{"iid":"LA037","pid":"P0","dlogp":-0.96,"p_flip":0.3},{"iid":"LA037","pid":"P1","dlogp":-1.2,"p_flip":0.4},{"iid":"LA037","pid":"P2","dlogp":-0.96,"p_flip":0.4},{"iid":"LA037","pid":"P3","dlogp":-1.2,"p_flip":0.45},{"iid":"LA037","pid":"P4","dlogp":-1.2,"p_flip":0.55},{"iid":"LA037","pid":"P5","dlogp":-0.72,"p_flip":0.2},{"iid":"LA037","pid":"P6","dlogp":-0.48,"p_flip":0.1},{"iid":"LA037","pid":"P7","dlogp":-0.84,"p_flip":0.6},
+{"iid":"LA038","pid":"P0","dlogp":-0.4,"p_flip":0.08},{"iid":"LA038","pid":"P1","dlogp":-0.5,"p_flip":0.12},{"iid":"LA038","pid":"P2","dlogp":-0.4,"p_flip":0.15},{"iid":"LA038","pid":"P3","dlogp":-0.5,"p_flip":0.15},{"iid":"LA038","pid":"P4","dlogp":-0.5,"p_flip":0.3},{"iid":"LA038","pid":"P5","dlogp":-0.3,"p_flip":0.05},{"iid":"LA038","pid":"P6","dlogp":-0.2,"p_flip":0.03},{"iid":"LA038","pid":"P7","dlogp":-0.35,"p_flip":0.45},
+{"iid":"LA039","pid":"P0","dlogp":-0.45,"p_flip":0.09},{"iid":"LA039","pid":"P1","dlogp":-0.55,"p_flip":0.13},{"iid":"LA039","pid":"P2","dlogp":-0.4,"p_flip":0.15},{"iid":"LA039","pid":"P3","dlogp":-0.55,"p_flip":0.16},{"iid":"LA039","pid":"P4","dlogp":-0.5,"p_flip":0.3},{"iid":"LA039","pid":"P5","dlogp":-0.3,"p_flip":0.05},{"iid":"LA039","pid":"P6","dlogp":-0.2,"p_flip":0.03},{"iid":"LA039","pid":"P7","dlogp":-0.35,"p_flip":0.45},
+{"iid":"LA040","pid":"P0","dlogp":-0.2,"p_flip":0.04},{"iid":"LA040","pid":"P1","dlogp":-0.25,"p_flip":0.07},{"iid":"LA040","pid":"P2","dlogp":-0.2,"p_flip":0.08},{"iid":"LA040","pid":"P3","dlogp":-0.25,"p_flip":0.08},{"iid":"LA040","pid":"P4","dlogp":-0.25,"p_flip":0.18},{"iid":"LA040","pid":"P5","dlogp":-0.15,"p_flip":0.03},{"iid":"LA040","pid":"P6","dlogp":-0.1,"p_flip":0.02},{"iid":"LA040","pid":"P7","dlogp":-0.18,"p_flip":0.33},
+{"iid":"LA041","pid":"P0","dlogp":-0.28,"p_flip":0.05},{"iid":"LA041","pid":"P1","dlogp":-0.35,"p_flip":0.09},{"iid":"LA041","pid":"P2","dlogp":-0.28,"p_flip":0.1},{"iid":"LA041","pid":"P3","dlogp":-0.35,"p_flip":0.1},{"iid":"LA041","pid":"P4","dlogp":-0.35,"p_flip":0.22},{"iid":"LA041","pid":"P5","dlogp":-0.21,"p_flip":0.03},{"iid":"LA041","pid":"P6","dlogp":-0.14,"p_flip":0.02},{"iid":"LA041","pid":"P7","dlogp":-0.25,"p_flip":0.36},
+{"iid":"LA042","pid":"P0","dlogp":-0.16,"p_flip":0.03},{"iid":"LA042","pid":"P1","dlogp":-0.2,"p_flip":0.06},{"iid":"LA042","pid":"P2","dlogp":-0.16,"p_flip":0.08},{"iid":"LA042","pid":"P3","dlogp":-0.2,"p_flip":0.07},{"iid":"LA042","pid":"P4","dlogp":-0.2,"p_flip":0.17},{"iid":"LA042","pid":"P5","dlogp":-0.12,"p_flip":0.02},{"iid":"LA042","pid":"P6","dlogp":-0.08,"p_flip":0.01},{"iid":"LA042","pid":"P7","dlogp":-0.14,"p_flip":0.32},
+{"iid":"LA043","pid":"P0","dlogp":-0.35,"p_flip":0.06},{"iid":"LA043","pid":"P1","dlogp":-0.4,"p_flip":0.1},{"iid":"LA043","pid":"P2","dlogp":-0.28,"p_flip":0.1},{"iid":"LA043","pid":"P3","dlogp":-0.4,"p_flip":0.12},{"iid":"LA043","pid":"P4","dlogp":-0.35,"p_flip":0.22},{"iid":"LA043","pid":"P5","dlogp":-0.21,"p_flip":0.03},{"iid":"LA043","pid":"P6","dlogp":-0.14,"p_flip":0.02},{"iid":"LA043","pid":"P7","dlogp":-0.25,"p_flip":0.36},
+{"iid":"LA044","pid":"P0","dlogp":-0.4,"p_flip":0.08},{"iid":"LA044","pid":"P1","dlogp":-0.5,"p_flip":0.12},{"iid":"LA044","pid":"P2","dlogp":-0.4,"p_flip":0.15},{"iid":"LA044","pid":"P3","dlogp":-0.5,"p_flip":0.15},{"iid":"LA044","pid":"P4","dlogp":-0.5,"p_flip":0.3},{"iid":"LA044","pid":"P5","dlogp":-0.3,"p_flip":0.05},{"iid":"LA044","pid":"P6","dlogp":-0.2,"p_flip":0.03},{"iid":"LA044","pid":"P7","dlogp":-0.35,"p_flip":0.45},
+{"iid":"LA045","pid":"P0","dlogp":-0.24,"p_flip":0.05},{"iid":"LA045","pid":"P1","dlogp":-0.3,"p_flip":0.08},{"iid":"LA045","pid":"P2","dlogp":-0.24,"p_flip":0.1},{"iid":"LA045","pid":"P3","dlogp":-0.3,"p_flip":0.09},{"iid":"LA045","pid":"P4","dlogp":-0.35,"p_flip":0.22},{"iid":"LA045","pid":"P5","dlogp":-0.22,"p_flip":0.03},{"iid":"LA045","pid":"P6","dlogp":-0.12,"p_flip":0.02},{"iid":"LA045","pid":"P7","dlogp":-0.21,"p_flip":0.35},
+{"iid":"LA046","pid":"P0","dlogp":-1.44,"p_flip":0.4},{"iid":"LA046","pid":"P1","dlogp":-1.8,"p_flip":0.5},{"iid":"LA046","pid":"P2","dlogp":-1.44,"p_flip":0.5},{"iid":"LA046","pid":"P3","dlogp":-1.8,"p_flip":0.55},{"iid":"LA046","pid":"P4","dlogp":-1.8,"p_flip":0.65},{"iid":"LA046","pid":"P5","dlogp":-1.08,"p_flip":0.3},{"iid":"LA046","pid":"P6","dlogp":-0.72,"p_flip":0.15},{"iid":"LA046","pid":"P7","dlogp":-1.26,"p_flip":0.65},
+{"iid":"LA047","pid":"P0","dlogp":-0.35,"p_flip":0.06},{"iid":"LA047","pid":"P1","dlogp":-0.4,"p_flip":0.1},{"iid":"LA047","pid":"P2","dlogp":-0.28,"p_flip":0.1},{"iid":"LA047","pid":"P3","dlogp":-0.4,"p_flip":0.12},{"iid":"LA047","pid":"P4","dlogp":-0.35,"p_flip":0.22},{"iid":"LA047","pid":"P5","dlogp":-0.21,"p_flip":0.03},{"iid":"LA047","pid":"P6","dlogp":-0.14,"p_flip":0.02},{"iid":"LA047","pid":"P7","dlogp":-0.25,"p_flip":0.36}
+],
+"notes": {
+"LA036":"Prior: removing late full attention (layer 19) gives a moderate drop, a bit larger on the in-context pattern prompts.",
+"LA037":"Prior: removing a whole early block (layer 2) breaks the features built early on, so a large drop.",
+"LA038":"Prior: removing a whole middle block (layer 9) gives a moderate drop.",
+"LA039":"Prior: removing a whole middle block (layer 8) gives a moderate drop.",
+"LA040":"Prior: one mid-layer DeltaNet mixer is largely redundant, so a small drop.",
+"LA041":"Prior: the first full-attention layer (3) gives a small-to-moderate drop.",
+"LA042":"Prior: one early DeltaNet mixer (layer 5) gives a small drop.",
+"LA043":"Prior: mid-late full attention (layer 15) may help copy the pattern, so a moderate drop on P0, P1 and P3.",
+"LA044":"Prior: removing a whole mid-late block (layer 16) gives a moderate drop.",
+"LA045":"Prior: one mid-layer MLP (13) gives a small drop, slightly larger on the fact-recall prompts.",
+"LA046":"Prior: removing a whole very early block (layer 1) is the most damaging edit here.",
+"LA047":"Prior: middle full attention (layer 11) gives a moderate drop on the in-context prompts."
+}}
+```

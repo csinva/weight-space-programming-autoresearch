@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **XML00**: layer 0: multiply the whole MLP output (down_proj) by 3
+- **XML01**: layer 9: multiply the whole MLP output (down_proj) by 3
+- **XML02**: layer 5: multiply the whole MLP output (down_proj) by 3
+- **XML03**: layer 17: multiply the whole MLP output (down_proj) by 3
+- **XML04**: layer 1: multiply the whole MLP output (down_proj) by 3
+- **XML05**: layer 18: multiply the whole MLP output (down_proj) by 3
+- **XML06**: layer 20: multiply the whole MLP output (down_proj) by 3
+- **XML07**: layer 22: multiply the whole MLP output (down_proj) by 3
+- **XML08**: layer 6: multiply the whole MLP output (down_proj) by 3
+- **XML09**: layer 16: multiply the whole MLP output (down_proj) by 3
+- **XML10**: layer 13: multiply the whole MLP output (down_proj) by 3
+- **XML11**: layer 10: multiply the whole MLP output (down_proj) by 3

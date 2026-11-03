@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO24|P0": {
+   "dlogp": -9.495,
+   "p_flip": 0.98
+  },
+  "TO24|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "TO24|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P4": {
+   "dlogp": -2.122,
+   "p_flip": 0.95
+  },
+  "TO24|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.7
+  },
+  "TO25|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "TO25|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.03
+  },
+  "TO26|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P2": {
+   "dlogp": -15.0,
+   "p_flip": 0.97
+  },
+  "TO26|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P7": {
+   "dlogp": -9.0,
+   "p_flip": 0.96
+  },
+  "TO27|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P1": {
+   "dlogp": -2.0,
+   "p_flip": 0.55
+  },
+  "TO27|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "TO27|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.5
+  },
+  "TO27|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "TO27|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P7": {
+   "dlogp": 0.05,
+   "p_flip": 0.03
+  },
+  "TO28|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P5": {
+   "dlogp": -19.322,
+   "p_flip": 0.99
+  },
+  "TO28|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P5": {
+   "dlogp": -12.0,
+   "p_flip": 0.97
+  },
+  "TO29|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P7": {
+   "dlogp": -13.0,
+   "p_flip": 0.97
+  },
+  "TO30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P1": {
+   "dlogp": -2.16,
+   "p_flip": 0.95
+  },
+  "TO30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P5": {
+   "dlogp": -12.0,
+   "p_flip": 0.95
+  },
+  "TO30|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "TO30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P0": {
+   "dlogp": -0.65,
+   "p_flip": 0.9
+  },
+  "TO31|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P2": {
+   "dlogp": -18.0,
+   "p_flip": 0.98
+  },
+  "TO31|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P4": {
+   "dlogp": -0.384,
+   "p_flip": 0.88
+  },
+  "TO31|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P0": {
+   "dlogp": -16.436,
+   "p_flip": 0.99
+  },
+  "TO32|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P4": {
+   "dlogp": -15.147,
+   "p_flip": 0.99
+  },
+  "TO32|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.15
+  },
+  "TO33|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "TO33|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P6": {
+   "dlogp": -2.0,
+   "p_flip": 0.5
+  },
+  "TO34|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P7": {
+   "dlogp": -17.405,
+   "p_flip": 0.99
+  }
+ },
+ "notes": {
+  "TO24": "Same edit as TO01 (Paris L2=0.5102 overwritten by ' **' row L2=0.7985), so I copied TO01's measured -9.495 for P0 and -2.122 for P4.",
+  "TO25": "' of' row (L2=0.6570) zeroed: it is the last input token of P4, which should disrupt that prediction a lot, and a middle token in P5, which should matter less.",
+  "TO26": "Swaps ' +' (L2=0.6765) with ' are': on the output side this is like TO03 for P2 (big drop) and like TO05 for P7 (-9.08).",
+  "TO27": "',' row (L2=0.8513, max +0.1289) zeroed: it is the last input token in P1 and P3, plus one comma in P2; removing ',' as an output slightly helps P7.",
+  "TO28": "Same edit as TO22 (oxygen row L2=0.5484 zeroed), so I copied TO22's P5 value of -19.322.",
+  "TO29": "Swaps oxygen (L2=0.5484) and ' are': both targets get the other token's output row, by analogy with TO12 and TO20 (about -12 to -14).",
+  "TO30": "Swaps ' five' (L2=0.5835) and ' and': P1 drops by about log(0.089/0.774) = -2.16, as in TO02's -2.636. P5 ends with ' and' as input, so this mirrors TO08's -13.2.",
+  "TO31": "Copying Paris onto ' +' (L2=0.6765) creates an exact tie that the lower token id wins (as in TO20): P0 gets log(1/1.916) = -0.65 and P4 gets -0.384, and ' +' itself in P2 collapses as in TO10.",
+  "TO32": "Same edit as TO07 (Paris row L2=0.5102 zeroed), so I copied TO07's measured -16.436 for P0 and -15.147 for P4.",
+  "TO33": "' is' row (L2=0.6115) zeroed: it is a mid-prompt function word in P4 and P5, so I expect only small drops.",
+  "TO34": "' William' row (L2=0.4328) zeroed: it is P6's last input token, but the context still strongly implies Shakespeare, so I predict a moderate drop with uncertain flip.",
+  "TO35": "Same edit as TO16 (' are' row L2=0.5785 zeroed), so I copied TO16's P7 value of -17.405."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE00|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "NE00|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE00|P2": {
+   "dlogp": -0.024,
+   "p_flip": 0.01
+  },
+  "NE00|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE00|P4": {
+   "dlogp": -0.036,
+   "p_flip": 0.02
+  },
+  "NE00|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE00|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "NE00|P7": {
+   "dlogp": -0.039,
+   "p_flip": 0.03
+  },
+  "NE01|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE01|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "NE01|P2": {
+   "dlogp": -0.048,
+   "p_flip": 0.015
+  },
+  "NE01|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "NE01|P4": {
+   "dlogp": -0.072,
+   "p_flip": 0.03
+  },
+  "NE01|P5": {
+   "dlogp": -0.024,
+   "p_flip": 0.005
+  },
+  "NE01|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.002
+  },
+  "NE01|P7": {
+   "dlogp": -0.078,
+   "p_flip": 0.04
+  },
+  "NE02|P0": {
+   "dlogp": -0.025,
+   "p_flip": 0.01
+  },
+  "NE02|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE02|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "NE02|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE02|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.025
+  },
+  "NE02|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "NE02|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.002
+  },
+  "NE02|P7": {
+   "dlogp": -0.065,
+   "p_flip": 0.035
+  },
+  "NE03|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE03|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE03|P2": {
+   "dlogp": -0.016,
+   "p_flip": 0.01
+  },
+  "NE03|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE03|P4": {
+   "dlogp": -0.024,
+   "p_flip": 0.015
+  },
+  "NE03|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.005
+  },
+  "NE03|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE03|P7": {
+   "dlogp": -0.026,
+   "p_flip": 0.025
+  },
+  "NE04|P0": {
+   "dlogp": -0.025,
+   "p_flip": 0.01
+  },
+  "NE04|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE04|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "NE04|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE04|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.025
+  },
+  "NE04|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "NE04|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.002
+  },
+  "NE04|P7": {
+   "dlogp": -0.065,
+   "p_flip": 0.035
+  },
+  "NE05|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "NE05|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE05|P2": {
+   "dlogp": -0.024,
+   "p_flip": 0.01
+  },
+  "NE05|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE05|P4": {
+   "dlogp": -0.036,
+   "p_flip": 0.02
+  },
+  "NE05|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE05|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "NE05|P7": {
+   "dlogp": -0.039,
+   "p_flip": 0.03
+  },
+  "NE06|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE06|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "NE06|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "NE06|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "NE06|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "NE06|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.008
+  },
+  "NE06|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "NE06|P7": {
+   "dlogp": -0.13,
+   "p_flip": 0.06
+  },
+  "NE07|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "NE07|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "NE07|P2": {
+   "dlogp": -0.096,
+   "p_flip": 0.02
+  },
+  "NE07|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "NE07|P4": {
+   "dlogp": -0.144,
+   "p_flip": 0.04
+  },
+  "NE07|P5": {
+   "dlogp": -0.048,
+   "p_flip": 0.008
+  },
+  "NE07|P6": {
+   "dlogp": -0.012,
+   "p_flip": 0.003
+  },
+  "NE07|P7": {
+   "dlogp": -0.156,
+   "p_flip": 0.06
+  },
+  "NE08|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE08|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "NE08|P2": {
+   "dlogp": -0.032,
+   "p_flip": 0.01
+  },
+  "NE08|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "NE08|P4": {
+   "dlogp": -0.048,
+   "p_flip": 0.02
+  },
+  "NE08|P5": {
+   "dlogp": -0.016,
+   "p_flip": 0.005
+  },
+  "NE08|P6": {
+   "dlogp": -0.004,
+   "p_flip": 0.002
+  },
+  "NE08|P7": {
+   "dlogp": -0.052,
+   "p_flip": 0.03
+  },
+  "NE09|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE09|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "NE09|P2": {
+   "dlogp": -0.048,
+   "p_flip": 0.015
+  },
+  "NE09|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "NE09|P4": {
+   "dlogp": -0.072,
+   "p_flip": 0.03
+  },
+  "NE09|P5": {
+   "dlogp": -0.024,
+   "p_flip": 0.005
+  },
+  "NE09|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.002
+  },
+  "NE09|P7": {
+   "dlogp": -0.078,
+   "p_flip": 0.04
+  },
+  "NE10|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE10|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE10|P2": {
+   "dlogp": -0.016,
+   "p_flip": 0.01
+  },
+  "NE10|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE10|P4": {
+   "dlogp": -0.024,
+   "p_flip": 0.015
+  },
+  "NE10|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.005
+  },
+  "NE10|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE10|P7": {
+   "dlogp": -0.026,
+   "p_flip": 0.025
+  },
+  "NE11|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "NE11|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE11|P2": {
+   "dlogp": -0.024,
+   "p_flip": 0.01
+  },
+  "NE11|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE11|P4": {
+   "dlogp": -0.036,
+   "p_flip": 0.02
+  },
+  "NE11|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE11|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "NE11|P7": {
+   "dlogp": -0.039,
+   "p_flip": 0.03
+  }
+ },
+ "notes": {
+  "NE00": "Layer-19 neuron zeroed; down column L2=0.4217 is near the layer max (0.4265), but removing one late neuron should only cause a small loss.",
+  "NE01": "Layer-11 down column L2=0.2913, slightly above the median (0.2556); scaling it 5x is a mid-layer push with a modest effect.",
+  "NE02": "Layer-1 down column L2=0.2734 with max entry +0.0309; amplifying it 5x early should mostly wash out before the output.",
+  "NE03": "Layer-21 neuron zeroed; down column L2=0.3226, close to the median (0.2996), so I expect a very small effect.",
+  "NE04": "Layer-10 down column L2=0.2561, at the median (0.2520), with max +0.0291; scaling 5x should give a small, spread-out change.",
+  "NE05": "Layer-20 neuron zeroed; down column L2=0.3595, above the median (0.2969), so a small direct effect on the logits.",
+  "NE06": "Layer-20 down column L2=0.2956 scaled 5x; a late-layer amplification acts more directly on the logits, so I predict it among the larger effects.",
+  "NE07": "Layer-0 down column has an outlier of +0.1719 at dim 0 (std 0.00924); scaling 5x strongly hits a probable massive-activation dimension, so this is my largest predicted effect.",
+  "NE08": "Layer-2 down column L2=0.2492, below the median (0.2655), max +0.0251; scaling 5x should give a small effect.",
+  "NE09": "Layer-22 neuron zeroed with the largest down column in its layer (L2=0.4528, entries \u00b10.0771), so a moderate late-layer effect.",
+  "NE10": "Layer-20 neuron zeroed; down column L2=0.2763, below the median (0.2969), so a minimal effect.",
+  "NE11": "Layer-18 neuron zeroed; down column L2=0.3138 (median 0.2775) and its gate row L2=0.5547 is large, but I still expect a small effect."
+ }
+}

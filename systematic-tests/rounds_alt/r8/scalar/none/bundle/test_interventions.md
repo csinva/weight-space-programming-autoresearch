@@ -1,0 +1,17 @@
+# Edits to predict (each applied alone)
+- **SC116**: `model.layers.22.mlp.gate_proj.weight`[1334, 425] (largest |w| in matrix): set to 0
+- **SC117**: `model.layers.10.mlp.gate_proj.weight`[1415, 24] (largest |w| in matrix): set to 0
+- **SC118**: `model.layers.5.mlp.gate_proj.weight`[151, 434] (largest |w| in matrix): set to 0
+- **SC119**: `model.embed_tokens.weight`[40014, 979] (embedding entry of a prompt's top-1 token): add +4
+- **SC120**: `model.layers.5.mlp.gate_proj.weight`[680, 155] (random entry): set to 0
+- **SC121**: `model.embed_tokens.weight`[513, 263] (embedding entry of a prompt's top-1 token): add -4
+- **SC122**: `model.layers.16.mlp.down_proj.weight`[201, 2721] (random down_proj entry): add +4
+- **SC123**: RMSNorm `model.layers.3.input_layernorm.weight` dimension 78: multiply its gain (1+w) by 10
+- **SC124**: `model.embed_tokens.weight`[40014, 927] (embedding entry of a prompt's top-1 token): add -4
+- **SC125**: `model.layers.16.mlp.down_proj.weight`[221, 1980] (random down_proj entry): add -4
+- **SC126**: RMSNorm `model.layers.2.post_attention_layernorm.weight` dimension 816: set its gain (1+w) to 0 (w := -1)
+- **SC127**: `model.embed_tokens.weight`[4097, 232] (embedding entry of a prompt's top-1 token): add -4
+- **SC128**: RMSNorm `model.layers.17.post_attention_layernorm.weight` dimension 495: set its gain (1+w) to 0 (w := -1)
+- **SC129**: `model.layers.15.mlp.down_proj.weight`[542, 582] (random down_proj entry): add +4
+- **SC130**: `model.layers.3.mlp.gate_proj.weight`[1307, 24] (largest |w| in matrix): set to 0
+- **SC131**: RMSNorm `model.layers.7.post_attention_layernorm.weight` dimension 41: set its gain (1+w) to 0 (w := -1)

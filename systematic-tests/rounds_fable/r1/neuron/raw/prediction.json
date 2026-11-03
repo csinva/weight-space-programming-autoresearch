@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE12|P0": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE12|P1": {
+   "dlogp": 0.003,
+   "p_flip": 0.012
+  },
+  "NE12|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.012
+  },
+  "NE12|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.015
+  },
+  "NE12|P4": {
+   "dlogp": 0.015,
+   "p_flip": 0.025
+  },
+  "NE12|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE12|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE12|P7": {
+   "dlogp": -0.012,
+   "p_flip": 0.04
+  },
+  "NE13|P0": {
+   "dlogp": 0.004,
+   "p_flip": 0.005
+  },
+  "NE13|P1": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE13|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE13|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.012
+  },
+  "NE13|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.02
+  },
+  "NE13|P5": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE13|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE13|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.03
+  },
+  "NE14|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE14|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE14|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE14|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE14|P4": {
+   "dlogp": -0.004,
+   "p_flip": 0.015
+  },
+  "NE14|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE14|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "NE14|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.025
+  },
+  "NE15|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE15|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE15|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.008
+  },
+  "NE15|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE15|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.015
+  },
+  "NE15|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE15|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "NE15|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.02
+  },
+  "NE16|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE16|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE16|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE16|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.012
+  },
+  "NE16|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "NE16|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE16|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE16|P7": {
+   "dlogp": -0.007,
+   "p_flip": 0.03
+  },
+  "NE17|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE17|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE17|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.008
+  },
+  "NE17|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE17|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "NE17|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE17|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "NE17|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.025
+  },
+  "NE18|P0": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE18|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE18|P2": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE18|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.012
+  },
+  "NE18|P4": {
+   "dlogp": 0.002,
+   "p_flip": 0.02
+  },
+  "NE18|P5": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE18|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE18|P7": {
+   "dlogp": 0.005,
+   "p_flip": 0.03
+  },
+  "NE19|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE19|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE19|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE19|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.012
+  },
+  "NE19|P4": {
+   "dlogp": -0.008,
+   "p_flip": 0.025
+  },
+  "NE19|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE19|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE19|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.04
+  },
+  "NE20|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE20|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE20|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.008
+  },
+  "NE20|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE20|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "NE20|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE20|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "NE20|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.025
+  },
+  "NE21|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.005
+  },
+  "NE21|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE21|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE21|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.012
+  },
+  "NE21|P4": {
+   "dlogp": 0.004,
+   "p_flip": 0.02
+  },
+  "NE21|P5": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE21|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE21|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.03
+  },
+  "NE22|P0": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE22|P1": {
+   "dlogp": 0.003,
+   "p_flip": 0.012
+  },
+  "NE22|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.012
+  },
+  "NE22|P3": {
+   "dlogp": 0.005,
+   "p_flip": 0.015
+  },
+  "NE22|P4": {
+   "dlogp": 0.015,
+   "p_flip": 0.025
+  },
+  "NE22|P5": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE22|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "NE22|P7": {
+   "dlogp": -0.008,
+   "p_flip": 0.04
+  },
+  "NE23|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE23|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "NE23|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.008
+  },
+  "NE23|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE23|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.015
+  },
+  "NE23|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "NE23|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "NE23|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.02
+  }
+ },
+ "notes": {
+  "NE12": "Layer-1 x5 edit with down column L2 0.2859 (near layer median 0.2763) and gate std 0.01335; feedback early-layer x5 edits NE02/NE07/NE08 reached +0.025 on P3/P4 and -0.031 on P7, so predicted P4 positive and P7 negative at ~0.01 scale.",
+  "NE13": "Layer-20 x5 edit with above-median down L2 0.3878 and the largest gate std (0.02018, max +0.0684); feedback late-layer x5 edit NE06 in layer 20 moved targets by at most +0.005, so small values.",
+  "NE14": "Layer-2 zero edit with down L2 0.2718 near layer median 0.2655 and small up std 0.00813; feedback zero edits were almost all under 0.005 in magnitude.",
+  "NE15": "Layer-10 zero edit with down L2 0.2731 (median 0.2520) and the smallest gate std here (0.00842); expected negligible like feedback zero edits.",
+  "NE16": "Layer-3 zero edit whose gate row L2 0.8971 (std 0.02805, min -0.0869) is far above the other neurons, suggesting a strongly gated early feature; down L2 0.3102 is near the layer max 0.3228, so slightly larger negative effects than other zero edits.",
+  "NE17": "Layer-12 zero edit with down L2 0.3632 near the layer max 0.3873 but ordinary gate std 0.01028; feedback mid/late zero edits were negligible except one P7 outlier.",
+  "NE18": "Layer-10 x5 edit with down L2 0.3522 and up max +0.0454; feedback NE04 (layer-10 x5) moved P7 by only +0.006, so small values with P7 slightly positive.",
+  "NE19": "Layer-15 zero edit whose down column L2 0.4938 is the layer maximum and up row L2 is 0.5084 (max +0.0796), making it the zero edit most likely to carry a sizable activation; predicted the largest negative zero-edit effects on P4/P7.",
+  "NE20": "Layer-11 zero edit with down L2 0.3638 (median 0.2556) and up min -0.0413; feedback NE01 in layer 11 was negligible, so near-zero predictions.",
+  "NE21": "Layer-20 x5 edit with down L2 0.3723 and up max +0.0610; same layer as feedback NE06 which moved targets by at most 0.005, so tiny values.",
+  "NE22": "Layer-2 x5 edit with down L2 0.3045 (median 0.2655) but a weak gate row (std 0.00740, L2 0.2366); feedback layer-2 x5 edit NE08 gave P4 +0.022, so predicted P4 positive and P7 slightly negative.",
+  "NE23": "Layer-10 zero edit with down L2 0.2941 (max +0.0400) and gate std 0.00886; expected negligible like other feedback zero edits."
+ }
+}

@@ -1,0 +1,40 @@
+Predictions for all 96 (edit, prompt) pairs are in the JSON block below. I couldn't run any code, so every value comes from reasoning about the weight files. I read all 12 edit files.
+
+**How the edits act.** The input and output embeddings are tied, so an edit mostly changes the target's logit at the output. Only TO08 also changes what the model reads: ' and' appears in P5 and P6.
+
+**The four kinds of case:**
+- **Target row overwritten with a token already in the top-10:** these were worked out from the listed baseline probabilities. Examples are ' five'↔' or' on P1 and ' Thursday'→' or' on P3.
+- **Target row zeroed or replaced by an unrelated token:** I estimated a large drop of about 9 to 13 nats. This is the least certain part. I don't know the model's actual logit scale, so I guessed a typical gap between the top logit and an unrelated token's logit.
+- **Ties between two identical rows:** I assumed the tie goes to the lower token id, which is what PyTorch's `argmax` does. That predicts TO04/P6 and TO10/P1 flip but TO05/P2 doesn't. If the evaluation breaks ties differently, those three `p_flip` values would be wrong.
+- **Prompts that never touch the edited tokens:** about 0, with a low `p_flip`.
+
+```json
+{"predictions": [
+{"iid":"TO00","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P3","dlogp":-12.0,"p_flip":0.99},{"iid":"TO00","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO00","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO01","pid":"P0","dlogp":-9.0,"p_flip":0.99},{"iid":"TO01","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO01","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO01","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO01","pid":"P4","dlogp":-2.1,"p_flip":0.95},{"iid":"TO01","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO01","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO01","pid":"P7","dlogp":-0.01,"p_flip":0.02},
+{"iid":"TO02","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO02","pid":"P1","dlogp":-2.64,"p_flip":0.99},{"iid":"TO02","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO02","pid":"P3","dlogp":0.02,"p_flip":0.02},{"iid":"TO02","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO02","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO02","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO02","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO03","pid":"P0","dlogp":-11.0,"p_flip":0.99},{"iid":"TO03","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO03","pid":"P2","dlogp":-11.0,"p_flip":0.99},{"iid":"TO03","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO03","pid":"P4","dlogp":-9.0,"p_flip":0.98},{"iid":"TO03","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO03","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO03","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO04","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO04","pid":"P6","dlogp":-2.0,"p_flip":0.8},{"iid":"TO04","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO05","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P2","dlogp":-0.6,"p_flip":0.1},{"iid":"TO05","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO05","pid":"P7","dlogp":-7.0,"p_flip":0.98},
+{"iid":"TO06","pid":"P0","dlogp":-11.0,"p_flip":0.99},{"iid":"TO06","pid":"P1","dlogp":-11.0,"p_flip":0.99},{"iid":"TO06","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO06","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO06","pid":"P4","dlogp":-9.0,"p_flip":0.98},{"iid":"TO06","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO06","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO06","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO07","pid":"P0","dlogp":-12.0,"p_flip":0.99},{"iid":"TO07","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO07","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO07","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO07","pid":"P4","dlogp":-10.0,"p_flip":0.98},{"iid":"TO07","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO07","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO07","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO08","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO08","pid":"P1","dlogp":0.05,"p_flip":0.02},{"iid":"TO08","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO08","pid":"P3","dlogp":-1.52,"p_flip":0.98},{"iid":"TO08","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO08","pid":"P5","dlogp":-4.0,"p_flip":0.8},{"iid":"TO08","pid":"P6","dlogp":-0.15,"p_flip":0.03},{"iid":"TO08","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO09","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO09","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"TO09","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO09","pid":"P3","dlogp":-2.45,"p_flip":0.97},{"iid":"TO09","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO09","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO09","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO09","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO10","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"TO10","pid":"P1","dlogp":-0.57,"p_flip":0.85},{"iid":"TO10","pid":"P2","dlogp":-11.0,"p_flip":0.99},{"iid":"TO10","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"TO10","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"TO10","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO10","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO10","pid":"P7","dlogp":0.0,"p_flip":0.01},
+{"iid":"TO11","pid":"P0","dlogp":-11.0,"p_flip":0.99},{"iid":"TO11","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"TO11","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"TO11","pid":"P3","dlogp":-11.0,"p_flip":0.99},{"iid":"TO11","pid":"P4","dlogp":-9.0,"p_flip":0.98},{"iid":"TO11","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"TO11","pid":"P6","dlogp":0.0,"p_flip":0.01},{"iid":"TO11","pid":"P7","dlogp":0.0,"p_flip":0.01}
+],
+"notes": {
+"TO00": "Zeroing the ' Thursday' row (L2=0.5711) sets its logit to 0, a huge drop only on P3; it is not in any input.",
+"TO01": "' Paris' (L2=0.5102) gets the larger ' **' row (L2=0.7985, max +0.0913); on P4 ' **' already has 0.032, so dlogp is about -2.1, while on P0 it falls to the tiny ' **' probability.",
+"TO02": "Swapping ' five' (L2=0.5835) and ' or' moves the target to the ' or' probability 0.055 on P1: log(0.055/0.774) = -2.64, and it flips.",
+"TO03": "' +' (L2=0.6765) and ' Paris' (L2=0.5102) swap, so each target in P0/P2/P4 gets an unrelated logit and the swapped id becomes top-1.",
+"TO04": "The ' Shakespeare' row (L2=0.4926) is replaced by ' Sh' (p=0.001); renormalized it is about 0.14, and on a tie argmax picks the lower id 1369, so it flips.",
+"TO05": "' are' (L2=0.5785) gets the ' +' logit: large drop on P7; on P2 the duplicate ' +' halves the target (-log 1.815), and the tie keeps id 478.",
+"TO06": "Swapping ' five' (max +0.0674) and ' Paris' gives unrelated logits on P0, P1 and P4.",
+"TO07": "Zeroing ' Paris' (std 0.01595) gives a logit of 0 on P0/P4; P4 is flatter, so a slightly smaller drop.",
+"TO08": "Swapping ' Thursday' (first value +0.0150) with ' and' gives P3 the ' and' probability 0.155 (-1.52); the ' and' input in P5/P6 now carries the Thursday embedding.",
+"TO09": "' Thursday' (min -0.0603) is copied from ' or': P3 target is about 0.019/0.313, dlogp -2.45; P1 loses a little mass to the duplicate.",
+"TO10": "' +' (first value +0.0070) gets the ' five' row: big drop on P2; on P1 the duplicate halves the target and the tie goes to the lower id 478, so it flips.",
+"TO11": "Swapping ' Thursday' (L2=0.5711) and ' Paris' (L2=0.5102) gives unrelated logits on P0, P3 and P4."
+}}
+```

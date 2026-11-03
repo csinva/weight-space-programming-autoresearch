@@ -1,0 +1,40 @@
+I've read all 12 test weight files and the 4 measured examples in `feedback.md`. These predictions are judgement calls, not calculations: I had no way to run code, and the weight files hold mostly norm gains and summary stats, which say little about how much a given prompt depends on a layer.
+
+**Basis for the estimates:**
+- **Measured examples:** all four earlier edits (layer 8 MLP, layer 14 whole block, layer 10 MLP, layer 16 mixer) changed the target by less than 0.2 nats, except P4 under the layer-16 mixer skip (-0.62). Middle layers look highly redundant, so the middle-layer test edits get small predictions.
+- **Prompt sensitivity:** P4 (target at 0.469) and P7 (target at 0.272) are the most fragile, so they get the largest drops and flip probabilities. P6 (0.994) and P5 (0.927) get the smallest.
+- **Layer position:**
+  - Skipping all of layer 0 (LA33) should be the most damaging edit, because the early layers process the raw token embeddings. I predict about -3 to -6 nats and very likely flips.
+  - Skipping only layer 0's token mixer (LA25) should also hurt clearly, about -0.6 to -1.5 nats.
+  - The last block, layer 23 (LA30), has the largest MLP input matrices of any layer (gate_proj 36.18, up_proj 21.25), so skipping it is predicted to cost about -0.5 to -1.2 nats.
+
+```json
+{"predictions": [
+{"iid":"LA24","pid":"P0","dlogp":-0.08,"p_flip":0.03},{"iid":"LA24","pid":"P1","dlogp":-0.06,"p_flip":0.03},{"iid":"LA24","pid":"P2","dlogp":-0.03,"p_flip":0.02},{"iid":"LA24","pid":"P3","dlogp":-0.08,"p_flip":0.04},{"iid":"LA24","pid":"P4","dlogp":-0.2,"p_flip":0.08},{"iid":"LA24","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"LA24","pid":"P6","dlogp":-0.01,"p_flip":0.01},{"iid":"LA24","pid":"P7","dlogp":-0.1,"p_flip":0.15},
+{"iid":"LA25","pid":"P0","dlogp":-1.2,"p_flip":0.35},{"iid":"LA25","pid":"P1","dlogp":-1.5,"p_flip":0.5},{"iid":"LA25","pid":"P2","dlogp":-1.0,"p_flip":0.4},{"iid":"LA25","pid":"P3","dlogp":-1.5,"p_flip":0.55},{"iid":"LA25","pid":"P4","dlogp":-1.5,"p_flip":0.55},{"iid":"LA25","pid":"P5","dlogp":-0.8,"p_flip":0.2},{"iid":"LA25","pid":"P6","dlogp":-0.6,"p_flip":0.1},{"iid":"LA25","pid":"P7","dlogp":-0.8,"p_flip":0.5},
+{"iid":"LA26","pid":"P0","dlogp":-0.1,"p_flip":0.03},{"iid":"LA26","pid":"P1","dlogp":-0.1,"p_flip":0.04},{"iid":"LA26","pid":"P2","dlogp":-0.05,"p_flip":0.03},{"iid":"LA26","pid":"P3","dlogp":-0.1,"p_flip":0.05},{"iid":"LA26","pid":"P4","dlogp":-0.2,"p_flip":0.08},{"iid":"LA26","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"LA26","pid":"P6","dlogp":-0.02,"p_flip":0.01},{"iid":"LA26","pid":"P7","dlogp":-0.1,"p_flip":0.15},
+{"iid":"LA27","pid":"P0","dlogp":-0.05,"p_flip":0.02},{"iid":"LA27","pid":"P1","dlogp":-0.05,"p_flip":0.03},{"iid":"LA27","pid":"P2","dlogp":-0.03,"p_flip":0.02},{"iid":"LA27","pid":"P3","dlogp":-0.05,"p_flip":0.03},{"iid":"LA27","pid":"P4","dlogp":-0.05,"p_flip":0.05},{"iid":"LA27","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"LA27","pid":"P6","dlogp":-0.01,"p_flip":0.01},{"iid":"LA27","pid":"P7","dlogp":0.05,"p_flip":0.1},
+{"iid":"LA28","pid":"P0","dlogp":-0.2,"p_flip":0.05},{"iid":"LA28","pid":"P1","dlogp":-0.2,"p_flip":0.06},{"iid":"LA28","pid":"P2","dlogp":-0.1,"p_flip":0.05},{"iid":"LA28","pid":"P3","dlogp":-0.2,"p_flip":0.1},{"iid":"LA28","pid":"P4","dlogp":-0.3,"p_flip":0.15},{"iid":"LA28","pid":"P5","dlogp":-0.1,"p_flip":0.02},{"iid":"LA28","pid":"P6","dlogp":-0.05,"p_flip":0.01},{"iid":"LA28","pid":"P7","dlogp":-0.1,"p_flip":0.2},
+{"iid":"LA29","pid":"P0","dlogp":-0.6,"p_flip":0.15},{"iid":"LA29","pid":"P1","dlogp":-0.6,"p_flip":0.2},{"iid":"LA29","pid":"P2","dlogp":-0.4,"p_flip":0.2},{"iid":"LA29","pid":"P3","dlogp":-0.7,"p_flip":0.25},{"iid":"LA29","pid":"P4","dlogp":-0.8,"p_flip":0.3},{"iid":"LA29","pid":"P5","dlogp":-0.3,"p_flip":0.05},{"iid":"LA29","pid":"P6","dlogp":-0.2,"p_flip":0.03},{"iid":"LA29","pid":"P7","dlogp":-0.3,"p_flip":0.3},
+{"iid":"LA30","pid":"P0","dlogp":-1.0,"p_flip":0.3},{"iid":"LA30","pid":"P1","dlogp":-1.2,"p_flip":0.4},{"iid":"LA30","pid":"P2","dlogp":-0.8,"p_flip":0.35},{"iid":"LA30","pid":"P3","dlogp":-1.2,"p_flip":0.45},{"iid":"LA30","pid":"P4","dlogp":-1.2,"p_flip":0.45},{"iid":"LA30","pid":"P5","dlogp":-0.8,"p_flip":0.2},{"iid":"LA30","pid":"P6","dlogp":-0.5,"p_flip":0.1},{"iid":"LA30","pid":"P7","dlogp":-0.6,"p_flip":0.45},
+{"iid":"LA31","pid":"P0","dlogp":-0.3,"p_flip":0.08},{"iid":"LA31","pid":"P1","dlogp":-0.4,"p_flip":0.12},{"iid":"LA31","pid":"P2","dlogp":-0.2,"p_flip":0.1},{"iid":"LA31","pid":"P3","dlogp":-0.4,"p_flip":0.15},{"iid":"LA31","pid":"P4","dlogp":-0.5,"p_flip":0.2},{"iid":"LA31","pid":"P5","dlogp":-0.15,"p_flip":0.03},{"iid":"LA31","pid":"P6","dlogp":-0.1,"p_flip":0.02},{"iid":"LA31","pid":"P7","dlogp":-0.2,"p_flip":0.25},
+{"iid":"LA32","pid":"P0","dlogp":-0.15,"p_flip":0.04},{"iid":"LA32","pid":"P1","dlogp":-0.15,"p_flip":0.05},{"iid":"LA32","pid":"P2","dlogp":-0.08,"p_flip":0.04},{"iid":"LA32","pid":"P3","dlogp":-0.15,"p_flip":0.07},{"iid":"LA32","pid":"P4","dlogp":-0.25,"p_flip":0.12},{"iid":"LA32","pid":"P5","dlogp":-0.08,"p_flip":0.02},{"iid":"LA32","pid":"P6","dlogp":-0.03,"p_flip":0.01},{"iid":"LA32","pid":"P7","dlogp":-0.1,"p_flip":0.18},
+{"iid":"LA33","pid":"P0","dlogp":-5.0,"p_flip":0.9},{"iid":"LA33","pid":"P1","dlogp":-5.0,"p_flip":0.9},{"iid":"LA33","pid":"P2","dlogp":-4.0,"p_flip":0.85},{"iid":"LA33","pid":"P3","dlogp":-5.0,"p_flip":0.9},{"iid":"LA33","pid":"P4","dlogp":-5.0,"p_flip":0.85},{"iid":"LA33","pid":"P5","dlogp":-5.0,"p_flip":0.85},{"iid":"LA33","pid":"P6","dlogp":-6.0,"p_flip":0.8},{"iid":"LA33","pid":"P7","dlogp":-3.0,"p_flip":0.8},
+{"iid":"LA34","pid":"P0","dlogp":-0.3,"p_flip":0.07},{"iid":"LA34","pid":"P1","dlogp":-0.25,"p_flip":0.08},{"iid":"LA34","pid":"P2","dlogp":-0.15,"p_flip":0.06},{"iid":"LA34","pid":"P3","dlogp":-0.3,"p_flip":0.12},{"iid":"LA34","pid":"P4","dlogp":-0.4,"p_flip":0.18},{"iid":"LA34","pid":"P5","dlogp":-0.1,"p_flip":0.02},{"iid":"LA34","pid":"P6","dlogp":-0.05,"p_flip":0.01},{"iid":"LA34","pid":"P7","dlogp":-0.2,"p_flip":0.22},
+{"iid":"LA35","pid":"P0","dlogp":-0.3,"p_flip":0.08},{"iid":"LA35","pid":"P1","dlogp":-0.4,"p_flip":0.15},{"iid":"LA35","pid":"P2","dlogp":-0.2,"p_flip":0.1},{"iid":"LA35","pid":"P3","dlogp":-0.4,"p_flip":0.18},{"iid":"LA35","pid":"P4","dlogp":-0.5,"p_flip":0.2},{"iid":"LA35","pid":"P5","dlogp":-0.2,"p_flip":0.04},{"iid":"LA35","pid":"P6","dlogp":-0.1,"p_flip":0.02},{"iid":"LA35","pid":"P7","dlogp":-0.2,"p_flip":0.25}
+],
+"notes": {
+"LA24":"Mid-layer 13 DeltaNet (out_proj Frobenius 16.77, top down_proj col 540:0.455); feedback shows mid-layer skips are mostly <0.2 nats.",
+"LA25":"Layer 0 DeltaNet has extreme dt_bias (-13.0625, +8.3750) and out_proj norm 17.92; early token mixing likely matters, so moderate-large drops.",
+"LA26":"Layer 21 DeltaNet out_proj 16.78 (dt_bias up to +5.1250); late mixer probably redundant, small effects like LA21 (layer 16 mixer).",
+"LA27":"Layer 14 MLP (down_proj 15.14, top col 1438:0.448); skipping all of layer 14 (LA10) measured only ±0.19 nats.",
+"LA28":"Layer 21 MLP down_proj 17.70 (top col 3519:0.469), one of the larger late MLPs, so modest drops.",
+"LA29":"Layer 3 full attention + MLP (mixer_in 40.50, top down col 3059:0.323); early block, so moderate damage.",
+"LA30":"Final block 23: largest gate_proj 36.18 / up_proj 21.25, top down col 1404:0.551; removing final sharpening likely costs ~1 nat.",
+"LA31":"Layer 5 DeltaNet + MLP (down_proj 15.81, top col 90:0.355); early-mid block, moderate effect.",
+"LA32":"Layer 17 MLP down_proj 16.39 (top col 2886:0.373); late-middle, small-modest drops.",
+"LA33":"Whole layer 0 (A_log -6.5938, dt_bias -13.0625; MLP gate 23.21) works as an extended embedding; skipping it is likely catastrophic.",
+"LA34":"Layer 18 block, in_norm gain mean 1.732 with small out_proj 14.64 (top down col 3502:0.362); modest effects.",
+"LA35":"Layer 23 full attention o_proj 20.06 (same file as LA30, top col 1404:0.551); last-layer attention gives moderate drops."
+}}
+```

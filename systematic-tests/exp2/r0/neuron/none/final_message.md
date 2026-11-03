@@ -1,0 +1,47 @@
+No weight values are available and no code execution is allowed, so these predictions rest on general reasoning about what a 100x amplified MLP neuron does to the residual stream.
+
+**Reasoning used across all 16 edits**
+
+- A 100x down_proj column adds a large fixed-direction vector to the residual on any prompt where the neuron fires. After the final RMSNorm, the logits tilt toward the unembedding of that direction, which for most neurons is dominated by frequent, low-content tokens such as newlines, punctuation, and function words. Those are also the tokens most likely to clear the 0.001 probability threshold on at least one prompt, so I use them as the up list.
+- The target token's log-probability should fall on average. The fall is smallest where the target is already near certain, since the log-sum-exp is dominated by the target itself, and largest where the target is weak and competitors are many.
+- Neurons are sparse, so each edit probably fires strongly on only a few of the 8 prompts. The per-prompt values below are moderate expected values rather than confident per-prompt calls.
+- Late-layer edits write almost directly into the logits. Mid-layer edits pass through more downstream processing, so I predict slightly smaller magnitude for layers 12 to 14.
+
+```json
+{"edits": [
+{"iid": "XNE00", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE01", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " to", "id": 310}, {"tok": " in", "id": 303}], "dlogp": {"P0": -0.25, "P1": -0.3, "P2": -0.3, "P3": -0.3, "P4": -0.4, "P5": -0.25, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE02", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE03", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " to", "id": 310}, {"tok": " in", "id": 303}], "dlogp": {"P0": -0.25, "P1": -0.3, "P2": -0.3, "P3": -0.3, "P4": -0.4, "P5": -0.25, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE04", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE05", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE06", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": ":", "id": 25}], "dlogp": {"P0": -0.3, "P1": -0.35, "P2": -0.35, "P3": -0.35, "P4": -0.45, "P5": -0.3, "P6": -0.1, "P7": -0.45}},
+{"iid": "XNE07", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.35, "P1": -0.45, "P2": -0.45, "P3": -0.45, "P4": -0.55, "P5": -0.35, "P6": -0.1, "P7": -0.55}},
+{"iid": "XNE08", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": ":", "id": 25}], "dlogp": {"P0": -0.3, "P1": -0.35, "P2": -0.35, "P3": -0.35, "P4": -0.45, "P5": -0.3, "P6": -0.1, "P7": -0.45}},
+{"iid": "XNE09", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE10", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE11", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " to", "id": 310}, {"tok": " in", "id": 303}], "dlogp": {"P0": -0.25, "P1": -0.3, "P2": -0.3, "P3": -0.3, "P4": -0.4, "P5": -0.25, "P6": -0.1, "P7": -0.4}},
+{"iid": "XNE12", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.35, "P1": -0.45, "P2": -0.45, "P3": -0.45, "P4": -0.55, "P5": -0.35, "P6": -0.1, "P7": -0.55}},
+{"iid": "XNE13", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": ":", "id": 25}], "dlogp": {"P0": -0.3, "P1": -0.35, "P2": -0.35, "P3": -0.35, "P4": -0.45, "P5": -0.3, "P6": -0.1, "P7": -0.45}},
+{"iid": "XNE14", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}, {"tok": "<|im_end|>", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.4, "P3": -0.4, "P4": -0.5, "P5": -0.3, "P6": -0.1, "P7": -0.5}},
+{"iid": "XNE15", "up": [{"tok": "\n", "id": 198}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": ".", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n\n", "id": null}, {"tok": " ", "id": null}, {"tok": " a", "id": 264}, {"tok": " to", "id": 310}, {"tok": " in", "id": 303}], "dlogp": {"P0": -0.25, "P1": -0.3, "P2": -0.3, "P3": -0.3, "P4": -0.4, "P5": -0.25, "P6": -0.1, "P7": -0.4}}
+],
+"notes": {
+"XNE00": "Layer 20 neuron writes near the logits; no weights, so I assume its direction favors frequent function and formatting tokens and erodes the top-1 target in proportion to how uncertain it already is.",
+"XNE01": "Layer 13 neuron is mid-stack, so its amplified output is partly reshaped downstream; same generic-token prior with slightly smaller target drops.",
+"XNE02": "Layer 21 neuron, near-direct logit write; generic frequent-token prior and confidence-scaled target drops.",
+"XNE03": "Layer 13 neuron, mid-stack attenuation assumed; generic frequent-token prior with smaller drops.",
+"XNE04": "Layer 21 neuron, same reasoning as XNE02.",
+"XNE05": "Layer 20 neuron, same reasoning as XNE00.",
+"XNE06": "Layer 18 neuron, intermediate depth; generic prior with colon added since list-style prompts dominate the set.",
+"XNE07": "Layer 23 neuron feeds the final norm directly, so I predict the largest target drops and the most generic-token spill.",
+"XNE08": "Layer 18 neuron, same reasoning as XNE06.",
+"XNE09": "Layer 20 neuron, same reasoning as XNE00.",
+"XNE10": "Layer 21 neuron, same reasoning as XNE02.",
+"XNE11": "Layer 12 neuron is the earliest edit, so downstream layers can partly absorb it; smallest predicted drops.",
+"XNE12": "Layer 23 neuron, same reasoning as XNE07.",
+"XNE13": "Layer 17 neuron, intermediate depth; same prior as XNE06.",
+"XNE14": "Layer 20 neuron, same reasoning as XNE00.",
+"XNE15": "Layer 14 neuron, mid-stack; same prior as XNE01."
+}}
+```

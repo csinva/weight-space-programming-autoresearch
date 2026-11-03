@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "SC24|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC24|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.07
+  },
+  "SC24|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC24|P4": {
+   "dlogp": -0.22,
+   "p_flip": 0.12
+  },
+  "SC24|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC24|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "SC24|P7": {
+   "dlogp": -0.22,
+   "p_flip": 0.2
+  },
+  "SC25|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "SC25|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "SC25|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.06
+  },
+  "SC25|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "SC25|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "SC25|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC25|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC25|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.17
+  },
+  "SC26|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "SC26|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC26|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC26|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC26|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC26|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC26|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC26|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "SC27|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC27|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC27|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC27|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC27|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC27|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC27|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "SC28|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC28|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.015
+  },
+  "SC28|P2": {
+   "dlogp": -0.015,
+   "p_flip": 0.015
+  },
+  "SC28|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.015
+  },
+  "SC28|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC28|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC28|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.003
+  },
+  "SC28|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC29|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC29|P1": {
+   "dlogp": -0.13,
+   "p_flip": 0.05
+  },
+  "SC29|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "SC29|P3": {
+   "dlogp": -0.13,
+   "p_flip": 0.05
+  },
+  "SC29|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "SC29|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.02
+  },
+  "SC29|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC29|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.14
+  },
+  "SC30|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.003
+  },
+  "SC30|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.004
+  },
+  "SC30|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "SC30|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.004
+  },
+  "SC30|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.005
+  },
+  "SC30|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC30|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC30|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.01
+  },
+  "SC31|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC31|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC31|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC31|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC31|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC31|P5": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "SC31|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC31|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "SC32|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "SC32|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC32|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC32|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC32|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC32|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC32|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC32|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "SC33|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "SC33|P1": {
+   "dlogp": -0.16,
+   "p_flip": 0.06
+  },
+  "SC33|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.06
+  },
+  "SC33|P3": {
+   "dlogp": -0.16,
+   "p_flip": 0.06
+  },
+  "SC33|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "SC33|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC33|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC33|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.17
+  },
+  "SC34|P0": {
+   "dlogp": -0.025,
+   "p_flip": 0.01
+  },
+  "SC34|P1": {
+   "dlogp": -0.035,
+   "p_flip": 0.02
+  },
+  "SC34|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC34|P3": {
+   "dlogp": -0.035,
+   "p_flip": 0.02
+  },
+  "SC34|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC34|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC34|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "SC34|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "SC35|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC35|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC35|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC35|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC35|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC35|P5": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "SC35|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC35|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  }
+ },
+ "notes": {
+  "SC24": "10x gain on one MLP-input dim at layer 7 is a moderate single-dimension distortion; small-moderate drops, larger on low-margin prompts.",
+  "SC25": "-4 on a down_proj entry (normally ~0.02) writes a large spike into one residual dim at layer 8; moderate disruption.",
+  "SC26": "Zeroing the largest weight writing to dim 0 at layer 22 is a small late change.",
+  "SC27": "Removing one input dim to the last-layer MLP has a tiny effect.",
+  "SC28": "Removing one input dim to the layer-13 MLP has a negligible effect.",
+  "SC29": "Largest down_proj weight at layer 9 writes to dim 0 (possible outlier pathway); small-moderate effect.",
+  "SC30": "Random single o_proj entry; effectively no change.",
+  "SC31": "Tied embedding: the ' oxygen' logit shifts by -4*normed_h[585] with unknown sign; large expected drop only on P5.",
+  "SC32": "Largest down_proj weight at layer 21 writing to dim 0; small effect.",
+  "SC33": "10x gain on one MLP-input dim at layer 14; moderate single-dimension distortion.",
+  "SC34": "Largest DeltaNet out_proj weight at layer 13; small effect.",
+  "SC35": "Tied embedding: the ' oxygen' logit shifts by -4*normed_h[896] with unknown sign; large expected drop only on P5."
+ }
+}

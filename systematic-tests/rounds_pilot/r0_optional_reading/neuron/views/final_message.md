@@ -1,0 +1,42 @@
+I read every weight file; the analysis below rests on the views sections. These predictions come from reasoning about the weights only, since there was no code execution and nothing was measured. Only two edits look likely to matter:
+
+- **NE10 (layer 20, neuron 1102, zeroed):** this looks like a plural-agreement neuron. Its gate reads ` are` / ` were` very strongly (+12.7σ). Its up row reads ` are` / ` they` / ` their` negatively, and its down column writes ` are` at −13.2σ (cosine −0.38). In a plural context the gate is positive and the up term negative, so the neuron's net effect is to *promote* ` are`. Removing it should therefore cut P7's target. That is the only pair where I give a real chance (0.35) that the top token changes.
+- **NE05 (layer 20, neuron 2203, zeroed):** one of the largest neurons in its layer by write norm. It writes ordinal and next-in-sequence tokens (` fourth`, `4`, `第五`) and boosts the P1 and P3 targets by about +3σ. I expect zeroing it to lower ` five` and ` Thursday` a little.
+
+The rest are probably small:
+- **NE03:** it directly suppresses ` five` (−6.4σ). Zeroing it should help P1 slightly, but which way the neuron fires is a guess.
+- **NE07:** a large layer-0 neuron scaled ×5, so I expect broad, mild disruption.
+- **The others:** their direct logit effects on the targets are weak, or (NE11, a knee/leg neuron) they are unlikely to fire on these prompts. I predict near-zero changes for them.
+
+Across all edits I scaled effects by how confident the unedited model is: P6 (0.994) should barely move, while P7 (0.272) and P4 (0.469) should move most.
+
+```json
+{"predictions": [
+{"iid":"NE00","pid":"P0","dlogp":-0.01,"p_flip":0.01},{"iid":"NE00","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE00","pid":"P2","dlogp":-0.02,"p_flip":0.02},{"iid":"NE00","pid":"P3","dlogp":-0.03,"p_flip":0.01},{"iid":"NE00","pid":"P4","dlogp":-0.02,"p_flip":0.01},{"iid":"NE00","pid":"P5","dlogp":0.01,"p_flip":0.01},{"iid":"NE00","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE00","pid":"P7","dlogp":0.02,"p_flip":0.03},
+{"iid":"NE01","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"NE01","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"NE01","pid":"P2","dlogp":-0.04,"p_flip":0.02},{"iid":"NE01","pid":"P3","dlogp":-0.06,"p_flip":0.02},{"iid":"NE01","pid":"P4","dlogp":-0.05,"p_flip":0.02},{"iid":"NE01","pid":"P5","dlogp":-0.05,"p_flip":0.01},{"iid":"NE01","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE01","pid":"P7","dlogp":-0.1,"p_flip":0.06},
+{"iid":"NE02","pid":"P0","dlogp":-0.02,"p_flip":0.01},{"iid":"NE02","pid":"P1","dlogp":-0.06,"p_flip":0.02},{"iid":"NE02","pid":"P2","dlogp":-0.02,"p_flip":0.02},{"iid":"NE02","pid":"P3","dlogp":-0.03,"p_flip":0.01},{"iid":"NE02","pid":"P4","dlogp":-0.04,"p_flip":0.02},{"iid":"NE02","pid":"P5","dlogp":-0.01,"p_flip":0.01},{"iid":"NE02","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE02","pid":"P7","dlogp":-0.06,"p_flip":0.04},
+{"iid":"NE03","pid":"P0","dlogp":0.01,"p_flip":0.01},{"iid":"NE03","pid":"P1","dlogp":0.1,"p_flip":0.01},{"iid":"NE03","pid":"P2","dlogp":0.01,"p_flip":0.01},{"iid":"NE03","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"NE03","pid":"P4","dlogp":0.01,"p_flip":0.01},{"iid":"NE03","pid":"P5","dlogp":0.01,"p_flip":0.01},{"iid":"NE03","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE03","pid":"P7","dlogp":0.01,"p_flip":0.02},
+{"iid":"NE04","pid":"P0","dlogp":-0.02,"p_flip":0.01},{"iid":"NE04","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE04","pid":"P2","dlogp":0.02,"p_flip":0.02},{"iid":"NE04","pid":"P3","dlogp":-0.02,"p_flip":0.01},{"iid":"NE04","pid":"P4","dlogp":-0.04,"p_flip":0.02},{"iid":"NE04","pid":"P5","dlogp":0.01,"p_flip":0.01},{"iid":"NE04","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE04","pid":"P7","dlogp":-0.05,"p_flip":0.04},
+{"iid":"NE05","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"NE05","pid":"P1","dlogp":-0.3,"p_flip":0.06},{"iid":"NE05","pid":"P2","dlogp":-0.01,"p_flip":0.01},{"iid":"NE05","pid":"P3","dlogp":-0.3,"p_flip":0.07},{"iid":"NE05","pid":"P4","dlogp":-0.03,"p_flip":0.02},{"iid":"NE05","pid":"P5","dlogp":0.02,"p_flip":0.01},{"iid":"NE05","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE05","pid":"P7","dlogp":-0.02,"p_flip":0.03},
+{"iid":"NE06","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"NE06","pid":"P1","dlogp":0.02,"p_flip":0.01},{"iid":"NE06","pid":"P2","dlogp":-0.01,"p_flip":0.01},{"iid":"NE06","pid":"P3","dlogp":-0.02,"p_flip":0.01},{"iid":"NE06","pid":"P4","dlogp":-0.02,"p_flip":0.01},{"iid":"NE06","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE06","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE06","pid":"P7","dlogp":-0.03,"p_flip":0.03},
+{"iid":"NE07","pid":"P0","dlogp":-0.1,"p_flip":0.03},{"iid":"NE07","pid":"P1","dlogp":-0.15,"p_flip":0.05},{"iid":"NE07","pid":"P2","dlogp":-0.12,"p_flip":0.05},{"iid":"NE07","pid":"P3","dlogp":-0.12,"p_flip":0.04},{"iid":"NE07","pid":"P4","dlogp":-0.2,"p_flip":0.08},{"iid":"NE07","pid":"P5","dlogp":-0.08,"p_flip":0.02},{"iid":"NE07","pid":"P6","dlogp":-0.02,"p_flip":0.01},{"iid":"NE07","pid":"P7","dlogp":-0.2,"p_flip":0.12},
+{"iid":"NE08","pid":"P0","dlogp":-0.01,"p_flip":0.01},{"iid":"NE08","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE08","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"NE08","pid":"P3","dlogp":-0.01,"p_flip":0.01},{"iid":"NE08","pid":"P4","dlogp":-0.02,"p_flip":0.01},{"iid":"NE08","pid":"P5","dlogp":-0.01,"p_flip":0.01},{"iid":"NE08","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE08","pid":"P7","dlogp":-0.02,"p_flip":0.02},
+{"iid":"NE09","pid":"P0","dlogp":0.03,"p_flip":0.01},{"iid":"NE09","pid":"P1","dlogp":-0.04,"p_flip":0.02},{"iid":"NE09","pid":"P2","dlogp":-0.03,"p_flip":0.02},{"iid":"NE09","pid":"P3","dlogp":-0.04,"p_flip":0.02},{"iid":"NE09","pid":"P4","dlogp":0.03,"p_flip":0.03},{"iid":"NE09","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE09","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE09","pid":"P7","dlogp":-0.05,"p_flip":0.05},
+{"iid":"NE10","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"NE10","pid":"P1","dlogp":0.01,"p_flip":0.01},{"iid":"NE10","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"NE10","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"NE10","pid":"P4","dlogp":0.01,"p_flip":0.01},{"iid":"NE10","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"NE10","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE10","pid":"P7","dlogp":-0.6,"p_flip":0.35},
+{"iid":"NE11","pid":"P0","dlogp":0.0,"p_flip":0.01},{"iid":"NE11","pid":"P1","dlogp":0.0,"p_flip":0.01},{"iid":"NE11","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"NE11","pid":"P3","dlogp":0.0,"p_flip":0.01},{"iid":"NE11","pid":"P4","dlogp":-0.01,"p_flip":0.01},{"iid":"NE11","pid":"P5","dlogp":0.0,"p_flip":0.01},{"iid":"NE11","pid":"P6","dlogp":0.0,"p_flip":0.0},{"iid":"NE11","pid":"P7","dlogp":0.01,"p_flip":0.02}
+],
+"notes": {
+"NE00":"Large-norm L19 neuron but direct logit effects on all targets are weak (|σ|<1.1), so removal should barely matter.",
+"NE01":"Mid-layer x5 whose write direction is negative for P5/P7 targets (-2.6σ/-2.8σ), but its activation is likely small, so only mild drops are expected.",
+"NE02":"Low-norm layer-1 neuron x5; direct effect -2.9σ on ' five' but small magnitude, so small effects.",
+"NE03":"Directly suppresses ' five' (-6.4σ), so zeroing should slightly raise P1; the firing sign is uncertain and other prompts are near zero.",
+"NE04":"Mid-norm L10 neuron x5 with weak, mostly positive target projections; small effects.",
+"NE05":"High-norm L20 ordinal/sequence neuron writing 'fourth'/'4' and boosting ' five' and ' Thursday' (~+3σ); zeroing should lower P1/P3 moderately.",
+"NE06":"Low-norm L20 neuron x5 with weak target projections; near zero.",
+"NE07":"Rank-8-norm layer-0 neuron x5 may perturb downstream processing broadly; mild negative effects, largest on the low-confidence P4/P7.",
+"NE08":"Very low-norm layer-2 neuron x5; negligible.",
+"NE09":"Largest-norm L22 neuron, but its gate reads ':'/spaces negatively and its target projections are modest; small mixed effects.",
+"NE10":"Plural-agreement neuron: the gate reads ' are' (+12.7σ), the up row reads ' are'/'they' negatively and the down column writes ' are' at -13σ, so its net effect promotes ' are' and zeroing should cut P7's ' are'.",
+"NE11":"Knee/leg anatomy neuron unlikely to fire on these prompts; near zero."
+}}
+```

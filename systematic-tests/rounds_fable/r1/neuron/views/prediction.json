@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE12|P0": {
+   "dlogp": 0.004,
+   "p_flip": 0.01
+  },
+  "NE12|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE12|P2": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE12|P3": {
+   "dlogp": 0.002,
+   "p_flip": 0.015
+  },
+  "NE12|P4": {
+   "dlogp": 0.008,
+   "p_flip": 0.02
+  },
+  "NE12|P5": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE12|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE12|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.03
+  },
+  "NE13|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE13|P1": {
+   "dlogp": 0.004,
+   "p_flip": 0.01
+  },
+  "NE13|P2": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE13|P3": {
+   "dlogp": 0.003,
+   "p_flip": 0.015
+  },
+  "NE13|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.02
+  },
+  "NE13|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE13|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE13|P7": {
+   "dlogp": -0.025,
+   "p_flip": 0.05
+  },
+  "NE14|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE14|P1": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE14|P2": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE14|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.015
+  },
+  "NE14|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "NE14|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE14|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE14|P7": {
+   "dlogp": -0.002,
+   "p_flip": 0.03
+  },
+  "NE15|P0": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE15|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE15|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE15|P3": {
+   "dlogp": 0.002,
+   "p_flip": 0.015
+  },
+  "NE15|P4": {
+   "dlogp": 0.003,
+   "p_flip": 0.02
+  },
+  "NE15|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE15|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE15|P7": {
+   "dlogp": -0.002,
+   "p_flip": 0.03
+  },
+  "NE16|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE16|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE16|P2": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE16|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.015
+  },
+  "NE16|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.025
+  },
+  "NE16|P5": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE16|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE16|P7": {
+   "dlogp": -0.008,
+   "p_flip": 0.035
+  },
+  "NE17|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.01
+  },
+  "NE17|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE17|P2": {
+   "dlogp": -0.006,
+   "p_flip": 0.01
+  },
+  "NE17|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.015
+  },
+  "NE17|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "NE17|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE17|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE17|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.04
+  },
+  "NE18|P0": {
+   "dlogp": 0.005,
+   "p_flip": 0.01
+  },
+  "NE18|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE18|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE18|P3": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "NE18|P4": {
+   "dlogp": 0.008,
+   "p_flip": 0.02
+  },
+  "NE18|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE18|P6": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE18|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.03
+  },
+  "NE19|P0": {
+   "dlogp": 0.012,
+   "p_flip": 0.01
+  },
+  "NE19|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.01
+  },
+  "NE19|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE19|P3": {
+   "dlogp": -0.008,
+   "p_flip": 0.02
+  },
+  "NE19|P4": {
+   "dlogp": 0.02,
+   "p_flip": 0.025
+  },
+  "NE19|P5": {
+   "dlogp": 0.004,
+   "p_flip": 0.01
+  },
+  "NE19|P6": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE19|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.035
+  },
+  "NE20|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE20|P1": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "NE20|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE20|P3": {
+   "dlogp": 0.002,
+   "p_flip": 0.015
+  },
+  "NE20|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.02
+  },
+  "NE20|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE20|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE20|P7": {
+   "dlogp": -0.012,
+   "p_flip": 0.035
+  },
+  "NE21|P0": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "NE21|P1": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE21|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE21|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.015
+  },
+  "NE21|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "NE21|P5": {
+   "dlogp": 0.004,
+   "p_flip": 0.01
+  },
+  "NE21|P6": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "NE21|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "NE22|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE22|P1": {
+   "dlogp": 0.005,
+   "p_flip": 0.01
+  },
+  "NE22|P2": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE22|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.015
+  },
+  "NE22|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "NE22|P5": {
+   "dlogp": 0.006,
+   "p_flip": 0.01
+  },
+  "NE22|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE22|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.035
+  },
+  "NE23|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE23|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE23|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE23|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE23|P4": {
+   "dlogp": -0.001,
+   "p_flip": 0.02
+  },
+  "NE23|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE23|P6": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE23|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.03
+  }
+ },
+ "notes": {
+  "NE12": "Layer 1, 5x, down column L2 0.2859 at norm rank 468/3584, gate reads ' hungry'/' thirsty' which are absent here; Paris +2.54\u03c3 direct view but early-layer 5x edits in feedback (NE02, NE07, NE08) stayed within \u00b10.03, so small positive on P0/P4.",
+  "NE13": "Layer 20, 5x, norm rank 3/3584 (L2 0.3878) with write direction promoting ' I' at +10.4\u03c3 and gate reading ' I'/' myself'; no first-person context in prompts, so near zero, slight negative on P7 (' are' -1.85\u03c3) and P5 (' oxygen' -0.98\u03c3).",
+  "NE14": "Layer 2 zeroing of a mid-norm neuron (rank 841, L2 0.2718); ' +' sits at -3.08\u03c3 in its write direction but layer-2 direct effect is negligible, so tiny positive on P2 and ~0 elsewhere.",
+  "NE15": "Layer 10 zeroing, rank 650 (L2 0.2731), gate reads ' resolution'/' matter' not present in prompts; Shakespeare -1.91\u03c3 and Paris -1.18\u03c3 views imply tiny positive on P6/P0/P4 but essentially zero.",
+  "NE16": "Layer 3 zeroing of a high-norm neuron (rank 4, L2 0.3102, gate row L2 0.8971) that likely fires often; Paris +1.11\u03c3 in its write direction, so small negative on P0/P4 and P7, but early layer caps magnitude near 0.01.",
+  "NE17": "Layer 12 zeroing, rank 9 (L2 0.3632); write direction has Paris +3.64\u03c3, ' +' +2.02\u03c3, ' are' +1.30\u03c3, and up row reads ' quality'/' When', so removing it slightly lowers P0/P4/P2/P7 targets.",
+  "NE18": "Layer 10, 5x, rank 42 (L2 0.3522); write direction has ' Thursday' -2.82\u03c3 and ' Shakespeare' +2.28\u03c3, Paris +1.44\u03c3, but gate reads code-like tokens ('utoff', '[]='), so modest negative on P3 and small positives on P0/P4, like NE04 in feedback.",
+  "NE19": "Layer 15 zeroing of the largest column in the layer (rank 1, L2 0.4938, up row max +0.0796); Paris -2.25\u03c3, ' five' -1.14\u03c3, ' +' +1.66\u03c3, ' Thursday' +1.18\u03c3, so removal nudges P0/P4 up and P2/P3 down.",
+  "NE20": "Layer 11 zeroing, rank 36 (L2 0.3638); ' are' +1.45\u03c3 and ' five' +0.91\u03c3 in its write direction, gate reads suffix tokens ('azioni'), so small negative on P7 and P1.",
+  "NE21": "Layer 20, 5x, rank 7 (L2 0.3723); write direction suppresses copulas ('been' -6.1\u03c3, '\u2014are' -5.5\u03c3, ' are' -4.15\u03c3 on P7) and gate reads ' lie'/' belong'; amplifying it is the most likely to hurt P7, matching NE10's -0.067 P7 effect scaled by 5x.",
+  "NE22": "Layer 2, 5x, rank 5 (L2 0.3045); ' oxygen' +1.79\u03c3, ' five' +1.19\u03c3, ' +' +1.06\u03c3 in write direction, but layer-2 effects propagate indirectly, so magnitudes mirror NE08 (layer 2 5x: +0.022 P4, +0.008 P7) with coin-flip sign on P7.",
+  "NE23": "Layer 10 zeroing, rank 276 (L2 0.2941); up row reads digits and separators (' ' +6.0\u03c3, '-' +5.5\u03c3, '2' +5.4\u03c3) and write direction has ' Thursday' +1.45\u03c3, ' Shakespeare' -2.51\u03c3, so small negative on P3/P1 and ~0 elsewhere."
+ }
+}

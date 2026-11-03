@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA24|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA24|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.05
+  },
+  "LA24|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "LA24|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA24|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA24|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA24|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA24|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.15
+  },
+  "LA25|P0": {
+   "dlogp": -0.9,
+   "p_flip": 0.12
+  },
+  "LA25|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "LA25|P2": {
+   "dlogp": -1.2,
+   "p_flip": 0.35
+  },
+  "LA25|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.4
+  },
+  "LA25|P4": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA25|P5": {
+   "dlogp": -0.9,
+   "p_flip": 0.12
+  },
+  "LA25|P6": {
+   "dlogp": -1.2,
+   "p_flip": 0.15
+  },
+  "LA25|P7": {
+   "dlogp": -1.0,
+   "p_flip": 0.5
+  },
+  "LA26|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA26|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA26|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "LA26|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA26|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "LA26|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA26|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA26|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.12
+  },
+  "LA27|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA27|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA27|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "LA27|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA27|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA27|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA27|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA27|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.15
+  },
+  "LA28|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA28|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.15
+  },
+  "LA28|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA28|P3": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA28|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.15
+  },
+  "LA28|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA28|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA28|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.2
+  },
+  "LA29|P0": {
+   "dlogp": -0.7,
+   "p_flip": 0.08
+  },
+  "LA29|P1": {
+   "dlogp": -1.2,
+   "p_flip": 0.3
+  },
+  "LA29|P2": {
+   "dlogp": -1.0,
+   "p_flip": 0.3
+  },
+  "LA29|P3": {
+   "dlogp": -1.2,
+   "p_flip": 0.3
+  },
+  "LA29|P4": {
+   "dlogp": -1.2,
+   "p_flip": 0.4
+  },
+  "LA29|P5": {
+   "dlogp": -0.7,
+   "p_flip": 0.08
+  },
+  "LA29|P6": {
+   "dlogp": -0.5,
+   "p_flip": 0.05
+  },
+  "LA29|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.45
+  },
+  "LA30|P0": {
+   "dlogp": -1.0,
+   "p_flip": 0.15
+  },
+  "LA30|P1": {
+   "dlogp": -1.4,
+   "p_flip": 0.3
+  },
+  "LA30|P2": {
+   "dlogp": -1.2,
+   "p_flip": 0.35
+  },
+  "LA30|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "LA30|P4": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA30|P5": {
+   "dlogp": -0.8,
+   "p_flip": 0.1
+  },
+  "LA30|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.03
+  },
+  "LA30|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.5
+  },
+  "LA31|P0": {
+   "dlogp": -0.45,
+   "p_flip": 0.05
+  },
+  "LA31|P1": {
+   "dlogp": -0.8,
+   "p_flip": 0.18
+  },
+  "LA31|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.18
+  },
+  "LA31|P3": {
+   "dlogp": -0.8,
+   "p_flip": 0.2
+  },
+  "LA31|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.3
+  },
+  "LA31|P5": {
+   "dlogp": -0.45,
+   "p_flip": 0.05
+  },
+  "LA31|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.02
+  },
+  "LA31|P7": {
+   "dlogp": -0.55,
+   "p_flip": 0.35
+  },
+  "LA32|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA32|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.07
+  },
+  "LA32|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "LA32|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA32|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA32|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA32|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA32|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.15
+  },
+  "LA33|P0": {
+   "dlogp": -5.0,
+   "p_flip": 0.8
+  },
+  "LA33|P1": {
+   "dlogp": -6.0,
+   "p_flip": 0.9
+  },
+  "LA33|P2": {
+   "dlogp": -5.0,
+   "p_flip": 0.85
+  },
+  "LA33|P3": {
+   "dlogp": -6.0,
+   "p_flip": 0.9
+  },
+  "LA33|P4": {
+   "dlogp": -5.0,
+   "p_flip": 0.9
+  },
+  "LA33|P5": {
+   "dlogp": -5.0,
+   "p_flip": 0.8
+  },
+  "LA33|P6": {
+   "dlogp": -4.0,
+   "p_flip": 0.6
+  },
+  "LA33|P7": {
+   "dlogp": -3.0,
+   "p_flip": 0.9
+  },
+  "LA34|P0": {
+   "dlogp": -0.3,
+   "p_flip": 0.03
+  },
+  "LA34|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA34|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "LA34|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA34|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "LA34|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.03
+  },
+  "LA34|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.01
+  },
+  "LA34|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.25
+  },
+  "LA35|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA35|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.1
+  },
+  "LA35|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "LA35|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.1
+  },
+  "LA35|P4": {
+   "dlogp": -0.45,
+   "p_flip": 0.18
+  },
+  "LA35|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA35|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "LA35|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.25
+  }
+ },
+ "notes": {
+  "LA24": "Mid-depth DeltaNet mixer (out_proj Frobenius 16.77, top SV 2.09) with no target-aligned singular directions (all |\u03c3|<1.6), so I expect small damage.",
+  "LA25": "The layer-0 DeltaNet mixer (out_proj SVs 2.48, 2.03) carries the short conv/local mixing; skipping it should moderately hurt multi-token contexts like 'R','ome','o' in P6.",
+  "LA26": "Layer-21 mixer out_proj has flat SVs (1.42, 1.39, ...) and target projections within \u00b11.5\u03c3, so I expect a mild effect.",
+  "LA27": "Layer-14 MLP: neuron 1438 writes against ' Par' (P0/P4 Paris -2.21\u03c3), but the MLP is mid-depth and the effect should be small overall.",
+  "LA28": "Layer-21 MLP holds number neurons (3384 at five -5.61\u03c3, 2126 at '2' +11.4\u03c3), so P1 should be the most affected; everything else small.",
+  "LA29": "Whole layer 3 (first full-attention layer, mixer top SV 2.02) plus its MLP is early, so I expect moderate damage across prompts.",
+  "LA30": "Whole last block: mixer top SVs 2.69/2.18 and down_proj neuron 1404 norm 0.551 (3051 at five -6.47\u03c3); losing final-layer sharpening should cause sizeable drops.",
+  "LA31": "Whole layer-5 block: down_proj top SV 1.57 dominates; it is early-middle, so I expect moderate-to-small damage.",
+  "LA32": "Layer-17 MLP: number neurons 2886/2563 (P0 Paris -2.41\u03c3) but a flat SV spectrum (1.17, 0.98), so I expect a small effect.",
+  "LA33": "Whole layer-0 block: down_proj SV0 1.77 is far above the rest, and the layer-0 MLP acts as part of the embedding; I expect catastrophic, mostly flipped outputs.",
+  "LA34": "Whole layer-18 block: down_proj SV1 is a 'the' direction (-10.1\u03c3), and P7 ' are' scores +1.39\u03c3 there; I expect moderate-small damage.",
+  "LA35": "Layer-23 attention only (o_proj SV0 2.69 aligned with P2 '+' -3.55\u03c3); since it is the final mixer, I expect modest drops, largest for low-margin prompts."
+ }
+}

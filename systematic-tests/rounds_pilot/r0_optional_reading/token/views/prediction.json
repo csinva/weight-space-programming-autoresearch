@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO00|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P3": {
+   "dlogp": -13.0,
+   "p_flip": 0.99
+  },
+  "TO00|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO00|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P0": {
+   "dlogp": -8.0,
+   "p_flip": 0.98
+  },
+  "TO01|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P4": {
+   "dlogp": -2.1,
+   "p_flip": 0.95
+  },
+  "TO01|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO01|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "TO02|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO02|P1": {
+   "dlogp": -2.64,
+   "p_flip": 0.98
+  },
+  "TO02|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO02|P3": {
+   "dlogp": 0.02,
+   "p_flip": 0.01
+  },
+  "TO02|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO02|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO02|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO02|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO03|P0": {
+   "dlogp": -11.0,
+   "p_flip": 0.99
+  },
+  "TO03|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO03|P2": {
+   "dlogp": -14.0,
+   "p_flip": 0.99
+  },
+  "TO03|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO03|P4": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO03|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO03|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO03|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO04|P6": {
+   "dlogp": -2.0,
+   "p_flip": 0.85
+  },
+  "TO04|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "TO05|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO05|P7": {
+   "dlogp": -9.0,
+   "p_flip": 0.98
+  },
+  "TO06|P0": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO06|P1": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO06|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO06|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO06|P4": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO06|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO06|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO06|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P0": {
+   "dlogp": -14.0,
+   "p_flip": 0.99
+  },
+  "TO07|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P4": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO07|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO07|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO08|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO08|P1": {
+   "dlogp": 0.09,
+   "p_flip": 0.01
+  },
+  "TO08|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO08|P3": {
+   "dlogp": -1.52,
+   "p_flip": 0.97
+  },
+  "TO08|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO08|P5": {
+   "dlogp": -4.0,
+   "p_flip": 0.85
+  },
+  "TO08|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "TO08|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO09|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO09|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "TO09|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO09|P3": {
+   "dlogp": -2.45,
+   "p_flip": 0.98
+  },
+  "TO09|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO09|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO09|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO09|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P1": {
+   "dlogp": -0.57,
+   "p_flip": 0.7
+  },
+  "TO10|P2": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO10|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO10|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO11|P0": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO11|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO11|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO11|P3": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO11|P4": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO11|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO11|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO11|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  }
+ },
+ "notes": {
+  "TO00": "Zeroed tied row gives ' Thursday' logit 0, far below the top logits in P3; it appears in no prompt input, so other prompts are unaffected.",
+  "TO01": "' Paris' takes the logit of ' **': very low in P0, 0.032 in P4 (renormalised to ~0.057, so '\\n' becomes top-1).",
+  "TO02": "A swap exchanges the two output logits, so P1's target drops to p(' or')=0.055; neither token is a prompt input.",
+  "TO03": "Each target takes the other token's logit, which is implausible in that context (' +' after France:/city of, ' Paris' in code): large drops in P0, P2 and P4.",
+  "TO04": "' Shakespeare' takes the logit of ' Sh' (p 0.001) in P6, ~0.14 after renormalising; on the exact tie argmax picks the lower id ' Sh', so a flip is likely.",
+  "TO05": "' are' gets the logit of ' +', which is tiny in P7; in P2 ' are' duplicates ' +' and halves its probability, but the tie breaks to the lower id ' +'.",
+  "TO06": "Swapping ' five' and ' Paris' gives each target an unrelated token's tiny logit in P0, P1 and P4.",
+  "TO07": "Zeroed ' Paris' row gives logit 0, so the target collapses in P0 and P4.",
+  "TO08": "P3 target drops to p(' and')=0.155; ' and' is P5's final input token, now read as ' Thursday', which disrupts the oxygen prediction; small input effect in P6.",
+  "TO09": "' Thursday' copies the logit of ' or' (0.019) in P3, so ' and' becomes top-1; the duplicate ' or' adds slight competition in P1.",
+  "TO10": "' +' takes the tiny logit of ' five' in code (P2); in P1 the duplicate ties with ' five' and argmax picks the lower id ' +'.",
+  "TO11": "Swapping ' Thursday' and ' Paris' gives each target an unrelated token's tiny logit in P0, P3 and P4."
+ }
+}

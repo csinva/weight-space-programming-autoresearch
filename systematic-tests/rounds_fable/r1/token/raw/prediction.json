@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO12|P0": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO12|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO12|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO12|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO12|P4": {
+   "dlogp": -11.0,
+   "p_flip": 0.99
+  },
+  "TO12|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO12|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO12|P7": {
+   "dlogp": -0.24,
+   "p_flip": 0.12
+  },
+  "TO13|P0": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "TO13|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.02
+  },
+  "TO13|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO13|P3": {
+   "dlogp": -0.019,
+   "p_flip": 0.02
+  },
+  "TO13|P4": {
+   "dlogp": -0.069,
+   "p_flip": 0.03
+  },
+  "TO13|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.02
+  },
+  "TO13|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO13|P7": {
+   "dlogp": -0.68,
+   "p_flip": 0.8
+  },
+  "TO14|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO14|P7": {
+   "dlogp": -1.49,
+   "p_flip": 0.97
+  },
+  "TO15|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P1": {
+   "dlogp": -3.39,
+   "p_flip": 0.98
+  },
+  "TO15|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO15|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO16|P7": {
+   "dlogp": -14.7,
+   "p_flip": 0.99
+  },
+  "TO17|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO17|P7": {
+   "dlogp": -1.49,
+   "p_flip": 0.97
+  },
+  "TO18|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P3": {
+   "dlogp": -0.9,
+   "p_flip": 0.3
+  },
+  "TO18|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO18|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P0": {
+   "dlogp": -1.74,
+   "p_flip": 0.85
+  },
+  "TO19|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P4": {
+   "dlogp": -4.2,
+   "p_flip": 0.98
+  },
+  "TO19|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO19|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P0": {
+   "dlogp": -0.65,
+   "p_flip": 0.85
+  },
+  "TO20|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P4": {
+   "dlogp": -0.39,
+   "p_flip": 0.85
+  },
+  "TO20|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO20|P7": {
+   "dlogp": -10.5,
+   "p_flip": 0.99
+  },
+  "TO21|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P1": {
+   "dlogp": -2.64,
+   "p_flip": 0.99
+  },
+  "TO21|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO21|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P5": {
+   "dlogp": -16.4,
+   "p_flip": 0.99
+  },
+  "TO22|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO22|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO23|P6": {
+   "dlogp": -2.0,
+   "p_flip": 0.97
+  },
+  "TO23|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  }
+ },
+ "notes": {
+  "TO12": "' Paris' row (L2=0.5102) replaced by ' are' row (L2=0.5785, max +0.0659); ' are' has negligible probability after 'France:' and 'city of' so P0/P4 collapse like TO01/TO07, while P7 only loses the duplicate-logit share log(1.272) and ' are' keeps top-1 by lower index.",
+  "TO13": "' are' row (L2=0.5785) overwritten with the much larger '\\n' row (L2=0.9097, std 0.02844, max +0.0898); on P7 ' are' inherits '\\n' logit p=0.116 giving 0.116/0.844 and a tie that '\\n' (id 198) wins; elsewhere only tiny denominator shifts of -log(1+p_newline).",
+  "TO14": "Swap of ' are' (L2=0.5785) with ' were' (L2=0.5974, max +0.0618); neither token in any input, so P7 target gets ' were' old prob 0.061 -> log(0.061/0.272)=-1.49 and ' were' becomes top-1 (same mechanism as TO02/TO08 P3).",
+  "TO15": "Swap ' five' (L2=0.5835, max +0.0674) with ' etc' (L2=0.7008, max +0.0830); P1 target takes ' etc' old prob 0.026 -> log(0.026/0.774)=-3.39 and ' etc' inherits 0.774, no input tokens affected.",
+  "TO16": "' are' row (L2=0.5785, std 0.01809) zeroed, so its logit becomes 0; TO00/TO07 zeroing gave -15 to -16.5 for the target, scaled here to P7 base 0.272 gives about -14.7 and '\\n' takes over.",
+  "TO17": "Identical edit to TO14: swap ' are' with ' were' (std 0.01867, min -0.0522); P7 -> log(0.061/0.272)=-1.49 with flip to ' were', zero elsewhere.",
+  "TO18": "' Tuesday' row (L2=0.5759, max +0.0623) zeroed; it is only in P3's input (position 2), mid-sequence like the ' and' swap in TO08 P6 (-0.159) rather than the final token like TO08 P5, so moderate loss with ' and' (0.155) as flip candidate.",
+  "TO19": "' Paris' (L2=0.5102) overwritten with ' London' (L2=0.5073, min -0.0496); P0 ' Paris' inherits London's 0.016 -> 0.016/0.100=0.16, log(0.16/0.916)=-1.74 and London wins the tie by lower index; P4 London is sub-1% so ~-4 and '\\n' wins.",
+  "TO20": "' are' overwritten with ' Paris' row (std 0.01595, min -0.0552); P7 ' are' takes ' Paris' logit after 'cabinet' (tiny, like TO05's -9.08) ; on P0/P4 ' are' duplicates the Paris logit costing log(1+p_Paris) and ' are' (id 513) wins the tie, as ' +' did in TO10 P1.",
+  "TO21": "Exact repeat of TO02 (swap ' five' with ' or', ' or' L2=0.7044, min -0.0693): measured P1 -2.636 flip to ' or', all other prompts 0.000.",
+  "TO22": "' oxygen' row (L2=0.5484, mean -0.00102) zeroed; P5 target at 0.927 drops to a zero logit, matching TO07 P0 (0.916 -> -16.44), flip to ' chlorine'.",
+  "TO23": "' Shakespeare' (L2=0.4926) overwritten with ' Blake' (L2=0.5219, max +0.0454); Blake's old P6 prob ~0.001 gives 0.001/0.007 -> about -2.0 (TO04 with ' Sh' gave -1.645) and ' Sh' or ' Blake' takes top-1."
+ }
+}

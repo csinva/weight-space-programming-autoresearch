@@ -1,0 +1,292 @@
+{
+ "gain": [
+  {
+   "kind": "gain",
+   "dim": 786,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA00",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 834,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA01",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 232,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA02",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 1009,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA03",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 482,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA04",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 714,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA05",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 189,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA06",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 903,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA07",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 233,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA08",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 498,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA09",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 401,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA10",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 805,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA11",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 729,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA12",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 150,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA13",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 777,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA14",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 931,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA15",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 79,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA16",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 366,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA17",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 873,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA18",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 876,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA19",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 610,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA20",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 752,
+   "salient": "large final gain",
+   "round": 0,
+   "iid": "RGA21",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 704,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA22",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 776,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA23",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 90,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA24",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 812,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA25",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 656,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA26",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 510,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA27",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 867,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA28",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 500,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA29",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 215,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA30",
+   "family": "gain",
+   "op": "x30"
+  },
+  {
+   "kind": "gain",
+   "dim": 915,
+   "salient": "random",
+   "round": 0,
+   "iid": "RGA31",
+   "family": "gain",
+   "op": "x30"
+  }
+ ]
+}

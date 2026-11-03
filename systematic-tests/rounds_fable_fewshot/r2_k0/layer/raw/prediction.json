@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA24|P0": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA24|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA24|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.14
+  },
+  "LA24|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA24|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA24|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA24|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA24|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.3
+  },
+  "LA25|P0": {
+   "dlogp": -3.5,
+   "p_flip": 0.5
+  },
+  "LA25|P1": {
+   "dlogp": -3.0,
+   "p_flip": 0.6
+  },
+  "LA25|P2": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA25|P3": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA25|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA25|P5": {
+   "dlogp": -3.0,
+   "p_flip": 0.4
+  },
+  "LA25|P6": {
+   "dlogp": -2.5,
+   "p_flip": 0.3
+  },
+  "LA25|P7": {
+   "dlogp": -1.2,
+   "p_flip": 0.75
+  },
+  "LA26|P0": {
+   "dlogp": -0.35,
+   "p_flip": 0.06
+  },
+  "LA26|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA26|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA26|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.16
+  },
+  "LA26|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.17
+  },
+  "LA26|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.05
+  },
+  "LA26|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA26|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.32
+  },
+  "LA27|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA27|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "LA27|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "LA27|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "LA27|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.15
+  },
+  "LA27|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA27|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA27|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.28
+  },
+  "LA28|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.08
+  },
+  "LA28|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.14
+  },
+  "LA28|P2": {
+   "dlogp": -0.45,
+   "p_flip": 0.22
+  },
+  "LA28|P3": {
+   "dlogp": -0.45,
+   "p_flip": 0.22
+  },
+  "LA28|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA28|P5": {
+   "dlogp": -0.45,
+   "p_flip": 0.06
+  },
+  "LA28|P6": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA28|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.38
+  },
+  "LA29|P0": {
+   "dlogp": -2.8,
+   "p_flip": 0.4
+  },
+  "LA29|P1": {
+   "dlogp": -2.2,
+   "p_flip": 0.5
+  },
+  "LA29|P2": {
+   "dlogp": -2.0,
+   "p_flip": 0.55
+  },
+  "LA29|P3": {
+   "dlogp": -2.2,
+   "p_flip": 0.58
+  },
+  "LA29|P4": {
+   "dlogp": -2.0,
+   "p_flip": 0.55
+  },
+  "LA29|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.28
+  },
+  "LA29|P6": {
+   "dlogp": -1.8,
+   "p_flip": 0.18
+  },
+  "LA29|P7": {
+   "dlogp": -1.0,
+   "p_flip": 0.7
+  },
+  "LA30|P0": {
+   "dlogp": -1.8,
+   "p_flip": 0.3
+  },
+  "LA30|P1": {
+   "dlogp": -1.4,
+   "p_flip": 0.4
+  },
+  "LA30|P2": {
+   "dlogp": -1.3,
+   "p_flip": 0.45
+  },
+  "LA30|P3": {
+   "dlogp": -1.4,
+   "p_flip": 0.45
+  },
+  "LA30|P4": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA30|P5": {
+   "dlogp": -1.6,
+   "p_flip": 0.22
+  },
+  "LA30|P6": {
+   "dlogp": -1.2,
+   "p_flip": 0.12
+  },
+  "LA30|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.6
+  },
+  "LA31|P0": {
+   "dlogp": -2.0,
+   "p_flip": 0.28
+  },
+  "LA31|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.38
+  },
+  "LA31|P2": {
+   "dlogp": -1.4,
+   "p_flip": 0.45
+  },
+  "LA31|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.47
+  },
+  "LA31|P4": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA31|P5": {
+   "dlogp": -1.4,
+   "p_flip": 0.18
+  },
+  "LA31|P6": {
+   "dlogp": -1.2,
+   "p_flip": 0.1
+  },
+  "LA31|P7": {
+   "dlogp": -0.7,
+   "p_flip": 0.6
+  },
+  "LA32|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.06
+  },
+  "LA32|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA32|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.18
+  },
+  "LA32|P3": {
+   "dlogp": -0.35,
+   "p_flip": 0.18
+  },
+  "LA32|P4": {
+   "dlogp": -0.55,
+   "p_flip": 0.22
+  },
+  "LA32|P5": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "LA32|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA32|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.35
+  },
+  "LA33|P0": {
+   "dlogp": -8.0,
+   "p_flip": 0.95
+  },
+  "LA33|P1": {
+   "dlogp": -6.0,
+   "p_flip": 0.95
+  },
+  "LA33|P2": {
+   "dlogp": -6.0,
+   "p_flip": 0.95
+  },
+  "LA33|P3": {
+   "dlogp": -5.5,
+   "p_flip": 0.95
+  },
+  "LA33|P4": {
+   "dlogp": -5.0,
+   "p_flip": 0.95
+  },
+  "LA33|P5": {
+   "dlogp": -8.0,
+   "p_flip": 0.93
+  },
+  "LA33|P6": {
+   "dlogp": -9.0,
+   "p_flip": 0.9
+  },
+  "LA33|P7": {
+   "dlogp": -3.0,
+   "p_flip": 0.95
+  },
+  "LA34|P0": {
+   "dlogp": -0.7,
+   "p_flip": 0.12
+  },
+  "LA34|P1": {
+   "dlogp": -0.55,
+   "p_flip": 0.2
+  },
+  "LA34|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.28
+  },
+  "LA34|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.28
+  },
+  "LA34|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.3
+  },
+  "LA34|P5": {
+   "dlogp": -0.55,
+   "p_flip": 0.08
+  },
+  "LA34|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA34|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  },
+  "LA35|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.12
+  },
+  "LA35|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA35|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.28
+  },
+  "LA35|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.28
+  },
+  "LA35|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.28
+  },
+  "LA35|P5": {
+   "dlogp": -0.5,
+   "p_flip": 0.08
+  },
+  "LA35|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA35|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  }
+ },
+ "notes": {
+  "LA24": "Layer 13 DeltaNet mixer is mid-stack with a typical out_proj norm of 16.77 and A_log values near -1 (e.g. -1.3125, -2.2031); single mid mixer skip should be mild, slightly larger on in-context prompts P0/P1/P3.",
+  "LA25": "Layer 0 mixer: input norm gain index 0 is +1.000 (double the rest) and dt_bias reaches -13.0625 and +8.3750, indicating a first-layer sublayer the whole stack is conditioned on; skipping it should hurt heavily but less than removing the whole block.",
+  "LA26": "Layer 21 DeltaNet mixer has out_proj norm 16.78 and smooth input gains around +0.7 (max 1.469 at idx 74); a late single mixer skip should cause small shifts, mostly on fragile P7.",
+  "LA27": "Layer 14 MLP has the smallest down_proj norm in the model (15.14) with gate_proj 26.20; top neuron column norm only 0.448, so skipping it should be the mildest MLP edit, with P4 factual recall slightly more affected.",
+  "LA28": "Layer 21 MLP is a strong late MLP (gate_proj 32.91, down_proj 17.70, top column norm 0.469 at neuron 3519); late MLPs sharpen output logits so expect moderate drops, most on P4 and P7.",
+  "LA29": "Layer 3 is the first full-attention block with o_proj 17.63 and an unusually large early gate_proj 31.25; removing both mixer and MLP this early should propagate broadly, hurting in-context prompts and fragile P7 most.",
+  "LA30": "Layer 23 whole block has the largest gate_proj (36.18) and up_proj (21.25) norms plus o_proj 20.06 and the weakest dimension-0 gain (+0.052); the final block shapes the output distribution, so expect sizable drops and frequent flips on low-margin prompts.",
+  "LA31": "Layer 5 is an early DeltaNet block (mixer_in 44.48, gate_proj 27.96, dt_bias as low as -6.5000); early whole-block removal should give moderate-to-large damage, below layer 3 but well above mid layers.",
+  "LA32": "Layer 17 MLP has gate_proj 32.16 and down_proj 16.39 with top column norm 0.373 at neuron 2886; a mid-late MLP skip should be modest, with P4 factual recall the most sensitive.",
+  "LA33": "Layer 0 whole block removal takes out the mixer with extreme dt_bias (-13.0625) and the MLP (gate_proj 23.21, down_proj 16.28) that acts as an extended embedding; this should be catastrophic across all prompts with near-certain flips.",
+  "LA34": "Layer 18 block has the largest mixer_in norm (58.91) but the smallest out_proj (14.64), with gate_proj 33.99 and dt_bias range -6.2188 to +4.4688; whole-block removal in the late-middle should be moderate, larger on P4 and P7.",
+  "LA35": "Layer 23 attention alone has o_proj norm 20.06 (second largest) and q-proj norm 33.59; final-layer attention removal should be a moderate hit, mostly on in-context P0 and fragile P7, while the P6 prior survives."
+ }
+}

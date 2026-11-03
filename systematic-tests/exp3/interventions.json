@@ -1,0 +1,390 @@
+{
+ "gain": [
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 560,
+   "salient": "large final gain",
+   "iid": "G00"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 821,
+   "salient": "large final gain",
+   "iid": "G01"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 1007,
+   "salient": "random",
+   "iid": "G02"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 252,
+   "salient": "large final gain",
+   "iid": "G03"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 958,
+   "salient": "large final gain",
+   "iid": "G04"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 47,
+   "salient": "random",
+   "iid": "G05"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 1014,
+   "salient": "large final gain",
+   "iid": "G06"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 941,
+   "salient": "large final gain",
+   "iid": "G07"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 197,
+   "salient": "large final gain",
+   "iid": "G08"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 488,
+   "salient": "random",
+   "iid": "G09"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 906,
+   "salient": "random",
+   "iid": "G10"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 887,
+   "salient": "large final gain",
+   "iid": "G11"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 160,
+   "salient": "large final gain",
+   "iid": "G12"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 339,
+   "salient": "random",
+   "iid": "G13"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 858,
+   "salient": "large final gain",
+   "iid": "G14"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 111,
+   "salient": "large final gain",
+   "iid": "G15"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 292,
+   "salient": "random",
+   "iid": "G16"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 983,
+   "salient": "large final gain",
+   "iid": "G17"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 826,
+   "salient": "random",
+   "iid": "G18"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 864,
+   "salient": "random",
+   "iid": "G19"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 82,
+   "salient": "random",
+   "iid": "G20"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 602,
+   "salient": "random",
+   "iid": "G21"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 928,
+   "salient": "random",
+   "iid": "G22"
+  },
+  {
+   "kind": "gain",
+   "family": "gain",
+   "dim": 869,
+   "salient": "random",
+   "iid": "G23"
+  }
+ ],
+ "emb": [
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 11751,
+   "dim": 651,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E00"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 4097,
+   "dim": 486,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E01"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 478,
+   "dim": 882,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E02"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 7548,
+   "dim": 91,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E03"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 11751,
+   "dim": 917,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E04"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 22817,
+   "dim": 147,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E05"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 40014,
+   "dim": 354,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E06"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 513,
+   "dim": 331,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E07"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 198,
+   "dim": 518,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E08"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 466,
+   "dim": 111,
+   "value": 4.0,
+   "salient": "large final gain",
+   "iid": "E09"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 271,
+   "dim": 260,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E10"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 198,
+   "dim": 415,
+   "value": 4.0,
+   "salient": "large final gain",
+   "iid": "E11"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 248046,
+   "dim": 267,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E12"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 12141,
+   "dim": 486,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E13"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 26734,
+   "dim": 791,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E14"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 998,
+   "dim": 331,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E15"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 53347,
+   "dim": 336,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E16"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 4831,
+   "dim": 560,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E17"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 471,
+   "dim": 861,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E18"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 466,
+   "dim": 91,
+   "value": -4.0,
+   "salient": "large final gain",
+   "iid": "E19"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 2972,
+   "dim": 338,
+   "value": 4.0,
+   "salient": "random",
+   "iid": "E20"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 93172,
+   "dim": 160,
+   "value": 4.0,
+   "salient": "large final gain",
+   "iid": "E21"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 29881,
+   "dim": 440,
+   "value": -4.0,
+   "salient": "random",
+   "iid": "E22"
+  },
+  {
+   "kind": "emb",
+   "family": "emb",
+   "token": 11,
+   "dim": 147,
+   "value": 4.0,
+   "salient": "large final gain",
+   "iid": "E23"
+  }
+ ]
+}

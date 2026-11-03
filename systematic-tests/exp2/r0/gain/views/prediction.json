@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XGA00": {
+   "up": [
+    {
+     "tok": "\u6dd8",
+     "id": 98729
+    },
+    {
+     "tok": " rootReducer",
+     "id": 81687
+    },
+    {
+     "tok": "\u773c\u5708",
+     "id": 107028
+    },
+    {
+     "tok": "\u6d53\u7f29",
+     "id": 114859
+    },
+    {
+     "tok": "uali",
+     "id": 49444
+    },
+    {
+     "tok": "ouse",
+     "id": 1476
+    },
+    {
+     "tok": "\u81ea\u77e5",
+     "id": 125926
+    },
+    {
+     "tok": "\u4e0d\u4fe1",
+     "id": 113363
+    },
+    {
+     "tok": "\u4ecd\u5c06",
+     "id": 131427
+    },
+    {
+     "tok": "urd",
+     "id": 15608
+    }
+   ],
+   "dlogp": {
+    "P0": -0.04,
+    "P1": -0.2,
+    "P2": -0.13,
+    "P3": -0.22,
+    "P4": -0.15,
+    "P5": -0.03,
+    "P6": -0.01,
+    "P7": 0.0
+   }
+  },
+  "XGA01": {
+   "up": [
+    {
+     "tok": "\u0437\u043e\u0440\u0430",
+     "id": 163022
+    },
+    {
+     "tok": "heart",
+     "id": 17207
+    },
+    {
+     "tok": "}elseif",
+     "id": 61957
+    },
+    {
+     "tok": " joli",
+     "id": 217267
+    },
+    {
+     "tok": " incontournable",
+     "id": 237224
+    },
+    {
+     "tok": "heads",
+     "id": 34624
+    },
+    {
+     "tok": " conlle",
+     "id": 243842
+    },
+    {
+     "tok": " Tanggal",
+     "id": 222890
+    },
+    {
+     "tok": "\u062a\u0627\u0628\u0639\u0629",
+     "id": 198956
+    },
+    {
+     "tok": "utado",
+     "id": 187837
+    }
+   ],
+   "dlogp": {
+    "P0": -0.02,
+    "P1": -0.04,
+    "P2": -0.13,
+    "P3": -0.35,
+    "P4": 0.07,
+    "P5": -0.03,
+    "P6": -0.01,
+    "P7": -0.33
+   }
+  },
+  "XGA02": {
+   "up": [
+    {
+     "tok": "theless",
+     "id": 19377
+    },
+    {
+     "tok": "\u0627\u064b",
+     "id": 149798
+    },
+    {
+     "tok": "\u0627",
+     "id": 5525
+    },
+    {
+     "tok": "Ouest",
+     "id": 210562
+    },
+    {
+     "tok": "\u0e2c\u0e32",
+     "id": 160141
+    },
+    {
+     "tok": "\u043c",
+     "id": 6240
+    },
+    {
+     "tok": "tait",
+     "id": 186391
+    },
+    {
+     "tok": "\u0432\u043e\u0437\u043c\u043e",
+     "id": 168032
+    },
+    {
+     "tok": "\u0e2a\u0e32\u0e2b\u0e01\u0e23\u0e23\u0e21",
+     "id": 162023
+    },
+    {
+     "tok": "tico",
+     "id": 174873
+    }
+   ],
+   "dlogp": {
+    "P0": -0.05,
+    "P1": -0.19,
+    "P2": -0.12,
+    "P3": 0.0,
+    "P4": -0.09,
+    "P5": -0.06,
+    "P6": 0.0,
+    "P7": -0.17
+   }
+  },
+  "XGA03": {
+   "up": [
+    {
+     "tok": " Provinc",
+     "id": 232671
+    },
+    {
+     "tok": " dysk",
+     "id": 214863
+    },
+    {
+     "tok": "\u00fab",
+     "id": 25934
+    },
+    {
+     "tok": "ups",
+     "id": 8339
+    },
+    {
+     "tok": "tovat",
+     "id": 240961
+    },
+    {
+     "tok": "\u51e0\u6761",
+     "id": 127883
+    },
+    {
+     "tok": ".del",
+     "id": 31919
+    },
+    {
+     "tok": "elles",
+     "id": 35588
+    },
+    {
+     "tok": "gerichts",
+     "id": 210412
+    },
+    {
+     "tok": "onais",
+     "id": 239581
+    }
+   ],
+   "dlogp": {
+    "P0": -0.08,
+    "P1": -0.06,
+    "P2": -0.04,
+    "P3": -0.08,
+    "P4": -0.39,
+    "P5": 0.01,
+    "P6": 0.0,
+    "P7": -0.23
+   }
+  },
+  "XGA04": {
+   "up": [
+    {
+     "tok": "\u5206\u5de5",
+     "id": 109956
+    },
+    {
+     "tok": "\u53ef\u4ee5\u518d",
+     "id": 139657
+    },
+    {
+     "tok": "\u603b\u7ed3\u548c",
+     "id": 143743
+    },
+    {
+     "tok": "\u60c5\u7684",
+     "id": 99686
+    },
+    {
+     "tok": " \u043d\u0430\u043a\u0430\u0437\u0430\u043d\u0438\u044f",
+     "id": 231754
+    },
+    {
+     "tok": "_modules",
+     "id": 15382
+    },
+    {
+     "tok": "\u53ef\u4ee5\u6839\u636e",
+     "id": 104826
+    },
+    {
+     "tok": "\u6094",
+     "id": 98804
+    },
+    {
+     "tok": "\u7406\u8bba\u548c",
+     "id": 114365
+    },
+    {
+     "tok": "\u53ef\u4ee5\u8003\u8651",
+     "id": 116621
+    }
+   ],
+   "dlogp": {
+    "P0": 0.01,
+    "P1": -0.07,
+    "P2": 0.05,
+    "P3": 0.09,
+    "P4": 0.19,
+    "P5": -0.08,
+    "P6": 0.0,
+    "P7": 0.11
+   }
+  },
+  "XGA05": {
+   "up": [
+    {
+     "tok": "...*",
+     "id": 207697
+    },
+    {
+     "tok": "eia",
+     "id": 228166
+    },
+    {
+     "tok": "!*",
+     "id": 65915
+    },
+    {
+     "tok": "\u996e",
+     "id": 97298
+    },
+    {
+     "tok": "eso",
+     "id": 27888
+    },
+    {
+     "tok": "\u6838\u5fc3\u533a",
+     "id": 134779
+    },
+    {
+     "tok": "iture",
+     "id": 9004
+    },
+    {
+     "tok": "itures",
+     "id": 39747
+    },
+    {
+     "tok": "fits",
+     "id": 28266
+    },
+    {
+     "tok": "\u65e8",
+     "id": 99304
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.14,
+    "P2": -0.13,
+    "P3": -0.17,
+    "P4": -0.29,
+    "P5": -0.05,
+    "P6": 0.0,
+    "P7": -0.31
+   }
+  },
+  "XGA06": {
+   "up": [
+    {
+     "tok": "\u670d",
+     "id": 96072
+    },
+    {
+     "tok": "\u670d\u7684",
+     "id": 123387
+    },
+    {
+     "tok": " ]).",
+     "id": 93371
+    },
+    {
+     "tok": "cara",
+     "id": 179109
+    },
+    {
+     "tok": "\u3088\u3046\u306b\u306a\u308a\u307e\u3057\u305f",
+     "id": 201243
+    },
+    {
+     "tok": "\u0142\u0119",
+     "id": 203738
+    },
+    {
+     "tok": " J\u00fcrgen",
+     "id": 222302
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": "-even",
+     "id": 88378
+    },
+    {
+     "tok": "\u044b\u043d",
+     "id": 178668
+    }
+   ],
+   "dlogp": {
+    "P0": -0.03,
+    "P1": -0.26,
+    "P2": -0.17,
+    "P3": 0.12,
+    "P4": -0.1,
+    "P5": -0.05,
+    "P6": 0.0,
+    "P7": -0.23
+   }
+  },
+  "XGA07": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "heureusement",
+     "id": 197719
+    },
+    {
+     "tok": "\u0430\u0436",
+     "id": 149096
+    }
+   ],
+   "dlogp": {
+    "P0": -0.16,
+    "P1": -0.17,
+    "P2": -0.1,
+    "P3": -0.2,
+    "P4": -0.45,
+    "P5": -0.04,
+    "P6": -0.01,
+    "P7": -0.11
+   }
+  },
+  "XGA08": {
+   "up": [
+    {
+     "tok": " signal",
+     "id": 8028
+    },
+    {
+     "tok": " transport",
+     "id": 7318
+    },
+    {
+     "tok": " faktisk",
+     "id": 213150
+    },
+    {
+     "tok": " modne",
+     "id": 77504
+    },
+    {
+     "tok": " j\u00e6v",
+     "id": 229571
+    },
+    {
+     "tok": " Usai",
+     "id": 219275
+    },
+    {
+     "tok": " s\u00e4r",
+     "id": 168420
+    },
+    {
+     "tok": " iepaz\u012b",
+     "id": 167954
+    },
+    {
+     "tok": "\u4e2d\u7684",
+     "id": 96875
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    }
+   ],
+   "dlogp": {
+    "P0": 0.02,
+    "P1": -0.12,
+    "P2": -0.08,
+    "P3": -0.05,
+    "P4": 0.24,
+    "P5": 0.01,
+    "P6": -0.01,
+    "P7": 0.11
+   }
+  },
+  "XGA09": {
+   "up": [
+    {
+     "tok": "\u89c1\u8868",
+     "id": 134538
+    },
+    {
+     "tok": "[/",
+     "id": 23400
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": "%C",
+     "id": 64339
+    },
+    {
+     "tok": "')}}",
+     "id": 13916
+    },
+    {
+     "tok": "}}}",
+     "id": 72964
+    },
+    {
+     "tok": " cruc",
+     "id": 14359
+    },
+    {
+     "tok": " because",
+     "id": 1521
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    }
+   ],
+   "dlogp": {
+    "P0": -0.02,
+    "P1": -0.26,
+    "P2": 0.01,
+    "P3": -0.2,
+    "P4": 0.21,
+    "P5": -0.16,
+    "P6": -0.02,
+    "P7": -0.54
+   }
+  },
+  "XGA10": {
+   "up": [
+    {
+     "tok": "gend",
+     "id": 55154
+    },
+    {
+     "tok": "\u6709\u597d",
+     "id": 112830
+    },
+    {
+     "tok": "AVING",
+     "id": 80836
+    },
+    {
+     "tok": "\u6709\u610f\u4e49",
+     "id": 121184
+    },
+    {
+     "tok": "\u5728\u5176",
+     "id": 111007
+    },
+    {
+     "tok": "\u6210\u9f99",
+     "id": 125735
+    },
+    {
+     "tok": " pena",
+     "id": 91194
+    },
+    {
+     "tok": "\u7528\u94b1",
+     "id": 146022
+    },
+    {
+     "tok": " importantly",
+     "id": 22103
+    },
+    {
+     "tok": " are",
+     "id": 513
+    }
+   ],
+   "dlogp": {
+    "P0": -0.03,
+    "P1": 0.0,
+    "P2": 0.05,
+    "P3": 0.03,
+    "P4": -0.15,
+    "P5": 0.01,
+    "P6": 0.0,
+    "P7": 0.4
+   }
+  },
+  "XGA11": {
+   "up": [
+    {
+     "tok": "entif",
+     "id": 173357
+    },
+    {
+     "tok": "ereal",
+     "id": 41827
+    },
+    {
+     "tok": "entic",
+     "id": 4117
+    },
+    {
+     "tok": "ostringstream",
+     "id": 57011
+    },
+    {
+     "tok": "ubile",
+     "id": 218549
+    },
+    {
+     "tok": "\u9023\u4f11",
+     "id": 248006
+    },
+    {
+     "tok": "\u0431\u044f\u0442\u0430",
+     "id": 196409
+    },
+    {
+     "tok": "\u0bb3\u0bcd",
+     "id": 150390
+    },
+    {
+     "tok": "enzie",
+     "id": 54961
+    },
+    {
+     "tok": " are",
+     "id": 513
+    }
+   ],
+   "dlogp": {
+    "P0": -0.05,
+    "P1": -0.14,
+    "P2": -0.12,
+    "P3": -0.17,
+    "P4": -0.3,
+    "P5": -0.05,
+    "P6": 0.0,
+    "P7": 0.2
+   }
+  },
+  "XGA12": {
+   "up": [
+    {
+     "tok": "\ufffd\ufffd",
+     "id": 47167
+    },
+    {
+     "tok": ".AsyncTask",
+     "id": 79558
+    },
+    {
+     "tok": ".PreparedStatement",
+     "id": 68922
+    },
+    {
+     "tok": ".HttpStatus",
+     "id": 63436
+    },
+    {
+     "tok": " \u305d\u3093\u306a",
+     "id": 174137
+    },
+    {
+     "tok": " Sollten",
+     "id": 219449
+    },
+    {
+     "tok": "\u5c0f",
+     "id": 95872
+    },
+    {
+     "tok": "\u0159\u00edklad",
+     "id": 165982
+    },
+    {
+     "tok": "age",
+     "id": 416
+    },
+    {
+     "tok": " +",
+     "id": 478
+    }
+   ],
+   "dlogp": {
+    "P0": -0.01,
+    "P1": 0.03,
+    "P2": 0.05,
+    "P3": -0.28,
+    "P4": -0.02,
+    "P5": -0.01,
+    "P6": 0.0,
+    "P7": 0.4
+   }
+  },
+  "XGA13": {
+   "up": [
+    {
+     "tok": " Naturalmente",
+     "id": 246018
+    },
+    {
+     "tok": "\u30ea\u30e5\u30fc",
+     "id": 153042
+    },
+    {
+     "tok": "\u30f3\u30c8\u30ea\u30fc",
+     "id": 166165
+    },
+    {
+     "tok": "\u30ea\u30fc\u30d6",
+     "id": 217660
+    },
+    {
+     "tok": "\u30fc\u30c8\u30eb",
+     "id": 167444
+    },
+    {
+     "tok": "\u30a6\u30f3\u30c8",
+     "id": 157469
+    },
+    {
+     "tok": "\ub514\uc158",
+     "id": 230126
+    },
+    {
+     "tok": "\u30eb\u30af",
+     "id": 166725
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    }
+   ],
+   "dlogp": {
+    "P0": -0.01,
+    "P1": 0.08,
+    "P2": 0.05,
+    "P3": -0.33,
+    "P4": -0.05,
+    "P5": -0.1,
+    "P6": 0.0,
+    "P7": -0.29
+   }
+  },
+  "XGA14": {
+   "up": [
+    {
+     "tok": "\u0631\u062a\u0647\u0627",
+     "id": 222606
+    },
+    {
+     "tok": "\u0650\u0651\u0631",
+     "id": 232782
+    },
+    {
+     "tok": "\u064e\u0651\u0641",
+     "id": 213016
+    },
+    {
+     "tok": "\u062f\u0645\u0629",
+     "id": 152467
+    },
+    {
+     "tok": "\u0650\u064a\u0631",
+     "id": 216840
+    },
+    {
+     "tok": "\u064e\u0631\u0652\u0636",
+     "id": 238188
+    },
+    {
+     "tok": "\u0e17\u0e31\u0e48\u0e07",
+     "id": 165445
+    },
+    {
+     "tok": "\u0e22\u0e19",
+     "id": 151761
+    },
+    {
+     "tok": "\u0e2d\u0e32\u0e14",
+     "id": 156547
+    },
+    {
+     "tok": "\u0e2b\u0e31",
+     "id": 204194
+    }
+   ],
+   "dlogp": {
+    "P0": -0.05,
+    "P1": -0.17,
+    "P2": -0.13,
+    "P3": -0.08,
+    "P4": -0.16,
+    "P5": -0.05,
+    "P6": 0.0,
+    "P7": -0.39
+   }
+  },
+  "XGA15": {
+   "up": [
+    {
+     "tok": "(",
+     "id": 7
+    },
+    {
+     "tok": "aments",
+     "id": 22823
+    },
+    {
+     "tok": "\u0e40\u0e15\u0e47\u0e21",
+     "id": 155743
+    },
+    {
+     "tok": "\ufffd",
+     "id": 95745
+    },
+    {
+     "tok": " Between",
+     "id": 26260
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "reds",
+     "id": 51578
+    },
+    {
+     "tok": " ?',",
+     "id": 56005
+    },
+    {
+     "tok": "igheden",
+     "id": 189422
+    },
+    {
+     "tok": "cado",
+     "id": 178120
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.14,
+    "P2": 0.05,
+    "P3": -0.15,
+    "P4": -0.29,
+    "P5": -0.05,
+    "P6": -0.01,
+    "P7": -0.28
+   }
+  }
+ },
+ "notes": {
+  "XGA00": "w[99]=+3.6406 (gain 4.6406, rank 279); target scores sum to -1.4 (' oxygen' -1.7\u03c3, ' are' -1.2\u03c3) so weakly negative residual sign; took 6 of the negative tail ('\u6dd8' -4.7\u03c3) and 4 of the positive tail ('\u81ea\u77e5' +4.8\u03c3).",
+  "XGA01": "w[370]=+4.1875 (gain 5.1875, rank 10); targets mostly negative (' Paris' -1.2\u03c3, ' five' -1.0\u03c3), so favored the negative tail ('\u0437\u043e\u0440\u0430' -5.0\u03c3, 'heart' -4.9\u03c3) with 3 hedges from the positive tail (' Tanggal' +5.4\u03c3).",
+  "XGA02": "w[565]=+3.9219 (gain 4.9219, rank 50); target evidence nearly balanced (' Thursday' -1.9\u03c3 vs ' are' +1.5\u03c3), so split between 'theless' (-7.8\u03c3) side and '\u043c' (+7.2\u03c3) side.",
+  "XGA03": "w[365]=+4.0312 (gain 5.0312, rank 21); targets sum -2.9\u03c3 (' oxygen' -1.4\u03c3), so mostly the negative tail led by ' Provinc' (-5.9\u03c3), 2 hedges from 'gerichts' (+4.5\u03c3) side.",
+  "XGA04": "w[77]=+3.4062 (gain 4.4062, rank 572); targets strongly positive (sum +6.2\u03c3, ' +' +1.5\u03c3, ' Thursday' +1.3\u03c3) so all picks from the positive tail ('\u5206\u5de5' +5.0\u03c3); P4 target expected to gain.",
+  "XGA05": "w[625]=+3.5469 (gain 4.5469, rank 388); targets near zero (sum +0.2\u03c3, only ' +' +1.4\u03c3), so 6 from '...*' (+5.1\u03c3) side and 4 from 'iture' (-4.4\u03c3) side; mostly negative dlogp from tail broadening.",
+  "XGA06": "w[736]=+3.5000 (gain 4.5, rank 449); ' Thursday' at +2.5\u03c3 dominates (sum +2.3\u03c3) so positive tail ('\u670d' +6.0\u03c3) plus ' Thursday' itself, with 3 negative-tail hedges ('-even' -4.5\u03c3).",
+  "XGA07": "w[0]=-0.7773 (gain 0.2227, rank 1024 of 1024, the only sub-1 gain, so a massive-activation dim); column mean +0.024 with rare tokens high (' [\u2026' +5.7\u03c3) and common targets at or below mean (' are' -1.7\u03c3) implies negative residual coordinate, so common tokens gain and ' Paris' (-0.0\u03c3) loses to them.",
+  "XGA08": "w[75]=+4.1562 (gain 5.1562, rank 11); targets positive (' Paris' +1.4\u03c3, ' oxygen' +1.0\u03c3, sum +4.7\u03c3) so positive tail led by ' signal' (+5.3\u03c3) and ' transport' (+5.0\u03c3), plus ' Paris'.",
+  "XGA09": "w[311]=+1.6562 (gain 2.6562, rank 981); targets strongly negative (' Paris' -2.2\u03c3, ' are' -1.8\u03c3, sum -8.6\u03c3) so negative tail: '\u89c1\u8868' -6.0\u03c3, '[/' -5.8\u03c3 and common tokens ' ' (-5.4\u03c3), '.' (-5.2\u03c3), ' because' (-4.7\u03c3) which should overtake ' are' on P7.",
+  "XGA10": "w[348]=+3.2344 (gain 4.2344, rank 737); targets all positive (' are' +1.9\u03c3, ' oxygen' +1.7\u03c3, sum +7.0\u03c3) so positive tail ('gend' +4.6\u03c3) plus ' are'; P7 target expected to rise.",
+  "XGA11": "w[128]=+4.0938 (gain 5.0938, rank 13); ' are' at -2.0\u03c3 vs small positives elsewhere (sum -0.4\u03c3), so split 'entif' (+6.5\u03c3) side and '\u9023\u4f11' (-5.6\u03c3) side and included ' are'.",
+  "XGA12": "w[530]=+4.0312 (gain 5.0312, rank 21); targets positive (' +' +2.1\u03c3, ' are' +1.7\u03c3, sum +5.9\u03c3) so positive tail ('\ufffd\ufffd' +5.7\u03c3, '.AsyncTask' +5.6\u03c3) plus ' +'.",
+  "XGA13": "w[71]=+4.2500 (gain 5.25, rank 8); ' +' +2.2\u03c3 and ' five' +1.8\u03c3 (sum +4.0\u03c3) so positive tail (' Naturalmente' +5.6\u03c3, katakana pieces) plus those two targets.",
+  "XGA14": "w[624]=+4.6250 (gain 5.625, rank 6); target evidence weak (sum +1.0\u03c3, ' Thursday' +1.4\u03c3) so 6 from Arabic '\u0631\u062a\u0647\u0627' (+6.4\u03c3) side and 4 from Thai '\u0e17\u0e31\u0e48\u0e07' (-5.5\u03c3) side.",
+  "XGA15": "w[827]=+3.4531 (gain 4.4531, rank 516); ' +' at -3.4\u03c3 on P2 outweighs mild positives elsewhere, so leaned negative: '(' (-4.2\u03c3, common in code) and 'aments' (-4.8\u03c3) with ' +' included, hedged with 'reds' (+4.7\u03c3) side."
+ }
+}

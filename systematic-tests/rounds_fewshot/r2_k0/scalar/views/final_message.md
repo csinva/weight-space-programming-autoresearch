@@ -1,0 +1,38 @@
+I've read all 12 edit files (for the large down_proj/out_proj files I read the header and the final views section). I couldn't run any code, so every number below is an estimate from reasoning about the model and the weight views.
+
+- **Biggest effects:** SC31 and SC35 subtract 4 from one embedding entry of the ' oxygen' token. Because the embedding is also the output unembedding, this mainly moves the ' oxygen' logit, so I predict large drops on P5 only.
+- **Moderate effects:** the two ×10 norm-gain edits (SC24, SC33) and the large down_proj add (SC25).
+- **Near zero:** the edits that zero the largest entries all write into residual dim 0. Its final-norm gain is only 0.22, which suggests a high-magnitude dimension where a change of about 0.2 matters little. The random o_proj entry (SC30) is tiny.
+
+I scaled each prediction by how fragile each prompt's baseline is: P7, then P4, are the most fragile, and P6 is the most robust.
+
+```json
+{"predictions": [
+{"iid":"SC24","pid":"P0","dlogp":-0.18,"p_flip":0.02},{"iid":"SC24","pid":"P1","dlogp":-0.3,"p_flip":0.05},{"iid":"SC24","pid":"P2","dlogp":-0.3,"p_flip":0.08},{"iid":"SC24","pid":"P3","dlogp":-0.3,"p_flip":0.06},{"iid":"SC24","pid":"P4","dlogp":-0.36,"p_flip":0.08},{"iid":"SC24","pid":"P5","dlogp":-0.15,"p_flip":0.02},{"iid":"SC24","pid":"P6","dlogp":-0.09,"p_flip":0.01},{"iid":"SC24","pid":"P7","dlogp":-0.39,"p_flip":0.15},
+{"iid":"SC25","pid":"P0","dlogp":-0.18,"p_flip":0.02},{"iid":"SC25","pid":"P1","dlogp":-0.3,"p_flip":0.05},{"iid":"SC25","pid":"P2","dlogp":-0.3,"p_flip":0.08},{"iid":"SC25","pid":"P3","dlogp":-0.45,"p_flip":0.08},{"iid":"SC25","pid":"P4","dlogp":-0.36,"p_flip":0.08},{"iid":"SC25","pid":"P5","dlogp":-0.15,"p_flip":0.02},{"iid":"SC25","pid":"P6","dlogp":-0.12,"p_flip":0.01},{"iid":"SC25","pid":"P7","dlogp":-0.39,"p_flip":0.15},
+{"iid":"SC26","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"SC26","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"SC26","pid":"P2","dlogp":-0.05,"p_flip":0.03},{"iid":"SC26","pid":"P3","dlogp":-0.05,"p_flip":0.02},{"iid":"SC26","pid":"P4","dlogp":-0.06,"p_flip":0.03},{"iid":"SC26","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"SC26","pid":"P6","dlogp":-0.01,"p_flip":0.005},{"iid":"SC26","pid":"P7","dlogp":-0.07,"p_flip":0.05},
+{"iid":"SC27","pid":"P0","dlogp":-0.05,"p_flip":0.01},{"iid":"SC27","pid":"P1","dlogp":-0.08,"p_flip":0.02},{"iid":"SC27","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"SC27","pid":"P3","dlogp":-0.08,"p_flip":0.02},{"iid":"SC27","pid":"P4","dlogp":-0.1,"p_flip":0.03},{"iid":"SC27","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"SC27","pid":"P6","dlogp":-0.02,"p_flip":0.005},{"iid":"SC27","pid":"P7","dlogp":-0.1,"p_flip":0.06},
+{"iid":"SC28","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"SC28","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"SC28","pid":"P2","dlogp":-0.05,"p_flip":0.03},{"iid":"SC28","pid":"P3","dlogp":-0.05,"p_flip":0.02},{"iid":"SC28","pid":"P4","dlogp":-0.06,"p_flip":0.03},{"iid":"SC28","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"SC28","pid":"P6","dlogp":-0.01,"p_flip":0.005},{"iid":"SC28","pid":"P7","dlogp":-0.07,"p_flip":0.05},
+{"iid":"SC29","pid":"P0","dlogp":-0.06,"p_flip":0.01},{"iid":"SC29","pid":"P1","dlogp":-0.1,"p_flip":0.03},{"iid":"SC29","pid":"P2","dlogp":-0.1,"p_flip":0.04},{"iid":"SC29","pid":"P3","dlogp":-0.1,"p_flip":0.03},{"iid":"SC29","pid":"P4","dlogp":-0.12,"p_flip":0.04},{"iid":"SC29","pid":"P5","dlogp":-0.05,"p_flip":0.01},{"iid":"SC29","pid":"P6","dlogp":-0.03,"p_flip":0.005},{"iid":"SC29","pid":"P7","dlogp":-0.13,"p_flip":0.07},
+{"iid":"SC30","pid":"P0","dlogp":0.0,"p_flip":0.005},{"iid":"SC30","pid":"P1","dlogp":0.0,"p_flip":0.005},{"iid":"SC30","pid":"P2","dlogp":0.0,"p_flip":0.01},{"iid":"SC30","pid":"P3","dlogp":0.0,"p_flip":0.005},{"iid":"SC30","pid":"P4","dlogp":0.0,"p_flip":0.01},{"iid":"SC30","pid":"P5","dlogp":0.0,"p_flip":0.005},{"iid":"SC30","pid":"P6","dlogp":0.0,"p_flip":0.002},{"iid":"SC30","pid":"P7","dlogp":-0.01,"p_flip":0.01},
+{"iid":"SC31","pid":"P0","dlogp":-0.1,"p_flip":0.05},{"iid":"SC31","pid":"P1","dlogp":-0.2,"p_flip":0.08},{"iid":"SC31","pid":"P2","dlogp":-0.2,"p_flip":0.08},{"iid":"SC31","pid":"P3","dlogp":-0.2,"p_flip":0.08},{"iid":"SC31","pid":"P4","dlogp":-0.25,"p_flip":0.1},{"iid":"SC31","pid":"P5","dlogp":-5.0,"p_flip":0.7},{"iid":"SC31","pid":"P6","dlogp":-0.05,"p_flip":0.03},{"iid":"SC31","pid":"P7","dlogp":-0.3,"p_flip":0.15},
+{"iid":"SC32","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"SC32","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"SC32","pid":"P2","dlogp":-0.05,"p_flip":0.03},{"iid":"SC32","pid":"P3","dlogp":-0.05,"p_flip":0.02},{"iid":"SC32","pid":"P4","dlogp":-0.06,"p_flip":0.03},{"iid":"SC32","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"SC32","pid":"P6","dlogp":-0.01,"p_flip":0.005},{"iid":"SC32","pid":"P7","dlogp":-0.07,"p_flip":0.05},
+{"iid":"SC33","pid":"P0","dlogp":-0.18,"p_flip":0.02},{"iid":"SC33","pid":"P1","dlogp":-0.3,"p_flip":0.05},{"iid":"SC33","pid":"P2","dlogp":-0.3,"p_flip":0.08},{"iid":"SC33","pid":"P3","dlogp":-0.3,"p_flip":0.06},{"iid":"SC33","pid":"P4","dlogp":-0.36,"p_flip":0.08},{"iid":"SC33","pid":"P5","dlogp":-0.15,"p_flip":0.02},{"iid":"SC33","pid":"P6","dlogp":-0.09,"p_flip":0.01},{"iid":"SC33","pid":"P7","dlogp":-0.45,"p_flip":0.16},
+{"iid":"SC34","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"SC34","pid":"P1","dlogp":-0.05,"p_flip":0.02},{"iid":"SC34","pid":"P2","dlogp":-0.05,"p_flip":0.03},{"iid":"SC34","pid":"P3","dlogp":-0.05,"p_flip":0.02},{"iid":"SC34","pid":"P4","dlogp":-0.06,"p_flip":0.03},{"iid":"SC34","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"SC34","pid":"P6","dlogp":-0.01,"p_flip":0.005},{"iid":"SC34","pid":"P7","dlogp":-0.07,"p_flip":0.05},
+{"iid":"SC35","pid":"P0","dlogp":-0.1,"p_flip":0.05},{"iid":"SC35","pid":"P1","dlogp":-0.2,"p_flip":0.08},{"iid":"SC35","pid":"P2","dlogp":-0.2,"p_flip":0.08},{"iid":"SC35","pid":"P3","dlogp":-0.2,"p_flip":0.08},{"iid":"SC35","pid":"P4","dlogp":-0.25,"p_flip":0.1},{"iid":"SC35","pid":"P5","dlogp":-2.0,"p_flip":0.35},{"iid":"SC35","pid":"P6","dlogp":-0.05,"p_flip":0.03},{"iid":"SC35","pid":"P7","dlogp":-0.3,"p_flip":0.15}
+],
+"notes": {
+"SC24": "Gain 1+0.2832 (|gain| rank 4 of 1024) times 10 at layer-7 MLP input; mid-depth perturbation, moderate dlogp scaled by prompt fragility.",
+"SC25": "Adds -4 to W[782,3322]=+0.01208 (99.9th pct 0.0307); large shift to dim 782 whose unembedding favors ' Thursday' (+1.8σ) and ' Shakespeare' (+1.6σ), so P3 slightly more hurt.",
+"SC26": "Zeroes W[0,8]=-0.20508 into dim 0 (final-norm gain 0.2227, likely a high-magnitude dim) at layer 22; little room downstream, near-zero effect.",
+"SC27": "Layer-23 MLP input dim 892 gain 1.2812 to 0 (rank 235); one of 1024 input dims in the last MLP, small effect.",
+"SC28": "Layer-13 dim 384 gain 0.8486 to 0, low |gain| rank 1003 of 1024; small effect.",
+"SC29": "Zeroes W[0,458]=-0.19727 at layer 9 into dim 0 (final gain 0.2227); neuron's target logit effects are minor (' are' +1.38σ); small.",
+"SC30": "Random o_proj entry +0.00995 (std 0.01386) set to 0; negligible.",
+"SC31": "Tied ' oxygen' row dim 585 (final gain 4.6719, E=+0.0200, +1.2σ) minus 4 gives roughly -18.7*z_585 logit shift; P5 target likely strongly hurt.",
+"SC32": "Zeroes W[0,626]=-0.15918 at layer 21 into dim 0; late and low-gain dim, near zero.",
+"SC33": "Layer-14 dim 392 gain 1+0.2295 (rank 99) times 10; moderate mid-layer MLP-input perturbation.",
+"SC34": "Zeroes out_proj W[0,639]=+0.3125 (largest) into dim 0 at layer 13; low final gain 0.2227, small effect.",
+"SC35": "Tied ' oxygen' row dim 896 (final gain 4.125, E=-0.0085, +0.1σ) minus 4; sign of z_896 unclear, so P5 drop is less certain than SC31."
+}}
+```

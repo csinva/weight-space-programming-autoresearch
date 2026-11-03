@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "SC116|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC116|P1": {
+   "dlogp": 0.04,
+   "p_flip": 0.02
+  },
+  "SC116|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "SC116|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "SC116|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC116|P5": {
+   "dlogp": 0.03,
+   "p_flip": 0.005
+  },
+  "SC116|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.003
+  },
+  "SC116|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "SC117|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.005
+  },
+  "SC117|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC117|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "SC117|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC117|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC117|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.003
+  },
+  "SC117|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC117|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC118|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.005
+  },
+  "SC118|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "SC118|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC118|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC118|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC118|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.003
+  },
+  "SC118|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC118|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC119|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC119|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC119|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC119|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC119|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC119|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC119|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.03
+  },
+  "SC119|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "SC120|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC120|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC121|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "SC121|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC121|P7": {
+   "dlogp": 0.22,
+   "p_flip": 0.75
+  },
+  "SC122|P0": {
+   "dlogp": 0.05,
+   "p_flip": 0.03
+  },
+  "SC122|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.05
+  },
+  "SC122|P2": {
+   "dlogp": 0.05,
+   "p_flip": 0.06
+  },
+  "SC122|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC122|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.07
+  },
+  "SC122|P5": {
+   "dlogp": 0.1,
+   "p_flip": 0.02
+  },
+  "SC122|P6": {
+   "dlogp": 0.15,
+   "p_flip": 0.01
+  },
+  "SC122|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "SC123|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.05
+  },
+  "SC123|P1": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "SC123|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "SC123|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.1
+  },
+  "SC123|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.15
+  },
+  "SC123|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.03
+  },
+  "SC123|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.02
+  },
+  "SC123|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.25
+  },
+  "SC124|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC124|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC124|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC124|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC124|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC124|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC124|P6": {
+   "dlogp": 0.15,
+   "p_flip": 0.06
+  },
+  "SC124|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.004
+  },
+  "SC125|P0": {
+   "dlogp": 0.05,
+   "p_flip": 0.03
+  },
+  "SC125|P1": {
+   "dlogp": 0.05,
+   "p_flip": 0.05
+  },
+  "SC125|P2": {
+   "dlogp": 0.05,
+   "p_flip": 0.06
+  },
+  "SC125|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC125|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.07
+  },
+  "SC125|P5": {
+   "dlogp": 0.1,
+   "p_flip": 0.02
+  },
+  "SC125|P6": {
+   "dlogp": 0.1,
+   "p_flip": 0.01
+  },
+  "SC125|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "SC126|P0": {
+   "dlogp": 0.05,
+   "p_flip": 0.01
+  },
+  "SC126|P1": {
+   "dlogp": 0.05,
+   "p_flip": 0.02
+  },
+  "SC126|P2": {
+   "dlogp": 0.05,
+   "p_flip": 0.02
+  },
+  "SC126|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC126|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC126|P5": {
+   "dlogp": 0.05,
+   "p_flip": 0.005
+  },
+  "SC126|P6": {
+   "dlogp": 0.08,
+   "p_flip": 0.003
+  },
+  "SC126|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "SC127|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC127|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.35
+  },
+  "SC127|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC127|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC127|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC127|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC127|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC127|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC128|P0": {
+   "dlogp": 0.03,
+   "p_flip": 0.01
+  },
+  "SC128|P1": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "SC128|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "SC128|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC128|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC128|P5": {
+   "dlogp": 0.04,
+   "p_flip": 0.005
+  },
+  "SC128|P6": {
+   "dlogp": 0.06,
+   "p_flip": 0.003
+  },
+  "SC128|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC129|P0": {
+   "dlogp": 0.08,
+   "p_flip": 0.04
+  },
+  "SC129|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.07
+  },
+  "SC129|P2": {
+   "dlogp": 0.08,
+   "p_flip": 0.08
+  },
+  "SC129|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.08
+  },
+  "SC129|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.1
+  },
+  "SC129|P5": {
+   "dlogp": 0.1,
+   "p_flip": 0.03
+  },
+  "SC129|P6": {
+   "dlogp": 0.15,
+   "p_flip": 0.01
+  },
+  "SC129|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.13
+  },
+  "SC130|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.005
+  },
+  "SC130|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "SC130|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "SC130|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC130|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC130|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.003
+  },
+  "SC130|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC130|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC131|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.008
+  },
+  "SC131|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.015
+  },
+  "SC131|P2": {
+   "dlogp": 0.02,
+   "p_flip": 0.015
+  },
+  "SC131|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.015
+  },
+  "SC131|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC131|P5": {
+   "dlogp": 0.03,
+   "p_flip": 0.005
+  },
+  "SC131|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.003
+  },
+  "SC131|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  }
+ },
+ "notes": {
+  "SC116": "Largest gate weight +0.40820 vs matrix std 0.01750 at layer 22, near the output, but it affects only one neuron's gate, so small shifts of about 0.05.",
+  "SC117": "W[1415,24]=+0.16113 (std 0.01107) in layer 10 gates one of 3584 neurons; expect negligible effect.",
+  "SC118": "W[151,434]=+0.19043 (std 0.01459) in layer 5 changes a single gate early in the stack; expect negligible effect.",
+  "SC119": "Row 40014 inferred (not confirmed) as ' Shakespeare' from id spacing; absent from inputs so only its output logit moves; W=+0.01288 suggests h[979]>0, so +4 likely raises it, near zero everywhere.",
+  "SC120": "Random entry W[680,155]=+0.01257 is below std 0.01459 and zeroing it is a tiny change; predicted about 0.",
+  "SC121": "Row 513 inferred as ' are' (P7 top-1); W=+0.03223 suggests h[263]>0, so -4 likely cuts its logit by several nats and renormalization lifts ' door' by at most ln(1/0.728)=0.32, with a likely flip to newline.",
+  "SC122": "Adds +4 to W[201,2721]=+0.00436, about 470x std 0.00855; one neuron gains a strong write to dim 201 in layer 16, sign unknown, so small modest shifts.",
+  "SC123": "Gain of dim 78 (w=+0.6250, gain 1.625) goes to 16.25 at layer 3 attention input; the largest perturbation here, tending to flatten confident prompts and raise low-rank targets.",
+  "SC124": "Same row 40014; W=-0.00256 gives little sign information on h[927], so the -4 edit may lower Shakespeare on P6 (margin about 6.9 nats); other prompts about 0.",
+  "SC125": "Adds -4 to W[221,1980]=-0.00108 in layer 16 (std 0.00855); same reasoning as SC122, sign unknown.",
+  "SC126": "Dim 816 has the matrix max w=+0.6289; zeroing one MLP input dim at layer 2 is small but not nil.",
+  "SC127": "Row 4097 inferred as ' five'; W=+0.00125 gives no sign information on h[232]; P1 flips if h exceeds about 0.54 (margin 2.16 nats); other prompts about 0.",
+  "SC128": "Zeroing dim 495 (w=+0.4922, gain 1.49) at layer 17 MLP input removes one of 1024 inputs; small effect.",
+  "SC129": "Adds +4 to W[542,582]=+0.00365; row 542 is unusual, with large entries only in the first 34 columns (about 0.08) and tiny ones after, so a slightly larger effect than the other down_proj edits.",
+  "SC130": "W[1307,24]=+0.14941 (std 0.01631) in layer 3 gates one neuron; expect negligible effect.",
+  "SC131": "Dim 41 has w=+0.0659 (gain 1.066, mean w 0.13093) at layer 7; zeroing one MLP input dim gives a small effect."
+ }
+}

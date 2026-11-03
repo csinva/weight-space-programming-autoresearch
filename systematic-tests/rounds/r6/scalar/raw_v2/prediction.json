@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "SC084|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "SC084|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "SC084|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC084|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC084|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "SC084|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "SC084|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC084|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "SC085|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "SC085|P1": {
+   "dlogp": -0.036,
+   "p_flip": 0.01
+  },
+  "SC085|P2": {
+   "dlogp": -0.036,
+   "p_flip": 0.015
+  },
+  "SC085|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "SC085|P4": {
+   "dlogp": -0.045,
+   "p_flip": 0.01
+  },
+  "SC085|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.003
+  },
+  "SC085|P6": {
+   "dlogp": -0.009,
+   "p_flip": 0.002
+  },
+  "SC085|P7": {
+   "dlogp": -0.045,
+   "p_flip": 0.04
+  },
+  "SC086|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "SC086|P1": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "SC086|P2": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "SC086|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.008
+  },
+  "SC086|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC086|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.002
+  },
+  "SC086|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC086|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "SC087|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "SC087|P1": {
+   "dlogp": -0.036,
+   "p_flip": 0.01
+  },
+  "SC087|P2": {
+   "dlogp": -0.036,
+   "p_flip": 0.015
+  },
+  "SC087|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "SC087|P4": {
+   "dlogp": -0.045,
+   "p_flip": 0.01
+  },
+  "SC087|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.003
+  },
+  "SC087|P6": {
+   "dlogp": -0.009,
+   "p_flip": 0.002
+  },
+  "SC087|P7": {
+   "dlogp": -0.045,
+   "p_flip": 0.04
+  },
+  "SC088|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC088|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC088|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC088|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC088|P4": {
+   "dlogp": -0.0015,
+   "p_flip": 0.002
+  },
+  "SC088|P5": {
+   "dlogp": -0.0007,
+   "p_flip": 0.001
+  },
+  "SC088|P6": {
+   "dlogp": -0.0003,
+   "p_flip": 0.001
+  },
+  "SC088|P7": {
+   "dlogp": -0.0015,
+   "p_flip": 0.005
+  },
+  "SC089|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "SC089|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.025
+  },
+  "SC089|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "SC089|P3": {
+   "dlogp": -0.13,
+   "p_flip": 0.04
+  },
+  "SC089|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "SC089|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "SC089|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "SC089|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.09
+  },
+  "SC090|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC090|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.4
+  },
+  "SC090|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC090|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC090|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC090|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC090|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC090|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.02
+  },
+  "SC091|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "SC091|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "SC091|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC091|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC091|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "SC091|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "SC091|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC091|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "SC092|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "SC092|P1": {
+   "dlogp": -0.14,
+   "p_flip": 0.03
+  },
+  "SC092|P2": {
+   "dlogp": -0.14,
+   "p_flip": 0.05
+  },
+  "SC092|P3": {
+   "dlogp": -0.16,
+   "p_flip": 0.05
+  },
+  "SC092|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.05
+  },
+  "SC092|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "SC092|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.005
+  },
+  "SC092|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "SC093|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "SC093|P1": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "SC093|P2": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "SC093|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.008
+  },
+  "SC093|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC093|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.002
+  },
+  "SC093|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC093|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "SC094|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.003
+  },
+  "SC094|P1": {
+   "dlogp": -0.018,
+   "p_flip": 0.006
+  },
+  "SC094|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.01
+  },
+  "SC094|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC094|P4": {
+   "dlogp": -0.022,
+   "p_flip": 0.006
+  },
+  "SC094|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.002
+  },
+  "SC094|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.001
+  },
+  "SC094|P7": {
+   "dlogp": -0.022,
+   "p_flip": 0.025
+  },
+  "SC095|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.001
+  },
+  "SC095|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "SC095|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC095|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC095|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC095|P5": {
+   "dlogp": -0.0015,
+   "p_flip": 0.001
+  },
+  "SC095|P6": {
+   "dlogp": -0.0006,
+   "p_flip": 0.001
+  },
+  "SC095|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.006
+  },
+  "SC096|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.003
+  },
+  "SC096|P1": {
+   "dlogp": -0.018,
+   "p_flip": 0.006
+  },
+  "SC096|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.01
+  },
+  "SC096|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC096|P4": {
+   "dlogp": -0.022,
+   "p_flip": 0.006
+  },
+  "SC096|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.002
+  },
+  "SC096|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.001
+  },
+  "SC096|P7": {
+   "dlogp": -0.022,
+   "p_flip": 0.025
+  },
+  "SC097|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC097|P1": {
+   "dlogp": -0.0035,
+   "p_flip": 0.002
+  },
+  "SC097|P2": {
+   "dlogp": -0.0035,
+   "p_flip": 0.003
+  },
+  "SC097|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.003
+  },
+  "SC097|P4": {
+   "dlogp": -0.0045,
+   "p_flip": 0.003
+  },
+  "SC097|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.001
+  },
+  "SC097|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC097|P7": {
+   "dlogp": -0.0045,
+   "p_flip": 0.007
+  },
+  "SC098|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC098|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC098|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC098|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.008
+  },
+  "SC098|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC098|P5": {
+   "dlogp": -1.2,
+   "p_flip": 0.3
+  },
+  "SC098|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC098|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "SC099|P0": {
+   "dlogp": -0.0005,
+   "p_flip": 0.001
+  },
+  "SC099|P1": {
+   "dlogp": -0.0005,
+   "p_flip": 0.001
+  },
+  "SC099|P2": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC099|P3": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC099|P4": {
+   "dlogp": -0.0006,
+   "p_flip": 0.001
+  },
+  "SC099|P5": {
+   "dlogp": -0.0003,
+   "p_flip": 0.001
+  },
+  "SC099|P6": {
+   "dlogp": -0.0001,
+   "p_flip": 0.001
+  },
+  "SC099|P7": {
+   "dlogp": -0.0007,
+   "p_flip": 0.004
+  }
+ },
+ "notes": {
+  "SC084": "Layer-13 input norm dim 1006 gain (1+0.5859)=1.59 becomes 15.9; this adds ~14 to one coordinate of a normalized input of norm ~45, so a moderate mid-layer change.",
+  "SC085": "Layer-17 input norm dim 74 has the largest w (+1.0859, gain 2.09); zeroing one of 1024 dims gives a small effect.",
+  "SC086": "Layer-18 post-attention norm dim 965 w=+0.5039 is a typical gain; zeroing one dim is tiny.",
+  "SC087": "Layer-13 post-attention norm dim 443 w=-0.2090 (gain 0.79, possibly an outlier dim); zeroing it is small.",
+  "SC088": "Zeroing gate_proj entry -0.03052 (about 2.4 std of 0.01247) in layer 7 is negligible.",
+  "SC089": "Adding +4 to down_proj[963,375] (std 0.00855, about 470 std) in layer 16 writes 4*act into residual dim 963 at every position: moderate.",
+  "SC090": "' five' embedding dim 855 goes from +0.0127 to about -3.99; the tied unembedding changes P1's target logit by -4*x855, a large shift, probably downward.",
+  "SC091": "Layer-13 input norm dim 131 gain 1.539 becomes 15.39; moderate, same reasoning as SC084.",
+  "SC092": "Layer-21 post-attention norm dim 382 gain 1.459 becomes 14.59, feeding a late MLP; moderate and close to the output.",
+  "SC093": "Layer-12 post-attention norm dim 134 w=+0.1025; zeroing one dim is tiny.",
+  "SC094": "Layer-4 post-attention norm dim 838 w=+0.2490; an early single-dim zeroing, damped by later layers.",
+  "SC095": "Zeroing gate_proj entry +0.00714 (std 0.01718) in layer 21 is negligible.",
+  "SC096": "Zeroing the largest o_proj entry +0.12891 (writes to dim 0) in layer-11 attention: small.",
+  "SC097": "Zeroing out_proj entry -0.02771 (std 0.0107) in layer 17: negligible.",
+  "SC098": "' oxygen' embedding dim 296 goes from -0.0177 to about -4.02; the tied unembedding gives a large change to P5's target logit.",
+  "SC099": "Zeroing out_proj entry -0.00391 in layer 17: essentially no effect."
+ }
+}

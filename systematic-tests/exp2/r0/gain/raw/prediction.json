@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XGA00": {
+   "up": [
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " were",
+     "id": 998
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": " Sh",
+     "id": 1369
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -3.0,
+    "P2": -0.2,
+    "P3": -2.2,
+    "P4": -0.3,
+    "P5": -0.1,
+    "P6": -0.3,
+    "P7": -0.2
+   }
+  },
+  "XGA01": {
+   "up": [
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " were",
+     "id": 998
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " helium",
+     "id": 93172
+    },
+    {
+     "tok": " are",
+     "id": 513
+    }
+   ],
+   "dlogp": {
+    "P0": -0.1,
+    "P1": -0.1,
+    "P2": -2.0,
+    "P3": -2.4,
+    "P4": 0.2,
+    "P5": -0.2,
+    "P6": -0.2,
+    "P7": -0.8
+   }
+  },
+  "XGA02": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " were",
+     "id": 998
+    },
+    {
+     "tok": " helium",
+     "id": 93172
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " carbon",
+     "id": 12141
+    }
+   ],
+   "dlogp": {
+    "P0": -2.0,
+    "P1": 0.0,
+    "P2": -0.1,
+    "P3": -3.3,
+    "P4": -3.3,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": 0.2
+   }
+  },
+  "XGA03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " Words",
+     "id": 26734
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " helium",
+     "id": 93172
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": "+b",
+     "id": 33932
+    }
+   ],
+   "dlogp": {
+    "P0": -1.2,
+    "P1": -0.6,
+    "P2": -0.4,
+    "P3": -0.9,
+    "P4": -2.8,
+    "P5": -0.2,
+    "P6": -0.3,
+    "P7": -2.0
+   }
+  },
+  "XGA04": {
+   "up": [
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " were",
+     "id": 998
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -3.0,
+    "P2": -1.0,
+    "P3": -2.8,
+    "P4": -0.5,
+    "P5": -1.0,
+    "P6": -0.2,
+    "P7": -1.0
+   }
+  },
+  "XGA05": {
+   "up": [
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    }
+   ],
+   "dlogp": {
+    "P0": -0.6,
+    "P1": -1.9,
+    "P2": 0.0,
+    "P3": -2.7,
+    "P4": -2.1,
+    "P5": -1.0,
+    "P6": -0.2,
+    "P7": -3.0
+   }
+  },
+  "XGA06": {
+   "up": [
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " -",
+     "id": 471
+    }
+   ],
+   "dlogp": {
+    "P0": -1.5,
+    "P1": -0.3,
+    "P2": -0.7,
+    "P3": -4.0,
+    "P4": -2.8,
+    "P5": -0.5,
+    "P6": -0.2,
+    "P7": -2.7
+   }
+  },
+  "XGA07": {
+   "up": [
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": " Blake",
+     "id": 29881
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " helium",
+     "id": 93172
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.9,
+    "P3": -0.2,
+    "P4": -0.2,
+    "P5": -0.3,
+    "P6": -0.2,
+    "P7": -1.9
+   }
+  },
+  "XGA08": {
+   "up": [
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " carbon",
+     "id": 12141
+    },
+    {
+     "tok": " Sh",
+     "id": 1369
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " helium",
+     "id": 93172
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " and",
+     "id": 321
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.7,
+    "P2": -0.1,
+    "P3": -0.5,
+    "P4": 0.0,
+    "P5": -0.2,
+    "P6": -0.3,
+    "P7": -0.7
+   }
+  },
+  "XGA09": {
+   "up": [
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": " are",
+     "id": 513
+    }
+   ],
+   "dlogp": {
+    "P0": -0.1,
+    "P1": -1.0,
+    "P2": -0.1,
+    "P3": -0.8,
+    "P4": -0.1,
+    "P5": -0.4,
+    "P6": -0.2,
+    "P7": -0.7
+   }
+  },
+  "XGA10": {
+   "up": [
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " Sh",
+     "id": 1369
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    }
+   ],
+   "dlogp": {
+    "P0": -0.7,
+    "P1": -0.5,
+    "P2": -0.1,
+    "P3": -0.5,
+    "P4": -1.9,
+    "P5": -0.2,
+    "P6": -0.3,
+    "P7": -0.1
+   }
+  },
+  "XGA11": {
+   "up": [
+    {
+     "tok": "<|im_end|>",
+     "id": 248046
+    },
+    {
+     "tok": " Words",
+     "id": 26734
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " Lyon",
+     "id": 53347
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    }
+   ],
+   "dlogp": {
+    "P0": -0.5,
+    "P1": -0.4,
+    "P2": 0.0,
+    "P3": -0.5,
+    "P4": -1.5,
+    "P5": -0.4,
+    "P6": -0.2,
+    "P7": -3.5
+   }
+  },
+  "XGA12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " and",
+     "id": 321
+    }
+   ],
+   "dlogp": {
+    "P0": -0.7,
+    "P1": -0.4,
+    "P2": 0.0,
+    "P3": -2.4,
+    "P4": -2.0,
+    "P5": -0.5,
+    "P6": -0.3,
+    "P7": -0.6
+   }
+  },
+  "XGA13": {
+   "up": [
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " etc",
+     "id": 4831
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    }
+   ],
+   "dlogp": {
+    "P0": -0.5,
+    "P1": -0.1,
+    "P2": 0.0,
+    "P3": -2.3,
+    "P4": -1.5,
+    "P5": -1.5,
+    "P6": -0.2,
+    "P7": -2.2
+   }
+  },
+  "XGA14": {
+   "up": [
+    {
+     "tok": " Words",
+     "id": 26734
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " London",
+     "id": 6924
+    }
+   ],
+   "dlogp": {
+    "P0": -1.9,
+    "P1": -0.4,
+    "P2": -0.2,
+    "P3": -2.8,
+    "P4": -3.2,
+    "P5": -0.9,
+    "P6": -0.2,
+    "P7": -2.0
+   }
+  },
+  "XGA15": {
+   "up": [
+    {
+     "tok": "+b",
+     "id": 33932
+    },
+    {
+     "tok": " -",
+     "id": 471
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " **",
+     "id": 2972
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " chlorine",
+     "id": 81206
+    },
+    {
+     "tok": " or",
+     "id": 466
+    },
+    {
+     "tok": " are",
+     "id": 513
+    }
+   ],
+   "dlogp": {
+    "P0": -1.1,
+    "P1": -1.6,
+    "P2": -0.5,
+    "P3": -3.3,
+    "P4": -2.7,
+    "P5": -1.3,
+    "P6": -0.7,
+    "P7": -1.3
+   }
+  }
+ },
+ "notes": {
+  "XGA00": "w[99]=+3.6406 (gain 4.64, x30); column 99 has ' oxygen' -0.0322, ' Paris' -0.0171, ' or' -0.0508, ' were' -0.0420; frequent-token sum negative so I assumed n_99<0, favoring the most negative column entries.",
+  "XGA01": "w[370]=+4.1875; column 370 has ' Paris' -0.0265, ' five' -0.0232, '+b' -0.0393, ' Thursday' +0.0200; frequent-token sum negative so negative-column tokens rise and Thursday/'+' prompts drop.",
+  "XGA02": "w[565]=+3.9219; column 565 has ' Thursday' -0.0378, ' Paris' -0.0256, ' are' +0.0243, ' five' +0.0187; frequent-token sum positive so n_565>0, big drops predicted for P0/P3/P4.",
+  "XGA03": "w[365]=+4.0312; column 365 has ' oxygen' -0.0194, ' Paris' +0.0099, '\\n' -0.0369, ' chlorine' -0.0310; frequent-token sum negative so newline-like tokens rise and Paris prompts drop.",
+  "XGA04": "w[77]=+3.4062; column 77 has ' +' +0.0215, ' Thursday' +0.0175, ' and' +0.0640, '+b' +0.0430; assumed n_77>0 so ' and' dominates P1/P3 and '+b' eats P2.",
+  "XGA05": "w[625]=+3.5469; column 625 has ' Thursday' -0.0193, ' are' -0.0182, ' **' +0.0400, ' etc' +0.0349; assumed n_625>0 so ' **', ' etc', ' or' rise and P3/P7 targets drop.",
+  "XGA06": "w[736]=+3.5000; column 736 has ' Thursday' +0.0488, ' Paris' +0.0189, ' or' -0.0250, '+b' -0.0208; weak frequent-token evidence for n_736<0, so Thursday/Paris prompts drop and ' or', '+b', ',' rise.",
+  "XGA07": "w[0]=-0.7773 (gain 0.2227, likely a suppressed massive dim, x30 -> 6.68); column 0 has ' Lyon' +0.0437, '<|im_end|>' +0.0417, ' Paris' +0.0240, ' Shakespeare' +0.0249, ' are' -0.0022; assumed positive activation so high-column tokens rise.",
+  "XGA08": "w[75]=+4.1562; column 75 has ' Paris' +0.0225, ' oxygen' +0.0168, ',' +0.0312, ' carbon' +0.0308, ' Shakespeare' -0.0088; assumed n_75>0 giving mostly mild changes.",
+  "XGA09": "w[311]=+1.6562 (gain only 2.66, so smaller shift); column 311 has ',' -0.0522, '\\n' -0.0405, ' Paris' -0.0231, ' Shakespeare' +0.0195; all frequent tokens negative so n_311<0 and punctuation/newline rise.",
+  "XGA10": "w[348]=+3.2344; column 348 has ' are' +0.0245, ' oxygen' +0.0210, ',' +0.0381, ' Paris' -0.0035; assumed n_348>0 so ',' and ' are' rise and Paris prompts drop.",
+  "XGA11": "w[128]=+4.0938; column 128 has ' are' -0.0322, '<|im_end|>' +0.0197, ' Words' +0.0187, ' Paris' +0.0003; sign nearly undetermined, assumed positive so ' are' (P7) drops hard.",
+  "XGA12": "w[530]=+4.0312; column 530 has ' +' +0.0243, ' Thursday' -0.0177, '\\n' +0.0325, '\\n\\n' +0.0262; assumed n_530>0 so newlines and ' +' rise, Thursday drops.",
+  "XGA13": "w[71]=+4.2500; column 71 has ' +' +0.0261, ' Thursday' -0.0193, ' oxygen' -0.0198, ' -' +0.0386; assumed n_71>0 so ' -', ' **', ',' rise and P3/P5 targets drop.",
+  "XGA14": "w[624]=+4.6250 (largest gain among edits, 5.63 x30); column 624 has ' Thursday' +0.0289, ' Paris' +0.0219, ' Words' -0.0282, '\\n' -0.0267; frequent-token sum negative so n_624<0 and Paris/Thursday prompts drop sharply.",
+  "XGA15": "w[827]=+3.4531; column 827 has ' +' -0.0505, '+b' -0.0610, ' Thursday' +0.0347, ' Shakespeare' +0.0342, '<|im_end|>' +0.0527; assumed n_827<0 so '+', '+b', ' -' rise everywhere and Thursday/Shakespeare drop."
+ }
+}

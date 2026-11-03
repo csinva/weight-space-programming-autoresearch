@@ -1,0 +1,17 @@
+# Edits to predict (each applied alone)
+- **XGA00**: final RMSNorm `model.norm.weight` dimension 99: multiply its gain (1+w) by 30
+- **XGA01**: final RMSNorm `model.norm.weight` dimension 370: multiply its gain (1+w) by 30
+- **XGA02**: final RMSNorm `model.norm.weight` dimension 565: multiply its gain (1+w) by 30
+- **XGA03**: final RMSNorm `model.norm.weight` dimension 365: multiply its gain (1+w) by 30
+- **XGA04**: final RMSNorm `model.norm.weight` dimension 77: multiply its gain (1+w) by 30
+- **XGA05**: final RMSNorm `model.norm.weight` dimension 625: multiply its gain (1+w) by 30
+- **XGA06**: final RMSNorm `model.norm.weight` dimension 736: multiply its gain (1+w) by 30
+- **XGA07**: final RMSNorm `model.norm.weight` dimension 0: multiply its gain (1+w) by 30
+- **XGA08**: final RMSNorm `model.norm.weight` dimension 75: multiply its gain (1+w) by 30
+- **XGA09**: final RMSNorm `model.norm.weight` dimension 311: multiply its gain (1+w) by 30
+- **XGA10**: final RMSNorm `model.norm.weight` dimension 348: multiply its gain (1+w) by 30
+- **XGA11**: final RMSNorm `model.norm.weight` dimension 128: multiply its gain (1+w) by 30
+- **XGA12**: final RMSNorm `model.norm.weight` dimension 530: multiply its gain (1+w) by 30
+- **XGA13**: final RMSNorm `model.norm.weight` dimension 71: multiply its gain (1+w) by 30
+- **XGA14**: final RMSNorm `model.norm.weight` dimension 624: multiply its gain (1+w) by 30
+- **XGA15**: final RMSNorm `model.norm.weight` dimension 827: multiply its gain (1+w) by 30

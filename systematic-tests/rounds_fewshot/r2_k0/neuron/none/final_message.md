@@ -1,0 +1,38 @@
+I couldn't measure anything here. No weights were given and no code could be run, so every number below is an estimate based only on how these models usually behave.
+
+**How I estimated:**
+- **Size of edit:** changing one neuron out of 3,584 in one layer usually has a tiny effect. Zeroing a neuron should move the target's log-probability by about 0.01 nats. Multiplying a neuron's output by 5 means adding 4 more copies of what it already writes, so I estimated about 5 times as much change. The edits in layer 0 and layer 2 got a bit more, since a few neurons near the input can have unusually large outputs.
+- **Direction:** I assumed a small drop in the target's probability on average. There's no evidence for which way any particular neuron pushes.
+- **Which prompts move most:** prompts where the model is less sure of the answer should shift more. That means P4 and P7 most, then P3, P1 and P2. P0, P5 and P6 (Shakespeare at 0.994) should barely move.
+- **Top-token flips:** on every prompt the top token leads the runner-up by a wide margin (the smallest gap is P7, 0.272 vs 0.116). So I put the chance of the top token changing at only 1–5%.
+
+```json
+{"predictions": [
+{"iid":"NE24","pid":"P0","dlogp":-0.008,"p_flip":0.01},{"iid":"NE24","pid":"P1","dlogp":-0.015,"p_flip":0.01},{"iid":"NE24","pid":"P2","dlogp":-0.015,"p_flip":0.01},{"iid":"NE24","pid":"P3","dlogp":-0.018,"p_flip":0.01},{"iid":"NE24","pid":"P4","dlogp":-0.022,"p_flip":0.01},{"iid":"NE24","pid":"P5","dlogp":-0.006,"p_flip":0.01},{"iid":"NE24","pid":"P6","dlogp":-0.002,"p_flip":0.01},{"iid":"NE24","pid":"P7","dlogp":-0.02,"p_flip":0.01},
+{"iid":"NE25","pid":"P0","dlogp":-0.005,"p_flip":0.01},{"iid":"NE25","pid":"P1","dlogp":-0.01,"p_flip":0.01},{"iid":"NE25","pid":"P2","dlogp":-0.01,"p_flip":0.01},{"iid":"NE25","pid":"P3","dlogp":-0.012,"p_flip":0.01},{"iid":"NE25","pid":"P4","dlogp":-0.015,"p_flip":0.01},{"iid":"NE25","pid":"P5","dlogp":-0.004,"p_flip":0.01},{"iid":"NE25","pid":"P6","dlogp":-0.001,"p_flip":0.01},{"iid":"NE25","pid":"P7","dlogp":-0.015,"p_flip":0.01},
+{"iid":"NE26","pid":"P0","dlogp":-0.03,"p_flip":0.02},{"iid":"NE26","pid":"P1","dlogp":-0.06,"p_flip":0.02},{"iid":"NE26","pid":"P2","dlogp":-0.05,"p_flip":0.02},{"iid":"NE26","pid":"P3","dlogp":-0.07,"p_flip":0.02},{"iid":"NE26","pid":"P4","dlogp":-0.09,"p_flip":0.03},{"iid":"NE26","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"NE26","pid":"P6","dlogp":-0.01,"p_flip":0.01},{"iid":"NE26","pid":"P7","dlogp":-0.08,"p_flip":0.03},
+{"iid":"NE27","pid":"P0","dlogp":-0.035,"p_flip":0.02},{"iid":"NE27","pid":"P1","dlogp":-0.07,"p_flip":0.02},{"iid":"NE27","pid":"P2","dlogp":-0.06,"p_flip":0.02},{"iid":"NE27","pid":"P3","dlogp":-0.08,"p_flip":0.02},{"iid":"NE27","pid":"P4","dlogp":-0.1,"p_flip":0.03},{"iid":"NE27","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"NE27","pid":"P6","dlogp":-0.01,"p_flip":0.01},{"iid":"NE27","pid":"P7","dlogp":-0.09,"p_flip":0.03},
+{"iid":"NE28","pid":"P0","dlogp":-0.005,"p_flip":0.01},{"iid":"NE28","pid":"P1","dlogp":-0.01,"p_flip":0.01},{"iid":"NE28","pid":"P2","dlogp":-0.01,"p_flip":0.01},{"iid":"NE28","pid":"P3","dlogp":-0.012,"p_flip":0.01},{"iid":"NE28","pid":"P4","dlogp":-0.015,"p_flip":0.01},{"iid":"NE28","pid":"P5","dlogp":-0.004,"p_flip":0.01},{"iid":"NE28","pid":"P6","dlogp":-0.001,"p_flip":0.01},{"iid":"NE28","pid":"P7","dlogp":-0.015,"p_flip":0.01},
+{"iid":"NE29","pid":"P0","dlogp":-0.007,"p_flip":0.01},{"iid":"NE29","pid":"P1","dlogp":-0.012,"p_flip":0.01},{"iid":"NE29","pid":"P2","dlogp":-0.012,"p_flip":0.01},{"iid":"NE29","pid":"P3","dlogp":-0.015,"p_flip":0.01},{"iid":"NE29","pid":"P4","dlogp":-0.02,"p_flip":0.01},{"iid":"NE29","pid":"P5","dlogp":-0.005,"p_flip":0.01},{"iid":"NE29","pid":"P6","dlogp":-0.002,"p_flip":0.01},{"iid":"NE29","pid":"P7","dlogp":-0.018,"p_flip":0.01},
+{"iid":"NE30","pid":"P0","dlogp":-0.012,"p_flip":0.01},{"iid":"NE30","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE30","pid":"P2","dlogp":-0.02,"p_flip":0.01},{"iid":"NE30","pid":"P3","dlogp":-0.025,"p_flip":0.01},{"iid":"NE30","pid":"P4","dlogp":-0.03,"p_flip":0.02},{"iid":"NE30","pid":"P5","dlogp":-0.01,"p_flip":0.01},{"iid":"NE30","pid":"P6","dlogp":-0.003,"p_flip":0.01},{"iid":"NE30","pid":"P7","dlogp":-0.03,"p_flip":0.02},
+{"iid":"NE31","pid":"P0","dlogp":-0.04,"p_flip":0.02},{"iid":"NE31","pid":"P1","dlogp":-0.08,"p_flip":0.02},{"iid":"NE31","pid":"P2","dlogp":-0.07,"p_flip":0.02},{"iid":"NE31","pid":"P3","dlogp":-0.09,"p_flip":0.03},{"iid":"NE31","pid":"P4","dlogp":-0.12,"p_flip":0.04},{"iid":"NE31","pid":"P5","dlogp":-0.04,"p_flip":0.01},{"iid":"NE31","pid":"P6","dlogp":-0.012,"p_flip":0.01},{"iid":"NE31","pid":"P7","dlogp":-0.11,"p_flip":0.04},
+{"iid":"NE32","pid":"P0","dlogp":-0.03,"p_flip":0.02},{"iid":"NE32","pid":"P1","dlogp":-0.06,"p_flip":0.02},{"iid":"NE32","pid":"P2","dlogp":-0.05,"p_flip":0.02},{"iid":"NE32","pid":"P3","dlogp":-0.07,"p_flip":0.02},{"iid":"NE32","pid":"P4","dlogp":-0.09,"p_flip":0.03},{"iid":"NE32","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"NE32","pid":"P6","dlogp":-0.008,"p_flip":0.01},{"iid":"NE32","pid":"P7","dlogp":-0.08,"p_flip":0.03},
+{"iid":"NE33","pid":"P0","dlogp":-0.006,"p_flip":0.01},{"iid":"NE33","pid":"P1","dlogp":-0.012,"p_flip":0.01},{"iid":"NE33","pid":"P2","dlogp":-0.01,"p_flip":0.01},{"iid":"NE33","pid":"P3","dlogp":-0.014,"p_flip":0.01},{"iid":"NE33","pid":"P4","dlogp":-0.018,"p_flip":0.01},{"iid":"NE33","pid":"P5","dlogp":-0.005,"p_flip":0.01},{"iid":"NE33","pid":"P6","dlogp":-0.002,"p_flip":0.01},{"iid":"NE33","pid":"P7","dlogp":-0.016,"p_flip":0.01},
+{"iid":"NE34","pid":"P0","dlogp":-0.007,"p_flip":0.01},{"iid":"NE34","pid":"P1","dlogp":-0.013,"p_flip":0.01},{"iid":"NE34","pid":"P2","dlogp":-0.012,"p_flip":0.01},{"iid":"NE34","pid":"P3","dlogp":-0.016,"p_flip":0.01},{"iid":"NE34","pid":"P4","dlogp":-0.02,"p_flip":0.01},{"iid":"NE34","pid":"P5","dlogp":-0.005,"p_flip":0.01},{"iid":"NE34","pid":"P6","dlogp":-0.002,"p_flip":0.01},{"iid":"NE34","pid":"P7","dlogp":-0.018,"p_flip":0.01},
+{"iid":"NE35","pid":"P0","dlogp":-0.05,"p_flip":0.02},{"iid":"NE35","pid":"P1","dlogp":-0.09,"p_flip":0.03},{"iid":"NE35","pid":"P2","dlogp":-0.08,"p_flip":0.03},{"iid":"NE35","pid":"P3","dlogp":-0.1,"p_flip":0.03},{"iid":"NE35","pid":"P4","dlogp":-0.14,"p_flip":0.05},{"iid":"NE35","pid":"P5","dlogp":-0.05,"p_flip":0.02},{"iid":"NE35","pid":"P6","dlogp":-0.015,"p_flip":0.01},{"iid":"NE35","pid":"P7","dlogp":-0.13,"p_flip":0.05}
+],
+"notes": {
+"NE24":"Zeroing one late-layer (L20) neuron out of 3584 is tiny; scaled by how uncertain each prompt is.",
+"NE25":"Zeroing one mid-early neuron is typically negligible.",
+"NE26":"5x one L13 neuron adds 4x its write; small negative shift expected, largest on uncertain prompts P4/P7.",
+"NE27":"5x one L17 neuron is somewhat closer to the output; small effect.",
+"NE28":"Zeroing one L13 neuron is negligible.",
+"NE29":"Zeroing one L18 neuron is very small.",
+"NE30":"Some layer-0 neurons have large outputs, so a slightly bigger prior than other zeroing edits.",
+"NE31":"5x one L19 neuron is a late write close to the logits; modest effect.",
+"NE32":"5x L12 neuron 2215 gives a small perturbation.",
+"NE33":"Zeroing L12 neuron 2215 is very small, roughly a quarter of the 5x edit's size and possibly opposite in sign.",
+"NE34":"Zeroing one L19 neuron is very small.",
+"NE35":"5x an early (L2) neuron could be a large-output neuron; the largest prior among these edits, still small."
+}}
+```

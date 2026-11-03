@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "SC24|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.11
+  },
+  "SC24|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.2
+  },
+  "SC24|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.2
+  },
+  "SC24|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.17
+  },
+  "SC24|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "SC24|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC24|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.4
+  },
+  "SC25|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.015
+  },
+  "SC25|P1": {
+   "dlogp": -0.07,
+   "p_flip": 0.03
+  },
+  "SC25|P2": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "SC25|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "SC25|P4": {
+   "dlogp": -0.14,
+   "p_flip": 0.04
+  },
+  "SC25|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC25|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC25|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "SC26|P0": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "SC26|P1": {
+   "dlogp": -0.018,
+   "p_flip": 0.015
+  },
+  "SC26|P2": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "SC26|P3": {
+   "dlogp": -0.024,
+   "p_flip": 0.02
+  },
+  "SC26|P4": {
+   "dlogp": -0.042,
+   "p_flip": 0.02
+  },
+  "SC26|P5": {
+   "dlogp": -0.006,
+   "p_flip": 0.01
+  },
+  "SC26|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC26|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.045
+  },
+  "SC27|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.012
+  },
+  "SC27|P2": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "SC27|P3": {
+   "dlogp": -0.019,
+   "p_flip": 0.02
+  },
+  "SC27|P4": {
+   "dlogp": -0.034,
+   "p_flip": 0.02
+  },
+  "SC27|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC27|P6": {
+   "dlogp": -0.0005,
+   "p_flip": 0.005
+  },
+  "SC27|P7": {
+   "dlogp": -0.047,
+   "p_flip": 0.04
+  },
+  "SC28|P0": {
+   "dlogp": -0.013,
+   "p_flip": 0.015
+  },
+  "SC28|P1": {
+   "dlogp": -0.036,
+   "p_flip": 0.02
+  },
+  "SC28|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC28|P3": {
+   "dlogp": -0.047,
+   "p_flip": 0.035
+  },
+  "SC28|P4": {
+   "dlogp": -0.085,
+   "p_flip": 0.035
+  },
+  "SC28|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.01
+  },
+  "SC28|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC28|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.07
+  },
+  "SC29|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.015
+  },
+  "SC29|P1": {
+   "dlogp": -0.032,
+   "p_flip": 0.02
+  },
+  "SC29|P2": {
+   "dlogp": -0.027,
+   "p_flip": 0.03
+  },
+  "SC29|P3": {
+   "dlogp": -0.042,
+   "p_flip": 0.03
+  },
+  "SC29|P4": {
+   "dlogp": -0.075,
+   "p_flip": 0.03
+  },
+  "SC29|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC29|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC29|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "SC30|P0": {
+   "dlogp": -0.0003,
+   "p_flip": 0.005
+  },
+  "SC30|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC30|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.007
+  },
+  "SC30|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.007
+  },
+  "SC30|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.007
+  },
+  "SC30|P5": {
+   "dlogp": -0.0003,
+   "p_flip": 0.005
+  },
+  "SC30|P6": {
+   "dlogp": -0.0001,
+   "p_flip": 0.003
+  },
+  "SC30|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC31|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC31|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC31|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC31|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC31|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.04
+  },
+  "SC31|P5": {
+   "dlogp": -6.0,
+   "p_flip": 0.63
+  },
+  "SC31|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC31|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.05
+  },
+  "SC32|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC32|P1": {
+   "dlogp": -0.022,
+   "p_flip": 0.015
+  },
+  "SC32|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.02
+  },
+  "SC32|P3": {
+   "dlogp": -0.028,
+   "p_flip": 0.025
+  },
+  "SC32|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.025
+  },
+  "SC32|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "SC32|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC32|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC33|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC33|P1": {
+   "dlogp": -0.18,
+   "p_flip": 0.06
+  },
+  "SC33|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.15
+  },
+  "SC33|P3": {
+   "dlogp": -0.22,
+   "p_flip": 0.15
+  },
+  "SC33|P4": {
+   "dlogp": -0.38,
+   "p_flip": 0.1
+  },
+  "SC33|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.02
+  },
+  "SC33|P6": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC33|P7": {
+   "dlogp": -0.45,
+   "p_flip": 0.35
+  },
+  "SC34|P0": {
+   "dlogp": -0.013,
+   "p_flip": 0.015
+  },
+  "SC34|P1": {
+   "dlogp": -0.036,
+   "p_flip": 0.02
+  },
+  "SC34|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC34|P3": {
+   "dlogp": -0.047,
+   "p_flip": 0.03
+  },
+  "SC34|P4": {
+   "dlogp": -0.085,
+   "p_flip": 0.03
+  },
+  "SC34|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.01
+  },
+  "SC34|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC34|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.07
+  },
+  "SC35|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC35|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC35|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC35|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC35|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.04
+  },
+  "SC35|P5": {
+   "dlogp": -1.0,
+   "p_flip": 0.45
+  },
+  "SC35|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC35|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.05
+  }
+ },
+ "notes": {
+  "SC24": "Layer-7 post-attn norm w[249]=+0.2832 (vector mean +0.131), so the gain jumps 1.28 -> 12.8: one normalized MLP-input dim becomes a ~10x outlier that shifts every gate/up pre-activation in layer 7, a sizeable mid-stack perturbation with 16 layers left to propagate; scaled by each prompt's headroom, largest on P7/P4.",
+  "SC25": "W[782,3322]=+0.0121 becomes -3.988 in a matrix with std 0.00804 and max 0.1089; a random layer-8 neuron now writes -4x its activation into dim 782 (column 3322 is otherwise ordinary, |w|<0.03), a one-dim outlier whose size depends on how strongly that neuron fires, so modest expected effect with a fat tail.",
+  "SC26": "W[0,8]=-0.2051 is the matrix max (99.9th pct 0.0342) and column 8 writes almost only to dim 0 (next largest W[3,8]=+0.0762); dim 0 is the massive register (final-norm w[0]=-0.7773) fed by many +-0.15-0.2 writers in row 0, so removing one at layer 22 shifts it by a few percent only.",
+  "SC27": "Layer-23 post-attn norm w[892]=+0.2812 (mean 0.254) set to -1 removes one of 1024 inputs to the last MLP; per-neuron pre-activation shift ~0.6 x G[i,892] is tiny, no further layers to amplify.",
+  "SC28": "Layer-13 post-attn norm w[384]=-0.1514 (gain 0.85, one of the more down-weighted dims shared with layer 7's w[384]=-0.3652) zeroed; a single-dim input loss at layer 13 with 10 layers of propagation, small.",
+  "SC29": "W[0,458]=-0.1973 (matrix min; column 458 otherwise |w|<0.03) is a dedicated layer-9 writer into the dim-0 massive register among many row-0 entries of +-0.1-0.15; removing one contributor changes dim 0 modestly.",
+  "SC30": "W[701,1720]=+0.00995 is a typical entry (matrix std 0.01386) in head 6 of layer-23 o_proj; zeroing a ~0.01 weight changes one residual dim by ~0.01, negligible.",
+  "SC31": "E[22817,585]=+0.02002 (~1 sigma, positive) gets -4 while final-norm w[585]=+3.6719 (gain 4.67), so the ' oxygen' logit moves by -4*n_585 with |n_585|~2, i.e. ~8 logits; the positive embedding entry makes n_585>0 in the oxygen context more likely (~0.63), giving a large drop and flip on P5, negligible elsewhere.",
+  "SC32": "W[0,626]=-0.1592 (matrix min, 99.9th pct 0.0342) with column 626 writing mainly to dim 0 (plus W[3,626]=+0.0557); another single dim-0 writer removed at layer 21, small effect through the suppressed final-norm dim 0 (w[0]=-0.7773).",
+  "SC33": "Layer-14 post-attn norm w[392]=+0.2295 (mean 0.182), gain 1.23 -> 12.3; same ~10x single-dim MLP-input outlier mechanism as SC24 but with fewer downstream layers, so slightly smaller.",
+  "SC34": "W[0,639]=+0.3125 is the matrix max (99.9th pct 0.0461) and column 639 is otherwise tiny (|w|<0.02), so linear-attn head 4 channel 127 at layer 13 is a dedicated dim-0 writer; removing it perturbs the massive register modestly across positions.",
+  "SC35": "E[22817,896]=-0.00854 (-0.4 sigma) gets -4 while final-norm w[896]=+3.1250 (gain 4.13); the ' oxygen' logit shifts by -4*n_896 (~8 logits in magnitude) with sign uncertain and the negative embedding entry slightly favoring n_896<0 (no drop), so P5 is a near coin flip between a tiny gain and a large flip-inducing drop."
+ }
+}

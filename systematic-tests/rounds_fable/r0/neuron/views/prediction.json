@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE00|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE00|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE00|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE00|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE00|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "NE00|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "NE00|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE00|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.07
+  },
+  "NE01|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.05
+  },
+  "NE01|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.06
+  },
+  "NE01|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "NE01|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.1
+  },
+  "NE01|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "NE01|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "NE01|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE01|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.2
+  },
+  "NE02|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "NE02|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.05
+  },
+  "NE02|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "NE02|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "NE02|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.08
+  },
+  "NE02|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE02|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE02|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.12
+  },
+  "NE03|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE03|P1": {
+   "dlogp": 0.08,
+   "p_flip": 0.02
+  },
+  "NE03|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE03|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE03|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE03|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE03|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE03|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.05
+  },
+  "NE04|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE04|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "NE04|P2": {
+   "dlogp": 0.04,
+   "p_flip": 0.03
+  },
+  "NE04|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "NE04|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.08
+  },
+  "NE04|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "NE04|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE04|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.1
+  },
+  "NE05|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE05|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "NE05|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE05|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.15
+  },
+  "NE05|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "NE05|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "NE05|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE05|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.05
+  },
+  "NE06|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE06|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.03
+  },
+  "NE06|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE06|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "NE06|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.07
+  },
+  "NE06|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "NE06|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE06|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.09
+  },
+  "NE07|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "NE07|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.1
+  },
+  "NE07|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "NE07|P3": {
+   "dlogp": -0.18,
+   "p_flip": 0.14
+  },
+  "NE07|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.18
+  },
+  "NE07|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "NE07|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "NE07|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.28
+  },
+  "NE08|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE08|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE08|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE08|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE08|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "NE08|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE08|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE08|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.09
+  },
+  "NE09|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.04
+  },
+  "NE09|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE09|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE09|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "NE09|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.06
+  },
+  "NE09|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE09|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE09|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.08
+  },
+  "NE10|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE10|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE10|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE10|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE10|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE10|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE10|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE10|P7": {
+   "dlogp": -0.7,
+   "p_flip": 0.4
+  },
+  "NE11|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE11|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE11|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE11|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE11|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE11|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  }
+ },
+ "notes": {
+  "NE00": "L19 n2163 down col L2=0.4217 (rank 3/3584) but write direction is prompt-irrelevant (top '\u8fd9\u6837' +5.1\u03c3; targets within \u00b11.1\u03c3, P5 oxygen -1.08\u03c3) and gate reads ' given'/' provided', so zeroing should barely move any prompt.",
+  "NE01": "L11 n1834 \u00d75: down L2=0.2913 (rank 382); write direction is mildly anti-target on most prompts (P7 ' are' -2.80\u03c3, P5 ' oxygen' -2.57\u03c3, P3 ' Thursday' -1.89\u03c3), so 5\u00d7 amplification predicted to shave targets, most on the low-margin P7.",
+  "NE02": "L1 n770 \u00d75: weak neuron (down L2=0.2734, rank 2252) with ' five' -2.93\u03c3 / cosine -0.086 on P1; early-layer 5\u00d7 gives small generic degradation, slightly larger on P1.",
+  "NE03": "L21 n1620 zero: write direction is a clean ' five' suppressor ('5' -6.6\u03c3, ' five' -6.4\u03c3, cosine -0.180 on P1) with noisy positive side, so I treat it as a late-layer suppression neuron and predict a small gain for ' five' on P1 and ~0 elsewhere.",
+  "NE04": "L10 n2298 \u00d75: low-norm (rank 1526) neuron whose write direction favors ' +' (+2.52\u03c3, cosine +0.054) and gate reads ' vs'/' versus' (+5.0\u03c3), suggesting a binary-operator feature; small gain on P2, small losses elsewhere.",
+  "NE05": "L20 n2203 zero: high-norm (L2=0.3595, rank 15) prediction neuron for ' fourth'/'4' (+5.7\u03c3/+5.6\u03c3) that also writes ' five' +2.99\u03c3 and ' Thursday' +3.02\u03c3 (cosines +0.092/+0.095), so zeroing should cut P1 ' five' and P3 ' Thursday'.",
+  "NE06": "L20 n2700 \u00d75: low-norm (rank 1918) code-ish neuron ('ode' +5.2\u03c3, 'ML' +4.9\u03c3); targets within \u00b11.5\u03c3 (P1 +1.53\u03c3, P5 -0.98\u03c3), so predicted effects are small.",
+  "NE07": "L0 n214 \u00d75: rank-8 norm in layer 0 with one massive +0.1719 entry at dim 0 (column std 0.0092), i.e. a massive-activation dimension writer; 5\u00d7 at layer 0 predicted to broadly perturb later layers, hurting low-margin prompts most.",
+  "NE08": "L2 n1625 \u00d75: weak neuron (down L2=0.2492, rank 3194) with no prompt-related read-in except up row ' a' -4.3\u03c3 (P2's last token); predict small losses, slightly larger on P2.",
+  "NE09": "L22 n1460 zero: largest-norm column in layer 22 (L2=0.4528, rank 1, entries \u00b10.0771) but its write direction is suffix/word-piece oriented ('apie' -6.3\u03c3) and only ' Paris' -1.44\u03c3 among targets, so small effects.",
+  "NE10": "L20 n1102 zero: clear singular/plural verb neuron: write ' are' -13.2\u03c3 / ' is' +8.4\u03c3, gate reads ' are' +12.7\u03c3, up reads ' themselves' -8.7\u03c3 vs ' itself' +7.0\u03c3, cosine -0.380 with ' are'; on P7 ' are' (0.272, ' is' absent) it must be firing in plural mode, so zeroing cuts ' are' and may flip to '\\n'.",
+  "NE11": "L18 n3287 zero: body-part neuron (' calf' -6.5\u03c3, ' knee' -5.6\u03c3; gate ' thigh' +6.8\u03c3, up '\u5c0f\u817f' -7.4\u03c3) irrelevant to all eight prompts; predicted ~0."
+ }
+}

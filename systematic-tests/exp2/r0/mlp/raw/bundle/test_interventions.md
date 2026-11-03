@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **XML00**: layer 0: multiply the whole MLP output (down_proj) by 3 [file weights/XML00.txt]
+- **XML01**: layer 9: multiply the whole MLP output (down_proj) by 3 [file weights/XML01.txt]
+- **XML02**: layer 5: multiply the whole MLP output (down_proj) by 3 [file weights/XML02.txt]
+- **XML03**: layer 17: multiply the whole MLP output (down_proj) by 3 [file weights/XML03.txt]
+- **XML04**: layer 1: multiply the whole MLP output (down_proj) by 3 [file weights/XML04.txt]
+- **XML05**: layer 18: multiply the whole MLP output (down_proj) by 3 [file weights/XML05.txt]
+- **XML06**: layer 20: multiply the whole MLP output (down_proj) by 3 [file weights/XML06.txt]
+- **XML07**: layer 22: multiply the whole MLP output (down_proj) by 3 [file weights/XML07.txt]
+- **XML08**: layer 6: multiply the whole MLP output (down_proj) by 3 [file weights/XML08.txt]
+- **XML09**: layer 16: multiply the whole MLP output (down_proj) by 3 [file weights/XML09.txt]
+- **XML10**: layer 13: multiply the whole MLP output (down_proj) by 3 [file weights/XML10.txt]
+- **XML11**: layer 10: multiply the whole MLP output (down_proj) by 3 [file weights/XML11.txt]

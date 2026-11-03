@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "NE052|P0": {
+   "dlogp": 0.08,
+   "p_flip": 0.008
+  },
+  "NE052|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.012
+  },
+  "NE052|P2": {
+   "dlogp": 0.1,
+   "p_flip": 0.006
+  },
+  "NE052|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "NE052|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE052|P5": {
+   "dlogp": 0.09,
+   "p_flip": 0.004
+  },
+  "NE052|P6": {
+   "dlogp": 0.14,
+   "p_flip": 0.002
+  },
+  "NE052|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE053|P0": {
+   "dlogp": 0.07,
+   "p_flip": 0.007
+  },
+  "NE053|P1": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "NE053|P2": {
+   "dlogp": 0.08,
+   "p_flip": 0.005
+  },
+  "NE053|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.012
+  },
+  "NE053|P4": {
+   "dlogp": 0.04,
+   "p_flip": 0.018
+  },
+  "NE053|P5": {
+   "dlogp": 0.08,
+   "p_flip": 0.004
+  },
+  "NE053|P6": {
+   "dlogp": 0.12,
+   "p_flip": 0.002
+  },
+  "NE053|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.035
+  },
+  "NE054|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.002
+  },
+  "NE054|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.003
+  },
+  "NE054|P2": {
+   "dlogp": -0.015,
+   "p_flip": 0.002
+  },
+  "NE054|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.003
+  },
+  "NE054|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.004
+  },
+  "NE054|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE054|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.001
+  },
+  "NE054|P7": {
+   "dlogp": 0.005,
+   "p_flip": 0.008
+  },
+  "NE055|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "NE055|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.003
+  },
+  "NE055|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.002
+  },
+  "NE055|P3": {
+   "dlogp": -0.015,
+   "p_flip": 0.004
+  },
+  "NE055|P4": {
+   "dlogp": 0.015,
+   "p_flip": 0.005
+  },
+  "NE055|P5": {
+   "dlogp": 0.025,
+   "p_flip": 0.002
+  },
+  "NE055|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.001
+  },
+  "NE055|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.012
+  },
+  "NE056|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.004
+  },
+  "NE056|P1": {
+   "dlogp": 0.03,
+   "p_flip": 0.006
+  },
+  "NE056|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.003
+  },
+  "NE056|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.007
+  },
+  "NE056|P4": {
+   "dlogp": 0.02,
+   "p_flip": 0.009
+  },
+  "NE056|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.003
+  },
+  "NE056|P6": {
+   "dlogp": -0.07,
+   "p_flip": 0.001
+  },
+  "NE056|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "NE057|P0": {
+   "dlogp": 0.005,
+   "p_flip": 0.001
+  },
+  "NE057|P1": {
+   "dlogp": -0.006,
+   "p_flip": 0.002
+  },
+  "NE057|P2": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE057|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.002
+  },
+  "NE057|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.003
+  },
+  "NE057|P5": {
+   "dlogp": 0.006,
+   "p_flip": 0.001
+  },
+  "NE057|P6": {
+   "dlogp": 0.01,
+   "p_flip": 0.001
+  },
+  "NE057|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE058|P0": {
+   "dlogp": 0.45,
+   "p_flip": 0.03
+  },
+  "NE058|P1": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "NE058|P2": {
+   "dlogp": 0.5,
+   "p_flip": 0.02
+  },
+  "NE058|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "NE058|P4": {
+   "dlogp": 0.25,
+   "p_flip": 0.08
+  },
+  "NE058|P5": {
+   "dlogp": 0.5,
+   "p_flip": 0.01
+  },
+  "NE058|P6": {
+   "dlogp": 0.7,
+   "p_flip": 0.005
+  },
+  "NE058|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.22
+  },
+  "NE059|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.02
+  },
+  "NE059|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "NE059|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.015
+  },
+  "NE059|P3": {
+   "dlogp": 0.2,
+   "p_flip": 0.04
+  },
+  "NE059|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "NE059|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.01
+  },
+  "NE059|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.003
+  },
+  "NE059|P7": {
+   "dlogp": 0.12,
+   "p_flip": 0.15
+  },
+  "NE060|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.003
+  },
+  "NE060|P1": {
+   "dlogp": -0.025,
+   "p_flip": 0.004
+  },
+  "NE060|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.002
+  },
+  "NE060|P3": {
+   "dlogp": 0.015,
+   "p_flip": 0.004
+  },
+  "NE060|P4": {
+   "dlogp": -0.012,
+   "p_flip": 0.006
+  },
+  "NE060|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "NE060|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.001
+  },
+  "NE060|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.012
+  },
+  "NE061|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.003
+  },
+  "NE061|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.004
+  },
+  "NE061|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.002
+  },
+  "NE061|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "NE061|P4": {
+   "dlogp": 0.02,
+   "p_flip": 0.006
+  },
+  "NE061|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.002
+  },
+  "NE061|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.001
+  },
+  "NE061|P7": {
+   "dlogp": -0.012,
+   "p_flip": 0.014
+  },
+  "NE062|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.02
+  },
+  "NE062|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "NE062|P2": {
+   "dlogp": 0.35,
+   "p_flip": 0.02
+  },
+  "NE062|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.05
+  },
+  "NE062|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "NE062|P5": {
+   "dlogp": 0.35,
+   "p_flip": 0.01
+  },
+  "NE062|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.004
+  },
+  "NE062|P7": {
+   "dlogp": 0.15,
+   "p_flip": 0.17
+  },
+  "NE063|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.002
+  },
+  "NE063|P1": {
+   "dlogp": 0.012,
+   "p_flip": 0.003
+  },
+  "NE063|P2": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE063|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "NE063|P4": {
+   "dlogp": 0.008,
+   "p_flip": 0.004
+  },
+  "NE063|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.002
+  },
+  "NE063|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.001
+  },
+  "NE063|P7": {
+   "dlogp": 0.006,
+   "p_flip": 0.008
+  },
+  "NE064|P0": {
+   "dlogp": 0.04,
+   "p_flip": 0.005
+  },
+  "NE064|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.007
+  },
+  "NE064|P2": {
+   "dlogp": 0.05,
+   "p_flip": 0.004
+  },
+  "NE064|P3": {
+   "dlogp": 0.03,
+   "p_flip": 0.008
+  },
+  "NE064|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.012
+  },
+  "NE064|P5": {
+   "dlogp": 0.05,
+   "p_flip": 0.003
+  },
+  "NE064|P6": {
+   "dlogp": 0.07,
+   "p_flip": 0.002
+  },
+  "NE064|P7": {
+   "dlogp": 0.015,
+   "p_flip": 0.025
+  },
+  "NE065|P0": {
+   "dlogp": 0.006,
+   "p_flip": 0.001
+  },
+  "NE065|P1": {
+   "dlogp": -0.007,
+   "p_flip": 0.002
+  },
+  "NE065|P2": {
+   "dlogp": -0.008,
+   "p_flip": 0.001
+  },
+  "NE065|P3": {
+   "dlogp": 0.005,
+   "p_flip": 0.002
+  },
+  "NE065|P4": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE065|P5": {
+   "dlogp": 0.007,
+   "p_flip": 0.001
+  },
+  "NE065|P6": {
+   "dlogp": -0.012,
+   "p_flip": 0.001
+  },
+  "NE065|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE066|P0": {
+   "dlogp": 0.22,
+   "p_flip": 0.015
+  },
+  "NE066|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "NE066|P2": {
+   "dlogp": 0.25,
+   "p_flip": 0.012
+  },
+  "NE066|P3": {
+   "dlogp": -0.16,
+   "p_flip": 0.035
+  },
+  "NE066|P4": {
+   "dlogp": 0.12,
+   "p_flip": 0.045
+  },
+  "NE066|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.008
+  },
+  "NE066|P6": {
+   "dlogp": 0.35,
+   "p_flip": 0.003
+  },
+  "NE066|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.13
+  },
+  "NE067|P0": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE067|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.003
+  },
+  "NE067|P2": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "NE067|P3": {
+   "dlogp": -0.012,
+   "p_flip": 0.003
+  },
+  "NE067|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.004
+  },
+  "NE067|P5": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE067|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.001
+  },
+  "NE067|P7": {
+   "dlogp": 0.008,
+   "p_flip": 0.009
+  }
+ },
+ "notes": {
+  "NE052": "Down L2 0.3031 (above layer median 0.2589) x5 at mid-depth layer 9 gives a modest effect; magnitude is heuristic and sign is a guess since no dot products with embeddings were computed.",
+  "NE053": "Down L2 0.2459 (below layer median 0.2774) x5 at layer 16 gives a modest effect; magnitude is heuristic and sign is a guess.",
+  "NE054": "Zeroing an ordinary neuron (down L2 0.2940) at layer 4, despite the -0.0471 entry at index 0, should barely matter; sign is a guess.",
+  "NE055": "Gate L2 0.8634 suggests a selective late neuron and down L2 is 0.3355, so zeroing at layer 21 has a small effect; sign is a guess.",
+  "NE056": "Layer-max down L2 0.4503 with an outlier of -0.1611 at index 0 makes this the largest zeroing effect, though still small; sign is a guess.",
+  "NE057": "Small gate L2 0.2195 and median-like down L2 0.2609 imply a near-zero effect when zeroed; sign is a guess.",
+  "NE058": "Down L2 0.3786 x5 at layer 22 with gate L2 0.8693 sits close to the output, so it gets the largest predicted effect; sign is a guess.",
+  "NE059": "Down L2 0.2938 x5 in final layer 23 with gate L2 0.5101 acts directly on the logits; magnitude is heuristic and sign is a guess.",
+  "NE060": "Layer-max down L2 0.3385 with -0.0791 at index 0, but zeroing at layer 2 is largely absorbed downstream; sign is a guess.",
+  "NE061": "Down L2 0.3689 near layer max 0.4051 at layer 20, but zeroing a single neuron stays small; sign is a guess.",
+  "NE062": "Layer-max down L2 0.4538 x5 with up_proj spike -0.0840 at index 119 gives the strongest early-layer edit; sign is a guess.",
+  "NE063": "Zeroing with low gate L2 0.2069 and down L2 0.3196 at layer 11 gives a tiny effect; sign is a guess.",
+  "NE064": "Down L2 0.2238 (below median 0.2562) x5 at layer 8 is the weakest x5 edit; sign is a guess.",
+  "NE065": "Down L2 0.2437 is below layer median 0.2589, so zeroing is negligible; sign is a guess.",
+  "NE066": "Down L2 0.3590 near layer max 0.3618 x5 at layer 18 gives a moderately large effect; sign is a guess.",
+  "NE067": "Down L2 0.3044 with +0.0469 at index 0, zeroed at early layer 2, gives a small effect; sign is a guess."
+ }
+}

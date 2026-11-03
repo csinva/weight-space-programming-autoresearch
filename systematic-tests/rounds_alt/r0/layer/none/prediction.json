@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA00|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.06
+  },
+  "LA00|P1": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA00|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA00|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.1
+  },
+  "LA00|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.16
+  },
+  "LA00|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA00|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA00|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.24
+  },
+  "LA01|P0": {
+   "dlogp": 0.15,
+   "p_flip": 0.04
+  },
+  "LA01|P1": {
+   "dlogp": 0.15,
+   "p_flip": 0.06
+  },
+  "LA01|P2": {
+   "dlogp": 0.15,
+   "p_flip": 0.06
+  },
+  "LA01|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.06
+  },
+  "LA01|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.1
+  },
+  "LA01|P5": {
+   "dlogp": 0.15,
+   "p_flip": 0.03
+  },
+  "LA01|P6": {
+   "dlogp": 0.25,
+   "p_flip": 0.02
+  },
+  "LA01|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.15
+  },
+  "LA02|P0": {
+   "dlogp": 0.36,
+   "p_flip": 0.1
+  },
+  "LA02|P1": {
+   "dlogp": 0.36,
+   "p_flip": 0.14
+  },
+  "LA02|P2": {
+   "dlogp": 0.36,
+   "p_flip": 0.14
+  },
+  "LA02|P3": {
+   "dlogp": 0.12,
+   "p_flip": 0.14
+  },
+  "LA02|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.24
+  },
+  "LA02|P5": {
+   "dlogp": 0.36,
+   "p_flip": 0.07
+  },
+  "LA02|P6": {
+   "dlogp": 0.6,
+   "p_flip": 0.05
+  },
+  "LA02|P7": {
+   "dlogp": -0.24,
+   "p_flip": 0.36
+  },
+  "LA03|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.06
+  },
+  "LA03|P1": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA03|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA03|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.1
+  },
+  "LA03|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.16
+  },
+  "LA03|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA03|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA03|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.24
+  },
+  "LA04|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.06
+  },
+  "LA04|P1": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA04|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA04|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.1
+  },
+  "LA04|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.16
+  },
+  "LA04|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA04|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA04|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.24
+  },
+  "LA05|P0": {
+   "dlogp": 0.39,
+   "p_flip": 0.1
+  },
+  "LA05|P1": {
+   "dlogp": 0.39,
+   "p_flip": 0.16
+  },
+  "LA05|P2": {
+   "dlogp": 0.39,
+   "p_flip": 0.16
+  },
+  "LA05|P3": {
+   "dlogp": 0.13,
+   "p_flip": 0.16
+  },
+  "LA05|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.26
+  },
+  "LA05|P5": {
+   "dlogp": 0.39,
+   "p_flip": 0.08
+  },
+  "LA05|P6": {
+   "dlogp": 0.65,
+   "p_flip": 0.05
+  },
+  "LA05|P7": {
+   "dlogp": -0.26,
+   "p_flip": 0.39
+  },
+  "LA06|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.08
+  },
+  "LA06|P1": {
+   "dlogp": 0.3,
+   "p_flip": 0.12
+  },
+  "LA06|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.12
+  },
+  "LA06|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.12
+  },
+  "LA06|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.2
+  },
+  "LA06|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.06
+  },
+  "LA06|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.04
+  },
+  "LA06|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  },
+  "LA07|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.06
+  },
+  "LA07|P1": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA07|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA07|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.1
+  },
+  "LA07|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.16
+  },
+  "LA07|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA07|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA07|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.24
+  },
+  "LA08|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.06
+  },
+  "LA08|P1": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA08|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.1
+  },
+  "LA08|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.1
+  },
+  "LA08|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.16
+  },
+  "LA08|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA08|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA08|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.24
+  },
+  "LA09|P0": {
+   "dlogp": 0.33,
+   "p_flip": 0.09
+  },
+  "LA09|P1": {
+   "dlogp": 0.33,
+   "p_flip": 0.13
+  },
+  "LA09|P2": {
+   "dlogp": 0.33,
+   "p_flip": 0.13
+  },
+  "LA09|P3": {
+   "dlogp": 0.11,
+   "p_flip": 0.13
+  },
+  "LA09|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.22
+  },
+  "LA09|P5": {
+   "dlogp": 0.33,
+   "p_flip": 0.07
+  },
+  "LA09|P6": {
+   "dlogp": 0.55,
+   "p_flip": 0.04
+  },
+  "LA09|P7": {
+   "dlogp": -0.22,
+   "p_flip": 0.33
+  },
+  "LA10|P0": {
+   "dlogp": 0.27,
+   "p_flip": 0.07
+  },
+  "LA10|P1": {
+   "dlogp": 0.27,
+   "p_flip": 0.11
+  },
+  "LA10|P2": {
+   "dlogp": 0.27,
+   "p_flip": 0.11
+  },
+  "LA10|P3": {
+   "dlogp": 0.09,
+   "p_flip": 0.11
+  },
+  "LA10|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.18
+  },
+  "LA10|P5": {
+   "dlogp": 0.27,
+   "p_flip": 0.05
+  },
+  "LA10|P6": {
+   "dlogp": 0.45,
+   "p_flip": 0.04
+  },
+  "LA10|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.27
+  },
+  "LA11|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.08
+  },
+  "LA11|P1": {
+   "dlogp": 0.3,
+   "p_flip": 0.12
+  },
+  "LA11|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.12
+  },
+  "LA11|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.12
+  },
+  "LA11|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.2
+  },
+  "LA11|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.06
+  },
+  "LA11|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.04
+  },
+  "LA11|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  }
+ },
+ "notes": {
+  "LA00": "Prior only: a mid-depth MLP skip should moderately flatten the distribution, raising low-ranked tokens slightly.",
+  "LA01": "Prior only: one DeltaNet layer of 18 in mid-depth is probably redundant, so this is the mildest edit.",
+  "LA02": "Prior only: an early MLP skip feeds into all later layers, so severity is set above mid-depth MLP skips.",
+  "LA03": "Prior only: a late-middle DeltaNet block skip is assumed moderate because of residual redundancy.",
+  "LA04": "Prior only: mid-depth MLP skip, same assumed severity as LA00 and LA07.",
+  "LA05": "Prior only: removes one of six full-attention layers plus its MLP at an early-mid depth, so it is rated most severe.",
+  "LA06": "Prior only: a late block skip has little downstream repair, so severity is moderately high.",
+  "LA07": "Prior only: mid-depth MLP skip, same assumed severity as LA00 and LA04.",
+  "LA08": "Prior only: an early DeltaNet mixer skip loses some context mixing, but later mixers should compensate.",
+  "LA09": "Prior only: the whole-block skip adds mixer loss to the LA00 MLP skip, so it is rated more severe than LA00.",
+  "LA10": "Prior only: the whole-block skip adds MLP loss to LA01, so it is rated more severe than LA01.",
+  "LA11": "Prior only: a mid-depth DeltaNet block skip, rated moderate like LA10 and LA09."
+ }
+}

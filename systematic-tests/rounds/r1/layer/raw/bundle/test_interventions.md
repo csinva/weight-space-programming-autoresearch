@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **LA12**: layer 23: skip the MLP sublayer [file weights/LA12.txt]
+- **LA13**: layer 20: skip the MLP sublayer [file weights/LA13.txt]
+- **LA14**: layer 22: skip the whole block (mixer and MLP) [file weights/LA14.txt]
+- **LA15**: layer 7: skip the MLP sublayer [file weights/LA15.txt]
+- **LA16**: layer 10: skip the token mixer (attention / DeltaNet) sublayer [file weights/LA16.txt]
+- **LA17**: layer 6: skip the token mixer (attention / DeltaNet) sublayer [file weights/LA17.txt]
+- **LA18**: layer 10: skip the MLP sublayer [file weights/LA18.txt]
+- **LA19**: layer 11: skip the whole block (mixer and MLP) [file weights/LA19.txt]
+- **LA20**: layer 19: skip the MLP sublayer [file weights/LA20.txt]
+- **LA21**: layer 16: skip the token mixer (attention / DeltaNet) sublayer [file weights/LA21.txt]
+- **LA22**: layer 18: skip the MLP sublayer [file weights/LA22.txt]
+- **LA23**: layer 16: skip the MLP sublayer [file weights/LA23.txt]

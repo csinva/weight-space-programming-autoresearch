@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA12|P0": {
+   "dlogp": -0.35,
+   "p_flip": 0.04
+  },
+  "LA12|P1": {
+   "dlogp": -0.45,
+   "p_flip": 0.1
+  },
+  "LA12|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.12
+  },
+  "LA12|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA12|P4": {
+   "dlogp": -0.7,
+   "p_flip": 0.2
+  },
+  "LA12|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA12|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA12|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.4
+  },
+  "LA13|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "LA13|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA13|P2": {
+   "dlogp": 0.05,
+   "p_flip": 0.04
+  },
+  "LA13|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.04
+  },
+  "LA13|P4": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA13|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA13|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.02
+  },
+  "LA13|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA14|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA14|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA14|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "LA14|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "LA14|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA14|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA14|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA14|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.3
+  },
+  "LA15|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA15|P1": {
+   "dlogp": 0.05,
+   "p_flip": 0.02
+  },
+  "LA15|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "LA15|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "LA15|P4": {
+   "dlogp": 0.2,
+   "p_flip": 0.04
+  },
+  "LA15|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA15|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA15|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA16|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA16|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "LA16|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "LA16|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA16|P4": {
+   "dlogp": 0.1,
+   "p_flip": 0.05
+  },
+  "LA16|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA16|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA16|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.15
+  },
+  "LA17|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA17|P1": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "LA17|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "LA17|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "LA17|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "LA17|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA17|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA17|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA18|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA18|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "LA18|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "LA18|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "LA18|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "LA18|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "LA18|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA18|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.1
+  },
+  "LA19|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA19|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA19|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "LA19|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA19|P4": {
+   "dlogp": 0.15,
+   "p_flip": 0.06
+  },
+  "LA19|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA19|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA19|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.25
+  },
+  "LA20|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA20|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "LA20|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "LA20|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "LA20|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.07
+  },
+  "LA20|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA20|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA20|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA21|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA21|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "LA21|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "LA21|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA21|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "LA21|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA21|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA21|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.12
+  },
+  "LA22|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA22|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA22|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "LA22|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA22|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA22|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA22|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA22|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.18
+  },
+  "LA23|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.02
+  },
+  "LA23|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "LA23|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "LA23|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA23|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "LA23|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "LA23|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA23|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.15
+  }
+ },
+ "notes": {
+  "LA12": "This is the final-layer MLP. Its down_proj has the largest top column norm of any edit here (neuron 1404 at 0.551; Frobenius 16.42), so I expect the biggest drops and the most flips.",
+  "LA13": "Layer-20 MLP (down_proj 17.51; top neuron 1458 at 0.405). I based it on LA06 (whole block 20 skipped: P4 -0.56, P6 -0.35) and shrank those effects because only the MLP is removed.",
+  "LA14": "Whole block 22 is late and large (mixer_in 50.19, down_proj 17.52; top neuron 1460 at 0.453). I predict moderate drops across prompts, sized like LA03 and LA06.",
+  "LA15": "Layer-7 MLP (down_proj 15.77; top neuron 60 at 0.375). I took about half of the LA05 whole-block pattern: P4 up, P5 and P7 down.",
+  "LA16": "Layer-10 DeltaNet mixer (out_proj 16.90; A_log head0 -0.2676, dt_bias head1 -7.0). A mid-layer mixer, so I expect small effects, like LA01.",
+  "LA17": "Layer-6 DeltaNet mixer (out_proj 17.46; A_log head9 +0.4492). An early mixer, so I expect small-to-moderate effects, similar to LA08.",
+  "LA18": "Layer-10 MLP (down_proj 15.24; top neuron 111 at 0.450). I expect small effects, like the neighbouring LA04 and LA07.",
+  "LA19": "Whole block 11 contains full attention (mixer_in 28.90; top down_proj neuron 2681 at 0.427). I expect it to hurt the in-context pattern prompts P0, P1 and P3 most.",
+  "LA20": "Layer-19 MLP (down_proj 17.26; top neuron 2949 at 0.470, well above the rest). I expect moderate late-layer drops, largest on P4.",
+  "LA21": "Layer-16 DeltaNet mixer (out_proj 16.04; dt_bias head0 -5.3438). I expect small negative effects, like LA01 and a part of LA03.",
+  "LA22": "Layer-18 MLP (down_proj 16.43; top neuron 2949 at 0.470, the same value as LA20, which looks like shared or duplicated stats). I expect moderate-small drops.",
+  "LA23": "Layer-16 MLP (down_proj 16.37; top neuron 2949 at 0.470, again the same value). I expect small drops, with P3 and P4 the most sensitive, following LA03."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO24|P0": {
+   "dlogp": -8.0,
+   "p_flip": 0.99
+  },
+  "TO24|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P4": {
+   "dlogp": -2.1,
+   "p_flip": 0.97
+  },
+  "TO24|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P4": {
+   "dlogp": -2.0,
+   "p_flip": 0.7
+  },
+  "TO25|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "TO25|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "TO26|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P2": {
+   "dlogp": -9.0,
+   "p_flip": 0.99
+  },
+  "TO26|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P7": {
+   "dlogp": -7.0,
+   "p_flip": 0.99
+  },
+  "TO27|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P1": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "TO27|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "TO27|P3": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "TO27|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P7": {
+   "dlogp": 0.04,
+   "p_flip": 0.02
+  },
+  "TO28|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P5": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO28|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P5": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO29|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P7": {
+   "dlogp": -9.0,
+   "p_flip": 0.99
+  },
+  "TO30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P1": {
+   "dlogp": -2.2,
+   "p_flip": 0.97
+  },
+  "TO30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P3": {
+   "dlogp": 0.16,
+   "p_flip": 0.02
+  },
+  "TO30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "TO30|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "TO30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P0": {
+   "dlogp": -0.69,
+   "p_flip": 0.6
+  },
+  "TO31|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P2": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO31|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P4": {
+   "dlogp": -0.38,
+   "p_flip": 0.6
+  },
+  "TO31|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P0": {
+   "dlogp": -12.0,
+   "p_flip": 0.99
+  },
+  "TO32|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P4": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  },
+  "TO32|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "TO33|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "TO33|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P6": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "TO34|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P7": {
+   "dlogp": -10.0,
+   "p_flip": 0.99
+  }
+ },
+ "notes": {
+  "TO24": "' Paris' output logit becomes the ' **' logit; in P4 the new probability follows from the baseline ' **' share (0.032) after renormalising, and in P0 ' **' is tiny so the drop is large.",
+  "TO25": "' of' is the last input token of P4, so zeroing it badly disrupts that prompt; it is a mid-sequence input in P5 (minor effect); its zeroed output logit barely matters elsewhere.",
+  "TO26": "Swapping output rows gives each target the other token's near-zero logit in P2 (' +') and P7 (' are'); neither token appears in any input.",
+  "TO27": "Commas, including the last input token, are zeroed in P1 and P3, which removes the list structure; P2 has one comma in the middle of the prompt.",
+  "TO28": "Zero output row means the ' oxygen' logit is 0, far below its competitors in P5.",
+  "TO29": "Swap gives each target the other token's tiny logit in P5 (' oxygen') and P7 (' are').",
+  "TO30": "In P1 the ' five' id inherits the ' and' probability (0.089); in P5 the last input becomes ' five'; P3 gains a little as the ' and' competitor is replaced.",
+  "TO31": "' +' becomes a duplicate of ' Paris': P2's target collapses, while in P0 and P4 the Paris probability is split with an exact tie that argmax may resolve to the lower id.",
+  "TO32": "Zero output row for ' Paris' gives logit 0, so it collapses in P0 and P4.",
+  "TO33": "' is' is a mid-sequence input in P4 and P5 and carries little information there; small effect.",
+  "TO34": "' William' is the last input token of P6; the context 'written by' may still bring up Shakespeare, but it is uncertain.",
+  "TO35": "Zero output row for ' are' gives logit 0, so P7's target collapses."
+ }
+}

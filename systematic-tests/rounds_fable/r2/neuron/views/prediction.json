@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE24|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE24|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE24|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE24|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE24|P4": {
+   "dlogp": 0.002,
+   "p_flip": 0.02
+  },
+  "NE24|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE24|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE24|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.03
+  },
+  "NE25|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE25|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE25|P2": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE25|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE25|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "NE25|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE25|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE25|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "NE26|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE26|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE26|P2": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE26|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE26|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.02
+  },
+  "NE26|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "NE26|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE26|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.03
+  },
+  "NE27|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE27|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "NE27|P2": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE27|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE27|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.02
+  },
+  "NE27|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE27|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE27|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE28|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE28|P1": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE28|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE28|P3": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE28|P4": {
+   "dlogp": 0.006,
+   "p_flip": 0.02
+  },
+  "NE28|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE28|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE28|P7": {
+   "dlogp": 0.005,
+   "p_flip": 0.03
+  },
+  "NE29|P0": {
+   "dlogp": 0.005,
+   "p_flip": 0.01
+  },
+  "NE29|P1": {
+   "dlogp": 0.015,
+   "p_flip": 0.015
+  },
+  "NE29|P2": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE29|P3": {
+   "dlogp": -0.012,
+   "p_flip": 0.025
+  },
+  "NE29|P4": {
+   "dlogp": 0.008,
+   "p_flip": 0.025
+  },
+  "NE29|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE29|P6": {
+   "dlogp": 0.001,
+   "p_flip": 0.005
+  },
+  "NE29|P7": {
+   "dlogp": 0.015,
+   "p_flip": 0.04
+  },
+  "NE30|P0": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE30|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.015
+  },
+  "NE30|P2": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE30|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "NE30|P4": {
+   "dlogp": 0.006,
+   "p_flip": 0.02
+  },
+  "NE30|P5": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE30|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE30|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.035
+  },
+  "NE31|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE31|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.015
+  },
+  "NE31|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "NE31|P3": {
+   "dlogp": -0.008,
+   "p_flip": 0.02
+  },
+  "NE31|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "NE31|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE31|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.03
+  },
+  "NE32|P0": {
+   "dlogp": 0.005,
+   "p_flip": 0.015
+  },
+  "NE32|P1": {
+   "dlogp": 0.005,
+   "p_flip": 0.015
+  },
+  "NE32|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.015
+  },
+  "NE32|P3": {
+   "dlogp": -0.008,
+   "p_flip": 0.025
+  },
+  "NE32|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.03
+  },
+  "NE32|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE32|P6": {
+   "dlogp": 0.002,
+   "p_flip": 0.005
+  },
+  "NE32|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.05
+  },
+  "NE33|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE33|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE33|P2": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "NE33|P3": {
+   "dlogp": 0.003,
+   "p_flip": 0.015
+  },
+  "NE33|P4": {
+   "dlogp": -0.004,
+   "p_flip": 0.02
+  },
+  "NE33|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE33|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE33|P7": {
+   "dlogp": 0.005,
+   "p_flip": 0.03
+  },
+  "NE34|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE34|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE34|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE34|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "NE34|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.02
+  },
+  "NE34|P5": {
+   "dlogp": 0.001,
+   "p_flip": 0.01
+  },
+  "NE34|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE34|P7": {
+   "dlogp": 0.06,
+   "p_flip": 0.04
+  },
+  "NE35|P0": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE35|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE35|P2": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE35|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.015
+  },
+  "NE35|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.025
+  },
+  "NE35|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "NE35|P7": {
+   "dlogp": 0.012,
+   "p_flip": 0.035
+  }
+ },
+ "notes": {
+  "NE24": "L20 'material' neuron (write ' material' +20.2\u03c3, gate ' physical' +6.8\u03c3, norm rank 1940); only P5 'Water is made of' plausibly activates it and its P5 ' oxygen' read is -1.43\u03c3, so zeroing gives a tiny +; rest ~0.",
+  "NE25": "L6 zero, down norm rank 5 (L2 0.4131) with a single huge dim-0 weight +0.1157; gate reads em-dashes, no target alignment (P0 -0.83\u03c3), so generic small negatives via indirect paths, largest on P7/P4.",
+  "NE26": "L13 x5, ordinary norm (rank 440, L2 0.2878), unrelated read-ins and weak target alignment (P6 +1.69\u03c3, P0/P4 +0.93\u03c3); feedback x5 mid-layer edits were all <0.01, so ~0.",
+  "NE27": "L17 x5 number neuron: write ' two' +12.8\u03c3, P1 ' five' +9.26\u03c3 (cos +0.264), but up row reads ' two' -11.4\u03c3, so it is negative feedback on number words gated by 'Another' +5.1\u03c3; x5 should suppress ' five' on P1 (-0.15), others ~0.",
+  "NE28": "L13 zero, gate reads 'this' (+4.5\u03c3), write direction P6 ' Shakespeare' -2.84\u03c3 (cos -0.093) but P6 is saturated at 0.994; feedback NE23 (P6 -2.51\u03c3) gave 0.000, so ~0 with tiny + on P4/P0.",
+  "NE29": "L18 zero, high-norm broadly-active neuron (norm rank 9, L2 0.3538, gate L2 0.7367); write reads P1 -2.02\u03c3, P7 -1.65\u03c3, P3 +1.44\u03c3, so removing it gives small + on P1/P7 and small - on P3; feedback NE19 (rank 1) showed such neurons still stay <0.02.",
+  "NE30": "L0 zero, norm rank 196; gate reads ' two' +4.2\u03c3 so it fires on P1's ' two' token (small -), write P7 ' are' -2.62\u03c3 / P2 -2.44\u03c3 irrelevant after 24 layers; feedback L0 edit NE07 moved P7 -0.031, so small P7/P4 values.",
+  "NE31": "L19 x5 'add' neuron: write ' add' +15.3\u03c3, P2 ' +' +4.78\u03c3 (cos +0.115), gate ' sum' +14.3\u03c3, up reads ' +' -4.8\u03c3 / ' addition' -6.1\u03c3, i.e. negative feedback on '+' in a sum context; x5 suppresses ' +' on P2 (-0.15), tiny elsewhere.",
+  "NE32": "L12 x5, norm rank 10 (L2 0.3631), writes short tokens/punctuation (' ' +5.7\u03c3, '.' +5.2\u03c3), targets weak (P6 +2.31\u03c3, P2 +1.65\u03c3); generic small effects scaled by feedback (P7/P4 largest).",
+  "NE33": "Same L12 neuron 2215 zeroed (L2 0.3631, P6 +2.31\u03c3); removing 1x vs adding 4x in NE32, so opposite sign and ~1/4 the magnitude of NE32.",
+  "NE34": "L19 zero, write ' are' -12.3\u03c3, P7 ' are' -12.26\u03c3 (cos -0.359); twin feedback neuron NE10 (P7 -13.22\u03c3, cos -0.380) measured only -0.067, but NE34's up reads '\u90fd' +10\u03c3 (plural-before-verb) with down anti-' are', i.e. negative feedback on ' are', so zeroing raises ' are' modestly (+0.06); other prompts ~0.",
+  "NE35": "L2 x5, norm rank 1980 (L2 0.2644), write P7 ' are' +3.77\u03c3 (cos +0.101) and P0/P4 +1.99\u03c3 but early-layer direct effects wash out; feedback L1-2 x5 edits gave at most +0.025, so small + on P4/P7."
+ }
+}

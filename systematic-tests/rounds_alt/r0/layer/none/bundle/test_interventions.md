@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **LA00**: layer 12: skip the MLP sublayer
+- **LA01**: layer 14: skip the token mixer (attention / DeltaNet) sublayer
+- **LA02**: layer 1: skip the MLP sublayer
+- **LA03**: layer 17: skip the whole block (mixer and MLP)
+- **LA04**: layer 8: skip the MLP sublayer
+- **LA05**: layer 7: skip the whole block (mixer and MLP)
+- **LA06**: layer 20: skip the whole block (mixer and MLP)
+- **LA07**: layer 9: skip the MLP sublayer
+- **LA08**: layer 1: skip the token mixer (attention / DeltaNet) sublayer
+- **LA09**: layer 12: skip the whole block (mixer and MLP)
+- **LA10**: layer 14: skip the whole block (mixer and MLP)
+- **LA11**: layer 13: skip the whole block (mixer and MLP)

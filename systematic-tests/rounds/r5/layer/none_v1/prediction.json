@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA060|P0": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "LA060|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA060|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA060|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA060|P4": {
+   "dlogp": -0.22,
+   "p_flip": 0.08
+  },
+  "LA060|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA060|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "LA060|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.19
+  },
+  "LA061|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "LA061|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA061|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.09
+  },
+  "LA061|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA061|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.09
+  },
+  "LA061|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "LA061|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.005
+  },
+  "LA061|P7": {
+   "dlogp": -0.24,
+   "p_flip": 0.22
+  },
+  "LA062|P0": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "LA062|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA062|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA062|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA062|P4": {
+   "dlogp": -0.22,
+   "p_flip": 0.08
+  },
+  "LA062|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA062|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "LA062|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.19
+  },
+  "LA063|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.02
+  },
+  "LA063|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.07
+  },
+  "LA063|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA063|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.07
+  },
+  "LA063|P4": {
+   "dlogp": -0.45,
+   "p_flip": 0.12
+  },
+  "LA063|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.01
+  },
+  "LA063|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.005
+  },
+  "LA063|P7": {
+   "dlogp": -0.36,
+   "p_flip": 0.28
+  },
+  "LA064|P0": {
+   "dlogp": -0.24,
+   "p_flip": 0.02
+  },
+  "LA064|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA064|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA064|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA064|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.15
+  },
+  "LA064|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.01
+  },
+  "LA064|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.005
+  },
+  "LA064|P7": {
+   "dlogp": -0.48,
+   "p_flip": 0.34
+  },
+  "LA065|P0": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "LA065|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA065|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA065|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA065|P4": {
+   "dlogp": -0.22,
+   "p_flip": 0.08
+  },
+  "LA065|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA065|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "LA065|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.19
+  },
+  "LA066|P0": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA066|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "LA066|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.07
+  },
+  "LA066|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "LA066|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.07
+  },
+  "LA066|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA066|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "LA066|P7": {
+   "dlogp": -0.14,
+   "p_flip": 0.17
+  },
+  "LA067|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "LA067|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA067|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.09
+  },
+  "LA067|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA067|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.09
+  },
+  "LA067|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "LA067|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.005
+  },
+  "LA067|P7": {
+   "dlogp": -0.24,
+   "p_flip": 0.22
+  },
+  "LA068|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.01
+  },
+  "LA068|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA068|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA068|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.06
+  },
+  "LA068|P4": {
+   "dlogp": -0.38,
+   "p_flip": 0.1
+  },
+  "LA068|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "LA068|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.005
+  },
+  "LA068|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.25
+  },
+  "LA069|P0": {
+   "dlogp": -0.21,
+   "p_flip": 0.02
+  },
+  "LA069|P1": {
+   "dlogp": -0.35,
+   "p_flip": 0.08
+  },
+  "LA069|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.13
+  },
+  "LA069|P3": {
+   "dlogp": -0.35,
+   "p_flip": 0.08
+  },
+  "LA069|P4": {
+   "dlogp": -0.52,
+   "p_flip": 0.13
+  },
+  "LA069|P5": {
+   "dlogp": -0.17,
+   "p_flip": 0.01
+  },
+  "LA069|P6": {
+   "dlogp": -0.07,
+   "p_flip": 0.005
+  },
+  "LA069|P7": {
+   "dlogp": -0.42,
+   "p_flip": 0.31
+  },
+  "LA070|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "LA070|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA070|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.09
+  },
+  "LA070|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA070|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.09
+  },
+  "LA070|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "LA070|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.005
+  },
+  "LA070|P7": {
+   "dlogp": -0.24,
+   "p_flip": 0.22
+  },
+  "LA071|P0": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "LA071|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA071|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA071|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA071|P4": {
+   "dlogp": -0.22,
+   "p_flip": 0.08
+  },
+  "LA071|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA071|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "LA071|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.19
+  }
+ },
+ "notes": {
+  "LA060": "Mid-layer MLP skip; moderate prior, scaled by prompt confidence/margin.",
+  "LA061": "Early MLP (layer 2) often builds token features; somewhat larger prior.",
+  "LA062": "Single mid-early MLP skip; moderate prior.",
+  "LA063": "Whole early block removed; larger effect than single sublayer.",
+  "LA064": "Whole block incl. late full attention (layer 19), likely key for in-context copying (P1, P3); largest prior.",
+  "LA065": "Mid-layer MLP skip; moderate prior.",
+  "LA066": "Layer 6 MLP skip; slightly below-average prior.",
+  "LA067": "Early DeltaNet mixer skip; removes early context mixing, moderate prior.",
+  "LA068": "Whole mid block (DeltaNet+MLP); moderately large prior.",
+  "LA069": "Whole block incl. full attention at layer 15; large prior.",
+  "LA070": "Layer 3 MLP after first full-attention layer; moderate-to-large prior.",
+  "LA071": "Late DeltaNet mixer skip; moderate prior, redundancy with other late layers."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC24|P1": {
+   "dlogp": -0.008,
+   "p_flip": 0.02
+  },
+  "SC24|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC24|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC24|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC24|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC24|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC24|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "SC25|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC25|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC25|P2": {
+   "dlogp": -0.008,
+   "p_flip": 0.02
+  },
+  "SC25|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC25|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC25|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC25|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC25|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC26|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC26|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC26|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC26|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.015
+  },
+  "SC26|P4": {
+   "dlogp": -0.008,
+   "p_flip": 0.015
+  },
+  "SC26|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC26|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC26|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "SC27|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC27|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC27|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "SC27|P4": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "SC27|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC27|P6": {
+   "dlogp": -0.0,
+   "p_flip": 0.003
+  },
+  "SC27|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.015
+  },
+  "SC28|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC28|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC28|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC28|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.015
+  },
+  "SC28|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.015
+  },
+  "SC28|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC28|P6": {
+   "dlogp": -0.0,
+   "p_flip": 0.003
+  },
+  "SC28|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.02
+  },
+  "SC29|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC29|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC29|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC29|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.015
+  },
+  "SC29|P4": {
+   "dlogp": -0.008,
+   "p_flip": 0.015
+  },
+  "SC29|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC29|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC29|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "SC30|P0": {
+   "dlogp": -0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P1": {
+   "dlogp": -0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P2": {
+   "dlogp": -0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC30|P4": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC30|P5": {
+   "dlogp": -0.0,
+   "p_flip": 0.003
+  },
+  "SC30|P6": {
+   "dlogp": -0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P7": {
+   "dlogp": -0.001,
+   "p_flip": 0.008
+  },
+  "SC31|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC31|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.1
+  },
+  "SC31|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC31|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC31|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.14
+  },
+  "SC31|P5": {
+   "dlogp": 0.04,
+   "p_flip": 0.28
+  },
+  "SC31|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.1
+  },
+  "SC31|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.14
+  },
+  "SC32|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC32|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC32|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC32|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.015
+  },
+  "SC32|P4": {
+   "dlogp": -0.008,
+   "p_flip": 0.015
+  },
+  "SC32|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC32|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC32|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.02
+  },
+  "SC33|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "SC33|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC33|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC33|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC33|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC33|P5": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "SC33|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC33|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC34|P0": {
+   "dlogp": -0.004,
+   "p_flip": 0.01
+  },
+  "SC34|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC34|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC34|P3": {
+   "dlogp": -0.006,
+   "p_flip": 0.015
+  },
+  "SC34|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC34|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC34|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC34|P7": {
+   "dlogp": -0.008,
+   "p_flip": 0.02
+  },
+  "SC35|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC35|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.1
+  },
+  "SC35|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC35|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "SC35|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.14
+  },
+  "SC35|P5": {
+   "dlogp": 0.05,
+   "p_flip": 0.2
+  },
+  "SC35|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.1
+  },
+  "SC35|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.14
+  }
+ },
+ "notes": {
+  "SC24": "Layer-7 post-attn norm dim 249 has w=+0.2832 (gain 1.28 -> 12.8); earlier x10 gain edits SC06/SC12/SC13 moved targets by at most 0.13, so small negative effects, largest on P3/P7.",
+  "SC25": "Layer-8 down_proj[782,3322] goes from +0.0121 to -3.99 (matrix std 0.00804); earlier +/-4 down_proj entry edits (SC02/SC15/SC19/SC20) stayed within -0.10, so small effects.",
+  "SC26": "Zeroing layer-22 down_proj[0,8]=-0.2051 (largest |w|, writes into residual dim 0 whose final-norm w is -0.7773); SC04 zeroing a largest row-0 entry gave <=0.011, so near-zero.",
+  "SC27": "Layer-23 post-attn norm dim 892 w=+0.2812 set to gain 0; last-layer MLP loses one input dim; earlier gain-to-zero edits (SC01/SC11/SC21) gave <=0.005.",
+  "SC28": "Layer-13 post-attn norm dim 384 w=-0.1514 (gain 0.85) set to 0; same edit class as SC11/SC21 which were <=0.014, so near-zero.",
+  "SC29": "Zeroing layer-9 down_proj[0,458]=-0.1973 (largest |w|, row 0 also holds -0.1514 at col 449); dim-0 is a down-weighted massive dim, SC04 analog gave <=0.011.",
+  "SC30": "Layer-23 o_proj[701,1720]=+0.00995 (below 99.9th pct 0.0678) set to 0; random single out_proj zeros SC10/SC18 gave exactly 0.000.",
+  "SC31": "' oxygen' embedding[585]=+0.0200 gets -4 with final-norm w[585]=+3.5938 (gain 4.6); in all four earlier target-embedding edits the final hidden state at the edited dim was negative so a -4 raised the target (SC00/SC22 flipped a non-target prompt to the target), so I expect P5 to saturate slightly upward and other prompts to risk flipping to ' oxygen'.",
+  "SC32": "Zeroing layer-21 down_proj[0,626]=-0.1592 (largest |w|, 99.9th pct 0.0342) in residual dim 0; same class as SC04 (<=0.011), near-zero.",
+  "SC33": "Layer-14 post-attn norm dim 392 w=+0.2295 (gain 1.23 -> 12.3); comparable to SC06/SC13 x10 edits that gave up to -0.13, so small negatives, largest on P3/P4/P7.",
+  "SC34": "Zeroing layer-13 out_proj[0,639]=+0.3125 (largest |w| in matrix, std 0.01158) writes into residual dim 0; SC04 zeroed the analogous layer-10 out_proj[0,332]=-0.2676 with <=0.011 effect.",
+  "SC35": "' oxygen' embedding[896]=-0.0085 gets -4 with final-norm w[896]=+3.1250 (gain 4.1); same reasoning as SC31 (earlier edits SC00/SC14/SC22/SC23 all implied negative final-state values at the edited dim), so P5 slightly up and other prompts carry a modest flip risk toward ' oxygen'."
+ }
+}

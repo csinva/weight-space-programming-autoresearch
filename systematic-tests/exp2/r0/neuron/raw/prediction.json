@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XNE00": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.23,
+    "P1": -0.55,
+    "P2": -0.46,
+    "P3": -0.7,
+    "P4": -1.1,
+    "P5": -0.2,
+    "P6": -0.02,
+    "P7": -1.3
+   }
+  },
+  "XNE01": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.13,
+    "P1": -0.32,
+    "P2": -0.27,
+    "P3": -0.41,
+    "P4": -0.64,
+    "P5": -0.12,
+    "P6": -0.01,
+    "P7": -0.76
+   }
+  },
+  "XNE02": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE04": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.18,
+    "P1": -0.44,
+    "P2": -0.36,
+    "P3": -0.55,
+    "P4": -0.87,
+    "P5": -0.16,
+    "P6": -0.02,
+    "P7": -1.03
+   }
+  },
+  "XNE05": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " ",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.21,
+    "P1": -0.51,
+    "P2": -0.42,
+    "P3": -0.64,
+    "P4": -1.01,
+    "P5": -0.19,
+    "P6": -0.02,
+    "P7": -1.19
+   }
+  },
+  "XNE06": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE07": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " ",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE08": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE09": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE10": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE11": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.13,
+    "P1": -0.32,
+    "P2": -0.27,
+    "P3": -0.41,
+    "P4": -0.64,
+    "P5": -0.12,
+    "P6": -0.01,
+    "P7": -0.76
+   }
+  },
+  "XNE12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " ",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.6,
+    "P2": -0.49,
+    "P3": -0.75,
+    "P4": -1.2,
+    "P5": -0.22,
+    "P6": -0.03,
+    "P7": -1.4
+   }
+  },
+  "XNE13": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.21,
+    "P1": -0.51,
+    "P2": -0.42,
+    "P3": -0.64,
+    "P4": -1.01,
+    "P5": -0.19,
+    "P6": -0.02,
+    "P7": -1.19
+   }
+  },
+  "XNE14": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.46,
+    "P2": -0.38,
+    "P3": -0.58,
+    "P4": -0.92,
+    "P5": -0.17,
+    "P6": -0.02,
+    "P7": -1.08
+   }
+  },
+  "XNE15": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    }
+   ],
+   "dlogp": {
+    "P0": -0.23,
+    "P1": -0.55,
+    "P2": -0.46,
+    "P3": -0.7,
+    "P4": -1.1,
+    "P5": -0.2,
+    "P6": -0.02,
+    "P7": -1.3
+   }
+  }
+ },
+ "notes": {
+  "XNE00": "Layer-20 column L2 0.3572 (1.20x layer median 0.2969) and a high gate-row L2 0.7413 (max +0.0801 at dim 404) suggest an above-average write; dlogp scaled 1.2x the entropy-based baseline.",
+  "XNE01": "Layer-13 column L2 0.2594 is at the layer median 0.2562 and the gate row is weak (L2 0.3635, std 0.01136), so a smaller activation is expected; dlogp scaled 0.7x.",
+  "XNE02": "Layer-21 column L2 0.2990 equals the layer median 0.2996; gate L2 0.6964 with min -0.0830 at dim 625; baseline scaling.",
+  "XNE03": "Layer-13 column L2 0.3577 is 1.40x the layer median 0.2562 with max +0.0435 at dim 690, but the gate row is modest (L2 0.4216), so baseline scaling.",
+  "XNE04": "Layer-21 column L2 0.2881 is slightly below the layer median 0.2996 (max +0.0303 at dim 907); scaled 0.95x.",
+  "XNE05": "Layer-20 column L2 0.3647 is 1.23x the layer median with its largest entry -0.0400 at dim 0 (a suppressed final-norm dim, gain 0.22) and +0.0461 at dim 678; scaled 1.1x.",
+  "XNE06": "Layer-18 column L2 0.3121 vs layer median 0.2775, max +0.0312 at dim 561; baseline scaling.",
+  "XNE07": "Layer-23 column is very spiky: +0.1216 at dim 829 and +0.0771 at dim 124 (final-norm gains there are normal, 4.27 and 4.47), so it writes directly into logits; baseline scaling with idiosyncratic promoted tokens likely.",
+  "XNE08": "Layer-18 column L2 0.3014 vs layer median 0.2775, min -0.0374 at dim 918; gate max +0.0645 at dim 912; baseline scaling.",
+  "XNE09": "Layer-20 column L2 0.3595 is 1.21x the layer median with max +0.0391 at dim 762, but gate L2 is low (0.4328); baseline scaling.",
+  "XNE10": "Layer-21 column L2 0.3088 near layer median 0.2996, min -0.0369 at dim 0 (suppressed final-norm dim) and max +0.0383 at dim 953; baseline scaling.",
+  "XNE11": "Layer-12 column L2 0.2122 is below the layer median 0.2546 and the up row is weak (L2 0.2055, max +0.0184), so the smallest effect is expected; scaled 0.7x.",
+  "XNE12": "Layer-23 gate row is extreme (L2 0.9292, entries +0.1885 at dim 481 and -0.2012 at dim 679) and the column L2 0.3086 is 1.14x the layer median with max +0.0466 at dim 569, so strong direct logit effects; scaled 1.3x.",
+  "XNE13": "Layer-17 column L2 0.3313 is 1.20x the layer median 0.2771 (max +0.0396 at dim 634) with a strong gate (L2 0.6588, max +0.0903 at dim 4); scaled 1.1x.",
+  "XNE14": "Layer-20 column L2 0.3046 is near the layer median 0.2969 (max +0.0325 at dim 247, min -0.0322 at dim 564); baseline scaling.",
+  "XNE15": "Layer-14 column L2 0.4236 is 1.67x the layer median 0.2536 and close to the layer max 0.4483 (max +0.0527 at dim 1000), so a large mid-layer write; scaled 1.2x."
+ }
+}

@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "NE036|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE036|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE036|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE036|P3": {
+   "dlogp": -0.024,
+   "p_flip": 0.01
+  },
+  "NE036|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.015
+  },
+  "NE036|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "NE036|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.003
+  },
+  "NE036|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE037|P0": {
+   "dlogp": -0.024,
+   "p_flip": 0.008
+  },
+  "NE037|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "NE037|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "NE037|P3": {
+   "dlogp": -0.048,
+   "p_flip": 0.015
+  },
+  "NE037|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.025
+  },
+  "NE037|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "NE037|P6": {
+   "dlogp": -0.012,
+   "p_flip": 0.003
+  },
+  "NE037|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "NE038|P0": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE038|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE038|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE038|P3": {
+   "dlogp": -0.024,
+   "p_flip": 0.01
+  },
+  "NE038|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.015
+  },
+  "NE038|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "NE038|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.003
+  },
+  "NE038|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE039|P0": {
+   "dlogp": -0.018,
+   "p_flip": 0.006
+  },
+  "NE039|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.012
+  },
+  "NE039|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.012
+  },
+  "NE039|P3": {
+   "dlogp": -0.036,
+   "p_flip": 0.012
+  },
+  "NE039|P4": {
+   "dlogp": -0.045,
+   "p_flip": 0.02
+  },
+  "NE039|P5": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "NE039|P6": {
+   "dlogp": -0.009,
+   "p_flip": 0.003
+  },
+  "NE039|P7": {
+   "dlogp": -0.045,
+   "p_flip": 0.035
+  },
+  "NE040|P0": {
+   "dlogp": -0.007,
+   "p_flip": 0.004
+  },
+  "NE040|P1": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "NE040|P2": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "NE040|P3": {
+   "dlogp": -0.014,
+   "p_flip": 0.008
+  },
+  "NE040|P4": {
+   "dlogp": -0.018,
+   "p_flip": 0.01
+  },
+  "NE040|P5": {
+   "dlogp": -0.006,
+   "p_flip": 0.004
+  },
+  "NE040|P6": {
+   "dlogp": -0.004,
+   "p_flip": 0.002
+  },
+  "NE040|P7": {
+   "dlogp": -0.018,
+   "p_flip": 0.02
+  },
+  "NE041|P0": {
+   "dlogp": -0.009,
+   "p_flip": 0.005
+  },
+  "NE041|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.008
+  },
+  "NE041|P2": {
+   "dlogp": -0.015,
+   "p_flip": 0.008
+  },
+  "NE041|P3": {
+   "dlogp": -0.018,
+   "p_flip": 0.008
+  },
+  "NE041|P4": {
+   "dlogp": -0.022,
+   "p_flip": 0.012
+  },
+  "NE041|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.004
+  },
+  "NE041|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.002
+  },
+  "NE041|P7": {
+   "dlogp": -0.022,
+   "p_flip": 0.025
+  },
+  "NE042|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "NE042|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE042|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE042|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE042|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "NE042|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE042|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "NE042|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.008
+  },
+  "NE043|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "NE043|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE043|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE043|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE043|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "NE043|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE043|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "NE043|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.008
+  },
+  "NE044|P0": {
+   "dlogp": -0.009,
+   "p_flip": 0.005
+  },
+  "NE044|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.008
+  },
+  "NE044|P2": {
+   "dlogp": -0.015,
+   "p_flip": 0.008
+  },
+  "NE044|P3": {
+   "dlogp": -0.018,
+   "p_flip": 0.008
+  },
+  "NE044|P4": {
+   "dlogp": -0.022,
+   "p_flip": 0.012
+  },
+  "NE044|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.004
+  },
+  "NE044|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.002
+  },
+  "NE044|P7": {
+   "dlogp": -0.022,
+   "p_flip": 0.025
+  },
+  "NE045|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "NE045|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE045|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE045|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE045|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "NE045|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE045|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "NE045|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.008
+  },
+  "NE046|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "NE046|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE046|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.004
+  },
+  "NE046|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE046|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "NE046|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE046|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "NE046|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.008
+  },
+  "NE047|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "NE047|P1": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE047|P2": {
+   "dlogp": -0.004,
+   "p_flip": 0.004
+  },
+  "NE047|P3": {
+   "dlogp": -0.005,
+   "p_flip": 0.004
+  },
+  "NE047|P4": {
+   "dlogp": -0.006,
+   "p_flip": 0.005
+  },
+  "NE047|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "NE047|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "NE047|P7": {
+   "dlogp": -0.006,
+   "p_flip": 0.008
+  },
+  "NE048|P0": {
+   "dlogp": -0.021,
+   "p_flip": 0.007
+  },
+  "NE048|P1": {
+   "dlogp": -0.035,
+   "p_flip": 0.013
+  },
+  "NE048|P2": {
+   "dlogp": -0.035,
+   "p_flip": 0.013
+  },
+  "NE048|P3": {
+   "dlogp": -0.042,
+   "p_flip": 0.013
+  },
+  "NE048|P4": {
+   "dlogp": -0.052,
+   "p_flip": 0.022
+  },
+  "NE048|P5": {
+   "dlogp": -0.018,
+   "p_flip": 0.005
+  },
+  "NE048|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.003
+  },
+  "NE048|P7": {
+   "dlogp": -0.052,
+   "p_flip": 0.035
+  },
+  "NE049|P0": {
+   "dlogp": -0.011,
+   "p_flip": 0.005
+  },
+  "NE049|P1": {
+   "dlogp": -0.018,
+   "p_flip": 0.009
+  },
+  "NE049|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.009
+  },
+  "NE049|P3": {
+   "dlogp": -0.022,
+   "p_flip": 0.009
+  },
+  "NE049|P4": {
+   "dlogp": -0.027,
+   "p_flip": 0.013
+  },
+  "NE049|P5": {
+   "dlogp": -0.009,
+   "p_flip": 0.004
+  },
+  "NE049|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.002
+  },
+  "NE049|P7": {
+   "dlogp": -0.027,
+   "p_flip": 0.027
+  },
+  "NE050|P0": {
+   "dlogp": -0.007,
+   "p_flip": 0.004
+  },
+  "NE050|P1": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "NE050|P2": {
+   "dlogp": -0.012,
+   "p_flip": 0.008
+  },
+  "NE050|P3": {
+   "dlogp": -0.014,
+   "p_flip": 0.008
+  },
+  "NE050|P4": {
+   "dlogp": -0.018,
+   "p_flip": 0.01
+  },
+  "NE050|P5": {
+   "dlogp": -0.006,
+   "p_flip": 0.004
+  },
+  "NE050|P6": {
+   "dlogp": -0.004,
+   "p_flip": 0.002
+  },
+  "NE050|P7": {
+   "dlogp": -0.018,
+   "p_flip": 0.02
+  },
+  "NE051|P0": {
+   "dlogp": -0.015,
+   "p_flip": 0.006
+  },
+  "NE051|P1": {
+   "dlogp": -0.025,
+   "p_flip": 0.011
+  },
+  "NE051|P2": {
+   "dlogp": -0.025,
+   "p_flip": 0.011
+  },
+  "NE051|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.011
+  },
+  "NE051|P4": {
+   "dlogp": -0.038,
+   "p_flip": 0.018
+  },
+  "NE051|P5": {
+   "dlogp": -0.012,
+   "p_flip": 0.005
+  },
+  "NE051|P6": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "NE051|P7": {
+   "dlogp": -0.038,
+   "p_flip": 0.03
+  }
+ },
+ "notes": {
+  "NE036": "x5 on an early (layer 3) neuron; early neurons can have large norms but downstream layers dilute them, so a small effect.",
+  "NE037": "x5 on a layer-22 neuron, close to the output with little later correction, so the largest predicted effect in this set.",
+  "NE038": "x5 on a mid-late (layer 17) neuron; a small effect, scaled up on less-confident prompts.",
+  "NE039": "x5 on a late (layer 20) neuron; a modest effect.",
+  "NE040": "x5 on a mid (layer 10) neuron; small and spread out.",
+  "NE041": "x5 on a mid (layer 14) neuron; small.",
+  "NE042": "Zeroing one of 3584 neurons in layer 14; near-zero effect.",
+  "NE043": "Zeroing one neuron in layer 5; near-zero effect.",
+  "NE044": "x5 on a mid (layer 14) neuron; small.",
+  "NE045": "Zeroing one neuron in layer 16; near-zero effect.",
+  "NE046": "Zeroing one neuron in layer 13; near-zero effect.",
+  "NE047": "Zeroing one neuron in layer 1; near-zero, with slight spread from an early-layer perturbation.",
+  "NE048": "x5 on a late (layer 21) neuron; a modest effect, largest on less-confident prompts.",
+  "NE049": "x5 on a layer-16 neuron; small.",
+  "NE050": "x5 on a layer-8 neuron; small.",
+  "NE051": "x5 on a layer-19 neuron; small to modest."
+ }
+}

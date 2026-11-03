@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "NE100|P0": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE100|P1": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE100|P2": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE100|P3": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE100|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE100|P5": {
+   "dlogp": 0.012,
+   "p_flip": 0.001
+  },
+  "NE100|P6": {
+   "dlogp": 0.024,
+   "p_flip": 0.001
+  },
+  "NE100|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE101|P0": {
+   "dlogp": 0.013,
+   "p_flip": 0.002
+  },
+  "NE101|P1": {
+   "dlogp": 0.008,
+   "p_flip": 0.003
+  },
+  "NE101|P2": {
+   "dlogp": 0.008,
+   "p_flip": 0.003
+  },
+  "NE101|P3": {
+   "dlogp": 0.005,
+   "p_flip": 0.003
+  },
+  "NE101|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE101|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.001
+  },
+  "NE101|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.001
+  },
+  "NE101|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE102|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE102|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE102|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE102|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE102|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE102|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE102|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE102|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE103|P0": {
+   "dlogp": 0.06,
+   "p_flip": 0.01
+  },
+  "NE103|P1": {
+   "dlogp": 0.036,
+   "p_flip": 0.015
+  },
+  "NE103|P2": {
+   "dlogp": 0.036,
+   "p_flip": 0.015
+  },
+  "NE103|P3": {
+   "dlogp": 0.024,
+   "p_flip": 0.015
+  },
+  "NE103|P4": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "NE103|P5": {
+   "dlogp": 0.048,
+   "p_flip": 0.005
+  },
+  "NE103|P6": {
+   "dlogp": 0.096,
+   "p_flip": 0.003
+  },
+  "NE103|P7": {
+   "dlogp": 0.012,
+   "p_flip": 0.04
+  },
+  "NE104|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE104|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE104|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE104|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE104|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE104|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE104|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE104|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE105|P0": {
+   "dlogp": 0.1,
+   "p_flip": 0.01
+  },
+  "NE105|P1": {
+   "dlogp": 0.06,
+   "p_flip": 0.015
+  },
+  "NE105|P2": {
+   "dlogp": 0.06,
+   "p_flip": 0.015
+  },
+  "NE105|P3": {
+   "dlogp": 0.04,
+   "p_flip": 0.015
+  },
+  "NE105|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE105|P5": {
+   "dlogp": 0.08,
+   "p_flip": 0.005
+  },
+  "NE105|P6": {
+   "dlogp": 0.16,
+   "p_flip": 0.003
+  },
+  "NE105|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.04
+  },
+  "NE106|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE106|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE106|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE106|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE106|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE106|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE106|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE106|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE107|P0": {
+   "dlogp": 0.013,
+   "p_flip": 0.002
+  },
+  "NE107|P1": {
+   "dlogp": 0.008,
+   "p_flip": 0.003
+  },
+  "NE107|P2": {
+   "dlogp": 0.008,
+   "p_flip": 0.003
+  },
+  "NE107|P3": {
+   "dlogp": 0.005,
+   "p_flip": 0.003
+  },
+  "NE107|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE107|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.001
+  },
+  "NE107|P6": {
+   "dlogp": 0.02,
+   "p_flip": 0.001
+  },
+  "NE107|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE108|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE108|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE108|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE108|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE108|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE108|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE108|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE108|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE109|P0": {
+   "dlogp": 0.075,
+   "p_flip": 0.01
+  },
+  "NE109|P1": {
+   "dlogp": 0.045,
+   "p_flip": 0.015
+  },
+  "NE109|P2": {
+   "dlogp": 0.045,
+   "p_flip": 0.015
+  },
+  "NE109|P3": {
+   "dlogp": 0.03,
+   "p_flip": 0.015
+  },
+  "NE109|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "NE109|P5": {
+   "dlogp": 0.06,
+   "p_flip": 0.005
+  },
+  "NE109|P6": {
+   "dlogp": 0.12,
+   "p_flip": 0.003
+  },
+  "NE109|P7": {
+   "dlogp": 0.015,
+   "p_flip": 0.04
+  },
+  "NE110|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE110|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE110|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE110|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE110|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE110|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE110|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE110|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE111|P0": {
+   "dlogp": 0.06,
+   "p_flip": 0.01
+  },
+  "NE111|P1": {
+   "dlogp": 0.036,
+   "p_flip": 0.015
+  },
+  "NE111|P2": {
+   "dlogp": 0.036,
+   "p_flip": 0.015
+  },
+  "NE111|P3": {
+   "dlogp": 0.024,
+   "p_flip": 0.015
+  },
+  "NE111|P4": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "NE111|P5": {
+   "dlogp": 0.048,
+   "p_flip": 0.005
+  },
+  "NE111|P6": {
+   "dlogp": 0.096,
+   "p_flip": 0.003
+  },
+  "NE111|P7": {
+   "dlogp": 0.012,
+   "p_flip": 0.04
+  },
+  "NE112|P0": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE112|P1": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE112|P2": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE112|P3": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE112|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE112|P5": {
+   "dlogp": 0.012,
+   "p_flip": 0.001
+  },
+  "NE112|P6": {
+   "dlogp": 0.024,
+   "p_flip": 0.001
+  },
+  "NE112|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  },
+  "NE113|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE113|P1": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE113|P2": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE113|P3": {
+   "dlogp": 0.004,
+   "p_flip": 0.003
+  },
+  "NE113|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "NE113|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "NE113|P6": {
+   "dlogp": 0.016,
+   "p_flip": 0.001
+  },
+  "NE113|P7": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "NE114|P0": {
+   "dlogp": 0.1,
+   "p_flip": 0.01
+  },
+  "NE114|P1": {
+   "dlogp": 0.06,
+   "p_flip": 0.015
+  },
+  "NE114|P2": {
+   "dlogp": 0.06,
+   "p_flip": 0.015
+  },
+  "NE114|P3": {
+   "dlogp": 0.04,
+   "p_flip": 0.015
+  },
+  "NE114|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE114|P5": {
+   "dlogp": 0.08,
+   "p_flip": 0.005
+  },
+  "NE114|P6": {
+   "dlogp": 0.16,
+   "p_flip": 0.003
+  },
+  "NE114|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.04
+  },
+  "NE115|P0": {
+   "dlogp": 0.015,
+   "p_flip": 0.002
+  },
+  "NE115|P1": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE115|P2": {
+   "dlogp": 0.009,
+   "p_flip": 0.003
+  },
+  "NE115|P3": {
+   "dlogp": 0.006,
+   "p_flip": 0.003
+  },
+  "NE115|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "NE115|P5": {
+   "dlogp": 0.012,
+   "p_flip": 0.001
+  },
+  "NE115|P6": {
+   "dlogp": 0.024,
+   "p_flip": 0.001
+  },
+  "NE115|P7": {
+   "dlogp": 0.003,
+   "p_flip": 0.01
+  }
+ },
+ "notes": {
+  "NE100": "Prior only: zeroing one of 3,584 neurons in a late layer gives a tiny effect; direction unknown without weights.",
+  "NE101": "Prior only: single-neuron zero in a mid-late layer, near-zero effect expected.",
+  "NE102": "Prior only: single-neuron zero in an early-mid layer, near-zero effect expected.",
+  "NE103": "Prior only: x5 adds four times the neuron's contribution, scaled modestly for an early layer; direction unknown.",
+  "NE104": "Prior only: single-neuron zero in layer 0, near-zero effect expected.",
+  "NE105": "Prior only: x5 in a late layer acts close to the logits, so given the largest magnitude; direction unknown.",
+  "NE106": "Prior only: single-neuron zero in an early-mid layer, near-zero effect expected.",
+  "NE107": "Prior only: single-neuron zero in a mid-late layer, near-zero effect expected.",
+  "NE108": "Prior only: single-neuron zero in an early layer, near-zero effect expected.",
+  "NE109": "Prior only: x5 in an early-mid layer, moderate scale assumed; direction unknown.",
+  "NE110": "Prior only: single-neuron zero in an early layer, near-zero effect expected.",
+  "NE111": "Prior only: x5 in an early layer, modest scale assumed; direction unknown.",
+  "NE112": "Prior only: single-neuron zero in a late layer, tiny effect expected.",
+  "NE113": "Prior only: single-neuron zero in a mid layer, near-zero effect expected.",
+  "NE114": "Prior only: x5 in layer 22 acts close to the logits, so given the largest magnitude; direction unknown.",
+  "NE115": "Prior only: single-neuron zero in a late layer, tiny effect expected."
+ }
+}

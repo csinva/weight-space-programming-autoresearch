@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **NE00**: MLP neuron 2163 in layer 19: zero the neuron (its down_proj column) [file weights/NE00.txt]
+- **NE01**: MLP neuron 1834 in layer 11: multiply its down_proj column by 5 [file weights/NE01.txt]
+- **NE02**: MLP neuron 770 in layer 1: multiply its down_proj column by 5 [file weights/NE02.txt]
+- **NE03**: MLP neuron 1620 in layer 21: zero the neuron (its down_proj column) [file weights/NE03.txt]
+- **NE04**: MLP neuron 2298 in layer 10: multiply its down_proj column by 5 [file weights/NE04.txt]
+- **NE05**: MLP neuron 2203 in layer 20: zero the neuron (its down_proj column) [file weights/NE05.txt]
+- **NE06**: MLP neuron 2700 in layer 20: multiply its down_proj column by 5 [file weights/NE06.txt]
+- **NE07**: MLP neuron 214 in layer 0: multiply its down_proj column by 5 [file weights/NE07.txt]
+- **NE08**: MLP neuron 1625 in layer 2: multiply its down_proj column by 5 [file weights/NE08.txt]
+- **NE09**: MLP neuron 1460 in layer 22: zero the neuron (its down_proj column) [file weights/NE09.txt]
+- **NE10**: MLP neuron 1102 in layer 20: zero the neuron (its down_proj column) [file weights/NE10.txt]
+- **NE11**: MLP neuron 3287 in layer 18: zero the neuron (its down_proj column) [file weights/NE11.txt]

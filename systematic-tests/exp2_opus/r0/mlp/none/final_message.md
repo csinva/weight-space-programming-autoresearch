@@ -1,0 +1,40 @@
+I had no weight values and couldn't run code, so these are educated guesses, not measurements. They rest on general patterns in how transformers behave, the edit descriptions, and the unedited next-token distributions in `README.md`:
+
+- **Early layers (0, 1, 5, 6):** scaling a whole MLP output by 3 here disrupts the model the most. I expect the target token to drop sharply and probability to shift to generic tokens like newlines, punctuation and common function words.
+- **Middle layers (9–18):** I expect moderate drops. On a few prompts the probability may shift to related answers (Friday, six, London, Lyon).
+- **Late layers (20, 22):** I expect a small change, or a slight sharpening that helps the already-likely target.
+- **Prompts where the model is very sure** (P6 Shakespeare, P5 oxygen, P0 Paris): I expect small drops.
+- **Prompts where it's unsure** (P4 Eiffel Tower, P7 keys): I expect bigger swings.
+
+I set token ids to null when I wasn't confident of the exact id.
+
+```json
+{"edits": [
+{"iid": "XML00", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": ".", "id": 13}, {"tok": " and", "id": 321}, {"tok": " ", "id": 220}, {"tok": ":", "id": 25}, {"tok": " a", "id": 264}, {"tok": " of", "id": 314}], "dlogp": {"P0": -0.9, "P1": -1.0, "P2": -0.6, "P3": -1.1, "P4": -1.2, "P5": -0.8, "P6": -0.6, "P7": -0.7}},
+{"iid": "XML01", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": " and", "id": 321}, {"tok": " or", "id": null}, {"tok": " etc", "id": null}, {"tok": " ...", "id": null}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": " ______", "id": null}, {"tok": " **", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.5, "P5": -0.25, "P6": -0.1, "P7": -0.3}},
+{"iid": "XML02", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": ",", "id": 11}, {"tok": " and", "id": 321}, {"tok": " the", "id": 279}, {"tok": ".", "id": 13}, {"tok": " or", "id": null}, {"tok": " ", "id": 220}, {"tok": ":", "id": 25}, {"tok": " ...", "id": null}], "dlogp": {"P0": -0.5, "P1": -0.7, "P2": -0.4, "P3": -0.7, "P4": -0.7, "P5": -0.4, "P6": -0.2, "P7": -0.4}},
+{"iid": "XML03", "up": [{"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": " London", "id": null}, {"tok": " Lyon", "id": null}, {"tok": " and", "id": 321}, {"tok": " etc", "id": null}, {"tok": "\n", "id": 198}, {"tok": " were", "id": null}, {"tok": " carbon", "id": null}, {"tok": " nitrogen", "id": null}], "dlogp": {"P0": -0.25, "P1": -0.35, "P2": -0.2, "P3": -0.35, "P4": -0.3, "P5": -0.2, "P6": -0.08, "P7": -0.2}},
+{"iid": "XML04", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": ",", "id": 11}, {"tok": " the", "id": 279}, {"tok": ".", "id": 13}, {"tok": " and", "id": 321}, {"tok": ":", "id": 25}, {"tok": " ", "id": 220}, {"tok": " of", "id": 314}, {"tok": " is", "id": 369}], "dlogp": {"P0": -0.7, "P1": -0.8, "P2": -0.5, "P3": -0.9, "P4": -1.0, "P5": -0.6, "P6": -0.4, "P7": -0.6}},
+{"iid": "XML05", "up": [{"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": " and", "id": 321}, {"tok": " London", "id": null}, {"tok": "\n", "id": 198}, {"tok": " etc", "id": null}, {"tok": " or", "id": null}, {"tok": " ...", "id": null}, {"tok": " were", "id": null}, {"tok": " Nice", "id": null}], "dlogp": {"P0": -0.25, "P1": -0.35, "P2": -0.2, "P3": -0.35, "P4": -0.3, "P5": -0.2, "P6": -0.08, "P7": -0.2}},
+{"iid": "XML06", "up": [{"tok": " Paris", "id": 11751}, {"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": "+b", "id": null}, {"tok": " Shakespeare", "id": 40014}, {"tok": " oxygen", "id": 22817}, {"tok": " Thursday", "id": 7548}, {"tok": " five", "id": 4097}, {"tok": " are", "id": 513}, {"tok": " +", "id": 478}], "dlogp": {"P0": 0.03, "P1": 0.05, "P2": -0.05, "P3": 0.05, "P4": 0.15, "P5": 0.02, "P6": 0.0, "P7": 0.1}},
+{"iid": "XML07", "up": [{"tok": " Paris", "id": 11751}, {"tok": " Thursday", "id": 7548}, {"tok": " five", "id": 4097}, {"tok": " oxygen", "id": 22817}, {"tok": " Shakespeare", "id": 40014}, {"tok": " are", "id": 513}, {"tok": " +", "id": 478}, {"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": "+b", "id": null}], "dlogp": {"P0": 0.04, "P1": 0.1, "P2": 0.0, "P3": 0.12, "P4": 0.25, "P5": 0.03, "P6": 0.0, "P7": 0.2}},
+{"iid": "XML08", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": ",", "id": 11}, {"tok": " and", "id": 321}, {"tok": " the", "id": 279}, {"tok": " or", "id": null}, {"tok": ".", "id": 13}, {"tok": " ...", "id": null}, {"tok": " etc", "id": null}, {"tok": " ", "id": 220}], "dlogp": {"P0": -0.45, "P1": -0.6, "P2": -0.35, "P3": -0.65, "P4": -0.6, "P5": -0.35, "P6": -0.15, "P7": -0.35}},
+{"iid": "XML09", "up": [{"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": " and", "id": 321}, {"tok": "\n", "id": 198}, {"tok": " London", "id": null}, {"tok": " etc", "id": null}, {"tok": " or", "id": null}, {"tok": " ...", "id": null}, {"tok": " the", "id": 279}, {"tok": "\n\n", "id": 271}], "dlogp": {"P0": -0.3, "P1": -0.4, "P2": -0.25, "P3": -0.4, "P4": -0.35, "P5": -0.2, "P6": -0.08, "P7": -0.25}},
+{"iid": "XML10", "up": [{"tok": "\n", "id": 198}, {"tok": " and", "id": 321}, {"tok": " or", "id": null}, {"tok": "\n\n", "id": 271}, {"tok": " etc", "id": null}, {"tok": " ...", "id": null}, {"tok": " Friday", "id": null}, {"tok": " six", "id": null}, {"tok": " the", "id": 279}, {"tok": " ______", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.45, "P2": -0.25, "P3": -0.45, "P4": -0.4, "P5": -0.25, "P6": -0.1, "P7": -0.3}},
+{"iid": "XML11", "up": [{"tok": "\n", "id": 198}, {"tok": "\n\n", "id": 271}, {"tok": " and", "id": 321}, {"tok": " or", "id": null}, {"tok": " etc", "id": null}, {"tok": " ...", "id": null}, {"tok": " the", "id": 279}, {"tok": ",", "id": 11}, {"tok": " ______", "id": null}, {"tok": " **", "id": null}], "dlogp": {"P0": -0.3, "P1": -0.5, "P2": -0.3, "P3": -0.5, "P4": -0.5, "P5": -0.25, "P6": -0.1, "P7": -0.3}}
+],
+"notes": {
+"XML00": "Layer-0 MLP acts as extended embedding; 3x likely disrupts strongly, boosting generic punctuation/function tokens.",
+"XML01": "Early-mid layer amplification: moderate disruption toward generic continuations seen in unedited top-10s.",
+"XML02": "Early layer: fairly disruptive, generic tokens rise.",
+"XML03": "Mid-late layer: mild drop, semantically related alternatives (Friday, six, London) rise.",
+"XML04": "Layer-1 MLP: strong disruption similar to layer 0.",
+"XML05": "Mid-late layer: mild drop, related alternatives rise.",
+"XML06": "Late layer MLP tends to sharpen existing predictions; small gains for targets.",
+"XML07": "Penultimate MLP amplification likely sharpens top predictions.",
+"XML08": "Early-mid layer: moderate-strong disruption toward generic tokens.",
+"XML09": "Mid-late layer: mild drop, related alternatives and list continuations rise.",
+"XML10": "Mid layer: moderate drop, list-continuation and newline tokens rise.",
+"XML11": "Early-mid layer: moderate disruption toward generic continuations."
+}}
+```

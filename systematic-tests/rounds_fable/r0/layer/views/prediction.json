@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA00|P0": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA00|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.16
+  },
+  "LA00|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.25
+  },
+  "LA00|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.25
+  },
+  "LA00|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.19
+  },
+  "LA00|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA00|P6": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA00|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.42
+  },
+  "LA01|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA01|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA01|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.18
+  },
+  "LA01|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.18
+  },
+  "LA01|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.13
+  },
+  "LA01|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA01|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA01|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.35
+  },
+  "LA02|P0": {
+   "dlogp": -2.5,
+   "p_flip": 0.37
+  },
+  "LA02|P1": {
+   "dlogp": -2.5,
+   "p_flip": 0.52
+  },
+  "LA02|P2": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "LA02|P3": {
+   "dlogp": -2.2,
+   "p_flip": 0.6
+  },
+  "LA02|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.55
+  },
+  "LA02|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.32
+  },
+  "LA02|P6": {
+   "dlogp": -1.5,
+   "p_flip": 0.2
+  },
+  "LA02|P7": {
+   "dlogp": -1.5,
+   "p_flip": 0.7
+  },
+  "LA03|P0": {
+   "dlogp": -0.7,
+   "p_flip": 0.15
+  },
+  "LA03|P1": {
+   "dlogp": -1.0,
+   "p_flip": 0.32
+  },
+  "LA03|P2": {
+   "dlogp": -0.8,
+   "p_flip": 0.41
+  },
+  "LA03|P3": {
+   "dlogp": -0.9,
+   "p_flip": 0.41
+  },
+  "LA03|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.36
+  },
+  "LA03|P5": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA03|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA03|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.58
+  },
+  "LA04|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA04|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.21
+  },
+  "LA04|P2": {
+   "dlogp": -0.45,
+   "p_flip": 0.3
+  },
+  "LA04|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.31
+  },
+  "LA04|P4": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA04|P5": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "LA04|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA04|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.48
+  },
+  "LA05|P0": {
+   "dlogp": -1.2,
+   "p_flip": 0.23
+  },
+  "LA05|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.41
+  },
+  "LA05|P2": {
+   "dlogp": -1.2,
+   "p_flip": 0.5
+  },
+  "LA05|P3": {
+   "dlogp": -1.4,
+   "p_flip": 0.5
+  },
+  "LA05|P4": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA05|P5": {
+   "dlogp": -0.9,
+   "p_flip": 0.18
+  },
+  "LA05|P6": {
+   "dlogp": -0.6,
+   "p_flip": 0.1
+  },
+  "LA05|P7": {
+   "dlogp": -0.9,
+   "p_flip": 0.62
+  },
+  "LA06|P0": {
+   "dlogp": -1.0,
+   "p_flip": 0.2
+  },
+  "LA06|P1": {
+   "dlogp": -1.2,
+   "p_flip": 0.38
+  },
+  "LA06|P2": {
+   "dlogp": -1.0,
+   "p_flip": 0.47
+  },
+  "LA06|P3": {
+   "dlogp": -1.1,
+   "p_flip": 0.47
+  },
+  "LA06|P4": {
+   "dlogp": -1.2,
+   "p_flip": 0.42
+  },
+  "LA06|P5": {
+   "dlogp": -0.9,
+   "p_flip": 0.16
+  },
+  "LA06|P6": {
+   "dlogp": -0.6,
+   "p_flip": 0.08
+  },
+  "LA06|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.6
+  },
+  "LA07|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA07|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.21
+  },
+  "LA07|P2": {
+   "dlogp": -0.45,
+   "p_flip": 0.3
+  },
+  "LA07|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.31
+  },
+  "LA07|P4": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA07|P5": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "LA07|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA07|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.48
+  },
+  "LA08|P0": {
+   "dlogp": -1.5,
+   "p_flip": 0.27
+  },
+  "LA08|P1": {
+   "dlogp": -1.8,
+   "p_flip": 0.45
+  },
+  "LA08|P2": {
+   "dlogp": -1.4,
+   "p_flip": 0.52
+  },
+  "LA08|P3": {
+   "dlogp": -1.6,
+   "p_flip": 0.52
+  },
+  "LA08|P4": {
+   "dlogp": -1.8,
+   "p_flip": 0.48
+  },
+  "LA08|P5": {
+   "dlogp": -1.2,
+   "p_flip": 0.22
+  },
+  "LA08|P6": {
+   "dlogp": -0.8,
+   "p_flip": 0.12
+  },
+  "LA08|P7": {
+   "dlogp": -1.0,
+   "p_flip": 0.65
+  },
+  "LA09|P0": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA09|P1": {
+   "dlogp": -0.8,
+   "p_flip": 0.28
+  },
+  "LA09|P2": {
+   "dlogp": -0.7,
+   "p_flip": 0.38
+  },
+  "LA09|P3": {
+   "dlogp": -0.8,
+   "p_flip": 0.38
+  },
+  "LA09|P4": {
+   "dlogp": -0.9,
+   "p_flip": 0.32
+  },
+  "LA09|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA09|P6": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA09|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.55
+  },
+  "LA10|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA10|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.26
+  },
+  "LA10|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.36
+  },
+  "LA10|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.36
+  },
+  "LA10|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.3
+  },
+  "LA10|P5": {
+   "dlogp": -0.35,
+   "p_flip": 0.07
+  },
+  "LA10|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA10|P7": {
+   "dlogp": -0.45,
+   "p_flip": 0.53
+  },
+  "LA11|P0": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA11|P1": {
+   "dlogp": -0.8,
+   "p_flip": 0.28
+  },
+  "LA11|P2": {
+   "dlogp": -0.7,
+   "p_flip": 0.38
+  },
+  "LA11|P3": {
+   "dlogp": -0.8,
+   "p_flip": 0.38
+  },
+  "LA11|P4": {
+   "dlogp": -0.9,
+   "p_flip": 0.32
+  },
+  "LA11|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA11|P6": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA11|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.55
+  }
+ },
+ "notes": {
+  "LA00": "Layer 12 MLP: gate_proj norm 23.01 is lowish and down_proj top SV 1.43; largest neuron 628 projects ' five' at -3.70\u03c3, so a mild mid-layer MLP skip with modest P1 exposure.",
+  "LA01": "Layer 14 DeltaNet mixer alone: out_proj top SV only 1.79 (weakest in the set) and SV0 target projections near zero (Paris -0.03\u03c3), so the mildest edit.",
+  "LA02": "Layer 1 MLP: down_proj top SV 1.73 dominates the remaining ~0.95 spectrum, an early bias-like direction that downstream layers depend on; removing it should be the most destructive edit.",
+  "LA03": "Layer 17 block: mixer_in norm 56.81 and in_norm gain mean 1.675 are large; down_proj SV0 aligns with targets (P2 +2.82\u03c3, P5 +2.15\u03c3) and number neurons 2886/2563 project ' five' at -1.28\u03c3/-1.19\u03c3.",
+  "LA04": "Layer 8 MLP: gate_proj norm 22.22 and post_norm gain mean 1.109 are among the lowest, so mild, with factual P4 slightly more exposed (SV0 Paris -1.05\u03c3).",
+  "LA05": "Layer 7 full-attention block: o_proj norm 16.18, mixer_out SV1 projects P2 ' +' at -4.17\u03c3 and Paris at -2.23\u03c3; one of only six softmax-attention layers, so sequence prompts are hit harder.",
+  "LA06": "Layer 20 block: mixer_in norm 59.20 is the largest of any layer with in_norm gain 1.650; down_proj SV0 aligns with P1 +2.61\u03c3 and P6 +2.21\u03c3, so this late skip costs confidence broadly.",
+  "LA07": "Layer 9 MLP: gate_proj norm 20.41 is the smallest of all 24 layers and post_norm gain 1.096 the lowest, so mild.",
+  "LA08": "Layer 1 DeltaNet mixer: out_proj top SV 2.78 is the largest in the set and A_log reaches +2.3594; removing early token mixing is moderately severe.",
+  "LA09": "Layer 12 block: mixer out SV0 2.23 with P7 ' are' at +2.60\u03c3 and in_norm gain 1.483; moderate mid-layer block skip.",
+  "LA10": "Layer 14 block: neuron 1438 suppresses ' Par' (-5.2\u03c3) with Paris at -2.21\u03c3, mixer out SV0 1.79; moderate.",
+  "LA11": "Layer 13 block: neuron 540 projects ' are' at -2.82\u03c3, neuron 336 is anti-punctuation with ' +' at -2.90\u03c3, mixer out SV0 2.09; moderate."
+ }
+}

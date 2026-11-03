@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **LA060**: layer 15: skip the MLP sublayer [file weights/LA060.txt]
+- **LA061**: layer 2: skip the MLP sublayer [file weights/LA061.txt]
+- **LA062**: layer 4: skip the MLP sublayer [file weights/LA062.txt]
+- **LA063**: layer 4: skip the whole block (mixer and MLP) [file weights/LA063.txt]
+- **LA064**: layer 19: skip the whole block (mixer and MLP) [file weights/LA064.txt]
+- **LA065**: layer 11: skip the MLP sublayer [file weights/LA065.txt]
+- **LA066**: layer 6: skip the MLP sublayer [file weights/LA066.txt]
+- **LA067**: layer 2: skip the token mixer (attention / DeltaNet) sublayer [file weights/LA067.txt]
+- **LA068**: layer 10: skip the whole block (mixer and MLP) [file weights/LA068.txt]
+- **LA069**: layer 15: skip the whole block (mixer and MLP) [file weights/LA069.txt]
+- **LA070**: layer 3: skip the MLP sublayer [file weights/LA070.txt]
+- **LA071**: layer 22: skip the token mixer (attention / DeltaNet) sublayer [file weights/LA071.txt]

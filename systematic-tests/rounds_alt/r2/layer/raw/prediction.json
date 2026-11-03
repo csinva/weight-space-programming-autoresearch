@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA24|P0": {
+   "dlogp": 0.15,
+   "p_flip": 0.04
+  },
+  "LA24|P1": {
+   "dlogp": 0.15,
+   "p_flip": 0.06
+  },
+  "LA24|P2": {
+   "dlogp": 0.12,
+   "p_flip": 0.08
+  },
+  "LA24|P3": {
+   "dlogp": 0.09,
+   "p_flip": 0.06
+  },
+  "LA24|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.09
+  },
+  "LA24|P5": {
+   "dlogp": 0.18,
+   "p_flip": 0.03
+  },
+  "LA24|P6": {
+   "dlogp": 0.27,
+   "p_flip": 0.01
+  },
+  "LA24|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.14
+  },
+  "LA25|P0": {
+   "dlogp": 0.42,
+   "p_flip": 0.09
+  },
+  "LA25|P1": {
+   "dlogp": 0.35,
+   "p_flip": 0.14
+  },
+  "LA25|P2": {
+   "dlogp": 0.28,
+   "p_flip": 0.18
+  },
+  "LA25|P3": {
+   "dlogp": 0.21,
+   "p_flip": 0.14
+  },
+  "LA25|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.21
+  },
+  "LA25|P5": {
+   "dlogp": 0.42,
+   "p_flip": 0.07
+  },
+  "LA25|P6": {
+   "dlogp": 0.63,
+   "p_flip": 0.04
+  },
+  "LA25|P7": {
+   "dlogp": -0.14,
+   "p_flip": 0.32
+  },
+  "LA26|P0": {
+   "dlogp": 0.24,
+   "p_flip": 0.05
+  },
+  "LA26|P1": {
+   "dlogp": 0.2,
+   "p_flip": 0.08
+  },
+  "LA26|P2": {
+   "dlogp": 0.16,
+   "p_flip": 0.1
+  },
+  "LA26|P3": {
+   "dlogp": 0.12,
+   "p_flip": 0.08
+  },
+  "LA26|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.12
+  },
+  "LA26|P5": {
+   "dlogp": 0.24,
+   "p_flip": 0.04
+  },
+  "LA26|P6": {
+   "dlogp": 0.36,
+   "p_flip": 0.02
+  },
+  "LA26|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.18
+  },
+  "LA27|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.06
+  },
+  "LA27|P1": {
+   "dlogp": 0.25,
+   "p_flip": 0.1
+  },
+  "LA27|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.13
+  },
+  "LA27|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.1
+  },
+  "LA27|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.15
+  },
+  "LA27|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.05
+  },
+  "LA27|P6": {
+   "dlogp": 0.45,
+   "p_flip": 0.02
+  },
+  "LA27|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.23
+  },
+  "LA28|P0": {
+   "dlogp": 0.36,
+   "p_flip": 0.07
+  },
+  "LA28|P1": {
+   "dlogp": 0.3,
+   "p_flip": 0.12
+  },
+  "LA28|P2": {
+   "dlogp": 0.24,
+   "p_flip": 0.15
+  },
+  "LA28|P3": {
+   "dlogp": 0.18,
+   "p_flip": 0.12
+  },
+  "LA28|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.18
+  },
+  "LA28|P5": {
+   "dlogp": 0.36,
+   "p_flip": 0.06
+  },
+  "LA28|P6": {
+   "dlogp": 0.54,
+   "p_flip": 0.03
+  },
+  "LA28|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.27
+  },
+  "LA29|P0": {
+   "dlogp": 0.6,
+   "p_flip": 0.12
+  },
+  "LA29|P1": {
+   "dlogp": 0.5,
+   "p_flip": 0.2
+  },
+  "LA29|P2": {
+   "dlogp": 0.4,
+   "p_flip": 0.25
+  },
+  "LA29|P3": {
+   "dlogp": 0.3,
+   "p_flip": 0.2
+  },
+  "LA29|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.3
+  },
+  "LA29|P5": {
+   "dlogp": 0.6,
+   "p_flip": 0.1
+  },
+  "LA29|P6": {
+   "dlogp": 0.9,
+   "p_flip": 0.05
+  },
+  "LA29|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.45
+  },
+  "LA30|P0": {
+   "dlogp": 0.9,
+   "p_flip": 0.18
+  },
+  "LA30|P1": {
+   "dlogp": 0.75,
+   "p_flip": 0.3
+  },
+  "LA30|P2": {
+   "dlogp": 0.6,
+   "p_flip": 0.35
+  },
+  "LA30|P3": {
+   "dlogp": 0.45,
+   "p_flip": 0.3
+  },
+  "LA30|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.45
+  },
+  "LA30|P5": {
+   "dlogp": 0.9,
+   "p_flip": 0.15
+  },
+  "LA30|P6": {
+   "dlogp": 1.35,
+   "p_flip": 0.08
+  },
+  "LA30|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.6
+  },
+  "LA31|P0": {
+   "dlogp": 0.48,
+   "p_flip": 0.1
+  },
+  "LA31|P1": {
+   "dlogp": 0.4,
+   "p_flip": 0.16
+  },
+  "LA31|P2": {
+   "dlogp": 0.32,
+   "p_flip": 0.2
+  },
+  "LA31|P3": {
+   "dlogp": 0.24,
+   "p_flip": 0.16
+  },
+  "LA31|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.24
+  },
+  "LA31|P5": {
+   "dlogp": 0.48,
+   "p_flip": 0.08
+  },
+  "LA31|P6": {
+   "dlogp": 0.72,
+   "p_flip": 0.04
+  },
+  "LA31|P7": {
+   "dlogp": -0.16,
+   "p_flip": 0.36
+  },
+  "LA32|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.06
+  },
+  "LA32|P1": {
+   "dlogp": 0.25,
+   "p_flip": 0.1
+  },
+  "LA32|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.13
+  },
+  "LA32|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.1
+  },
+  "LA32|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.15
+  },
+  "LA32|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.05
+  },
+  "LA32|P6": {
+   "dlogp": 0.45,
+   "p_flip": 0.02
+  },
+  "LA32|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.23
+  },
+  "LA33|P0": {
+   "dlogp": 1.08,
+   "p_flip": 0.24
+  },
+  "LA33|P1": {
+   "dlogp": 0.9,
+   "p_flip": 0.36
+  },
+  "LA33|P2": {
+   "dlogp": 0.72,
+   "p_flip": 0.42
+  },
+  "LA33|P3": {
+   "dlogp": 0.54,
+   "p_flip": 0.36
+  },
+  "LA33|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.54
+  },
+  "LA33|P5": {
+   "dlogp": 1.08,
+   "p_flip": 0.2
+  },
+  "LA33|P6": {
+   "dlogp": 1.62,
+   "p_flip": 0.12
+  },
+  "LA33|P7": {
+   "dlogp": -0.36,
+   "p_flip": 0.7
+  },
+  "LA34|P0": {
+   "dlogp": 0.42,
+   "p_flip": 0.09
+  },
+  "LA34|P1": {
+   "dlogp": 0.35,
+   "p_flip": 0.14
+  },
+  "LA34|P2": {
+   "dlogp": 0.28,
+   "p_flip": 0.18
+  },
+  "LA34|P3": {
+   "dlogp": 0.21,
+   "p_flip": 0.14
+  },
+  "LA34|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.21
+  },
+  "LA34|P5": {
+   "dlogp": 0.42,
+   "p_flip": 0.07
+  },
+  "LA34|P6": {
+   "dlogp": 0.63,
+   "p_flip": 0.04
+  },
+  "LA34|P7": {
+   "dlogp": -0.14,
+   "p_flip": 0.32
+  },
+  "LA35|P0": {
+   "dlogp": 0.45,
+   "p_flip": 0.1
+  },
+  "LA35|P1": {
+   "dlogp": 0.4,
+   "p_flip": 0.15
+  },
+  "LA35|P2": {
+   "dlogp": 0.28,
+   "p_flip": 0.18
+  },
+  "LA35|P3": {
+   "dlogp": 0.25,
+   "p_flip": 0.15
+  },
+  "LA35|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.21
+  },
+  "LA35|P5": {
+   "dlogp": 0.42,
+   "p_flip": 0.07
+  },
+  "LA35|P6": {
+   "dlogp": 0.6,
+   "p_flip": 0.03
+  },
+  "LA35|P7": {
+   "dlogp": -0.14,
+   "p_flip": 0.32
+  }
+ },
+ "notes": {
+  "LA24": "Layer 13 DeltaNet out_proj norm 16.77 with top down_proj column 540:0.455; a mid-stack single mixer skip, so the smallest scale (0.3 nats, heuristic).",
+  "LA25": "Layer 0 out_proj norm 17.92 and input gain up to +1.000; first context mixing is removed, so a moderate scale (0.7, heuristic).",
+  "LA26": "Layer 21 out_proj norm 16.78 with input gain mean +1.722; a late DeltaNet skip, so a modest scale (0.4, heuristic).",
+  "LA27": "Layer 14 down_proj norm 15.14, the lowest of any layer, with top column 1438:0.448; mid-stack MLP skip scale 0.5 (heuristic).",
+  "LA28": "Layer 21 down_proj norm 17.70, the largest in the stack, with post gain mean +1.415; late MLP skip scale 0.6 (heuristic).",
+  "LA29": "Layer 3 is the first full attention layer, o_proj norm 17.63 and down_proj 15.47; whole-block skip scale 1.0 (heuristic).",
+  "LA30": "Layer 23 o_proj 20.06, up_proj 21.25 and top down_proj column 1404:0.551; final block sits next to the logits, so a large scale (1.5, heuristic).",
+  "LA31": "Layer 5 out_proj 17.10 and down_proj 15.81, top column 90:0.355; early whole-block skip scale 0.8 (heuristic).",
+  "LA32": "Layer 17 down_proj 16.39 with post gain mean +1.358; MLP skip scale 0.5 (heuristic).",
+  "LA33": "Layer 0 out_proj 17.92 and down_proj 16.28 act directly on raw embeddings, with a flat column profile (204:0.302); largest scale (1.8, heuristic).",
+  "LA34": "Layer 18 out_proj 14.64 is the smallest mixer output in the stack, down_proj 16.43; whole-block skip scale 0.7 (heuristic).",
+  "LA35": "Layer 23 attention o_proj 20.06 with input gain mean +1.267; last-layer context read, scale 0.7, nudged up for list and pattern prompts (heuristic)."
+ }
+}

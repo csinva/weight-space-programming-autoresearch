@@ -1,0 +1,91 @@
+{
+ "init": {
+  "tools": [
+   "Read"
+  ],
+  "model": "claude-fable-5-1"
+ },
+ "tool_calls": 34,
+ "tools_used": [
+  "Read"
+ ],
+ "reads": [
+  "README.md",
+  "test_interventions.md",
+  "weights/XML00.txt",
+  "weights/XML01.txt",
+  "weights/XML02.txt",
+  "weights/XML03.txt",
+  "weights/XML04.txt",
+  "weights/XML05.txt",
+  "weights/XML06.txt",
+  "weights/XML07.txt",
+  "weights/XML08.txt",
+  "weights/XML09.txt",
+  "weights/XML10.txt",
+  "weights/XML11.txt",
+  "weights/XML00.txt",
+  "weights/XML00.txt",
+  "weights/XML01.txt",
+  "weights/XML02.txt",
+  "weights/XML03.txt",
+  "weights/XML04.txt",
+  "weights/XML05.txt",
+  "weights/XML06.txt",
+  "weights/XML07.txt",
+  "weights/XML08.txt",
+  "weights/XML09.txt",
+  "weights/XML10.txt",
+  "weights/XML11.txt",
+  "weights",
+  "weights/shared_embeddings.txt",
+  "weights/shared_target_embeddings.txt",
+  "weights/shared_norms.txt",
+  "weights/shared_norm_gains.txt",
+  "weights/shared_embed.txt",
+  "weights/shared_targets.txt"
+ ],
+ "reads_outside_sandbox": [],
+ "cost_usd": 2.461519,
+ "duration_s": 279.688,
+ "num_turns": 35,
+ "usage": {
+  "input_tokens": 226,
+  "cache_creation_input_tokens": 68970,
+  "cache_read_input_tokens": 269836,
+  "output_tokens": 20248,
+  "output_tokens_details": {
+   "thinking_tokens": 10525
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 68970,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 32,
+    "output_tokens": 14532,
+    "cache_read_input_tokens": 68240,
+    "cache_creation_input_tokens": 5528,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 5528
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "is_error": false,
+ "attempt": 0,
+ "missing": 0,
+ "wall_s": 280.5836431980133,
+ "model_flag": "claude-fable-5-1"
+}

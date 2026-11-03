@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **SC12**: RMSNorm `model.layers.9.input_layernorm.weight` dimension 235: multiply its gain (1+w) by 10 [file weights/SC12.txt]
+- **SC13**: RMSNorm `model.layers.19.input_layernorm.weight` dimension 140: multiply its gain (1+w) by 10 [file weights/SC13.txt]
+- **SC14**: `model.embed_tokens.weight`[513, 854] (target-token embedding entry): add +4 [file weights/SC14.txt]
+- **SC15**: `model.layers.0.mlp.down_proj.weight`[538, 2319] (random down_proj entry): add -4 [file weights/SC15.txt]
+- **SC16**: `model.layers.2.mlp.gate_proj.weight`[2965, 980] (random entry): set to 0 [file weights/SC16.txt]
+- **SC17**: `model.layers.9.mlp.gate_proj.weight`[2252, 16] (largest |w| in matrix): set to 0 [file weights/SC17.txt]
+- **SC18**: `model.layers.1.linear_attn.out_proj.weight`[767, 1456] (random entry): set to 0 [file weights/SC18.txt]
+- **SC19**: `model.layers.4.mlp.down_proj.weight`[117, 474] (random down_proj entry): add +4 [file weights/SC19.txt]
+- **SC20**: `model.layers.21.mlp.down_proj.weight`[49, 301] (random down_proj entry): add -4 [file weights/SC20.txt]
+- **SC21**: RMSNorm `model.layers.21.post_attention_layernorm.weight` dimension 495: set its gain (1+w) to 0 (w := -1) [file weights/SC21.txt]
+- **SC22**: `model.embed_tokens.weight`[11751, 995] (target-token embedding entry): add -4 [file weights/SC22.txt]
+- **SC23**: `model.embed_tokens.weight`[11751, 594] (target-token embedding entry): add +4 [file weights/SC23.txt]

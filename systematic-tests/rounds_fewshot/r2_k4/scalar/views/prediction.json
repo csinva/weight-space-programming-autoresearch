@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC24|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC24|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC24|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC24|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC24|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC24|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC24|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "SC25|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC25|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC25|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC25|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "SC25|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "SC25|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC25|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC25|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "SC26|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC26|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC26|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "SC26|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "SC26|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC26|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC26|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.07
+  },
+  "SC27|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC27|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC27|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC27|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC27|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC27|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC27|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC28|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC28|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC28|P2": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC28|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC28|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC28|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC28|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC28|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC29|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "SC29|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.06
+  },
+  "SC29|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "SC29|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "SC29|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.1
+  },
+  "SC29|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC29|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC29|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.15
+  },
+  "SC30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.003
+  },
+  "SC31|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC31|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC31|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC31|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC31|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.06
+  },
+  "SC31|P5": {
+   "dlogp": -4.0,
+   "p_flip": 0.5
+  },
+  "SC31|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC31|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "SC32|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC32|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC32|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC32|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC32|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC32|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC32|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC32|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC33|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC33|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC33|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC33|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC33|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC33|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC33|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC33|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC34|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "SC34|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "SC34|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "SC34|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.05
+  },
+  "SC34|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.06
+  },
+  "SC34|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC34|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC34|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.09
+  },
+  "SC35|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC35|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC35|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC35|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC35|P4": {
+   "dlogp": -0.07,
+   "p_flip": 0.06
+  },
+  "SC35|P5": {
+   "dlogp": -2.5,
+   "p_flip": 0.4
+  },
+  "SC35|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC35|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  }
+ },
+ "notes": {
+  "SC24": "Layer-7 post-attn gain of dim 249 (w=+0.2832, |gain| rank 4) times 10; the similar SC06 edit (layer 6, rank 6, x10) moved targets by at most +/-0.04, so I predict tiny effects.",
+  "SC25": "Adds -4 to W[782,3322]=+0.01208 in layer 8; the similar SC02 random +4 edit gave -0.00 to -0.10; neuron direct-logit view is -2.92 sigma for ' +' and +0.60 sigma for ' Thursday', so I predict small negative changes.",
+  "SC26": "Zeroes W[0,8]=-0.20508 in layer 22, which writes residual dim 0; dim 0's final-norm gain is only 0.2227, so the direct logit effect is weak and I predict small changes.",
+  "SC27": "Layer-23 post-attn gain of dim 892 set to 0 (|gain| rank 235); the similar SC21 gain-to-0 edit gave about 0, so I predict near zero.",
+  "SC28": "Layer-13 gain of dim 384 set to 0, and its |gain| rank is 1003 of 1024 (already a small gain), so I predict near zero.",
+  "SC29": "Zeroes W[0,458]=-0.19727, the largest weight in the layer-9 MLP, writing dim 0 (final gain 0.2227); being early, it may disturb dim-0 activations downstream, so I predict modest negative changes.",
+  "SC30": "Zeroes a random layer-23 o_proj entry W[701,1720]=+0.00995, close to the matrix std of 0.01386; I predict about 0, like SC18.",
+  "SC31": "Adds -4 to oxygen's tied embedding dim 585 (final gain 4.6719), shifting P5's target logit by about +/-19 times the normalised hidden value; the sign is unknown and E[oxygen,585] is +1.2 sigma, so I predict a large expected drop on P5 only.",
+  "SC32": "Zeroes W[0,626]=-0.15918 in layer 21, writing low-gain dim 0 (0.2227); I predict small changes.",
+  "SC33": "Layer-14 gain of dim 392 (|gain| rank 99) times 10; by analogy with SC06 I predict small effects.",
+  "SC34": "Zeroes the largest layer-13 linear-attention out_proj weight W[0,639]=+0.3125, which writes dim 0; I predict small-to-modest negative changes.",
+  "SC35": "Adds -4 to oxygen's embedding dim 896 (final gain 4.1250, E[oxygen,896]=-0.0085); the P5 logit shift is about +/-16 times the hidden value with unknown sign, so I predict a large but uncertain drop on P5."
+ }
+}

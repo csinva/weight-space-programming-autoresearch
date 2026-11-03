@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE12|P0": {
+   "dlogp": 0.06,
+   "p_flip": 0.005
+  },
+  "NE12|P1": {
+   "dlogp": 0.06,
+   "p_flip": 0.005
+  },
+  "NE12|P2": {
+   "dlogp": 0.07,
+   "p_flip": 0.004
+  },
+  "NE12|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.008
+  },
+  "NE12|P4": {
+   "dlogp": 0.03,
+   "p_flip": 0.012
+  },
+  "NE12|P5": {
+   "dlogp": 0.06,
+   "p_flip": 0.004
+  },
+  "NE12|P6": {
+   "dlogp": 0.09,
+   "p_flip": 0.002
+  },
+  "NE12|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "NE13|P0": {
+   "dlogp": 0.1,
+   "p_flip": 0.006
+  },
+  "NE13|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.008
+  },
+  "NE13|P2": {
+   "dlogp": 0.12,
+   "p_flip": 0.006
+  },
+  "NE13|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.012
+  },
+  "NE13|P4": {
+   "dlogp": 0.05,
+   "p_flip": 0.018
+  },
+  "NE13|P5": {
+   "dlogp": 0.1,
+   "p_flip": 0.005
+  },
+  "NE13|P6": {
+   "dlogp": 0.15,
+   "p_flip": 0.002
+  },
+  "NE13|P7": {
+   "dlogp": 0.04,
+   "p_flip": 0.03
+  },
+  "NE14|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE14|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE14|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE14|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE14|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE14|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE14|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE14|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  },
+  "NE15|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE15|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE15|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE15|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE15|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE15|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE15|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE15|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  },
+  "NE16|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE16|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE16|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE16|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE16|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE16|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE16|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE16|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  },
+  "NE17|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE17|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE17|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE17|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE17|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE17|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE17|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE17|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  },
+  "NE18|P0": {
+   "dlogp": 0.07,
+   "p_flip": 0.005
+  },
+  "NE18|P1": {
+   "dlogp": 0.07,
+   "p_flip": 0.006
+  },
+  "NE18|P2": {
+   "dlogp": 0.08,
+   "p_flip": 0.005
+  },
+  "NE18|P3": {
+   "dlogp": 0.06,
+   "p_flip": 0.01
+  },
+  "NE18|P4": {
+   "dlogp": 0.04,
+   "p_flip": 0.014
+  },
+  "NE18|P5": {
+   "dlogp": 0.07,
+   "p_flip": 0.004
+  },
+  "NE18|P6": {
+   "dlogp": 0.1,
+   "p_flip": 0.002
+  },
+  "NE18|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.024
+  },
+  "NE19|P0": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE19|P1": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE19|P2": {
+   "dlogp": 0.014,
+   "p_flip": 0.002
+  },
+  "NE19|P3": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE19|P4": {
+   "dlogp": 0.006,
+   "p_flip": 0.004
+  },
+  "NE19|P5": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE19|P6": {
+   "dlogp": 0.018,
+   "p_flip": 0.001
+  },
+  "NE19|P7": {
+   "dlogp": 0.005,
+   "p_flip": 0.008
+  },
+  "NE20|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE20|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE20|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE20|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE20|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE20|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE20|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE20|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  },
+  "NE21|P0": {
+   "dlogp": 0.09,
+   "p_flip": 0.006
+  },
+  "NE21|P1": {
+   "dlogp": 0.09,
+   "p_flip": 0.007
+  },
+  "NE21|P2": {
+   "dlogp": 0.11,
+   "p_flip": 0.006
+  },
+  "NE21|P3": {
+   "dlogp": 0.07,
+   "p_flip": 0.011
+  },
+  "NE21|P4": {
+   "dlogp": 0.04,
+   "p_flip": 0.016
+  },
+  "NE21|P5": {
+   "dlogp": 0.09,
+   "p_flip": 0.005
+  },
+  "NE21|P6": {
+   "dlogp": 0.14,
+   "p_flip": 0.002
+  },
+  "NE21|P7": {
+   "dlogp": 0.03,
+   "p_flip": 0.028
+  },
+  "NE22|P0": {
+   "dlogp": 0.05,
+   "p_flip": 0.005
+  },
+  "NE22|P1": {
+   "dlogp": 0.06,
+   "p_flip": 0.005
+  },
+  "NE22|P2": {
+   "dlogp": 0.07,
+   "p_flip": 0.004
+  },
+  "NE22|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.008
+  },
+  "NE22|P4": {
+   "dlogp": 0.03,
+   "p_flip": 0.012
+  },
+  "NE22|P5": {
+   "dlogp": 0.05,
+   "p_flip": 0.004
+  },
+  "NE22|P6": {
+   "dlogp": 0.08,
+   "p_flip": 0.002
+  },
+  "NE22|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "NE23|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE23|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE23|P2": {
+   "dlogp": 0.012,
+   "p_flip": 0.002
+  },
+  "NE23|P3": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "NE23|P4": {
+   "dlogp": 0.005,
+   "p_flip": 0.004
+  },
+  "NE23|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.002
+  },
+  "NE23|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "NE23|P7": {
+   "dlogp": 0.004,
+   "p_flip": 0.008
+  }
+ },
+ "notes": {
+  "NE12": "Prior only, no neuron-specific evidence: x5 on one early-layer neuron gives a small softening of the distribution.",
+  "NE13": "Prior only, no neuron-specific evidence: x5 on a late-layer neuron is closer to the logits, so slightly larger effect.",
+  "NE14": "Prior only: zeroing 1 of 3,584 neurons in an early layer should be near zero.",
+  "NE15": "Prior only: zeroing one mid-layer neuron should be near zero.",
+  "NE16": "Prior only: zeroing one early-layer neuron should be near zero.",
+  "NE17": "Prior only: zeroing one mid-layer neuron should be near zero.",
+  "NE18": "Prior only, no neuron-specific evidence: x5 on a mid-layer neuron gives a small softening.",
+  "NE19": "Prior only: zeroing one later-layer neuron should be near zero, slightly above earlier layers.",
+  "NE20": "Prior only: zeroing one mid-layer neuron should be near zero.",
+  "NE21": "Prior only, no neuron-specific evidence: x5 on a late-layer neuron is closer to the logits, so slightly larger effect.",
+  "NE22": "Prior only, no neuron-specific evidence: x5 on one early-layer neuron gives a small softening.",
+  "NE23": "Prior only: zeroing one mid-layer neuron should be near zero."
+ }
+}

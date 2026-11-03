@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE24|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE24|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE24|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.03
+  },
+  "NE24|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE24|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE24|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "NE24|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE24|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "NE25|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE25|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE25|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.03
+  },
+  "NE25|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE25|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE25|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "NE25|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE25|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "NE26|P0": {
+   "dlogp": -0.035,
+   "p_flip": 0.03
+  },
+  "NE26|P1": {
+   "dlogp": -0.09,
+   "p_flip": 0.06
+  },
+  "NE26|P2": {
+   "dlogp": -0.075,
+   "p_flip": 0.08
+  },
+  "NE26|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "NE26|P4": {
+   "dlogp": -0.21,
+   "p_flip": 0.15
+  },
+  "NE26|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE26|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE26|P7": {
+   "dlogp": -0.29,
+   "p_flip": 0.28
+  },
+  "NE27|P0": {
+   "dlogp": -0.035,
+   "p_flip": 0.03
+  },
+  "NE27|P1": {
+   "dlogp": -0.09,
+   "p_flip": 0.06
+  },
+  "NE27|P2": {
+   "dlogp": -0.075,
+   "p_flip": 0.08
+  },
+  "NE27|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "NE27|P4": {
+   "dlogp": -0.21,
+   "p_flip": 0.15
+  },
+  "NE27|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE27|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE27|P7": {
+   "dlogp": -0.29,
+   "p_flip": 0.28
+  },
+  "NE28|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE28|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE28|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.03
+  },
+  "NE28|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE28|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE28|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "NE28|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE28|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "NE29|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE29|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE29|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.03
+  },
+  "NE29|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE29|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE29|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "NE29|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE29|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "NE30|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.015
+  },
+  "NE30|P1": {
+   "dlogp": -0.025,
+   "p_flip": 0.025
+  },
+  "NE30|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE30|P3": {
+   "dlogp": -0.035,
+   "p_flip": 0.035
+  },
+  "NE30|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "NE30|P5": {
+   "dlogp": -0.009,
+   "p_flip": 0.012
+  },
+  "NE30|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE30|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.11
+  },
+  "NE31|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.035
+  },
+  "NE31|P1": {
+   "dlogp": -0.11,
+   "p_flip": 0.07
+  },
+  "NE31|P2": {
+   "dlogp": -0.09,
+   "p_flip": 0.09
+  },
+  "NE31|P3": {
+   "dlogp": -0.14,
+   "p_flip": 0.09
+  },
+  "NE31|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.17
+  },
+  "NE31|P5": {
+   "dlogp": -0.035,
+   "p_flip": 0.035
+  },
+  "NE31|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE31|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.3
+  },
+  "NE32|P0": {
+   "dlogp": -0.035,
+   "p_flip": 0.03
+  },
+  "NE32|P1": {
+   "dlogp": -0.09,
+   "p_flip": 0.06
+  },
+  "NE32|P2": {
+   "dlogp": -0.075,
+   "p_flip": 0.08
+  },
+  "NE32|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "NE32|P4": {
+   "dlogp": -0.21,
+   "p_flip": 0.15
+  },
+  "NE32|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE32|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "NE32|P7": {
+   "dlogp": -0.29,
+   "p_flip": 0.28
+  },
+  "NE33|P0": {
+   "dlogp": -0.006,
+   "p_flip": 0.01
+  },
+  "NE33|P1": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "NE33|P2": {
+   "dlogp": -0.013,
+   "p_flip": 0.025
+  },
+  "NE33|P3": {
+   "dlogp": -0.022,
+   "p_flip": 0.03
+  },
+  "NE33|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "NE33|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE33|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE33|P7": {
+   "dlogp": -0.055,
+   "p_flip": 0.09
+  },
+  "NE34|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "NE34|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE34|P2": {
+   "dlogp": -0.018,
+   "p_flip": 0.03
+  },
+  "NE34|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE34|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE34|P5": {
+   "dlogp": -0.007,
+   "p_flip": 0.01
+  },
+  "NE34|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "NE34|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.1
+  },
+  "NE35|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "NE35|P1": {
+   "dlogp": -0.13,
+   "p_flip": 0.08
+  },
+  "NE35|P2": {
+   "dlogp": -0.11,
+   "p_flip": 0.1
+  },
+  "NE35|P3": {
+   "dlogp": -0.17,
+   "p_flip": 0.1
+  },
+  "NE35|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.19
+  },
+  "NE35|P5": {
+   "dlogp": -0.045,
+   "p_flip": 0.04
+  },
+  "NE35|P6": {
+   "dlogp": -0.004,
+   "p_flip": 0.012
+  },
+  "NE35|P7": {
+   "dlogp": -0.42,
+   "p_flip": 0.32
+  }
+ },
+ "notes": {
+  "NE24": "Zeroing one late-layer (20) neuron of 3584 removes a tiny residual write; effect scaled by (1-p) per prompt, slight negative skew.",
+  "NE25": "Zeroing a single layer-6 neuron; mid-early contribution is diluted downstream, so small shifts scaled by prompt confidence.",
+  "NE26": "x5 on a layer-13 neuron adds 4x its contribution; amplification skews negative since confident targets have little upside, scaled by (1-p).",
+  "NE27": "x5 on a layer-17 neuron writes fairly directly toward logits; moderate negative shift, largest on low-margin P7 and P4.",
+  "NE28": "Zeroing a single layer-13 neuron; generic small negative effect scaled by target headroom.",
+  "NE29": "Zeroing a single layer-18 neuron; late but single-neuron, so small; P7 and P4 most exposed.",
+  "NE30": "Layer-0 neurons act like extended embeddings and can be token-specific; slightly larger than other zero-ablations but still small.",
+  "NE31": "x5 on a layer-19 neuron sits just before the final attention layer, near-direct logit influence; bumped above other x5 edits.",
+  "NE32": "x5 on layer-12 neuron 2215; roughly 4x the opposite of NE33 to first order, with negative skew from log-softmax saturation.",
+  "NE33": "Zero of the same layer-12 neuron 2215 as NE32; kept small and consistent in sign-magnitude ratio with NE32.",
+  "NE34": "Zeroing a single layer-19 neuron; small negative shift concentrated on P7 and P4 where the target margin is thin.",
+  "NE35": "x5 on a layer-2 neuron compounds through 21 downstream layers, so largest predicted disruption among the edits, especially on P7."
+ }
+}

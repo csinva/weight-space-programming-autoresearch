@@ -1,0 +1,17 @@
+# Edits to predict (each applied alone)
+- **NE036**: MLP neuron 231 in layer 3: multiply its down_proj column by 5
+- **NE037**: MLP neuron 87 in layer 22: multiply its down_proj column by 5
+- **NE038**: MLP neuron 3211 in layer 17: multiply its down_proj column by 5
+- **NE039**: MLP neuron 2176 in layer 20: multiply its down_proj column by 5
+- **NE040**: MLP neuron 319 in layer 10: multiply its down_proj column by 5
+- **NE041**: MLP neuron 598 in layer 14: multiply its down_proj column by 5
+- **NE042**: MLP neuron 1469 in layer 14: zero the neuron (its down_proj column)
+- **NE043**: MLP neuron 1605 in layer 5: zero the neuron (its down_proj column)
+- **NE044**: MLP neuron 1777 in layer 14: multiply its down_proj column by 5
+- **NE045**: MLP neuron 1436 in layer 16: zero the neuron (its down_proj column)
+- **NE046**: MLP neuron 2587 in layer 13: zero the neuron (its down_proj column)
+- **NE047**: MLP neuron 1373 in layer 1: zero the neuron (its down_proj column)
+- **NE048**: MLP neuron 2110 in layer 21: multiply its down_proj column by 5
+- **NE049**: MLP neuron 2673 in layer 16: multiply its down_proj column by 5
+- **NE050**: MLP neuron 36 in layer 8: multiply its down_proj column by 5
+- **NE051**: MLP neuron 1490 in layer 19: multiply its down_proj column by 5

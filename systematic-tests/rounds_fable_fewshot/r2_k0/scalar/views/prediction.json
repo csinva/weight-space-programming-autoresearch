@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.45,
+   "p_flip": 0.08
+  },
+  "SC24|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.16
+  },
+  "SC24|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.22
+  },
+  "SC24|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.22
+  },
+  "SC24|P4": {
+   "dlogp": -0.55,
+   "p_flip": 0.2
+  },
+  "SC24|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.06
+  },
+  "SC24|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.02
+  },
+  "SC24|P7": {
+   "dlogp": -0.55,
+   "p_flip": 0.38
+  },
+  "SC25|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "SC25|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC25|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "SC25|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "SC25|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "SC25|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC25|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC25|P7": {
+   "dlogp": -0.14,
+   "p_flip": 0.08
+  },
+  "SC26|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC26|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC26|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC26|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC26|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC27|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC27|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC27|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC27|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "SC27|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC27|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC27|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC28|P0": {
+   "dlogp": -0.07,
+   "p_flip": 0.02
+  },
+  "SC28|P1": {
+   "dlogp": -0.07,
+   "p_flip": 0.03
+  },
+  "SC28|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "SC28|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "SC28|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "SC28|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "SC28|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC28|P7": {
+   "dlogp": -0.09,
+   "p_flip": 0.06
+  },
+  "SC29|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.03
+  },
+  "SC29|P1": {
+   "dlogp": -0.18,
+   "p_flip": 0.05
+  },
+  "SC29|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "SC29|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "SC29|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "SC29|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "SC29|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "SC29|P7": {
+   "dlogp": -0.22,
+   "p_flip": 0.12
+  },
+  "SC30|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC30|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC30|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC30|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC30|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC30|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC30|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "SC30|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "SC31|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.11
+  },
+  "SC31|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.11
+  },
+  "SC31|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.09
+  },
+  "SC31|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.11
+  },
+  "SC31|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.12
+  },
+  "SC31|P5": {
+   "dlogp": -6.0,
+   "p_flip": 0.5
+  },
+  "SC31|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "SC31|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.16
+  },
+  "SC32|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC32|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC32|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC32|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC32|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "SC32|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC32|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC32|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "SC33|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.07
+  },
+  "SC33|P1": {
+   "dlogp": -0.45,
+   "p_flip": 0.14
+  },
+  "SC33|P2": {
+   "dlogp": -0.45,
+   "p_flip": 0.2
+  },
+  "SC33|P3": {
+   "dlogp": -0.45,
+   "p_flip": 0.2
+  },
+  "SC33|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "SC33|P5": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "SC33|P6": {
+   "dlogp": -0.18,
+   "p_flip": 0.02
+  },
+  "SC33|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.35
+  },
+  "SC34|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "SC34|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "SC34|P2": {
+   "dlogp": -0.16,
+   "p_flip": 0.06
+  },
+  "SC34|P3": {
+   "dlogp": -0.16,
+   "p_flip": 0.06
+  },
+  "SC34|P4": {
+   "dlogp": -0.17,
+   "p_flip": 0.05
+  },
+  "SC34|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "SC34|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "SC34|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "SC35|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.09
+  },
+  "SC35|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.09
+  },
+  "SC35|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "SC35|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.09
+  },
+  "SC35|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "SC35|P5": {
+   "dlogp": -1.2,
+   "p_flip": 0.4
+  },
+  "SC35|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "SC35|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.14
+  }
+ },
+ "notes": {
+  "SC24": "L7 pre-MLP norm w[249]=+0.2832 (gain 1.28, rank 4/1024) becomes 12.8, injecting a ~10x one-coordinate term into every L7 MLP preactivation at all positions; moderate damage, flips mainly on low-margin P7/P2/P3.",
+  "SC25": "W[782,3322] goes +0.01208 -> -3.988 so neuron 3322 now writes -4*activation into dim 782; random neuron with likely small activation and E[t,782] only 0.01-0.03, so small indirect effect.",
+  "SC26": "W[0,8]=-0.2051 is the matrix max and column 8 is otherwise ~0.005-0.076; dim 0 has final-norm gain 0.2227, so this L22 entry mostly tunes the final RMS scale, which cannot change argmax.",
+  "SC27": "L23 pre-MLP norm w[892]=+0.2812 (rank 235) zeroed removes one ordinary input dim from the last MLP only; targets sit at +0.5 to +1.0 sigma in E[:,892], negligible.",
+  "SC28": "L13 pre-MLP norm w[384]=-0.1514 (gain 0.85, rank 1003/1024, already down-weighted) zeroed; about 1/9 the perturbation size of the x10 edits with 10 layers of propagation, small.",
+  "SC29": "W[0,458]=-0.1973 is the matrix max and column 458 is dominated by dim 0, whose final gain is 0.2227; removing one L9 dim-0 writer gives a modest downstream shift with 14 layers to propagate.",
+  "SC30": "W[701,1720]=+0.00995 (matrix std 0.01386) at L23 o_proj zeroed; change to residual dim 701 is ~0.01 against a gain-4.59 unembedding column, effectively nothing.",
+  "SC31": "E[22817,585] goes +0.0200 -> -3.98 with final gain 4.6719, so the oxygen logit shifts by -18.7*h_585 on P5; oxygen is +1.2 sigma in column 585 so h_585>0 is slightly favored, roughly even odds of a multi-nat drop; other prompts only risk an oxygen hijack if h_585 is strongly negative.",
+  "SC32": "W[0,626]=-0.1592 is the matrix max and column 626 is dim-0 dominated (next +0.0557 at dim 3); L21 dim-0 writer with final gain 0.2227 acts via RMS scale plus two late layers, small.",
+  "SC33": "L14 pre-MLP norm w[392]=+0.2295 (gain 1.23, rank 99) becomes 12.3, same ~10x one-coordinate corruption of a mid-stack MLP as SC24 with 9 layers left; moderate damage, flips mainly on P7/P2/P3.",
+  "SC34": "W[0,639]=+0.3125 is the matrix max (27 sigma) and column 639 is otherwise ~0.01, a pure dim-0 writer from linear-attn head 4 at L13; dim 0 final gain 0.2227, so modest indirect effect.",
+  "SC35": "E[22817,896] goes -0.0085 -> -4.0085 with final gain 4.125, oxygen logit shift -16.5*h_896 on P5; oxygen is only +0.1 sigma in column 896 so sign of h_896 is near coin-flip, somewhat less likely to hurt than SC31."
+ }
+}

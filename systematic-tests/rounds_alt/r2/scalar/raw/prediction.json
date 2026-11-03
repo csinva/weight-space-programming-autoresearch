@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": 0.2,
+   "p_flip": 0.04
+  },
+  "SC24|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "SC24|P2": {
+   "dlogp": 0.25,
+   "p_flip": 0.06
+  },
+  "SC24|P3": {
+   "dlogp": 0.12,
+   "p_flip": 0.07
+  },
+  "SC24|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "SC24|P5": {
+   "dlogp": 0.2,
+   "p_flip": 0.02
+  },
+  "SC24|P6": {
+   "dlogp": 0.35,
+   "p_flip": 0.01
+  },
+  "SC24|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.14
+  },
+  "SC25|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.05
+  },
+  "SC25|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "SC25|P2": {
+   "dlogp": 0.35,
+   "p_flip": 0.08
+  },
+  "SC25|P3": {
+   "dlogp": 0.2,
+   "p_flip": 0.09
+  },
+  "SC25|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.09
+  },
+  "SC25|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.03
+  },
+  "SC25|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.02
+  },
+  "SC25|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "SC26|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.003
+  },
+  "SC26|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.004
+  },
+  "SC26|P2": {
+   "dlogp": 0.02,
+   "p_flip": 0.005
+  },
+  "SC26|P3": {
+   "dlogp": 0.01,
+   "p_flip": 0.005
+  },
+  "SC26|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC26|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC26|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.001
+  },
+  "SC26|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.015
+  },
+  "SC27|P0": {
+   "dlogp": 0.008,
+   "p_flip": 0.002
+  },
+  "SC27|P1": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "SC27|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.003
+  },
+  "SC27|P3": {
+   "dlogp": 0.005,
+   "p_flip": 0.003
+  },
+  "SC27|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.003
+  },
+  "SC27|P5": {
+   "dlogp": 0.008,
+   "p_flip": 0.001
+  },
+  "SC27|P6": {
+   "dlogp": 0.015,
+   "p_flip": 0.001
+  },
+  "SC27|P7": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC28|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.004
+  },
+  "SC28|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC28|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.006
+  },
+  "SC28|P3": {
+   "dlogp": 0.015,
+   "p_flip": 0.006
+  },
+  "SC28|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.006
+  },
+  "SC28|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC28|P6": {
+   "dlogp": 0.04,
+   "p_flip": 0.001
+  },
+  "SC28|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC29|P0": {
+   "dlogp": 0.03,
+   "p_flip": 0.006
+  },
+  "SC29|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.008
+  },
+  "SC29|P2": {
+   "dlogp": 0.03,
+   "p_flip": 0.008
+  },
+  "SC29|P3": {
+   "dlogp": 0.02,
+   "p_flip": 0.01
+  },
+  "SC29|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC29|P5": {
+   "dlogp": 0.03,
+   "p_flip": 0.003
+  },
+  "SC29|P6": {
+   "dlogp": 0.05,
+   "p_flip": 0.002
+  },
+  "SC29|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "SC30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC31|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P5": {
+   "dlogp": 0.5,
+   "p_flip": 0.28
+  },
+  "SC31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC31|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC32|P0": {
+   "dlogp": 0.02,
+   "p_flip": 0.003
+  },
+  "SC32|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.004
+  },
+  "SC32|P2": {
+   "dlogp": 0.02,
+   "p_flip": 0.005
+  },
+  "SC32|P3": {
+   "dlogp": 0.01,
+   "p_flip": 0.005
+  },
+  "SC32|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC32|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.002
+  },
+  "SC32|P6": {
+   "dlogp": 0.03,
+   "p_flip": 0.001
+  },
+  "SC32|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.015
+  },
+  "SC33|P0": {
+   "dlogp": 0.15,
+   "p_flip": 0.03
+  },
+  "SC33|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "SC33|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.05
+  },
+  "SC33|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.06
+  },
+  "SC33|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "SC33|P5": {
+   "dlogp": 0.15,
+   "p_flip": 0.02
+  },
+  "SC33|P6": {
+   "dlogp": 0.25,
+   "p_flip": 0.01
+  },
+  "SC33|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.12
+  },
+  "SC34|P0": {
+   "dlogp": 0.06,
+   "p_flip": 0.01
+  },
+  "SC34|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.015
+  },
+  "SC34|P2": {
+   "dlogp": 0.07,
+   "p_flip": 0.015
+  },
+  "SC34|P3": {
+   "dlogp": 0.04,
+   "p_flip": 0.02
+  },
+  "SC34|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC34|P5": {
+   "dlogp": 0.06,
+   "p_flip": 0.005
+  },
+  "SC34|P6": {
+   "dlogp": 0.1,
+   "p_flip": 0.003
+  },
+  "SC34|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC35|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P5": {
+   "dlogp": 0.1,
+   "p_flip": 0.13
+  },
+  "SC35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  },
+  "SC35|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.001
+  }
+ },
+ "notes": {
+  "SC24": "w[249]=+0.2832, so gain goes from 1.28 to about 12.8; one early MLP's input gets a large outlier, a moderate perturbation; signs are a weak prior (tail tokens rise as confidence falls).",
+  "SC25": "W[782,3322]=+0.01208 becomes about -3.99 against matrix std 0.00804, a persistent one-dimension residual offset if the neuron is active; largest non-embedding edit, signs uncertain.",
+  "SC26": "W[0,8]=-0.20508 is removed in layer 22; column 8 is otherwise small (next is [3]=+0.0762), so the change is confined to dim 0 near the output and should be small.",
+  "SC27": "w[892]=+0.2812, gain 1.28 to 0, removes one of 1024 inputs to the last MLP only; negligible.",
+  "SC28": "w[384]=-0.1514, gain 0.85 to 0, drops one low-gain input to a mid-depth MLP; small.",
+  "SC29": "W[0,458]=-0.19727 is removed in layer 9; it writes to dim 0, whose gains are low in the early-layer norm files seen (e.g. layer 7 w[0]=-0.2305); small.",
+  "SC30": "W[701,1720]=+0.00995 is below matrix std 0.01386 and in the last attention layer; effectively no change.",
+  "SC31": "W[22817,585]=+0.02002; I inferred from vocabulary-rank scaling (not confirmed by the files) that 22817 is ' oxygen', so only P5 moves, via logit shift -4*h[585]; positive E entry suggests h[585]>0, lowering oxygen and lifting ' what'.",
+  "SC32": "W[0,626]=-0.15918 is removed in layer 21; dim 0 only and late, with column entries otherwise small (e.g. [3]=+0.0557); small.",
+  "SC33": "w[392]=+0.2295, gain goes from 1.23 to about 12.3 at layer 14; same mechanism as SC24 but later, so less propagation.",
+  "SC34": "W[0,639]=+0.3125 is the matrix maximum, with the rest of column 639 at most +0.0254; removing it shifts dim 0 at layer 13, modest effect, sign unknown.",
+  "SC35": "W[22817,896]=-0.00854 is near zero, so the sign of h[896] is close to a coin flip; same inferred ' oxygen' token, so only P5 moves, with lower flip risk than SC31."
+ }
+}

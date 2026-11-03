@@ -1,0 +1,41 @@
+I read all 12 weight files. These predictions come only from reasoning about the weights, since I couldn't run any code. Every value is a heuristic estimate, not a measurement.
+
+**How I built the numbers.** I gave each edit a base size: about -0.02 to -0.12 nats. I then scaled it by how sensitive each prompt looks, using the gap between its top two tokens. P7, P4, P1 and P3 have the smallest gaps, so I treated them as most sensitive. P6 (0.994 confidence) is treated as almost unaffected. All 96 predictions are negative. In reality, zeroing a neuron can raise the target's probability, so some of these signs are probably wrong.
+
+**What I expect.**
+- **Biggest effects:** NE07 is a layer-0 neuron scaled ×5. Its down_proj column has one extreme entry, +0.1719 at index 0, about 18 standard deviations out. NE06 is a late-layer (20) neuron scaled ×5.
+- **Next:** NE09 has the largest down_proj norm in layer 22 (0.4528) and entries up to ±0.0771.
+- **Smallest effects:** the other neurons that are zeroed. Their down_proj norms are close to their layer medians.
+
+Every edit changes a single neuron, so I don't expect the top token to flip on any prompt. All flip probabilities are 0.06 or lower.
+
+```json
+{"predictions": [
+{"iid":"NE00","pid":"P0","dlogp":-0.015,"p_flip":0.01},{"iid":"NE00","pid":"P1","dlogp":-0.03,"p_flip":0.01},{"iid":"NE00","pid":"P2","dlogp":-0.024,"p_flip":0.01},{"iid":"NE00","pid":"P3","dlogp":-0.03,"p_flip":0.01},{"iid":"NE00","pid":"P4","dlogp":-0.036,"p_flip":0.02},{"iid":"NE00","pid":"P5","dlogp":-0.012,"p_flip":0.005},{"iid":"NE00","pid":"P6","dlogp":-0.003,"p_flip":0.002},{"iid":"NE00","pid":"P7","dlogp":-0.039,"p_flip":0.03},
+{"iid":"NE01","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"NE01","pid":"P1","dlogp":-0.06,"p_flip":0.015},{"iid":"NE01","pid":"P2","dlogp":-0.048,"p_flip":0.015},{"iid":"NE01","pid":"P3","dlogp":-0.06,"p_flip":0.015},{"iid":"NE01","pid":"P4","dlogp":-0.072,"p_flip":0.03},{"iid":"NE01","pid":"P5","dlogp":-0.024,"p_flip":0.005},{"iid":"NE01","pid":"P6","dlogp":-0.006,"p_flip":0.002},{"iid":"NE01","pid":"P7","dlogp":-0.078,"p_flip":0.04},
+{"iid":"NE02","pid":"P0","dlogp":-0.025,"p_flip":0.01},{"iid":"NE02","pid":"P1","dlogp":-0.05,"p_flip":0.015},{"iid":"NE02","pid":"P2","dlogp":-0.04,"p_flip":0.015},{"iid":"NE02","pid":"P3","dlogp":-0.05,"p_flip":0.015},{"iid":"NE02","pid":"P4","dlogp":-0.06,"p_flip":0.025},{"iid":"NE02","pid":"P5","dlogp":-0.02,"p_flip":0.005},{"iid":"NE02","pid":"P6","dlogp":-0.005,"p_flip":0.002},{"iid":"NE02","pid":"P7","dlogp":-0.065,"p_flip":0.035},
+{"iid":"NE03","pid":"P0","dlogp":-0.01,"p_flip":0.01},{"iid":"NE03","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE03","pid":"P2","dlogp":-0.016,"p_flip":0.01},{"iid":"NE03","pid":"P3","dlogp":-0.02,"p_flip":0.01},{"iid":"NE03","pid":"P4","dlogp":-0.024,"p_flip":0.015},{"iid":"NE03","pid":"P5","dlogp":-0.008,"p_flip":0.005},{"iid":"NE03","pid":"P6","dlogp":-0.002,"p_flip":0.002},{"iid":"NE03","pid":"P7","dlogp":-0.026,"p_flip":0.025},
+{"iid":"NE04","pid":"P0","dlogp":-0.025,"p_flip":0.01},{"iid":"NE04","pid":"P1","dlogp":-0.05,"p_flip":0.015},{"iid":"NE04","pid":"P2","dlogp":-0.04,"p_flip":0.015},{"iid":"NE04","pid":"P3","dlogp":-0.05,"p_flip":0.015},{"iid":"NE04","pid":"P4","dlogp":-0.06,"p_flip":0.025},{"iid":"NE04","pid":"P5","dlogp":-0.02,"p_flip":0.005},{"iid":"NE04","pid":"P6","dlogp":-0.005,"p_flip":0.002},{"iid":"NE04","pid":"P7","dlogp":-0.065,"p_flip":0.035},
+{"iid":"NE05","pid":"P0","dlogp":-0.015,"p_flip":0.01},{"iid":"NE05","pid":"P1","dlogp":-0.03,"p_flip":0.01},{"iid":"NE05","pid":"P2","dlogp":-0.024,"p_flip":0.01},{"iid":"NE05","pid":"P3","dlogp":-0.03,"p_flip":0.01},{"iid":"NE05","pid":"P4","dlogp":-0.036,"p_flip":0.02},{"iid":"NE05","pid":"P5","dlogp":-0.012,"p_flip":0.005},{"iid":"NE05","pid":"P6","dlogp":-0.003,"p_flip":0.002},{"iid":"NE05","pid":"P7","dlogp":-0.039,"p_flip":0.03},
+{"iid":"NE06","pid":"P0","dlogp":-0.05,"p_flip":0.015},{"iid":"NE06","pid":"P1","dlogp":-0.1,"p_flip":0.02},{"iid":"NE06","pid":"P2","dlogp":-0.08,"p_flip":0.02},{"iid":"NE06","pid":"P3","dlogp":-0.1,"p_flip":0.02},{"iid":"NE06","pid":"P4","dlogp":-0.12,"p_flip":0.04},{"iid":"NE06","pid":"P5","dlogp":-0.04,"p_flip":0.008},{"iid":"NE06","pid":"P6","dlogp":-0.01,"p_flip":0.003},{"iid":"NE06","pid":"P7","dlogp":-0.13,"p_flip":0.06},
+{"iid":"NE07","pid":"P0","dlogp":-0.06,"p_flip":0.015},{"iid":"NE07","pid":"P1","dlogp":-0.12,"p_flip":0.02},{"iid":"NE07","pid":"P2","dlogp":-0.096,"p_flip":0.02},{"iid":"NE07","pid":"P3","dlogp":-0.12,"p_flip":0.02},{"iid":"NE07","pid":"P4","dlogp":-0.144,"p_flip":0.04},{"iid":"NE07","pid":"P5","dlogp":-0.048,"p_flip":0.008},{"iid":"NE07","pid":"P6","dlogp":-0.012,"p_flip":0.003},{"iid":"NE07","pid":"P7","dlogp":-0.156,"p_flip":0.06},
+{"iid":"NE08","pid":"P0","dlogp":-0.02,"p_flip":0.01},{"iid":"NE08","pid":"P1","dlogp":-0.04,"p_flip":0.01},{"iid":"NE08","pid":"P2","dlogp":-0.032,"p_flip":0.01},{"iid":"NE08","pid":"P3","dlogp":-0.04,"p_flip":0.01},{"iid":"NE08","pid":"P4","dlogp":-0.048,"p_flip":0.02},{"iid":"NE08","pid":"P5","dlogp":-0.016,"p_flip":0.005},{"iid":"NE08","pid":"P6","dlogp":-0.004,"p_flip":0.002},{"iid":"NE08","pid":"P7","dlogp":-0.052,"p_flip":0.03},
+{"iid":"NE09","pid":"P0","dlogp":-0.03,"p_flip":0.01},{"iid":"NE09","pid":"P1","dlogp":-0.06,"p_flip":0.015},{"iid":"NE09","pid":"P2","dlogp":-0.048,"p_flip":0.015},{"iid":"NE09","pid":"P3","dlogp":-0.06,"p_flip":0.015},{"iid":"NE09","pid":"P4","dlogp":-0.072,"p_flip":0.03},{"iid":"NE09","pid":"P5","dlogp":-0.024,"p_flip":0.005},{"iid":"NE09","pid":"P6","dlogp":-0.006,"p_flip":0.002},{"iid":"NE09","pid":"P7","dlogp":-0.078,"p_flip":0.04},
+{"iid":"NE10","pid":"P0","dlogp":-0.01,"p_flip":0.01},{"iid":"NE10","pid":"P1","dlogp":-0.02,"p_flip":0.01},{"iid":"NE10","pid":"P2","dlogp":-0.016,"p_flip":0.01},{"iid":"NE10","pid":"P3","dlogp":-0.02,"p_flip":0.01},{"iid":"NE10","pid":"P4","dlogp":-0.024,"p_flip":0.015},{"iid":"NE10","pid":"P5","dlogp":-0.008,"p_flip":0.005},{"iid":"NE10","pid":"P6","dlogp":-0.002,"p_flip":0.002},{"iid":"NE10","pid":"P7","dlogp":-0.026,"p_flip":0.025},
+{"iid":"NE11","pid":"P0","dlogp":-0.015,"p_flip":0.01},{"iid":"NE11","pid":"P1","dlogp":-0.03,"p_flip":0.01},{"iid":"NE11","pid":"P2","dlogp":-0.024,"p_flip":0.01},{"iid":"NE11","pid":"P3","dlogp":-0.03,"p_flip":0.01},{"iid":"NE11","pid":"P4","dlogp":-0.036,"p_flip":0.02},{"iid":"NE11","pid":"P5","dlogp":-0.012,"p_flip":0.005},{"iid":"NE11","pid":"P6","dlogp":-0.003,"p_flip":0.002},{"iid":"NE11","pid":"P7","dlogp":-0.039,"p_flip":0.03}
+],
+"notes": {
+"NE00": "Layer-19 neuron zeroed; down column L2=0.4217 is near the layer max (0.4265), but removing one late neuron should only cause a small loss.",
+"NE01": "Layer-11 down column L2=0.2913, slightly above the median (0.2556); scaling it 5x is a mid-layer push with a modest effect.",
+"NE02": "Layer-1 down column L2=0.2734 with max entry +0.0309; amplifying it 5x early should mostly wash out before the output.",
+"NE03": "Layer-21 neuron zeroed; down column L2=0.3226, close to the median (0.2996), so I expect a very small effect.",
+"NE04": "Layer-10 down column L2=0.2561, at the median (0.2520), with max +0.0291; scaling 5x should give a small, spread-out change.",
+"NE05": "Layer-20 neuron zeroed; down column L2=0.3595, above the median (0.2969), so a small direct effect on the logits.",
+"NE06": "Layer-20 down column L2=0.2956 scaled 5x; a late-layer amplification acts more directly on the logits, so I predict it among the larger effects.",
+"NE07": "Layer-0 down column has an outlier of +0.1719 at dim 0 (std 0.00924); scaling 5x strongly hits a probable massive-activation dimension, so this is my largest predicted effect.",
+"NE08": "Layer-2 down column L2=0.2492, below the median (0.2655), max +0.0251; scaling 5x should give a small effect.",
+"NE09": "Layer-22 neuron zeroed with the largest down column in its layer (L2=0.4528, entries ±0.0771), so a moderate late-layer effect.",
+"NE10": "Layer-20 neuron zeroed; down column L2=0.2763, below the median (0.2969), so a minimal effect.",
+"NE11": "Layer-18 neuron zeroed; down column L2=0.3138 (median 0.2775) and its gate row L2=0.5547 is large, but I still expect a small effect."
+}}
+```

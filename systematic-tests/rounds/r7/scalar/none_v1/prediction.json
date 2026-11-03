@@ -1,0 +1,534 @@
+{
+ "predictions": {
+  "SC100|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC100|P1": {
+   "dlogp": -0.026,
+   "p_flip": 0.01
+  },
+  "SC100|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC100|P3": {
+   "dlogp": -0.026,
+   "p_flip": 0.01
+  },
+  "SC100|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC100|P5": {
+   "dlogp": -0.016,
+   "p_flip": 0.005
+  },
+  "SC100|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.002
+  },
+  "SC100|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC101|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC101|P1": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC101|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC101|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC101|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC101|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "SC101|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC101|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC102|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC102|P1": {
+   "dlogp": -0.039,
+   "p_flip": 0.01
+  },
+  "SC102|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC102|P3": {
+   "dlogp": -0.039,
+   "p_flip": 0.01
+  },
+  "SC102|P4": {
+   "dlogp": -0.045,
+   "p_flip": 0.015
+  },
+  "SC102|P5": {
+   "dlogp": -0.024,
+   "p_flip": 0.005
+  },
+  "SC102|P6": {
+   "dlogp": -0.009,
+   "p_flip": 0.002
+  },
+  "SC102|P7": {
+   "dlogp": -0.045,
+   "p_flip": 0.025
+  },
+  "SC103|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "SC103|P1": {
+   "dlogp": -0.065,
+   "p_flip": 0.02
+  },
+  "SC103|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "SC103|P3": {
+   "dlogp": -0.065,
+   "p_flip": 0.02
+  },
+  "SC103|P4": {
+   "dlogp": -0.075,
+   "p_flip": 0.02
+  },
+  "SC103|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC103|P6": {
+   "dlogp": -0.015,
+   "p_flip": 0.003
+  },
+  "SC103|P7": {
+   "dlogp": -0.075,
+   "p_flip": 0.04
+  },
+  "SC104|P0": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC104|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC104|P2": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC104|P3": {
+   "dlogp": -1.0,
+   "p_flip": 0.35
+  },
+  "SC104|P4": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC104|P5": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC104|P6": {
+   "dlogp": -0.0002,
+   "p_flip": 0.001
+  },
+  "SC104|P7": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC105|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC105|P1": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC105|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC105|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC105|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC105|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "SC105|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC105|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC106|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "SC106|P1": {
+   "dlogp": -0.065,
+   "p_flip": 0.02
+  },
+  "SC106|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.015
+  },
+  "SC106|P3": {
+   "dlogp": -0.065,
+   "p_flip": 0.02
+  },
+  "SC106|P4": {
+   "dlogp": -0.075,
+   "p_flip": 0.02
+  },
+  "SC106|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC106|P6": {
+   "dlogp": -0.015,
+   "p_flip": 0.003
+  },
+  "SC106|P7": {
+   "dlogp": -0.075,
+   "p_flip": 0.04
+  },
+  "SC107|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "SC107|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC107|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.002
+  },
+  "SC107|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC107|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC107|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.001
+  },
+  "SC107|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC107|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.003
+  },
+  "SC108|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC108|P1": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC108|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC108|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC108|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC108|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "SC108|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC108|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC109|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC109|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC109|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC109|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC109|P4": {
+   "dlogp": -0.0015,
+   "p_flip": 0.001
+  },
+  "SC109|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.001
+  },
+  "SC109|P6": {
+   "dlogp": -0.0003,
+   "p_flip": 0.001
+  },
+  "SC109|P7": {
+   "dlogp": -0.0015,
+   "p_flip": 0.002
+  },
+  "SC110|P0": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC110|P1": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC110|P2": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC110|P3": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC110|P4": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC110|P5": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC110|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "SC110|P7": {
+   "dlogp": -0.001,
+   "p_flip": 0.004
+  },
+  "SC111|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC111|P1": {
+   "dlogp": -0.104,
+   "p_flip": 0.03
+  },
+  "SC111|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC111|P3": {
+   "dlogp": -0.104,
+   "p_flip": 0.03
+  },
+  "SC111|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "SC111|P5": {
+   "dlogp": -0.064,
+   "p_flip": 0.01
+  },
+  "SC111|P6": {
+   "dlogp": -0.024,
+   "p_flip": 0.004
+  },
+  "SC111|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.06
+  },
+  "SC112|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC112|P1": {
+   "dlogp": -0.052,
+   "p_flip": 0.015
+  },
+  "SC112|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC112|P3": {
+   "dlogp": -0.052,
+   "p_flip": 0.015
+  },
+  "SC112|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.015
+  },
+  "SC112|P5": {
+   "dlogp": -0.032,
+   "p_flip": 0.008
+  },
+  "SC112|P6": {
+   "dlogp": -0.012,
+   "p_flip": 0.002
+  },
+  "SC112|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC113|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC113|P1": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC113|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC113|P3": {
+   "dlogp": -0.013,
+   "p_flip": 0.005
+  },
+  "SC113|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.005
+  },
+  "SC113|P5": {
+   "dlogp": -0.008,
+   "p_flip": 0.003
+  },
+  "SC113|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.001
+  },
+  "SC113|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC114|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC114|P1": {
+   "dlogp": -0.026,
+   "p_flip": 0.01
+  },
+  "SC114|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "SC114|P3": {
+   "dlogp": -0.026,
+   "p_flip": 0.01
+  },
+  "SC114|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC114|P5": {
+   "dlogp": -0.016,
+   "p_flip": 0.005
+  },
+  "SC114|P6": {
+   "dlogp": -0.006,
+   "p_flip": 0.002
+  },
+  "SC114|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "SC115|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC115|P1": {
+   "dlogp": -0.039,
+   "p_flip": 0.01
+  },
+  "SC115|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC115|P3": {
+   "dlogp": -0.039,
+   "p_flip": 0.01
+  },
+  "SC115|P4": {
+   "dlogp": -0.045,
+   "p_flip": 0.015
+  },
+  "SC115|P5": {
+   "dlogp": -0.024,
+   "p_flip": 0.005
+  },
+  "SC115|P6": {
+   "dlogp": -0.009,
+   "p_flip": 0.002
+  },
+  "SC115|P7": {
+   "dlogp": -0.045,
+   "p_flip": 0.025
+  }
+ },
+ "notes": {
+  "SC100": "Single down_proj entry +-4 in layer 8 adds a small one-dimension write; tiny effect.",
+  "SC101": "Zeroing one input gain of a layer-3 attention layer removes one of 1024 dims from the mixer input; negligible.",
+  "SC102": "Down_proj entry +4 in early layer 4 is a small residual perturbation that gets propagated; small effect.",
+  "SC103": "10x gain on one dim into layer-11 attention distorts q/k/v modestly; small-moderate effect.",
+  "SC104": "Changes the tied unembedding of ' Thursday', so P3's target logit shifts by about 4*h_final[282]; sign unknown, assumed a drop.",
+  "SC105": "Zeroing one MLP-input gain dim in layer 10; negligible.",
+  "SC106": "10x one MLP-input gain dim in layer 8; small-moderate effect.",
+  "SC107": "Zeroing one random down_proj weight in the last layer; negligible.",
+  "SC108": "Zeroing the largest gate weight changes one neuron's gating in layer 14; small effect.",
+  "SC109": "Zeroing one out_proj entry in a linear-attention layer; negligible.",
+  "SC110": "Changes the tied unembedding of ' Shakespeare'; P6 is saturated at 0.994, so the risk is mostly downward.",
+  "SC111": "10x one dim into the layer-0 MLP propagates through the whole network; the largest of the generic edits.",
+  "SC112": "10x one dim into layer-17 linear attention; small-moderate effect.",
+  "SC113": "Zeroing the largest gate weight in layer 6; small effect.",
+  "SC114": "Down_proj entry +4 in layer 9; small effect.",
+  "SC115": "Down_proj entry +4 in layer 6; small effect."
+ }
+}

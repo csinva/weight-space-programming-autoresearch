@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XNE00": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE01": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.3,
+    "P2": -0.3,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.25,
+    "P6": -0.1,
+    "P7": -0.4
+   }
+  },
+  "XNE02": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.3,
+    "P2": -0.3,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.25,
+    "P6": -0.1,
+    "P7": -0.4
+   }
+  },
+  "XNE04": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE05": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE06": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": ":",
+     "id": 25
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.35,
+    "P2": -0.35,
+    "P3": -0.35,
+    "P4": -0.45,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.45
+   }
+  },
+  "XNE07": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.35,
+    "P1": -0.45,
+    "P2": -0.45,
+    "P3": -0.45,
+    "P4": -0.55,
+    "P5": -0.35,
+    "P6": -0.1,
+    "P7": -0.55
+   }
+  },
+  "XNE08": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": ":",
+     "id": 25
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.35,
+    "P2": -0.35,
+    "P3": -0.35,
+    "P4": -0.45,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.45
+   }
+  },
+  "XNE09": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE10": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE11": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.3,
+    "P2": -0.3,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.25,
+    "P6": -0.1,
+    "P7": -0.4
+   }
+  },
+  "XNE12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.35,
+    "P1": -0.45,
+    "P2": -0.45,
+    "P3": -0.45,
+    "P4": -0.55,
+    "P5": -0.35,
+    "P6": -0.1,
+    "P7": -0.55
+   }
+  },
+  "XNE13": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": ":",
+     "id": 25
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.35,
+    "P2": -0.35,
+    "P3": -0.35,
+    "P4": -0.45,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.45
+   }
+  },
+  "XNE14": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.4,
+    "P2": -0.4,
+    "P3": -0.4,
+    "P4": -0.5,
+    "P5": -0.3,
+    "P6": -0.1,
+    "P7": -0.5
+   }
+  },
+  "XNE15": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": null
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " ",
+     "id": null
+    },
+    {
+     "tok": " a",
+     "id": 264
+    },
+    {
+     "tok": " to",
+     "id": 310
+    },
+    {
+     "tok": " in",
+     "id": 303
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.3,
+    "P2": -0.3,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.25,
+    "P6": -0.1,
+    "P7": -0.4
+   }
+  }
+ },
+ "notes": {
+  "XNE00": "Layer 20 neuron writes near the logits; no weights, so I assume its direction favors frequent function and formatting tokens and erodes the top-1 target in proportion to how uncertain it already is.",
+  "XNE01": "Layer 13 neuron is mid-stack, so its amplified output is partly reshaped downstream; same generic-token prior with slightly smaller target drops.",
+  "XNE02": "Layer 21 neuron, near-direct logit write; generic frequent-token prior and confidence-scaled target drops.",
+  "XNE03": "Layer 13 neuron, mid-stack attenuation assumed; generic frequent-token prior with smaller drops.",
+  "XNE04": "Layer 21 neuron, same reasoning as XNE02.",
+  "XNE05": "Layer 20 neuron, same reasoning as XNE00.",
+  "XNE06": "Layer 18 neuron, intermediate depth; generic prior with colon added since list-style prompts dominate the set.",
+  "XNE07": "Layer 23 neuron feeds the final norm directly, so I predict the largest target drops and the most generic-token spill.",
+  "XNE08": "Layer 18 neuron, same reasoning as XNE06.",
+  "XNE09": "Layer 20 neuron, same reasoning as XNE00.",
+  "XNE10": "Layer 21 neuron, same reasoning as XNE02.",
+  "XNE11": "Layer 12 neuron is the earliest edit, so downstream layers can partly absorb it; smallest predicted drops.",
+  "XNE12": "Layer 23 neuron, same reasoning as XNE07.",
+  "XNE13": "Layer 17 neuron, intermediate depth; same prior as XNE06.",
+  "XNE14": "Layer 20 neuron, same reasoning as XNE00.",
+  "XNE15": "Layer 14 neuron, mid-stack; same prior as XNE01."
+ }
+}

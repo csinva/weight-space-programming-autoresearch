@@ -1,0 +1,1326 @@
+{
+ "predictions": {
+  "G00": {
+   "up": [
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " four",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " one",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.05,
+    "P1": 0.2,
+    "P2": -0.05,
+    "P3": -0.35,
+    "P4": -0.37,
+    "P5": 0.06,
+    "P6": -0.05,
+    "P7": -0.67
+   }
+  },
+  "G01": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": "+",
+     "id": null
+    },
+    {
+     "tok": " *",
+     "id": null
+    },
+    {
+     "tok": " Shakespe",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    }
+   ],
+   "dlogp": {
+    "P0": -0.11,
+    "P1": -0.29,
+    "P2": 0.16,
+    "P3": -0.35,
+    "P4": -0.53,
+    "P5": -0.12,
+    "P6": 0.005,
+    "P7": -0.69
+   }
+  },
+  "G02": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " April",
+     "id": null
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "+",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.17,
+    "P2": 0.16,
+    "P3": 0.28,
+    "P4": -0.48,
+    "P5": -0.26,
+    "P6": -0.21,
+    "P7": -0.8
+   }
+  },
+  "G03": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": "+",
+     "id": null
+    },
+    {
+     "tok": " *",
+     "id": null
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": "-b",
+     "id": null
+    },
+    {
+     "tok": "*b",
+     "id": null
+    },
+    {
+     "tok": ",",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.19,
+    "P1": -0.33,
+    "P2": 0.16,
+    "P3": -0.4,
+    "P4": -0.61,
+    "P5": -0.15,
+    "P6": 0.005,
+    "P7": -0.74
+   }
+  },
+  "G04": {
+   "up": [
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.1,
+    "P1": 0.2,
+    "P2": -0.19,
+    "P3": 0.28,
+    "P4": -0.52,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": -0.61
+   }
+  },
+  "G05": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.22,
+    "P2": 0.16,
+    "P3": 0.28,
+    "P4": 0.6,
+    "P5": 0.03,
+    "P6": 0.005,
+    "P7": 0.38
+   }
+  },
+  "G06": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": null
+    },
+    {
+     "tok": " door",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.08,
+    "P1": -0.13,
+    "P2": -0.03,
+    "P3": -0.35,
+    "P4": -0.5,
+    "P5": 0.06,
+    "P6": -0.05,
+    "P7": 0.49
+   }
+  },
+  "G07": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.18,
+    "P1": -0.16,
+    "P2": -0.03,
+    "P3": -0.38,
+    "P4": -0.6,
+    "P5": -0.18,
+    "P6": 0.005,
+    "P7": 0.56
+   }
+  },
+  "G08": {
+   "up": [
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Blake",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " Shakespe",
+     "id": null
+    },
+    {
+     "tok": " Henry",
+     "id": null
+    },
+    {
+     "tok": " Words",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.26,
+    "P1": -0.2,
+    "P2": -0.4,
+    "P3": -0.53,
+    "P4": -0.68,
+    "P5": -0.27,
+    "P6": 0.005,
+    "P7": 0.02
+   }
+  },
+  "G09": {
+   "up": [
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": " Oxygen",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " carbon",
+     "id": null
+    },
+    {
+     "tok": " +",
+     "id": 478
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.26,
+    "P2": -0.17,
+    "P3": -0.32,
+    "P4": -0.21,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": 0.52
+   }
+  },
+  "G10": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " Versailles",
+     "id": null
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Nice",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    },
+    {
+     "tok": " Brussels",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.45,
+    "P2": -0.39,
+    "P3": -0.24,
+    "P4": 0.09,
+    "P5": -0.09,
+    "P6": -0.01,
+    "P7": -0.83
+   }
+  },
+  "G11": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " Versailles",
+     "id": null
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.1,
+    "P2": -0.02,
+    "P3": 0.01,
+    "P4": 0.41,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": -0.66
+   }
+  },
+  "G12": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " April",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": " four",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.12,
+    "P1": 0.18,
+    "P2": 0.16,
+    "P3": 0.28,
+    "P4": -0.54,
+    "P5": -0.14,
+    "P6": 0.005,
+    "P7": -0.68
+   }
+  },
+  "G13": {
+   "up": [
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " four",
+     "id": null
+    },
+    {
+     "tok": " one",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    }
+   ],
+   "dlogp": {
+    "P0": 0.04,
+    "P1": 0.2,
+    "P2": -0.22,
+    "P3": -0.38,
+    "P4": -0.38,
+    "P5": -0.13,
+    "P6": 0.005,
+    "P7": -0.65
+   }
+  },
+  "G14": {
+   "up": [
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": " Oxygen",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " April",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.28,
+    "P2": -0.18,
+    "P3": 0.19,
+    "P4": -0.25,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": -0.67
+   }
+  },
+  "G15": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": " Oxygen",
+     "id": null
+    },
+    {
+     "tok": " carbon",
+     "id": null
+    },
+    {
+     "tok": " April",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.15,
+    "P1": -0.66,
+    "P2": 0.16,
+    "P3": 0.28,
+    "P4": -0.57,
+    "P5": 0.06,
+    "P6": -0.11,
+    "P7": -1.06
+   }
+  },
+  "G16": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.17,
+    "P1": 0.2,
+    "P2": 0.16,
+    "P3": -0.42,
+    "P4": -0.59,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": -0.19
+   }
+  },
+  "G17": {
+   "up": [
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": " Oxygen",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " carbon",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.31,
+    "P2": 0.1,
+    "P3": -0.31,
+    "P4": -0.25,
+    "P5": 0.06,
+    "P6": 0.005,
+    "P7": -0.69
+   }
+  },
+  "G18": {
+   "up": [
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.15,
+    "P1": -0.06,
+    "P2": -0.17,
+    "P3": -0.23,
+    "P4": -0.57,
+    "P5": 0.05,
+    "P6": -0.05,
+    "P7": -0.51
+   }
+  },
+  "G19": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": "+",
+     "id": null
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " of",
+     "id": null
+    },
+    {
+     "tok": " in",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.34,
+    "P1": 0.05,
+    "P2": 0.16,
+    "P3": -0.65,
+    "P4": -0.76,
+    "P5": -0.49,
+    "P6": 0.005,
+    "P7": 1.04
+   }
+  },
+  "G20": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " Versailles",
+     "id": null
+    },
+    {
+     "tok": " -",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": 0.2,
+    "P2": 0.16,
+    "P3": -0.36,
+    "P4": 0.14,
+    "P5": -0.12,
+    "P6": 0.005,
+    "P7": -0.65
+   }
+  },
+  "G21": {
+   "up": [
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": " four",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.05,
+    "P1": 0.2,
+    "P2": -0.15,
+    "P3": 0.05,
+    "P4": -0.37,
+    "P5": -0.05,
+    "P6": -0.08,
+    "P7": -0.58
+   }
+  },
+  "G22": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " Sh",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.07,
+    "P1": -0.37,
+    "P2": 0.16,
+    "P3": -0.08,
+    "P4": -0.35,
+    "P5": -0.08,
+    "P6": 0.005,
+    "P7": -0.35
+   }
+  },
+  "G23": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    },
+    {
+     "tok": "+b",
+     "id": null
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " April",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.2,
+    "P2": 0.09,
+    "P3": 0.28,
+    "P4": -0.67,
+    "P5": 0.06,
+    "P6": -0.11,
+    "P7": 0.07
+   }
+  }
+ },
+ "notes": {
+  "G00": "gain 4.9531, five E=+0.0403 (2.5 sd) so n_d is estimated positive on P1 (about +0.6) and pushes five up; other prompts use n_d of about 0.2-0.5 with a flattening penalty.",
+  "G01": "gain 4.9531, ' +' E=+0.0210 and Shakespeare +0.0148 imply n_d of about +0.3-0.5 on P2/P6; elsewhere E is near 0 (e.g. Paris -0.0016), so only the noise penalty applies.",
+  "G02": "gain 4.3438, column mean -0.01155; Thursday E=+0.0408 and ' +' +0.0260 imply n_d of about +0.6 on P3/P2, so both rise; others are penalized.",
+  "G03": "gain 5.0625, ' +' E=-0.0309 implies n_d of about -0.5 on P2 (target up); Shakespeare +0.0166 implies n_d of about +0.25; the rest are near-zero E and get the penalty.",
+  "G04": "gain 4.9844, every target E is negative (Shakespeare -0.0420, Thursday -0.0337, five -0.0300), so n_d is estimated negative on all prompts, with the biggest gains on P1/P3/P6.",
+  "G05": "gain 3.9062, Paris E=-0.0330, ' +' -0.0396 and Thursday -0.0391 imply n_d of about -0.5; are +0.0247 implies n_d of about +0.4, so most targets rise.",
+  "G06": "gain 4.875, are E=-0.0267 implies n_d of about -0.4 on P7 (are up); oxygen +0.0165 implies about +0.25; Paris -0.0092 gives only a weak signal.",
+  "G07": "gain 4.8906, are E=-0.0260 and Shakespeare -0.0192 imply n_d of about -0.4/-0.3; Paris +0.0014 is near zero, so P0/P4 are penalized.",
+  "G08": "gain 4.9062 with column mean +0.0116; Shakespeare E=+0.0282 implies n_d of about +0.4 on P6; most targets sit below the column mean, so they are penalized.",
+  "G09": "gain 4.75, oxygen E=+0.0312 implies n_d of about +0.5 on P5, are -0.0261 implies about -0.4 on P7, and Paris +0.0186 implies about +0.3.",
+  "G10": "gain 4.5781, column mean +0.01207; Paris E=+0.0273 implies n_d of about +0.4 on P0/P4; five -0.0020 and are +0.0067 sit below the mean, so they are penalized.",
+  "G11": "gain 4.875, Paris E=-0.0251 and Shakespeare -0.0349 imply n_d of about -0.4/-0.5; oxygen +0.0221 implies about +0.3.",
+  "G12": "gain 5.6562, Thursday E=-0.0245, ' +' -0.0183 and five -0.0176 imply n_d of about -0.3; are -0.0003 is near zero, so only the penalty applies.",
+  "G13": "gain 4.4219, five E=+0.0251 implies n_d of about +0.4 on P1; Paris +0.0125 implies about +0.2; ' +' -0.0075 gives only a weak signal.",
+  "G14": "gain 4.9062, Thursday E=+0.0200 implies n_d of about +0.3; oxygen -0.0206 and Paris -0.0156 imply about -0.3/-0.25.",
+  "G15": "gain 6.0312 with column mean +0.01718; ' +' E=-0.0302 (3.3 sd below the mean) implies n_d of about -0.45; are +0.0026 sits about 1 sd below the mean, so it gets the largest penalty.",
+  "G16": "gain 4.5312, ' +' E=+0.0242 implies n_d of about +0.4; five -0.0256 and oxygen -0.0286 imply about -0.4; are +0.0176 implies about +0.25.",
+  "G17": "gain 4.8906, oxygen E=-0.0371 implies n_d of about -0.55 on P5; Paris +0.0161 implies about +0.25; ' +' -0.0164 implies about -0.25.",
+  "G18": "gain 4.6875, targets have modest E (five -0.0132, are -0.0121, Thursday +0.0137), so n_d is estimated at about \u00b10.2 with small net effects plus the penalty.",
+  "G19": "gain 3.9531 with column mean -0.02212; are E=+0.0540 and ' +' +0.0461 (3.3-3.7 sd) imply n_d of about +0.8, a strong rise for P7/P2; Paris -0.0164 sits above the mean but has the wrong sign, so it is penalized.",
+  "G20": "gain 4.2656, Paris E=-0.0236 and Shakespeare -0.0315 imply n_d of about -0.35/-0.45; ' +' +0.0211 implies about +0.3; five -0.0216 implies about -0.3.",
+  "G21": "gain 4.1094, every target E is negative (five -0.0254, Thursday -0.0221) but close to the column mean of -0.00812, so n_d is about -0.3 with only mild net effects.",
+  "G22": "gain 4.2812, ' +' E=-0.0204 implies n_d of about -0.3; Shakespeare +0.0282 implies about +0.4; Paris +0.0166 implies about +0.25.",
+  "G23": "gain 4.8125, Thursday E=-0.0374 implies n_d of about -0.55 on P3; are -0.0264 implies about -0.4; oxygen +0.0183 implies about +0.3."
+ }
+}

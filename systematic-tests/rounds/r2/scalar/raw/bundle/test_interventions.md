@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **SC24**: RMSNorm `model.layers.7.post_attention_layernorm.weight` dimension 249: multiply its gain (1+w) by 10 [file weights/SC24.txt]
+- **SC25**: `model.layers.8.mlp.down_proj.weight`[782, 3322] (random down_proj entry): add -4 [file weights/SC25.txt]
+- **SC26**: `model.layers.22.mlp.down_proj.weight`[0, 8] (largest |w| in matrix): set to 0 [file weights/SC26.txt]
+- **SC27**: RMSNorm `model.layers.23.post_attention_layernorm.weight` dimension 892: set its gain (1+w) to 0 (w := -1) [file weights/SC27.txt]
+- **SC28**: RMSNorm `model.layers.13.post_attention_layernorm.weight` dimension 384: set its gain (1+w) to 0 (w := -1) [file weights/SC28.txt]
+- **SC29**: `model.layers.9.mlp.down_proj.weight`[0, 458] (largest |w| in matrix): set to 0 [file weights/SC29.txt]
+- **SC30**: `model.layers.23.self_attn.o_proj.weight`[701, 1720] (random entry): set to 0 [file weights/SC30.txt]
+- **SC31**: `model.embed_tokens.weight`[22817, 585] (target-token embedding entry): add -4 [file weights/SC31.txt]
+- **SC32**: `model.layers.21.mlp.down_proj.weight`[0, 626] (largest |w| in matrix): set to 0 [file weights/SC32.txt]
+- **SC33**: RMSNorm `model.layers.14.post_attention_layernorm.weight` dimension 392: multiply its gain (1+w) by 10 [file weights/SC33.txt]
+- **SC34**: `model.layers.13.linear_attn.out_proj.weight`[0, 639] (largest |w| in matrix): set to 0 [file weights/SC34.txt]
+- **SC35**: `model.embed_tokens.weight`[22817, 896] (target-token embedding entry): add -4 [file weights/SC35.txt]

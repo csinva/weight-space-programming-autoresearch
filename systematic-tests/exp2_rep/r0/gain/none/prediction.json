@@ -1,0 +1,1766 @@
+{
+ "predictions": {
+  "RGA00": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA01": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA02": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA04": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA05": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA06": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA07": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA08": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA09": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA10": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA11": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA13": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA14": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA15": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA16": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA17": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA18": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA19": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA20": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA21": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA22": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA23": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA24": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA25": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA26": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA27": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA28": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA29": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA30": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  },
+  "RGA31": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": "\n\n",
+     "id": 271
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": ".",
+     "id": 13
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": " ",
+     "id": 220
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": " a",
+     "id": 264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.2,
+    "P6": -0.05,
+    "P7": -0.3
+   }
+  }
+ },
+ "notes": {
+  "RGA00": "No weights: 30x gain on one final-norm coordinate adds 29*x_d*E[:,d] to logits; without E I use frequent tokens already above the 0.001 floor and assume the confident target loses mass.",
+  "RGA01": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA02": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA03": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA04": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA05": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA06": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA07": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA08": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA09": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA10": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA11": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA12": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA13": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA14": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA15": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA16": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA17": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA18": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA19": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA20": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA21": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA22": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA23": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA24": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA25": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA26": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA27": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA28": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA29": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA30": "Same structural prior as RGA00; dimension-specific embedding column unknown.",
+  "RGA31": "Same structural prior as RGA00; dimension-specific embedding column unknown."
+ }
+}

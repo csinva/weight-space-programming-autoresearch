@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.02
+  },
+  "SC24|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "SC24|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "SC24|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "SC24|P4": {
+   "dlogp": -0.36,
+   "p_flip": 0.08
+  },
+  "SC24|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "SC24|P6": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "SC24|P7": {
+   "dlogp": -0.39,
+   "p_flip": 0.15
+  },
+  "SC25|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.02
+  },
+  "SC25|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "SC25|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "SC25|P3": {
+   "dlogp": -0.45,
+   "p_flip": 0.08
+  },
+  "SC25|P4": {
+   "dlogp": -0.36,
+   "p_flip": 0.08
+  },
+  "SC25|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "SC25|P6": {
+   "dlogp": -0.12,
+   "p_flip": 0.01
+  },
+  "SC25|P7": {
+   "dlogp": -0.39,
+   "p_flip": 0.15
+  },
+  "SC26|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC26|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC26|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC26|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC26|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC26|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC26|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC26|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC27|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "SC27|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC27|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "SC27|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "SC27|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC27|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "SC27|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.005
+  },
+  "SC27|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "SC28|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC28|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC28|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC28|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC28|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC28|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC28|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC28|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC29|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "SC29|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC29|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "SC29|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC29|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "SC29|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "SC29|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.005
+  },
+  "SC29|P7": {
+   "dlogp": -0.13,
+   "p_flip": 0.07
+  },
+  "SC30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "SC30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "SC30|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.005
+  },
+  "SC30|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.002
+  },
+  "SC30|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC31|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "SC31|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC31|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC31|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC31|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "SC31|P5": {
+   "dlogp": -5.0,
+   "p_flip": 0.7
+  },
+  "SC31|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC31|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "SC32|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC32|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC32|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC32|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC32|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC32|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC32|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC32|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC33|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.02
+  },
+  "SC33|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "SC33|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "SC33|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "SC33|P4": {
+   "dlogp": -0.36,
+   "p_flip": 0.08
+  },
+  "SC33|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "SC33|P6": {
+   "dlogp": -0.09,
+   "p_flip": 0.01
+  },
+  "SC33|P7": {
+   "dlogp": -0.45,
+   "p_flip": 0.16
+  },
+  "SC34|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC34|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC34|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC34|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "SC34|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "SC34|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC34|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "SC34|P7": {
+   "dlogp": -0.07,
+   "p_flip": 0.05
+  },
+  "SC35|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "SC35|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC35|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC35|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "SC35|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "SC35|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.35
+  },
+  "SC35|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "SC35|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  }
+ },
+ "notes": {
+  "SC24": "Gain 1+0.2832 (|gain| rank 4 of 1024) times 10 at layer-7 MLP input; mid-depth perturbation, moderate dlogp scaled by prompt fragility.",
+  "SC25": "Adds -4 to W[782,3322]=+0.01208 (99.9th pct 0.0307); large shift to dim 782 whose unembedding favors ' Thursday' (+1.8\u03c3) and ' Shakespeare' (+1.6\u03c3), so P3 slightly more hurt.",
+  "SC26": "Zeroes W[0,8]=-0.20508 into dim 0 (final-norm gain 0.2227, likely a high-magnitude dim) at layer 22; little room downstream, near-zero effect.",
+  "SC27": "Layer-23 MLP input dim 892 gain 1.2812 to 0 (rank 235); one of 1024 input dims in the last MLP, small effect.",
+  "SC28": "Layer-13 dim 384 gain 0.8486 to 0, low |gain| rank 1003 of 1024; small effect.",
+  "SC29": "Zeroes W[0,458]=-0.19727 at layer 9 into dim 0 (final gain 0.2227); neuron's target logit effects are minor (' are' +1.38\u03c3); small.",
+  "SC30": "Random o_proj entry +0.00995 (std 0.01386) set to 0; negligible.",
+  "SC31": "Tied ' oxygen' row dim 585 (final gain 4.6719, E=+0.0200, +1.2\u03c3) minus 4 gives roughly -18.7*z_585 logit shift; P5 target likely strongly hurt.",
+  "SC32": "Zeroes W[0,626]=-0.15918 at layer 21 into dim 0; late and low-gain dim, near zero.",
+  "SC33": "Layer-14 dim 392 gain 1+0.2295 (rank 99) times 10; moderate mid-layer MLP-input perturbation.",
+  "SC34": "Zeroes out_proj W[0,639]=+0.3125 (largest) into dim 0 at layer 13; low final gain 0.2227, small effect.",
+  "SC35": "Tied ' oxygen' row dim 896 (final gain 4.125, E=-0.0085, +0.1\u03c3) minus 4; sign of z_896 unclear, so P5 drop is less certain than SC31."
+ }
+}

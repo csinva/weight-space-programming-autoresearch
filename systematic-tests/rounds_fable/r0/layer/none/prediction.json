@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA00|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA00|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA00|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA00|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.2
+  },
+  "LA00|P4": {
+   "dlogp": -0.7,
+   "p_flip": 0.35
+  },
+  "LA00|P5": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA00|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA00|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  },
+  "LA01|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA01|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA01|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA01|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA01|P4": {
+   "dlogp": -0.4,
+   "p_flip": 0.25
+  },
+  "LA01|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "LA01|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA01|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.4
+  },
+  "LA02|P0": {
+   "dlogp": -2.0,
+   "p_flip": 0.4
+  },
+  "LA02|P1": {
+   "dlogp": -1.8,
+   "p_flip": 0.5
+  },
+  "LA02|P2": {
+   "dlogp": -1.5,
+   "p_flip": 0.5
+  },
+  "LA02|P3": {
+   "dlogp": -1.8,
+   "p_flip": 0.55
+  },
+  "LA02|P4": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "LA02|P5": {
+   "dlogp": -1.5,
+   "p_flip": 0.3
+  },
+  "LA02|P6": {
+   "dlogp": -1.0,
+   "p_flip": 0.2
+  },
+  "LA02|P7": {
+   "dlogp": -1.2,
+   "p_flip": 0.75
+  },
+  "LA03|P0": {
+   "dlogp": -0.7,
+   "p_flip": 0.15
+  },
+  "LA03|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA03|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "LA03|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA03|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.4
+  },
+  "LA03|P5": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA03|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.06
+  },
+  "LA03|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.5
+  },
+  "LA04|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA04|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA04|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA04|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.2
+  },
+  "LA04|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA04|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA04|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA04|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  },
+  "LA05|P0": {
+   "dlogp": -1.5,
+   "p_flip": 0.35
+  },
+  "LA05|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.45
+  },
+  "LA05|P2": {
+   "dlogp": -1.2,
+   "p_flip": 0.45
+  },
+  "LA05|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.5
+  },
+  "LA05|P4": {
+   "dlogp": -1.2,
+   "p_flip": 0.5
+  },
+  "LA05|P5": {
+   "dlogp": -1.0,
+   "p_flip": 0.25
+  },
+  "LA05|P6": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA05|P7": {
+   "dlogp": -1.0,
+   "p_flip": 0.7
+  },
+  "LA06|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.18
+  },
+  "LA06|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.22
+  },
+  "LA06|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.22
+  },
+  "LA06|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.28
+  },
+  "LA06|P4": {
+   "dlogp": -0.9,
+   "p_flip": 0.42
+  },
+  "LA06|P5": {
+   "dlogp": -0.7,
+   "p_flip": 0.14
+  },
+  "LA06|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.07
+  },
+  "LA06|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.52
+  },
+  "LA07|P0": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA07|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA07|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA07|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.2
+  },
+  "LA07|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA07|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA07|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA07|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  },
+  "LA08|P0": {
+   "dlogp": -1.2,
+   "p_flip": 0.25
+  },
+  "LA08|P1": {
+   "dlogp": -1.0,
+   "p_flip": 0.35
+  },
+  "LA08|P2": {
+   "dlogp": -1.0,
+   "p_flip": 0.4
+  },
+  "LA08|P3": {
+   "dlogp": -1.0,
+   "p_flip": 0.4
+  },
+  "LA08|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.45
+  },
+  "LA08|P5": {
+   "dlogp": -0.8,
+   "p_flip": 0.2
+  },
+  "LA08|P6": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA08|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.65
+  },
+  "LA09|P0": {
+   "dlogp": -0.9,
+   "p_flip": 0.2
+  },
+  "LA09|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA09|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA09|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.3
+  },
+  "LA09|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.45
+  },
+  "LA09|P5": {
+   "dlogp": -0.8,
+   "p_flip": 0.15
+  },
+  "LA09|P6": {
+   "dlogp": -0.5,
+   "p_flip": 0.08
+  },
+  "LA09|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.55
+  },
+  "LA10|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.18
+  },
+  "LA10|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA10|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA10|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.3
+  },
+  "LA10|P4": {
+   "dlogp": -0.9,
+   "p_flip": 0.42
+  },
+  "LA10|P5": {
+   "dlogp": -0.7,
+   "p_flip": 0.14
+  },
+  "LA10|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.07
+  },
+  "LA10|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.52
+  },
+  "LA11|P0": {
+   "dlogp": -0.9,
+   "p_flip": 0.2
+  },
+  "LA11|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA11|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA11|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.3
+  },
+  "LA11|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.45
+  },
+  "LA11|P5": {
+   "dlogp": -0.8,
+   "p_flip": 0.15
+  },
+  "LA11|P6": {
+   "dlogp": -0.5,
+   "p_flip": 0.08
+  },
+  "LA11|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.55
+  }
+ },
+ "notes": {
+  "LA00": "Mid-layer MLP skip; mild overall, largest on factual prompts P4/P5 where mid MLPs store associations.",
+  "LA01": "Single DeltaNet mixer at layer 14 is one of 18 linear-attention mixers; small, mostly redundant contribution.",
+  "LA02": "Layer 1 MLP acts as extended embedding in small models; skipping it distorts all downstream computation, most damaging edit.",
+  "LA03": "Whole block at layer 17 is late-mid; moderate loss, with weak-margin prompts P4/P7 most likely to flip.",
+  "LA04": "Layer 8 MLP skip; mild, with the effect concentrated on recall prompts P4/P5.",
+  "LA05": "Layer 7 is one of six full softmax attention layers; removing the block hurts in-context pattern prompts P0/P1/P3 and copying.",
+  "LA06": "Late block at layer 20 contributes to final logit sharpening; moderate drops, more on low-margin P4/P7.",
+  "LA07": "Layer 9 MLP skip; mild, similar profile to layer 8, strongest on P4.",
+  "LA08": "Layer 1 DeltaNet mixer builds early local context via short conv; removal moderately hurts context-dependent prompts like P2.",
+  "LA09": "Whole block at layer 12 (mid, DeltaNet) removes both mixing and factual MLP; moderate, factual prompts hit hardest.",
+  "LA10": "Whole block at layer 14 (DeltaNet) is mid-late; moderate, slightly less than layer 12/13.",
+  "LA11": "Whole block at layer 13 (DeltaNet) mid-stack; moderate with P4 and P7 most likely to flip given small baseline margins."
+ }
+}

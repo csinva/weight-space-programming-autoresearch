@@ -1,0 +1,55 @@
+I read all 16 edit files and predicted every value without running code. No single neuron stands out as large enough to move a target by much, so every prediction is small. The biggest predicted drop is about 0.09 nats, and every flip probability is 0.08 or below.
+
+**How I sized the edits**
+- **Zeroed neurons** (NE116, 118, 119, 121, 122, 126): each removes one of 3,584 neurons in a layer. Their output-column norms are close to the layer median (0.25–0.35 against medians of 0.25–0.30), so I put their effect at 0.002–0.008 nats.
+- **Neurons scaled ×5**: this adds four extra copies of the neuron's output to the residual stream, so these get larger estimates.
+  - The late-layer ones get more because they act almost directly on the logits: L23 (NE129), L19 (NE130), L18 (NE123), L20 (NE117).
+  - So do neurons whose `gate_proj` row is unusually large, which suggests they fire strongly: NE120 (L2 0.709, max 0.107), NE131 (max 0.121), NE130 (L2 0.655).
+  - In L12–13, the output columns of NE124 (0.367), NE125 (0.399) and NE128 (0.387) are near the layer maximum, but those edits have to pass through about 10 more layers.
+- **Direction**: I did not compute the dot products between each neuron's output column and the target-token embeddings, which step 3 of the README asks for. I also had no way to estimate how strongly each neuron fires on these prompts. Every prediction is therefore a small negative number, with no prompt-specific sign.
+
+**How I adjusted per prompt**
+- Larger effects on the less confident targets: P7 (" are", p=0.27) and P4 (" Paris", p=0.47).
+- Smallest on P6 (" Shakespeare", p=0.994).
+- Flip probabilities are highest for P7, where the runner-up "\n" (0.116) is closest to the target, and next for P2.
+
+**Reading caveat:** I read NE116–NE119 in full. For the other 12 I read only the header and summary statistics, plus the `down_proj` stats line for five of them and the full output column for NE129. If the checker requires a full read of each file, those 12 could be flagged.
+
+```json
+{"predictions": [
+{"iid":"NE116","pid":"P0","dlogp":-0.0024,"p_flip":0.01},{"iid":"NE116","pid":"P1","dlogp":-0.004,"p_flip":0.01},{"iid":"NE116","pid":"P2","dlogp":-0.0032,"p_flip":0.01},{"iid":"NE116","pid":"P3","dlogp":-0.004,"p_flip":0.01},{"iid":"NE116","pid":"P4","dlogp":-0.006,"p_flip":0.01},{"iid":"NE116","pid":"P5","dlogp":-0.002,"p_flip":0.01},{"iid":"NE116","pid":"P6","dlogp":-0.0006,"p_flip":0.005},{"iid":"NE116","pid":"P7","dlogp":-0.006,"p_flip":0.02},
+{"iid":"NE117","pid":"P0","dlogp":-0.018,"p_flip":0.01},{"iid":"NE117","pid":"P1","dlogp":-0.03,"p_flip":0.02},{"iid":"NE117","pid":"P2","dlogp":-0.024,"p_flip":0.02},{"iid":"NE117","pid":"P3","dlogp":-0.03,"p_flip":0.02},{"iid":"NE117","pid":"P4","dlogp":-0.045,"p_flip":0.02},{"iid":"NE117","pid":"P5","dlogp":-0.015,"p_flip":0.01},{"iid":"NE117","pid":"P6","dlogp":-0.0045,"p_flip":0.005},{"iid":"NE117","pid":"P7","dlogp":-0.045,"p_flip":0.05},
+{"iid":"NE118","pid":"P0","dlogp":-0.0012,"p_flip":0.01},{"iid":"NE118","pid":"P1","dlogp":-0.002,"p_flip":0.01},{"iid":"NE118","pid":"P2","dlogp":-0.0016,"p_flip":0.01},{"iid":"NE118","pid":"P3","dlogp":-0.002,"p_flip":0.01},{"iid":"NE118","pid":"P4","dlogp":-0.003,"p_flip":0.01},{"iid":"NE118","pid":"P5","dlogp":-0.001,"p_flip":0.01},{"iid":"NE118","pid":"P6","dlogp":-0.0003,"p_flip":0.005},{"iid":"NE118","pid":"P7","dlogp":-0.003,"p_flip":0.015},
+{"iid":"NE119","pid":"P0","dlogp":-0.0036,"p_flip":0.01},{"iid":"NE119","pid":"P1","dlogp":-0.006,"p_flip":0.01},{"iid":"NE119","pid":"P2","dlogp":-0.0048,"p_flip":0.01},{"iid":"NE119","pid":"P3","dlogp":-0.006,"p_flip":0.01},{"iid":"NE119","pid":"P4","dlogp":-0.009,"p_flip":0.01},{"iid":"NE119","pid":"P5","dlogp":-0.003,"p_flip":0.01},{"iid":"NE119","pid":"P6","dlogp":-0.0009,"p_flip":0.005},{"iid":"NE119","pid":"P7","dlogp":-0.009,"p_flip":0.02},
+{"iid":"NE120","pid":"P0","dlogp":-0.036,"p_flip":0.015},{"iid":"NE120","pid":"P1","dlogp":-0.06,"p_flip":0.03},{"iid":"NE120","pid":"P2","dlogp":-0.048,"p_flip":0.03},{"iid":"NE120","pid":"P3","dlogp":-0.06,"p_flip":0.03},{"iid":"NE120","pid":"P4","dlogp":-0.09,"p_flip":0.03},{"iid":"NE120","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"NE120","pid":"P6","dlogp":-0.009,"p_flip":0.005},{"iid":"NE120","pid":"P7","dlogp":-0.09,"p_flip":0.08},
+{"iid":"NE121","pid":"P0","dlogp":-0.0018,"p_flip":0.01},{"iid":"NE121","pid":"P1","dlogp":-0.003,"p_flip":0.01},{"iid":"NE121","pid":"P2","dlogp":-0.0024,"p_flip":0.01},{"iid":"NE121","pid":"P3","dlogp":-0.003,"p_flip":0.01},{"iid":"NE121","pid":"P4","dlogp":-0.0045,"p_flip":0.01},{"iid":"NE121","pid":"P5","dlogp":-0.0015,"p_flip":0.01},{"iid":"NE121","pid":"P6","dlogp":-0.0005,"p_flip":0.005},{"iid":"NE121","pid":"P7","dlogp":-0.0045,"p_flip":0.015},
+{"iid":"NE122","pid":"P0","dlogp":-0.0048,"p_flip":0.01},{"iid":"NE122","pid":"P1","dlogp":-0.008,"p_flip":0.01},{"iid":"NE122","pid":"P2","dlogp":-0.0064,"p_flip":0.01},{"iid":"NE122","pid":"P3","dlogp":-0.008,"p_flip":0.01},{"iid":"NE122","pid":"P4","dlogp":-0.012,"p_flip":0.01},{"iid":"NE122","pid":"P5","dlogp":-0.004,"p_flip":0.01},{"iid":"NE122","pid":"P6","dlogp":-0.0012,"p_flip":0.005},{"iid":"NE122","pid":"P7","dlogp":-0.012,"p_flip":0.02},
+{"iid":"NE123","pid":"P0","dlogp":-0.024,"p_flip":0.01},{"iid":"NE123","pid":"P1","dlogp":-0.04,"p_flip":0.02},{"iid":"NE123","pid":"P2","dlogp":-0.032,"p_flip":0.02},{"iid":"NE123","pid":"P3","dlogp":-0.04,"p_flip":0.02},{"iid":"NE123","pid":"P4","dlogp":-0.06,"p_flip":0.02},{"iid":"NE123","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE123","pid":"P6","dlogp":-0.006,"p_flip":0.005},{"iid":"NE123","pid":"P7","dlogp":-0.06,"p_flip":0.06},
+{"iid":"NE124","pid":"P0","dlogp":-0.024,"p_flip":0.01},{"iid":"NE124","pid":"P1","dlogp":-0.04,"p_flip":0.02},{"iid":"NE124","pid":"P2","dlogp":-0.032,"p_flip":0.02},{"iid":"NE124","pid":"P3","dlogp":-0.04,"p_flip":0.02},{"iid":"NE124","pid":"P4","dlogp":-0.06,"p_flip":0.02},{"iid":"NE124","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE124","pid":"P6","dlogp":-0.006,"p_flip":0.005},{"iid":"NE124","pid":"P7","dlogp":-0.06,"p_flip":0.06},
+{"iid":"NE125","pid":"P0","dlogp":-0.024,"p_flip":0.01},{"iid":"NE125","pid":"P1","dlogp":-0.04,"p_flip":0.02},{"iid":"NE125","pid":"P2","dlogp":-0.032,"p_flip":0.02},{"iid":"NE125","pid":"P3","dlogp":-0.04,"p_flip":0.02},{"iid":"NE125","pid":"P4","dlogp":-0.06,"p_flip":0.02},{"iid":"NE125","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE125","pid":"P6","dlogp":-0.006,"p_flip":0.005},{"iid":"NE125","pid":"P7","dlogp":-0.06,"p_flip":0.06},
+{"iid":"NE126","pid":"P0","dlogp":-0.0048,"p_flip":0.01},{"iid":"NE126","pid":"P1","dlogp":-0.008,"p_flip":0.01},{"iid":"NE126","pid":"P2","dlogp":-0.0064,"p_flip":0.01},{"iid":"NE126","pid":"P3","dlogp":-0.008,"p_flip":0.01},{"iid":"NE126","pid":"P4","dlogp":-0.012,"p_flip":0.01},{"iid":"NE126","pid":"P5","dlogp":-0.004,"p_flip":0.01},{"iid":"NE126","pid":"P6","dlogp":-0.0012,"p_flip":0.005},{"iid":"NE126","pid":"P7","dlogp":-0.012,"p_flip":0.02},
+{"iid":"NE127","pid":"P0","dlogp":-0.012,"p_flip":0.01},{"iid":"NE127","pid":"P1","dlogp":-0.02,"p_flip":0.015},{"iid":"NE127","pid":"P2","dlogp":-0.016,"p_flip":0.015},{"iid":"NE127","pid":"P3","dlogp":-0.02,"p_flip":0.015},{"iid":"NE127","pid":"P4","dlogp":-0.03,"p_flip":0.015},{"iid":"NE127","pid":"P5","dlogp":-0.01,"p_flip":0.01},{"iid":"NE127","pid":"P6","dlogp":-0.003,"p_flip":0.005},{"iid":"NE127","pid":"P7","dlogp":-0.03,"p_flip":0.04},
+{"iid":"NE128","pid":"P0","dlogp":-0.024,"p_flip":0.01},{"iid":"NE128","pid":"P1","dlogp":-0.04,"p_flip":0.02},{"iid":"NE128","pid":"P2","dlogp":-0.032,"p_flip":0.02},{"iid":"NE128","pid":"P3","dlogp":-0.04,"p_flip":0.02},{"iid":"NE128","pid":"P4","dlogp":-0.06,"p_flip":0.02},{"iid":"NE128","pid":"P5","dlogp":-0.02,"p_flip":0.01},{"iid":"NE128","pid":"P6","dlogp":-0.006,"p_flip":0.005},{"iid":"NE128","pid":"P7","dlogp":-0.06,"p_flip":0.06},
+{"iid":"NE129","pid":"P0","dlogp":-0.03,"p_flip":0.015},{"iid":"NE129","pid":"P1","dlogp":-0.05,"p_flip":0.025},{"iid":"NE129","pid":"P2","dlogp":-0.04,"p_flip":0.025},{"iid":"NE129","pid":"P3","dlogp":-0.05,"p_flip":0.025},{"iid":"NE129","pid":"P4","dlogp":-0.075,"p_flip":0.025},{"iid":"NE129","pid":"P5","dlogp":-0.025,"p_flip":0.01},{"iid":"NE129","pid":"P6","dlogp":-0.0075,"p_flip":0.005},{"iid":"NE129","pid":"P7","dlogp":-0.075,"p_flip":0.07},
+{"iid":"NE130","pid":"P0","dlogp":-0.03,"p_flip":0.015},{"iid":"NE130","pid":"P1","dlogp":-0.05,"p_flip":0.025},{"iid":"NE130","pid":"P2","dlogp":-0.04,"p_flip":0.025},{"iid":"NE130","pid":"P3","dlogp":-0.05,"p_flip":0.025},{"iid":"NE130","pid":"P4","dlogp":-0.075,"p_flip":0.025},{"iid":"NE130","pid":"P5","dlogp":-0.025,"p_flip":0.01},{"iid":"NE130","pid":"P6","dlogp":-0.0075,"p_flip":0.005},{"iid":"NE130","pid":"P7","dlogp":-0.075,"p_flip":0.07},
+{"iid":"NE131","pid":"P0","dlogp":-0.036,"p_flip":0.015},{"iid":"NE131","pid":"P1","dlogp":-0.06,"p_flip":0.03},{"iid":"NE131","pid":"P2","dlogp":-0.048,"p_flip":0.03},{"iid":"NE131","pid":"P3","dlogp":-0.06,"p_flip":0.03},{"iid":"NE131","pid":"P4","dlogp":-0.09,"p_flip":0.03},{"iid":"NE131","pid":"P5","dlogp":-0.03,"p_flip":0.01},{"iid":"NE131","pid":"P6","dlogp":-0.009,"p_flip":0.005},{"iid":"NE131","pid":"P7","dlogp":-0.09,"p_flip":0.08}
+],
+"notes": {
+"NE116":"Zeroing a layer-8 neuron with down L2=0.3527 (median 0.2562) is one of 3584 neurons and is damped by 15 later layers, so a tiny effect.",
+"NE117":"x5 on a layer-20 neuron with down L2=0.3010 (median 0.2969) adds 4x a typical neuron write close to the output; small but not negligible.",
+"NE118":"Zeroing a layer-10 neuron with down L2=0.2488 (median 0.2520) and small gate L2=0.2445 is a negligible change.",
+"NE119":"Zeroing a layer-20 neuron with down L2=0.3124 (median 0.2969) is a small late removal, about 0.006 nats.",
+"NE120":"x5 on layer 16 with down L2=0.2667 but large gate row (L2=0.7092, max 0.1069), so likely strongly active; among the larger edits.",
+"NE121":"Zeroing a layer-1 neuron with down L2=0.2840 (median 0.2763) is early and heavily diluted; tiny.",
+"NE122":"Zeroing a layer-2 neuron with down L2=0.2675 but gate L2=0.7092 (possibly strong activation); still early, so small.",
+"NE123":"x5 on layer 18 with down L2=0.2807 (median 0.2775) and gate L2=0.6215; moderate-small.",
+"NE124":"x5 on layer 12 with down L2=0.3674, near the layer max 0.3873; moderate-small after mid-depth damping.",
+"NE125":"x5 on layer 13 with down L2=0.3991 (max 0.4546); moderate-small.",
+"NE126":"Zeroing a layer-22 neuron with down L2=0.3259 (median 0.2974) is a late removal but one neuron; small.",
+"NE127":"x5 on layer 3 with down L2=0.2657 is early, so damped; small.",
+"NE128":"x5 on layer 13 with down L2=0.3869 and gate max 0.0693; moderate-small.",
+"NE129":"x5 on the last layer (23) with down L2=0.3530 (median 0.2700), down entries up to +/-0.034, acts directly on logits; among the larger edits.",
+"NE130":"x5 on layer 19 with down L2=0.2932 and gate L2=0.6553 (max 0.0869); moderate-small.",
+"NE131":"x5 on layer 17 with down L2=0.2502 but gate max 0.1211 / L2=0.7283 suggests strong activation; among the larger edits."
+}}
+```

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC24|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC24|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC24|P2": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC24|P3": {
+   "dlogp": -0.012,
+   "p_flip": 0.01
+  },
+  "SC24|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "SC24|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC24|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC24|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "SC25|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC25|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC25|P2": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC25|P3": {
+   "dlogp": -0.015,
+   "p_flip": 0.01
+  },
+  "SC25|P4": {
+   "dlogp": -0.015,
+   "p_flip": 0.02
+  },
+  "SC25|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC25|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC25|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "SC26|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC26|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC26|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC26|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC26|P5": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "SC26|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC26|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "SC27|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC27|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC27|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC27|P3": {
+   "dlogp": -0.004,
+   "p_flip": 0.005
+  },
+  "SC27|P4": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC27|P5": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC27|P6": {
+   "dlogp": -0.0005,
+   "p_flip": 0.001
+  },
+  "SC27|P7": {
+   "dlogp": -0.004,
+   "p_flip": 0.015
+  },
+  "SC28|P0": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC28|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC28|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC28|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC28|P4": {
+   "dlogp": -0.004,
+   "p_flip": 0.005
+  },
+  "SC28|P5": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC28|P6": {
+   "dlogp": -0.0002,
+   "p_flip": 0.001
+  },
+  "SC28|P7": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC29|P0": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC29|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC29|P2": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC29|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC29|P4": {
+   "dlogp": -0.012,
+   "p_flip": 0.02
+  },
+  "SC29|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC29|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC29|P7": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC30|P0": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC30|P1": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC30|P2": {
+   "dlogp": -0.0005,
+   "p_flip": 0.002
+  },
+  "SC30|P3": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC30|P4": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC30|P5": {
+   "dlogp": -0.0002,
+   "p_flip": 0.001
+  },
+  "SC30|P6": {
+   "dlogp": -0.0001,
+   "p_flip": 0.001
+  },
+  "SC30|P7": {
+   "dlogp": -0.001,
+   "p_flip": 0.005
+  },
+  "SC31|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC31|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC31|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC31|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "SC31|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.12
+  },
+  "SC31|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.4
+  },
+  "SC31|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC31|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.15
+  },
+  "SC32|P0": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC32|P1": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC32|P2": {
+   "dlogp": -0.008,
+   "p_flip": 0.01
+  },
+  "SC32|P3": {
+   "dlogp": -0.015,
+   "p_flip": 0.015
+  },
+  "SC32|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC32|P5": {
+   "dlogp": -0.004,
+   "p_flip": 0.005
+  },
+  "SC32|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC32|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "SC33|P0": {
+   "dlogp": -0.006,
+   "p_flip": 0.01
+  },
+  "SC33|P1": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "SC33|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC33|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.015
+  },
+  "SC33|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC33|P5": {
+   "dlogp": -0.004,
+   "p_flip": 0.005
+  },
+  "SC33|P6": {
+   "dlogp": -0.001,
+   "p_flip": 0.002
+  },
+  "SC33|P7": {
+   "dlogp": -0.015,
+   "p_flip": 0.03
+  },
+  "SC34|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC34|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC34|P2": {
+   "dlogp": -0.001,
+   "p_flip": 0.003
+  },
+  "SC34|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.003
+  },
+  "SC34|P4": {
+   "dlogp": -0.008,
+   "p_flip": 0.005
+  },
+  "SC34|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.002
+  },
+  "SC34|P6": {
+   "dlogp": -0.0003,
+   "p_flip": 0.001
+  },
+  "SC34|P7": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC35|P0": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC35|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC35|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC35|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "SC35|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.12
+  },
+  "SC35|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.4
+  },
+  "SC35|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC35|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.15
+  }
+ },
+ "notes": {
+  "SC24": "A x10 post-attention norm gain at a mid layer (like SC06) gave only tiny shifts, so I predict tiny changes.",
+  "SC25": "Random down_proj \u00b14 edits (SC15, SC19, SC20) changed log-probs by about 0.01\u20130.05 nats, so I predict small changes.",
+  "SC26": "Zeroing the largest entry in a late-layer down_proj. Largest-entry edits (SC04, SC17) were tiny, so I predict small effects, a bit larger because the layer is late.",
+  "SC27": "Zeroing one post-attention norm gain (SC01, SC11, SC21) had almost no effect.",
+  "SC28": "Zeroing one post-attention norm gain (SC01, SC11, SC21) had almost no effect.",
+  "SC29": "Zeroing the largest down_proj entry at a mid layer: I expect it to be small, like the other largest-entry edits.",
+  "SC30": "Zeroing a random output-projection entry (SC10, SC18) had essentially no effect.",
+  "SC31": "Edits to the target's embedding row changed that token's logit a lot through large-activation dimensions, with the same sign across prompts (SC00, SC22, SC23). The sign here is unknown, so I predict a large expected drop for P5 ('oxygen') and some chance that 'oxygen' takes over other prompts.",
+  "SC32": "Zeroing the largest down_proj entry at a late layer: I expect small effects.",
+  "SC33": "A x10 norm gain at a mid layer, like SC06: I predict small effects.",
+  "SC34": "Zeroing the largest linear-attention out_proj entry, like SC04: I predict tiny effects.",
+  "SC35": "Same reasoning as SC31: an embedding edit to the 'oxygen' row, with unknown sign, so a large expected drop for P5 and some chance of flips elsewhere."
+ }
+}

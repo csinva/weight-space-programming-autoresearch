@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "SC00|P0": {
+   "dlogp": -5.0,
+   "p_flip": 0.45
+  },
+  "SC00|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "SC00|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC00|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "SC00|P4": {
+   "dlogp": -5.0,
+   "p_flip": 0.5
+  },
+  "SC00|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC00|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC00|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "SC01|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC01|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC01|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC01|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC01|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.08
+  },
+  "SC01|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC01|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC01|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.1
+  },
+  "SC02|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.03
+  },
+  "SC02|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC02|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC02|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.06
+  },
+  "SC02|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.07
+  },
+  "SC02|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC02|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC02|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.1
+  },
+  "SC03|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC03|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "SC03|P2": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "SC03|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "SC03|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.08
+  },
+  "SC03|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC03|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "SC03|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.1
+  },
+  "SC04|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC04|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC04|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "SC04|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "SC04|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "SC04|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC04|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC04|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.08
+  },
+  "SC05|P0": {
+   "dlogp": -0.0005,
+   "p_flip": 0.01
+  },
+  "SC05|P1": {
+   "dlogp": -0.0005,
+   "p_flip": 0.01
+  },
+  "SC05|P2": {
+   "dlogp": -0.0005,
+   "p_flip": 0.01
+  },
+  "SC05|P3": {
+   "dlogp": -0.0005,
+   "p_flip": 0.01
+  },
+  "SC05|P4": {
+   "dlogp": -0.0005,
+   "p_flip": 0.015
+  },
+  "SC05|P5": {
+   "dlogp": -0.0005,
+   "p_flip": 0.01
+  },
+  "SC05|P6": {
+   "dlogp": -0.0005,
+   "p_flip": 0.005
+  },
+  "SC05|P7": {
+   "dlogp": -0.0005,
+   "p_flip": 0.02
+  },
+  "SC06|P0": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "SC06|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "SC06|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "SC06|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "SC06|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "SC06|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "SC06|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "SC06|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.35
+  },
+  "SC07|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC07|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC07|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC07|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "SC07|P4": {
+   "dlogp": -0.06,
+   "p_flip": 0.08
+  },
+  "SC07|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC07|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC07|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.1
+  },
+  "SC08|P0": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC08|P1": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC08|P2": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC08|P3": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC08|P4": {
+   "dlogp": -0.003,
+   "p_flip": 0.015
+  },
+  "SC08|P5": {
+   "dlogp": -0.003,
+   "p_flip": 0.01
+  },
+  "SC08|P6": {
+   "dlogp": -0.003,
+   "p_flip": 0.005
+  },
+  "SC08|P7": {
+   "dlogp": -0.003,
+   "p_flip": 0.02
+  },
+  "SC09|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "SC09|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "SC09|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "SC09|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.05
+  },
+  "SC09|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.06
+  },
+  "SC09|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "SC09|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC09|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.08
+  },
+  "SC10|P0": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC10|P1": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC10|P2": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC10|P3": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC10|P4": {
+   "dlogp": -0.002,
+   "p_flip": 0.015
+  },
+  "SC10|P5": {
+   "dlogp": -0.002,
+   "p_flip": 0.01
+  },
+  "SC10|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "SC10|P7": {
+   "dlogp": -0.002,
+   "p_flip": 0.02
+  },
+  "SC11|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "SC11|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC11|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "SC11|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.06
+  },
+  "SC11|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.08
+  },
+  "SC11|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "SC11|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "SC11|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.1
+  }
+ },
+ "notes": {
+  "SC00": "W[11751,880]=-0.00519 becomes -4.005 in the tied ' Paris' embedding; final-norm w[880]=+3.7031 (gain 4.7) so the Paris logit shifts by roughly 4*4.7*x_hat[880], over 10 nats with unknown sign, a coin flip between collapse and slight gain on P0/P4; Paris token absent from other prompts' inputs.",
+  "SC01": "Layer-20 post-attn norm w[373]=+0.5430 (gain 1.54, matrix mean 0.396, std 0.064) is an ordinary dimension; zeroing one of 1024 MLP input dims perturbs preactivations by about 3%, expected effect a few hundredths of a nat.",
+  "SC02": "Layer-20 down_proj W[179,320]=+0.00806 becomes 4.008 (matrix std 0.00914, max 0.1436); effect = 4*act_320 into dim 179, final-norm gain 4.44, Paris embedding at dim 179 is +0.0439 so Paris prompts near zero or slightly positive, others slightly negative.",
+  "SC03": "Final norm w[160]=+4.6562 (gain 5.66, mean 3.31); zeroing it removes 5.66*x_hat[160]*E[t,160] from each logit with target embedding values Paris -0.0069, five -0.0176, + -0.0183, Thursday -0.0245, oxygen -0.0029, Shakespeare -0.0113, are -0.0003, giving shifts of order 0.1 nat, largest for Thursday.",
+  "SC04": "Layer-10 out_proj W[0,332]=-0.26758 (largest |w|, 99.9th pct 0.0469) writes into residual dim 0, a massive-activation dim that every norm downweights (final norm w[0]=-0.7773, layer-20 post-attn w[0]=-0.1641), and row 0 has many other large entries (-0.2383, +0.2168, +0.1729), so removing one gives a small relative change.",
+  "SC05": "Layer-10 gate_proj W[2222,618]=+0.00160 is well below the matrix std 0.01107; zeroing it changes one neuron's preactivation by a negligible amount.",
+  "SC06": "Layer-6 post-attn norm w[931]=+0.2793 (gain 1.28) scaled to gain 12.8 injects about 11.5*x_hat[931] into one MLP input dim versus an input norm near 37, perturbing all 3584 layer-6 neurons by roughly a quarter of their preactivation scale at every position; moderate damage, worst on low-margin P4 and P7.",
+  "SC07": "Layer-10 input norm w[950]=+0.5977 (gain 1.60, mean 0.294, std 0.245) is a typical dim; zeroing one of 1024 inputs to the layer-10 linear attention is a roughly 4% perturbation, expected effect a few hundredths of a nat.",
+  "SC08": "Layer-1 down_proj W[665,3271]=+0.00510 (matrix std 0.00859); zeroing it removes act*0.005 from one early residual dim, negligible.",
+  "SC09": "Layer-23 down_proj W[747,2266]=+0.01031 becomes 4.01 (matrix std 0.00857); adds 4*act into dim 747 right before the final norm, whose w[747]=+0.7578 (gain 1.76, below the 3.31 mean), and Paris embedding at 747 is -0.0234, so only small logit shifts.",
+  "SC10": "Layer-10 out_proj W[74,1912]=+0.00409 is below the matrix std 0.01167; zeroing it is negligible.",
+  "SC11": "Layer-12 post-attn norm w[686]=+0.2119 (gain 1.21, mean 0.136, std 0.118) is ordinary; zeroing one MLP input dim of 1024 gives a small perturbation, a few hundredths of a nat."
+ }
+}

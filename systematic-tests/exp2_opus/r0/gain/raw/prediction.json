@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XGA00": {
+   "up": [
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    }
+   ],
+   "dlogp": {
+    "P0": 0.02,
+    "P1": -0.81,
+    "P2": -0.44,
+    "P3": -0.58,
+    "P4": 0.03,
+    "P5": 0.07,
+    "P6": -0.21,
+    "P7": 0.2
+   }
+  },
+  "XGA01": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " six",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": 0.18,
+    "P2": -0.3,
+    "P3": -0.9,
+    "P4": 0.26,
+    "P5": 0.02,
+    "P6": -0.1,
+    "P7": -0.14
+   }
+  },
+  "XGA02": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": -0.87,
+    "P2": -0.36,
+    "P3": 0.3,
+    "P4": 0.24,
+    "P5": -0.36,
+    "P6": -0.09,
+    "P7": -1.01
+   }
+  },
+  "XGA03": {
+   "up": [
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    }
+   ],
+   "dlogp": {
+    "P0": -0.3,
+    "P1": -0.35,
+    "P2": -0.32,
+    "P3": -0.35,
+    "P4": -0.5,
+    "P5": -0.12,
+    "P6": -0.13,
+    "P7": -0.37
+   }
+  },
+  "XGA04": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": "+",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.01,
+    "P1": -0.4,
+    "P2": 0.14,
+    "P3": 0.04,
+    "P4": 0.015,
+    "P5": -0.42,
+    "P6": -0.11,
+    "P7": -0.18
+   }
+  },
+  "XGA05": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.22,
+    "P1": -0.23,
+    "P2": -0.87,
+    "P3": 0.08,
+    "P4": -0.36,
+    "P5": -0.07,
+    "P6": -0.08,
+    "P7": 0.06
+   }
+  },
+  "XGA06": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " April",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.04,
+    "P1": -0.79,
+    "P2": -0.54,
+    "P3": 0.33,
+    "P4": 0.07,
+    "P5": -0.22,
+    "P6": -0.12,
+    "P7": -0.05
+   }
+  },
+  "XGA07": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": -0.06,
+    "P2": -0.23,
+    "P3": -0.03,
+    "P4": 0.2,
+    "P5": -0.08,
+    "P6": 0.005,
+    "P7": -0.46
+   }
+  },
+  "XGA08": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    },
+    {
+     "tok": " Lyon",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": -0.34,
+    "P2": -0.29,
+    "P3": -0.18,
+    "P4": 0.16,
+    "P5": 0.01,
+    "P6": -0.19,
+    "P7": -0.07
+   }
+  },
+  "XGA09": {
+   "up": [
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " London",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": -0.56,
+    "P2": -0.19,
+    "P3": -0.26,
+    "P4": 0.18,
+    "P5": -0.43,
+    "P6": -0.27,
+    "P7": 0.0
+   }
+  },
+  "XGA10": {
+   "up": [
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " were",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " nitrogen",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.29,
+    "P1": -0.33,
+    "P2": 0.01,
+    "P3": -0.27,
+    "P4": -0.49,
+    "P5": 0.07,
+    "P6": -0.2,
+    "P7": 0.21
+   }
+  },
+  "XGA11": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": "\n",
+     "id": 198
+    }
+   ],
+   "dlogp": {
+    "P0": -0.24,
+    "P1": -0.37,
+    "P2": -0.3,
+    "P3": -0.34,
+    "P4": -0.4,
+    "P5": -0.21,
+    "P6": -0.11,
+    "P7": -0.72
+   }
+  },
+  "XGA12": {
+   "up": [
+    {
+     "tok": " +",
+     "id": 478
+    },
+    {
+     "tok": " are",
+     "id": 513
+    },
+    {
+     "tok": "+",
+     "id": null
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.36,
+    "P2": -0.16,
+    "P3": -0.58,
+    "P4": -0.42,
+    "P5": -0.25,
+    "P6": -0.16,
+    "P7": -0.23
+   }
+  },
+  "XGA13": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.25,
+    "P1": -0.6,
+    "P2": -0.66,
+    "P3": -0.21,
+    "P4": -0.41,
+    "P5": -0.12,
+    "P6": -0.1,
+    "P7": -0.34
+   }
+  },
+  "XGA14": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Paris",
+     "id": 11751
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    },
+    {
+     "tok": " London",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": 0.08,
+    "P1": -0.45,
+    "P2": -0.28,
+    "P3": 0.32,
+    "P4": 0.15,
+    "P5": -0.1,
+    "P6": -0.11,
+    "P7": -0.39
+   }
+  },
+  "XGA15": {
+   "up": [
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": " Shakespeare",
+     "id": 40014
+    },
+    {
+     "tok": " Friday",
+     "id": null
+    },
+    {
+     "tok": " oxygen",
+     "id": 22817
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    },
+    {
+     "tok": " ______",
+     "id": null
+    },
+    {
+     "tok": " **",
+     "id": null
+    },
+    {
+     "tok": "...",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.05,
+    "P1": -0.07,
+    "P2": -1.66,
+    "P3": 0.33,
+    "P4": -0.09,
+    "P5": 0.0,
+    "P6": 0.005,
+    "P7": -0.52
+   }
+  }
+ },
+ "notes": {
+  "XGA00": "w[99]=+3.6406 (gain 4.64); target column mixed, net negative (oxygen -0.0322, are -0.0240), so assumed negative direction.",
+  "XGA01": "w[370]=+4.1875; column mostly negative (Paris -0.0265, five -0.0232) vs Thursday +0.0200, so P3 predicted to drop.",
+  "XGA02": "Dim 565 column: Thursday -0.0378 and are +0.0243 have opposite signs; net negative direction assumed, so P7 drops.",
+  "XGA03": "Dim 365 column is small (oxygen -0.0194 is the largest), so I predicted mild uniform drops.",
+  "XGA04": "Dim 77 column mostly positive (+ +0.0215, Thursday +0.0175); oxygen -0.0123 predicted to drop.",
+  "XGA05": "Dim 625 column: + is +0.0189 against negative Thursday -0.0193 and are -0.0182; net negative, so P2 drops.",
+  "XGA06": "Dim 736: Thursday +0.0488 is the largest target value, so weekday tokens predicted up and five (-0.0154) down.",
+  "XGA07": "Dim 0 has tiny stored gain (w=-0.7773, so 30x is a large boost on a likely massive-activation dim); 7 of 8 target values positive.",
+  "XGA08": "Dim 75 column mostly positive (Paris +0.0225, oxygen +0.0168); Shakespeare -0.0088 dips slightly.",
+  "XGA09": "Dim 311: Paris -0.0231 vs Shakespeare +0.0195; net negative direction assumed, so P6 and P5 drop.",
+  "XGA10": "Dim 348: are +0.0245 and oxygen +0.0210 are positive, so those predicted up and Paris (-0.0035) down.",
+  "XGA11": "Dim 128: only are (-0.0322) is large, so P7 predicted to drop most.",
+  "XGA12": "Dim 530: + +0.0243 vs Thursday -0.0177; weak net sign, mild drops.",
+  "XGA13": "Dim 71: + +0.0261 and five +0.0199 vs oxygen -0.0198; net sign near zero, assumed slightly negative.",
+  "XGA14": "Dim 624: Thursday +0.0289 and Paris +0.0219 are positive, so those predicted up.",
+  "XGA15": "Dim 827: + is -0.0505 (strongly opposite) while Shakespeare +0.0342 and Thursday +0.0347 are positive, so P2 drops sharply."
+ }
+}

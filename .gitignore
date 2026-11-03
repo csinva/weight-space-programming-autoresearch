@@ -30,3 +30,11 @@ paper-imodels-agentic
 **.code-workspace
 .copilot
 **.npy
+
+# systematic-tests model cache
+systematic-tests/.hf_cache/
+systematic-tests/rounds/*/*/*/bundle/weights/
+systematic-tests/exp2/*/dense_effects.npz
+systematic-tests/exp3/dense_effects.npz
+systematic-tests/**/bundle/weights/
+systematic-tests/**/dense_effects.npz

@@ -1,0 +1,25 @@
+# Edits to predict (each applied alone)
+- **G00**: final RMSNorm `model.norm.weight` dimension 560: multiply its gain (1+w) by 30
+- **G01**: final RMSNorm `model.norm.weight` dimension 821: multiply its gain (1+w) by 30
+- **G02**: final RMSNorm `model.norm.weight` dimension 1007: multiply its gain (1+w) by 30
+- **G03**: final RMSNorm `model.norm.weight` dimension 252: multiply its gain (1+w) by 30
+- **G04**: final RMSNorm `model.norm.weight` dimension 958: multiply its gain (1+w) by 30
+- **G05**: final RMSNorm `model.norm.weight` dimension 47: multiply its gain (1+w) by 30
+- **G06**: final RMSNorm `model.norm.weight` dimension 1014: multiply its gain (1+w) by 30
+- **G07**: final RMSNorm `model.norm.weight` dimension 941: multiply its gain (1+w) by 30
+- **G08**: final RMSNorm `model.norm.weight` dimension 197: multiply its gain (1+w) by 30
+- **G09**: final RMSNorm `model.norm.weight` dimension 488: multiply its gain (1+w) by 30
+- **G10**: final RMSNorm `model.norm.weight` dimension 906: multiply its gain (1+w) by 30
+- **G11**: final RMSNorm `model.norm.weight` dimension 887: multiply its gain (1+w) by 30
+- **G12**: final RMSNorm `model.norm.weight` dimension 160: multiply its gain (1+w) by 30
+- **G13**: final RMSNorm `model.norm.weight` dimension 339: multiply its gain (1+w) by 30
+- **G14**: final RMSNorm `model.norm.weight` dimension 858: multiply its gain (1+w) by 30
+- **G15**: final RMSNorm `model.norm.weight` dimension 111: multiply its gain (1+w) by 30
+- **G16**: final RMSNorm `model.norm.weight` dimension 292: multiply its gain (1+w) by 30
+- **G17**: final RMSNorm `model.norm.weight` dimension 983: multiply its gain (1+w) by 30
+- **G18**: final RMSNorm `model.norm.weight` dimension 826: multiply its gain (1+w) by 30
+- **G19**: final RMSNorm `model.norm.weight` dimension 864: multiply its gain (1+w) by 30
+- **G20**: final RMSNorm `model.norm.weight` dimension 82: multiply its gain (1+w) by 30
+- **G21**: final RMSNorm `model.norm.weight` dimension 602: multiply its gain (1+w) by 30
+- **G22**: final RMSNorm `model.norm.weight` dimension 928: multiply its gain (1+w) by 30
+- **G23**: final RMSNorm `model.norm.weight` dimension 869: multiply its gain (1+w) by 30

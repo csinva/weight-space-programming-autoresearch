@@ -1,0 +1,94 @@
+{
+ "init": {
+  "tools": [
+   "Read"
+  ],
+  "model": "claude-fable-5-1"
+ },
+ "tool_calls": 37,
+ "tools_used": [
+  "Read"
+ ],
+ "reads": [
+  "README.md",
+  "test_interventions.md",
+  "weights",
+  "weights/XNE00.txt",
+  "weights/XNE01.txt",
+  "weights/XNE02.txt",
+  "weights/XNE03.txt",
+  "weights/XNE04.txt",
+  "weights/XNE05.txt",
+  "weights/XNE06.txt",
+  "weights/XNE07.txt",
+  "weights/XNE08.txt",
+  "weights/XNE09.txt",
+  "weights/XNE10.txt",
+  "weights/XNE11.txt",
+  "weights/XNE12.txt",
+  "weights/XNE13.txt",
+  "weights/XNE14.txt",
+  "weights/XNE15.txt",
+  "weights/shared_embeddings.txt",
+  "weights/shared_norms.txt",
+  "weights/shared_embed.txt",
+  "weights/shared_norm_gains.txt",
+  "weights/shared_target_embeddings.txt",
+  "weights/shared_targets.txt",
+  "weights/shared_norm_gains.txt",
+  "weights/shared_target_embeds.txt",
+  "weights/shared_embedding_rows.txt",
+  "weights/shared_token_embeddings.txt",
+  "weights/shared_embeds.txt",
+  "weights/shared_embed_rows.txt",
+  "weights/shared_norm_gains.txt",
+  "weights/shared_target_embedding_rows.txt",
+  "weights/shared_embedding.txt",
+  "weights/shared_unembed.txt",
+  "weights/shared_target_tokens.txt",
+  "weights/shared_embed_tokens.txt"
+ ],
+ "reads_outside_sandbox": [],
+ "cost_usd": 8.290259500000001,
+ "duration_s": 310.536,
+ "num_turns": 38,
+ "usage": {
+  "input_tokens": 162,
+  "cache_creation_input_tokens": 342429,
+  "cache_read_input_tokens": 1009438,
+  "output_tokens": 23754,
+  "output_tokens_details": {
+   "thinking_tokens": 13605
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 342429,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 32,
+    "output_tokens": 10858,
+    "cache_read_input_tokens": 334190,
+    "cache_creation_input_tokens": 13037,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 13037
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "is_error": false,
+ "attempt": 0,
+ "missing": 0,
+ "wall_s": 311.4776451587677,
+ "model_flag": "claude-fable-5-1"
+}

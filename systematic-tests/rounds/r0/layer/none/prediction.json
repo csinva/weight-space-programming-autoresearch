@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA00|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA00|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "LA00|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "LA00|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA00|P4": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "LA00|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA00|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA00|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  },
+  "LA01|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA01|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "LA01|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.1
+  },
+  "LA01|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA01|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "LA01|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA01|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "LA01|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.25
+  },
+  "LA02|P0": {
+   "dlogp": -2.0,
+   "p_flip": 0.45
+  },
+  "LA02|P1": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA02|P2": {
+   "dlogp": -2.0,
+   "p_flip": 0.6
+  },
+  "LA02|P3": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA02|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "LA02|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.45
+  },
+  "LA02|P6": {
+   "dlogp": -1.5,
+   "p_flip": 0.3
+  },
+  "LA02|P7": {
+   "dlogp": -1.5,
+   "p_flip": 0.7
+  },
+  "LA03|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA03|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA03|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.22
+  },
+  "LA03|P3": {
+   "dlogp": -0.55,
+   "p_flip": 0.22
+  },
+  "LA03|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA03|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA03|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA03|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.4
+  },
+  "LA04|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA04|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "LA04|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "LA04|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA04|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA04|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA04|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA04|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  },
+  "LA05|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.15
+  },
+  "LA05|P1": {
+   "dlogp": -1.2,
+   "p_flip": 0.4
+  },
+  "LA05|P2": {
+   "dlogp": -0.9,
+   "p_flip": 0.4
+  },
+  "LA05|P3": {
+   "dlogp": -1.3,
+   "p_flip": 0.45
+  },
+  "LA05|P4": {
+   "dlogp": -0.9,
+   "p_flip": 0.3
+  },
+  "LA05|P5": {
+   "dlogp": -0.5,
+   "p_flip": 0.06
+  },
+  "LA05|P6": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA05|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.5
+  },
+  "LA06|P0": {
+   "dlogp": -0.35,
+   "p_flip": 0.05
+  },
+  "LA06|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA06|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.25
+  },
+  "LA06|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.25
+  },
+  "LA06|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA06|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA06|P6": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA06|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.4
+  },
+  "LA07|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA07|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "LA07|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "LA07|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA07|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA07|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA07|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA07|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  },
+  "LA08|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.08
+  },
+  "LA08|P1": {
+   "dlogp": -0.8,
+   "p_flip": 0.25
+  },
+  "LA08|P2": {
+   "dlogp": -0.7,
+   "p_flip": 0.3
+  },
+  "LA08|P3": {
+   "dlogp": -0.8,
+   "p_flip": 0.3
+  },
+  "LA08|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.25
+  },
+  "LA08|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.05
+  },
+  "LA08|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA08|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.45
+  },
+  "LA09|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA09|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA09|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.2
+  },
+  "LA09|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "LA09|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA09|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA09|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA09|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.38
+  },
+  "LA10|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA10|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA10|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.2
+  },
+  "LA10|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "LA10|P4": {
+   "dlogp": -0.55,
+   "p_flip": 0.18
+  },
+  "LA10|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA10|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA10|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.38
+  },
+  "LA11|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.04
+  },
+  "LA11|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA11|P2": {
+   "dlogp": -0.35,
+   "p_flip": 0.2
+  },
+  "LA11|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.2
+  },
+  "LA11|P4": {
+   "dlogp": -0.55,
+   "p_flip": 0.18
+  },
+  "LA11|P5": {
+   "dlogp": -0.25,
+   "p_flip": 0.03
+  },
+  "LA11|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA11|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.38
+  }
+ },
+ "notes": {
+  "LA00": "Single mid-layer MLP skip; usually modest damage, factual prompts slightly more sensitive.",
+  "LA01": "Single mid-layer DeltaNet mixer skip; typically small effect due to redundancy.",
+  "LA02": "Early MLPs (layer 0/1) act as extended embeddings in small models; skipping is usually severe.",
+  "LA03": "Whole late-middle block skip; moderate damage, scaled by each prompt's margin.",
+  "LA04": "Single mid-layer MLP skip; modest damage.",
+  "LA05": "Layer 7 is the first full-attention layer, likely key for induction/ICL prompts (P0-P3); whole-block skip hits those hardest.",
+  "LA06": "Late whole-block skip near output; moderate damage.",
+  "LA07": "Single mid-layer MLP skip; modest damage.",
+  "LA08": "Early DeltaNet mixer handles local token context (multi-token words like R-ome-o); moderate damage.",
+  "LA09": "Whole mid block skip; moderate damage, low-margin prompts flip most.",
+  "LA10": "Whole mid block skip; moderate damage.",
+  "LA11": "Whole mid block skip; moderate damage."
+ }
+}

@@ -1,0 +1,634 @@
+[
+ {
+  "pid": "P0",
+  "text": "Germany: Berlin\nItaly: Rome\nFrance:",
+  "input_ids": [
+   48484,
+   25,
+   19241,
+   198,
+   68121,
+   25,
+   21047,
+   198,
+   47358,
+   25
+  ],
+  "input_tokens": [
+   "Germany",
+   ":",
+   " Berlin",
+   "\n",
+   "Italy",
+   ":",
+   " Rome",
+   "\n",
+   "France",
+   ":"
+  ],
+  "target_id": 11751,
+  "target": " Paris",
+  "target_logp": -0.08717967569828033,
+  "top10": [
+   {
+    "id": 11751,
+    "token": " Paris",
+    "p": 0.9165
+   },
+   {
+    "id": 6924,
+    "token": " London",
+    "p": 0.0158
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.0064
+   },
+   {
+    "id": 53347,
+    "token": " Lyon",
+    "p": 0.0037
+   },
+   {
+    "id": 436,
+    "token": " L",
+    "p": 0.0036
+   },
+   {
+    "id": 227953,
+    "token": " Versailles",
+    "p": 0.003
+   },
+   {
+    "id": 35938,
+    "token": " Brussels",
+    "p": 0.0026
+   },
+   {
+    "id": 23327,
+    "token": " Madrid",
+    "p": 0.0024
+   },
+   {
+    "id": 27917,
+    "token": " Nice",
+    "p": 0.0021
+   },
+   {
+    "id": 4770,
+    "token": " La",
+    "p": 0.0017
+   }
+  ]
+ },
+ {
+  "pid": "P1",
+  "text": "one, two, three, four,",
+  "input_ids": [
+   588,
+   11,
+   1330,
+   11,
+   2250,
+   11,
+   2943,
+   11
+  ],
+  "input_tokens": [
+   "one",
+   ",",
+   " two",
+   ",",
+   " three",
+   ",",
+   " four",
+   ","
+  ],
+  "target_id": 4097,
+  "target": " five",
+  "target_logp": -0.2566879093647003,
+  "top10": [
+   {
+    "id": 4097,
+    "token": " five",
+    "p": 0.7736
+   },
+   {
+    "id": 321,
+    "token": " and",
+    "p": 0.089
+   },
+   {
+    "id": 466,
+    "token": " or",
+    "p": 0.0554
+   },
+   {
+    "id": 4831,
+    "token": " etc",
+    "p": 0.0259
+   },
+   {
+    "id": 2423,
+    "token": " ...",
+    "p": 0.0064
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.0054
+   },
+   {
+    "id": 4590,
+    "token": " six",
+    "p": 0.0025
+   },
+   {
+    "id": 271,
+    "token": "\n\n",
+    "p": 0.0021
+   },
+   {
+    "id": 2943,
+    "token": " four",
+    "p": 0.002
+   },
+   {
+    "id": 799,
+    "token": " one",
+    "p": 0.0014
+   }
+  ]
+ },
+ {
+  "pid": "P2",
+  "text": "def add(a, b):\n    return a",
+  "input_ids": [
+   727,
+   884,
+   2784,
+   11,
+   292,
+   1590,
+   198,
+   262,
+   460,
+   264
+  ],
+  "input_tokens": [
+   "def",
+   " add",
+   "(a",
+   ",",
+   " b",
+   "):",
+   "\n",
+   "   ",
+   " return",
+   " a"
+  ],
+  "target_id": 478,
+  "target": " +",
+  "target_logp": -0.2051578313112259,
+  "top10": [
+   {
+    "id": 478,
+    "token": " +",
+    "p": 0.8145
+   },
+   {
+    "id": 33932,
+    "token": "+b",
+    "p": 0.1728
+   },
+   {
+    "id": 271,
+    "token": "\n\n",
+    "p": 0.0029
+   },
+   {
+    "id": 471,
+    "token": " -",
+    "p": 0.0019
+   },
+   {
+    "id": 11,
+    "token": ",",
+    "p": 0.0016
+   },
+   {
+    "id": 10,
+    "token": "+",
+    "p": 0.001
+   },
+   {
+    "id": 348,
+    "token": " *",
+    "p": 0.001
+   },
+   {
+    "id": 32176,
+    "token": "*b",
+    "p": 0.0004
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.0003
+   },
+   {
+    "id": 1402,
+    "token": "-b",
+    "p": 0.0003
+   }
+  ]
+ },
+ {
+  "pid": "P3",
+  "text": "Monday, Tuesday, Wednesday,",
+  "input_ids": [
+   34072,
+   11,
+   7348,
+   11,
+   7670,
+   11
+  ],
+  "input_tokens": [
+   "Monday",
+   ",",
+   " Tuesday",
+   ",",
+   " Wednesday",
+   ","
+  ],
+  "target_id": 7548,
+  "target": " Thursday",
+  "target_logp": -0.3476213812828064,
+  "top10": [
+   {
+    "id": 7548,
+    "token": " Thursday",
+    "p": 0.7064
+   },
+   {
+    "id": 321,
+    "token": " and",
+    "p": 0.1555
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.019
+   },
+   {
+    "id": 466,
+    "token": " or",
+    "p": 0.0188
+   },
+   {
+    "id": 6394,
+    "token": " Friday",
+    "p": 0.0133
+   },
+   {
+    "id": 5632,
+    "token": " April",
+    "p": 0.0093
+   },
+   {
+    "id": 271,
+    "token": "\n\n",
+    "p": 0.006
+   },
+   {
+    "id": 220,
+    "token": " ",
+    "p": 0.0058
+   },
+   {
+    "id": 4831,
+    "token": " etc",
+    "p": 0.0039
+   },
+   {
+    "id": 2423,
+    "token": " ...",
+    "p": 0.0039
+   }
+  ]
+ },
+ {
+  "pid": "P4",
+  "text": "The Eiffel Tower is located in the city of",
+  "input_ids": [
+   760,
+   242476,
+   300,
+   21262,
+   369,
+   7172,
+   303,
+   279,
+   3177,
+   314
+  ],
+  "input_tokens": [
+   "The",
+   " Eiff",
+   "el",
+   " Tower",
+   " is",
+   " located",
+   " in",
+   " the",
+   " city",
+   " of"
+  ],
+  "target_id": 11751,
+  "target": " Paris",
+  "target_logp": -0.7574332356452942,
+  "top10": [
+   {
+    "id": 11751,
+    "token": " Paris",
+    "p": 0.4689
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.0713
+   },
+   {
+    "id": 248046,
+    "token": "<|im_end|>",
+    "p": 0.0329
+   },
+   {
+    "id": 2972,
+    "token": " **",
+    "p": 0.0316
+   },
+   {
+    "id": 279,
+    "token": " the",
+    "p": 0.0286
+   },
+   {
+    "id": 864,
+    "token": " which",
+    "p": 0.0251
+   },
+   {
+    "id": 31586,
+    "token": " ______",
+    "p": 0.0222
+   },
+   {
+    "id": 11,
+    "token": ",",
+    "p": 0.0143
+   },
+   {
+    "id": 1076,
+    "token": "...",
+    "p": 0.0123
+   },
+   {
+    "id": 271,
+    "token": "\n\n",
+    "p": 0.0122
+   }
+  ]
+ },
+ {
+  "pid": "P5",
+  "text": "Water is made of hydrogen and",
+  "input_ids": [
+   27336,
+   369,
+   1801,
+   314,
+   33536,
+   321
+  ],
+  "input_tokens": [
+   "Water",
+   " is",
+   " made",
+   " of",
+   " hydrogen",
+   " and"
+  ],
+  "target_id": 22817,
+  "target": " oxygen",
+  "target_logp": -0.07538671791553497,
+  "top10": [
+   {
+    "id": 22817,
+    "token": " oxygen",
+    "p": 0.9274
+   },
+   {
+    "id": 81206,
+    "token": " chlorine",
+    "p": 0.008
+   },
+   {
+    "id": 12141,
+    "token": " carbon",
+    "p": 0.0063
+   },
+   {
+    "id": 93172,
+    "token": " helium",
+    "p": 0.0053
+   },
+   {
+    "id": 44857,
+    "token": " nitrogen",
+    "p": 0.0049
+   },
+   {
+    "id": 83579,
+    "token": " Oxygen",
+    "p": 0.0043
+   },
+   {
+    "id": 31586,
+    "token": " ______",
+    "p": 0.0034
+   },
+   {
+    "id": 1092,
+    "token": " what",
+    "p": 0.0031
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.0021
+   },
+   {
+    "id": 4979,
+    "token": "/or",
+    "p": 0.002
+   }
+  ]
+ },
+ {
+  "pid": "P6",
+  "text": "Romeo and Juliet was written by William",
+  "input_ids": [
+   49,
+   617,
+   78,
+   321,
+   68613,
+   557,
+   5158,
+   539,
+   12021
+  ],
+  "input_tokens": [
+   "R",
+   "ome",
+   "o",
+   " and",
+   " Juliet",
+   " was",
+   " written",
+   " by",
+   " William"
+  ],
+  "target_id": 40014,
+  "target": " Shakespeare",
+  "target_logp": -0.005824498366564512,
+  "top10": [
+   {
+    "id": 40014,
+    "token": " Shakespeare",
+    "p": 0.9942
+   },
+   {
+    "id": 1369,
+    "token": " Sh",
+    "p": 0.0014
+   },
+   {
+    "id": 26734,
+    "token": " Words",
+    "p": 0.0007
+   },
+   {
+    "id": 29881,
+    "token": " Blake",
+    "p": 0.0006
+   },
+   {
+    "id": 21764,
+    "token": " Lang",
+    "p": 0.0003
+   },
+   {
+    "id": 7034,
+    "token": " Cong",
+    "p": 0.0001
+   },
+   {
+    "id": 143364,
+    "token": "\u838e\u58eb\u6bd4\u4e9a",
+    "p": 0.0001
+   },
+   {
+    "id": 30458,
+    "token": " Haz",
+    "p": 0.0001
+   },
+   {
+    "id": 227237,
+    "token": " Shakespe",
+    "p": 0.0001
+   },
+   {
+    "id": 17075,
+    "token": " Henry",
+    "p": 0.0001
+   }
+  ]
+ },
+ {
+  "pid": "P7",
+  "text": "The keys to the cabinet",
+  "input_ids": [
+   760,
+   6679,
+   310,
+   279,
+   21245
+  ],
+  "input_tokens": [
+   "The",
+   " keys",
+   " to",
+   " the",
+   " cabinet"
+  ],
+  "target_id": 513,
+  "target": " are",
+  "target_logp": -1.3019049167633057,
+  "top10": [
+   {
+    "id": 513,
+    "token": " are",
+    "p": 0.272
+   },
+   {
+    "id": 198,
+    "token": "\n",
+    "p": 0.1161
+   },
+   {
+    "id": 998,
+    "token": " were",
+    "p": 0.0611
+   },
+   {
+    "id": 11,
+    "token": ",",
+    "p": 0.051
+   },
+   {
+    "id": 314,
+    "token": " of",
+    "p": 0.0449
+   },
+   {
+    "id": 13,
+    "token": ".",
+    "p": 0.0448
+   },
+   {
+    "id": 271,
+    "token": "\n\n",
+    "p": 0.0414
+   },
+   {
+    "id": 5817,
+    "token": " door",
+    "p": 0.0353
+   },
+   {
+    "id": 25,
+    "token": ":",
+    "p": 0.0283
+   },
+   {
+    "id": 303,
+    "token": " in",
+    "p": 0.0169
+   }
+  ]
+ }
+]

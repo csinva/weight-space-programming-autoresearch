@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE24|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE24|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE24|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE24|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE24|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.03
+  },
+  "NE24|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE24|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE24|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.04
+  },
+  "NE25|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "NE25|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.08
+  },
+  "NE25|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "NE25|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "NE25|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.15
+  },
+  "NE25|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "NE25|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "NE25|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.18
+  },
+  "NE26|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.05
+  },
+  "NE26|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.06
+  },
+  "NE26|P2": {
+   "dlogp": -0.06,
+   "p_flip": 0.06
+  },
+  "NE26|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "NE26|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "NE26|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.03
+  },
+  "NE26|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE26|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "NE27|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE27|P1": {
+   "dlogp": -0.4,
+   "p_flip": 0.22
+  },
+  "NE27|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE27|P3": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE27|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "NE27|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE27|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE27|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.08
+  },
+  "NE28|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE28|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE28|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE28|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE28|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE28|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE28|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE28|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE29|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE29|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.03
+  },
+  "NE29|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE29|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE29|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.05
+  },
+  "NE29|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE29|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE29|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.05
+  },
+  "NE30|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE30|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE30|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE30|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE30|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE30|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE30|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE30|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE31|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE31|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE31|P2": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "NE31|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE31|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE31|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE31|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE31|P7": {
+   "dlogp": -0.04,
+   "p_flip": 0.05
+  },
+  "NE32|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.08
+  },
+  "NE32|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.1
+  },
+  "NE32|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.12
+  },
+  "NE32|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.1
+  },
+  "NE32|P4": {
+   "dlogp": -0.18,
+   "p_flip": 0.15
+  },
+  "NE32|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.05
+  },
+  "NE32|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE32|P7": {
+   "dlogp": -0.18,
+   "p_flip": 0.18
+  },
+  "NE33|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE33|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE33|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.04
+  },
+  "NE33|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.04
+  },
+  "NE33|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.06
+  },
+  "NE33|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE33|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE33|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.07
+  },
+  "NE34|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE34|P1": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE34|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE34|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE34|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE34|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "NE34|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.01
+  },
+  "NE34|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.3
+  },
+  "NE35|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.06
+  },
+  "NE35|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "NE35|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.07
+  },
+  "NE35|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.08
+  },
+  "NE35|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.12
+  },
+  "NE35|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "NE35|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "NE35|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.12
+  }
+ },
+ "notes": {
+  "NE24": "L20 'material' concept neuron (write top ' material' +20.2\u03c3, gate reads ' tangible' +7.2\u03c3), down norm rank 1940/3584 and target projections tiny (P5 ' oxygen' -1.43\u03c3, P3 +1.91\u03c3); almost surely inactive on these prompts, so zeroing does ~nothing.",
+  "NE25": "L6 neuron with down-column norm rank 5/3584 (L2 0.4131) and a 9\u03c3 outlier +0.1157 in dim 0, suggesting a massive-activation/sink channel; zeroing could mildly disturb attention sinks everywhere, so small negatives with larger flip risk on fragile P4/P7.",
+  "NE26": "L13 neuron, down norm rank 440, write direction weakly aligned with targets (P6 +1.69\u03c3, P0/P4 +0.93\u03c3, cos \u22640.05), no clear trigger in gate/up read-ins; \u00d75 modeled as modest noise injection hurting low-confidence targets most.",
+  "NE27": "L17 quantity neuron: write top ' two' +12.8\u03c3, ' five' +9.26\u03c3 with cos(down, ' five') = 0.264, but up row is -11.4\u03c3 on ' two' so on P1 the activation is likely negative and suppresses numbers; \u00d75 should cut ' five' noticeably, other prompts barely affected.",
+  "NE28": "L13 'this'-reading neuron (gate top '\u8fd9\u4e2a\u673a\u4f1a' +5.6\u03c3, 'this' +4.5\u03c3), write top ' v\u1eady'/' frozen', down norm rank 885; only notable target projection is P6 ' Shakespeare' -2.84\u03c3 (cos -0.093) which is bounded by 0.006 nats, so ~zero effect.",
+  "NE29": "L18 neuron with down norm rank 9/3584 (L2 0.3538) and very large gate row (L2 0.7367, max 0.0659); write projections are P1 ' five' -2.02\u03c3, P7 ' are' -1.65\u03c3, P3 ' Thursday' +1.44\u03c3, so zeroing gives tiny sign-matched shifts.",
+  "NE30": "L0 neuron (down norm rank 196) acting on near-token-embedding inputs; gate top includes ' two' +4.2\u03c3 which appears in P1, write has P2 ' +' -2.44\u03c3 and P7 ' are' -2.62\u03c3, but a single layer-0 neuron propagated 23 layers should be negligible.",
+  "NE31": "L19 'sum\u2192add' neuron: gate reads ' sum' +14.3\u03c3, write top ' add' +15.3\u03c3 with P2 ' +' +4.78\u03c3 (cos 0.115), while up row is -4.8\u03c3 on ' +'; likely active with negative sign on P2 so \u00d75 suppresses ' +' and could flip to '+b'.",
+  "NE32": "L12 neuron 2215 with down norm rank 10/3584 (L2 0.3631) and large negative weights in dims 0 (-0.0359), 3 (-0.0327), 16 (-0.0361); write top tokens are ' ', '2', '.', '-' (bias-like), so \u00d75 likely perturbs a sink-related channel and hurts broadly, most on P2/P4/P7.",
+  "NE33": "Same L12 neuron 2215 (down L2 0.3631, rank 10, dim-0 weight -0.0359) zeroed; removing a -1\u00d7 contribution is far milder than \u00d75, so small negatives with the same prompt ordering as NE32.",
+  "NE34": "L19 number-agreement neuron: write top- ' are' -12.3\u03c3 and '\u90fd' -13.2\u03c3, top+ ' was'/' is', P7 ' are' -12.26\u03c3 with cos -0.359; on attractor sentence P7 (' are' only 0.272) sign of its activation is ambiguous so moderate negative with ~0.3 flip risk, other prompts untouched.",
+  "NE35": "L2 neuron (down norm rank 1980, L2 0.2644) with up row negative on suffix pieces ('ing' -4.5\u03c3, 'er' -4.6\u03c3) and write P7 ' are' +3.77\u03c3 (cos 0.101), P0/P4 ' Paris' +1.99\u03c3; \u00d75 at layer 2 mainly injects early noise, so small negatives, larger on P4/P7."
+ }
+}

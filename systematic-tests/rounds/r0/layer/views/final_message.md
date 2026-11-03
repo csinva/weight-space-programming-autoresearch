@@ -1,0 +1,37 @@
+I read all 12 edit files. All predictions below are reasoned estimates; nothing was run, since running code isn't allowed here.
+
+The views gave little to tell the prompts apart. Each layer's projections onto the eight target tokens mostly fall within ±2–3σ, and I can't see neuron activations. So the predictions rest mainly on two things:
+
+- **How much each edit should hurt:** early sublayers matter most (layer 1 MLP worst). Whole-block skips hurt more than single sublayers. Skipping attention layer 7 should hurt the pattern-following prompts (P0, P1, P3).
+- **How fragile each prompt is:** this comes from the gap between the target and the runner-up. P7 and P4 are the most fragile; P6 and P5 are the most robust.
+
+```json
+{"predictions": [
+{"iid":"LA00","pid":"P0","dlogp":-0.08,"p_flip":0.02},{"iid":"LA00","pid":"P1","dlogp":-0.15,"p_flip":0.04},{"iid":"LA00","pid":"P2","dlogp":-0.12,"p_flip":0.06},{"iid":"LA00","pid":"P3","dlogp":-0.15,"p_flip":0.05},{"iid":"LA00","pid":"P4","dlogp":-0.2,"p_flip":0.05},{"iid":"LA00","pid":"P5","dlogp":-0.06,"p_flip":0.02},{"iid":"LA00","pid":"P6","dlogp":-0.02,"p_flip":0.01},{"iid":"LA00","pid":"P7","dlogp":-0.15,"p_flip":0.2},
+{"iid":"LA01","pid":"P0","dlogp":-0.1,"p_flip":0.02},{"iid":"LA01","pid":"P1","dlogp":-0.2,"p_flip":0.05},{"iid":"LA01","pid":"P2","dlogp":-0.15,"p_flip":0.07},{"iid":"LA01","pid":"P3","dlogp":-0.2,"p_flip":0.06},{"iid":"LA01","pid":"P4","dlogp":-0.25,"p_flip":0.06},{"iid":"LA01","pid":"P5","dlogp":-0.08,"p_flip":0.02},{"iid":"LA01","pid":"P6","dlogp":-0.03,"p_flip":0.01},{"iid":"LA01","pid":"P7","dlogp":-0.2,"p_flip":0.25},
+{"iid":"LA02","pid":"P0","dlogp":-1.0,"p_flip":0.2},{"iid":"LA02","pid":"P1","dlogp":-1.5,"p_flip":0.45},{"iid":"LA02","pid":"P2","dlogp":-1.2,"p_flip":0.45},{"iid":"LA02","pid":"P3","dlogp":-1.5,"p_flip":0.5},{"iid":"LA02","pid":"P4","dlogp":-1.8,"p_flip":0.55},{"iid":"LA02","pid":"P5","dlogp":-0.8,"p_flip":0.15},{"iid":"LA02","pid":"P6","dlogp":-0.4,"p_flip":0.05},{"iid":"LA02","pid":"P7","dlogp":-0.8,"p_flip":0.6},
+{"iid":"LA03","pid":"P0","dlogp":-0.25,"p_flip":0.03},{"iid":"LA03","pid":"P1","dlogp":-0.5,"p_flip":0.1},{"iid":"LA03","pid":"P2","dlogp":-0.35,"p_flip":0.15},{"iid":"LA03","pid":"P3","dlogp":-0.4,"p_flip":0.12},{"iid":"LA03","pid":"P4","dlogp":-0.5,"p_flip":0.12},{"iid":"LA03","pid":"P5","dlogp":-0.2,"p_flip":0.03},{"iid":"LA03","pid":"P6","dlogp":-0.08,"p_flip":0.01},{"iid":"LA03","pid":"P7","dlogp":-0.3,"p_flip":0.35},
+{"iid":"LA04","pid":"P0","dlogp":-0.12,"p_flip":0.02},{"iid":"LA04","pid":"P1","dlogp":-0.2,"p_flip":0.05},{"iid":"LA04","pid":"P2","dlogp":-0.18,"p_flip":0.08},{"iid":"LA04","pid":"P3","dlogp":-0.2,"p_flip":0.06},{"iid":"LA04","pid":"P4","dlogp":-0.25,"p_flip":0.06},{"iid":"LA04","pid":"P5","dlogp":-0.08,"p_flip":0.02},{"iid":"LA04","pid":"P6","dlogp":-0.03,"p_flip":0.01},{"iid":"LA04","pid":"P7","dlogp":-0.2,"p_flip":0.25},
+{"iid":"LA05","pid":"P0","dlogp":-0.5,"p_flip":0.06},{"iid":"LA05","pid":"P1","dlogp":-0.7,"p_flip":0.2},{"iid":"LA05","pid":"P2","dlogp":-0.5,"p_flip":0.2},{"iid":"LA05","pid":"P3","dlogp":-0.7,"p_flip":0.25},{"iid":"LA05","pid":"P4","dlogp":-0.6,"p_flip":0.2},{"iid":"LA05","pid":"P5","dlogp":-0.3,"p_flip":0.04},{"iid":"LA05","pid":"P6","dlogp":-0.1,"p_flip":0.02},{"iid":"LA05","pid":"P7","dlogp":-0.4,"p_flip":0.4},
+{"iid":"LA06","pid":"P0","dlogp":-0.3,"p_flip":0.04},{"iid":"LA06","pid":"P1","dlogp":-0.5,"p_flip":0.12},{"iid":"LA06","pid":"P2","dlogp":-0.4,"p_flip":0.17},{"iid":"LA06","pid":"P3","dlogp":-0.5,"p_flip":0.15},{"iid":"LA06","pid":"P4","dlogp":-0.6,"p_flip":0.15},{"iid":"LA06","pid":"P5","dlogp":-0.25,"p_flip":0.03},{"iid":"LA06","pid":"P6","dlogp":-0.1,"p_flip":0.01},{"iid":"LA06","pid":"P7","dlogp":-0.35,"p_flip":0.4},
+{"iid":"LA07","pid":"P0","dlogp":-0.08,"p_flip":0.02},{"iid":"LA07","pid":"P1","dlogp":-0.15,"p_flip":0.04},{"iid":"LA07","pid":"P2","dlogp":-0.12,"p_flip":0.06},{"iid":"LA07","pid":"P3","dlogp":-0.15,"p_flip":0.05},{"iid":"LA07","pid":"P4","dlogp":-0.2,"p_flip":0.05},{"iid":"LA07","pid":"P5","dlogp":-0.06,"p_flip":0.02},{"iid":"LA07","pid":"P6","dlogp":-0.02,"p_flip":0.01},{"iid":"LA07","pid":"P7","dlogp":-0.15,"p_flip":0.2},
+{"iid":"LA08","pid":"P0","dlogp":-0.4,"p_flip":0.05},{"iid":"LA08","pid":"P1","dlogp":-0.6,"p_flip":0.17},{"iid":"LA08","pid":"P2","dlogp":-0.5,"p_flip":0.2},{"iid":"LA08","pid":"P3","dlogp":-0.6,"p_flip":0.2},{"iid":"LA08","pid":"P4","dlogp":-0.7,"p_flip":0.2},{"iid":"LA08","pid":"P5","dlogp":-0.3,"p_flip":0.04},{"iid":"LA08","pid":"P6","dlogp":-0.15,"p_flip":0.02},{"iid":"LA08","pid":"P7","dlogp":-0.4,"p_flip":0.4},
+{"iid":"LA09","pid":"P0","dlogp":-0.25,"p_flip":0.03},{"iid":"LA09","pid":"P1","dlogp":-0.4,"p_flip":0.1},{"iid":"LA09","pid":"P2","dlogp":-0.35,"p_flip":0.14},{"iid":"LA09","pid":"P3","dlogp":-0.4,"p_flip":0.12},{"iid":"LA09","pid":"P4","dlogp":-0.5,"p_flip":0.12},{"iid":"LA09","pid":"P5","dlogp":-0.2,"p_flip":0.03},{"iid":"LA09","pid":"P6","dlogp":-0.07,"p_flip":0.01},{"iid":"LA09","pid":"P7","dlogp":-0.3,"p_flip":0.35},
+{"iid":"LA10","pid":"P0","dlogp":-0.2,"p_flip":0.03},{"iid":"LA10","pid":"P1","dlogp":-0.4,"p_flip":0.1},{"iid":"LA10","pid":"P2","dlogp":-0.4,"p_flip":0.15},{"iid":"LA10","pid":"P3","dlogp":-0.45,"p_flip":0.13},{"iid":"LA10","pid":"P4","dlogp":-0.45,"p_flip":0.12},{"iid":"LA10","pid":"P5","dlogp":-0.2,"p_flip":0.03},{"iid":"LA10","pid":"P6","dlogp":-0.07,"p_flip":0.01},{"iid":"LA10","pid":"P7","dlogp":-0.3,"p_flip":0.35},
+{"iid":"LA11","pid":"P0","dlogp":-0.2,"p_flip":0.03},{"iid":"LA11","pid":"P1","dlogp":-0.35,"p_flip":0.09},{"iid":"LA11","pid":"P2","dlogp":-0.3,"p_flip":0.12},{"iid":"LA11","pid":"P3","dlogp":-0.35,"p_flip":0.1},{"iid":"LA11","pid":"P4","dlogp":-0.45,"p_flip":0.1},{"iid":"LA11","pid":"P5","dlogp":-0.18,"p_flip":0.03},{"iid":"LA11","pid":"P6","dlogp":-0.06,"p_flip":0.01},{"iid":"LA11","pid":"P7","dlogp":-0.28,"p_flip":0.32}
+],
+"notes": {
+"LA00":"Layer-12 MLP down_proj norm 15.22 (among the smallest) with top neuron 628 col norm 0.387; mid-layer MLP, expect small effects.",
+"LA01":"Layer-14 DeltaNet out_proj top singular value 1.79 with weak target projections (e.g. P0 Paris -0.03σ on SV0); small mid-layer mixer effect.",
+"LA02":"Layer-1 MLP down_proj has a dominant singular value 1.73 vs 0.99 next (extended-embedding role); early MLP removal expected to be most damaging.",
+"LA03":"Layer-17 block includes number neurons 2886/2563 (+6σ '9', -8.4σ '3'; P1 five -1.28σ); moderate whole-block hit, P1 somewhat sensitive.",
+"LA04":"Layer-8 MLP down_proj top singular value 1.53, neuron 94 norm 0.362; small mid-layer effect.",
+"LA05":"Layer-7 full-attention block (out SV1 shows ' +' -4.17σ, Paris -2.23σ); attention removal hurts in-context prompts P0/P1/P3 more.",
+"LA06":"Layer-20 block: down_proj SV0 positive on P1 five +2.61σ, P6 +2.21σ, neuron 1642 ' I' +10.4σ; late layer gives moderate direct effects.",
+"LA07":"Layer-9 MLP down_proj top neuron 2201 norm 0.409, singular value 1.70; small effect expected.",
+"LA08":"Layer-1 DeltaNet out_proj top singular value 2.78 (largest of these edits); early token mixing removal gives moderate damage.",
+"LA09":"Layer-12 whole block: mixer SV0 2.23 plus MLP neuron 628 (P1 five -3.70σ); moderate effect.",
+"LA10":"Layer-14 whole block: neuron 1438 suppresses ' Par' (Paris -2.21σ) partly offsetting; moderate overall.",
+"LA11":"Layer-13 block: neuron 540 col norm 0.455, P7 are -2.82σ; moderate mid-layer whole-block effect."
+}}
+```

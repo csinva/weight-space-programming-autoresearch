@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "TO24|P0": {
+   "dlogp": -9.495,
+   "p_flip": 0.98
+  },
+  "TO24|P1": {
+   "dlogp": -0.001,
+   "p_flip": 0.01
+  },
+  "TO24|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P4": {
+   "dlogp": -2.122,
+   "p_flip": 0.98
+  },
+  "TO24|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO24|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P4": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "TO25|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "TO25|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO25|P7": {
+   "dlogp": 0.045,
+   "p_flip": 0.02
+  },
+  "TO26|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P2": {
+   "dlogp": -16.5,
+   "p_flip": 0.99
+  },
+  "TO26|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO26|P7": {
+   "dlogp": -9.4,
+   "p_flip": 0.99
+  },
+  "TO27|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P1": {
+   "dlogp": -2.5,
+   "p_flip": 0.65
+  },
+  "TO27|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "TO27|P3": {
+   "dlogp": -2.5,
+   "p_flip": 0.7
+  },
+  "TO27|P4": {
+   "dlogp": 0.014,
+   "p_flip": 0.01
+  },
+  "TO27|P5": {
+   "dlogp": 0.002,
+   "p_flip": 0.01
+  },
+  "TO27|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO27|P7": {
+   "dlogp": 0.052,
+   "p_flip": 0.02
+  },
+  "TO28|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P5": {
+   "dlogp": -19.322,
+   "p_flip": 0.99
+  },
+  "TO28|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO28|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P5": {
+   "dlogp": -13.0,
+   "p_flip": 0.99
+  },
+  "TO29|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO29|P7": {
+   "dlogp": -14.5,
+   "p_flip": 0.99
+  },
+  "TO30|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P1": {
+   "dlogp": -2.16,
+   "p_flip": 0.97
+  },
+  "TO30|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "TO30|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO30|P5": {
+   "dlogp": -12.0,
+   "p_flip": 0.96
+  },
+  "TO30|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "TO30|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P0": {
+   "dlogp": -0.65,
+   "p_flip": 0.9
+  },
+  "TO31|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P2": {
+   "dlogp": -19.3,
+   "p_flip": 0.99
+  },
+  "TO31|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P4": {
+   "dlogp": -0.384,
+   "p_flip": 0.9
+  },
+  "TO31|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO31|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P0": {
+   "dlogp": -16.436,
+   "p_flip": 0.99
+  },
+  "TO32|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P4": {
+   "dlogp": -15.147,
+   "p_flip": 0.99
+  },
+  "TO32|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO32|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P4": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "TO33|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "TO33|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO33|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO34|P6": {
+   "dlogp": -3.5,
+   "p_flip": 0.5
+  },
+  "TO34|P7": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P4": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "TO35|P7": {
+   "dlogp": -17.405,
+   "p_flip": 0.99
+  }
+ },
+ "notes": {
+  "TO24": "Identical to measured TO01 (Paris row L2=0.5102, std 0.01595 replaced by ' **' row L2=0.7985, max +0.0913); copied TO01's P0 -9.495 and P4 -2.122 flips, feedback shows repeats (TO14/TO17) are deterministic.",
+  "TO25": "' of' row (L2=0.6570, max +0.0684) is the final input token of P4 and position 3 of P5; a zero last-token leaves the residual at zero until attention layer 3, so P4 is disrupted but Eiffel-Tower context may still carry Paris; P7 gains +0.045 from removing ' of' (0.045) from Z.",
+  "TO26": "Swap of ' +' (L2=0.6765, min -0.0674) and ' are' (L2=0.5785); P7 gets ' +' logit per TO05 (-9.084 minus the -ln(0.728) tie correction gives -9.4), P2 gets the near-zero ' are' logit like TO03/TO10 (-18 to -19).",
+  "TO27": "',' row is the largest here (L2=0.8513, max +0.1289) and is the last token of P1 and P3 plus position 3 of P2; last-token zeroing passes through DeltaNet layers as exactly zero, so P1/P3 are hurt but sequence state can still favor the next item; P7 gains +0.052 from dropping ',' (0.051).",
+  "TO28": "Identical to measured TO22 (oxygen row L2=0.5484, min/max \u00b10.0486 zeroed); copied P5 -19.322 flip to chlorine.",
+  "TO29": "Swap oxygen (L2=0.5484) with ' are' (L2=0.5785, max +0.0659); P7 ' are' takes oxygen's logit (like TO20 Paris: -14.35 after tie correction), P5 oxygen takes the low ' are' logit, both flip.",
+  "TO30": "Swap ' five' (L2=0.5835, max +0.0674) with ' and' (L2=0.6734); P1 target gets ' and' logit, ln(0.089/0.774)=-2.16 (matches TO08's P3 arithmetic); P5 input ' and' becomes ' five' embedding as in TO08 (-13.2); P6 small like TO08 (-0.159).",
+  "TO31": "' +' (L2=0.6765) overwritten with Paris row (L2=0.5102, min -0.0552); P2 loses ' +' as in TO03/TO10 (-19), P0/P4 become exact ties with lower-id ' +' winning argmax, dlogp=-ln(1+p) = -0.65 and -0.384 as in TO20.",
+  "TO32": "Identical to measured TO07 (Paris row L2=0.5102, 1024 values zeroed); copied P0 -16.436 and P4 -15.147 flips.",
+  "TO33": "' is' row (L2=0.6115, mean +0.00067) sits mid-prompt in P4 (pos 4) and P5 (pos 1), a function word less informative than TO18's zeroed ' Tuesday' (-1.29), so small drops without flips.",
+  "TO34": "' William' row is the smallest (L2=0.4328, std 0.01352) and is the final token of P6; zero last embedding stays zero through layers 0-2 and only attention layer 3 injects context, but Romeo/Juliet/written-by context still points to Shakespeare (baseline 0.994), so moderate drop with ~50% flip.",
+  "TO35": "Identical to measured TO16 (' are' row L2=0.5785, min -0.0630 zeroed); copied P7 -17.405 flip to newline."
+ }
+}

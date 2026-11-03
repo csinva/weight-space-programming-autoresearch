@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **TO24**: overwrite embedding row of token 11751 (' Paris') with a copy of token 2972 (' **')'s row (tied) [file weights/TO24.txt]
+- **TO25**: embedding row of token 314 (' of') set to 0 (tied: input and output) [file weights/TO25.txt]
+- **TO26**: swap embedding rows of token 478 (' +') and 513 (' are') (tied: input and output) [file weights/TO26.txt]
+- **TO27**: embedding row of token 11 (',') set to 0 (tied: input and output) [file weights/TO27.txt]
+- **TO28**: embedding row of token 22817 (' oxygen') set to 0 (tied: input and output) [file weights/TO28.txt]
+- **TO29**: swap embedding rows of token 22817 (' oxygen') and 513 (' are') (tied: input and output) [file weights/TO29.txt]
+- **TO30**: swap embedding rows of token 4097 (' five') and 321 (' and') (tied: input and output) [file weights/TO30.txt]
+- **TO31**: overwrite embedding row of token 478 (' +') with a copy of token 11751 (' Paris')'s row (tied) [file weights/TO31.txt]
+- **TO32**: embedding row of token 11751 (' Paris') set to 0 (tied: input and output) [file weights/TO32.txt]
+- **TO33**: embedding row of token 369 (' is') set to 0 (tied: input and output) [file weights/TO33.txt]
+- **TO34**: embedding row of token 12021 (' William') set to 0 (tied: input and output) [file weights/TO34.txt]
+- **TO35**: embedding row of token 513 (' are') set to 0 (tied: input and output) [file weights/TO35.txt]

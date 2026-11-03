@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA060|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA060|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA060|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "LA060|P3": {
+   "dlogp": -0.18,
+   "p_flip": 0.06
+  },
+  "LA060|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.15
+  },
+  "LA060|P5": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA060|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA060|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA061|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA061|P1": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA061|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA061|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "LA061|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.3
+  },
+  "LA061|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA061|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.02
+  },
+  "LA061|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.35
+  },
+  "LA062|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "LA062|P1": {
+   "dlogp": -0.22,
+   "p_flip": 0.06
+  },
+  "LA062|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.1
+  },
+  "LA062|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "LA062|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.2
+  },
+  "LA062|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA062|P6": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "LA062|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.28
+  },
+  "LA063|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.05
+  },
+  "LA063|P1": {
+   "dlogp": -0.45,
+   "p_flip": 0.14
+  },
+  "LA063|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.2
+  },
+  "LA063|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.16
+  },
+  "LA063|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.35
+  },
+  "LA063|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA063|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA063|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.38
+  },
+  "LA064|P0": {
+   "dlogp": -0.35,
+   "p_flip": 0.06
+  },
+  "LA064|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.15
+  },
+  "LA064|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.2
+  },
+  "LA064|P3": {
+   "dlogp": -0.55,
+   "p_flip": 0.18
+  },
+  "LA064|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.3
+  },
+  "LA064|P5": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA064|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA064|P7": {
+   "dlogp": -0.35,
+   "p_flip": 0.35
+  },
+  "LA065|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA065|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.04
+  },
+  "LA065|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.08
+  },
+  "LA065|P3": {
+   "dlogp": -0.18,
+   "p_flip": 0.05
+  },
+  "LA065|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.15
+  },
+  "LA065|P5": {
+   "dlogp": -0.07,
+   "p_flip": 0.01
+  },
+  "LA065|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA065|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA066|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA066|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA066|P2": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "LA066|P3": {
+   "dlogp": -0.22,
+   "p_flip": 0.07
+  },
+  "LA066|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.18
+  },
+  "LA066|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA066|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA066|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.25
+  },
+  "LA067|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA067|P1": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA067|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA067|P3": {
+   "dlogp": -0.4,
+   "p_flip": 0.12
+  },
+  "LA067|P4": {
+   "dlogp": -0.45,
+   "p_flip": 0.28
+  },
+  "LA067|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA067|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.02
+  },
+  "LA067|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.32
+  },
+  "LA068|P0": {
+   "dlogp": -0.18,
+   "p_flip": 0.03
+  },
+  "LA068|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.08
+  },
+  "LA068|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.12
+  },
+  "LA068|P3": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA068|P4": {
+   "dlogp": -0.45,
+   "p_flip": 0.25
+  },
+  "LA068|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA068|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA068|P7": {
+   "dlogp": -0.28,
+   "p_flip": 0.3
+  },
+  "LA069|P0": {
+   "dlogp": -0.22,
+   "p_flip": 0.04
+  },
+  "LA069|P1": {
+   "dlogp": -0.38,
+   "p_flip": 0.1
+  },
+  "LA069|P2": {
+   "dlogp": -0.3,
+   "p_flip": 0.15
+  },
+  "LA069|P3": {
+   "dlogp": -0.42,
+   "p_flip": 0.13
+  },
+  "LA069|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.28
+  },
+  "LA069|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA069|P6": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA069|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.32
+  },
+  "LA070|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA070|P1": {
+   "dlogp": -0.28,
+   "p_flip": 0.08
+  },
+  "LA070|P2": {
+   "dlogp": -0.25,
+   "p_flip": 0.12
+  },
+  "LA070|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA070|P4": {
+   "dlogp": -0.4,
+   "p_flip": 0.24
+  },
+  "LA070|P5": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA070|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA070|P7": {
+   "dlogp": -0.28,
+   "p_flip": 0.3
+  },
+  "LA071|P0": {
+   "dlogp": -0.12,
+   "p_flip": 0.02
+  },
+  "LA071|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "LA071|P2": {
+   "dlogp": -0.18,
+   "p_flip": 0.1
+  },
+  "LA071|P3": {
+   "dlogp": -0.22,
+   "p_flip": 0.07
+  },
+  "LA071|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.18
+  },
+  "LA071|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA071|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA071|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.24
+  }
+ },
+ "notes": {
+  "LA060": "Mid-depth MLP skip in a 24-layer residual model: expected to be mild; scaled by each prompt's baseline confidence (P4 and P7 are fragile, P6 and P5 are robust).",
+  "LA061": "Early MLPs in small models often do key token-enrichment work, so this is predicted to be moderately harmful.",
+  "LA062": "Early-ish MLP skip: predicted between the layer-2 MLP and mid-layer MLP effects.",
+  "LA063": "Whole early block (DeltaNet + MLP) removed: predicted larger than skipping its MLP alone.",
+  "LA064": "Removes full-attention layer 19, which likely helps in-context retrieval, so list and pattern prompts (P0, P1, P3) are predicted to be hit more.",
+  "LA065": "Mid-layer MLP skip: predicted mild because of residual redundancy.",
+  "LA066": "Layer-6 MLP skip: predicted to be mild to moderate.",
+  "LA067": "Early DeltaNet mixer skip breaks local token mixing (multi-token words, context), predicted moderately harmful.",
+  "LA068": "Whole mid DeltaNet block removed: predicted moderate.",
+  "LA069": "Whole full-attention block 15 removed: predicted moderate, with more effect on in-context prompts.",
+  "LA070": "Layer-3 MLP skip (full-attention layer): predicted to be similar to the other early MLP skips.",
+  "LA071": "Late DeltaNet mixer skip: predicted mild to moderate, with output-stage refinement lost."
+ }
+}

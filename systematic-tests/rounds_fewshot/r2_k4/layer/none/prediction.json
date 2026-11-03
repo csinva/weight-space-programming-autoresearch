@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA24|P0": {
+   "dlogp": -0.06,
+   "p_flip": 0.01
+  },
+  "LA24|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "LA24|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "LA24|P3": {
+   "dlogp": -0.07,
+   "p_flip": 0.03
+  },
+  "LA24|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA24|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA24|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "LA24|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.1
+  },
+  "LA25|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA25|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA25|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.25
+  },
+  "LA25|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA25|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.35
+  },
+  "LA25|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA25|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.08
+  },
+  "LA25|P7": {
+   "dlogp": -0.5,
+   "p_flip": 0.45
+  },
+  "LA26|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA26|P1": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "LA26|P2": {
+   "dlogp": -0.08,
+   "p_flip": 0.04
+  },
+  "LA26|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "LA26|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.05
+  },
+  "LA26|P5": {
+   "dlogp": -0.04,
+   "p_flip": 0.01
+  },
+  "LA26|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.005
+  },
+  "LA26|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.12
+  },
+  "LA27|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA27|P1": {
+   "dlogp": 0.03,
+   "p_flip": 0.02
+  },
+  "LA27|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "LA27|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.02
+  },
+  "LA27|P4": {
+   "dlogp": 0.08,
+   "p_flip": 0.03
+  },
+  "LA27|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "LA27|P6": {
+   "dlogp": -0.002,
+   "p_flip": 0.005
+  },
+  "LA27|P7": {
+   "dlogp": 0.08,
+   "p_flip": 0.06
+  },
+  "LA28|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA28|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "LA28|P2": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA28|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "LA28|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA28|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA28|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA28|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.2
+  },
+  "LA29|P0": {
+   "dlogp": -0.6,
+   "p_flip": 0.15
+  },
+  "LA29|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA29|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.25
+  },
+  "LA29|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.3
+  },
+  "LA29|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.3
+  },
+  "LA29|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "LA29|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA29|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.4
+  },
+  "LA30|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.2
+  },
+  "LA30|P1": {
+   "dlogp": -0.9,
+   "p_flip": 0.4
+  },
+  "LA30|P2": {
+   "dlogp": -0.7,
+   "p_flip": 0.35
+  },
+  "LA30|P3": {
+   "dlogp": -0.9,
+   "p_flip": 0.4
+  },
+  "LA30|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.4
+  },
+  "LA30|P5": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA30|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA30|P7": {
+   "dlogp": -0.7,
+   "p_flip": 0.5
+  },
+  "LA31|P0": {
+   "dlogp": -0.25,
+   "p_flip": 0.05
+  },
+  "LA31|P1": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA31|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "LA31|P3": {
+   "dlogp": -0.25,
+   "p_flip": 0.1
+  },
+  "LA31|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.12
+  },
+  "LA31|P5": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA31|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA31|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.25
+  },
+  "LA32|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA32|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA32|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "LA32|P3": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA32|P4": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "LA32|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA32|P6": {
+   "dlogp": -0.005,
+   "p_flip": 0.005
+  },
+  "LA32|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.1
+  },
+  "LA33|P0": {
+   "dlogp": -6.0,
+   "p_flip": 0.9
+  },
+  "LA33|P1": {
+   "dlogp": -5.0,
+   "p_flip": 0.9
+  },
+  "LA33|P2": {
+   "dlogp": -5.0,
+   "p_flip": 0.9
+  },
+  "LA33|P3": {
+   "dlogp": -5.0,
+   "p_flip": 0.9
+  },
+  "LA33|P4": {
+   "dlogp": -6.0,
+   "p_flip": 0.92
+  },
+  "LA33|P5": {
+   "dlogp": -6.0,
+   "p_flip": 0.88
+  },
+  "LA33|P6": {
+   "dlogp": -6.0,
+   "p_flip": 0.85
+  },
+  "LA33|P7": {
+   "dlogp": -3.5,
+   "p_flip": 0.9
+  },
+  "LA34|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA34|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "LA34|P2": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "LA34|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "LA34|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "LA34|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "LA34|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA34|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.15
+  },
+  "LA35|P0": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA35|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA35|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.1
+  },
+  "LA35|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA35|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.12
+  },
+  "LA35|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA35|P6": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA35|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.25
+  }
+ },
+ "notes": {
+  "LA24": "Middle-layer DeltaNet skip; feedback for the layer-16 mixer skip (LA21) shows small effects, largest on P4/P7.",
+  "LA25": "The layer-0 mixer (short conv) merges multi-token words, so I expect a moderate drop, mostly on low-margin prompts.",
+  "LA26": "Late DeltaNet mixer skip; I expect small-to-moderate effects, with confident prompts staying robust.",
+  "LA27": "Feedback shows that skipping the layer-14 whole block (LA10) has tiny mixed effects, so its MLP alone should too.",
+  "LA28": "Late MLPs write more directly to the logits, so I expect a moderate drop.",
+  "LA29": "Layer 3 is the first full-attention layer, and skipping an early block should move things moderately to strongly.",
+  "LA30": "The final block shapes the output distribution directly, so I expect a sizable drop and possible flips on low-margin prompts.",
+  "LA31": "Skipping an early-middle block should have a modest effect, larger than the mid-layer feedback.",
+  "LA32": "Middle-late MLP skip; I expect a small effect, similar to the LA04/LA18 feedback.",
+  "LA33": "Layer-0 MLP acts like an extended embedding in most models; skipping it is usually catastrophic.",
+  "LA34": "Skipping a mid-late block should have a small-to-moderate effect, scaled up a bit from LA10.",
+  "LA35": "Final-layer attention skip; I expect a moderate effect, smaller than skipping the whole block 23."
+ }
+}

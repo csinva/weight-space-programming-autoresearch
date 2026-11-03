@@ -1,0 +1,886 @@
+{
+ "predictions": {
+  "XNE00": {
+   "up": [
+    {
+     "tok": "-bar",
+     "id": 15309
+    },
+    {
+     "tok": "bar",
+     "id": 2185
+    },
+    {
+     "tok": "hat",
+     "id": 8925
+    },
+    {
+     "tok": " bar",
+     "id": 3498
+    },
+    {
+     "tok": "_bar",
+     "id": 13975
+    },
+    {
+     "tok": "BAR",
+     "id": 31970
+    },
+    {
+     "tok": "bars",
+     "id": 24160
+    },
+    {
+     "tok": "wide",
+     "id": 8877
+    },
+    {
+     "tok": "-Bar",
+     "id": 90105
+    },
+    {
+     "tok": "til",
+     "id": 1589
+    }
+   ],
+   "dlogp": {
+    "P0": -0.4,
+    "P1": 0.03,
+    "P2": -0.3,
+    "P3": -0.46,
+    "P4": -0.4,
+    "P5": -0.31,
+    "P6": -0.01,
+    "P7": -0.23
+   }
+  },
+  "XNE01": {
+   "up": [
+    {
+     "tok": "\u76f8\u5e94\u7684",
+     "id": 108615
+    },
+    {
+     "tok": " corresponding",
+     "id": 11811
+    },
+    {
+     "tok": " associated",
+     "id": 5634
+    },
+    {
+     "tok": "\u76f8\u5e94",
+     "id": 108536
+    },
+    {
+     "tok": "\u76f8\u61c9",
+     "id": 135871
+    },
+    {
+     "tok": "\u5bf9\u5e94\u7684",
+     "id": 109778
+    },
+    {
+     "tok": "associated",
+     "id": 47442
+    },
+    {
+     "tok": "\u968f\u4e4b",
+     "id": 105118
+    },
+    {
+     "tok": " accordingly",
+     "id": 26211
+    },
+    {
+     "tok": " related",
+     "id": 5265
+    }
+   ],
+   "dlogp": {
+    "P0": -0.1,
+    "P1": -0.19,
+    "P2": -0.23,
+    "P3": -0.18,
+    "P4": -0.1,
+    "P5": -0.19,
+    "P6": -0.01,
+    "P7": -0.11
+   }
+  },
+  "XNE02": {
+   "up": [
+    {
+     "tok": "r",
+     "id": 81
+    },
+    {
+     "tok": " r",
+     "id": 427
+    },
+    {
+     "tok": "$r",
+     "id": 41541
+    },
+    {
+     "tok": "(r",
+     "id": 2515
+    },
+    {
+     "tok": "=r",
+     "id": 30101
+    },
+    {
+     "tok": ")r",
+     "id": 90127
+    },
+    {
+     "tok": ",r",
+     "id": 15415
+    },
+    {
+     "tok": "[r",
+     "id": 15656
+    },
+    {
+     "tok": "-r",
+     "id": 3667
+    },
+    {
+     "tok": "*r",
+     "id": 36642
+    }
+   ],
+   "dlogp": {
+    "P0": -0.33,
+    "P1": -0.1,
+    "P2": -0.18,
+    "P3": -0.04,
+    "P4": -0.33,
+    "P5": -0.33,
+    "P6": -0.01,
+    "P7": -0.28
+   }
+  },
+  "XNE03": {
+   "up": [
+    {
+     "tok": "\u96be",
+     "id": 96459
+    },
+    {
+     "tok": "\u5982\u679c",
+     "id": 96604
+    },
+    {
+     "tok": "\u592a\u96be",
+     "id": 127023
+    },
+    {
+     "tok": " |",
+     "id": 735
+    },
+    {
+     "tok": " cart",
+     "id": 7171
+    },
+    {
+     "tok": " \u201c",
+     "id": 1001
+    },
+    {
+     "tok": "\u82e5",
+     "id": 97199
+    },
+    {
+     "tok": " \u2018",
+     "id": 3260
+    },
+    {
+     "tok": "\u30fc\u30c8",
+     "id": 80501
+    },
+    {
+     "tok": " \ufffd",
+     "id": 31422
+    }
+   ],
+   "dlogp": {
+    "P0": -0.24,
+    "P1": 0.11,
+    "P2": 0.08,
+    "P3": -0.18,
+    "P4": -0.24,
+    "P5": -0.13,
+    "P6": -0.02,
+    "P7": -0.3
+   }
+  },
+  "XNE04": {
+   "up": [
+    {
+     "tok": " degree",
+     "id": 8122
+    },
+    {
+     "tok": " Degree",
+     "id": 35852
+    },
+    {
+     "tok": " degrees",
+     "id": 11995
+    },
+    {
+     "tok": "\u5ea6",
+     "id": 95960
+    },
+    {
+     "tok": "degree",
+     "id": 39672
+    },
+    {
+     "tok": "-degree",
+     "id": 36427
+    },
+    {
+     "tok": "Degree",
+     "id": 56780
+    },
+    {
+     "tok": " Degrees",
+     "id": 89701
+    },
+    {
+     "tok": "degrees",
+     "id": 67387
+    },
+    {
+     "tok": "deg",
+     "id": 16023
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.17,
+    "P2": 0.02,
+    "P3": -0.06,
+    "P4": -0.06,
+    "P5": 0.03,
+    "P6": -0.02,
+    "P7": 0.03
+   }
+  },
+  "XNE05": {
+   "up": [
+    {
+     "tok": " View",
+     "id": 2651
+    },
+    {
+     "tok": " formed",
+     "id": 13717
+    },
+    {
+     "tok": " view",
+     "id": 1593
+    },
+    {
+     "tok": "engers",
+     "id": 14455
+    },
+    {
+     "tok": "ains",
+     "id": 1674
+    },
+    {
+     "tok": " forming",
+     "id": 28115
+    },
+    {
+     "tok": "\u5f62\u6210\u4e00\u4e2a",
+     "id": 120404
+    },
+    {
+     "tok": " ex",
+     "id": 495
+    },
+    {
+     "tok": "ap",
+     "id": 385
+    },
+    {
+     "tok": "air",
+     "id": 1264
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.21,
+    "P2": -0.11,
+    "P3": -0.06,
+    "P4": -0.06,
+    "P5": -0.15,
+    "P6": -0.01,
+    "P7": -0.06
+   }
+  },
+  "XNE06": {
+   "up": [
+    {
+     "tok": " expansion",
+     "id": 14046
+    },
+    {
+     "tok": " expand",
+     "id": 8952
+    },
+    {
+     "tok": " Expansion",
+     "id": 52722
+    },
+    {
+     "tok": " expands",
+     "id": 50110
+    },
+    {
+     "tok": " expanding",
+     "id": 22451
+    },
+    {
+     "tok": "\u5c55\u5f00",
+     "id": 101614
+    },
+    {
+     "tok": " expansions",
+     "id": 74839
+    },
+    {
+     "tok": " expanded",
+     "id": 16676
+    },
+    {
+     "tok": " Expand",
+     "id": 48455
+    },
+    {
+     "tok": "expand",
+     "id": 31251
+    }
+   ],
+   "dlogp": {
+    "P0": -0.31,
+    "P1": -0.14,
+    "P2": -0.21,
+    "P3": -0.23,
+    "P4": -0.31,
+    "P5": -0.09,
+    "P6": -0.0,
+    "P7": -0.26
+   }
+  },
+  "XNE07": {
+   "up": [
+    {
+     "tok": " \u05d4",
+     "id": 67000
+    },
+    {
+     "tok": " \u0430",
+     "id": 19774
+    },
+    {
+     "tok": " \u0442\u0430",
+     "id": 148889
+    },
+    {
+     "tok": " \u0438\u043c",
+     "id": 46145
+    },
+    {
+     "tok": " \u043e",
+     "id": 7958
+    },
+    {
+     "tok": " \u043f",
+     "id": 4901
+    },
+    {
+     "tok": "\u05d4",
+     "id": 44436
+    },
+    {
+     "tok": "\u043d\u0430",
+     "id": 13785
+    },
+    {
+     "tok": "\u0441",
+     "id": 2175
+    },
+    {
+     "tok": " \u0432",
+     "id": 5624
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.25,
+    "P2": -0.33,
+    "P3": -0.03,
+    "P4": -0.2,
+    "P5": -0.26,
+    "P6": -0.03,
+    "P7": -0.28
+   }
+  },
+  "XNE08": {
+   "up": [
+    {
+     "tok": " Lib",
+     "id": 5510
+    },
+    {
+     "tok": " lib",
+     "id": 2953
+    },
+    {
+     "tok": "Lib",
+     "id": 8921
+    },
+    {
+     "tok": "lib",
+     "id": 2653
+    },
+    {
+     "tok": "spec",
+     "id": 9253
+    },
+    {
+     "tok": "ypes",
+     "id": 1741
+    },
+    {
+     "tok": "-lib",
+     "id": 37359
+    },
+    {
+     "tok": "elsen",
+     "id": 39787
+    },
+    {
+     "tok": "onus",
+     "id": 26801
+    },
+    {
+     "tok": "\u0443\u0436\u0435",
+     "id": 164898
+    }
+   ],
+   "dlogp": {
+    "P0": -0.38,
+    "P1": -0.28,
+    "P2": -0.21,
+    "P3": -0.04,
+    "P4": -0.38,
+    "P5": -0.2,
+    "P6": -0.01,
+    "P7": -0.26
+   }
+  },
+  "XNE09": {
+   "up": [
+    {
+     "tok": " fourth",
+     "id": 11400
+    },
+    {
+     "tok": "4",
+     "id": 19
+    },
+    {
+     "tok": "\uff14",
+     "id": 44085
+    },
+    {
+     "tok": " five",
+     "id": 4097
+    },
+    {
+     "tok": " Thursday",
+     "id": 7548
+    },
+    {
+     "tok": "\u7b2c\u56db\u6b65",
+     "id": 141818
+    },
+    {
+     "tok": "\u56db\u662f",
+     "id": 111489
+    },
+    {
+     "tok": "\u7b2c\u4e94",
+     "id": 99577
+    },
+    {
+     "tok": "                ",
+     "id": 336
+    },
+    {
+     "tok": "               ",
+     "id": 388
+    }
+   ],
+   "dlogp": {
+    "P0": -0.03,
+    "P1": 0.15,
+    "P2": -0.13,
+    "P3": 0.2,
+    "P4": -0.03,
+    "P5": -0.33,
+    "P6": -0.02,
+    "P7": -0.15
+   }
+  },
+  "XNE10": {
+   "up": [
+    {
+     "tok": " con",
+     "id": 384
+    },
+    {
+     "tok": "con",
+     "id": 435
+    },
+    {
+     "tok": " Con",
+     "id": 1160
+    },
+    {
+     "tok": "n\u00fc",
+     "id": 240997
+    },
+    {
+     "tok": " Xxx",
+     "id": 47385
+    },
+    {
+     "tok": " cleanly",
+     "id": 93531
+    },
+    {
+     "tok": "\u8def\u4e0e",
+     "id": 115883
+    },
+    {
+     "tok": "Subsystem",
+     "id": 78326
+    },
+    {
+     "tok": "\u4ebf\u4eba",
+     "id": 132384
+    },
+    {
+     "tok": " enhver",
+     "id": 240641
+    }
+   ],
+   "dlogp": {
+    "P0": -0.39,
+    "P1": -0.36,
+    "P2": -0.38,
+    "P3": -0.19,
+    "P4": -0.39,
+    "P5": -0.21,
+    "P6": -0.01,
+    "P7": -0.19
+   }
+  },
+  "XNE11": {
+   "up": [
+    {
+     "tok": " number",
+     "id": 1324
+    },
+    {
+     "tok": "\u7684\u7b2c",
+     "id": 118392
+    },
+    {
+     "tok": "number",
+     "id": 3946
+    },
+    {
+     "tok": " n\u00famero",
+     "id": 29226
+    },
+    {
+     "tok": "\u786e\u5b9a",
+     "id": 98825
+    },
+    {
+     "tok": "_number",
+     "id": 5327
+    },
+    {
+     "tok": "-number",
+     "id": 25030
+    },
+    {
+     "tok": "ood",
+     "id": 1338
+    },
+    {
+     "tok": "\u7b2c",
+     "id": 96025
+    },
+    {
+     "tok": " where",
+     "id": 1332
+    }
+   ],
+   "dlogp": {
+    "P0": -0.06,
+    "P1": -0.08,
+    "P2": -0.1,
+    "P3": -0.15,
+    "P4": -0.06,
+    "P5": -0.09,
+    "P6": -0.01,
+    "P7": 0.0
+   }
+  },
+  "XNE12": {
+   "up": [
+    {
+     "tok": "as",
+     "id": 299
+    },
+    {
+     "tok": "os",
+     "id": 428
+    },
+    {
+     "tok": "\u3067",
+     "id": 15685
+    },
+    {
+     "tok": "\uc5d0\uc11c",
+     "id": 54581
+    },
+    {
+     "tok": "r",
+     "id": 81
+    },
+    {
+     "tok": "es",
+     "id": 287
+    },
+    {
+     "tok": "rach",
+     "id": 172581
+    },
+    {
+     "tok": "st",
+     "id": 267
+    },
+    {
+     "tok": "\u6089",
+     "id": 98330
+    },
+    {
+     "tok": "\u7740",
+     "id": 95966
+    }
+   ],
+   "dlogp": {
+    "P0": -0.12,
+    "P1": -0.17,
+    "P2": -0.05,
+    "P3": -0.16,
+    "P4": -0.12,
+    "P5": -0.13,
+    "P6": -0.01,
+    "P7": -0.28
+   }
+  },
+  "XNE13": {
+   "up": [
+    {
+     "tok": "str",
+     "id": 485
+    },
+    {
+     "tok": "(str",
+     "id": 4060
+    },
+    {
+     "tok": " strconv",
+     "id": 32214
+    },
+    {
+     "tok": " str",
+     "id": 592
+    },
+    {
+     "tok": "Str",
+     "id": 2495
+    },
+    {
+     "tok": " String",
+     "id": 894
+    },
+    {
+     "tok": "strconv",
+     "id": 50102
+    },
+    {
+     "tok": "ToString",
+     "id": 5688
+    },
+    {
+     "tok": " string",
+     "id": 886
+    },
+    {
+     "tok": "String",
+     "id": 683
+    }
+   ],
+   "dlogp": {
+    "P0": -0.24,
+    "P1": -0.21,
+    "P2": -0.15,
+    "P3": -0.14,
+    "P4": -0.24,
+    "P5": -0.2,
+    "P6": -0.02,
+    "P7": -0.31
+   }
+  },
+  "XNE14": {
+   "up": [
+    {
+     "tok": "\u8840",
+     "id": 96471
+    },
+    {
+     "tok": "blood",
+     "id": 48323
+    },
+    {
+     "tok": " blood",
+     "id": 6340
+    },
+    {
+     "tok": "\u8840\u7684",
+     "id": 118240
+    },
+    {
+     "tok": " Blood",
+     "id": 19459
+    },
+    {
+     "tok": "\u8840\u6db2",
+     "id": 101872
+    },
+    {
+     "tok": "Blood",
+     "id": 49752
+    },
+    {
+     "tok": " sangre",
+     "id": 183964
+    },
+    {
+     "tok": "\u7684\u8840",
+     "id": 114910
+    },
+    {
+     "tok": " sangue",
+     "id": 177812
+    }
+   ],
+   "dlogp": {
+    "P0": -0.31,
+    "P1": -0.05,
+    "P2": 0.1,
+    "P3": -0.11,
+    "P4": -0.31,
+    "P5": -0.1,
+    "P6": -0.0,
+    "P7": -0.15
+   }
+  },
+  "XNE15": {
+   "up": [
+    {
+     "tok": "\u7b56",
+     "id": 96814
+    },
+    {
+     "tok": "\u8bf4\u6765",
+     "id": 120251
+    },
+    {
+     "tok": "sci",
+     "id": 52021
+    },
+    {
+     "tok": "\u8721",
+     "id": 103007
+    },
+    {
+     "tok": "\u90e8\u548c",
+     "id": 118268
+    },
+    {
+     "tok": "\u9ad8\u80fd",
+     "id": 128412
+    },
+    {
+     "tok": " cint",
+     "id": 157924
+    },
+    {
+     "tok": "son",
+     "id": 901
+    },
+    {
+     "tok": "Mutable",
+     "id": 10891
+    },
+    {
+     "tok": "\u4eae",
+     "id": 96998
+    }
+   ],
+   "dlogp": {
+    "P0": -0.1,
+    "P1": -0.09,
+    "P2": -0.15,
+    "P3": -0.21,
+    "P4": -0.1,
+    "P5": -0.21,
+    "P6": -0.01,
+    "P7": 0.06
+   }
+  }
+ },
+ "notes": {
+  "XNE00": "Layer-20 x-bar/x-hat neuron (gate reads 'hat' +6.0\u03c3, up reads ' average' +5.7\u03c3, write '-bar' +9.1\u03c3); down L2 0.3572 rank 21; assumed positive activation so bar/hat tokens rise and ' Thursday' (-2.57\u03c3) falls.",
+  "XNE01": "Layer-13 'corresponding' neuron: write direction suppresses '\u76f8\u5e94\u7684' -10.6\u03c3 and ' corresponding' -10.5\u03c3 while gate reads ' associated' +7.5\u03c3 and up reads ' accordingly' -5.5\u03c3; assumed negative activation flips the sign and promotes the corresponding/associated family; L2 0.2594 rank 1617.",
+  "XNE02": "Layer-21 neuron whose write direction hits 'r' -13.5\u03c3 and ' r' -13.4\u03c3 with gate reading 'radius'/'distance' (+5.0\u03c3); assumed negative activation promotes the r-variable tokens; targets ' Paris'/' oxygen' at +1.51\u03c3 become negative.",
+  "XNE03": "Layer-13 neuron with strong column (L2 0.3577, rank 26) and write top '\u96be' +5.6\u03c3, '\u5982\u679c' +4.9\u03c3, ' |' +4.6\u03c3; targets ' five' +2.20\u03c3 and ' +' +1.90\u03c3 favored under assumed positive activation.",
+  "XNE04": "Layer-21 'degree' neuron: gate reads ' degree' +10.2\u03c3, write promotes ' degree' +7.9\u03c3 and ' degrees' +6.7\u03c3; assumed positive activation; targets ' +' +1.39\u03c3, ' oxygen' +1.46\u03c3, ' are' +1.46\u03c3 slightly up.",
+  "XNE05": "Layer-20 word-piece neuron (gate reads '0' +6.0\u03c3, 'o' +5.9\u03c3; L2 0.3647 rank 10); write top+ 'icot' +5.1\u03c3 vs top- ' View' -4.9\u03c3; assumed negative activation so the ' View'/' formed'/'ains' side rises; target \u03c3 all mildly negative (' Paris' -0.75\u03c3) so losses are small.",
+  "XNE06": "Layer-18 'expansion' neuron: gate reads '\u5c55\u5f00' +12.9\u03c3, write suppresses ' expansion' -17.1\u03c3 and ' expand' -16.3\u03c3; assumed negative activation promotes the expand family; ' Shakespeare' -1.80\u03c3 flips to slight gain, ' Paris' +1.30\u03c3 to a loss.",
+  "XNE07": "Layer-23 Arabic/Cyrillic-script neuron: gate reads ' \u0628' +8.1\u03c3, up reads ' \u062a' -8.1\u03c3, down column has a 0.1216 outlier at index 829; write top+ ' \u05d4' +5.4\u03c3, ' \u0430' +5.2\u03c3; assumed positive activation; target ' +' -1.50\u03c3 and ' are' -1.12\u03c3 fall.",
+  "XNE08": "Layer-18 neuron reading ' ion' +5.5\u03c3, ' hydrogen' +4.8\u03c3, 'npm' +4.6\u03c3; write suppresses ' Lib' -5.9\u03c3, ' lib' -5.3\u03c3; assumed negative activation promotes lib/spec tokens; ' Paris' +1.95\u03c3 becomes a loss.",
+  "XNE09": "Layer-20 ordinal/sequence neuron (L2 0.3595 rank 15): write promotes ' fourth' +5.7\u03c3, '4' +5.6\u03c3, '\u7b2c\u4e94' +5.1\u03c3 and prompt targets ' five' +2.99\u03c3, ' Thursday' +3.02\u03c3; positive activation expected on counting prompts P1/P3, ' oxygen' -1.47\u03c3 falls.",
+  "XNE10": "Layer-21 'connect' neuron: gate reads '\u8fde\u63a5' +13.1\u03c3 and ' connect' +12.8\u03c3, up reads ' connect' +7.3\u03c3, write promotes ' con' +5.8\u03c3; assumed positive activation; targets ' Paris' -1.96\u03c3, ' +' -1.89\u03c3, ' five' -1.75\u03c3 fall.",
+  "XNE11": "Layer-12 number/position neuron (weak column L2 0.2122, rank 3189): gate reads ' position' +4.9\u03c3 and ' count' +4.5\u03c3, write promotes ' number' +5.3\u03c3; assumed positive activation with small effects; ' are' +1.27\u03c3 roughly flat.",
+  "XNE12": "Layer-23 suffix neuron: write suppresses 'as' -12.0\u03c3 and 'os' -10.8\u03c3, gate has massive-dimension weights (+0.1885 at 481, -0.2012 at 679) and reads 'ov'/'o'/'es' negatively; assumed negative activation promotes 'as'/'os'/'es' fragments; ' are' +1.07\u03c3 falls.",
+  "XNE13": "Layer-17 string-conversion neuron (L2 0.3313 rank 49): write promotes 'str' +7.7\u03c3 and '(str' +7.5\u03c3, up reads ' integer' +5.7\u03c3, gate reads ' string' +4.4\u03c3; assumed positive activation; ' are' -1.33\u03c3 and ' Paris' -0.77\u03c3 fall.",
+  "XNE14": "Layer-20 blood neuron: gate reads ' serum' +6.2\u03c3 and ' blood' +5.0\u03c3, write suppresses '\u8840' -13.4\u03c3 and 'blood' -12.7\u03c3; assumed negative activation promotes blood tokens; ' +' -2.05\u03c3 flips to a small gain, ' Paris' +1.36\u03c3 to a loss.",
+  "XNE15": "Layer-14 neuron with the strongest column in its layer (L2 0.4236, rank 5); gate reads punctuation '\u00b7' +5.5\u03c3, '/' +5.5\u03c3, '\\n' +5.1\u03c3 so it may fire after ':' and ','; write top+ '\u7b56' +5.1\u03c3, '\u8bf4\u6765' +5.0\u03c3; ' are' +1.77\u03c3 gets a small gain under assumed positive activation."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA036|P0": {
+   "dlogp": 1.0,
+   "p_flip": 0.12
+  },
+  "LA036|P1": {
+   "dlogp": 0.4,
+   "p_flip": 0.2
+  },
+  "LA036|P2": {
+   "dlogp": 0.5,
+   "p_flip": 0.2
+  },
+  "LA036|P3": {
+   "dlogp": 0.3,
+   "p_flip": 0.25
+  },
+  "LA036|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.35
+  },
+  "LA036|P5": {
+   "dlogp": 0.7,
+   "p_flip": 0.06
+  },
+  "LA036|P6": {
+   "dlogp": 0.8,
+   "p_flip": 0.04
+  },
+  "LA036|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.5
+  },
+  "LA037|P0": {
+   "dlogp": 0.8,
+   "p_flip": 0.15
+  },
+  "LA037|P1": {
+   "dlogp": 0.4,
+   "p_flip": 0.25
+  },
+  "LA037|P2": {
+   "dlogp": 0.6,
+   "p_flip": 0.3
+  },
+  "LA037|P3": {
+   "dlogp": 0.3,
+   "p_flip": 0.3
+  },
+  "LA037|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.4
+  },
+  "LA037|P5": {
+   "dlogp": 0.7,
+   "p_flip": 0.1
+  },
+  "LA037|P6": {
+   "dlogp": 0.9,
+   "p_flip": 0.08
+  },
+  "LA037|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.5
+  },
+  "LA038|P0": {
+   "dlogp": 0.5,
+   "p_flip": 0.06
+  },
+  "LA038|P1": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "LA038|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.2
+  },
+  "LA038|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.15
+  },
+  "LA038|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.25
+  },
+  "LA038|P5": {
+   "dlogp": 0.4,
+   "p_flip": 0.03
+  },
+  "LA038|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.02
+  },
+  "LA038|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.35
+  },
+  "LA039|P0": {
+   "dlogp": 0.55,
+   "p_flip": 0.07
+  },
+  "LA039|P1": {
+   "dlogp": 0.25,
+   "p_flip": 0.13
+  },
+  "LA039|P2": {
+   "dlogp": 0.35,
+   "p_flip": 0.2
+  },
+  "LA039|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.16
+  },
+  "LA039|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.26
+  },
+  "LA039|P5": {
+   "dlogp": 0.45,
+   "p_flip": 0.03
+  },
+  "LA039|P6": {
+   "dlogp": 0.5,
+   "p_flip": 0.02
+  },
+  "LA039|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.35
+  },
+  "LA040|P0": {
+   "dlogp": 0.2,
+   "p_flip": 0.02
+  },
+  "LA040|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.05
+  },
+  "LA040|P2": {
+   "dlogp": 0.15,
+   "p_flip": 0.1
+  },
+  "LA040|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.06
+  },
+  "LA040|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.12
+  },
+  "LA040|P5": {
+   "dlogp": 0.2,
+   "p_flip": 0.01
+  },
+  "LA040|P6": {
+   "dlogp": 0.25,
+   "p_flip": 0.01
+  },
+  "LA040|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.2
+  },
+  "LA041|P0": {
+   "dlogp": 0.4,
+   "p_flip": 0.05
+  },
+  "LA041|P1": {
+   "dlogp": 0.2,
+   "p_flip": 0.1
+  },
+  "LA041|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.15
+  },
+  "LA041|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.12
+  },
+  "LA041|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.2
+  },
+  "LA041|P5": {
+   "dlogp": 0.3,
+   "p_flip": 0.03
+  },
+  "LA041|P6": {
+   "dlogp": 0.4,
+   "p_flip": 0.02
+  },
+  "LA041|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.3
+  },
+  "LA042|P0": {
+   "dlogp": 0.2,
+   "p_flip": 0.03
+  },
+  "LA042|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.06
+  },
+  "LA042|P2": {
+   "dlogp": 0.15,
+   "p_flip": 0.1
+  },
+  "LA042|P3": {
+   "dlogp": 0.08,
+   "p_flip": 0.07
+  },
+  "LA042|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.13
+  },
+  "LA042|P5": {
+   "dlogp": 0.2,
+   "p_flip": 0.01
+  },
+  "LA042|P6": {
+   "dlogp": 0.25,
+   "p_flip": 0.01
+  },
+  "LA042|P7": {
+   "dlogp": -0.08,
+   "p_flip": 0.2
+  },
+  "LA043|P0": {
+   "dlogp": 0.5,
+   "p_flip": 0.06
+  },
+  "LA043|P1": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "LA043|P2": {
+   "dlogp": 0.3,
+   "p_flip": 0.15
+  },
+  "LA043|P3": {
+   "dlogp": 0.15,
+   "p_flip": 0.15
+  },
+  "LA043|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.25
+  },
+  "LA043|P5": {
+   "dlogp": 0.35,
+   "p_flip": 0.03
+  },
+  "LA043|P6": {
+   "dlogp": 0.45,
+   "p_flip": 0.02
+  },
+  "LA043|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.3
+  },
+  "LA044|P0": {
+   "dlogp": 0.7,
+   "p_flip": 0.1
+  },
+  "LA044|P1": {
+   "dlogp": 0.3,
+   "p_flip": 0.2
+  },
+  "LA044|P2": {
+   "dlogp": 0.5,
+   "p_flip": 0.25
+  },
+  "LA044|P3": {
+   "dlogp": 0.25,
+   "p_flip": 0.25
+  },
+  "LA044|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.35
+  },
+  "LA044|P5": {
+   "dlogp": 0.6,
+   "p_flip": 0.06
+  },
+  "LA044|P6": {
+   "dlogp": 0.7,
+   "p_flip": 0.04
+  },
+  "LA044|P7": {
+   "dlogp": -0.25,
+   "p_flip": 0.45
+  },
+  "LA045|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.03
+  },
+  "LA045|P1": {
+   "dlogp": 0.15,
+   "p_flip": 0.08
+  },
+  "LA045|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "LA045|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.1
+  },
+  "LA045|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.15
+  },
+  "LA045|P5": {
+   "dlogp": 0.25,
+   "p_flip": 0.02
+  },
+  "LA045|P6": {
+   "dlogp": 0.3,
+   "p_flip": 0.01
+  },
+  "LA045|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.25
+  },
+  "LA046|P0": {
+   "dlogp": 0.9,
+   "p_flip": 0.17
+  },
+  "LA046|P1": {
+   "dlogp": 0.45,
+   "p_flip": 0.27
+  },
+  "LA046|P2": {
+   "dlogp": 0.65,
+   "p_flip": 0.32
+  },
+  "LA046|P3": {
+   "dlogp": 0.3,
+   "p_flip": 0.32
+  },
+  "LA046|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.42
+  },
+  "LA046|P5": {
+   "dlogp": 0.75,
+   "p_flip": 0.11
+  },
+  "LA046|P6": {
+   "dlogp": 1.0,
+   "p_flip": 0.09
+  },
+  "LA046|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.52
+  },
+  "LA047|P0": {
+   "dlogp": 0.3,
+   "p_flip": 0.04
+  },
+  "LA047|P1": {
+   "dlogp": 0.15,
+   "p_flip": 0.08
+  },
+  "LA047|P2": {
+   "dlogp": 0.2,
+   "p_flip": 0.12
+  },
+  "LA047|P3": {
+   "dlogp": 0.1,
+   "p_flip": 0.1
+  },
+  "LA047|P4": {
+   "dlogp": -0.08,
+   "p_flip": 0.17
+  },
+  "LA047|P5": {
+   "dlogp": 0.25,
+   "p_flip": 0.02
+  },
+  "LA047|P6": {
+   "dlogp": 0.3,
+   "p_flip": 0.01
+  },
+  "LA047|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.25
+  }
+ },
+ "notes": {
+  "LA036": "Layer 19 o_proj norm 24.21 is the largest mixer output of any layer, so I rated this the strongest mixer skip; estimate, not computed.",
+  "LA037": "Early block with down_proj 15.77 and mixer_out 18.11 feeding every later layer, so high severity assumed.",
+  "LA038": "Mid-depth DeltaNet block with down_proj 15.55 and mixer_out 16.31, the lower range of the stack, so moderate severity.",
+  "LA039": "Mid-depth block with mixer_out 16.61 and down_proj 15.40, rated about the same as layer 9.",
+  "LA040": "out_proj norm 16.31 is among the smaller values and only the mixer is removed, so low severity.",
+  "LA041": "First full-attention layer, o_proj norm 17.63, moderate severity because it is the earliest long-range mixing.",
+  "LA042": "out_proj norm 17.10 in a DeltaNet layer with neighbouring mixers that may compensate, so low severity.",
+  "LA043": "Layer 15 o_proj norm 20.04 is the second-tier maximum among mixers, so moderate severity.",
+  "LA044": "Late-ish block with post-norm gain mean +1.304 and down_proj 16.37, top column 2949:0.470 stands out, so fairly high severity.",
+  "LA045": "MLP-only skip, down_proj norm 15.35, moderate-low severity.",
+  "LA046": "Earliest skipped block, mixer_out 18.34 is the largest among DeltaNet layers, so highest severity along with layer 2.",
+  "LA047": "Layer 11 has the smallest mixer_in 28.90 and o_proj 16.86, moderate-low severity."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA24|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA24|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA24|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA24|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "LA24|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA24|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "LA24|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA24|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.3
+  },
+  "LA25|P0": {
+   "dlogp": -4.0,
+   "p_flip": 0.6
+  },
+  "LA25|P1": {
+   "dlogp": -4.0,
+   "p_flip": 0.65
+  },
+  "LA25|P2": {
+   "dlogp": -3.0,
+   "p_flip": 0.65
+  },
+  "LA25|P3": {
+   "dlogp": -3.5,
+   "p_flip": 0.7
+  },
+  "LA25|P4": {
+   "dlogp": -3.0,
+   "p_flip": 0.7
+  },
+  "LA25|P5": {
+   "dlogp": -3.5,
+   "p_flip": 0.5
+  },
+  "LA25|P6": {
+   "dlogp": -3.0,
+   "p_flip": 0.4
+  },
+  "LA25|P7": {
+   "dlogp": -2.0,
+   "p_flip": 0.8
+  },
+  "LA26|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA26|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.12
+  },
+  "LA26|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.14
+  },
+  "LA26|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "LA26|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA26|P5": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "LA26|P6": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA26|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.3
+  },
+  "LA27|P0": {
+   "dlogp": -0.7,
+   "p_flip": 0.12
+  },
+  "LA27|P1": {
+   "dlogp": -0.6,
+   "p_flip": 0.14
+  },
+  "LA27|P2": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "LA27|P3": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA27|P4": {
+   "dlogp": -1.0,
+   "p_flip": 0.28
+  },
+  "LA27|P5": {
+   "dlogp": -0.6,
+   "p_flip": 0.08
+  },
+  "LA27|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.04
+  },
+  "LA27|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.32
+  },
+  "LA28|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA28|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.12
+  },
+  "LA28|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA28|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "LA28|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.2
+  },
+  "LA28|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.06
+  },
+  "LA28|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA28|P7": {
+   "dlogp": -0.4,
+   "p_flip": 0.3
+  },
+  "LA29|P0": {
+   "dlogp": -3.0,
+   "p_flip": 0.45
+  },
+  "LA29|P1": {
+   "dlogp": -3.0,
+   "p_flip": 0.5
+  },
+  "LA29|P2": {
+   "dlogp": -2.5,
+   "p_flip": 0.55
+  },
+  "LA29|P3": {
+   "dlogp": -2.5,
+   "p_flip": 0.6
+  },
+  "LA29|P4": {
+   "dlogp": -2.0,
+   "p_flip": 0.55
+  },
+  "LA29|P5": {
+   "dlogp": -2.0,
+   "p_flip": 0.35
+  },
+  "LA29|P6": {
+   "dlogp": -1.5,
+   "p_flip": 0.2
+  },
+  "LA29|P7": {
+   "dlogp": -1.5,
+   "p_flip": 0.7
+  },
+  "LA30|P0": {
+   "dlogp": -2.0,
+   "p_flip": 0.4
+  },
+  "LA30|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.4
+  },
+  "LA30|P2": {
+   "dlogp": -2.0,
+   "p_flip": 0.55
+  },
+  "LA30|P3": {
+   "dlogp": -1.5,
+   "p_flip": 0.5
+  },
+  "LA30|P4": {
+   "dlogp": -1.8,
+   "p_flip": 0.5
+  },
+  "LA30|P5": {
+   "dlogp": -1.5,
+   "p_flip": 0.3
+  },
+  "LA30|P6": {
+   "dlogp": -1.0,
+   "p_flip": 0.15
+  },
+  "LA30|P7": {
+   "dlogp": -1.0,
+   "p_flip": 0.6
+  },
+  "LA31|P0": {
+   "dlogp": -1.5,
+   "p_flip": 0.25
+  },
+  "LA31|P1": {
+   "dlogp": -1.5,
+   "p_flip": 0.3
+  },
+  "LA31|P2": {
+   "dlogp": -1.2,
+   "p_flip": 0.35
+  },
+  "LA31|P3": {
+   "dlogp": -1.3,
+   "p_flip": 0.4
+  },
+  "LA31|P4": {
+   "dlogp": -1.3,
+   "p_flip": 0.4
+  },
+  "LA31|P5": {
+   "dlogp": -1.0,
+   "p_flip": 0.18
+  },
+  "LA31|P6": {
+   "dlogp": -0.6,
+   "p_flip": 0.08
+  },
+  "LA31|P7": {
+   "dlogp": -0.8,
+   "p_flip": 0.55
+  },
+  "LA32|P0": {
+   "dlogp": -0.5,
+   "p_flip": 0.1
+  },
+  "LA32|P1": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA32|P2": {
+   "dlogp": -0.4,
+   "p_flip": 0.15
+  },
+  "LA32|P3": {
+   "dlogp": -0.5,
+   "p_flip": 0.18
+  },
+  "LA32|P4": {
+   "dlogp": -0.7,
+   "p_flip": 0.22
+  },
+  "LA32|P5": {
+   "dlogp": -0.4,
+   "p_flip": 0.06
+  },
+  "LA32|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.03
+  },
+  "LA32|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.3
+  },
+  "LA33|P0": {
+   "dlogp": -10.0,
+   "p_flip": 0.97
+  },
+  "LA33|P1": {
+   "dlogp": -9.0,
+   "p_flip": 0.97
+  },
+  "LA33|P2": {
+   "dlogp": -8.0,
+   "p_flip": 0.97
+  },
+  "LA33|P3": {
+   "dlogp": -8.0,
+   "p_flip": 0.97
+  },
+  "LA33|P4": {
+   "dlogp": -7.0,
+   "p_flip": 0.97
+  },
+  "LA33|P5": {
+   "dlogp": -10.0,
+   "p_flip": 0.95
+  },
+  "LA33|P6": {
+   "dlogp": -11.0,
+   "p_flip": 0.93
+  },
+  "LA33|P7": {
+   "dlogp": -5.0,
+   "p_flip": 0.98
+  },
+  "LA34|P0": {
+   "dlogp": -1.0,
+   "p_flip": 0.2
+  },
+  "LA34|P1": {
+   "dlogp": -1.2,
+   "p_flip": 0.25
+  },
+  "LA34|P2": {
+   "dlogp": -0.8,
+   "p_flip": 0.28
+  },
+  "LA34|P3": {
+   "dlogp": -1.0,
+   "p_flip": 0.32
+  },
+  "LA34|P4": {
+   "dlogp": -1.2,
+   "p_flip": 0.35
+  },
+  "LA34|P5": {
+   "dlogp": -0.8,
+   "p_flip": 0.12
+  },
+  "LA34|P6": {
+   "dlogp": -0.4,
+   "p_flip": 0.05
+  },
+  "LA34|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.45
+  },
+  "LA35|P0": {
+   "dlogp": -0.8,
+   "p_flip": 0.18
+  },
+  "LA35|P1": {
+   "dlogp": -0.7,
+   "p_flip": 0.2
+  },
+  "LA35|P2": {
+   "dlogp": -1.0,
+   "p_flip": 0.3
+  },
+  "LA35|P3": {
+   "dlogp": -0.7,
+   "p_flip": 0.25
+  },
+  "LA35|P4": {
+   "dlogp": -0.8,
+   "p_flip": 0.28
+  },
+  "LA35|P5": {
+   "dlogp": -0.5,
+   "p_flip": 0.12
+  },
+  "LA35|P6": {
+   "dlogp": -0.3,
+   "p_flip": 0.05
+  },
+  "LA35|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.4
+  }
+ },
+ "notes": {
+  "LA24": "Mid-depth DeltaNet mixer with modest out-proj top singular value 2.09 and in_norm gain mean 1.422; its SV0 target alignments are weak (|\u03c3|<0.75), so expect small uniform damage scaled by each prompt's top-1 margin.",
+  "LA25": "Layer-0 mixer has the largest out-proj spectrum among DeltaNet layers (top SVs 2.48, 2.03, 1.71) and extreme dt_bias values (+8.375, -13.0625), so removing all layer-0 token mixing should badly degrade every downstream layer without fully destroying the model since the layer-0 MLP remains.",
+  "LA26": "Layer-21 mixer has a flat out-proj spectrum (top SV only 1.42) despite a high in_norm gain mean of 1.722, suggesting distributed, modest late-layer contributions; small negative dlogp, P6 near zero.",
+  "LA27": "Layer-14 MLP (down_proj top SV 1.39) hosts neuron 1438 whose write direction is anti-' Par'/' Bar' (P0/P4 ' Paris' -2.21\u03c3), suggesting this MLP touches the Paris prediction, so P4 (margin only 0.469 vs 0.071) gets the largest hit.",
+  "LA28": "Layer-21 MLP contains strong number neurons: 3384 is anti-' five' (-5.61\u03c3 on P1) and 2126 is pro-'2'/anti-'three'; a late anti-five neuron may act as a calibration suppressor, so P1 damage is set smaller than the other prompts.",
+  "LA29": "Layer 3 is the first full-attention layer (mixer_in norm 40.50, out-proj top SV 2.02, down_proj top SV 1.46); skipping the whole block removes the earliest global token mixing, so sequence-pattern prompts P0/P1/P3 and fragile P7 suffer most.",
+  "LA30": "Last block: out-proj has the largest spectrum of any layer (top SVs 2.69, 2.18, 2.14, 2.09) with SV0 hitting P2 ' +' at -3.55\u03c3, and the MLP has the largest gate_proj norm 36.18 with anti-five neuron 3051 (-6.47\u03c3 on P1); removing it shifts final logits substantially, especially for P2 and low-margin P7.",
+  "LA31": "Layer-5 DeltaNet block with down_proj dominated by one direction (top SV 1.57 vs 0.97 next) and out-proj SV0 aligned negatively with P0/P4/P5 targets (-1.18\u03c3, -1.50\u03c3); an early full block removal causes moderate damage across prompts.",
+  "LA32": "Layer-17 MLP (down_proj top SV 1.17) features numeric neurons 2886/2563 (anti-'3'/'4', pro-'9') and 'File'-suppressing neuron 3455, all with P0/P4 ' Paris' at -2.4\u03c3 to -2.7\u03c3; expect modest degradation, largest for the low-margin P4.",
+  "LA33": "Skipping all of layer 0 (mixer plus MLP, in_norm gain mean 1.238, down_proj top SV 1.77 far above the next 1.00) leaves only raw embeddings for every later layer; this is catastrophic, so dlogp is near the floor and flips are near-certain for all prompts.",
+  "LA34": "Layer-18 block has the highest in_norm gain mean (1.732) and largest mixer_in norm among DeltaNets (58.91), and its down_proj SV1 is a strong ' a' vs ' the' axis (-10.1\u03c3 on 'the') with neuron 2028 at -2.73\u03c3 on ' five'; late block removal yields moderate damage, more for P1/P4.",
+  "LA35": "Layer-23 attention alone: out-proj SV1 is a single-letter-token direction (' t' +8.1\u03c3) with P7 ' are' at +3.35\u03c3 and P1 ' five' at +2.36\u03c3, while SV0 is anti-operator (P2 ' +' -3.55\u03c3); expect moderate hits with P2 and P7 most at risk."
+ }
+}

@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "LA12|P0": {
+   "dlogp": -0.2,
+   "p_flip": 0.04
+  },
+  "LA12|P1": {
+   "dlogp": -0.2,
+   "p_flip": 0.07
+  },
+  "LA12|P2": {
+   "dlogp": -0.2,
+   "p_flip": 0.09
+  },
+  "LA12|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA12|P4": {
+   "dlogp": -0.6,
+   "p_flip": 0.22
+  },
+  "LA12|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA12|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.02
+  },
+  "LA12|P7": {
+   "dlogp": -0.55,
+   "p_flip": 0.3
+  },
+  "LA13|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "LA13|P1": {
+   "dlogp": -0.12,
+   "p_flip": 0.03
+  },
+  "LA13|P2": {
+   "dlogp": 0.06,
+   "p_flip": 0.03
+  },
+  "LA13|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.04
+  },
+  "LA13|P4": {
+   "dlogp": -0.35,
+   "p_flip": 0.1
+  },
+  "LA13|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA13|P6": {
+   "dlogp": -0.2,
+   "p_flip": 0.01
+  },
+  "LA13|P7": {
+   "dlogp": -0.12,
+   "p_flip": 0.1
+  },
+  "LA14|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA14|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "LA14|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "LA14|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.07
+  },
+  "LA14|P4": {
+   "dlogp": -0.5,
+   "p_flip": 0.16
+  },
+  "LA14|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA14|P6": {
+   "dlogp": -0.25,
+   "p_flip": 0.02
+  },
+  "LA14|P7": {
+   "dlogp": -0.3,
+   "p_flip": 0.2
+  },
+  "LA15|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "LA15|P1": {
+   "dlogp": 0.05,
+   "p_flip": 0.02
+  },
+  "LA15|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.02
+  },
+  "LA15|P3": {
+   "dlogp": -0.1,
+   "p_flip": 0.04
+  },
+  "LA15|P4": {
+   "dlogp": 0.2,
+   "p_flip": 0.05
+  },
+  "LA15|P5": {
+   "dlogp": -0.15,
+   "p_flip": 0.02
+  },
+  "LA15|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA15|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.09
+  },
+  "LA16|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA16|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "LA16|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "LA16|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "LA16|P4": {
+   "dlogp": 0.1,
+   "p_flip": 0.06
+  },
+  "LA16|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA16|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA16|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.09
+  },
+  "LA17|P0": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "LA17|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "LA17|P2": {
+   "dlogp": -0.05,
+   "p_flip": 0.03
+  },
+  "LA17|P3": {
+   "dlogp": 0.05,
+   "p_flip": 0.04
+  },
+  "LA17|P4": {
+   "dlogp": -0.25,
+   "p_flip": 0.08
+  },
+  "LA17|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA17|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA17|P7": {
+   "dlogp": -0.22,
+   "p_flip": 0.11
+  },
+  "LA18|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA18|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "LA18|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "LA18|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "LA18|P4": {
+   "dlogp": -0.1,
+   "p_flip": 0.05
+  },
+  "LA18|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "LA18|P6": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "LA18|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.07
+  },
+  "LA19|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA19|P1": {
+   "dlogp": -0.08,
+   "p_flip": 0.03
+  },
+  "LA19|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "LA19|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "LA19|P4": {
+   "dlogp": 0.2,
+   "p_flip": 0.08
+  },
+  "LA19|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA19|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA19|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.13
+  },
+  "LA20|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA20|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "LA20|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "LA20|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "LA20|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA20|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA20|P6": {
+   "dlogp": -0.1,
+   "p_flip": 0.01
+  },
+  "LA20|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.11
+  },
+  "LA21|P0": {
+   "dlogp": -0.15,
+   "p_flip": 0.03
+  },
+  "LA21|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "LA21|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "LA21|P3": {
+   "dlogp": -0.2,
+   "p_flip": 0.06
+  },
+  "LA21|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.07
+  },
+  "LA21|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA21|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "LA21|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.1
+  },
+  "LA22|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA22|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.03
+  },
+  "LA22|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "LA22|P3": {
+   "dlogp": -0.15,
+   "p_flip": 0.06
+  },
+  "LA22|P4": {
+   "dlogp": -0.3,
+   "p_flip": 0.1
+  },
+  "LA22|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "LA22|P6": {
+   "dlogp": -0.08,
+   "p_flip": 0.01
+  },
+  "LA22|P7": {
+   "dlogp": -0.15,
+   "p_flip": 0.11
+  },
+  "LA23|P0": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "LA23|P1": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "LA23|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "LA23|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "LA23|P4": {
+   "dlogp": -0.15,
+   "p_flip": 0.08
+  },
+  "LA23|P5": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA23|P6": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "LA23|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.09
+  }
+ },
+ "notes": {
+  "LA12": "Final-layer MLP writes directly into logits and usually sharpens the top token, so losses are largest here, concentrated on low-margin P4 and P7; no late-layer MLP feedback exists.",
+  "LA13": "Layer 20 block skip (LA06) gave P4 -0.56, P6 -0.35, P1/P7 -0.19 and slight gains on P2/P3; MLP-only scaled to roughly 60%.",
+  "LA14": "Late block skips (LA03 layer 17, LA06 layer 20) hurt P4, P7, P6 and P3 most; layer 22 block assumed similar, slightly smaller.",
+  "LA15": "Layer 7 block skip (LA05) gave P4 +0.49, P5 -0.34, P7 -0.32, P3 -0.21; attention likely carries most of that, so MLP-only gets about half.",
+  "LA16": "Mid-layer mixer skip at 14 (LA01) gave P0 -0.14, P4 +0.42, small elsewhere; layer 10 DeltaNet assumed similar but weaker, with P4 sign uncertain.",
+  "LA17": "Early mixer skip at layer 1 (LA08) hurt P4 -0.39 and P7 -0.30 and helped P3; layer 6 DeltaNet assumed to follow that pattern at reduced size.",
+  "LA18": "Nearby MLP skips at layers 8, 9, 12 (LA04, LA07, LA00) were all under 0.1 except P4; layer 10 MLP predicted near zero with mild P4 loss.",
+  "LA19": "Blocks 12 and 13 (LA09, LA11) gave P4 +0.3 to +0.4 and P7 about -0.2; layer 11 is full attention so in-context prompts P0 and P3 get extra loss.",
+  "LA20": "Layer 19 MLP sits between the broadly negative layer 17 and 20 block skips, so moderate losses with P4 largest.",
+  "LA21": "Between layer 14 mixer (P0 -0.14) and layer 17 block (P3 -0.60, P4 -0.82); layer 16 DeltaNet mixer predicted as a mild mix of both.",
+  "LA22": "Layer 18 MLP neighbors the negative layer 17 and 20 block skips; MLP-only share estimated at about a third of block effects.",
+  "LA23": "Layer 16 MLP near the layer 17 block skip, which hurt all prompts; MLP-only estimated at a quarter of those losses."
+ }
+}

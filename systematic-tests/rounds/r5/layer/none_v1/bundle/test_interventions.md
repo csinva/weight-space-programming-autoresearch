@@ -1,0 +1,13 @@
+# Edits to predict (each applied alone)
+- **LA060**: layer 15: skip the MLP sublayer
+- **LA061**: layer 2: skip the MLP sublayer
+- **LA062**: layer 4: skip the MLP sublayer
+- **LA063**: layer 4: skip the whole block (mixer and MLP)
+- **LA064**: layer 19: skip the whole block (mixer and MLP)
+- **LA065**: layer 11: skip the MLP sublayer
+- **LA066**: layer 6: skip the MLP sublayer
+- **LA067**: layer 2: skip the token mixer (attention / DeltaNet) sublayer
+- **LA068**: layer 10: skip the whole block (mixer and MLP)
+- **LA069**: layer 15: skip the whole block (mixer and MLP)
+- **LA070**: layer 3: skip the MLP sublayer
+- **LA071**: layer 22: skip the token mixer (attention / DeltaNet) sublayer

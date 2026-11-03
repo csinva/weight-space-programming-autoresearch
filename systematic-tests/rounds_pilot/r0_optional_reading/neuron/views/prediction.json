@@ -1,0 +1,402 @@
+{
+ "predictions": {
+  "NE00|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE00|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE00|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE00|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE00|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE00|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE00|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE00|P7": {
+   "dlogp": 0.02,
+   "p_flip": 0.03
+  },
+  "NE01|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE01|P1": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "NE01|P2": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE01|P3": {
+   "dlogp": -0.06,
+   "p_flip": 0.02
+  },
+  "NE01|P4": {
+   "dlogp": -0.05,
+   "p_flip": 0.02
+  },
+  "NE01|P5": {
+   "dlogp": -0.05,
+   "p_flip": 0.01
+  },
+  "NE01|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE01|P7": {
+   "dlogp": -0.1,
+   "p_flip": 0.06
+  },
+  "NE02|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE02|P1": {
+   "dlogp": -0.06,
+   "p_flip": 0.02
+  },
+  "NE02|P2": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE02|P3": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE02|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE02|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE02|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE02|P7": {
+   "dlogp": -0.06,
+   "p_flip": 0.04
+  },
+  "NE03|P0": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE03|P1": {
+   "dlogp": 0.1,
+   "p_flip": 0.01
+  },
+  "NE03|P2": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE03|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE03|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE03|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE03|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE03|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  },
+  "NE04|P0": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE04|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE04|P2": {
+   "dlogp": 0.02,
+   "p_flip": 0.02
+  },
+  "NE04|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE04|P4": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE04|P5": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE04|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE04|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.04
+  },
+  "NE05|P0": {
+   "dlogp": -0.03,
+   "p_flip": 0.01
+  },
+  "NE05|P1": {
+   "dlogp": -0.3,
+   "p_flip": 0.06
+  },
+  "NE05|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE05|P3": {
+   "dlogp": -0.3,
+   "p_flip": 0.07
+  },
+  "NE05|P4": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "NE05|P5": {
+   "dlogp": 0.02,
+   "p_flip": 0.01
+  },
+  "NE05|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE05|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.03
+  },
+  "NE06|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE06|P1": {
+   "dlogp": 0.02,
+   "p_flip": 0.01
+  },
+  "NE06|P2": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE06|P3": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE06|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE06|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE06|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE06|P7": {
+   "dlogp": -0.03,
+   "p_flip": 0.03
+  },
+  "NE07|P0": {
+   "dlogp": -0.1,
+   "p_flip": 0.03
+  },
+  "NE07|P1": {
+   "dlogp": -0.15,
+   "p_flip": 0.05
+  },
+  "NE07|P2": {
+   "dlogp": -0.12,
+   "p_flip": 0.05
+  },
+  "NE07|P3": {
+   "dlogp": -0.12,
+   "p_flip": 0.04
+  },
+  "NE07|P4": {
+   "dlogp": -0.2,
+   "p_flip": 0.08
+  },
+  "NE07|P5": {
+   "dlogp": -0.08,
+   "p_flip": 0.02
+  },
+  "NE07|P6": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE07|P7": {
+   "dlogp": -0.2,
+   "p_flip": 0.12
+  },
+  "NE08|P0": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE08|P1": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE08|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE08|P3": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE08|P4": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE08|P5": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE08|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE08|P7": {
+   "dlogp": -0.02,
+   "p_flip": 0.02
+  },
+  "NE09|P0": {
+   "dlogp": 0.03,
+   "p_flip": 0.01
+  },
+  "NE09|P1": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE09|P2": {
+   "dlogp": -0.03,
+   "p_flip": 0.02
+  },
+  "NE09|P3": {
+   "dlogp": -0.04,
+   "p_flip": 0.02
+  },
+  "NE09|P4": {
+   "dlogp": 0.03,
+   "p_flip": 0.03
+  },
+  "NE09|P5": {
+   "dlogp": -0.02,
+   "p_flip": 0.01
+  },
+  "NE09|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE09|P7": {
+   "dlogp": -0.05,
+   "p_flip": 0.05
+  },
+  "NE10|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE10|P1": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE10|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE10|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE10|P4": {
+   "dlogp": 0.01,
+   "p_flip": 0.01
+  },
+  "NE10|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE10|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE10|P7": {
+   "dlogp": -0.6,
+   "p_flip": 0.35
+  },
+  "NE11|P0": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P1": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P2": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P3": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P4": {
+   "dlogp": -0.01,
+   "p_flip": 0.01
+  },
+  "NE11|P5": {
+   "dlogp": 0.0,
+   "p_flip": 0.01
+  },
+  "NE11|P6": {
+   "dlogp": 0.0,
+   "p_flip": 0.0
+  },
+  "NE11|P7": {
+   "dlogp": 0.01,
+   "p_flip": 0.02
+  }
+ },
+ "notes": {
+  "NE00": "Large-norm L19 neuron but direct logit effects on all targets are weak (|\u03c3|<1.1), so removal should barely matter.",
+  "NE01": "Mid-layer x5 whose write direction is negative for P5/P7 targets (-2.6\u03c3/-2.8\u03c3), but its activation is likely small, so only mild drops are expected.",
+  "NE02": "Low-norm layer-1 neuron x5; direct effect -2.9\u03c3 on ' five' but small magnitude, so small effects.",
+  "NE03": "Directly suppresses ' five' (-6.4\u03c3), so zeroing should slightly raise P1; the firing sign is uncertain and other prompts are near zero.",
+  "NE04": "Mid-norm L10 neuron x5 with weak, mostly positive target projections; small effects.",
+  "NE05": "High-norm L20 ordinal/sequence neuron writing 'fourth'/'4' and boosting ' five' and ' Thursday' (~+3\u03c3); zeroing should lower P1/P3 moderately.",
+  "NE06": "Low-norm L20 neuron x5 with weak target projections; near zero.",
+  "NE07": "Rank-8-norm layer-0 neuron x5 may perturb downstream processing broadly; mild negative effects, largest on the low-confidence P4/P7.",
+  "NE08": "Very low-norm layer-2 neuron x5; negligible.",
+  "NE09": "Largest-norm L22 neuron, but its gate reads ':'/spaces negatively and its target projections are modest; small mixed effects.",
+  "NE10": "Plural-agreement neuron: the gate reads ' are' (+12.7\u03c3), the up row reads ' are'/'they' negatively and the down column writes ' are' at -13\u03c3, so its net effect promotes ' are' and zeroing should cut P7's ' are'.",
+  "NE11": "Knee/leg anatomy neuron unlikely to fire on these prompts; near zero."
+ }
+}

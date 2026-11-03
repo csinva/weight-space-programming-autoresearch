@@ -1,0 +1,1326 @@
+{
+ "predictions": {
+  "G00": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G01": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G02": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G03": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G04": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G05": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G06": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G07": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G08": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G09": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G10": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G11": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G12": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G13": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G14": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G15": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G16": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G17": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G18": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G19": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G20": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G21": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G22": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  },
+  "G23": {
+   "up": [
+    {
+     "tok": "\n",
+     "id": 198
+    },
+    {
+     "tok": " and",
+     "id": 321
+    },
+    {
+     "tok": ",",
+     "id": 11
+    },
+    {
+     "tok": " the",
+     "id": 279
+    },
+    {
+     "tok": " of",
+     "id": 314
+    },
+    {
+     "tok": "\n\n",
+     "id": null
+    },
+    {
+     "tok": " or",
+     "id": null
+    },
+    {
+     "tok": " etc",
+     "id": null
+    },
+    {
+     "tok": " ...",
+     "id": null
+    },
+    {
+     "tok": "<|im_end|>",
+     "id": null
+    }
+   ],
+   "dlogp": {
+    "P0": -0.2,
+    "P1": -0.3,
+    "P2": -0.2,
+    "P3": -0.3,
+    "P4": -0.4,
+    "P5": -0.15,
+    "P6": -0.05,
+    "P7": -0.4
+   }
+  }
+ },
+ "notes": {
+  "G00": "Assumed |n_d|~1 on all 8 prompts (no per-dimension data available); logit shift = 29*n_d*E[:,d] with E entries ~0.03 gives small target drops scaled by entropy; up = high-ranked unedited alternatives as a hedge.",
+  "G01": "Same prior as G00: |n_d|~1 on all prompts, sign unknown; no file evidence distinguishes dim 821.",
+  "G02": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 1007.",
+  "G03": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 252.",
+  "G04": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 958.",
+  "G05": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 47.",
+  "G06": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 1014.",
+  "G07": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 941.",
+  "G08": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 197.",
+  "G09": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 488.",
+  "G10": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 906.",
+  "G11": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 887.",
+  "G12": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 160.",
+  "G13": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 339.",
+  "G14": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 858.",
+  "G15": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 111.",
+  "G16": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 292.",
+  "G17": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 983.",
+  "G18": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 826.",
+  "G19": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 864.",
+  "G20": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 82.",
+  "G21": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 602.",
+  "G22": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 928.",
+  "G23": "Same prior as G00: |n_d|~1 on all prompts; no evidence specific to dim 869."
+ }
+}
