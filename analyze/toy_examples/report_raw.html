@@ -47,6 +47,9 @@
   .note { color:var(--muted); font-size:13px; margin:6px 0 0; }
   footer { color:var(--muted); font-size:12px; margin-top:60px; border-top:1px solid var(--line); padding-top:18px; }
   code { background:#f1f5f9; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .defs p { font-size:14.5px; margin:0 0 12px; max-width:900px; }
+  .defs details summary { cursor:pointer; margin:6px 0; }
+  .todo { background:#fef3c7; color:#92400e; padding:1px 6px; border-radius:4px; font-weight:600; }
 </style>
 </head>
 <body>
@@ -56,6 +59,47 @@
     <p class="sub">Autonomous AI research that writes transformer weights directly (Weight-Space Programming). Each run iteratively
       proposes weight-space programs; below, every point is one program, numbered in the order it was tried.</p>
   </header>
+
+  <section class="defs" id="setup">
+    <h2>Setup</h2>
+    <p><b>What was done.</b> For each of 13 tasks with a known algorithm or a known dataset, one autonomous coding-agent run was asked to set
+      every weight of a small transformer by hand, with no training, so that the transformer solves the task by generating the answer token by token.
+      Each run (May 15, 2026) repeatedly edited the weights, evaluated them, and logged the result; this page shows all 959 logged attempts
+      (addition-five-digits 4, boolean-circuit-5-bits 10, digit-counting-10 13, linear-interpolation-two-points 5, multiplication-five-digits 4, parity-upto10-bits 4, sort-five-digits 6, decimal-to-binary-8bit 20, gcd-three-digits 21, word-reversal-3x3 25, nli-snli 388, paraphrase-mrpc 309, sentiment-sst2 150).
+      An attempt is one version of the weight-writing code (a <i>weight-space program</i>) and its evaluation.</p>
+    <p><b>Agent.</b> Claude, model version <span class='todo'>[not recorded in the repository; fill in]</span>, thinking effort <span class='todo'>[not recorded in the repository; fill in]</span>, run as an autonomous coding agent through the GitHub Copilot CLI
+      (<code>copilot --autopilot --yolo</code>, as in the repository's launch instructions), prompted with "Read and follow the instructions in
+      <code>evolve/program.md</code>". The agent ran without human intervention and was told not to stop (at least 20 attempts, and to keep simplifying after reaching 100%).</p>
+    <p><b>Network.</b> A decoder-only (GPT-style) transformer defined in <code>interpretable_transformer.py</code>: learned token and position
+      embeddings, a stack of pre-LayerNorm blocks (causal multi-head self-attention and a ReLU MLP, each with a residual connection), a final LayerNorm and a
+      linear output head over a character-level vocabulary specific to each task (4 to 34 symbols). The starting configuration is 3 layers, width 64,
+      4 heads and MLP width 256; the agent may change the architecture, depth, width, number of heads and MLP width. All parameters are set inside
+      <code>write_weights(model, task)</code>. Parameter count is <code>sum(p.numel() for p in model.parameters())</code>.</p>
+    <p><b>Rules given to the agent</b> (<code>evolve/program.md</code>). Allowed: editing anything in its copy of
+      <code>interpretable_transformer.py</code> except the evaluation code in the main block, including the architecture and hard-coded constants,
+      arrays, hand-built attention circuits and lookup tables. Not allowed: any training (gradient descent, optimizer steps, fitting loops,
+      backpropagation), computing the task output with Python functions or libraries outside the transformer, using pretrained weights, and
+      modifying the shared task and evaluation code. Goal: maximize accuracy; all else equal, prefer more interpretable solutions, with
+      parameter count as a suggested proxy.</p>
+    <p><b>What the harness fixes in code and what is only an instruction.</b> Each run works in its own folder (<code>runs/&lt;task&gt;-may15-run&lt;k&gt;</code>)
+      with a private copy of <code>interpretable_transformer.py</code>. The task definitions and evaluation function (<code>src/</code>) and the
+      instructions are symlinks to the shared <code>evolve/</code> folder, so the scoring code is the same for every run. The rules above (no training,
+      no outside computation, no pretrained weights, no edits to the evaluation code or the symlinked files) are instructions to the agent; they are not
+      checked automatically, and compliance was not audited by code.</p>
+    <p><b>Evaluation.</b> Running <code>uv run interpretable_transformer.py --task &lt;task&gt;</code> builds the network, generates the answer greedily
+      (argmax at each step) for a fixed number of answer tokens, and scores <b>accuracy</b>: the fraction of examples whose generated answer string
+      exactly matches the target (no partial credit or numerical tolerance). Each attempt is scored on the same 200 examples, produced by the task's
+      generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the three real-world tasks the
+      examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI), lowercased, with characters
+      outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length.</p>
+    <p><b>Plots.</b> Each point is one attempt: x is its parameter count (log scale), y its accuracy, and the number and colour give the order in
+      which attempts were logged in <code>results/overall_results.csv</code>.</p>
+    <details open><summary><b>Tasks</b></summary>
+    <div class="scroll" style="max-height:none"><table class="mlist">
+      <thead><tr><th>task</th><th>group</th><th>definition</th><th>prompt</th><th>answer</th><th>example</th><th>vocab</th><th>attempts</th></tr></thead>
+      <tbody><tr><td><code>addition-five-digits</code></td><td>Easy</td><td>Add two 5-digit non-negative integers.</td><td><code>&quot;AAAAA+BBBBB=&quot;    (12 tokens; leading zeros allowed)</code></td><td><code>&quot;SSSSSS&quot;          (6 tokens; left-padded with zeros)</code></td><td>&quot;12345+67890=&quot; -&gt; &quot;080235&quot;  (since 12345+67890 = 80235)</td><td>12</td><td>4</td></tr><tr><td><code>boolean-circuit-5-bits</code></td><td>Easy</td><td>Evaluate a boolean expression of 5 bits joined by 4 binary operators.</td><td><code>&quot;BoBoBoBoB=&quot;   (10 tokens; 5 bits interleaved with 4 ops + &#x27;=&#x27;)</code></td><td><code>&quot;R&quot;            (1 token; &#x27;0&#x27; or &#x27;1&#x27;)</code></td><td>&quot;1&amp;0|1^1&amp;0=&quot; -&gt; &quot;0&quot;</td><td>6</td><td>10</td></tr><tr><td><code>digit-counting-10</code></td><td>Easy</td><td>Count occurrences of a query digit in a string of 10 digits.</td><td><code>&quot;DDDDDDDDDDQ=&quot;  (12 tokens: 10 digits + query digit + &#x27;=&#x27;)</code></td><td><code>&quot;CC&quot;            (2 tokens; count 00-10, left-padded)</code></td><td>&quot;31415926533=&quot; -&gt; &quot;02&quot;  (digit &#x27;3&#x27; appears twice in &quot;3141592653&quot;)</td><td>11</td><td>13</td></tr><tr><td><code>linear-interpolation-two-points</code></td><td>Easy</td><td>Linear interpolation given two integer (x, y) pairs and a query x.</td><td><code>&quot;X1,Y1;X2,Y2;XQ=&quot;   (12 tokens; y values are 2 digits)</code></td><td><code>&quot;YY&quot;                (2 tokens)</code></td><td>m=2, b=3 -&gt; &quot;1,05;4,11;7=&quot; -&gt; &quot;17&quot;  (y = 2*7+3 = 17)</td><td>13</td><td>5</td></tr><tr><td><code>multiplication-five-digits</code></td><td>Easy</td><td>Multiply two 5-digit non-negative integers.</td><td><code>&quot;AAAAA*BBBBB=&quot;    (12 tokens; leading zeros allowed)</code></td><td><code>&quot;PPPPPPPPPP&quot;      (10 tokens; left-padded with zeros)</code></td><td>&quot;12345*67890=&quot; -&gt; &quot;0838102050&quot;  (since 12345*67890 = 838102050)</td><td>12</td><td>4</td></tr><tr><td><code>parity-upto10-bits</code></td><td>Easy</td><td>Compute parity (XOR) of a variable-length bit string, length 1-10.</td><td><code>&quot;__BBBBBBBB=&quot;  (11 tokens; left-padded bits + &#x27;=&#x27;)</code></td><td><code>&quot;P&quot;            (1 token; &#x27;0&#x27; if even number of 1s, &#x27;1&#x27; if odd)</code></td><td>&quot;____1011010=&quot; -&gt; &quot;0&quot;  (four 1s -&gt; even parity)</td><td>4</td><td>4</td></tr><tr><td><code>sort-five-digits</code></td><td>Easy</td><td>Sort a string of 5 digits in ascending order.</td><td><code>&quot;DDDDD=&quot;     (6 tokens)</code></td><td><code>&quot;SSSSS&quot;      (5 tokens; sorted ascending)</code></td><td>&quot;31415=&quot; -&gt; &quot;11345&quot;</td><td>11</td><td>6</td></tr><tr><td><code>decimal-to-binary-8bit</code></td><td>Harder</td><td>Convert a decimal integer in [0, 255] to its 8-bit binary representation.</td><td><code>&quot;DDD=&quot;       (4 tokens; decimal, left-padded with zeros)</code></td><td><code>&quot;BBBBBBBB&quot;   (8 tokens; binary, MSB first, zero-padded to 8 bits)</code></td><td>&quot;042=&quot; -&gt; &quot;00101010&quot;  (42 in binary is 101010)</td><td>11</td><td>20</td></tr><tr><td><code>gcd-three-digits</code></td><td>Harder</td><td>Greatest common divisor of two 3-digit non-negative integers.</td><td><code>&quot;AAA,BBB=&quot;   (8 tokens)</code></td><td><code>&quot;GGG&quot;        (3 tokens; gcd, left-padded with zeros)</code></td><td>&quot;084,036=&quot; -&gt; &quot;012&quot;  (gcd(84, 36) = 12)</td><td>12</td><td>21</td></tr><tr><td><code>word-reversal-3x3</code></td><td>Harder</td><td>Reverse the order of 3 fixed-length words separated by underscores.</td><td><code>&quot;abc_def_ghi=&quot;   (12 tokens)</code></td><td><code>&quot;ghi_def_abc&quot;    (11 tokens)</code></td><td>&quot;cat_dog_pig=&quot; -&gt; &quot;pig_dog_cat&quot;</td><td>28</td><td>25</td></tr><tr><td><code>nli-snli</code></td><td>Real world</td><td>Three-way natural language inference on a small subset of SNLI.</td><td><code>&quot;&lt;premise padded&gt;|&lt;hypothesis padded&gt;=&quot;   (2*SENT_LEN + 2 tokens)</code></td><td><code>&quot;L&quot;                                       (1 token; &#x27;0&#x27;, &#x27;1&#x27;, &#x27;2&#x27;)</code></td><td></td><td>34</td><td>388</td></tr><tr><td><code>paraphrase-mrpc</code></td><td>Real world</td><td>Binary paraphrase detection on a small subset of GLUE/MRPC.</td><td><code>&quot;&lt;s1 padded&gt;|&lt;s2 padded&gt;=&quot;   (2*SENT_LEN + 2 tokens)</code></td><td><code>&quot;L&quot;                          (1 token; &#x27;0&#x27; or &#x27;1&#x27;)</code></td><td></td><td>33</td><td>309</td></tr><tr><td><code>sentiment-sst2</code></td><td>Real world</td><td>Binary sentiment classification on a small subset of SST-2.</td><td><code>&quot;&lt;sentence padded to 80 chars&gt;=&quot;   (81 tokens)</code></td><td><code>&quot;L&quot;                                (1 token; &#x27;0&#x27; or &#x27;1&#x27;)</code></td><td></td><td>32</td><td>150</td></tr></tbody></table></div></details>
+  </section>
+
 
   <h2>Per-task exploration</h2>
   <p class="note">Pick a task. The plot shows <b>accuracy vs. number of parameters</b>; points are numbered by the
@@ -72,7 +116,7 @@
   <div class="card"><div id="summaryPlot" style="width:100%;height:560px;"></div></div>
 
   <footer>
-    Generated from <code>runs/*/results/overall_results.csv</code> by <code>analyze/build_report.py</code>.
+    Generated from <code>runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
   </footer>
 </div>
 

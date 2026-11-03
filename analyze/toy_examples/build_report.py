@@ -35,6 +35,12 @@ CATEGORY = {
 }
 CAT_ORDER = ["Easy", "Harder", "Real world"]
 
+# The agent model and thinking effort for these runs are not recorded in the repository
+# (the Copilot CLI logs from May 2026 are gone). Fill these in before publishing.
+AGENT_MODEL = None
+AGENT_EFFORT = None
+RUN_DATE = "May 15, 2026"
+
 
 def fmt_params(p: float) -> str:
     if p >= 1e6:
@@ -123,6 +129,74 @@ def collect() -> list[dict]:
     return tasks
 
 
+def task_rows(tasks: list[dict]) -> str:
+    """One table row per task, from the task definitions in evolve/src/task.py."""
+    import inspect
+    import sys
+    sys.path.insert(0, str(ROOT / "evolve"))
+    from src.task import TASK_REGISTRY
+    n_attempts = {t["task"]: len(t["methods"]) for t in tasks}
+    rows = []
+    for t in sorted(TASK_REGISTRY, key=lambda n: (CAT_ORDER.index(CATEGORY.get(n, "Real world")), n)):
+        cls = TASK_REGISTRY[t]
+        doc = [l.strip() for l in (inspect.getdoc(cls) or "").split("\n")]
+        fmt = {k: next((l.split(":", 1)[1].strip() for l in doc if l.lower().startswith(k + ":")), "") for k in ["prompt", "answer", "example"]}
+        rows.append(
+            f"<tr><td><code>{html.escape(t)}</code></td><td>{CATEGORY.get(t, '')}</td><td>{html.escape(doc[0])}</td>"
+            f"<td><code>{html.escape(fmt['prompt'])}</code></td><td><code>{html.escape(fmt['answer'])}</code></td>"
+            f"<td>{html.escape(fmt['example'])}</td><td>{len(cls.vocab)}</td><td>{n_attempts.get(t, 0)}</td></tr>")
+    return "".join(rows)
+
+
+def definitions(tasks: list[dict]) -> str:
+    """Precise description of the setup, shown at the top of the report."""
+    n_att = sum(len(t["methods"]) for t in tasks)
+    todo = "<span class='todo'>[not recorded in the repository; fill in]</span>"
+    model = html.escape(AGENT_MODEL) if AGENT_MODEL else todo
+    effort = html.escape(AGENT_EFFORT) if AGENT_EFFORT else todo
+    return f"""
+  <section class="defs" id="setup">
+    <h2>Setup</h2>
+    <p><b>What was done.</b> For each of {len(tasks)} tasks with a known algorithm or a known dataset, one autonomous coding-agent run was asked to set
+      every weight of a small transformer by hand, with no training, so that the transformer solves the task by generating the answer token by token.
+      Each run ({RUN_DATE}) repeatedly edited the weights, evaluated them, and logged the result; this page shows all {n_att} logged attempts
+      ({", ".join(f"{t['task']} {len(t['methods'])}" for t in tasks)}).
+      An attempt is one version of the weight-writing code (a <i>weight-space program</i>) and its evaluation.</p>
+    <p><b>Agent.</b> Claude, model version {model}, thinking effort {effort}, run as an autonomous coding agent through the GitHub Copilot CLI
+      (<code>copilot --autopilot --yolo</code>, as in the repository's launch instructions), prompted with "Read and follow the instructions in
+      <code>evolve/program.md</code>". The agent ran without human intervention and was told not to stop (at least 20 attempts, and to keep simplifying after reaching 100%).</p>
+    <p><b>Network.</b> A decoder-only (GPT-style) transformer defined in <code>interpretable_transformer.py</code>: learned token and position
+      embeddings, a stack of pre-LayerNorm blocks (causal multi-head self-attention and a ReLU MLP, each with a residual connection), a final LayerNorm and a
+      linear output head over a character-level vocabulary specific to each task (4 to 34 symbols). The starting configuration is 3 layers, width 64,
+      4 heads and MLP width 256; the agent may change the architecture, depth, width, number of heads and MLP width. All parameters are set inside
+      <code>write_weights(model, task)</code>. Parameter count is <code>sum(p.numel() for p in model.parameters())</code>.</p>
+    <p><b>Rules given to the agent</b> (<code>evolve/program.md</code>). Allowed: editing anything in its copy of
+      <code>interpretable_transformer.py</code> except the evaluation code in the main block, including the architecture and hard-coded constants,
+      arrays, hand-built attention circuits and lookup tables. Not allowed: any training (gradient descent, optimizer steps, fitting loops,
+      backpropagation), computing the task output with Python functions or libraries outside the transformer, using pretrained weights, and
+      modifying the shared task and evaluation code. Goal: maximize accuracy; all else equal, prefer more interpretable solutions, with
+      parameter count as a suggested proxy.</p>
+    <p><b>What the harness fixes in code and what is only an instruction.</b> Each run works in its own folder (<code>runs/&lt;task&gt;-may15-run&lt;k&gt;</code>)
+      with a private copy of <code>interpretable_transformer.py</code>. The task definitions and evaluation function (<code>src/</code>) and the
+      instructions are symlinks to the shared <code>evolve/</code> folder, so the scoring code is the same for every run. The rules above (no training,
+      no outside computation, no pretrained weights, no edits to the evaluation code or the symlinked files) are instructions to the agent; they are not
+      checked automatically, and compliance was not audited by code.</p>
+    <p><b>Evaluation.</b> Running <code>uv run interpretable_transformer.py --task &lt;task&gt;</code> builds the network, generates the answer greedily
+      (argmax at each step) for a fixed number of answer tokens, and scores <b>accuracy</b>: the fraction of examples whose generated answer string
+      exactly matches the target (no partial credit or numerical tolerance). Each attempt is scored on the same 200 examples, produced by the task's
+      generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the three real-world tasks the
+      examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI), lowercased, with characters
+      outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length.</p>
+    <p><b>Plots.</b> Each point is one attempt: x is its parameter count (log scale), y its accuracy, and the number and colour give the order in
+      which attempts were logged in <code>results/overall_results.csv</code>.</p>
+    <details open><summary><b>Tasks</b></summary>
+    <div class="scroll" style="max-height:none"><table class="mlist">
+      <thead><tr><th>task</th><th>group</th><th>definition</th><th>prompt</th><th>answer</th><th>example</th><th>vocab</th><th>attempts</th></tr></thead>
+      <tbody>{task_rows(tasks)}</tbody></table></div></details>
+  </section>
+"""
+
+
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,6 +246,9 @@ TEMPLATE = r"""<!DOCTYPE html>
   .note { color:var(--muted); font-size:13px; margin:6px 0 0; }
   footer { color:var(--muted); font-size:12px; margin-top:60px; border-top:1px solid var(--line); padding-top:18px; }
   code { background:#f1f5f9; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .defs p { font-size:14.5px; margin:0 0 12px; max-width:900px; }
+  .defs details summary { cursor:pointer; margin:6px 0; }
+  .todo { background:#fef3c7; color:#92400e; padding:1px 6px; border-radius:4px; font-weight:600; }
 </style>
 </head>
 <body>
@@ -181,6 +258,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     <p class="sub">Autonomous AI research that writes transformer weights directly (Weight-Space Programming). Each run iteratively
       proposes weight-space programs; below, every point is one program, numbered in the order it was tried.</p>
   </header>
+__DEFS__
 
   <h2>Per-task exploration</h2>
   <p class="note">Pick a task. The plot shows <b>accuracy vs. number of parameters</b>; points are numbered by the
@@ -197,7 +275,7 @@ TEMPLATE = r"""<!DOCTYPE html>
   <div class="card"><div id="summaryPlot" style="width:100%;height:560px;"></div></div>
 
   <footer>
-    Generated from <code>runs/*/results/overall_results.csv</code> by <code>analyze/build_report.py</code>.
+    Generated from <code>runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
   </footer>
 </div>
 
@@ -318,7 +396,7 @@ renderSummary();
 
 def main():
     tasks = collect()
-    OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(tasks)))
+    OUT.write_text(TEMPLATE.replace("__DEFS__", definitions(tasks)).replace("__DATA__", json.dumps(tasks)))
     n_methods = sum(len(t["methods"]) for t in tasks)
     print(f"Wrote {OUT} with {len(tasks)} tasks, {n_methods} circuits.")
 
