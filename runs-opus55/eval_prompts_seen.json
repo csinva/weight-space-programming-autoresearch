@@ -1,0 +1,34 @@
+{
+ "trec-coarse-opus55-s1": {
+  "eval_prompts_seen": 1,
+  "of": 200
+ },
+ "trec-coarse-opus55-s2": {
+  "eval_prompts_seen": 0,
+  "of": 200
+ },
+ "sentiment-sst2-opus55-s1": {
+  "eval_prompts_seen": 2,
+  "of": 200
+ },
+ "sentiment-sst2-opus55-s2": {
+  "eval_prompts_seen": 3,
+  "of": 200
+ },
+ "paraphrase-mrpc-opus55-s1": {
+  "eval_prompts_seen": 4,
+  "of": 200
+ },
+ "paraphrase-mrpc-opus55-s2": {
+  "eval_prompts_seen": 3,
+  "of": 200
+ },
+ "nli-snli-opus55-s1": {
+  "eval_prompts_seen": 4,
+  "of": 200
+ },
+ "nli-snli-opus55-s2": {
+  "eval_prompts_seen": 26,
+  "of": 200
+ }
+}

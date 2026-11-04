@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.0000,success,RandomInitInterpretable,1.58e+05,"Baseline: default architecture, no weight assignment (random init); used to inspect the task interface."
+date-normalization,0.9900,success,role-pointer-v1,5.44e+05,2 blocks: shift-register attention + conjunction MLP tags field terminators; output steps query roles and copy window digits.
+date-normalization,1.0000,success,role-pointer-v2-eq-null,5.44e+05,"role-pointer-v1 with the NULL register moved to the '=' token, whose 4-token window is always padding even for the longest 27-char dates."
+date-normalization,1.0000,success,role-pointer-v3-no-mlp2,5.34e+05,"Removes the unused MLP from block 2, so the second block is a pure attention lookup."
+date-normalization,0.0350,success,nibble-code-v1,5.37e+04,"Replaces one-hot tokens with a readable 14-dim code (digit nibble, letter index, punctuation flags) and nearest-code output decoding; d_model 248 -> 72."
+date-normalization,1.0000,success,nibble-code-v2,5.37e+04,"nibble-code-v1 with a +1 logit bias on output tokens, so digit 0 no longer ties with every unused token."
+date-normalization,1.0000,success,nibble-code-v3-null-is-step0,5.37e+04,"Drops the dedicated NULL slot: the step-0 position bit already marks '=', so idle heads key on it."
+date-normalization,1.0000,success,nibble-code-v4-dash-from-steps,5.37e+04,Drops the dedicated DASH slot: the unembedding reads the '-' logit straight from the step-4 and step-7 position bits.
+date-normalization,1.0000,success,nibble-code-v5-prompt-derived,4.85e+04,"Drops the PROMPT slot, computing it linearly as ON minus the step bits; d_model 72 -> 68."
+date-normalization,1.0000,success,nibble-code-v6-free-head-width,3.44e+04,"Decouples head width from d_model: block 1 heads are 13-dim and block 2 heads 8-dim, shrinking the attention matrices."
+date-normalization,1.0000,success,nibble-code-v7-key-val-widths,2.29e+04,Separates key and value widths per block: block 1 uses 2-dim keys (position circle) with 11-dim values; block 2 uses 4-dim role keys with 4-dim nibble values.
+date-normalization,1.0000,success,nibble-code-v8-no-sep,2.23e+04,"Removes the word-like SEP flag: the day rule becomes a digit followed by anything except a digit, slash, dot or padding; d_model 66."
+date-normalization,1.0000,success,nibble-code-v9-slash-key,2.21e+04,Replaces the first-slash neuron: every '/' is a MONTH key and the second-slash neuron cancels it; d_ff 18.
+date-normalization,1.0000,success,ascii-like-v1-shared-nibble,1.64e+04,Letters share the digit nibble (low 4 bits plus one high bit); trigram neurons replace the known letter bits with the month digits; d_model 54.
+date-normalization,1.0000,success,ascii-like-v2-b1-60,1.64e+04,Sharpness sweep: shift-register key scale B1 lowered from 200 to 60 (neighbour-position score gap about 12).
+date-normalization,0.8100,success,ascii-like-v3-b1-30,1.64e+04,"Sharpness sweep: B1 = 30 (neighbour-position score gap about 3), to find where shift-register leakage breaks the rules."
+date-normalization,1.0000,success,ascii-like-v4-period48-b30,1.64e+04,"Tightens the position circle from period 64 to 48 at B1 = 30, nearly doubling the gap between adjacent positions (about 5.5)."
+date-normalization,1.0000,success,ascii-like-v5-b2-30,1.64e+04,"Sharpness sweep: block 2 role query scale B2 lowered from 300 to 30, matching B1 (role score gap 15)."
+date-normalization,1.0000,success,hash-nibble-v1-mod16,1.55e+04,"Drops the letter high bit: letters are their alphabet index mod 16, testing whether month trigrams stay unambiguous; d_model 51."
+date-normalization,1.0000,success,hash-nibble-v2-year-3digits,1.52e+04,"YEAR rule now needs only three digits before a non-digit token, removing the offset-4 digit flag; d_model 50."
+date-normalization,0.9550,success,hash-nibble-v3-force-2bits,1.52e+04,"The yy century override only pushes the low two bits (+2/-2). Failed: it assumed offset 4 held the day's tens digit, but it holds the ones digit, whose high bits leak into the century."
+date-normalization,1.0000,success,hash-nibble-v4-no-on-slot,1.49e+04,Restores the 4-bit century override (offset 4 is the day's ones digit) and removes the ON slot via rule thresholds and a real head bias; d_model 49.
+date-normalization,0.9950,success,hash-nibble-v5-no-digit-guards,1.49e+04,"Removes the three is-digit guards from each trigram neuron, testing whether digit runs ever imitate a month's bit pattern."
+date-normalization,0.9950,success,hash-nibble-v6-one-guard,1.49e+04,"Keeps one is-digit guard per trigram neuron (offset 1), which blocks the digit collision found in v5 where years ending in 35 hashed to 'sep'."
+date-normalization,1.0000,success,hash-nibble-v7-offset2-guard,1.49e+04,"Moves the single trigram guard to offset 2, which vetoes both digit collisions found so far: '35_' as 'sep' and '1/2' as 'apr'."
+date-normalization,1.0000,success,hash-nibble-v8-b2-10,1.49e+04,"Sharpness sweep: B2 = 10 (role score gap 5 against about 40 other positions), to find the limit of the role lookup."
+date-normalization,0.4900,success,hash-nibble-v9-b1-22,1.49e+04,"Sharpness sweep: B1 = 22 on the period-48 circle (neighbour gap about 3), to compare with the failure at gap 3 on the period-64 circle."
+date-normalization,1.0000,success,hash-nibble-v10-b40-b20,1.49e+04,Round scales with margin above the failures at B1 = 22: B1 = 40 and B2 = 20. Base model for the ablation series.
+date-normalization,0.9100,success,ablate-yy,1.49e+04,"Ablation of hash-nibble-v10: disables the mm/dd/yy year rule, which should cost only that format's share."
+date-normalization,0.0900,success,ablate-year,1.49e+04,"Ablation of hash-nibble-v10: disables the four-digit year rule, which should break every format except mm/dd/yy."
+date-normalization,0.9300,success,ablate-dot-month,1.49e+04,"Ablation of hash-nibble-v10: disables the second-dot month rule, which should break only yyyy.mm.dd."
+date-normalization,0.7900,success,ablate-slash-day,1.49e+04,"Ablation of hash-nibble-v10: disables the second-slash rule, which should break both day and month across the two slash formats."
+date-normalization,0.9300,success,ablate-dot-day,1.49e+04,"Ablation of hash-nibble-v10: disables the yyyy.mm.dd end-of-string day rule, which should break only that format's day."
+date-normalization,0.2800,success,ablate-word-day,1.49e+04,"Ablation of hash-nibble-v10: disables the general day rule, which should break all six month-word formats but neither slash nor dotted dates."
+date-normalization,0.2800,success,ablate-months,1.49e+04,"Ablation of hash-nibble-v10: disables all 12 trigram neurons, which should break only the month field in the six month-word formats."
+date-normalization,0.5800,success,ablate-bos,1.49e+04,"Ablation of hash-nibble-v10: removes the BOS token, so offsets past the start of the string clamp onto token 0 and single-digit leading fields read a wrong tens digit. Cost more than predicted: clamped digits also trigger false YEAR tags."
+date-normalization,1.0000,success,ablate-causal-mask,1.49e+04,"Ablation of hash-nibble-v10 (BOS restored): removes the causal mask, testing whether the backward-looking circuit relies on it during prefix-only generation."
+date-normalization,1.0000,success,century-v1-derived-digit,1.33e+04,"Restores the causal mask. Derives the year's second digit from the low bit of the first (1 gives 9, 2 gives 0), dropping the offset-3 nibble; d_model 45."
+date-normalization,1.0000,success,century-v2-two-bits,1.27e+04,"Stores only the two low bits at offset 4, since the century digit is 1 or 2; the yy override then needs just those two bits; d_model 43."
+date-normalization,1.0000,success,veto-v1-minimal,1.27e+04,Shrinks the answer-step veto: none on YEAR (its only false tag comes after the year is written) and just two steps on the general day rule.
+date-normalization,1.0000,success,compass-v1-2d-role-keys,1.21e+04,"Block 2 keys shrink from 4 to 2 dims: YEAR, MONTH, DAY and NULL sit at the four compass points, so a mismatched role scores zero or below."
+date-normalization,1.0000,success,narrow-v1-emb-and-head,7.59e+03,"Narrows the tables to the slots they use: 8-dim token table, 12-dim position table, and a 6-input head; same computation, fewer unused zero parameters."
+date-normalization,0.5400,success,trigram-v1-positive-only,7.59e+03,"Trigram neurons keep only their positive inputs (bits that must be on), testing whether the 'must be off' inputs are needed."
+date-normalization,1.0000,success,century-v3-offset3-bit,6.77e+03,"Reads the century from one bit at offset 3: set for 19xx, clear for 20xx and for the '/' of mm/dd/yy, so yy needs no override and block 1 drops its fourth head; d_model 42."
+date-normalization,1.0000,success,shared-keys-v1,6.35e+03,"One key per token shared by all heads in a block: heads differ only in their query, removing duplicated key weights."
+date-normalization,1.0000,success,compass-v2-direct-slots,6.23e+03,"Rules write role directions straight into two key slots (east YEAR, north MONTH, west DAY), replacing three role slots; d_model 41."
+date-normalization,1.0000,success,sum-heads-v1,5.74e+03,"Block 2 sums its heads before W_o, since all four write the same output bits: one copy of the wiring instead of four."
+date-normalization,1.0000,success,circle-v1-period43,5.74e+03,"Position circle period equals the sequence length (43 with BOS): one point per position, no magic constant, and a wider gap between neighbours."
+date-normalization,1.0000,success,margin-b30-b10,5.74e+03,"Margin check on the fully reduced circuit: lowers B1 to 30 and B2 to 10 to see how close the chosen scales (40, 20) are to failure."
+date-normalization,1.0000,success,validate-100k,5.74e+03,"Final circuit (B1 = 40, B2 = 20) with the development check widened to 100,000 fresh dates over 20 unseen seeds, to catch rare hash collisions."
+date-normalization,1.0000,success,final-compass-pointer,5.74e+03,"Final clean circuit: 3-head shift register, 18 conjunction neurons tagging field terminators with compass directions, then a 4-head role lookup; d_model 41."

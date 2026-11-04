@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.0000,success,RandomInitInterpretable,1.58e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+date-normalization,0.9800,success,ptr_v1_d44,2.92e+04,"2-layer pointer circuit, no LayerNorm: Gaussian look-back heads, ReLU field-end tags, month base-27 bumps, tangent-line digit head."
+date-normalization,1.0000,success,ptr_v2_d44,2.92e+04,As ptr_v1 with the 19xx detector requiring all four look-back digits (fixes mm/d0/yy false century).
+date-normalization,1.0000,success,ptr_v3_defaults,2.92e+04,"Tag units rewritten as defaults+overrides: run-end=day, 4-digit=year, slash1/dot=month, padding=weak year/day. Fewer ReLUs and flags used."
+date-normalization,1.0000,success,ptr_v4_d36,2.13e+04,Dropped unused stream dims; '=' marker shared with step K0; century is a single 19xx bit read with two scales. d_model 36.
+date-normalization,1.0000,success,ptr_v5_noMLP2,1.82e+04,"ptr_v4 with the unused second-layer MLP removed: parse attention + MLP, then fetch attention only."
+date-normalization,1.0000,success,ptr_v6_look3,1.81e+04,"Only 3 look-back heads: the year's hundreds digit (9 or 0) alone gives the century, thousands = 2 - hundreds/9. No 19xx ReLU."
+date-normalization,1.0000,success,ptr_v7_bigram_d32,1.50e+04,"Months recognised from letters 2-3 only (bigram bump), with march's ambiguous 'ar' tagged weakly. Drops a letter dim; d_model 32."
+date-normalization,1.0000,success,ptr_v8_noHY,1.50e+04,Hyphen logit = 1000*(ONE - sum of digit-step flags): the hyphen needs no stream dim of its own.
+date-normalization,1.0000,success,ptr_v9_noOUT,1.50e+04,"Dropped the prompt/answer flag: only the two answer hyphens look like run ends, so the parser is gated by their steps K5, K8."
+date-normalization,1.0000,success,ptr_v10_ZS,1.50e+04,is-digit flags from 2 and 3 back merged into one counter ZS (year = Z1 + ZS == 3).
+date-normalization,1.0000,success,ptr_v11_circle,1.35e+04,Letters embedded on a circle so each month is one ReLU matching two template angles: d_ff 42 -> 18.
+date-normalization,1.0000,success,ptr_v12_overlayF,1.35e+04,"Prompt position flags i==1 and i<=2 overlaid on output-step dims K1, K2 (prompt and answer never interfere). 29 stream dims used."
+date-normalization,1.0000,success,ptr_v13_factored_d28,1.09e+04,"Answer step factored into field flag x digit flag; a head joins in only if its digit flag is on, via a louder '=' query. d_model 28."
+date-normalization,1.0000,success,ptr_v14_noK0,1.09e+04,"No dedicated '=' marker or thousands flag: '=' is US=2 (loudest padding) and thousands is FY minus H, T, O. 27 stream dims used."
+date-normalization,1.0000,success,ptr_v15_3heads,1.04e+04,"3 heads, d_model 27: the hundreds digit is computed autoregressively from the just-written thousands digit (18 - 9y) by one ReLU."
+date-normalization,1.0000,success,ptr_v16_sparse,4.44e+02,"Same circuit as ptr_v15, stored sparsely: only nonzero weights are parameters, so n_params is the true circuit size, not d_model^2 zeros."
+date-normalization,0.4100,success,ptr_v17_lookG5,4.44e+02,Gain sweep: look-back Gaussian sharpness lowered from 30 to 5 to find the margin of the position attention.
+date-normalization,1.0000,success,ptr_v18_lookG10,4.44e+02,"Gain sweep: look-back sharpness 10. At 5, neighbour leakage e^-5 breaks the narrow month templates; 10 should clear them."
+date-normalization,0.8900,success,ptr_v19_fetchG10,4.44e+02,Gain sweep: fetch sharpness lowered from 30 to 10 with look-back at 10.
+date-normalization,1.0000,success,ptr_v20_fetchG20,4.44e+02,"Gain sweep: fetch sharpness 20. At 10, weak tags (score 5) lost e^-5 to each of ~25 padding tokens; 20 gives score 10."
+date-normalization,0.0450,success,abl_u0_runend,4.39e+02,Ablation of ptr_v20: remove the 'any run end is a day' default unit.
+date-normalization,0.9300,success,abl_u1_year,4.37e+02,Ablation of ptr_v20: remove the 'three or more digits back is a YEAR' unit.
+date-normalization,1.0000,success,ptr_v21_dotyear,4.41e+02,"Ablation showed the year unit is only needed for yyyy.mm.dd (padding finds other years), so YEAR = dot with a digit 3 back. No digit-run counter."
+date-normalization,0.7950,success,abl_u2_slash,4.37e+02,Ablation of ptr_v21: remove the 'first slash ends the MONTH' unit.
+date-normalization,0.9300,success,abl_u3_dot,4.37e+02,Ablation of ptr_v21: remove the 'dot after a digit ends the MONTH' unit.
+date-normalization,0.0700,success,abl_u4_padding,4.37e+02,Ablation of ptr_v21: remove the weak 'padding after a digit' year/day unit.
+date-normalization,0.8500,success,abl_u5_tensfix,4.38e+02,"Ablation of ptr_v21: remove the unit that clears the tens slot at i=1, where there is no token 2 back."
+date-normalization,0.5650,success,abl_u6_hundreds,4.38e+02,"Ablation of ptr_v21: remove the autoregressive hundreds unit (18 - 9*thousands), so every hundreds digit reads as 0."
+date-normalization,1.0000,success,ptr_v22_alpha14,4.17e+02,"Circle holds only the 14 letters months actually use (others at the origin), tripling the template margin: threshold 1.95 vs nearest miss 1.90."
+date-normalization,0.6050,success,ptr_v23_lookG5_alpha14,4.17e+02,Retests look-back gain 5 (0.41 on the 26-letter circle) now that the month template margin is three times wider.
+date-normalization,1.0000,success,ptr_v24_lookG7,4.17e+02,"Look-back gain 7. At 5 month units fired but unsaturated, scaling fetched digits (8 became 5); e^-7 leakage should keep activation near 1."
+date-normalization,1.0000,success,ptr_v25_signedSEP,4.17e+02,"Slash and dot share one signed separator dim (+1/-1), and look-back gain returns to the safer 10. 26 stream dims used."
+date-normalization,1.0000,success,ptr_v26_hyphen2,4.17e+02,"Hyphen logit reduced from 1000 to 2: it only has to beat logit 1 of digit 0 at X=0, so the head needs no big constant."
+date-normalization,1.0000,success,ptr_v27_selfbonus,4.15e+02,"Tens fix moved from a ReLU into attention: at i=1 the 2-back head gets a self bonus and reads the separator, whose digit value is 0. 18 ReLUs."
+date-normalization,0.9450,success,abl_march_strong,4.15e+02,"Control on ptr_v27: march's 'ar' tag made full strength, so 'ar' ties with 'an'/'eb' in january and february."
+date-normalization,1.0000,success,ptr_v28_rotation,4.07e+02,"Look-back query is a rotation of a position circle (cos kernel) instead of a Gaussian in (1,i,i^2): 6 weights per head instead of 9."
+date-normalization,1.0000,success,ptr_v29_prunedV,4.02e+02,"W_v copies only the 7 look-back features that are read later, not all 12."
+date-normalization,1.0000,success,ptr_v30_promptPos,3.82e+02,"Position circle written only on prompt positions: answer tokens never read back, so their look-back attention can be uniform and unused."
+date-normalization,1.0000,success,ptr_v31_oneAnswer,3.51e+02,"The constant ONE is only written on answer steps, the only tokens whose query or logits use it."
+date-normalization,1.0000,success,ptr_v32_step0token,3.46e+02,"The thousands step is recognised from its own '=' token (US=2) rather than as FY minus H, T, O: the fetch query needs fewer weights."
+date-normalization,1.0000,success,ptr_v33_smallgate,3.46e+02,"Hundreds gate shrunk from H*100 to H*20, the smallest round value that passes 18 - 9y."
+date-normalization,1.0000,success,ptr_v34_fetchG14,3.46e+02,"Gain sweep: fetch sharpness 14, between the failing 10 and the passing 20."
+date-normalization,0.0350,success,abl_head_noplus1,3.46e+02,"Control: tangent logits without the +1, so digit 0 at X=0 ties with every non-digit logit at 0. Fetch gain back at 20."
+date-normalization,1.0000,success,ptr_v35_noZ3,3.45e+02,"First dot of yyyy.mm.dd found by position (flag O overlaid on i=4) instead of a digit 3 back, dropping the Z3 dim. 25 stream dims used."
+date-normalization,1.0000,success,ptr_v36_thresh191,3.45e+02,"Month threshold moved from 1.95 to 1.91, just above the nearest miss at 1.90: wider ReLU ramp, less sensitive to attention leakage."
+date-normalization,1.0000,success,ptr_v37_circle36,3.45e+02,"Position circle shortened from 48 to 36 steps: only prompt tokens (i<=31) use it, so it need not cover answer positions, and G falls by almost half."
+date-normalization,1.0000,success,ptr_v38_weak75,3.45e+02,"Weak padding tag raised from 0.5 to 0.75: more margin against padding tokens, less against the strong tags it must still lose to."
+date-normalization,0.6400,success,ptr_v39_lookG5_ramp,3.45e+02,"Third test of look-back gain 5 (0.41, then 0.605), now with the wider month ramp from ptr_v36. Weak tag back at 0.5."
+date-normalization,1.0000,success,ptr_v40_verify100k,3.45e+02,Look-back gain back at 10; the circuit is checked on 100000 generated examples across five non-eval seeds before finalising.
+date-normalization,1.0000,success,ptr_v41_final,3.45e+02,"Final circuit, verification scaffolding removed: 3 look-back heads, 18 ReLUs (6 parse rules, 12 month templates), 3 fetch heads, tangent digit head."

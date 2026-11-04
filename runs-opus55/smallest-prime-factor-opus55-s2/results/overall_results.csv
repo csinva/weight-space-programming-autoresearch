@@ -1,0 +1,42 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+smallest-prime-factor,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+smallest-prime-factor,1.0000,success,relu_comb_v1,1.50e+06,"3 blocks without inner LN: attention sums signed residues for all 65 primes <=316, ReLU bumps at multiples flag divisibility, priority gate picks smallest, per-digit mux plus copy head for primes."
+smallest-prime-factor,1.0000,success,relu_rect_v2,3.74e+05,"relu_comb_v1 with rectangular attention maps, per-block MLP widths, no attention in block 2 and only 10 position dims: same circuit, sized to what it uses."
+smallest-prime-factor,1.0000,success,relu_digit_registers,3.18e+05,"Block 2 writes the winning prime straight into 30 one-hot digit registers plus an ANY-factor bit, instead of keeping 65 first-factor dims."
+smallest-prime-factor,1.0000,success,relu_unsigned_residues,3.81e+05,"Digit registers with unsigned digit residues in [0,p): measures how many extra bumps dropping the signed trick costs."
+smallest-prime-factor,0.5800,success,relu_ablate_primes_le97,9.92e+04,Ablation: trial-divide only by the 25 primes up to 97; composites with a larger smallest factor fall through to the copy head and are wrong.
+smallest-prime-factor,1.0000,success,pulse_placevalue_v1,2.81e+04,"Numeric circuit: one attention head reads n as a place-value weighted mean, one periodic pulse neuron per prime detects divisibility, priority gate writes the prime's digits, 4 gates select the answer digit, tangent-line head decodes it."
+smallest-prime-factor,0.9650,success,pulse_float32,2.81e+04,pulse_placevalue_v1 in float32: tests whether n/p and the cos pulse keep enough precision without doubles.
+smallest-prime-factor,1.0000,success,pulse_sharp_4900,2.81e+04,Pulse sharpness just below the theoretical limit 1/(1-cos(2pi/313)) = 4962: near misses for p=313 should start firing.
+smallest-prime-factor,1.0000,success,sieve_2block,8.13e+03,Two blocks: a two-hidden-layer sieve MLP (pulse neurons then priority gates) replaces the 65 flag dims of the state vector.
+smallest-prime-factor,1.0000,success,sieve_cumsum_inhibition,3.91e+03,The 65x65 priority matrix becomes a parameter-free lateral inhibition: each pulse is suppressed by the running sum of all pulses from smaller primes.
+smallest-prime-factor,1.0000,success,sieve_no_any_bit,3.70e+03,Drops the ANY dim: a nonzero digit of the winning prime closes the copy gate by itself.
+smallest-prime-factor,1.0000,success,sieve_gaussian_copy,2.73e+03,"Replaces the 10 position one-hots with a place-value score, s, s^2 and 3 step flags; the copy head becomes Gaussian attention -BETA(i-(s-5))^2 in a 2-dim head."
+smallest-prime-factor,0.3750,success,sieve_ablate_primes_le13,1.02e+03,Ablation of the compact sieve: only the 6 primes up to 13.
+smallest-prime-factor,0.9950,success,sieve_ablate_primes_le311,2.70e+03,"Ablation of the compact sieve: drops only p=313, the largest prime the task can need."
+smallest-prime-factor,0.8700,success,sieve_sharp_1000,2.73e+03,"Pulse sharpness 1000, far below the 4962 needed to silence near misses for p=313: large primes leak about 0.8 at n = kp +- 1."
+smallest-prime-factor,1.0000,success,sieve_final_layernorm,2.95e+03,"Restores the standard final LayerNorm: the tangent-line head reads A and ONE relative to an always-zero dim, which cancels LayerNorm's mean shift."
+smallest-prime-factor,0.6650,success,sieve_all_layernorm,3.27e+03,"Restores the standard pre-LN blocks: a huge constant anchor dim fixes LayerNorm's scale, and all weights read relative to an always-zero dim to cancel its mean shift."
+smallest-prime-factor,0.4500,success,sieve_all_layernorm_anchor1e9,3.27e+03,"Pre-LN blocks with the anchor lowered to 1e9, balancing rounding noise (grows with the anchor) against LayerNorm scale drift (shrinks with it)."
+smallest-prime-factor,1.0000,success,sieve_all_layernorm_balanced,3.47e+03,"Pre-LN blocks with a mirror dim holding -n: the state sum no longer depends on n, removing the first-order LayerNorm scale drift."
+smallest-prime-factor,1.0000,success,relu_compact,1.04e+05,"ReLU only, 2 blocks, no periodic neuron: 5 Gaussian-attention heads read one-hot digits, a two-hidden-layer MLP does the residue comb and cumsum inhibition, numeric gates and tangent-line head as in the sieve."
+smallest-prime-factor,1.0000,success,relu_compact_float32,1.04e+05,"relu_compact in float32: all residue signals are small integers, so unlike the pulse model it should not need doubles."
+smallest-prime-factor,1.0000,success,tri_compact_float32,5.00e+04,"Replaces each 3-ReLU bump with one triangular unit relu(1-|u|), so the comb needs 195 hidden units instead of 585."
+smallest-prime-factor,0.2500,success,tri_beta_5,5.00e+04,"Softer attention, BETA 5: neighbouring positions get weight e^-5, so each residue sum is off by a small fraction of an integer."
+smallest-prime-factor,0.9650,success,tri_beta_10,5.00e+04,"BETA 10: the leak e^-10 times the largest residue 150 is about 0.007, predicted to be safe where BETA 5 is not."
+smallest-prime-factor,0.9950,success,tri_narrow_beta_10,5.00e+04,"BETA 10 with a narrow bump relu(1-2|u|): near misses at y = c +- 1 now sit in a dead zone, so attention leaks produce exactly zero flags."
+smallest-prime-factor,1.0000,success,tri_narrow_beta_15,5.00e+04,"Narrow bump at BETA 15, to look for the smallest attention sharpness that keeps every n correct."
+smallest-prime-factor,1.0000,success,tri_numeric_digits,4.72e+04,"Heads read digits as numbers: y_p = sum of d_i * (10^i mod p). A far smaller state, but the range of y_p grows ninefold and needs many more bumps."
+smallest-prime-factor,1.0000,success,tri_shared_residue,4.38e+03,"Factors the comb: one shared residue sum y_p per prime, one hand-set tooth offset per bump, and a fixed sum of the bumps of each prime, removing the 536x65 bump-to-flag matrix."
+smallest-prime-factor,1.0000,success,tri_best_multiplier,4.20e+03,"Each prime uses the multiplier c that makes the five weights c*10^i mod p smallest; p divides n iff it divides c*n, and a smaller y_p range needs fewer teeth."
+smallest-prime-factor,1.0000,success,tri_one_attention,4.43e+03,"Removes the copy head: block 1 already stored the 5 digits, so 5 step-gated units replace block 2's attention, leaving one attention layer in the model."
+smallest-prime-factor,0.7200,success,tri_ablate_inhibition,4.43e+03,"Ablation: no lateral inhibition, so numbers with several prime factors write the digits of all of them at once."
+smallest-prime-factor,1.0000,success,tri_float16,4.43e+03,"tri_one_attention in half precision: y_p stays in the low hundreds, so even 16-bit floats may represent every signal exactly."
+smallest-prime-factor,0.7950,success,tri_float16_beta_8,4.43e+03,"Float16 with BETA 8 and a finite '=' weight of -1000: the best-multiplier coefficients are small, so softer attention may stay inside the bump's dead zone."
+smallest-prime-factor,1.0000,success,tri_float16_beta_12,4.43e+03,"Float16 with BETA 12, between the failing BETA 8 and the passing BETA 15."
+smallest-prime-factor,0.3000,success,tri_ablate_copy_gate,4.43e+03,"Ablation: factor digits no longer close the copy path, so a composite's prompt digits add onto its factor digits."
+smallest-prime-factor,0.4750,success,tri_ablate_primes_le47,2.39e+03,Ablation of the final architecture: only the 15 primes up to 47.
+smallest-prime-factor,0.8250,success,tri_ablate_primes_le199,3.66e+03,Ablation of the final architecture: only the 46 primes up to 199.
+smallest-prime-factor,1.0000,success,tri_final_layernorm,4.70e+03,"Full prime list at BETA 15 in float16 with the standard final LayerNorm restored, read relative to an always-zero dim."
+smallest-prime-factor,1.0000,success,tri_final,4.43e+03,"Recommended model: one attention layer reads the digits, a residue comb with best multipliers and narrow bumps finds divisors, cumsum inhibition picks the smallest, 8 step gates and a tangent-line head emit the answer. Float16, no LayerNorm, BETA 15."
+smallest-prime-factor,1.0000,success,tri_float16_beta_10,4.43e+03,"tri_final at BETA 10, to narrow the sharpness threshold between the failing BETA 8 and the passing BETA 12."

@@ -1,0 +1,54 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.0000,success,InspectTaskInterface,1.59e+05,Random init; prints the task object's public interface to learn the format.
+trec-coarse,0.0000,success,InspectTaskSignatures,1.59e+05,"Random init; prints vocab, lengths, signatures and docstrings of the task."
+trec-coarse,0.0000,success,InspectDevExamples,1.59e+05,Random init; prints example format and a sample of questions outside the eval set.
+trec-coarse,0.7650,success,KeywordVotesV1,1.24e+05,"Delay-head char window, AND-unit keyword detectors, hand-written class votes summed by uniform attention."
+trec-coarse,0.7600,success,KeywordVotesV2,1.22e+05,V1 minus the over-firing rules: 'what do/does/are' no longer votes DESC and bare 'name' no longer votes HUM.
+trec-coarse,0.7800,success,EarlyHeadNounV3,2.12e+05,V2 plus an EARLY position flag: head-noun keywords ending by char 24 get a +6 bonus unit.
+trec-coarse,0.8000,success,ShortDefinitionV4,2.39e+05,"V3 plus a graded DESC vote per padding char in the first 24 positions (short questions are definitions), and what-causes/what-is-the-name-of rules."
+trec-coarse,0.8100,success,StrongWhV5,2.39e+05,V4 with who/where/when/why votes raised to 16-20 so a later noun cannot outvote the question word.
+trec-coarse,0.8450,success,VocabPassV6,2.93e+05,"V5 plus come-from=DESC, first/full/last-name=HUM, fear-of=ENTY, and more place and occupation nouns."
+trec-coarse,0.8350,success,SuffixMorphologyV7,2.93e+05,"V6 plus early -er/-ist/-ian suffix detectors voting HUM, and type/kind/sort-of raised to ENTY 14."
+trec-coarse,0.8450,success,WhoDominantV8,2.91e+05,V7 without the suffix detectors (they over-fired); who/whose/whom raised to 30.
+trec-coarse,0.8450,success,AdjacentHeadNounV9,5.26e+05,"V8 plus a +12 unit for every noun directly after what/which, so the head noun outranks later nouns."
+trec-coarse,0.8450,success,SuperlativeV10,3.00e+05,"V8 (V9's 292 extra units gave only +1 dev question, dropped) plus superlatives voting ENTY: definitions do not use most/largest/first."
+trec-coarse,0.8500,success,VocabPassV11,3.35e+05,"V10 plus middle-name and possessive-name HUM rules, peak/region/site LOC nouns, measure NUM nouns, eat/made-of/symbol/plural ENTY."
+trec-coarse,0.8400,success,EarlyEnd18V12,3.35e+05,V11 with the EARLY window narrowed from 24 to 18 characters.
+trec-coarse,0.8350,success,EarlyEnd30V13,3.35e+05,V11 with the EARLY window widened from 24 to 30 characters.
+trec-coarse,0.8550,success,ShortVote05V14,3.35e+05,V11 (EARLY window 24) with the per-padding-char short-question DESC vote raised from 0.3 to 0.5.
+trec-coarse,0.8400,success,MeanWhatAreV15,3.38e+05,V14 with mean/means/meaning raised to DESC 8 and what-are/what-was given a small DESC vote against the ENTY prior.
+trec-coarse,0.8550,success,WhatAreOnlyV16,3.38e+05,V15 with the small DESC vote kept on what-are but removed from what-was.
+trec-coarse,0.8550,success,VocabPassV17,3.61e+05,V16 plus a small HUM vote for name-commands and more concrete LOC/NUM/HUM nouns.
+trec-coarse,0.8550,success,Bonus8V18,3.61e+05,V17 with the head-noun EARLY bonus raised from 6 to 8.
+trec-coarse,0.8300,success,NoBonusAblationV19,2.15e+05,Ablation of V17: all head-noun EARLY bonus units removed (the short-question '<_' detector stays).
+trec-coarse,0.8450,success,AttnEarlyPoolV20,2.17e+05,"Replaces V17's duplicate EARLY units with position-weighted pooling: attention weights early positions 2.5x, one detector per keyword."
+trec-coarse,0.8550,success,AttnPoolSuperlativeV21,2.17e+05,"V20 with superlative votes lowered to 1.2 so that, scaled by early pooling, they do not outvote head nouns."
+trec-coarse,0.8500,success,EarlyScale3V22,2.17e+05,V21 with the pooling attention's early-position weight raised from 2.5x to 3x.
+trec-coarse,0.8450,success,EarlyScale2V23,2.17e+05,V21 with the pooling attention's early-position weight lowered from 2.5x to 2x.
+trec-coarse,0.8500,success,DescVocabV24,2.25e+05,"V21 plus non-definition DESC cues: purpose, outcome, effect, reason, history-of, known-for, do, happen, what-makes."
+trec-coarse,0.8500,success,DescVocabNarrowV25,2.23e+05,"V24 without its two broadest cues, do and happen, keeping the specific DESC nouns."
+trec-coarse,0.8500,success,EntyPrior05V26,2.23e+05,V25 with the ENTY default prior lowered from 1 to 0.5.
+trec-coarse,0.8500,success,TrueSuperlativesV27,2.21e+05,"V26 with first and only removed from the superlative list, leaving true superlatives."
+trec-coarse,0.8500,success,NoDigitChannelsV28,1.87e+05,V27 with the six unused digit input channels removed: each window slot shrinks from 38 to 32 channels.
+trec-coarse,0.8500,success,ShortWindowV29,1.27e+05,"V28 with the two longest patterns shortened (name-of, difference) so the attention window needs fewer heads."
+trec-coarse,0.8500,success,UnanchoredHowV30,1.27e+05,"V29 with the how-many/long/old rules unanchored, so they also fire mid-sentence ('for how long', 'is how old')."
+trec-coarse,0.8450,success,ContractionV31,1.27e+05,V30 plus the contraction what-'s treated the same as what-is.
+trec-coarse,0.8550,success,NoNameVoteV32,1.26e+05,"Ablation of V30: removes the name-command HUM vote, so name-questions fall through to keywords and the ENTY default."
+trec-coarse,0.8500,success,OfPropertyV33,1.27e+05,"V32 plus a weak ENTY vote on 'of': 'what is the X of Y' asks for a property, not a definition."
+trec-coarse,0.8450,success,WhichHumanV34,1.27e+05,"V32 plus a small HUM vote on which-questions, which otherwise fall through to the ENTY default."
+trec-coarse,0.8600,success,NamingTermsV35,1.28e+05,"V32 plus naming constructions voting ENTY: 'what is X called', 'what do you call X', 'how do you say X'."
+trec-coarse,0.8700,success,NoNameOfV36,1.27e+05,Ablation of V35: removes the name-of ENTY vote so the noun after 'the name of the' decides the class.
+trec-coarse,0.8700,success,WhatCenturyV37,1.27e+05,"V36 with century narrowed to 'what century', since digit stripping turns '19th century painter' into 'th century painter'."
+trec-coarse,0.8650,success,MethodAndFactsV38,1.32e+05,"V37 plus method words (way, tips, technique) voting ENTY and description words (facts, information, believe, look like) voting DESC."
+trec-coarse,0.8650,success,PluralsV39,1.33e+05,V38 with plural forms types/kinds/sorts-of added and weight widened to the stem weigh.
+trec-coarse,0.8650,success,EntyNounsV40,1.37e+05,"V39 plus general ENTY category nouns: species, event, stages, weapon, document, battle, war, crop, metal."
+trec-coarse,0.8650,success,HumNounsV41,1.42e+05,"V40 plus HUM role nouns: soldier, witch, designer, boxer, golfer, gymnast, laureate, villain, terrorist, commander, hero."
+trec-coarse,0.8650,success,Gain1e4V42,1.42e+05,V41 robustness check: attention sharpness GAIN lowered from 4e4 to 1e4.
+trec-coarse,0.3400,success,Gain2e3V43,1.42e+05,V41 robustness check: attention sharpness GAIN lowered to 2e3 to find where the character window breaks.
+trec-coarse,0.8600,success,TrimHowV44,1.38e+05,Ablation of V41: how-X list trimmed from 17 to the 8 most common measures.
+trec-coarse,0.8650,success,NoWhatMakesV45,1.41e+05,Ablation of V41: removes the what-makes and what-ever DESC rules added from dev errors.
+trec-coarse,0.8650,success,NoSuperlativesV46,1.37e+05,Ablation of V45: removes the nine superlative ENTY units entirely.
+trec-coarse,0.8650,success,StemPatternsV47,1.09e+05,"V46 with every pattern cut to its first 11 characters, matching long words as stems and shrinking the window from 14 to 11 heads."
+trec-coarse,0.8350,success,Stem9V48,9.10e+04,"V47 with patterns cut further to 9 characters, to find where stem collisions begin; window is 9 heads."
+trec-coarse,0.8650,success,Stem10V49,1.00e+05,"V47 with patterns cut to 10 characters, the boundary between V47 and the collapsed V48; window is 10 heads."
+trec-coarse,0.8650,success,FinalCleanV50,1.00e+05,"Final candidate: V49 with all dev-report code removed, so the model is only hand-written weights and nothing reads data at construction."

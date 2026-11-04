@@ -1,0 +1,30 @@
+{
+ "trec-coarse-opus55-s1": {
+  "run": "trec-coarse-opus55-s1",
+  "program": "NoNameOfV36",
+  "eval_200": 0.87,
+  "pool_2000": 0.8655,
+  "rest_of_train": [
+   0.8099652375434531,
+   3452
+  ],
+  "official_test": [
+   0.868,
+   500
+  ]
+ },
+ "trec-coarse-opus55-s2": {
+  "run": "trec-coarse-opus55-s2",
+  "program": "e22_what_is_the_desc",
+  "eval_200": 0.92,
+  "pool_2000": 0.871,
+  "rest_of_train": [
+   0.8311123986095017,
+   3452
+  ],
+  "official_test": [
+   0.878,
+   500
+  ]
+ }
+}

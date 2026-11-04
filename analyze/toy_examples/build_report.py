@@ -29,9 +29,13 @@ CATEGORY = {
     "word-reversal-3x3": "Harder",
     "gcd-three-digits": "Harder",
     "decimal-to-binary-8bit": "Harder",
+    "edit-distance-8": "Harder",
+    "smallest-prime-factor": "Harder",
     "sentiment-sst2": "Real world",
     "paraphrase-mrpc": "Real world",
     "nli-snli": "Real world",
+    "trec-coarse": "Real world",
+    "date-normalization": "Real world",
 }
 CAT_ORDER = ["Easy", "Harder", "Real world"]
 
@@ -155,6 +159,26 @@ def summarize(r: dict) -> dict:
     return dict(best=best, first_best=first_best, smallest=smallest, n=len(m))
 
 
+def trec_table() -> str:
+    p = ROOT / "runs-opus55" / "heldout_trec.json"
+    if not p.exists():
+        return ""
+    rows = "".join(
+        f"<tr><td>{i}</td><td>{html.escape(r['program'])}</td><td>{r['eval_200']:.1%}</td><td>{r['official_test'][0]:.1%}</td><td>{r['rest_of_train'][0]:.1%}</td></tr>"
+        for i, r in enumerate(json.loads(p.read_text()).values(), 1))
+    fp = ROOT / "runs-opus55" / "heldout_fresh_seed.json"
+    fresh = json.loads(fp.read_text()) if fp.exists() else {}
+    n_ok = sum(1 for v in fresh.values() if v.get("fresh_seed") == 1.0)
+    note = (f"""<p class="note" style="margin-top:14px"><b>Fresh-seed check on generated tasks.</b> In {n_ok} of the {len(fresh)} runs on tasks with a generator (the 12 algorithmic tasks and date
+    normalization), the first saved program to reach the run's best accuracy also scores 100% on 2,000 new examples from an unseen seed, so these scores do not depend on the fixed 200 evaluation examples
+    (<code>evolve/heldout_fresh_seed.py</code>).</p>""" if fresh else "")
+    return (note + """<h3 style="margin-top:24px">Held-out check on TREC</h3>
+  <p class="note">The best program of each TREC run, scored on data outside its 2,000-example pool, which the agent never saw: the official test split (500 questions)
+    and the remaining 3,452 training questions. The best-of-50 score on the fixed 200 examples is inflated by up to about 4 points relative to the test split.</p>
+  <div class="scroll" style="max-height:none"><table class="mlist"><thead><tr><th>run</th><th>program</th><th>fixed 200 examples</th><th>official test</th><th>rest of training split</th></tr></thead><tbody>"""
+            + rows + "</tbody></table></div>")
+
+
 def n_dep(r: dict) -> str:
     m = r["methods"]
     if not any("data" in x for x in m):
@@ -208,7 +232,7 @@ def task_rows(tasks: list[dict]) -> str:
 SHARED_DEFS = """
     <p><b>Network.</b> A decoder-only (GPT-style) transformer defined in <code>interpretable_transformer.py</code>: learned token and position
       embeddings, a stack of pre-LayerNorm blocks (causal multi-head self-attention and a ReLU MLP, each with a residual connection), a final LayerNorm and a
-      linear output head over a character-level vocabulary specific to each task (4 to 34 symbols). The starting configuration is 3 layers, width 64,
+      linear output head over a character-level vocabulary specific to each task (4 to 43 symbols). The starting configuration is 3 layers, width 64,
       4 heads and MLP width 256; the agent may change the architecture, depth, width, number of heads and MLP width. All parameters are set inside
       <code>write_weights(model, task)</code>. Parameter count is <code>sum(p.numel() for p in model.parameters())</code>.</p>
     <p><b>Rules given to the agent</b> (<code>evolve/program.md</code>). Allowed: editing anything in its copy of
@@ -220,9 +244,10 @@ SHARED_DEFS = """
     <p><b>Evaluation.</b> Running <code>uv run interpretable_transformer.py --task &lt;task&gt;</code> builds the network, generates the answer greedily
       (argmax at each step) for a fixed number of answer tokens, and scores <b>accuracy</b>: the fraction of examples whose generated answer string
       exactly matches the target (no partial credit or numerical tolerance). Each attempt is scored on the same 200 examples, produced by the task's
-      generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the three real-world tasks the
-      examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI), lowercased, with characters
-      outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length.</p>
+      generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the four dataset tasks the
+      examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI, TREC), lowercased, with characters
+      outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length. The real-world group also includes
+      date normalization, whose examples are generated from nine common date formats rather than drawn from a dataset.</p>
 """
 
 
@@ -257,15 +282,18 @@ def definitions(new_runs: list[dict]) -> str:
       <i>Static scan</i> (<code>audit_runs.py</code>): no saved program contains training or fitting code (optimizers, <code>.backward()</code>,
       <code>.fit(</code>, least squares, pseudo-inverse).
       <i>Counterfactual data check</i> (<code>audit_data_use.py</code>): each saved program is built normally, built again (to confirm determinism), and built
-      with the task data altered (a different sample with answers shuffled; for the real-world tasks the other half of the training split with labels
+      with the task data altered (a different sample with answers shuffled; for the dataset tasks the other half of the training split with labels
       shuffled). A program is <b>data-dependent</b> if its weights change, which means they were computed from task examples or chosen by checking accuracy
       on them. No saved program is data-dependent; a positive control (programs that set weights from label counts or generated answers) is flagged.
       <i>Indirect fitting</i>: no session printed data statistics (word frequencies, log-odds and so on) or ran a fitting procedure (logistic regression,
       perceptron) whose numbers could have been copied into a later program.
-      One caveat for the real-world tasks: in 5 of the 6 runs the agent added a measurement-only "dev" check that prints accuracy (and sometimes a confusion
-      matrix) on examples from the same 2,000-example pool, usually excluding the 200 evaluation prompts, and adjusted its hand-set word lists, thresholds and
-      biases across attempts. This is manual tuning guided by data, as a person iterating on features would do, rather than training; in every run the agent
-      also sees the accuracy on the fixed evaluation set after each attempt.</p>
+      Across all runs, 1,277 saved programs are data-independent, none are data-dependent, 7 are not deterministic (so the check cannot tell) and 9 fail to build.</p>
+    <p><b>Data-guided hand tuning.</b> A caveat for the dataset tasks: in 7 of the 8 runs the agent added a measurement-only "dev" check that prints accuracy
+      (and sometimes a confusion matrix) on examples from the same 2,000-example pool, usually excluding the 200 evaluation prompts, and adjusted its hand-set
+      word lists, thresholds and biases across attempts. The two TREC runs went further: nearly every attempt printed misclassified dev questions with their true and predicted
+      labels, and the agent wrote rules in response. This is manual feature engineering guided by data, as a person would do it, rather than training, but those rules
+      are informed by labeled examples. Few evaluation prompts appeared in tool outputs (0 to 4 of 200 in 7 of the 8 runs; up to 26 in NLI run 2, an upper bound because
+      SNLI reuses premises across examples). In every run the agent also sees the accuracy on the fixed evaluation set after each attempt.</p>
 {SHARED_DEFS}
     <p><b>Plots and tables.</b> Each point is one attempt: x is its parameter count (log scale), y its accuracy; attempts are numbered in the order
       they were logged in <code>results/overall_results.csv</code>. "First attempt at best" is the attempt number at which a run first reached its best
@@ -359,6 +387,7 @@ __DEFS__
     <thead><tr><th>task</th><th>group</th><th>run (seed)</th><th>attempts</th><th>best accuracy</th><th>first attempt at best</th><th>smallest near-best (params)</th><th>attempts whose weights use task data</th><th>best without task data</th><th>sessions</th><th>cost (list price)</th></tr></thead>
     <tbody>__RESULTS__</tbody></table></div>
 
+__TREC__
   <h2>Per-task exploration</h2>
   <p class="note">Pick a task. The plot shows accuracy against number of parameters for both runs (colour = run); points are connected in the
     order tried. Hover a point for its name and description.</p>
@@ -473,7 +502,7 @@ def main():
     old_runs = collect(RUNS)
     new_tasks, old_tasks = group_by_task(new_runs), group_by_task(old_runs)
     out = (TEMPLATE.replace("__DEFS__", definitions(new_runs)).replace("__OLDDEFS__", old_definitions(old_runs))
-           .replace("__RESULTS__", results_table(new_tasks))
+           .replace("__RESULTS__", results_table(new_tasks)).replace("__TREC__", trec_table())
            .replace("__NEW__", json.dumps(new_tasks)).replace("__OLD__", json.dumps(old_tasks)))
     OUT.write_text(out)
     print(f"Wrote {OUT}: {len(new_runs)} Opus 5.5 runs ({sum(len(r['methods']) for r in new_runs)} attempts), "

@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+edit-distance-8,1.0000,success,PrefixMinDP_v1,3.69e+04,"One block per DP row: causal softmax computes prefix min of W; heads: prefix-min, left-neighbour, match; no LayerNorm; 9 blocks, d=30, ff=5."
+edit-distance-8,1.0000,success,TwoHeadDP,2.73e+04,"Simplified recurrence W <- min(W+1, min_{x<l}W - match): drops the own-prefix head and one neuron; 2 heads, 9 blocks, d=26, ff=3."
+edit-distance-8,0.7700,success,TwoHeadDP_beta5,2.73e+04,Sensitivity: TwoHeadDP with soft-min sharpness BETA=5 instead of 30.
+edit-distance-8,1.0000,success,TwoHeadDP_beta5_gamma30,2.73e+04,"Separate sharpness for the match head (GAMMA=30) from the soft-min (BETA=5), to locate what failed at BETA=5."
+edit-distance-8,0.4050,success,TwoHeadDP_beta2_gamma30,2.73e+04,Sensitivity: soft-min sharpness BETA=2 with GAMMA=30; how soft can the min be before rounding at the read-out fails?
+edit-distance-8,1.0000,success,MergedRegister_ff2,2.68e+04,"W_o subtracts the match from the left-min into one register, so the MLP needs only 2 neurons; BETA=10, GAMMA=30, d=26."
+edit-distance-8,1.0000,success,CompactDP_d10,4.56e+03,"d=10: positions as (1,x,x^2) with a quadratic peak selecting a_row, ring letters, rank-1 G^(x-t) self-exclusion, 'a' tokens kept out by W=100; 9 blocks, 2 heads, ff=2."
+edit-distance-8,1.0000,success,TiedCell_d12,1.25e+03,"All 9 blocks share one recurrent cell; a row counter (i, i^2) in every token steers the quadratic peak along a; d=12, 2 heads, ff=3."
+edit-distance-8,1.0000,success,TiedStrictMask_d10,9.63e+02,"Strictly causal attention mask (diagonal removed) replaces the self-exclusion code; shared cell, d=10, 2 heads, ff=3."
+edit-distance-8,1.0000,success,TiedCountdown_d8,7.24e+02,"Each token counts down Y=x-i with Y^2 kept by one neuron; the token at Y=0 is a_i and ',' frozen at Y=0 is the sentinel; shared cell, d=8, 2 heads, ff=4."
+edit-distance-8,1.0000,success,SevenRegisters_d7,5.78e+02,"Constant and comma flag merged into one register E; ',' takes its sentinel score from a frozen negative Y^2; rectangular attention (2 heads of 3 dims); shared cell, d=7, ff=4."
+edit-distance-8,1.0000,success,Seven_beta5,5.78e+02,Margin sweep on SevenRegisters_d7: BETA=5.
+edit-distance-8,1.0000,success,Seven_beta3p5,5.78e+02,Margin sweep on SevenRegisters_d7: BETA=3.5.
+edit-distance-8,1.0000,success,IntegerWeights_d7,5.78e+02,"No sqrt(dh) score normaliser; match scores recentred to +/-TAU around ',' at 0, so every weight is a small integer (BETA=8, TAU=16, PEAK=64)."
+edit-distance-8,1.0000,success,TransientAttn_ff3,5.63e+02,"Block is x + mlp(x + attn(x)): attention output is scratch, so R needs no clearing and the MLP has 3 neurons; shared cell, d=7, integer weights."
+edit-distance-8,1.0000,success,TransientAttn_edgecheck,5.63e+02,Same weights as TransientAttn_ff3; adds an exhaustive grading run over all 131k string pairs from alphabets ab and ac.
+edit-distance-8,1.0000,success,Halved_b4_t8_p32_f32,5.63e+02,"All sharpness constants halved and FAR cut to 32 (BETA=4, TAU=8, PEAK=32), graded with the exhaustive two-letter check."
+edit-distance-8,1.0000,success,Sweep_tau4,5.63e+02,Margin sweep from Halved_b4_t8_p32_f32: TAU=4.
+edit-distance-8,0.3550,success,Sweep_tau2,5.63e+02,Margin sweep from Halved_b4_t8_p32_f32: TAU=2.
+edit-distance-8,1.0000,success,Sweep_peak12,5.63e+02,"Margin sweep from Halved_b4_t8_p32_f32: PEAK=12; an unselected neighbour matching a letter then scores TAU-PEAK=-4 against 0 for ','."
+edit-distance-8,0.2550,success,Sweep_peak6,5.63e+02,"Margin sweep: PEAK=6 is below TAU, so a neighbouring token that matches the letter outscores ','; predicted to fail."
+edit-distance-8,1.0000,success,Sweep_far16,5.63e+02,Margin sweep from Halved_b4_t8_p32_f32: FAR=16.
+edit-distance-8,1.0000,success,Sweep_far10,5.63e+02,Margin sweep from Halved_b4_t8_p32_f32: FAR=10.
+edit-distance-8,0.7600,success,Sweep_far4,5.63e+02,"Margin sweep from Halved_b4_t8_p32_f32: FAR=4, below the largest W held by ','; predicted to fail."
+edit-distance-8,0.3200,success,Control_8passes,5.63e+02,"Control: FAR=16 with only 8 applications of the cell, dropping the final read-out pass; predicted to fail because '=' then lags one row."
+edit-distance-8,0.0200,success,Control_12passes,5.63e+02,"Control: 12 applications of the cell, testing whether the answer at '=' is a fixed point after pass 9. It is not: the prediction that it would be was wrong."
+edit-distance-8,0.0000,success,Control_LayerNorm,5.77e+02,"Control: pre-attention LayerNorm restored (identity gain), testing whether removing it was necessary; predicted to fail."
+edit-distance-8,0.2150,success,Control_SelfVisible,5.63e+02,"Control: standard causal mask, so each token sees itself in the min; tests whether the strict mask is necessary; predicted to fail."
+edit-distance-8,1.0000,success,NoHide_d7,5.63e+02,"Strict mask back; digit logits offset by +1 so non-digit head rows can be all zero, removing the HIDE constant; shared cell, d=7, ff=3, FAR=16."
+edit-distance-8,1.0000,success,ScalarValues_d7,5.07e+02,"Each head returns one scalar value, shrinking W_v and W_o from 7x6 to 7x2; shared cell, d=7, ff=3."
+edit-distance-8,1.0000,success,HardAttention_d7,5.07e+02,"Softmax replaced by hard argmax attention with ties shared evenly: exact integer arithmetic with BETA=TAU=1, PEAK=4; departs from standard softmax attention."
+edit-distance-8,1.0000,success,Hard_clear14,5.07e+02,"Hard attention with CLEAR=14, just enough for the 'a' tokens; the Y^2 neuron now clips on later tokens, testing whether that is harmless."
+edit-distance-8,1.0000,success,Soft_beta3,5.07e+02,"Back to softmax attention with CLEAR=14: margin sweep at BETA=3, TAU=8, PEAK=32. NOT a clean pass: 200/200 on the official sample hides real errors (4992/5000 random; 65310/65536 ab; 65308/65536 ac)."
+edit-distance-8,1.0000,success,Soft_beta3p5,5.07e+02,"Margin sweep at BETA=3.5, TAU=8, PEAK=32, graded by the exhaustive check because BETA=3 failed it while scoring 200/200 on the official sample."
+edit-distance-8,1.0000,success,Soft_tau3,5.07e+02,"Margin sweep at TAU=3 with a comfortable BETA=8, locating the match-head boundary between TAU=2 (fail) and TAU=4 (pass)."
+edit-distance-8,1.0000,success,Hard_far9_peak2,5.07e+02,Hard attention at tight constants: PEAK=2 (just above TAU=1) and FAR=9 (just above the largest column value).
+edit-distance-8,1.0000,success,Soft_tight_6_6_12_12,5.07e+02,"Softmax attention with all constants set together near their boundaries: BETA=6, TAU=6, PEAK=12, FAR=12."
+edit-distance-8,1.0000,success,FinalHard_d7,5.07e+02,"Final hard-attention candidate: exact integer registers, BETA=TAU=1, PEAK=2, FAR=9, CLEAR=14; shared cell, d=7, ff=3; 200k random-pair stress check plus exhaustive two-letter check."
+edit-distance-8,1.0000,success,FinalSoft_d7,5.07e+02,"Final softmax candidate with margins from the sweeps: BETA=8, TAU=8, PEAK=32, FAR=16, CLEAR=14; one shared cell applied 9 times, d=7, 2 heads, 3 ReLUs; 200k random-pair stress check plus exhaustive two-letter check."

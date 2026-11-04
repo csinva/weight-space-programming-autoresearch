@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,0.2050,success,e01_probe_task_interface,1.52e+05,Random init baseline; logs public task attributes and evaluator forward calls to learn the task format.
+edit-distance-8,1.0000,success,e02_tied_cell_automaton,2.90e+04,"Levenshtein DP as a tied-weight cellular automaton: one Block applied 16x, 16 heads (match bits via comma sink, prev-row H, self-cancel), Myers difference cell in 73 ReLUs, quadratic-score readout; no LayerNorm."
+edit-distance-8,1.0000,success,e03_monotone_match,2.80e+04,"e02 without the match-clearing units: m only ever inhibits, so letting it accumulate over sweeps is harmless. 65 ReLUs."
+edit-distance-8,0.9950,success,e04_uniform_law_scalar,1.64e+04,"One ungated law at every position: inert positions have m=1 so z=0, comma is a fixed point holding DP row 0, '=' reads V=-H. Scalar h,v with a 4-ReLU z; d_model 48, 12 heads, 49 ReLUs."
+edit-distance-8,0.9950,success,e05_debug_uniform_law,1.64e+04,Same weights as e04 plus diagnostics printing failing pairs and the DP state held by the model vs the true DP table.
+edit-distance-8,1.0000,success,e06_sharp_uniform_law,1.64e+04,"e04 with the root cause fixed: prev/self heads sharpened to SHARP=4000 (about 120 nats between neighbours). Correction: e16 later showed the A,B routing tolerates this same 6-nat leak, so 'scalar state has no thresholds' does not fully explain e04's failure."
+edit-distance-8,1.0000,success,e07_mlp_is_only_min,1.90e+04,"Clean split: the MLP only computes z and adds it to registers A,B (32 ReLUs, no pass-through units, no output bias); attention does all linear routing (14 heads). d_model 56."
+edit-distance-8,0.1650,success,e08_rotation_routing,1.01e+04,"Position is a 2-channel circle; 'attend left' is one rotation matrix used at every position. Comma is a zero state with a PUNCT flag. d_model 30, 14 heads of dim 4 (head dim independent of d_model), 32 ReLUs."
+edit-distance-8,1.0000,success,e09_rotation_routing_inert17,1.01e+04,"e08 fixed: cosine match values can be negative at inert positions, so m could fall below 1 and wake them. Inert m = N_LAYERS+1 prevents that. d_model 30, 14 heads of dim 4, 32 ReLUs."
+edit-distance-8,0.9850,success,e10_depth15,1.01e+04,"Depth sweep on e09: 15 sweeps, one fewer than the 16 the DP's longest dependency chain needs."
+edit-distance-8,0.6600,success,e11_depth12,1.01e+04,"Depth sweep on e09: 12 sweeps, so row 8 never fully settles."
+edit-distance-8,0.9400,success,e12_depth14,1.01e+04,Depth sweep on e09: 14 sweeps.
+edit-distance-8,0.1700,success,e13_depth10,1.01e+04,Depth sweep on e09: 10 sweeps.
+edit-distance-8,1.0000,success,e14_sharp1000,1.01e+04,"Margin sweep at full depth 16: SHARP=1000, about 30 nats between neighbouring positions."
+edit-distance-8,1.0000,success,e15_sharp500,1.01e+04,"Margin sweep at full depth 16: SHARP=500, about 15 nats between neighbouring positions."
+edit-distance-8,1.0000,success,e16_sharp200,1.01e+04,"Margin sweep at full depth 16: SHARP=200, about 6 nats, the leak that broke e04, now on the A,B routing."
+edit-distance-8,0.9350,success,e17_sharp100,1.01e+04,"Margin sweep at full depth 16: SHARP=100, about 3 nats between neighbouring positions."
+edit-distance-8,1.0000,success,e18_gamma40,1.01e+04,Match margin sweep with SHARP=1000: GAMMA=40 gives 10 nats between a match and the comma sink.
+edit-distance-8,0.3450,success,e19_gamma12,1.01e+04,Match margin sweep with SHARP=1000: GAMMA=12 gives 3 nats between a match and the comma sink.
+edit-distance-8,0.9900,success,e20_gamma24,1.01e+04,Match margin sweep with SHARP=1000: GAMMA=24 gives 6 nats between a match and the comma sink.
+edit-distance-8,1.0000,success,e21_head_dim3,9.54e+03,"Smallest uniform head: d_head=3, 17 heads (8 match, 3 left, 6 own). GAMMA=100, SHARP=1000, d_model 30, 32 ReLUs."
+edit-distance-8,1.0000,success,e22_cell_rule_once,7.61e+03,"The cell rule is written once: a 4-ReLU MLP (m,A,B,row)->z shared by all 8 columns, 24 weights in place of about 2000. Off-row positions are inert through the row flag, not a position table."
+edit-distance-8,1.0000,success,e23_labels_vs_state,2.13e+03,"Separates 6 fixed labels from 24 zero-initialised state registers. Q and K read labels only; 10 heads of 3 kinds with their own key/value sizes; head reads 9 channels. Same circuit, far fewer stored zeros."
+edit-distance-8,1.0000,success,e24_depth32_fixed_point,2.13e+03,"Stability test on e23: 32 sweeps, twice what is needed. The answer should be a fixed point of the automaton."
+edit-distance-8,0.5700,success,e25_abl_no_corner_units,2.13e+03,"Cell ablation on e23: drops z3 and z4, the corrections at (v,h) = (-1,+1) and (+1,-1), leaving z = clip(v+h+1, 0, 1)."
+edit-distance-8,0.6850,success,e26_abl_one_corner_unit,2.13e+03,"Cell ablation on e23: keeps z3 and drops z4, so the corner (v,h) = (-1,+1) is correct and (+1,-1) is not."
+edit-distance-8,0.7000,success,e27_abl_other_corner_unit,2.13e+03,"Cell ablation on e23: keeps z4 and drops z3, the mirror of e26. Edit distance is symmetric, so the two should score about the same."
+edit-distance-8,1.0000,success,e28_lock2000,2.13e+03,"LOCK sweep on e23 with the full cell: LOCK=2000. Predicted safe, since neighbours score 1879 + GAMMA, below the sink's 2050."
+edit-distance-8,0.2000,success,e29_lock800,2.13e+03,"LOCK sweep on e23: LOCK=800. Predicted to fail, since neighbours score 752 + GAMMA = 852, above the sink's 850."
+edit-distance-8,0.7750,success,e30_abl_no_row0,2.13e+03,"Boundary ablation on e23: DP row 0 has H=0 instead of +1, so inserting into an empty prefix is free along the top edge. The readout constant stays 8."
+edit-distance-8,0.0000,success,e31_abl_no_col0,2.13e+03,"Boundary ablation on e23: DP column 0 has V=0 instead of +1, the mirror of e30 on the left edge."
+edit-distance-8,0.7800,success,e32_abl_no_col0_fair,2.13e+03,"Fair mirror of e30: column 0 has V=0 and the readout constant D[0,8] is 0 to match. e31's 0% came from the stale constant 8, not the DP."
+edit-distance-8,0.8500,success,e33_depth13,2.13e+03,"Depth sweep on e23, the smallest exact model: 13 sweeps, filling the gap between 94% at 14 and 66% at 12."
+edit-distance-8,0.4600,success,e34_depth11,2.13e+03,"Depth sweep on e23: 11 sweeps, the last gap in the curve between 17% at 10 and 66% at 12."
+edit-distance-8,0.1300,success,e35_constant_5,2.13e+03,"Baseline: the head always answers 5, ignoring the DP. Sets the floor for the ablations."
+edit-distance-8,0.0200,success,e36_constant_6,2.13e+03,"Baseline: the head always answers 6. Constant 5 scored below the random init, so 5 is not the mode of the eval set."
+edit-distance-8,0.2050,success,e37_constant_4,2.13e+03,"Baseline: the head always answers 4. Constants 5 and 6 scored 13% and 2%, so the eval distances lean low."
+edit-distance-8,0.2500,success,e38_constant_3,2.13e+03,"Baseline: the head always answers 3, to bracket the mode. Constant 4 scored 41/200, the same as the random init in e01."
+edit-distance-8,1.0000,success,e39_all_margins_low,2.13e+03,"Interaction test on e23: GAMMA=40, LOCK=2000, SHARP=200 at once, each individually exact in its own sweep, to check the margins do not compound."
+edit-distance-8,1.0000,success,e40_final_clean,2.13e+03,"Final: e23 with the ablation switches removed and wide margins, checked on 200000 pairs. MLP is one 4-ReLU min gate shared by 8 columns, attention is pure routing with 10 heads of 3 kinds, 16 tied sweeps, 6 labels, 24 state registers."

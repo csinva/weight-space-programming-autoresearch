@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.1450,success,e00_baseline_random,1.59e+05,Random init baseline; also prints the public attributes of the task object.
+trec-coarse,0.7750,success,e01_decision_list_v1,6.34e+04,Window attention + AND-gate keyword neurons + priority attention (decision list); default ENTY.
+trec-coarse,0.8450,success,e02_more_nouns,1.39e+05,"Decision list with bigger head-noun gazetteers; bare 'what is X' means DESC, 'what is the' means ENTY."
+trec-coarse,0.8600,success,e03_enty_nouns,2.11e+05,"Adds an ENTY head-noun tier so the earliest noun wins, plus how-did/does DESC and person-name rules."
+trec-coarse,0.8650,success,e04_suffix_rules,2.38e+05,"Adds agent-noun suffix detectors (-ist, -ician, -ographer, -ress) as HUM plus broad category nouns."
+trec-coarse,0.8650,success,e05_short_question,3.00e+05,Adds wildcard gap patterns: a short 'what is X' (ends by position 20) means DESC; '^name' means HUM.
+trec-coarse,0.8650,success,e06_semantic_groups,3.20e+05,"Adds small semantic noun groups for each class seen in dev errors (office-holders, facts, odds, etc.)."
+trec-coarse,0.8950,success,e07_stems_pruned,2.73e+05,Merges plural/singular nouns into stems and prunes error-specific one-off words to cut dev overfitting.
+trec-coarse,0.8400,success,e08_eps30,2.73e+05,"EPS=30: one priority tier trades off against 10 characters, so early keywords can beat later higher tiers."
+trec-coarse,0.8900,success,e09_eps8,2.73e+05,"EPS=8: milder position trade-off, one priority tier is worth about 37 characters."
+trec-coarse,0.8900,success,e10_comefrom_which,2.74e+05,EPS back to 3; 'come from' outranks '^where'; bare '^which' defaults to HUM like '^name'.
+trec-coarse,0.9000,success,e11_abl_no_suffix,2.69e+05,"Ablation: reverts '^which', removes the agent-noun suffix detectors to measure what they contribute."
+trec-coarse,0.9000,success,e12_fix_salience_stacking,2.68e+05,Fixes stacked salience: one unanchored where/why at tier 8 instead of duplicate keywords firing together.
+trec-coarse,0.9000,success,e13_binary_letters,8.28e+04,Replaces one-hot letters with a 5-bit code and +/-1 AND weights; same matches with far fewer parameters.
+trec-coarse,0.8950,success,e14_short_window20,6.98e+04,Tightens the short-question test by four characters so the attention window shrinks from 24 to 20 heads.
+trec-coarse,0.8800,success,e15_past_tense_desc,7.04e+04,Tests whether past-tense 'what was/were/did' questions without a head noun lean DESC instead of ENTY.
+trec-coarse,0.8950,success,e16_abl_no_of_what,6.97e+04,Ablation: reverts past-tense DESC and removes the 'of what' ENTY rule.
+trec-coarse,0.9000,success,e17_abl_no_desc_nouns,6.83e+04,"Ablation: removes the small tier-5 DESC noun group (nature, function, facts, information, ...)."
+trec-coarse,0.9050,success,e18_abl_no_name,6.95e+04,Ablation: restores the DESC nouns and removes the '^name' HUM rule.
+trec-coarse,0.9050,success,e19_fire_diagnostic,6.95e+04,Same model as e18 plus a dev-only diagnostic that lists keyword neurons firing on zero or one questions.
+trec-coarse,0.9100,success,e20_how_collapse_prune,5.79e+04,Collapses all how-adjective keywords into one 'how'=NUM neuron (verbs override to DESC); prunes dead neurons.
+trec-coarse,0.8900,success,e21_prune_once_keywords,4.75e+04,Prunes the 55 keyword neurons that fire on only one dev question to measure the long tail's value.
+trec-coarse,0.9200,success,e22_what_is_the_desc,5.78e+04,Restores the e20 keywords; drops '^what is the'=ENTY so those questions default to DESC.
+trec-coarse,0.8750,success,e23_soft_vote,5.79e+04,"e20 rules with BETA=2, EPS=0: decision attention becomes a soft vote over keywords instead of a hard list."
+trec-coarse,0.8500,success,e24_gamma5,5.79e+04,Restores the hard decision list; GAMMA=5 tests whether the position kernel can use smaller weights.
+trec-coarse,0.9100,success,e25_gamma10,5.79e+04,GAMMA=10: looks for the sharpness threshold below which long AND patterns start losing activation.
+trec-coarse,0.9200,success,e26_agent_verbs,6.10e+04,"Adds past-tense agent verbs (invented, wrote, won, ...) as a general HUM signal at tier 4.5."
+trec-coarse,0.8800,success,e27_default_hum,5.79e+04,Removes agent verbs; default class HUM instead of ENTY for questions where no keyword fires.
+trec-coarse,0.9100,success,e28_window18,5.24e+04,Default back to ENTY; drops the redundant 'what do you call' so the attention window shrinks to 18 heads.
+trec-coarse,0.9100,success,e29_merge_fractional_tiers,5.24e+04,Merges tiers 5.2 and 5.5 into 5 to test whether those fractional priorities matter.
+trec-coarse,0.9100,success,e30_merge_tier85,5.24e+04,"Moves 'come from' from tier 8.5 to tier 9, removing another fractional priority."
+trec-coarse,0.9100,success,e31_integer_tiers,5.24e+04,All priorities become integers: 'how' moves to tier 5 and the 'what is the' group moves to tier 4.
+trec-coarse,0.9100,success,e32_beta100_eps1,5.24e+04,"Divides the decision attention weights by three (BETA=100, EPS=1), keeping the same ratio."
+trec-coarse,0.9100,success,e33_ends_in_do,5.26e+04,Adds a question-final 'do' detector: questions ending in 'do' ask for a description (DESC).
+trec-coarse,0.9100,success,e34_ends_in_do_fixed,5.26e+04,"Fixes e33, whose pattern had a stray space and never fired: 'do' followed directly by padding means DESC."
+trec-coarse,0.9100,success,e35_final_word_stats,5.26e+04,"Same model as e34 plus a dev-only table of question-final words by class, to find useful endings."
+trec-coarse,0.9100,success,e36_in_the_world,5.26e+04,Removes the dead 'do' rule and adds 'in the world' as a LOC signal at tier 5.
+trec-coarse,0.8750,success,e37_no_tiebreak,5.24e+04,Removes 'in the world'; EPS=0 tests whether the earliest-keyword tie-break is needed at all.
+trec-coarse,0.9100,success,e38_short_q_14,5.24e+04,Restores the tie-break; tightens the short-question test from position 16 to position 14.
+trec-coarse,0.9100,success,e39_no_short_q_no_pad,4.21e+04,Removes the short-question rule and the pad channel entirely; the window shrinks to 16 heads.
+trec-coarse,0.9100,success,e40_window15,3.97e+04,"Shortens the two longest keywords ('you say', 'expectancy') so the window shrinks to 15 heads."
+trec-coarse,0.9100,success,e41_window14_clean_compiler,3.73e+04,Removes the unused suffix and wildcard compiler paths; stem forms shrink the window to 14 heads.
+trec-coarse,0.9100,success,e42_shared_key,3.71e+04,"All attention heads share one key projection (p, p^2) instead of keeping separate identical copies."
+trec-coarse,0.9100,success,e43_abl_what_does_a,3.66e+04,Ablation: drops the '^what does a/an/the' and '^what are some' ENTY overrides.
+trec-coarse,0.9100,success,e44_abl_near_duplicates,3.63e+04,"Restores the 'what does a' overrides; removes rare near-duplicates (stands for, comes from, whom, what 's a)."
+trec-coarse,0.9100,success,e45_unit_votes,3.71e+04,Restores the near-duplicates; every keyword casts a plain vote of 1 instead of a priority-scaled vote.
+trec-coarse,0.9100,success,e46_gamma8,3.71e+04,"GAMMA=8: narrows the sharpness threshold, which lies between 5 (fails) and 10 (works)."
+trec-coarse,0.9100,success,e47_beta20,3.71e+04,"GAMMA back to 10 for margin; BETA=20, EPS=0.2 tests how soft the decision attention can get."
+trec-coarse,0.8250,success,e48_latest_wins,3.71e+04,Sanity check: EPS=-1 flips the tie-break so the latest keyword wins instead of the earliest.
+trec-coarse,0.9100,success,e49_final_integer_decision_list,3.71e+04,"Final: integer-tier keyword decision list with 5-bit letters, 14 window heads, shared key, earliest keyword wins."

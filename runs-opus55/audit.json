@@ -377,6 +377,761 @@
    }
   }
  },
+ "date-normalization-opus55-s1": {
+  "n_snapshots": 50,
+  "flagged": {
+   "abl_head_noplus1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "abl_march_strong": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "abl_u0_runend": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u1_year": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u2_slash": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u3_dot": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u4_padding": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u5_tensfix": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "abl_u6_hundreds": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v10_ZS": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v11_circle": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v12_overlayF": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v13_factored_d28": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v14_noK0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v15_3heads": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v16_sparse": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v17_lookG5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v18_lookG10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v19_fetchG10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v1_d44": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v20_fetchG20": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v21_dotyear": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v22_alpha14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v23_lookG5_alpha14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v24_lookG7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v25_signedSEP": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v26_hyphen2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v27_selfbonus": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v28_rotation": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v29_prunedV": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v2_d44": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v30_promptPos": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v31_oneAnswer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v32_step0token": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v33_smallgate": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v34_fetchG14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v35_noZ3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v36_thresh191": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v37_circle36": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v38_weak75": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v39_lookG5_ramp": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v3_defaults": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v40_verify100k": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v41_final": {
+    "paths": [
+     "/."
+    ]
+   },
+   "ptr_v4_d36": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v5_noMLP2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v6_look3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v7_bigram_d32": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v8_noHY": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "ptr_v9_noOUT": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ],
+    "paths": [
+     "/._"
+    ]
+   },
+   "interpretable_transformer": {
+    "paths": [
+     "/."
+    ]
+   }
+  }
+ },
+ "date-normalization-opus55-s2": {
+  "n_snapshots": 50,
+  "flagged": {
+   "ablate-bos": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-causal-mask": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-dot-day": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-dot-month": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-months": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-slash-day": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-word-day": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-year": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ablate-yy": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ascii-like-v1-shared-nibble": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ascii-like-v2-b1-60": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ascii-like-v3-b1-30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ascii-like-v4-period48-b30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ascii-like-v5-b2-30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "century-v1-derived-digit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "century-v2-two-bits": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "century-v3-offset3-bit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "circle-v1-period43": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "compass-v1-2d-role-keys": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "compass-v2-direct-slots": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v1-mod16": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v10-b40-b20": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v2-year-3digits": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v3-force-2bits": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v4-no-on-slot": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v5-no-digit-guards": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v6-one-guard": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v7-offset2-guard": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v8-b2-10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "hash-nibble-v9-b1-22": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "margin-b30-b10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "narrow-v1-emb-and-head": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v3-null-is-step0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v4-dash-from-steps": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v5-prompt-derived": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v6-free-head-width": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v7-key-val-widths": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v8-no-sep": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "nibble-code-v9-slash-key": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "role-pointer-v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "role-pointer-v2-eq-null": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "role-pointer-v3-no-mlp2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "shared-keys-v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "sum-heads-v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "trigram-v1-positive-only": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "validate-100k": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "veto-v1-minimal": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
  "decimal-to-binary-8bit-opus55-s1": {
   "n_snapshots": 41,
   "flagged": {
@@ -780,6 +1535,255 @@
    }
   }
  },
+ "edit-distance-8-opus55-s1": {
+  "n_snapshots": 39,
+  "flagged": {
+   "CompactDP_d10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Control_12passes": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Control_8passes": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Control_LayerNorm": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Control_SelfVisible": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FinalHard_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FinalSoft_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Halved_b4_t8_p32_f32": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "HardAttention_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Hard_clear14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Hard_far9_peak2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "IntegerWeights_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MergedRegister_ff2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoHide_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "PrefixMinDP_v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ScalarValues_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SevenRegisters_d7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Seven_beta3p5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Seven_beta5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Soft_beta3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Soft_beta3p5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Soft_tau3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Soft_tight_6_6_12_12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_far10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_far16": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_far4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_peak12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_peak6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_tau2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sweep_tau4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedCell_d12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedCountdown_d8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedStrictMask_d10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TransientAttn_edgecheck": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TransientAttn_ff3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TwoHeadDP": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TwoHeadDP_beta2_gamma30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TwoHeadDP_beta5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TwoHeadDP_beta5_gamma30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "edit-distance-8-opus55-s2": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
  "gcd-three-digits-opus55-s1": {
   "n_snapshots": 41,
   "flagged": {}
@@ -795,11 +1799,11 @@
   }
  },
  "linear-interpolation-two-points-opus55-s1": {
-  "n_snapshots": 27,
+  "n_snapshots": 28,
   "flagged": {}
  },
  "linear-interpolation-two-points-opus55-s2": {
-  "n_snapshots": 30,
+  "n_snapshots": 31,
   "flagged": {
    "Ablate14NoSlope5": {
     "eval_data": [
@@ -2553,6 +3557,21 @@
   "n_snapshots": 48,
   "flagged": {}
  },
+ "smallest-prime-factor-opus55-s1": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
+ "smallest-prime-factor-opus55-s2": {
+  "n_snapshots": 40,
+  "flagged": {
+   "relu_comb_v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
  "sort-five-digits-opus55-s1": {
   "n_snapshots": 31,
   "flagged": {
@@ -2572,6 +3591,309 @@
     ]
    }
   }
+ },
+ "trec-coarse-opus55-s1": {
+  "n_snapshots": 51,
+  "flagged": {
+   "AdjacentHeadNounV9": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "AttnEarlyPoolV20": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "AttnPoolSuperlativeV21": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Bonus8V18": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ContractionV31": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "DescVocabNarrowV25": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "DescVocabV24": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EarlyEnd18V12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EarlyEnd30V13": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EarlyHeadNounV3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EarlyScale2V23": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EarlyScale3V22": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EntyNounsV40": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "EntyPrior05V26": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Gain1e4V42": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Gain2e3V43": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "HumNounsV41": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "KeywordVotesV1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "KeywordVotesV2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MeanWhatAreV15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MethodAndFactsV38": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NamingTermsV35": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoBonusAblationV19": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoDigitChannelsV28": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoNameOfV36": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoNameVoteV32": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoSuperlativesV46": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoWhatMakesV45": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "OfPropertyV33": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "PluralsV39": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ShortDefinitionV4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ShortVote05V14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ShortWindowV29": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Stem10V49": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Stem9V48": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "StemPatternsV47": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "StrongWhV5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SuffixMorphologyV7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SuperlativeV10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TrimHowV44": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TrueSuperlativesV27": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "UnanchoredHowV30": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "VocabPassV11": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "VocabPassV17": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "VocabPassV6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "WhatAreOnlyV16": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "WhatCenturyV37": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "WhichHumanV34": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "WhoDominantV8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "trec-coarse-opus55-s2": {
+  "n_snapshots": 50,
+  "flagged": {}
  },
  "word-reversal-3x3-opus55-s1": {
   "n_snapshots": 39,

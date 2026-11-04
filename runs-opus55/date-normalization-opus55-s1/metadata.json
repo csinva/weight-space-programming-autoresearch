@@ -1,0 +1,40 @@
+{
+ "run": "date-normalization-opus55-s1",
+ "task": "date-normalization",
+ "seed": 1,
+ "model": "claude-opus-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "4efbf4ce-e8fb-4fc7-8c3b-49043f79c527",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 19.3037082,
+   "turns": 286,
+   "seconds": 3822,
+   "attempts_before": 0,
+   "attempts_after": 51,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-04T17:02:30.191831+00:00",
+ "finished": "2026-11-04T18:06:11.974866+00:00",
+ "attempts": 51
+}
