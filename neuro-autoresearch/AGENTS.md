@@ -1,5 +1,7 @@
 # neuro-autoresearch
 
+Carefully follow the instructions in `SKILL-TECHNICAL-WRITING.md`
+
 Open-ended agentic search for computational models of the visual cortex, aiming
 to discover and understand its computational principles. Read `README.md` for
 the current search workflow, evaluation protocols and commands.
