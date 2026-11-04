@@ -27,12 +27,12 @@ SYMLINK_NAMES = ["src"]
 COPY_NAMES = ["interpretable_transformer.py", "results", "program.md"]
 
 
-def setup_run(tag: str, repo_root: str | None = None) -> str:
+def setup_run(tag: str, repo_root: str | None = None, runs_subdir: str = "runs") -> str:
     evolve_dir = os.path.dirname(os.path.abspath(__file__))
     if repo_root is None:
         repo_root = os.path.dirname(evolve_dir)
 
-    runs_dir = os.path.join(repo_root, "runs")
+    runs_dir = os.path.join(repo_root, runs_subdir)
     run_dir = os.path.join(runs_dir, f"{tag}")
 
     if os.path.exists(run_dir):

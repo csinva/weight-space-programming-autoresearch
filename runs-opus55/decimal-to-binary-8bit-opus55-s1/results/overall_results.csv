@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,0.0000,success,e00_probe_task_interface,1.52e+05,Random init baseline; prints the public attributes of the task object to learn the format.
+decimal-to-binary-8bit,0.0000,success,e01_probe_examples,1.52e+05,Random init baseline; prints sample examples and format from the task object.
+decimal-to-binary-8bit,1.0000,success,e02_two_head_subtract_sink,5.60e+02,"One attention-only block, d=8, 2 heads: head A reads N via weights 100:10:1, head B reads emitted bits via weights 2^k with '=' as a mass sink; argmax compares r with 2^k. No LayerNorm/MLP."
+decimal-to-binary-8bit,1.0000,success,e03_d4_shared_log_channel,2.16e+02,"d=4, 2 heads, attention only: one log-weight channel is key for both heads and query for the sink; '=' value 1/2 makes the sink supply the trial weight 2^k; rank-one head reads the sign of N-S-2^k+1/2."
+decimal-to-binary-8bit,1.0000,success,e04_d4_pos11,1.96e+02,e03 with the position table cut to the 11 positions actually fed to the model.
+decimal-to-binary-8bit,1.0000,success,e05_d4_concat_embeddings,1.19e+02,"e04 with token value and position channels concatenated rather than added, and a head that reads only OUT."
+decimal-to-binary-8bit,0.3550,success,e06_off2,1.19e+02,"Ablation of e05: silencing key OFF lowered from 20 to 2, leaking attention between digits and bits."
+decimal-to-binary-8bit,0.9800,success,e07_off5,1.19e+02,Margin sweep on e05: silencing key OFF = 5.
+decimal-to-binary-8bit,1.0000,success,e08_off10,1.19e+02,Margin sweep on e05: silencing key OFF = 10.
+decimal-to-binary-8bit,0.9100,success,e09_noise1e-3,1.19e+02,Robustness of e05: 0.1% multiplicative Gaussian noise on every nonzero weight.
+decimal-to-binary-8bit,1.0000,success,e10_noise1e-4,1.19e+02,Robustness of e05: 0.01% multiplicative Gaussian noise on every nonzero weight.
+decimal-to-binary-8bit,0.3050,success,e11_no_sink_mass,1.19e+02,"Ablation of e05: '=' keeps fixed log-mass 0 rather than a mass that varies with position, so head B's denominator is no longer 256."
+decimal-to-binary-8bit,0.0000,success,e12_eq_value_zero,1.19e+02,"Ablation of e05: '=' value set to 0, so the sink no longer supplies the trial weight 2^k and every bit is tested against zero."
+decimal-to-binary-8bit,0.0000,success,e13_no_head_b,1.19e+02,"Ablation of e05: head B disconnected, so the model has no memory of emitted bits or any threshold and always compares N with 0."
+decimal-to-binary-8bit,1.0000,success,e14_final_layernorm,1.38e+02,"e05 plus a stock final LayerNorm: the head reads the difference OUT - SINK, whose sign LayerNorm preserves."
+decimal-to-binary-8bit,1.0000,success,e15_stock_block_d10,8.71e+02,"Full stock block (ln1, attention, ln2, MLP) at d=10: equal-norm zero-mean embeddings make the pre-attention LayerNorm an exact identity; MLP is a no-op."
+decimal-to-binary-8bit,1.0000,success,e16_stock_defaults_d64,1.52e+05,"Original architecture and hyperparameters (d=64, 4 heads, 3 layers, d_ff=256): the e15 circuit sits in block 1 and all other blocks and MLPs are no-ops."
+decimal-to-binary-8bit,1.0000,success,e17_integer_wires,1.10e+03,"All-integer weights, d=13, 13 heads, attention only: each head is a wire from one position, place values 200,20,2,-256..-4 sit in W_o and the threshold table sits in the head. No logs or square roots."
+decimal-to-binary-8bit,0.7650,success,e18_wires_noise1e-3,1.10e+03,"Robustness of e17: 0.1% multiplicative Gaussian noise on every nonzero weight, for comparison with e09."
+decimal-to-binary-8bit,1.0000,success,e19_wires_noise_Wo_only,1.10e+03,Fragility map of e17: 0.1% noise on the place values in W_o only.
+decimal-to-binary-8bit,1.0000,success,e20_wires_noise_tokens_only,1.10e+03,Fragility map of e17: 0.1% noise on the digit values in the token embedding only.
+decimal-to-binary-8bit,1.0000,success,e21_wires_noise_head_only,1.10e+03,"Fragility map of e17: 0.1% noise on the output head, including the threshold table, only."
+decimal-to-binary-8bit,1.0000,success,e22_wires_noise_Wv_only,1.10e+03,Fragility map of e17: 0.1% noise on the per-head value gains in W_v only.
+decimal-to-binary-8bit,1.0000,success,e23_wires_noise_pos_only,1.10e+03,Fragility map of e17: 0.1% noise on the position embedding only; its one-hot multiplies the threshold table and its constant sets every query.
+decimal-to-binary-8bit,1.0000,success,e24_wires_noise_WqWk_only,1.10e+03,Fragility map of e17: 0.1% noise on the attention query and key matrices only.
+decimal-to-binary-8bit,0.0150,success,e25_wires_hit6_fb3,1.10e+03,"Score sweep on e17: smallest clean integer attention scores, HIT=6 and FALLBACK=3."
+decimal-to-binary-8bit,0.9850,success,e26_wires_hit16_fb8,1.10e+03,Score sweep on e17: HIT=16 and FALLBACK=8.
+decimal-to-binary-8bit,1.0000,success,e27_wires_hit20_fb10,1.10e+03,Score sweep on e17: HIT=20 and FALLBACK=10.
+decimal-to-binary-8bit,0.6700,success,e28_one_head_uniform_mean,2.64e+03,"One head with zero query and key: a gated-ReLU MLP computes signed place values per position, uniform attention averages them, and the head's threshold table divides by the known p+1."
+decimal-to-binary-8bit,1.0000,success,e29_one_head_gate1200,2.64e+03,e28 with the gate leak fixed: GATE raised above 128*9 so a bit unit stays off when a digit 8 or 9 sits at another position.
+decimal-to-binary-8bit,0.0200,success,e30_no_feedback_square_waves,3.04e+04,"Contrast model that ignores emitted bits: each bit is a position-gated square wave of N made from 1004 ReLU ramps, showing what autoregression saves."
+decimal-to-binary-8bit,1.0000,success,e31_no_feedback_sqrt_fixed,3.04e+04,"e30 with the attention scale fixed (query multiplied by sqrt(dh)): feedback-free square waves from 1004 ReLU ramps, showing what autoregression saves."
+decimal-to-binary-8bit,1.0000,success,e32_round_3_decimals,1.19e+02,Precision of e05: every weight rounded to 3 decimal places.
+decimal-to-binary-8bit,0.7800,success,e33_round_2_decimals,1.19e+02,Precision of e05: every weight rounded to 2 decimal places.
+decimal-to-binary-8bit,1.0000,success,e34_integer_bit_ranks,1.19e+02,e05 with the U channel in units of bits: positions hold integer ranks 7..1 and ln 2 appears only as a scale in W_q.
+decimal-to-binary-8bit,1.0000,success,e35_ranks_round_2_decimals,1.19e+02,"Precision of e34: every weight rounded to 2 decimal places, for comparison with e33."
+decimal-to-binary-8bit,0.2650,success,e36_ranks_round_1_decimal,1.19e+02,Precision of e34: every weight rounded to 1 decimal place.
+decimal-to-binary-8bit,0.9850,success,e37_ranks_2dec_off10,1.19e+02,e35 with the silencing offset lowered from 20 to 10 bits.
+decimal-to-binary-8bit,1.0000,success,e38_ranks_2dec_off15,1.19e+02,e35 with the silencing offset lowered from 20 to 15 bits.
+decimal-to-binary-8bit,1.0000,success,e39_final_literal_weights,1.19e+02,"Final model, 119 params: one attention-only block with d=4 and 2 heads implementing trial subtraction; every weight is a literal with at most two decimals and bit ranks are integers."

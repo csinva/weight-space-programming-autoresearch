@@ -1,0 +1,39 @@
+{
+ "run": "decimal-to-binary-8bit-opus55-s2",
+ "task": "decimal-to-binary-8bit",
+ "seed": 2,
+ "model": "claude-opus-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "8d8f6a32-ab79-428f-91b9-0d12813e1be4",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 10.955670799999998,
+   "turns": 183,
+   "seconds": 2357,
+   "attempts_before": 0,
+   "attempts_after": 40,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-04T00:51:54.215486+00:00",
+ "finished": "2026-11-04T01:31:11.642538+00:00",
+ "attempts": 40
+}

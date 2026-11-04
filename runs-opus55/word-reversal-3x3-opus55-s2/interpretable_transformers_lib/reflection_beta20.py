@@ -1,0 +1,159 @@
+"""Interpretable transformer, hand-written weights (no training) for word-reversal-3x3:
+"abc_def_ghi=" -> "ghi_def_abc". The algorithm is a reflection through the '=' pivot.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import math
+import os
+import sys
+import time
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+sys.path.insert(0, os.path.dirname(__file__))
+from src.eval import evaluate, plot_accuracy_over_iterations
+import src.task
+
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+OVERALL_CSV = os.path.join(RESULTS_DIR, "overall_results.csv")
+OVERALL_CSV_COLS = ["task", "accuracy", "status", "model_shorthand_name", "n_params", "description"]
+
+
+# ---------------------------------------------------------------------------
+# Architecture (edit freely — but NO TRAINING)
+# ---------------------------------------------------------------------------
+
+class MirrorAttention(nn.Module):
+    """Standard causal dot-product attention with a diagonal W_q and identity W_k."""
+
+    def __init__(self):
+        super().__init__()
+        self.q_scale = nn.Parameter(torch.zeros(4))  # diagonal of W_q
+
+    def forward(self, addr: torch.Tensor) -> torch.Tensor:
+        """addr is (T, 4). Returns the (T, T) attention matrix."""
+        T = addr.shape[0]
+        q = addr * self.q_scale
+        scores = q @ addr.T
+        mask = torch.triu(torch.ones(T, T, dtype=torch.bool, device=addr.device), diagonal=1)
+        return scores.masked_fill(mask, float("-inf")).softmax(dim=-1)
+
+
+class SimpleTransformer(nn.Module):
+    def __init__(self, vocab_size: int, max_seq_len: int = 32):
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.max_seq_len = max_seq_len
+        self.attn = MirrorAttention()
+        self.prompt_chars = 11  # length of "www_www_www"; the '=' is the pivot
+
+    def addresses(self, T: int, device) -> torch.Tensor:
+        """Fixed circular encoding: word and letter each become (cos, sin) of an angle."""
+        t = torch.arange(T, device=device)
+        answer = t >= self.prompt_chars
+        char = torch.where(answer, t - self.prompt_chars, t)  # index within its own text
+        word = char // 4 + torch.where(answer, 1, -3)
+        letter = char % 4
+        letter = torch.where(letter == 3, 4, letter)  # separators go in a far column
+        w_angle, l_angle = word * (math.pi / 4), letter * (2 * math.pi / 5)
+        return torch.stack([w_angle.cos(), w_angle.sin(), l_angle.cos(), l_angle.sin()], -1)
+
+    def forward(self, ids: torch.Tensor) -> torch.Tensor:
+        T = ids.shape[1]
+        tok = ids.float()  # fixed embedding: token i is the number i
+        addr = self.addresses(T, ids.device)  # (T, 4)
+        copied = (tok @ self.attn(addr).T)[:, :, None]  # (B, T, 1)
+        # Fixed head: the logit of token i is minus the distance from the copy to i.
+        return -(copied - torch.arange(self.vocab_size, device=ids.device).float()) ** 2
+
+
+# ---------------------------------------------------------------------------
+# Agent's interpretable weight assignment (edit this)
+# ---------------------------------------------------------------------------
+
+@torch.no_grad()
+def write_weights(model: SimpleTransformer, task) -> None:
+    """Word angles: prompt -3,-2,-1 and answer +1,+2,+3 times pi/4; letters on a 5-point circle.
+    W_q = BETA * diag(1, -1, 1, 1) flips sin(word), so angle theta queries angle -theta:
+    a genuine linear reflection under plain dot-product attention. Scores peak at 2 BETA
+    for the mirrored position; the runner-up is at most about 1.71 BETA."""
+    BETA = 20.0
+    model.attn.q_scale.copy_(BETA * torch.tensor([1.0, -1.0, 1.0, 1.0]))
+
+
+# A unique shorthand name + 1-2 sentence description of what this attempt does.
+# Used as the row identifier in results/overall_results.csv.
+model_shorthand_name = "reflection_beta20"
+model_description = "Temperature test of reflection_only_4p: beta=20, predicted to hold since the 0.29*beta gap keeps token leakage under half a token."
+
+
+# ---------------------------------------------------------------------------
+# Evaluation harness (do not edit below)
+# ---------------------------------------------------------------------------
+
+def upsert_overall_results(rows: list[dict], results_dir: str) -> None:
+    os.makedirs(results_dir, exist_ok=True)
+    path = os.path.join(results_dir, "overall_results.csv")
+    new_keys = {(r["model_shorthand_name"], r["task"]) for r in rows}
+    existing: list[dict] = []
+    if os.path.exists(path):
+        with open(path, newline="") as f:
+            for row in csv.DictReader(f):
+                if (row.get("model_shorthand_name"), row.get("task")) not in new_keys:
+                    existing.append(row)
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=OVERALL_CSV_COLS)
+        writer.writeheader()
+        writer.writerows(existing + [{k: r.get(k, "") for k in OVERALL_CSV_COLS} for r in rows])
+    print(f"Overall results saved → {path}")
+
+
+
+def build_model(task) -> SimpleTransformer:
+    max_seq_len = max(task.seq_len, 16)
+    model = SimpleTransformer(vocab_size=task.vocab_size, max_seq_len=max_seq_len)
+    write_weights(model, task)
+    model.eval()
+    return model
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--task", help="Task name (see src/task.py)", choices=list(src.task.TASK_REGISTRY.keys()))
+    parser.add_argument("--n-samples", type=int, default=200)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--verbose", action="store_true")
+    args = parser.parse_args()
+
+    t0 = time.time()
+    task = src.task.get_task(args.task)
+    model = build_model(task).to(args.device)
+
+    accuracy, _ = evaluate(
+        model, task, n_samples=args.n_samples, seed=args.seed,
+        device=args.device, verbose=args.verbose,
+    )
+
+    n_params = sum(p.numel() for p in model.parameters())
+
+    upsert_overall_results([{
+        "task":        args.task,
+        "accuracy":    f"{accuracy:.4f}",
+        "status":      "",
+        "model_shorthand_name":  model_shorthand_name,
+        "n_params":    f"{n_params:.2e}",
+        "description": model_description,
+    }], RESULTS_DIR)
+    plot_accuracy_over_iterations(RESULTS_DIR)
+
+    print()
+    print("---")
+    print(f"task:          {args.task}")
+    print(f"accuracy:      {accuracy:.4f}  ({int(round(accuracy * args.n_samples))}/{args.n_samples})")
+    print(f"total_seconds: {time.time() - t0:.1f}s")

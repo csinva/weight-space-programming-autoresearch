@@ -38,3 +38,5 @@ systematic-tests/exp2/*/dense_effects.npz
 systematic-tests/exp3/dense_effects.npz
 systematic-tests/**/bundle/weights/
 systematic-tests/**/dense_effects.npz
+
+.hf_home/

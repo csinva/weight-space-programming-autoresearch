@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+linear-interpolation-two-points,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+linear-interpolation-two-points,0.0150,success,RandomInitProbe,1.52e+05,Random init; prints the task's public interface and sample examples to learn the format.
+linear-interpolation-two-points,0.0100,success,RandomInitStats,1.52e+05,"Random init; prints data-range statistics of slope, intercept, x and y on a non-eval seed."
+linear-interpolation-two-points,1.0000,success,SlopeHypothesisV1,7.54e+03,Attention reads 5 numbers; MLP bumps test slopes 1..5; big-M ReLUs select the line; digits split by printed tens; quadratic round() head. No LayerNorm.
+linear-interpolation-two-points,1.0000,success,FloorHead2Block,4.89e+03,"Third block removed: a linear head computes floor(V/SCALE), with a position-dependent place value, so digit splitting needs no ReLU."
+linear-interpolation-two-points,1.0000,success,AttnOnlyBlock0,3.06e+03,"Attention kept only in block 0 and block 1 MLP narrowed to 5 units; reading needs one attention layer, so the rest is removed."
+linear-interpolation-two-points,1.0000,success,KeyEqualsRegister,1.98e+03,"Each number's positional key and its register share one channel (key is 0 at output steps), cutting d_model from 19 to 14."
+linear-interpolation-two-points,0.3100,success,ScaleIsBias,1.79e+03,"The constant bias channel is merged into the place-value SCALE channel, which is positive everywhere; d_model drops to 13."
+linear-interpolation-two-points,1.0000,success,AbsPenalty,1.84e+03,Separate bias restored after ScaleIsBias broke the 10:1 attention ratio. Slope test is now |z_k| from 2 ReLUs instead of a 3-ReLU bump.
+linear-interpolation-two-points,1.0000,success,FiveScalarHeads,1.33e+03,"Attention projects into exactly 5 scalar heads, one per number, instead of d_model dimensions; Q/K/V/O become 5x14 matrices."
+linear-interpolation-two-points,1.0000,success,ConstQuery,1.18e+03,"Each head has a constant query instead of W_q(x), so routing is independent of the state; this makes merging bias into SCALE safe (d_model 13)."
+linear-interpolation-two-points,0.7650,success,ScalarSlopeUnaryMul,9.35e+02,Slope stored as one literal number m (default 1 plus bumps for 2..5); block 1 multiplies m*(x3-x1) with four gated adders; d_model 9.
+linear-interpolation-two-points,1.0000,success,ScalarSlopeHalfThreshold,9.35e+02,"ScalarSlopeUnaryMul with adder thresholds at S >= k-0.5, testing whether float noise at the ReLU kink caused its 76.5% accuracy."
+linear-interpolation-two-points,0.9900,success,RealLayerNorm,1.33e+03,"Real LayerNorm restored and made an identity: a mirror channel zeroes the mean, a +A/-A pair pins the std, and LN gains undo the scale."
+linear-interpolation-two-points,1.0000,success,RealLayerNormA1e4,1.33e+03,"RealLayerNorm with A lowered from 1e5 to 1e4, to test whether float32 rounding of the mean caused its two misses."
+linear-interpolation-two-points,1.0000,success,LayerNormExhaustive,1.33e+03,"Same circuit as RealLayerNormA1e4 plus a diagnostic that generates all 45000 possible prompts, since 200 samples cannot rule out rare misses."
+linear-interpolation-two-points,1.0000,success,ScalarSlopeExhaustive,9.35e+02,"Smallest circuit so far (no LayerNorm, d_model 9) with attention score FORBID lowered to 30, checked on all 45000 possible prompts."
+linear-interpolation-two-points,1.0000,success,BigM40,9.35e+02,"Big-M lowered from 200 to 40, just above the predicted bound M/2 >= 18; smaller constants make the weights easier to read."
+linear-interpolation-two-points,0.9600,success,BigM30,9.35e+02,"Stress test: big-M set to 30, below the predicted bound M/2 >= 18, to check that the bound is real; misses are expected for large t'."
+linear-interpolation-two-points,1.0000,success,LinearPartInHead,9.16e+02,"ReLUs only gate: the head reads the linear formula y1 + t' - 9m directly from registers, and block 1 holds just the 4 gated adders (M=40)."
+linear-interpolation-two-points,1.0000,success,StockArchitecture,1.52e+05,"The whole circuit embedded in the unmodified default transformer (d_model 64, 4 heads, 3 layers, d_ff 256, real LayerNorm); block 2 sits idle."
+linear-interpolation-two-points,0.5600,success,NoHeadMargin,9.16e+02,"Ablation: the head's 0.05 tie-break margin is removed. Exact multiples of SCALE then tie two digits, so failures are expected."
+linear-interpolation-two-points,0.0200,success,WeakRouting,9.16e+02,"Stress test: FORBID lowered to 4, so attention is no longer hard routing and other digits may leak into the registers. Margin restored to 0.05."
+linear-interpolation-two-points,0.9650,success,Forbid16,9.16e+02,"FORBID 16 from a leak bound of about 15.8, testing the bound after WeakRouting's failure was confounded by the +9 offset beating the key at 4."
+linear-interpolation-two-points,1.0000,success,Forbid17,9.16e+02,FORBID 17 from a corrected leak bound of about 16.5; Forbid16's bound had missed that two positions leak at the units step.
+linear-interpolation-two-points,1.0000,success,BinaryAdders,1.07e+03,"m-1 stored as 3 bits with adders for t', 2t', 4t': 6 multiplier ReLUs instead of 8, at the cost of 2 more channels (d_model 11). FORBID back to 30."
+linear-interpolation-two-points,1.0000,success,LineHypotheses,1.18e+03,"One candidate line per slope: Y = sum_k relu(y1 + k(x3-x1) - M|z_k|). 15 ReLUs and a head reading only Y, but 13 channels; compared with scalar slope."
+linear-interpolation-two-points,1.0000,success,SparseScale,1.18e+03,"SCALE is written only at the two output steps instead of every position, removing 14 nonzero weights that nothing depends on."
+linear-interpolation-two-points,0.7550,success,DropSlope5,1.18e+03,"Ablation: the slope-5 hypothesis is removed. A fifth of all lines have slope 5, so about 36000/45000 is expected if the others are unaffected."
+linear-interpolation-two-points,1.0000,success,FinalLineHypotheses,1.18e+03,"Final circuit: same weights as SparseScale, documented. Scalar heads read 5 numbers, |z_k| tests 5 slopes, relu selects the line, linear head floor-divides."

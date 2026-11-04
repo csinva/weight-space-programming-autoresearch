@@ -1,0 +1,39 @@
+{
+ "run": "multiplication-five-digits-opus55-s2",
+ "task": "multiplication-five-digits",
+ "seed": 2,
+ "model": "claude-opus-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "eee37795-4ac2-4528-8a50-d4149cfce3fe",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 11.534321199999999,
+   "turns": 205,
+   "seconds": 2892,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-04T01:20:47.744548+00:00",
+ "finished": "2026-11-04T02:09:00.162294+00:00",
+ "attempts": 30
+}

@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.0000,success,E01_RandomInitProbe,1.61e+05,Baseline random init; also prints the task object's public attributes to learn the interface.
+paraphrase-mrpc,0.0000,success,E02_RandomInitDevSample,1.61e+05,"Random init; prints task method signatures, dev-seed examples and forward shapes."
+paraphrase-mrpc,0.6800,success,E03_ConstantOneCircuit,1.95e+05,Window/match/pool circuit wired up but head ignores overlap and always answers 1 (class-prior baseline).
+paraphrase-mrpc,0.6500,success,E04_FourGramOverlap,1.95e+05,"Fraction of s2 4-grams found exactly in s1 via attention, thresholded at 0.35."
+paraphrase-mrpc,0.6650,success,E05_FourGramLowThreshold,1.95e+05,4-gram overlap thresholded lower at 0.25; adds a Python-only dev report comparing candidate features by AUC.
+paraphrase-mrpc,0.6550,success,E06_ThreeGramOverlap,1.95e+05,"s2 3-gram overlap with s1 thresholded at 0.33; dev report compares symmetric, prefix, stem and long-word features."
+paraphrase-mrpc,0.6600,success,E07_BidirThreeGram,1.95e+05,"Bidirectional 3-gram overlap (s1 and s2 positions both matched against the other sentence, L2 non-causal), threshold 0.33."
+paraphrase-mrpc,0.6500,success,E08_WordStemMatch,1.95e+05,"Bidirectional stem overlap: pool only 4-grams starting at a word boundary (space plus first 3 letters), threshold 0.33."
+paraphrase-mrpc,0.6600,success,E09_GramPlusStemBlend,1.95e+05,"Equal blend of bidirectional 3-gram overlap and word-stem overlap, threshold 0.30."
+paraphrase-mrpc,0.6850,success,E10_EarlyPositionDecay,1.95e+05,"Gram + stem blend with pooling weighted toward early s2 positions (log-weight ramp 2.0), threshold 0.30."
+paraphrase-mrpc,0.6800,success,E11_FuzzyMatchMargin3,1.95e+05,"Gram + stem blend with fuzzy matching: null slot lowered so shingles differing by one bit-flip pair still count, threshold 0.30."
+paraphrase-mrpc,0.6600,success,E12_FuzzyRecalibrated,1.95e+05,Fuzzy gram + stem blend (margin 3) with the threshold raised to 0.42 to match the higher fuzzy overlap scale.
+paraphrase-mrpc,0.6850,success,E13_FuzzyMatchMargin5,1.95e+05,"Fuzzier gram + stem blend tolerating two flipped bits per shingle (margin 5), threshold 0.40."
+paraphrase-mrpc,0.6500,success,E14_LengthAwareThreshold,1.95e+05,"Fuzzy gram + stem blend (margin 3) with a length term: head adds 0.1 times s2 fill, threshold 0.46, so short s2 needs more overlap."
+paraphrase-mrpc,0.6750,success,E15_FuzzyThreeGramOnly,1.95e+05,"Simplification: fuzzy bidirectional 3-gram overlap alone (stem head dropped) plus the 0.1 s2 fill term, threshold 0.54."
+paraphrase-mrpc,0.6850,success,E16_ConsonantSkeleton,1.95e+05,"Fuzzy 3-gram overlap with all vowels sharing one code, so inflected word forms match more easily; fill term 0.1, threshold 0.54."
+paraphrase-mrpc,0.6750,success,E17_CompactD48,3.67e+04,"Same fuzzy 3-gram + fill circuit as E15 rebuilt at d_model 48 with one match head and a 3-char window, about 7x fewer parameters."
+paraphrase-mrpc,0.6750,success,E18_CompactD30FiveBit,1.65e+04,E17 circuit shrunk further: 5-bit character codes (enough for the letters in prompts) and d_model 30.
+paraphrase-mrpc,0.6700,success,E19_SoftMatchSharp1,1.65e+04,Compact D30 circuit with soft match attention (sharpness 1 instead of 10): partial shingle agreement contributes a graded amount.
+paraphrase-mrpc,0.6900,success,E20_RareLetterPooling,1.65e+04,Compact D30 circuit with letter-level IDF: pooling up-weights positions holding rare English letters (hand-written frequency classes).
+paraphrase-mrpc,0.6700,success,E21_FullyCausalCompact,1.65e+04,"Compact D30 circuit restored to strict causal attention: only s2 positions are matched against s1, fuzzy 3-gram + fill, threshold 0.54."
+paraphrase-mrpc,0.6700,success,E22_StrongerLengthTerm,1.65e+04,"Causal compact circuit with the s2 length term doubled to 0.2, threshold 0.64, keeping the effective cut for full-length sentences."
+paraphrase-mrpc,0.6550,success,E23_ExactBigramOverlap,1.65e+04,"Causal compact circuit using exact character bigrams instead of fuzzy trigrams; fill term 0.2, threshold 0.76."
+paraphrase-mrpc,0.6700,success,E24_MinimalCausalD24,1.14e+04,"Cleaned-up causal circuit with unused registers removed: d_model 24, three attention layers, fuzzy 3-gram overlap + fill term, no MLP."
+paraphrase-mrpc,0.6650,success,E25_SeparatorAsSpace,1.14e+04,"Minimal D24 causal circuit with the separator embedded like a space, so the first word of s2 can match a word inside s1."
+paraphrase-mrpc,0.6600,success,E26_LowerCutStructureLab,1.14e+04,Minimal D24 circuit with threshold 0.62; dev report adds overlap-decile label rates and a Python-only comparison of structural features.
+paraphrase-mrpc,0.6600,success,E27_BottomDecileCut,1.14e+04,"Minimal D24 circuit with threshold 0.60, aiming the 0 answer at the low-overlap region where the dev label rate falls below one half."
+paraphrase-mrpc,0.6600,success,E28_NoLengthTerm,1.14e+04,Minimal D24 circuit with the length term removed: answer 1 iff fuzzy 3-gram overlap exceeds 0.42.
+paraphrase-mrpc,0.6600,success,E29_SmallestCircuitD22,9.97e+03,"Smallest circuit so far: d_model 22, heads 2/1/1, no fill head; answer 1 iff fuzzy 3-gram overlap of s2 with s1 exceeds 0.42."
+paraphrase-mrpc,0.6550,success,E30_ExactTrigramD22,9.97e+03,"D22 circuit with exact 3-gram matching (no bit tolerance), threshold 0.34: the plainest possible reading of the rule."
+paraphrase-mrpc,0.6650,success,E31_FuzzyThreshold046,9.97e+03,D22 fuzzy 3-gram circuit with the threshold raised to 0.46 to check sensitivity of the single decision constant.
+paraphrase-mrpc,0.6600,success,E32_PhoneticCode,9.97e+03,"D22 circuit with hand-designed phonetic character codes: alike-sounding letters differ by one bit, so fuzzy matching forgives spelling and tense variation."
+paraphrase-mrpc,0.6600,success,E33_MatchSharp3,9.97e+03,D22 fuzzy 3-gram circuit with match sharpness lowered to 3 to test whether a softer match bit changes the decision.
+paraphrase-mrpc,0.6750,success,E34_FuzzyBigram,9.97e+03,"D22 circuit with fuzzy 2-grams tolerating one flipped bit, threshold 0.68."
+paraphrase-mrpc,0.6550,success,E35_FuzzyFourGramD28,1.47e+04,"Causal circuit widened to d_model 28 for fuzzy 4-grams with a four-character window, threshold 0.34."
+paraphrase-mrpc,0.6650,success,E36_FourGramMargin5,1.47e+04,"D28 circuit with 4-grams tolerating two flipped bits, threshold 0.40: wider tolerance scaled to the longer shingle."
+paraphrase-mrpc,0.6500,success,E37_LatePositionWeight,1.47e+04,"D28 4-gram circuit pooling with extra log-weight on late s2 positions (ramp 1.5), since dev tail coverage out-ranked head coverage."
+paraphrase-mrpc,0.3200,success,E38_NegativeControlAllZero,1.47e+04,"Negative control: threshold 1.1 is unreachable, so the head always answers 0; checks the decision path and the class balance."
+paraphrase-mrpc,0.6850,success,E39_StemHeadCausalD28,1.47e+04,"Causal D28 circuit counting word stems: a fourth window head flags 4-grams starting at a boundary and pooling only reads those, threshold 0.44."
+paraphrase-mrpc,0.6250,success,E40_ExactStemCausalD28,1.47e+04,"Causal D28 stem circuit with exact matching: a word counts only if its first three letters and leading boundary occur together in s1, threshold 0.34."
+paraphrase-mrpc,0.6650,success,E41_ExactStemLowCut,1.47e+04,"Exact causal stem circuit with the threshold lowered to 0.26, moving the cut toward the region where the label rate actually drops below one half."
+paraphrase-mrpc,0.6400,success,E42_AllPlusStemBlendD32,1.83e+04,"Causal D32 circuit blending all-shingle and word-stem 4-gram overlap equally from one match head, threshold 0.30."
+paraphrase-mrpc,0.6600,success,E43_FuzzyBlendD32,1.83e+04,"All-shingle plus word-stem blend at d_model 32 with one flipped bit tolerated, threshold 0.36."
+paraphrase-mrpc,0.6450,success,E44_FuzzyBlendLowCut,1.83e+04,Fuzzy all-shingle plus stem blend at d_model 32 with the threshold lowered to 0.32.
+paraphrase-mrpc,0.6450,success,E45_BlendStemShare25,1.83e+04,"Fuzzy blend at d_model 32 weighting stems at 0.25 and all shingles at 0.75, threshold 0.30."
+paraphrase-mrpc,0.6550,success,E46_BlendStemShare75,1.83e+04,"Fuzzy blend at d_model 32 weighting stems at 0.75 and all shingles at 0.25, threshold 0.34."
+paraphrase-mrpc,0.6550,success,E47_BlendMargin5,1.83e+04,"Blend at d_model 32 with two flipped bits tolerated per 4-gram, stem share 0.25, threshold 0.38."
+paraphrase-mrpc,0.6550,success,E48_BlendSoftMatch,1.83e+04,"Blend at d_model 32 with soft match attention (sharpness 3), two flipped bits tolerated, stem share 0.25, threshold 0.38."
+paraphrase-mrpc,0.6600,success,E49_MinimalThreshold040,9.97e+03,"Minimal D22 fuzzy 3-gram circuit with threshold 0.40, bracketing the chosen 0.42 from below (E31 bracketed it from above at 0.46)."
+paraphrase-mrpc,0.6600,success,E50_FinalMinimalCircuit,9.97e+03,"Final pick, same weights as E29: fully causal d_model 22 circuit answering 1 iff fuzzy 3-gram overlap of s2 with s1 exceeds 0.42; rerun to confirm reproducibility."

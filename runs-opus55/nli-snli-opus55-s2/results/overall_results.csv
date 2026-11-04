@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+nli-snli,0.0000,success,e01_random_baseline,1.62e+05,Baseline: default architecture with random init; prints the task object's public interface.
+nli-snli,0.0000,success,e02_inspect_examples,1.62e+05,Random init; prints method signatures and sample examples drawn with a non-eval seed to learn the prompt format.
+nli-snli,0.4450,success,e03_exact_stem_overlap,3.63e+05,Word-anchored 4-char stem tokens; label from fraction of hypothesis content words found in the premise (exact stems only).
+nli-snli,0.4700,success,e04_concepts_hypernyms,4.42e+05,Stem overlap plus hand-written synonym concepts and hypernym closure (premise man unlocks hypothesis person).
+nli-snli,0.4900,success,e05_group_conflict,4.42e+05,Adds mutual-exclusion conflict: an unmatched hypothesis concept whose exclusive group appears in the premise votes contradiction.
+nli-snli,0.5700,success,e06_cue_votes,4.61e+05,"Adds hypothesis-only cue-word votes per class (negations, purpose clauses, generic nouns) from known NLI annotation artefacts."
+nli-snli,0.5400,success,e07_lower_contra_threshold,4.61e+05,Lowers the contradiction overlap threshold from 0.35 to 0.25 to reduce neutral-to-contradiction errors; prints sample dev errors.
+nli-snli,0.5150,success,e08_unmatched_count,4.65e+05,Adds a count of hypothesis words absent from the premise via uniform attention over fixed positions; each one penalises entailment.
+nli-snli,0.5250,success,e09_generic_stopwords,4.82e+05,"Treats generic verbs, collectives and particles (wear, hold, look, group, near, up) as non-content so implied words stop counting as unmatched."
+nli-snli,0.5250,success,e10_broader_lexicon,5.22e+05,"Broader synonym lexicon (photo, music, food, beverage, smile, work, ball) with vehicle and ball hypernyms; reports second-seed accuracy and dev/eval overlap."
+nli-snli,0.5300,success,e11_main_verb_unmatched,6.97e+05,Extends the char window to 7 to spot the word after is/are/was; an unmatched main verb votes contradiction.
+nli-snli,0.5450,success,e12_main_verb_weight1,6.97e+05,Reduces the unmatched main-verb contradiction vote from 3.0 to 1.0 after the stronger weight over-predicted contradiction.
+nli-snli,0.5250,success,e13_conflict_weight6,5.22e+05,Removes the main-verb circuit (no dev gain) and raises the exclusive-group conflict weight from 4 to 6.
+nli-snli,0.6000,success,e14_neutral_bias,5.22e+05,Adds a constant -1 bias on the neutral logit because neutral is over-predicted relative to its gold frequency.
+nli-snli,0.5700,success,e15_neutral_bias_small,5.22e+05,Reduces the neutral logit bias to -0.3 after -1 lowered accuracy on both larger non-eval samples.
+nli-snli,0.5600,success,e16_more_neutral_cues,5.37e+05,"Expands neutral cue words with motives, plans, superlatives and occasions that annotators add without premise support."
+nli-snli,0.5600,success,e17_stem_length5,6.81e+05,Generalises the stem circuit to L chars and tests L=5 so fewer distinct words collide; match threshold follows as L-0.5.
+nli-snli,0.5550,success,e18_stem_length3,4.10e+05,Tests L=3 word stems at the aggressive end of stemming after L=5 lost accuracy on both larger samples.
+nli-snli,0.5650,success,e19_hypothesis_length,5.40e+05,Returns to L=4 stems and adds a neutral vote that grows with the number of hypothesis content words.
+nli-snli,0.5500,success,e20_new_words_contra,5.40e+05,"Each hypothesis word absent from the premise now also adds 0.4 to the contradiction logit, on top of penalising entailment."
+nli-snli,0.5550,success,e21_subject_unmatched,5.40e+05,Drops the length and new-word terms; attention tilted to the earliest hypothesis content word flags an unmatched subject.
+nli-snli,0.5650,success,e22_contra_vote3,5.37e+05,Removes the subject circuit and lowers the contradiction cue-word vote from 5 to 3.
+nli-snli,0.5450,success,e23_entail_vote1p5,5.37e+05,"Halves the entailment cue-word vote from 3 to 1.5, since generic nouns like person may be weak evidence."
+nli-snli,0.5750,success,e24_entail_vote4p5,5.37e+05,Raises the entailment cue-word vote to 4.5 after halving it clearly lost accuracy and entailment recall.
+nli-snli,0.5250,success,e25_overlap_gain12,5.37e+05,Restores the entailment vote to 3 and raises the matched-fraction gain from 8 to 12 relative to the cue votes.
+nli-snli,0.5550,success,e26_overlap_gain5,5.37e+05,Lowers the matched-fraction gain to 5 so the cue votes and conflict bit weigh more against word overlap.
+nli-snli,0.5750,success,e27_soft_match_3of4,5.37e+05,"Lowers the match threshold so a premise stem agreeing on 3 of 4 chars counts as matched (men/man, swim/swam); gain back to 8."
+nli-snli,0.5300,success,e28_soft_match_2of4,5.37e+05,Relaxes the match threshold further so a premise stem agreeing on 2 of 4 chars counts as matched.
+nli-snli,0.5700,success,e29_soft3_entail_t07,5.37e+05,Returns to 3-of-4 soft matching and raises the entailment threshold to 0.7 because soft matching inflates the matched fraction.
+nli-snli,0.5900,success,e30_ablate_neutral_cues,5.22e+05,Ablation of e27: removes the expanded neutral cue list to test whether a shorter lexicon keeps the same accuracy.
+nli-snli,0.6100,success,e31_ablate_unmatched_count,5.22e+05,Ablation test: zeroes the unmatched-word penalty on entailment to measure what the count head contributes before removing it.
+nli-snli,0.5800,success,e32_ablate_sport_vehicle,4.79e+05,Restores the unmatched penalty and removes the sport and vehicle exclusive groups with their hypernyms to shrink the lexicon.
+nli-snli,0.5950,success,e33_more_exclusive_groups,5.76e+05,"Restores sport and vehicle groups and adds exclusive instrument and activity groups, since conflict coverage has paid off."
+nli-snli,0.5850,success,e34_antonym_groups,6.24e+05,"Adds antonym groups for age, size, time of day, weather and counts; number words leave the stoplist so they can conflict."
+nli-snli,0.5950,success,e35_antonyms_no_numbers,6.08e+05,"Keeps the age, size, time and weather antonym groups but returns number words to the stoplist."
+nli-snli,0.5900,success,e36_reverse_hypernym_neutral,6.55e+05,Drops antonym groups (no gain over e33) and adds a head that votes neutral when the premise names only a parent of a hypothesis concept.
+nli-snli,0.5950,success,e37_pruned_e33,1.71e+05,Same circuit as e33 with every Linear and Embedding pruned to its nonzero rows and columns; must reproduce e33 exactly with far fewer parameters.
+nli-snli,0.5650,success,e38_contra_t025,1.71e+05,"On the pruned e33 base, lowers the contradiction overlap threshold to 0.25 to reduce neutral predicted as contradiction."
+nli-snli,0.6000,success,e39_unmatched_penalty1,1.71e+05,Keeps the 0.3 contradiction threshold and lowers the per-word unmatched penalty on entailment from 1.5 to 1.0.
+nli-snli,0.5900,success,e40_unmatched_penalty2,1.71e+05,Raises the per-word unmatched penalty on entailment to 2.0 after 1.0 lost accuracy on both larger samples.
+nli-snli,0.5950,success,e41_soft_attention_beta10,1.71e+05,Lowers attention sharpness from 30 to 10 so partially matching premise stems give graded rather than all-or-nothing evidence.
+nli-snli,0.5400,success,e42_soft_attention_beta5,1.71e+05,Softens attention further to beta 5 to find where graded match evidence stops helping.
+nli-snli,0.5950,success,e43_contra_cues_negation_sleep,1.70e+05,Returns to beta 10 and ablates the contradiction cue list down to negation words and sleeping.
+nli-snli,0.5950,success,e44_ablate_free_concepts,1.60e+05,"Removes the photo, food, beverage, smile and work synonym concepts to test whether they earn their detectors."
+nli-snli,0.5850,success,e45_ablate_color_group,1.47e+05,Removes the exclusive color group to measure how much of the conflict signal depends on color words.
+nli-snli,0.6000,success,e46_conflict_weight3,1.60e+05,"Restores the color group and halves the conflict weight to 3, matching the cue votes so all evidence uses one scale."
+nli-snli,0.5600,success,e47_neutral_bias_015,1.60e+05,Restores conflict weight 6 and halves the neutral logit bias to -0.15.
+nli-snli,0.6000,success,e48_short_neutral_cues,1.58e+05,Restores neutral bias -0.3 and cuts neutral cues to eight purpose and unsupported-detail words.
+nli-snli,0.5900,success,e49_short_entail_cues,1.60e+05,Restores the 20-word neutral list and removes human and instrument from the entailment cues.
+nli-snli,0.5900,success,e50_final_clean,1.60e+05,Final cleaned model: same circuit as e49 with unused flags and redundant lines removed and the docstring brought up to date.

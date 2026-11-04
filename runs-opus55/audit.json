@@ -1,0 +1,2584 @@
+{
+ "addition-five-digits-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "addition-five-digits-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "boolean-circuit-5-bits-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {
+   "E01_cpu_at_equals": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E02_tied_block_pc": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E03_tape_one_head": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E04_pc_in_pos_dims": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E05_parabolic_pointer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E06_bare_attention": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E07_beta_1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E08_beta_3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E09_beta_2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E10_clock_in_bias": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E11_equals_is_or": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E12_two_bit_opcode": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E13_pos_table_10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E14_no_causal_mask": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E15_scalar_opcode": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E16_ctrl_4_clocks": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E17_ctrl_6_clocks": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E18_noise_0p01": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E19_noise_0p01_beta3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E20_two_heads_noise_0p01": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E21_two_heads_clean": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E22_keys_not_values_noise": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E23_curvature_bias_noise": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E24_self_resetting_rules": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E25_noise_seed_1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E26_no_value_mask_noise": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E27_noise_0p03": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E28_integer_weights_final": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E29_integer_noise_0p01": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E30_integer_noise_0p02": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "boolean-circuit-5-bits-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {
+   "AttentionOnly_TruthTable9": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ConstDepth_LastResetParity": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ConstDepth_ablate_L2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ConstDepth_ablate_parity4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ConstDepth_noise002": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "DualRailCA_LayerNorm_d12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FoldAtEq_L5_d20_3neuron": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_noWk_beta20": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_noWk_beta200": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_noWk_beta8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_posPlane_d4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_scalarState_d3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_sinPE_noWo_d6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_theta2pi11": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MinCA_theta60_alias": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "OppositeKindCA_noise002": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "OppositeKindCA_scalarPos": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_final": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_generalize7bit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_noise002": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_noise005": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_noise010": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RestoringCA_softAttn_beta06": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SkipCA_d8_H2_T5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SkipCA_d8_H2_T5_fixed": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedCA_2neuron_T10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedCA_d6_H1_T10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TiedCA_d6_H1_T9_depthcheck": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "decimal-to-binary-8bit-opus55-s1": {
+  "n_snapshots": 41,
+  "flagged": {
+   "e01_probe_examples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e02_two_head_subtract_sink": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e03_d4_shared_log_channel": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e04_d4_pos11": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e05_d4_concat_embeddings": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e06_off2": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e07_off5": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e08_off10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e09_noise1e-3": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e10_noise1e-4": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e11_no_sink_mass": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e12_eq_value_zero": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e13_no_head_b": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e14_final_layernorm": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e15_stock_block_d10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e16_stock_defaults_d64": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e17_integer_wires": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e18_wires_noise1e-3": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e19_wires_noise_Wo_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e20_wires_noise_tokens_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e21_wires_noise_head_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e22_wires_noise_Wv_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e23_wires_noise_pos_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e24_wires_noise_WqWk_only": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e25_wires_hit6_fb3": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e26_wires_hit16_fb8": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e27_wires_hit20_fb10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e28_one_head_uniform_mean": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e29_one_head_gate1200": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e30_no_feedback_square_waves": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e31_no_feedback_sqrt_fixed": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e32_round_3_decimals": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e33_round_2_decimals": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e34_integer_bit_ranks": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e35_ranks_round_2_decimals": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e36_ranks_round_1_decimal": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e37_ranks_2dec_off10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e38_ranks_2dec_off15": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e39_final_literal_weights": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "decimal-to-binary-8bit-opus55-s2": {
+  "n_snapshots": 41,
+  "flagged": {}
+ },
+ "digit-counting-10-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {
+   "e01_random_examples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "digit-counting-10-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {
+   "BoostedSelfB5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "BoostedSelfB5Noise1e-3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "DiagonalAttentionD3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "DigitsOnlyHead": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FinalNoise3e-4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FinalSoftmaxCounterD3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FlagIsRegisterD3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "FourierCircleMLPD7": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "GainStagedNoise1e-3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "LogitGainNoise1e-3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "MetricAttention": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoMLPTangentHeadD6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoTensControl": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "NoWoPos13D6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Noise1e-3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "OneLayerControl": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ProbeExamples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "ReciprocalTangentHead": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "RoundedWeights": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sharpness10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sharpness2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "Sharpness4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SignedFlagD4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SoftGateB5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SoftGateB5Noise1e-2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SoftGateB5Noise1e-3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "SoftmaxCounterOneHotD17": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "ThirdHarmonicDigits": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "TwoMarksNoPosTable": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "gcd-three-digits-opus55-s1": {
+  "n_snapshots": 41,
+  "flagged": {}
+ },
+ "gcd-three-digits-opus55-s2": {
+  "n_snapshots": 41,
+  "flagged": {
+   "EuclidTied1000": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "linear-interpolation-two-points-opus55-s1": {
+  "n_snapshots": 27,
+  "flagged": {}
+ },
+ "linear-interpolation-two-points-opus55-s2": {
+  "n_snapshots": 30,
+  "flagged": {
+   "Ablate14NoSlope5": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Ablate15NoFloorShift": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Ablate16NoVolumeKnob": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Ablate17FlatStay": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Ablate18NoMute": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "AttnOnly05NoMLP": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "AttnOnly06NoRef": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "AttnOnly07PhaseLive": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "AttnOnly08Deltas": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compact26Exhaustive": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compact27SharpnessL14": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compass09TwoDimAddress": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compass10SharpnessL15": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compass11SharpnessL8": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compass12GentleGate": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Compass13Robust": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "DefaultArch23NoEdits": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "DefaultArch24CleanDig": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "DefaultArch25Exhaustive": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "General21SlopesZeroToNine": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "LayerNorm22Anchors": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "NullSlope19FourHeads": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "NullSlope20NoDigChannel": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "Probe03Examples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SlopeBank01": {
+    "eval_data": [
+     "\\bevaluate\\(",
+     "generate_examples\\("
+    ]
+   },
+   "SlopeBank02EqFlag": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "VolumeKnob03TwoBlocks": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "VolumeKnob04SharedAddress": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\bevaluate\\("
+    ]
+   }
+  }
+ },
+ "multiplication-five-digits-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {
+   "Abl_Float32": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Abl_LayerNorm": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Abl_NoTieBreak": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Abl_SmallSinkA": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Abl_SmallSinkV": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "FinalLN_v9": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "LinearNoise_1e-12": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "LinearSinkFinal_v12": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "LinearSink_v10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "LogitQuery_v4": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "MergeXPP_v5": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Noise_1e-10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Noise_1e-11": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Noise_1e-12": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Off_25": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Off_40": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Off_60": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "PureAttention_v2": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "QueryBias_v7": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "RampKey_v11": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "RampNoise_1e-12": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "RectAttention_v3": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SV_1e15": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SV_1e20": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SigFigs_10": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SigFigs_12": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "SinkAddress_v8": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "Tie_0.05": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "TypedEmbed_v6": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "multiplication-five-digits-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {
+   "e01_random_baseline": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "nli-snli-opus55-s1": {
+  "n_snapshots": 51,
+  "flagged": {
+   "e02_random_inspect_examples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e04_same_with_dev_report": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e05_lower_entail_threshold": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e06_exclusive_group_conflicts": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e07_low_coverage_means_neutral": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e08_length_difference_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e09_centered_length_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e10_length_center_minus12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e11_broader_action_place_groups": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e12_coverage_ignores_function_words": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e13_fourgram_coverage": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e14_neutral_added_information_words": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e15_concept_agreement_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e16_weaker_agreement_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e17_new_topic_votes_neutral": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e18_new_topic_votes_contradiction": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e19_absolute_hypothesis_length": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e20_absolute_length_center_38": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e21_cleanup_back_to_e14": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e22_softer_conflict_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e23_stronger_length_vote": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e24_entailment_hypernyms": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e25_last_word_in_premise": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e26_entail_threshold_055": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e27_entail_threshold_075": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e28_ablate_narrow_groups": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e29_ablate_color_group": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e30_ablate_activity_group": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e31_ablate_all_conflicts": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e32_ablate_length": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e33_ablate_coverage": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e34_ablate_lexicon": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e35_lexicon_scale_150": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e36_lexicon_scale_200": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e37_coverage_gain_11": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e38_coverage_gain_6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e39_ablate_weak_contradiction_words": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e40_clothing_conflict_group": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e41_probe_conflict_registers": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e42_length_center_minus15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e43_length_center_minus9": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e44_cov_low_025": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e45_cov_low_008": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e46_ablate_vehicle_group": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e47_window_13": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e48_window_10_with_stems": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e49_ablate_motive_words": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e50_final_simplified": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "nli-snli-opus55-s2": {
+  "n_snapshots": 51,
+  "flagged": {
+   "e02_inspect_examples": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "e03_exact_stem_overlap": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e04_concepts_hypernyms": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e05_group_conflict": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e06_cue_votes": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e07_lower_contra_threshold": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e08_unmatched_count": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e09_generic_stopwords": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e10_broader_lexicon": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e11_main_verb_unmatched": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e12_main_verb_weight1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e13_conflict_weight6": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e14_neutral_bias": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e15_neutral_bias_small": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e16_more_neutral_cues": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e17_stem_length5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e18_stem_length3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e19_hypothesis_length": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e20_new_words_contra": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e21_subject_unmatched": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e22_contra_vote3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e23_entail_vote1p5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e24_entail_vote4p5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e25_overlap_gain12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e26_overlap_gain5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e27_soft_match_3of4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e28_soft_match_2of4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e29_soft3_entail_t07": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e30_ablate_neutral_cues": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e31_ablate_unmatched_count": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e32_ablate_sport_vehicle": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e33_more_exclusive_groups": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e34_antonym_groups": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e35_antonyms_no_numbers": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e36_reverse_hypernym_neutral": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e37_pruned_e33": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e38_contra_t025": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e39_unmatched_penalty1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e40_unmatched_penalty2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e41_soft_attention_beta10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e42_soft_attention_beta5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e43_contra_cues_negation_sleep": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e44_ablate_free_concepts": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e45_ablate_color_group": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e46_conflict_weight3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e47_neutral_bias_015": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e48_short_neutral_cues": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e49_short_entail_cues": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e50_final_clean": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "paraphrase-mrpc-opus55-s1": {
+  "n_snapshots": 49,
+  "flagged": {
+   "E03_ConstantOneCircuit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E04_FourGramOverlap": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E05_FourGramLowThreshold": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E06_ThreeGramOverlap": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E07_BidirThreeGram": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E08_WordStemMatch": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E09_GramPlusStemBlend": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E10_EarlyPositionDecay": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E11_FuzzyMatchMargin3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E12_FuzzyRecalibrated": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E13_FuzzyMatchMargin5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E14_LengthAwareThreshold": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E15_FuzzyThreeGramOnly": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E16_ConsonantSkeleton": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E17_CompactD48": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E18_CompactD30FiveBit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E19_SoftMatchSharp1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E20_RareLetterPooling": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E21_FullyCausalCompact": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E22_StrongerLengthTerm": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E23_ExactBigramOverlap": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E24_MinimalCausalD24": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E25_SeparatorAsSpace": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E26_LowerCutStructureLab": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E27_BottomDecileCut": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E28_NoLengthTerm": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E29_SmallestCircuitD22": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E30_ExactTrigramD22": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E31_FuzzyThreshold046": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E32_PhoneticCode": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E33_MatchSharp3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E34_FuzzyBigram": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E35_FuzzyFourGramD28": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E36_FourGramMargin5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E37_LatePositionWeight": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E38_NegativeControlAllZero": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E39_StemHeadCausalD28": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E40_ExactStemCausalD28": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E41_ExactStemLowCut": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E42_AllPlusStemBlendD32": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E43_FuzzyBlendD32": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E44_FuzzyBlendLowCut": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E45_BlendStemShare25": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E46_BlendStemShare75": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E47_BlendMargin5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E48_BlendSoftMatch": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E49_MinimalThreshold040": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "E50_FinalMinimalCircuit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "paraphrase-mrpc-opus55-s2": {
+  "n_snapshots": 39,
+  "flagged": {
+   "e11_counts_L4_miss12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e14_gram8_tau3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e15_gram6_tau5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e16_gram10_tau2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e17_gram8_slack1_tau5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e18_gram8_win40_tau2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e19_gram8_win30_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e20_gram8_win40_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e21_gram8_win50_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e22_gram8_win50_tau2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e23_gram6_win40_tau3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e24_gram10_win40_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e25_gram8_win40_vowelmerge": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e27_compact_bits": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e28_compact_5bit": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e29_skip0246": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e30_skip0246_tau3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e31_skip036_tau5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e32_skip036_tau4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e33_gram4_win40_tau9": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e34_gram7_win40_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e35_gram9_win40_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e36_gram8_win45_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e37_gram8_win35_tau1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e38_gram8_win40_s1lim45": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e39_gram8_win40_s1lim55": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e40_4bit_hash": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e41_3bit_hash": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e42_2bit_hash": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e43_1bit_gram12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e44_soundclass8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e45_soundclass8_gram10": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e46_soundclass4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e47_soundclass8_tau2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e48_soundclass8_tau3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e49_soundclass8_softer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "e50_final_soundclass8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "parity-upto10-bits-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "parity-upto10-bits-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "sentiment-sst2-opus55-s1": {
+  "n_snapshots": 48,
+  "flagged": {
+   "big_binary": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_vocab4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w10_dh8": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w10_negator05": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w10_negw15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w12_negw15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w8_affix": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w8_negw15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "big_w8_negw2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_affix_neg2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_affix_pos": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_binary": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_boost0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_dh9": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_flipneg0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_flippos2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_func015": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_idioms": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_lex_small": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_negw3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_nev_stays": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_no_wo": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_noflip": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_nolatch": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_prefix_neg": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_tieneg": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w10_trunc": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w12": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w6_trunc": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w7_trunc": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w8_flip1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w8_negw1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w8_negw15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w8_trunc": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "core_w8_weak025": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_big_negflip15": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_big_negw2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_big_negw2_negatorw1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_big_negw2_negatorw2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_negvocab2_negatorw1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_negvocab3_clean": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_negvocab3_contrast": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_negvocab3_reach25": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_shift14_flat": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "lex_shift14_tieneg": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "priors_weak04": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "priors_weak08": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "sentiment-sst2-opus55-s2": {
+  "n_snapshots": 48,
+  "flagged": {}
+ },
+ "sort-five-digits-opus55-s1": {
+  "n_snapshots": 31,
+  "flagged": {
+   "e02_format_probe": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "sort-five-digits-opus55-s2": {
+  "n_snapshots": 31,
+  "flagged": {
+   "RandomInitProbe": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "word-reversal-3x3-opus55-s1": {
+  "n_snapshots": 39,
+  "flagged": {}
+ },
+ "word-reversal-3x3-opus55-s2": {
+  "n_snapshots": 41,
+  "flagged": {}
+ }
+}

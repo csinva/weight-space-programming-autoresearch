@@ -1,0 +1,443 @@
+{
+ "addition-five-digits-opus55-s1": {
+  "tools": {
+   "Bash": 36,
+   "Read": 11,
+   "Glob": 3,
+   "Edit": 83,
+   "Write": 39,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 34
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "addition-five-digits-opus55-s2": {
+  "tools": {
+   "Bash": 37,
+   "Read": 15,
+   "Edit": 143,
+   "Write": 33,
+   "Grep": 3,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "pwd &&": 1,
+   "ls -la": 1,
+   "uv run": 34,
+   "true": 1
+  },
+  "refused_calls": 3,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-probably-unused-placeholder/none"
+  ]
+ },
+ "boolean-circuit-5-bits-opus55-s1": {
+  "tools": {
+   "Bash": 38,
+   "Read": 6,
+   "Grep": 1,
+   "Edit": 109,
+   "Write": 32,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "ls -la": 1,
+   "uv run": 36
+  },
+  "refused_calls": 4,
+  "paths_outside_run": []
+ },
+ "boolean-circuit-5-bits-opus55-s2": {
+  "tools": {
+   "Read": 9,
+   "Bash": 36,
+   "Glob": 2,
+   "Edit": 99,
+   "Write": 34
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 35
+  },
+  "refused_calls": 4,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-opus55-s1": {
+  "tools": {
+   "Bash": 44,
+   "Glob": 2,
+   "Read": 7,
+   "Edit": 93,
+   "Write": 48
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "cat results/overall_results.csv": 1,
+   "uv run": 42
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-opus55-s2": {
+  "tools": {
+   "Bash": 44,
+   "Glob": 2,
+   "Read": 7,
+   "Edit": 80,
+   "Write": 49
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 42
+  },
+  "refused_calls": 4,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-probe-does-not-exist"
+  ]
+ },
+ "digit-counting-10-opus55-s1": {
+  "tools": {
+   "Bash": 32,
+   "Glob": 2,
+   "Read": 8,
+   "Edit": 107,
+   "Write": 34
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 31
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "digit-counting-10-opus55-s2": {
+  "tools": {
+   "Bash": 39,
+   "Glob": 3,
+   "Read": 7,
+   "Edit": 137,
+   "Write": 32,
+   "Grep": 6
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 37
+  },
+  "refused_calls": 4,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-programming-autoresearch/results/overall_results.csv"
+  ]
+ },
+ "gcd-three-digits-opus55-s1": {
+  "tools": {
+   "Bash": 50,
+   "Read": 9,
+   "Glob": 2,
+   "Edit": 84,
+   "Write": 43,
+   "Grep": 6
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "ls -la": 1,
+   "uv run": 48
+  },
+  "refused_calls": 3,
+  "paths_outside_run": [
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-opus55-gcd-three-digits-opus55-s1/18d44e06-3d2a-4670-a659-08b99f829712/tasks/b1sa6pclt.output",
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-opus55-gcd-three-digits-opus55-s1/18d44e06-3d2a-4670-a659-08b99f829712/tasks/ba82zwb49.output"
+  ]
+ },
+ "gcd-three-digits-opus55-s2": {
+  "tools": {
+   "Bash": 47,
+   "Glob": 2,
+   "Read": 8,
+   "Edit": 150,
+   "Write": 43,
+   "Grep": 10
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "python3 -": 1,
+   "uv run": 43,
+   "git -C": 1
+  },
+  "refused_calls": 5,
+  "paths_outside_run": [
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-opus55-gcd-three-digits-opus55-s2/179da5e9-068c-4c69-9fc5-8bff830e9833/tasks/b6bofcsv8.output"
+  ]
+ },
+ "linear-interpolation-two-points-opus55-s1": {
+  "tools": {
+   "Bash": 33,
+   "Read": 8,
+   "Glob": 2,
+   "Edit": 116,
+   "Write": 31
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 32
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "linear-interpolation-two-points-opus55-s2": {
+  "tools": {
+   "Bash": 35,
+   "Read": 7,
+   "Edit": 119,
+   "Write": 33,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "ls -la": 1,
+   "uv run": 33
+  },
+  "refused_calls": 4,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-opus55-s1": {
+  "tools": {
+   "Bash": 40,
+   "Glob": 3,
+   "Read": 7,
+   "Edit": 131,
+   "Write": 32,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 38
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-opus55-s2": {
+  "tools": {
+   "Bash": 33,
+   "Read": 11,
+   "Glob": 2,
+   "Edit": 126,
+   "Write": 32
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 32
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "nli-snli-opus55-s1": {
+  "tools": {
+   "Bash": 57,
+   "Glob": 3,
+   "Read": 16,
+   "Edit": 176,
+   "Write": 58,
+   "Grep": 13
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "echo noop": 1,
+   "uv run": 55
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "nli-snli-opus55-s2": {
+  "tools": {
+   "Bash": 54,
+   "Read": 9,
+   "Glob": 2,
+   "Edit": 195,
+   "Write": 55,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 52
+  },
+  "refused_calls": 3,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-probramming-autoresearch/runs-opus55/nli-snli-opus55-s2/interpretable_transformer.py"
+  ]
+ },
+ "paraphrase-mrpc-opus55-s1": {
+  "tools": {
+   "Bash": 54,
+   "Read": 7,
+   "Glob": 2,
+   "Edit": 137,
+   "Write": 53
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 52
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "paraphrase-mrpc-opus55-s2": {
+  "tools": {
+   "Bash": 56,
+   "Read": 8,
+   "Glob": 2,
+   "Grep": 3,
+   "Edit": 118,
+   "Write": 43
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 54
+  },
+  "refused_calls": 6,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-opus55-s1": {
+  "tools": {
+   "Bash": 32,
+   "Glob": 3,
+   "Read": 7,
+   "Edit": 130,
+   "Write": 37,
+   "Grep": 5
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 31
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-opus55-s2": {
+  "tools": {
+   "Bash": 35,
+   "Read": 7,
+   "Grep": 3,
+   "Edit": 117,
+   "Write": 32,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "ls -la": 1,
+   "uv run": 33
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "sentiment-sst2-opus55-s1": {
+  "tools": {
+   "Bash": 56,
+   "Read": 12,
+   "Glob": 3,
+   "Edit": 194,
+   "Write": 51,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 55
+  },
+  "refused_calls": 3,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-programming-autoresearch/results/overall_results.csv"
+  ]
+ },
+ "sentiment-sst2-opus55-s2": {
+  "tools": {
+   "Bash": 53,
+   "Glob": 2,
+   "Read": 16,
+   "Edit": 184,
+   "Write": 53
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 52
+  },
+  "refused_calls": 2,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-probing-placeholder/none.py"
+  ]
+ },
+ "sort-five-digits-opus55-s1": {
+  "tools": {
+   "Bash": 33,
+   "Glob": 3,
+   "Read": 9,
+   "Edit": 137,
+   "Write": 32,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 31
+  },
+  "refused_calls": 3,
+  "paths_outside_run": [
+   "/data/chandan.singh/weight-space-probe-placeholder",
+   "/data/chandan.singh/weight-space-programming-autoresearch/results/overall_results.csv.placeholder-not-used"
+  ]
+ },
+ "sort-five-digits-opus55-s2": {
+  "tools": {
+   "Bash": 34,
+   "Glob": 2,
+   "Read": 7,
+   "Edit": 84,
+   "Write": 36
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 32
+  },
+  "refused_calls": 4,
+  "paths_outside_run": []
+ },
+ "word-reversal-3x3-opus55-s1": {
+  "tools": {
+   "Bash": 42,
+   "Glob": 3,
+   "Read": 5,
+   "Edit": 51,
+   "Write": 44,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "uv run": 41
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "word-reversal-3x3-opus55-s2": {
+  "tools": {
+   "Bash": 44,
+   "Read": 6,
+   "Glob": 3,
+   "Edit": 128,
+   "Write": 45,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 43
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ }
+}

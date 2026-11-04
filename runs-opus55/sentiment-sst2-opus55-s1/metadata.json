@@ -1,0 +1,76 @@
+{
+ "run": "sentiment-sst2-opus55-s1",
+ "task": "sentiment-sst2",
+ "seed": 1,
+ "model": "claude-opus-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "c52d9212-c23d-4dc0-a1e9-aed213f88cad",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 5.169464199999999,
+   "turns": 110,
+   "seconds": 1436,
+   "attempts_before": 0,
+   "attempts_after": 13,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  },
+  {
+   "k": 1,
+   "session_id": "c52d9212-c23d-4dc0-a1e9-aed213f88cad",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 11.780183799999996,
+   "turns": 96,
+   "seconds": 1527,
+   "attempts_before": 13,
+   "attempts_after": 27,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_01.jsonl"
+  },
+  {
+   "k": 2,
+   "session_id": "c52d9212-c23d-4dc0-a1e9-aed213f88cad",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 21.830812599999994,
+   "turns": 117,
+   "seconds": 2073,
+   "attempts_before": 27,
+   "attempts_after": 50,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Write"
+   ],
+   "log": "agent_logs/session_02.jsonl"
+  }
+ ],
+ "started": "2026-11-03T23:57:07.248878+00:00",
+ "finished": "2026-11-04T01:21:03.480469+00:00",
+ "attempts": 50
+}

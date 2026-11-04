@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.0000,success,e00_random_baseline,1.59e+05,"Baseline: default architecture, random init; also logs the task's public interface."
+sentiment-sst2,,crash,e01a_lexicon_too_long,,First e01 attempt: assert failed because the pattern thought_provoking exceeds the 16-char window; stopped before eval.
+sentiment-sst2,0.7200,success,e01_lexicon_sum,2.97e+06,"Char-window attention, one AND neuron per hand-written lexicon pattern (weights +-1,+-2), summed sentiment at '='; ties positive."
+sentiment-sst2,0.6900,success,e02_drop_function_words,2.96e+06,"e01 minus the function words no/not/never/only/yet/however as negative evidence, ahead of real negation handling."
+sentiment-sst2,0.7200,success,e03_suffix_less,2.97e+06,"e01 plus a -1 suffix pattern *less that fires on any word ending in -less (pointless, witless, listless)."
+sentiment-sst2,0.7300,success,e04_wider_vocab,3.03e+06,"e03 plus about 50 more hand-written patterns: warmth and craft words (+1), hedging and cliche words (-1)."
+sentiment-sst2,0.6900,success,e05_ties_negative,3.03e+06,e04 with the threshold moved so zero-score phrases are called negative instead of positive.
+sentiment-sst2,0.7400,success,e06_negation_flip,4.28e+06,"e04 plus a negation circuit: offset heads count negators in the previous 15 chars, gated ReLUs flip SCORE (positive to -1x, negative to +0.5x)."
+sentiment-sst2,0.7400,success,e07_implicit_negators,4.28e+06,"e06 with implicit negators nothing, lack*, little and less added to the set that flips nearby scores."
+sentiment-sst2,0.7650,success,e08_large_vocab,4.47e+06,e07 plus about 220 hand-written critic-vocabulary patterns of both polarities; mean* narrowed to whole-word mean.
+sentiment-sst2,0.7650,success,e09_short_neg_scope,4.47e+06,"e08 with negation scope cut from 15 characters to 8, about one following word."
+sentiment-sst2,0.7650,success,e10_full_flip_negatives,4.47e+06,e09 with negated negative words flipped at full strength (+1x instead of +0.5x).
+sentiment-sst2,0.6750,success,e11_threshold_1p5,4.47e+06,e10 with the threshold shifted to +1.5 so one mild negative word alone no longer decides a phrase.
+sentiment-sst2,0.7650,success,e12_contrast_pivot,4.48e+06,"e10 plus a contrast circuit: a uniform head records any earlier but/however/though/although/yet, and gated ReLUs double every score after it."
+sentiment-sst2,,crash,e13a_lexicon_too_long,,First e13 attempt: assert failed because the pattern straight_to_video exceeds the 16-char window; stopped before eval.
+sentiment-sst2,0.7700,success,e13_vocab_round3,4.57e+06,"e10 (contrast circuit removed, it added nothing) plus about 100 more hand-written patterns, including common words like just, even and worse."
+sentiment-sst2,0.7700,success,e14_intensifier_bigrams,4.58e+06,"e13 plus intensifier bigram patterns (very good, so funny, really good) as extra evidence on top of the unigram. BUG: very_bad* and so_bad* were placed in the +2 tier by mistake; fixed in e15."
+sentiment-sst2,0.7700,success,e15_intensifier_fixed,4.58e+06,e14 with the polarity bug fixed: very_bad* and so_bad* moved to the -2 tier.
+sentiment-sst2,0.7700,success,e16_weak_pos_tier,4.57e+06,"e13 (intensifier bigrams removed, they added nothing) with the broad positive tier weakened from +1 to +0.75."
+sentiment-sst2,0.7650,success,e17_strong_neg_tier,4.57e+06,e13 with the mild negative tier strengthened from -1 to -1.5 and the positive tier restored to +1.
+sentiment-sst2,0.7700,success,e18_window_14,3.58e+06,"e13 with the character window cut from 16 to 14, shrinking width and head count; five long patterns shortened to fit."
+sentiment-sst2,0.7600,success,e19_vocab_round4,3.66e+06,"e18 plus about 80 hand-written patterns for review phrasing: craft praise, adverbs, and hedges like would_be and ultimately."
+sentiment-sst2,0.7600,success,e20_drop_neutral_words,3.64e+06,"e19 minus words that appear in reviews of either polarity: performance, acting, direction, oscar, ultimately, almost and similar."
+sentiment-sst2,0.7650,success,e21_drop_modal_phrases,3.63e+06,"e20 minus the modal-phrase patterns would_be, could_have, want_to and similar, which can appear in positive phrases."
+sentiment-sst2,0.7650,success,e22_ablate_negation,3.63e+06,"Ablation of e21: empty negator list, so the flip circuit never fires. Measures what negation contributes with the larger vocabulary."
+sentiment-sst2,0.7650,success,e23_two_blocks,2.66e+06,"e22 with the unused negation circuit deleted: two blocks only, one reads words and one pools sentiment."
+sentiment-sst2,0.7550,success,e24_polarity_only,2.66e+06,"Ablation of e23: strength tiers collapsed, every pattern scores exactly +1 or -1."
+sentiment-sst2,0.7650,success,e25_scalar_pool_head,1.70e+06,"e23 (tiers restored) with the pooling block reduced to one head of width 1, removing about 1M unused zero weights."
+sentiment-sst2,0.7650,success,e26_split_key_value,1.22e+06,"e25 with separate key and value widths: 3-dim position keys and 32-dim character values, shrinking the attention matrices."
+sentiment-sst2,0.7650,success,e27_audit_neutral_neg,1.22e+06,"Lexicon audit of e26: removes near-neutral negatives only, yet, however, dark, long and familiar."
+sentiment-sst2,0.7650,success,e28_audit_suffix_less,1.21e+06,"Lexicon audit of e27: removes the *less suffix pattern, which also fires on less, unless and nevertheless."
+sentiment-sst2,0.7750,success,e29_audit_broad_pos,1.20e+06,"Lexicon audit of e28: removes broad positive stems well, pretty, real, true, family, heart*, soul*, human*, emotion*, visual*."
+sentiment-sst2,0.7750,success,e30_audit_common_neg,1.20e+06,"Lexicon audit of e29: removes common words just, any, anything, even, mostly, enough, minutes and rather from the negative tier."
+sentiment-sst2,0.7750,success,e31_audit_descriptive,1.19e+06,"Lexicon audit of e30: removes descriptive non-judgement words comic*, comedy, tense*, tight*, slick*, complex*, tears*, cry*, quietly*, intensely*."
+sentiment-sst2,0.7800,success,e32_strong_negators,1.19e+06,"e31 with the explicit negators no, not, never, n't and nothing promoted from the -1 tier to -2."
+sentiment-sst2,0.7800,success,e33_strong_lack_words,1.19e+06,"e32 with too, lack* and without also promoted from the -1 tier to -2."
+sentiment-sst2,0.7800,success,e34_negative_idioms,1.20e+06,"e33 plus negative multi-word idioms: at best, fails to, falls short, not very, little more and similar. Includes a dead pattern than_a_ that can never fire; removed in e35."
+sentiment-sst2,0.7800,success,e35_positive_idioms,1.22e+06,"e34 (dead pattern than_a_ removed) plus positive idioms: a must, a joy, of the year, not bad, never dull and similar."
+sentiment-sst2,0.7800,success,e36_idiom_override,1.22e+06,"e35 with double-negative idioms (not bad, never dull) moved to a +5 tier so they outweigh their own negative parts."
+sentiment-sst2,0.7800,success,e37_window_12,9.58e+05,"e33 lexicon (idioms removed, they added nothing) with a 12-character window; over-long patterns now truncate to a prefix automatically."
+sentiment-sst2,0.7800,success,e38_window_10,7.49e+05,e37 with a 10-character window: longer patterns match their first nine characters as a prefix.
+sentiment-sst2,0.7800,success,e39_window_8,5.59e+05,e38 with an 8-character window: longer patterns match their first seven characters as a prefix.
+sentiment-sst2,0.7650,success,e40_window_6,3.90e+05,e39 with a 6-character window: longer patterns match their first five characters as a prefix.
+sentiment-sst2,0.7700,success,e41_window_7,4.72e+05,"e40 with a 7-character window, locating the smallest window between the 6 that lost accuracy and the 8 that did not."
+sentiment-sst2,0.7800,success,e42_tight_layout,5.21e+05,"e39 window of 8 with a tight channel layout: 8 x 32 character dims plus 5 control dims, instead of slots padded to width 35."
+sentiment-sst2,0.7800,success,e43_one_pad_char,5.20e+05,"e42 with one virtual leading space instead of KW; heads reaching before the text land on that space, a valid word boundary."
+sentiment-sst2,0.7800,success,e44_no_double_count,5.09e+05,"e43 with positive-side overlapping and duplicate lexicon entries removed. Corrected description: negative-side overlaps remained until e45, so words could still double-count here."
+sentiment-sst2,0.7800,success,e45_no_double_count_neg,4.99e+05,"e44 with the negative-side overlaps removed too (fail*/fails, pain*/painful*, mess*/messy, hate*/hated and similar)."
+sentiment-sst2,0.7800,success,e46_drop_unused_head,4.80e+05,"e45 with the never-used head 0 removed: exactly seven heads, one per character offset 1 to 7."
+sentiment-sst2,0.7800,success,e47_soft_attention,4.80e+05,"e46 with attention sharpness BETA lowered from 30 to 8, so the circuit does not rely on extreme weights."

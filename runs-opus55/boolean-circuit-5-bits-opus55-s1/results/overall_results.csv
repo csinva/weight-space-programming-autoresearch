@@ -1,0 +1,32 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,0.1150,success,E00_probe_random,1.51e+05,"Baseline: random init, prints the public task attributes to learn vocab and prompt format."
+boolean-circuit-5-bits,1.0000,success,E01_cpu_at_equals,1.76e+04,"4 layers no LayerNorm: '=' is a CPU; two heads read op_L and bit_L, third loads b0, MLP is a 4-rule transition table on a state register."
+boolean-circuit-5-bits,1.0000,success,E02_tied_block_pc,5.26e+03,"One block with shared weights clocked 4 times; a program-counter register steers attention to (op_L, bit_L) and the MLP advances it."
+boolean-circuit-5-bits,1.0000,success,E03_tape_one_head,2.98e+03,"Read-only tape via causal cross-attention, transient reads, one head fetching (op,bit) pairs, 5 clocks with '=' read as '|'; 4 rules + 5 counter units."
+boolean-circuit-5-bits,1.0000,success,E04_pc_in_pos_dims,1.96e+03,"E03 with the program counter stored in the position dims: the '=' position embedding is the boot state, so d_model falls from 22 to 17."
+boolean-circuit-5-bits,1.0000,success,E05_parabolic_pointer,6.61e+02,"Scalar pointer C addresses the tape via parabolic attention -(p-C)^2/2, moving +2 per clock; 3 state rules + 1 clock unit, d_model 9, d_ff 4."
+boolean-circuit-5-bits,1.0000,success,E06_bare_attention,3.64e+02,Attention reduced to a query map (no W_k W_v W_o); tape is keys and values; pointer lives in the position dim and moves +4 per clock; d_model 8.
+boolean-circuit-5-bits,0.8950,success,E07_beta_1,3.64e+02,E06 at attention sharpness beta=1: control measuring how hard the read must be.
+boolean-circuit-5-bits,1.0000,success,E08_beta_3,3.64e+02,E06 at attention sharpness beta=3: brackets the threshold for exact reads.
+boolean-circuit-5-bits,1.0000,success,E09_beta_2,3.64e+02,E06 at attention sharpness beta=2: narrows the threshold between beta=1 (fails) and beta=3 (exact).
+boolean-circuit-5-bits,1.0000,success,E10_clock_in_bias,3.47e+02,"Clock moved from a hidden unit into fc2.bias, so d_ff is exactly the 3 rewrite rules; beta=10."
+boolean-circuit-5-bits,1.0000,success,E11_equals_is_or,2.97e+02,"Token '=' embedded identically to '|', dropping the EQ dim; d_model 7, d_ff 3."
+boolean-circuit-5-bits,1.0000,success,E12_two_bit_opcode,2.49e+02,"Operators coded in two bits (& = U, | = V, ^ = U+V), so one wire covers 'op in {|,^}'; d_model 6, d_ff 3."
+boolean-circuit-5-bits,1.0000,success,E13_pos_table_10,2.13e+02,Position table trimmed from 16 to the 10 prompt cells; no unused embedding rows remain.
+boolean-circuit-5-bits,1.0000,success,E14_no_causal_mask,2.13e+02,"Causal mask removed: the CPU sits at the last cell, so no future cell exists for it and the mask should be dead code."
+boolean-circuit-5-bits,1.0000,success,E15_scalar_opcode,1.84e+02,"Operators on one scalar wire (&=0, |=1, ^=2): d_model 5 but d_ff 4, trading a clean rule table for fewer parameters."
+boolean-circuit-5-bits,0.6350,success,E16_ctrl_4_clocks,1.84e+02,"Control: E15 with 4 clocks instead of 5, so the last (op, bit) is never applied; expected to fail."
+boolean-circuit-5-bits,0.6750,success,E17_ctrl_6_clocks,1.84e+02,"Control: E15 with 6 clocks, pushing the pointer past the end of the tape; tests whether the machine halts cleanly."
+boolean-circuit-5-bits,0.5850,success,E18_noise_0p01,1.84e+02,Robustness: E15 with a fixed Gaussian perturbation of std 0.01 on every parameter (no fitting).
+boolean-circuit-5-bits,0.7550,success,E19_noise_0p01_beta3,1.84e+02,Tests the tie-fragility hypothesis: same std 0.01 noise as E18 with softer attention (beta=3 instead of 10).
+boolean-circuit-5-bits,0.6750,success,E20_two_heads_noise_0p01,2.09e+02,"Removes the attention tie: two heads each peak on an integer cell (op, bit); same std 0.01 noise as E18 at beta=10."
+boolean-circuit-5-bits,1.0000,success,E21_two_heads_clean,2.09e+02,"E20 without noise: confirms the two-head design is itself correct, separating a broken design from a fragile one."
+boolean-circuit-5-bits,0.6750,success,E22_keys_not_values_noise,2.09e+02,Tests the amplification hypothesis: a fixed mask stops address dims (up to 32) reaching the MLP; same std 0.01 noise and seed as E20.
+boolean-circuit-5-bits,0.8500,success,E23_curvature_bias_noise,2.19e+02,Tests the peak-drift hypothesis: curvature and head offset come from W_q biases instead of a noisy stored register; same std 0.01 noise and seed.
+boolean-circuit-5-bits,0.9650,success,E24_self_resetting_rules,2.61e+02,"Tests the error-amplification hypothesis: two-bit opcode rules have coefficient +-1 on S, so firing overwrites S; d_model 6, d_ff 3, same std 0.01 noise."
+boolean-circuit-5-bits,0.9800,success,E25_noise_seed_1,2.61e+02,"Replication: E24 with noise seed 1 instead of 0, checking the robustness gain was not a lucky draw."
+boolean-circuit-5-bits,0.7550,success,E26_no_value_mask_noise,2.61e+02,"Ablation: E25 without the key/value mask (same noise seed 1), measuring whether the mask earns its place in the robust design."
+boolean-circuit-5-bits,0.6650,success,E27_noise_0p03,2.61e+02,"Breakdown point: robust design (mask restored) at noise std 0.03, three times E25, seed 1."
+boolean-circuit-5-bits,0.9950,success,E29_integer_noise_0p01,2.61e+02,"Checks whether the integer rescale kept the robustness: E28 at noise std 0.01, seed 1 (compare E25)."
+boolean-circuit-5-bits,0.7800,success,E30_integer_noise_0p02,2.61e+02,"Brackets the breakdown point of the final integer design: noise std 0.02, seed 1."
+boolean-circuit-5-bits,1.0000,success,E28_integer_weights_final,2.61e+02,"Final clean candidate: robust two-head tape machine with every weight a small integer (keys (p,-p^2)); d_model 6, d_ff 3, no noise."

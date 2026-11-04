@@ -99,9 +99,12 @@ def make_writeup(task: str, methods: list[dict]) -> str:
     return "".join(f"<p>{p}</p>" for p in parts)
 
 
-def collect() -> list[dict]:
-    tasks = []
-    for run_dir in sorted(RUNS.iterdir()):
+def collect(runs_root: Path = RUNS) -> list[dict]:
+    """One entry per run folder: task, seed (from metadata.json if present), attempts and an auto-generated writeup."""
+    out = []
+    if not runs_root.exists():
+        return out
+    for run_dir in sorted(runs_root.iterdir()):
         csv_path = run_dir / "results" / "overall_results.csv"
         if not csv_path.exists():
             continue
@@ -113,20 +116,72 @@ def collect() -> list[dict]:
                     "name": row.get("model_shorthand_name", "") or "?",
                     "acc": float(row["accuracy"]) if row.get("accuracy") else 0.0,
                     "params": float(row["n_params"]) if row.get("n_params") else 0.0,
-                    "status": "failed" if row.get("status") == "failed" else "success",
+                    "status": "failed" if row.get("status") in ("failed", "crash") else "success",
                     "desc": row.get("description", "") or "",
                 })
         if not methods:
             continue
-        task = methods and (next(iter(csv.DictReader(csv_path.open())), {}).get("task") or run_dir.name)
-        tasks.append({
-            "task": task,
-            "category": CATEGORY.get(task, "Other"),
-            "methods": methods,
-            "writeup": make_writeup(task, methods),
+        task = next(iter(csv.DictReader(csv_path.open())), {}).get("task") or run_dir.name
+        meta = json.loads((run_dir / "metadata.json").read_text()) if (run_dir / "metadata.json").exists() else {}
+        audit = {}
+        ap = runs_root / "audit_data_use.json"
+        if ap.exists():
+            per = json.loads(ap.read_text())["per_snapshot"].get(run_dir.name, {})
+            for x in methods:
+                x["data"] = per.get(x["name"], "missing")
+        out.append({
+            "task": task, "run": run_dir.name, "seed": meta.get("seed", 1),
+            "category": CATEGORY.get(task, "Other"), "methods": methods, "writeup": make_writeup(task, methods),
+            "cost": sum((x.get("cost_usd") or 0) for x in meta.get("sessions", [])), "sessions": len(meta.get("sessions", [])),
+            "target": meta.get("target"),
         })
-    tasks.sort(key=lambda t: (CAT_ORDER.index(t["category"]) if t["category"] in CAT_ORDER else 99, t["task"]))
-    return tasks
+    out.sort(key=lambda t: (CAT_ORDER.index(t["category"]) if t["category"] in CAT_ORDER else 99, t["task"], t["seed"]))
+    return out
+
+
+def group_by_task(runs: list[dict]) -> list[dict]:
+    tasks = {}
+    for r in runs:
+        tasks.setdefault(r["task"], dict(task=r["task"], category=r["category"], seeds=[]))["seeds"].append(r)
+    return list(tasks.values())
+
+
+def summarize(r: dict) -> dict:
+    m = r["methods"]
+    best = max(x["acc"] for x in m)
+    first_best = next(x["i"] for x in m if x["acc"] >= best - 1e-9)
+    near = [x for x in m if x["acc"] >= best - 0.01]
+    smallest = min(near, key=lambda x: x["params"])
+    return dict(best=best, first_best=first_best, smallest=smallest, n=len(m))
+
+
+def n_dep(r: dict) -> str:
+    m = r["methods"]
+    if not any("data" in x for x in m):
+        return "n/a"
+    d = sum(1 for x in m if x.get("data") == "data_dependent")
+    return f"{d} of {len(m)}"
+
+
+def best_indep(r: dict) -> str:
+    ok = [x for x in r["methods"] if x.get("data") == "data_independent"]
+    if not any("data" in x for x in r["methods"]):
+        return "n/a"
+    return f"{max(x['acc'] for x in ok):.1%}" if ok else "none"
+
+
+def results_table(new_tasks: list[dict]) -> str:
+    rows = []
+    for t in new_tasks:
+        for i, r in enumerate(t["seeds"]):
+            sm = summarize(r)
+            rows.append(
+                (f"<tr><td rowspan={len(t['seeds'])}><code>{html.escape(t['task'])}</code></td><td rowspan={len(t['seeds'])}>{t['category']}</td>" if i == 0 else "<tr>") +
+                f"<td>{r['seed']}</td><td>{sm['n']}</td><td class='acc-pill' style='color:{'#059669' if sm['best'] >= 0.99 else '#374151'}'>{sm['best']:.1%}</td>"
+                f"<td>{sm['first_best']}</td><td>{fmt_params(sm['smallest']['params'])} <span style='color:#6b7280'>({html.escape(sm['smallest']['name'])}, {sm['smallest']['acc']:.1%})</span></td>"
+                f"<td>{n_dep(r)}</td><td>{best_indep(r)}</td>"
+                f"<td>{r['sessions']}</td><td>${r['cost']:.0f}</td></tr>")
+    return "".join(rows)
 
 
 def task_rows(tasks: list[dict]) -> str:
@@ -135,7 +190,9 @@ def task_rows(tasks: list[dict]) -> str:
     import sys
     sys.path.insert(0, str(ROOT / "evolve"))
     from src.task import TASK_REGISTRY
-    n_attempts = {t["task"]: len(t["methods"]) for t in tasks}
+    n_attempts = {}
+    for t in tasks:
+        n_attempts[t["task"]] = n_attempts.get(t["task"], 0) + len(t["methods"])
     rows = []
     for t in sorted(TASK_REGISTRY, key=lambda n: (CAT_ORDER.index(CATEGORY.get(n, "Real world")), n)):
         cls = TASK_REGISTRY[t]
@@ -148,23 +205,7 @@ def task_rows(tasks: list[dict]) -> str:
     return "".join(rows)
 
 
-def definitions(tasks: list[dict]) -> str:
-    """Precise description of the setup, shown at the top of the report."""
-    n_att = sum(len(t["methods"]) for t in tasks)
-    todo = "<span class='todo'>[not recorded in the repository; fill in]</span>"
-    model = html.escape(AGENT_MODEL) if AGENT_MODEL else todo
-    effort = html.escape(AGENT_EFFORT) if AGENT_EFFORT else todo
-    return f"""
-  <section class="defs" id="setup">
-    <h2>Setup</h2>
-    <p><b>What was done.</b> For each of {len(tasks)} tasks with a known algorithm or a known dataset, one autonomous coding-agent run was asked to set
-      every weight of a small transformer by hand, with no training, so that the transformer solves the task by generating the answer token by token.
-      Each run ({RUN_DATE}) repeatedly edited the weights, evaluated them, and logged the result; this page shows all {n_att} logged attempts
-      ({", ".join(f"{t['task']} {len(t['methods'])}" for t in tasks)}).
-      An attempt is one version of the weight-writing code (a <i>weight-space program</i>) and its evaluation.</p>
-    <p><b>Agent.</b> Claude, model version {model}, thinking effort {effort}, run as an autonomous coding agent through the GitHub Copilot CLI
-      (<code>copilot --autopilot --yolo</code>, as in the repository's launch instructions), prompted with "Read and follow the instructions in
-      <code>evolve/program.md</code>". The agent ran without human intervention and was told not to stop (at least 20 attempts, and to keep simplifying after reaching 100%).</p>
+SHARED_DEFS = """
     <p><b>Network.</b> A decoder-only (GPT-style) transformer defined in <code>interpretable_transformer.py</code>: learned token and position
       embeddings, a stack of pre-LayerNorm blocks (causal multi-head self-attention and a ReLU MLP, each with a residual connection), a final LayerNorm and a
       linear output head over a character-level vocabulary specific to each task (4 to 34 symbols). The starting configuration is 3 layers, width 64,
@@ -176,24 +217,77 @@ def definitions(tasks: list[dict]) -> str:
       backpropagation), computing the task output with Python functions or libraries outside the transformer, using pretrained weights, and
       modifying the shared task and evaluation code. Goal: maximize accuracy; all else equal, prefer more interpretable solutions, with
       parameter count as a suggested proxy.</p>
-    <p><b>What the harness fixes in code and what is only an instruction.</b> Each run works in its own folder (<code>runs/&lt;task&gt;-may15-run&lt;k&gt;</code>)
-      with a private copy of <code>interpretable_transformer.py</code>. The task definitions and evaluation function (<code>src/</code>) and the
-      instructions are symlinks to the shared <code>evolve/</code> folder, so the scoring code is the same for every run. The rules above (no training,
-      no outside computation, no pretrained weights, no edits to the evaluation code or the symlinked files) are instructions to the agent; they are not
-      checked automatically, and compliance was not audited by code.</p>
     <p><b>Evaluation.</b> Running <code>uv run interpretable_transformer.py --task &lt;task&gt;</code> builds the network, generates the answer greedily
       (argmax at each step) for a fixed number of answer tokens, and scores <b>accuracy</b>: the fraction of examples whose generated answer string
       exactly matches the target (no partial credit or numerical tolerance). Each attempt is scored on the same 200 examples, produced by the task's
       generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the three real-world tasks the
       examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI), lowercased, with characters
       outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length.</p>
-    <p><b>Plots.</b> Each point is one attempt: x is its parameter count (log scale), y its accuracy, and the number and colour give the order in
-      which attempts were logged in <code>results/overall_results.csv</code>.</p>
-    <details open><summary><b>Tasks</b></summary>
+"""
+
+
+def definitions(new_runs: list[dict]) -> str:
+    """Precise description of the Opus 5.5 runs, shown at the top of the report."""
+    n_att = sum(len(r["methods"]) for r in new_runs)
+    tasks = sorted({r["task"] for r in new_runs})
+    return f"""
+  <section class="defs" id="setup">
+    <h2>Setup</h2>
+    <p><b>What was done.</b> For each of {len(tasks)} tasks with a known algorithm or a known dataset, an autonomous coding agent was asked to set
+      every weight of a small transformer by hand, with no training, so that the transformer solves the task by generating the answer token by token.
+      Each task was run twice, independently (seeds 1 and 2: two separate agent sessions from the same starting files; the agent's own sampling makes
+      them differ). In each run the agent repeatedly edited the weights, evaluated them and logged the result, until it reached at least 30 attempts for the
+      easy tasks, 40 for the harder ones and 50 for the real-world ones. This page shows all {n_att} logged attempts of the {len(new_runs)} runs.
+      An attempt is one version of the weight-writing code (a <i>weight-space program</i>) and its evaluation.</p>
+    <p><b>Agent.</b> Claude Opus 5.5 (<code>claude-opus-5-5</code>, default thinking effort) running headless in Claude Code (<code>claude -p</code>),
+      driven by <code>evolve/launch_claude.py</code>. The prompt tells it to read and follow <code>program.md</code> (the same instructions as the earlier runs,
+      with its task name filled in), notes that its run folder already exists, and asks for at least the target number of attempts. If a session ends early,
+      the driver resumes the same session with a short "continue the loop" message, until the target is reached or two sessions in a row add no attempts.
+      There was no human intervention.</p>
+    <p><b>What the harness enforces.</b> Each run works in its own folder <code>runs-opus55/&lt;task&gt;-opus55-s&lt;seed&gt;</code>, created by
+      <code>evolve/setup_run.py</code>, with a private copy of <code>interpretable_transformer.py</code> and <code>program.md</code>; the task and
+      evaluation code (<code>src/</code>) is a symlink to the shared <code>evolve/src</code>, so scoring is identical across runs. Claude Code runs in
+      restricted mode with only the Read, Edit, Write, Glob, Grep and Bash tools: file reads are confined to the run folder (so the earlier runs'
+      solutions cannot be opened), there is no web access, and the only shell command it may run, apart from read-only listings of its own folder, is
+      <code>uv run interpretable_transformer.py ...</code>; every other command is refused. Snapshots are saved with the Write tool. The rules on training,
+      outside computation and pretrained weights remain instructions: the agent's own Python could in principle break them, which the snapshots are checked for.</p>
+    <p><b>Audits after the runs.</b> Four checks, all in <code>evolve/</code>.
+      <i>Transcripts</i> (<code>audit_transcripts.py</code>): every tool call of every session. Runs used only the six allowed tools, and no call read or
+      changed another run's files; the few paths outside a run folder were failed calls on nonexistent files and Claude Code's own saved command output.
+      <i>Static scan</i> (<code>audit_runs.py</code>): no saved program contains training or fitting code (optimizers, <code>.backward()</code>,
+      <code>.fit(</code>, least squares, pseudo-inverse).
+      <i>Counterfactual data check</i> (<code>audit_data_use.py</code>): each saved program is built normally, built again (to confirm determinism), and built
+      with the task data altered (a different sample with answers shuffled; for the real-world tasks the other half of the training split with labels
+      shuffled). A program is <b>data-dependent</b> if its weights change, which means they were computed from task examples or chosen by checking accuracy
+      on them. No saved program is data-dependent; a positive control (programs that set weights from label counts or generated answers) is flagged.
+      <i>Indirect fitting</i>: no session printed data statistics (word frequencies, log-odds and so on) or ran a fitting procedure (logistic regression,
+      perceptron) whose numbers could have been copied into a later program.
+      One caveat for the real-world tasks: in 5 of the 6 runs the agent added a measurement-only "dev" check that prints accuracy (and sometimes a confusion
+      matrix) on examples from the same 2,000-example pool, usually excluding the 200 evaluation prompts, and adjusted its hand-set word lists, thresholds and
+      biases across attempts. This is manual tuning guided by data, as a person iterating on features would do, rather than training; in every run the agent
+      also sees the accuracy on the fixed evaluation set after each attempt.</p>
+{SHARED_DEFS}
+    <p><b>Plots and tables.</b> Each point is one attempt: x is its parameter count (log scale), y its accuracy; attempts are numbered in the order
+      they were logged in <code>results/overall_results.csv</code>. "First attempt at best" is the attempt number at which a run first reached its best
+      accuracy; "smallest near-best" is the attempt with the fewest parameters within 1 point of the run's best accuracy.</p>
+    <details><summary><b>Tasks</b></summary>
     <div class="scroll" style="max-height:none"><table class="mlist">
-      <thead><tr><th>task</th><th>group</th><th>definition</th><th>prompt</th><th>answer</th><th>example</th><th>vocab</th><th>attempts</th></tr></thead>
-      <tbody>{task_rows(tasks)}</tbody></table></div></details>
+      <thead><tr><th>task</th><th>group</th><th>definition</th><th>prompt</th><th>answer</th><th>example</th><th>vocab</th><th>attempts (both runs)</th></tr></thead>
+      <tbody>{task_rows(new_runs)}</tbody></table></div></details>
   </section>
+"""
+
+
+def old_definitions(old_runs: list[dict]) -> str:
+    todo = "<span class='todo'>[not recorded in the repository; fill in]</span>"
+    model = html.escape(AGENT_MODEL) if AGENT_MODEL else todo
+    effort = html.escape(AGENT_EFFORT) if AGENT_EFFORT else todo
+    return f"""
+    <p class="note" style="font-size:14px">An earlier, smaller study on {RUN_DATE}: one run per task ({sum(len(r['methods']) for r in old_runs)} attempts in total) with Claude,
+      model version {model}, thinking effort {effort}, driven by the GitHub Copilot CLI (<code>copilot --autopilot --yolo</code>), prompted with
+      "Read and follow the instructions in <code>evolve/program.md</code>" and told to make at least 20 attempts. Same network, rules and evaluation as above;
+      the run folders are <code>runs/&lt;task&gt;-may15-run&lt;k&gt;</code>. In these runs the agent had the CLI's default tools and the rules were not
+      enforced by the harness.</p>
 """
 
 
@@ -255,139 +349,119 @@ TEMPLATE = r"""<!DOCTYPE html>
 <div class="wrap">
   <header>
     <h1>Weight-Space Programming Autoresearch</h1>
-    <p class="sub">Autonomous AI research that writes transformer weights directly (Weight-Space Programming). Each run iteratively
-      proposes weight-space programs; below, every point is one program, numbered in the order it was tried.</p>
+    <p class="sub">An autonomous agent writes transformer weights directly, with no training, to solve tasks with known solutions.
+      Every point below is one weight-space program, numbered in the order it was tried.</p>
   </header>
 __DEFS__
+  <h2>Results: Claude Opus 5.5, two runs per task</h2>
+  <p class="note">Best accuracy per run, the attempt at which it was first reached, and the smallest program within 1 point of the best.</p>
+  <div class="scroll" style="max-height:none"><table class="mlist">
+    <thead><tr><th>task</th><th>group</th><th>run (seed)</th><th>attempts</th><th>best accuracy</th><th>first attempt at best</th><th>smallest near-best (params)</th><th>attempts whose weights use task data</th><th>best without task data</th><th>sessions</th><th>cost (list price)</th></tr></thead>
+    <tbody>__RESULTS__</tbody></table></div>
 
   <h2>Per-task exploration</h2>
-  <p class="note">Pick a task. The plot shows <b>accuracy vs. number of parameters</b>; points are numbered by the
-    order tried and connected along the path the search took. Hover a point for its method &amp; description.</p>
-  <div class="tabs" id="tabs"></div>
+  <p class="note">Pick a task. The plot shows accuracy against number of parameters for both runs (colour = run); points are connected in the
+    order tried. Hover a point for its name and description.</p>
+  <div class="tabs" id="tabsNew"></div>
   <div class="panel">
-    <div class="card"><div id="taskPlot" style="width:100%;height:440px;"></div></div>
-    <div class="writeup" id="writeup"></div>
+    <div class="card"><div id="taskPlotNew" style="width:100%;height:440px;"></div></div>
+    <div class="writeup" id="writeupNew"></div>
   </div>
 
   <h2>All tasks together</h2>
-  <p class="note">Every task overlaid. Each line traces one task's search path through (parameters, accuracy) space,
-    in the order circuits were tried.</p>
-  <div class="card"><div id="summaryPlot" style="width:100%;height:560px;"></div></div>
+  <p class="note">Each line is one run, connected in order of increasing parameter count.</p>
+  <div class="card"><div id="summaryPlotNew" style="width:100%;height:560px;"></div></div>
+
+  <h2 id="earlier">Earlier runs (May 2026, GitHub Copilot CLI)</h2>
+__OLDDEFS__
+  <div class="tabs" id="tabsOld"></div>
+  <div class="panel">
+    <div class="card"><div id="taskPlotOld" style="width:100%;height:440px;"></div></div>
+    <div class="writeup" id="writeupOld"></div>
+  </div>
+  <h3 style="margin-top:28px">All tasks together (earlier runs)</h3>
+  <div class="card"><div id="summaryPlotOld" style="width:100%;height:520px;"></div></div>
 
   <footer>
-    Generated from <code>runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
+    Generated from <code>runs-opus55/*/results/overall_results.csv</code> and <code>runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
   </footer>
 </div>
 
 <script>
-const DATA = __DATA__;
+const NEW = __NEW__;
+const OLD = __OLD__;
 const PALETTE = ['#2563eb','#dc2626','#059669','#d97706','#7c3aed','#0891b2','#db2777',
                  '#65a30d','#ea580c','#4f46e5','#0d9488','#be123c','#a16207'];
+const SEEDCOL = ['#2563eb','#ea580c','#059669'];
 const LAYOUT_BASE = {
   paper_bgcolor:'#fff', plot_bgcolor:'#fff',
   font:{family:'-apple-system,Segoe UI,Roboto,sans-serif', color:'#1a1a1a', size:12},
   margin:{l:58,r:18,t:14,b:50},
 };
+const AXES = {
+  xaxis:{title:{text:'# parameters (log scale)'}, type:'log', gridcolor:'#f1f5f9', zeroline:false},
+  yaxis:{title:{text:'accuracy'}, range:[-0.04,1.06], gridcolor:'#f1f5f9', zeroline:false, tickformat:'.0%'},
+};
 
-function renderTask(idx){
-  const t = DATA[idx];
-  const m = t.methods;
-  // For dense sweeps we can't legibly stamp a number on every point, so we drop
-  // the on-plot labels (order stays in the hover + the ordered table below) and
-  // lighten the path so the cloud of points stays readable. "Dense" also covers
-  // tasks where most attempts share one param count (e.g. solved immediately then
-  // refined in place) -- there the points are coincident and numbers just pile up.
-  const counts = {}; let modal = 0;
-  m.forEach(d=>{ counts[d.params]=(counts[d.params]||0)+1; modal=Math.max(modal,counts[d.params]); });
-  const dense = m.length > 35 || modal/m.length >= 0.6;
-  const trace = {
-    x: m.map(d=>d.params), y: m.map(d=>d.acc),
-    customdata: m.map(d=>String(d.i)),
-    text: m.map(d=>
-      `#${d.i} <b>${esc(d.name)}</b><br>acc ${(d.acc*100).toFixed(1)}%`+
-      `<br>${d.params.toExponential(2)} params`+
-      `${d.status==='failed'?'<br><i>failed</i>':''}`+
-      `<br>${wrap(d.desc,60)}`),
-    mode: dense ? 'lines+markers' : 'lines+markers+text',
-    line:{color: dense?'rgba(148,163,184,0.35)':'#cbd5e1', width: dense?1:1.4},
-    marker:{
-      // Color encodes the ORDER tried: light (first) -> dark (last).
-      size: dense?8:15, opacity: dense?0.85:1, color:m.map(d=>d.i),
-      colorscale:[[0,'#dbeafe'],[0.5,'#60a5fa'],[1,'#1e3a8a']],
-      cmin:1, cmax:m.length, line:{color:'#fff', width: dense?0.6:1.2},
-      colorbar:{title:{text:'order tried',side:'right'}, thickness:10, len:0.6, x:1.02},
-    },
-    textposition:'top center', textfont:{size:9, color:'#475569'},
-    texttemplate:'%{customdata}',
-    hovertemplate:'%{text}<extra></extra>',
-  };
-  const layout = Object.assign({}, LAYOUT_BASE, {
-    xaxis:{title:{text:'# parameters (log scale)'}, type:'log', gridcolor:'#f1f5f9', zeroline:false},
-    yaxis:{title:{text:'accuracy'}, range:[-0.04,1.06], gridcolor:'#f1f5f9', zeroline:false, tickformat:'.0%'},
-    showlegend:false,
-  });
-  Plotly.react('taskPlot', [trace], layout, {displayModeBar:false, responsive:true});
-
+function hoverText(d){
+  return `#${d.i} <b>${esc(d.name)}</b><br>acc ${(d.acc*100).toFixed(1)}%<br>${d.params.toExponential(2)} params`+
+         `${d.status==='failed'?'<br><i>failed</i>':''}<br>${wrap(d.desc,60)}`;
+}
+function methodTable(m){
   const rows = m.map(d=>
-    `<tr><td class="num">${d.i}</td>`+
-    `<td><b>${esc(d.name)}</b></td>`+
+    `<tr><td class="num">${d.i}</td><td><b>${esc(d.name)}</b></td>`+
     `<td class="acc-pill" style="color:${d.acc>=0.99?'#059669':d.acc<0.5?'#b91c1c':'#374151'}">${(d.acc*100).toFixed(1)}%</td>`+
-    `<td style="white-space:nowrap;color:#6b7280">${fmtP(d.params)}</td>`+
-    `<td class="desc">${esc(d.desc)}</td></tr>`).join('');
-  document.getElementById('writeup').innerHTML =
-    `<h3>${esc(t.task)}</h3>`+
-    `<div class="meta">${esc(t.category)} &middot; ${m.length} circuits tried</div>`+
-    t.writeup+
-    `<details class="methods" open><summary>All ${m.length} circuits, in order</summary>`+
-    `<div class="scroll"><table class="mlist"><thead><tr>`+
-    `<th>#</th><th>method</th><th>acc</th><th>params</th><th>description</th>`+
-    `</tr></thead><tbody>${rows}</tbody></table></div></details>`;
+    `<td style="white-space:nowrap;color:#6b7280">${fmtP(d.params)}</td><td class="desc">${esc(d.desc)}</td></tr>`).join('');
+  return `<div class="scroll"><table class="mlist"><thead><tr><th>#</th><th>method</th><th>acc</th><th>params</th><th>description</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
-
-function renderSummary(){
-  const traces = DATA.map((t,i)=>{
+function renderTask(task, plotId, writeupId){
+  const runs = task.seeds;
+  const traces = runs.map((r,k)=>({
+    name:`run ${r.seed}`, x:r.methods.map(d=>d.params), y:r.methods.map(d=>d.acc),
+    text:r.methods.map(hoverText), mode:'lines+markers',
+    line:{color:SEEDCOL[k%3], width:1, dash:k?'dot':'solid'}, opacity:0.9,
+    marker:{size:7, color:SEEDCOL[k%3], line:{color:'#fff', width:0.6}},
+    hovertemplate:'%{text}<extra>run '+r.seed+'</extra>',
+  }));
+  Plotly.react(plotId, traces, Object.assign({}, LAYOUT_BASE, AXES, {showlegend:runs.length>1, legend:{x:0.01,y:0.99}}), {displayModeBar:false, responsive:true});
+  document.getElementById(writeupId).innerHTML =
+    `<h3>${esc(task.task)}</h3><div class="meta">${esc(task.category)} &middot; ${runs.map(r=>`run ${r.seed}: ${r.methods.length} attempts`).join(' &middot; ')}</div>`+
+    runs.map(r=>(runs.length>1?`<p style="margin-top:10px"><b>Run ${r.seed}.</b></p>`:'')+r.writeup+
+      `<details class="methods"><summary>All ${r.methods.length} attempts of run ${r.seed}, in order</summary>${methodTable(r.methods)}</details>`).join('');
+}
+function renderSummary(tasks, plotId){
+  const traces = [];
+  tasks.forEach((t,i)=>{
     const c = PALETTE[i%PALETTE.length];
-    // Connect along increasing parameter count (not tried-order) so each task is
-    // a clean left-to-right curve instead of a scribble jumping around the plot.
-    const pts = t.methods.slice().sort((a,b)=> a.params-b.params || a.acc-b.acc);
-    return {
-      name: t.task, legendgroup:t.task,
-      x: pts.map(d=>d.params), y: pts.map(d=>d.acc),
-      text: pts.map(d=>`#${d.i} ${esc(d.name)}<br>${(d.acc*100).toFixed(1)}% &middot; ${d.params.toExponential(1)}p`),
-      mode:'lines+markers',
-      line:{color:c, width:1.6},
-      marker:{size:5, color:c, opacity:0.75, line:{color:'#fff',width:0.6}},
-      hovertemplate:`<b>${esc(t.task)}</b><br>%{text}<extra></extra>`,
-    };
+    t.seeds.forEach((r,k)=>{
+      const pts = r.methods.slice().sort((a,b)=> a.params-b.params || a.acc-b.acc);
+      traces.push({
+        name: t.seeds.length>1?`${t.task} (run ${r.seed})`:t.task, legendgroup:t.task,
+        x: pts.map(d=>d.params), y: pts.map(d=>d.acc),
+        text: pts.map(d=>`#${d.i} ${esc(d.name)}<br>${(d.acc*100).toFixed(1)}% &middot; ${d.params.toExponential(1)}p`),
+        mode:'lines+markers', line:{color:c, width:1.4, dash:k?'dot':'solid'},
+        marker:{size:4, color:c, opacity:0.75}, hovertemplate:`<b>${esc(t.task)}</b> run ${r.seed}<br>%{text}<extra></extra>`,
+      });
+    });
   });
-  const layout = Object.assign({}, LAYOUT_BASE, {
-    xaxis:{title:{text:'# parameters (log scale)'}, type:'log', gridcolor:'#f1f5f9', zeroline:false},
-    yaxis:{title:{text:'accuracy'}, range:[-0.04,1.06], gridcolor:'#f1f5f9', zeroline:false, tickformat:'.0%'},
-    legend:{font:{size:11}, bgcolor:'rgba(255,255,255,0.6)'},
-  });
-  Plotly.react('summaryPlot', traces, layout, {displayModeBar:false, responsive:true});
+  Plotly.react(plotId, traces, Object.assign({}, LAYOUT_BASE, AXES, {legend:{font:{size:10}, bgcolor:'rgba(255,255,255,0.6)'}}), {displayModeBar:false, responsive:true});
 }
-
-function buildTabs(){
-  const el = document.getElementById('tabs');
-  el.innerHTML = DATA.map((t,i)=>
-    `<button class="tab${i===0?' active':''}" data-i="${i}">`+
-    `<span class="cat">${esc(t.category)}</span>${esc(t.task)}</button>`).join('');
+function buildTabs(tasks, tabsId, plotId, writeupId){
+  const el = document.getElementById(tabsId);
+  el.innerHTML = tasks.map((t,i)=>`<button class="tab${i===0?' active':''}" data-i="${i}"><span class="cat">${esc(t.category)}</span>${esc(t.task)}</button>`).join('');
   el.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
     el.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    renderTask(+b.dataset.i);
+    b.classList.add('active'); renderTask(tasks[+b.dataset.i], plotId, writeupId);
   }));
+  if (tasks.length) renderTask(tasks[0], plotId, writeupId);
 }
-
 function esc(s){ return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 function wrap(s, n){ s=esc(s); let out='',line=0;
   for(const w of s.split(' ')){ if(line+w.length>n){out+='<br>';line=0;} out+=w+' '; line+=w.length+1; } return out; }
 function fmtP(p){ if(p>=1e6) return (p/1e6).toFixed(2)+'M'; if(p>=1e3) return (p/1e3).toFixed(1)+'K'; return p.toFixed(0); }
 
-buildTabs();
-renderTask(0);
-renderSummary();
+buildTabs(NEW, 'tabsNew', 'taskPlotNew', 'writeupNew'); renderSummary(NEW, 'summaryPlotNew');
+buildTabs(OLD, 'tabsOld', 'taskPlotOld', 'writeupOld'); renderSummary(OLD, 'summaryPlotOld');
 </script>
 </body>
 </html>
@@ -395,10 +469,15 @@ renderSummary();
 
 
 def main():
-    tasks = collect()
-    OUT.write_text(TEMPLATE.replace("__DEFS__", definitions(tasks)).replace("__DATA__", json.dumps(tasks)))
-    n_methods = sum(len(t["methods"]) for t in tasks)
-    print(f"Wrote {OUT} with {len(tasks)} tasks, {n_methods} circuits.")
+    new_runs = collect(ROOT / "runs-opus55")
+    old_runs = collect(RUNS)
+    new_tasks, old_tasks = group_by_task(new_runs), group_by_task(old_runs)
+    out = (TEMPLATE.replace("__DEFS__", definitions(new_runs)).replace("__OLDDEFS__", old_definitions(old_runs))
+           .replace("__RESULTS__", results_table(new_tasks))
+           .replace("__NEW__", json.dumps(new_tasks)).replace("__OLD__", json.dumps(old_tasks)))
+    OUT.write_text(out)
+    print(f"Wrote {OUT}: {len(new_runs)} Opus 5.5 runs ({sum(len(r['methods']) for r in new_runs)} attempts), "
+          f"{len(old_runs)} earlier runs ({sum(len(r['methods']) for r in old_runs)} attempts).")
 
 
 if __name__ == "__main__":

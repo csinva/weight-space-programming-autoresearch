@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+word-reversal-3x3,0.0000,success,RandomInitInterpretable,1.54e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+word-reversal-3x3,0.0000,success,Probe2Examples,1.54e+05,Random init again; run only to print example signatures and I/O pairs from the task object.
+word-reversal-3x3,1.0000,success,E03_OneHotPtr3L,1.15e+05,"Default shape: 3 layers with LN and MLP; only block 0 acts. One-hot token + one-hot position; W_q maps position to source address. LN calibrated to identity, MLP zeroed."
+word-reversal-3x3,1.0000,success,E04_OneHotPtr1L,4.12e+04,E03 with the two idle blocks removed: one layer does all the work.
+word-reversal-3x3,1.0000,success,E05_NoMLP,1.47e+04,"E04 without the MLP: the zeroed MLP did nothing, so the block is attention only."
+word-reversal-3x3,1.0000,success,E06_NoLN,1.44e+04,"E05 without LayerNorm: it was calibrated to identity, so remove it. Attention plus embeddings only."
+word-reversal-3x3,1.0000,success,E07_NoResidual,1.44e+04,"E06 with the residual removed from attention, so the output is the copied token alone and W_o needs no amplification (gain 1)."
+word-reversal-3x3,0.0000,success,E08_Beta1,1.44e+04,E07 with soft attention (beta=1) to find how sharp the pointer must be.
+word-reversal-3x3,0.9100,success,E09_Beta1p5,1.18e+04,"Soft attention beta=1.5: just above ln(4), testing the theory that the 4 separators in context outvote the target at beta=1."
+word-reversal-3x3,1.0000,success,E10_Beta2,1.18e+04,Soft attention beta=2 (weight 7.4 vs 1): enough to beat separators and repeated letters?
+word-reversal-3x3,0.9000,success,E11_WordLetterNaive,6.73e+03,"Factored address: word(3) + letter slot(4) + phase(1), W_q swaps words 0 and 2 and flips phase. Separators keep their word code; expected to mis-read, since the answer's first separator mirrors to the '=' slot."
+word-reversal-3x3,1.0000,success,E12_WordLetterSep,6.73e+03,"E11 with no word code on separators: a separator query matches every prompt separator, and they all hold '_'. W_q reads as: mirror the word, keep the slot, look in the prompt."
+word-reversal-3x3,1.0000,success,E13_BinaryToken,1.53e+03,E12 with tokens as 5-bit +/- codes instead of one-hot; the head decodes by matching codes. d_model 13.
+word-reversal-3x3,1.0000,success,E14_RingToken,1.09e+03,E12 with tokens as 28 points on a 2-D circle; the head picks the nearest angle. d_model 10.
+word-reversal-3x3,1.0000,success,E15_RingTwoFields,5.82e+02,"Ring tokens plus ring addresses: keys on one 2-D circle, queries on another. d_model 6."
+word-reversal-3x3,1.0000,success,E16_RingNegated,3.64e+02,"One 2-D address field: prompt positions store r(s) on a half ring, answer positions store -r(source), and W_q=-I turns that into a query. d_model 4."
+word-reversal-3x3,1.0000,success,E17_FieldsRing,1.03e+02,"E16 with W_q/W_k/W_v replaced by fixed field selection and the head tied to the token table. Params: token table, address table, beta."
+word-reversal-3x3,1.0000,success,E18_ScalarToken,7.50e+01,E17 with each token as one number (its index); the head picks the nearest token value.
+word-reversal-3x3,1.0000,success,E19_ScalarAddress,5.20e+01,E18 with each address as one number and attention scored by negative squared distance: pos_emb is literally a table of read addresses. d_model 2.
+word-reversal-3x3,0.0000,success,E20_ScalarBeta3,5.20e+01,"E19 at beta=3, below the predicted limit of about 4.7 where leak from neighbouring slots shifts the averaged scalar token by half a step."
+word-reversal-3x3,1.0000,success,E21_ScalarBeta5,5.20e+01,"E19 at beta=5, just above the predicted limit of about 4.7."
+word-reversal-3x3,0.1400,success,E22_ScalarBeta4,5.20e+01,"E19 at beta=4, bisecting the failed beta=3 and working beta=5."
+word-reversal-3x3,1.0000,success,E23_TrimPosition,5.10e+01,"E19 at beta=20 with position 22 dropped from the address table, since the last character is never fed back."
+word-reversal-3x3,1.0000,success,E24_FixedKeys,4.00e+01,"Keys are position+1 by construction, so the 22-row address table shrinks to 11 read addresses for the answer positions."
+word-reversal-3x3,1.0000,success,E25_FixedValues,1.20e+01,"E24 with the token id itself as the value, so no token table. Learnable-style state is just the 11 read addresses and beta."
+word-reversal-3x3,1.0000,success,E26_LinearQuery,5.00e+00,Read address is linear in fixed position features: read = 9 - 4*word + letter - 4*is_sep. The 11-entry table becomes 4 coefficients.
+word-reversal-3x3,1.0000,success,E27_FoldEquals,4.00e+00,"Treat '=' as a separator by folding its value onto '_'. Then read = 9 + i - 8*word: walk forward, jump back 8 at each word boundary. 3 coefficients plus beta."
+word-reversal-3x3,1.0000,success,E28_FoldBeta5,4.00e+00,"E27 at beta=5, the lowest value that passed on random prompts, checked on the worst-case a/z stress test."
+word-reversal-3x3,0.8900,success,E29_FoldBeta4p5,4.00e+00,"E27 at beta=4.5, bisecting between beta=4 (failed in the scalar family) and beta=5 (passes)."
+word-reversal-3x3,1.0000,success,E30_HardAttention,3.00e+00,"E27 with softmax replaced by argmax, so no leakage and no beta. Only the 3 query coefficients remain, at the cost of a non-standard attention rule."
+word-reversal-3x3,1.0000,success,E31_StockDefault,1.54e+05,"Unmodified default architecture (d_model 64, 4 heads, 3 layers, d_ff 256). Balanced ring codes make LayerNorm a constant rescale; head 0 of block 0 is the pointer and the rest is zero."
+word-reversal-3x3,0.0000,success,E32_StockGain5,1.54e+05,"E31 at gain=5: the residual input token can tilt the read by up to 11.5 degrees, past the 6.4-degree half-step, so failures are expected."
+word-reversal-3x3,1.0000,success,E33_StockGain10,1.54e+05,"E31 at gain=10: maximum tilt 5.7 degrees, just inside the 6.4-degree half-step, so it should pass with a thin margin. Stress test now includes the full alphabet."
+word-reversal-3x3,1.0000,success,E34_StockBeta100,1.54e+05,"E31 at beta=100: adjacent keys on the half ring differ by only 0.04, so the score gap is 4 and neighbours leak about 2 percent each."
+word-reversal-3x3,0.0000,success,E35_StockBeta30,1.54e+05,"E31 at beta=30: score gap to adjacent keys only 1.2, so neighbours and even distant keys leak heavily. Looking for where the vector average finally fails."
+word-reversal-3x3,1.0000,success,E36_StockTiny,9.61e+02,"Every stock component kept (LayerNorm, MLP, residual, W_o) at the smallest size that fits the 8 active dims: d_model 8, 1 head, 1 layer, d_ff 1."
+word-reversal-3x3,1.0000,success,E37_StockWordLetterRing,2.02e+03,"Stock blocks with the readable word/slot/phase address: W_q is mirror-word, keep-slot, flip-phase. Ring tokens, d_model 14, 1 head, 1 layer, d_ff 1."
+word-reversal-3x3,1.0000,success,E38_StockWordLetterOneHot,9.12e+03,"E37 with centred one-hot tokens, so each output dim is a letter. d_model 38, gain 10."
+word-reversal-3x3,1.0000,success,E39_OneHotGain2,9.12e+03,"E38 at gain=2: with one-hot tokens the read only has to outvote the single residual input token, so gain just above 1 should do."
+word-reversal-3x3,1.0000,success,E40_OneHotBeta3,9.12e+03,"E38 at beta=3, with a single-field mismatch costing only 3 score units, to measure how soft the readable circuit can be."

@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.0000,success,e01_random_probe,1.61e+05,"Baseline: default random init, prints the task object's public interface."
+paraphrase-mrpc,0.0000,success,e02_random_sigprobe,1.61e+05,"Baseline: default random init, prints task method signatures."
+paraphrase-mrpc,0.0000,success,e03_random_exprobe,1.61e+05,"Baseline: default random init, prints sample examples from a non-eval seed."
+paraphrase-mrpc,0.0000,success,e04_random_featstats,1.61e+05,"Baseline: default random init, prints class-conditional stem-overlap statistics from a non-eval seed."
+paraphrase-mrpc,0.6500,success,e05_stem3_cov2,7.54e+05,Causal circuit: exact 3-letter word-prefix match of sent2 against sent1; predict 1 if coverage > 0.38.
+paraphrase-mrpc,0.6500,success,e06_stem3_cov2_nullfix,7.54e+05,Stem-3 coverage circuit with null key moved to position 61 so position 59 stems count; tau 0.38.
+paraphrase-mrpc,0.6500,success,e07_stem3_cov2_sentfix,7.54e+05,Stem-3 coverage circuit; sentinel window is pure '|' so it cannot partially match; tau 0.38.
+paraphrase-mrpc,0.6800,success,e08_always1_baseline,7.54e+05,Same circuit with tau=-1 so it always answers 1: the majority-class baseline for this eval.
+paraphrase-mrpc,0.6800,success,e09_always1_splitcheck,7.54e+05,Always-1 circuit; checks whether generate_examples seeds really give samples distinct from eval.
+paraphrase-mrpc,0.6800,success,e10_always1_devstats,7.54e+05,Always-1 circuit; prints feature tables on a dev set with the eval prompts excluded.
+paraphrase-mrpc,0.6550,success,e11_counts_L4_miss12,1.05e+06,Causal stem-4 circuit with uniform-attention word counts; answer 1 iff Miss1+Miss2 <= 6.
+paraphrase-mrpc,0.6800,success,e12_counts_L4_miss12_t9,1.05e+06,Causal stem-4 word-count circuit; answer 1 iff Miss1+Miss2 <= 9.
+paraphrase-mrpc,0.6800,success,e13_rulelab,1.05e+06,Same as e12 (Miss1+Miss2 <= 9); also prints dev accuracy of a hand-written rule list.
+paraphrase-mrpc,0.6650,success,e14_gram8_tau3,2.19e+06,Attention-only circuit: answer 1 iff at least 3 8-char windows of sent2 appear verbatim in sent1.
+paraphrase-mrpc,0.6600,success,e15_gram6_tau5,1.40e+06,Attention-only circuit: answer 1 iff at least 5 6-char windows of sent2 appear verbatim in sent1.
+paraphrase-mrpc,0.6650,success,e16_gram10_tau2,3.14e+06,Attention-only circuit: answer 1 iff at least 2 10-char windows of sent2 appear verbatim in sent1.
+paraphrase-mrpc,0.6550,success,e17_gram8_slack1_tau5,2.19e+06,Fuzzy windows: an 8-char window counts if at most 1 char differs; answer 1 iff at least 5 windows match.
+paraphrase-mrpc,0.6700,success,e18_gram8_win40_tau2,2.19e+06,Exact 8-char windows counted only in the first 40 chars of sent2; answer 1 iff at least 2 match.
+paraphrase-mrpc,0.6450,success,e19_gram8_win30_tau1,2.19e+06,Exact 8-char windows counted only in the first 30 chars of sent2; answer 1 iff at least 1 matches.
+paraphrase-mrpc,0.6800,success,e20_gram8_win40_tau1,2.19e+06,Exact 8-char windows counted only in the first 40 chars of sent2; answer 1 iff at least 1 matches.
+paraphrase-mrpc,0.6600,success,e21_gram8_win50_tau1,2.19e+06,Exact 8-char windows counted only in the first 50 chars of sent2; answer 1 iff at least 1 matches.
+paraphrase-mrpc,0.6700,success,e22_gram8_win50_tau2,2.19e+06,Exact 8-char windows counted only in the first 50 chars of sent2; answer 1 iff at least 2 match.
+paraphrase-mrpc,0.6800,success,e23_gram6_win40_tau3,1.40e+06,Exact 6-char windows counted only in the first 40 chars of sent2; answer 1 iff at least 3 match.
+paraphrase-mrpc,0.6850,success,e24_gram10_win40_tau1,3.14e+06,Exact 10-char windows counted only in the first 40 chars of sent2; answer 1 iff at least 1 matches.
+paraphrase-mrpc,0.6850,success,e25_gram8_win40_vowelmerge,2.19e+06,"8-char windows with all vowels merged into one channel, in the first 40 chars of sent2; answer 1 iff at least 1 matches."
+paraphrase-mrpc,0.6800,success,e26_rulelab2,2.19e+06,"Same weights as e20 (8-char windows, first 40 chars, at least 1 match); also prints dev accuracy of hand-written combined rules."
+paraphrase-mrpc,0.6800,success,e27_compact_bits,7.65e+04,"e20's rule rebuilt with 6-bit char codes and 7-bit position codes: same predictions, far fewer dimensions."
+paraphrase-mrpc,0.6800,success,e28_compact_5bit,6.73e+04,"e27 with 5-bit char codes, the minimum that separates the 28 real characters."
+paraphrase-mrpc,0.6900,success,e29_skip0246,2.63e+04,"Window samples only offsets 0,2,4,6 instead of 8 consecutive chars; answer 1 iff any window in the first 40 chars of sent2 matches."
+paraphrase-mrpc,0.6800,success,e30_skip0246_tau3,2.63e+04,"Skip-sampled window (offsets 0,2,4,6); answer 1 iff at least 3 windows in the first 40 chars of sent2 match."
+paraphrase-mrpc,0.6750,success,e31_skip036_tau5,1.90e+04,"Skip-sampled window (offsets 0,3,6); answer 1 iff at least 5 windows in the first 40 chars of sent2 match."
+paraphrase-mrpc,0.6750,success,e32_skip036_tau4,1.90e+04,"Skip-sampled window (offsets 0,3,6); answer 1 iff at least 4 windows in the first 40 chars of sent2 match."
+paraphrase-mrpc,0.6800,success,e33_gram4_win40_tau9,2.63e+04,Exact 4-char windows; answer 1 iff at least 9 windows in the first 40 chars of sent2 match.
+paraphrase-mrpc,0.6850,success,e34_gram7_win40_tau1,5.53e+04,Exact 7-char windows; answer 1 iff at least 1 window in the first 40 chars of sent2 matches.
+paraphrase-mrpc,0.6700,success,e35_gram9_win40_tau1,8.04e+04,Exact 9-char windows; answer 1 iff at least 1 window in the first 40 chars of sent2 matches.
+paraphrase-mrpc,0.6800,success,e36_gram8_win45_tau1,6.73e+04,Exact 8-char windows; answer 1 iff at least 1 window in the first 45 chars of sent2 matches.
+paraphrase-mrpc,0.6450,success,e37_gram8_win35_tau1,6.73e+04,Exact 8-char windows; answer 1 iff at least 1 window in the first 35 chars of sent2 matches.
+paraphrase-mrpc,0.6950,success,e38_gram8_win40_s1lim45,6.73e+04,8-char windows from the first 40 chars of sent2 matched only against the first 45 chars of sent1; answer 1 iff any match.
+paraphrase-mrpc,0.6750,success,e39_gram8_win40_s1lim55,6.73e+04,8-char windows from the first 40 chars of sent2 matched only against the first 55 chars of sent1; answer 1 iff any match.
+paraphrase-mrpc,0.6800,success,e40_4bit_hash,5.86e+04,"4-bit char codes: letters share 16 classes, so 8-char windows match by hash; answer 1 iff any window in the first 40 chars of sent2 matches."
+paraphrase-mrpc,0.6850,success,e41_3bit_hash,5.05e+04,"3-bit char codes: letters share 8 classes, so 8-char windows match by hash; answer 1 iff any window in the first 40 chars of sent2 matches."
+paraphrase-mrpc,0.6950,success,e42_2bit_hash,4.30e+04,"2-bit char codes: letters share 4 classes, so 8-char windows match by hash; answer 1 iff any window in the first 40 chars of sent2 matches."
+paraphrase-mrpc,0.6750,success,e43_1bit_gram12,6.49e+04,1-bit char codes (2 letter classes) with 12-char windows; answer 1 iff any window in the first 40 chars of sent2 matches.
+paraphrase-mrpc,0.6900,success,e44_soundclass8,5.05e+04,Letters mapped to 8 Soundex-style sound classes (3-bit codes); answer 1 iff any 8-char sound window in the first 40 chars of sent2 is in sent1.
+paraphrase-mrpc,0.6750,success,e45_soundclass8_gram10,7.03e+04,8 Soundex-style sound classes with 10-char windows; answer 1 iff any window in the first 40 chars of sent2 is in sent1.
+paraphrase-mrpc,0.6650,success,e46_soundclass4,4.30e+04,"4 broad sound classes (vowel, stop, continuant, space; 2-bit codes); answer 1 iff any 8-char window in the first 40 chars of sent2 is in sent1."
+paraphrase-mrpc,0.6700,success,e47_soundclass8_tau2,5.05e+04,8 Soundex-style sound classes; answer 1 iff at least 2 8-char sound windows in the first 40 chars of sent2 are in sent1.
+paraphrase-mrpc,0.6750,success,e48_soundclass8_tau3,5.05e+04,8 Soundex-style sound classes; answer 1 iff at least 3 8-char sound windows in the first 40 chars of sent2 are in sent1.
+paraphrase-mrpc,0.6700,success,e49_soundclass8_softer,5.05e+04,"e47 with softer constants (BETA 12, GAIN 5): checks the circuit does not depend on extreme weights."
+paraphrase-mrpc,0.6700,success,e50_final_soundclass8,5.05e+04,"Final cleaned circuit: 8 sound classes, 8-char windows, answer 1 iff at least 2 windows in the first 40 chars of sent2 occur in sent1."

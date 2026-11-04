@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.0000,success,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sentiment-sst2,0.0000,success,probe_task_interface,1.59e+05,Random init; prints the public interface of the task object to learn vocab and format.
+sentiment-sst2,0.0000,success,probe_task_format,1.59e+05,Random init; prints method signatures and 3 examples from a non-eval seed to learn the prompt format.
+sentiment-sst2,0.6750,success,lex_shift14_flat,2.35e+06,"No LayerNorm. Attention shift register (14 chars) + one AND-gate MLP unit per hand-written lexicon pattern, uniform attention sums polarity at '='."
+sentiment-sst2,0.6100,success,lex_shift14_tieneg,2.35e+06,"Same circuit as lex_shift14_flat, but phrases with no lexicon evidence default to negative instead of positive."
+sentiment-sst2,0.7350,success,lex_big_negflip15,3.81e+06,"Broad hand-written lexicon plus a negation layer: attention finds a negator within 15 chars, MLP flips polarity; positive tie default."
+sentiment-sst2,0.7350,success,lex_big_negw2,3.81e+06,"lex_big_negflip15 with negative evidence weighted 2x, since reviews hedge praise more often than they hedge criticism."
+sentiment-sst2,0.7600,success,lex_big_negw2_negatorw1,3.81e+06,"lex_big_negw2 plus negators as direct negative evidence (-1), routed straight to SCORE so the flip gate cannot reverse them."
+sentiment-sst2,0.7650,success,lex_big_negw2_negatorw2,3.81e+06,"lex_big_negw2_negatorw1 with the direct negator evidence raised to -2, the same strength as a negative lexicon word."
+sentiment-sst2,0.7450,success,lex_negvocab2_negatorw1,3.90e+06,"Back to negator weight 1, with 95 net new negative patterns. Several were copied from printed dev errors, so its dev score (0.790) is inflated."
+sentiment-sst2,0.7500,success,lex_negvocab3_clean,3.88e+06,lex_negvocab2_negatorw1 with sentence-specific words removed; adds a clean dev score on dev[600:] and a check of the eval-set assumption.
+sentiment-sst2,0.7500,success,lex_negvocab3_reach25,3.88e+06,"lex_negvocab3_clean with negation reach widened from 15 to 25 characters, roughly five words instead of three."
+sentiment-sst2,0.7500,success,lex_negvocab3_contrast,4.34e+06,"lex_negvocab3_clean plus a latching attention head: after but/however/yet/though/although, evidence is boosted by +1 (NEG_REACH back to 15)."
+sentiment-sst2,0.7750,success,priors_weak04,4.40e+06,"lex_negvocab3_contrast plus weak 0.4 priors on common review and function words, and a *less suffix rule, for phrases with no lexicon hit."
+sentiment-sst2,0.7800,success,priors_weak08,4.40e+06,priors_weak04 with the prior strength doubled to 0.8.
+sentiment-sst2,0.7500,success,core_lex_small,3.67e+06,"priors_weak04 circuit with the lexicon cut by hand to the most common review words, to measure how much of the big lexicon matters."
+sentiment-sst2,0.7600,success,core_negw3,3.67e+06,core_lex_small with negative evidence weighted 3x instead of 2x.
+sentiment-sst2,0.7550,success,core_flipneg0,3.67e+06,"core_lex_small with a negated negative worth 0 instead of +0.5, so 'not bad' is neutral."
+sentiment-sst2,0.7550,success,core_flippos2,3.67e+06,"core_flipneg0 with a negated positive worth -2 instead of -1, matching the strength of a negative word."
+sentiment-sst2,0.7350,success,core_tieneg,3.67e+06,"core_flippos2 with the zero-evidence default switched to negative, to test whether the tie rule still matters once priors exist."
+sentiment-sst2,0.7350,success,core_func015,3.71e+06,"core_flippos2 plus 0.15-strength function-word priors written from general knowledge of review language, to give zero-evidence phrases a vote."
+sentiment-sst2,0.7550,success,core_boost0,3.67e+06,"core_flippos2 with the contrast boost set to 0, to test whether the latching attention head can be removed."
+sentiment-sst2,0.7550,success,core_nolatch,3.25e+06,"Refactor of core_boost0: latch head, contrast patterns and the unused flip gate removed; 15 heads and 3 gates instead of 16 and 6."
+sentiment-sst2,0.7550,success,core_binary,4.21e+05,core_nolatch with 6-bit +/-1 character codes in place of 32-dim one-hots: d_model drops from 480 to 150 and AND gates read bit codes.
+sentiment-sst2,0.7550,success,core_dh9,3.55e+05,"core_binary with head size 9, the minimum that fits the 9 scratch channels; d_model 135."
+sentiment-sst2,0.7700,success,big_binary,5.48e+05,"Full 1100-pattern lexicon on the simplified circuit: 6-bit char codes, d_model 135, no latch, negated negatives neutral, negated positives -2."
+sentiment-sst2,0.7750,success,big_vocab4,6.40e+05,"big_binary plus a broad new tier of general review vocabulary written from general knowledge, not from printed errors."
+sentiment-sst2,0.7550,success,core_no_wo,3.00e+05,"core_dh9 with the W_o output projection removed from attention: heads write in place, and predictions should not change."
+sentiment-sst2,0.7550,success,core_idioms,3.06e+05,"core_no_wo plus two-word idioms where single words mislead, such as 'not only' and 'at best'."
+sentiment-sst2,0.7650,success,core_prefix_neg,3.01e+05,"core_no_wo (idioms dropped) plus weak negative prefix rules un*, dis* and mis*, to cover rare negative words without listing them."
+sentiment-sst2,0.7650,success,core_affix_neg2,3.02e+05,"core_prefix_neg plus more negative-leaning affixes: over*, non*, anti*, pseudo* and *ish."
+sentiment-sst2,0.7650,success,core_affix_pos,3.03e+05,"core_affix_neg2 plus positive-leaning suffixes *ful, *ive and *ous as weak priors."
+sentiment-sst2,0.7650,success,core_nev_stays,3.02e+05,"core_affix_neg2 with negated negatives left negative instead of dropped, so the NEV gate is no longer needed."
+sentiment-sst2,0.7600,success,core_noflip,3.02e+05,"core_nev_stays with the flip disabled (negators still count as direct negative evidence), measuring what block 2 is worth."
+sentiment-sst2,0.7700,success,core_w12,2.41e+05,core_nev_stays with a 12-character shift register instead of 14; patterns that no longer fit are dropped.
+sentiment-sst2,0.7650,success,core_w10_trunc,1.90e+05,core_nev_stays with a 10-character shift register; patterns that do not fit are truncated to stems instead of dropped. d_model 99.
+sentiment-sst2,0.7650,success,core_w8_trunc,1.42e+05,core_w10_trunc with an 8-character shift register: every pattern is at most a 7-character stem. d_model 81.
+sentiment-sst2,0.7300,success,core_w6_trunc,1.01e+05,core_w8_trunc with a 6-character shift register: every pattern is at most a 5-character stem. d_model 63.
+sentiment-sst2,0.7650,success,core_w7_trunc,1.21e+05,"Shift register of 7 characters, between core_w8_trunc and core_w6_trunc: patterns are at most 6-character stems. d_model 72."
+sentiment-sst2,0.7650,success,core_w8_negw15,1.42e+05,"core_w8_trunc with negative words weighted 1.5x instead of 2x, now that morphology adds negative evidence on its own."
+sentiment-sst2,0.7650,success,core_w8_negw1,1.42e+05,"core_w8_trunc with positive and negative words weighted equally, testing whether the separate negative weight can go."
+sentiment-sst2,0.7600,success,core_w8_flip1,1.42e+05,"core_w8_negw1 with a negated positive worth -1 instead of -2, so every full-strength weight is +/-1."
+sentiment-sst2,0.7600,success,core_w8_weak025,1.42e+05,"core_w8_flip1 with weak priors at 0.25 instead of 0.4, relative to the unit word weights."
+sentiment-sst2,0.7850,success,big_w8_affix,3.19e+05,"Full big_vocab4 lexicon with every core winner: no W_o, 8-char truncated stems, negative affix rules, +/-1 weights, ungated negatives."
+sentiment-sst2,0.7900,success,big_w8_negw15,3.19e+05,"big_w8_affix with negative words weighted 1.5x, because equal weights left the full lexicon biased towards positive."
+sentiment-sst2,0.7800,success,big_w8_negw2,3.19e+05,"big_w8_affix with negative words weighted 2x, bracketing the 1.5x result from above."
+sentiment-sst2,0.7950,success,big_w10_negw15,4.05e+05,"big_w8_negw15 with a 10-character shift register, checking the register length on the full lexicon. d_model 99."
+sentiment-sst2,0.8000,success,big_w12_negw15,4.98e+05,"big_w10_negw15 with a 12-character shift register, to see where the register length curve flattens. d_model 117."
+sentiment-sst2,0.7850,success,big_w10_negator05,4.05e+05,"big_w10_negw15 with direct negator evidence halved to 0.5, re-testing that weight at full lexicon size."
+sentiment-sst2,0.7950,success,big_w10_dh8,3.52e+05,"Refactor of big_w10_negw15: negative evidence writes straight to SCORE, removing the NEV channel and one gate. d_model 88, predictions should match."

@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,0.0000,success,e01_random_baseline,1.52e+05,"Default architecture, random init baseline; also reports the task interface."
+decimal-to-binary-8bit,0.0000,success,e02_random_probe,1.52e+05,"Random init again; prints the task's lengths, method signatures and sample examples."
+decimal-to-binary-8bit,1.0000,success,e03_one_head_per_position,2.77e+03,"1 layer, attention only, 11 heads each reading one position; W_o holds place values (100,10,1,-128..-2) and head argmax compares remainder to 2^k."
+decimal-to-binary-8bit,1.0000,success,e04_two_head_logplace,5.60e+02,"2 heads, d=8: keys are log place values so softmax attention is a weighted mean; head 0 = n/111, head 1 = S/256 with '=' padding the total weight to 256."
+decimal-to-binary-8bit,1.0000,success,e05_equals_is_threshold,5.20e+02,"As e04 with no threshold table: '=' has value 1/2, so its padding weight 2^(k+1) contributes exactly 2^k to head 1. Position table trimmed to 11 rows."
+decimal-to-binary-8bit,1.0000,success,e06_mode_log_features,3.42e+02,"d=6: position is just (MODE, log place value), token is (value, is-equals). Both heads key on LOG -/+ M*MODE; zero-sum head logit1=+y, logit0=-y."
+decimal-to-binary-8bit,1.0000,success,e07_d4_write_onto_mode,1.96e+02,"d=4: features VAL, EQ, MODE, LOG only. Decision y is added onto MODE (+1 while writing); '=' value 257/512 cancels that offset."
+decimal-to-binary-8bit,1.0000,success,e08_d4_M10,1.96e+02,e07 with region separation M=10 instead of 20; check now reports the minimum logit margin.
+decimal-to-binary-8bit,1.0000,success,e09_d4_M6,1.96e+02,e07 with region separation M=6; finding where leakage between digits and bits starts to matter.
+decimal-to-binary-8bit,0.4150,success,e10_d4_M3,1.96e+02,"e07 with region separation M=3; expected to break, measuring how attention leakage fails."
+decimal-to-binary-8bit,0.9400,success,e11_d4_M4p5,1.96e+02,e07 with region separation M=4.5; bisecting the failure point between M=3 and M=6.
+decimal-to-binary-8bit,1.0000,success,e12_d4_odd_margin,1.96e+02,"d=4 with '=' exactly 1/2 and W_o doubled: logit is 1+2(r-2^k), an odd integer, so margin is 1 with no fudge constant (was 1/256)."
+decimal-to-binary-8bit,1.0000,success,e13_odd_margin_M6,1.96e+02,"e12 with M=6: leakage tolerance of the odd-integer logit, compare e09 (margin 0.0031)."
+decimal-to-binary-8bit,1.0000,success,e14_odd_margin_M4p5,1.96e+02,e12 with M=4.5: the separation that scored 240/256 with the 1/256 margin in e11.
+decimal-to-binary-8bit,0.3400,success,e15_odd_margin_M3,1.96e+02,e12 with M=3: the separation that scored 97/256 with the 1/256 margin in e10.
+decimal-to-binary-8bit,0.9700,success,e16_odd_margin_M3p75,1.96e+02,e12 with M=3.75: bisecting the failure point between M=3 (81/256) and M=4.5 (256/256).
+decimal-to-binary-8bit,1.0000,success,e17_final_layernorm,2.04e+02,"d=4, M=6 with a stock final LayerNorm restored: zero-sum head rows cancel the mean and the positive std preserves the decision sign."
+decimal-to-binary-8bit,1.0000,success,e18_onehot_stock_block,3.46e+03,"Stock Block restored (ln1, ln2, MLP) on one-hot embeddings, d=24: fixed input norm lets ln1 be an exact identity via gamma=std, beta=mean; MLP output is zero."
+decimal-to-binary-8bit,1.0000,success,e19_stock_architecture,1.52e+05,"Unmodified default architecture (d=64, 4 heads, 3 layers, d_ff=256): only block 0 attention is used, blocks 1-2 and all MLPs are exact pass-throughs."
+decimal-to-binary-8bit,1.0000,success,e20_two_layers_one_head,3.65e+02,"d=5, one head per layer: layer 1 adds n, layer 2 subtracts S + 2^k. Each layer does one job; no LayerNorm or MLP."
+decimal-to-binary-8bit,1.0000,success,e21_concat_embeddings,1.52e+02,"d=4, M=6: 2-dim token and 2-dim position embeddings concatenated rather than summed, removing 44 unused parameters from the two tables."
+decimal-to-binary-8bit,1.0000,success,e22_minimal_dof,8.90e+01,"Degrees-of-freedom probe: W_v and W_o replaced by hard-wired read of VAL and two output scales, head reads only MODE. Bespoke rather than a standard transformer."
+decimal-to-binary-8bit,1.0000,success,e23_round_3dp,1.52e+02,e21 with every weight rounded to 3 decimals: testing whether exact closed-form logs are needed.
+decimal-to-binary-8bit,0.9850,success,e24_round_2dp,1.52e+02,"e21 with every weight rounded to 2 decimals, e.g. log 2 as 0.69."
+decimal-to-binary-8bit,0.0000,success,e25_noise_1e-3,1.52e+02,"e21 with seeded Gaussian noise of std 0.001 added to every weight, including the zeros."
+decimal-to-binary-8bit,0.8550,success,e26_noise_1e-3_nonzero,1.52e+02,"Same noise std as e25 but only on nonzero weights, testing whether structural zeros cause the collapse to 1/256."
+decimal-to-binary-8bit,0.2850,success,e27_gain_in_Wv_noise_1e-3,1.52e+02,Gain moved from W_o into W_v so attention outputs n and S+2^k directly and W_o is just +/-2; same all-weights noise as e25.
+decimal-to-binary-8bit,0.0000,success,e28_hard_attn_noise_1e-3,2.77e+03,e03 hard one-position-per-head attention under the same all-weights noise as e25: does saturated attention trade parameters for robustness?
+decimal-to-binary-8bit,1.0000,success,e29_gain_in_Wv,1.52e+02,"152-param d=4 model with gain in W_v: attention outputs n and S+2^k directly, W_o is just +/-2. Exact weights, no noise."
+decimal-to-binary-8bit,0.9850,success,e30_gain_in_Wv_round_2dp,1.52e+02,e29 rounded to 2 decimals: does moving the gain into W_v change the rounding limit seen in e24 (254/256)?
+decimal-to-binary-8bit,1.0000,success,e31_integer_exponents,1.52e+02,"e29 with LOG stored in log2 units: bit positions hold the plain integers 8..1, and ln 2 appears only as one scale in W_q and W_k."
+decimal-to-binary-8bit,0.0300,success,e32_ablate_padding,1.52e+02,"Ablation of e31: '=' no longer pads head 1 to total weight 256, so the head's denominator varies with position."
+decimal-to-binary-8bit,0.0000,success,e33_ablate_threshold,1.52e+02,"Ablation of e31: '=' still pads to 256 but has value 0, so the 2^k threshold disappears from head 1."
+decimal-to-binary-8bit,0.8950,success,e34_ablate_odd_scaling,1.52e+02,"Ablation of e31: W_o is +/-1 not +/-2, so the logit is 1+(r-2^k) and lands exactly on 0 when r=2^k-1, leaving those cases to floating-point ties."
+decimal-to-binary-8bit,0.0450,success,e35_ablate_feedback,1.52e+02,"Ablation of e31: head 1 no longer weights emitted bits by place value, removing the autoregressive remainder."
+decimal-to-binary-8bit,1.0000,success,e36_ln2_0p693,1.52e+02,e31 with the single constant ln 2 written as 0.693; every other weight is left exact.
+decimal-to-binary-8bit,0.5750,success,e37_ln2_0p69,1.52e+02,"e31 with only ln 2 written as 0.69, isolating that constant from the all-weights rounding of e24 (254/256)."
+decimal-to-binary-8bit,1.0000,success,e38_mlp_ripple_no_feedback,2.07e+03,"Feedback-free: attention computes n once, then 8 stacked MLP stages run restoring subtraction and each position reads its own stage. Ignores emitted bits."
+decimal-to-binary-8bit,1.0000,success,e39_stock_integer_exponents,1.52e+05,"Unmodified default architecture with the final conventions: gain in W_v, so attention outputs n and S+2^k, and exponents stored as integers."
+decimal-to-binary-8bit,1.0000,success,e40_final_two_head_circuit,1.52e+02,"Final model: 152 params, 1 layer, 2 heads, d=4, attention only. Head 0 outputs n, head 1 outputs S+2^k with '=' as padding and threshold; every weight is named."

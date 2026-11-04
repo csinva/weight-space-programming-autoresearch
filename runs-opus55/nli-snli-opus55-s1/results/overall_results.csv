@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+nli-snli,0.2750,success,e01_random_baseline,1.62e+05,Random init baseline; prints the public attributes of the task object.
+nli-snli,0.0000,success,e02_random_inspect_examples,1.62e+05,Random init again; prints example format from a non-eval seed to learn padding and labels.
+nli-snli,0.4850,success,e03_lexicon_plus_trigram_coverage,1.29e+06,Word detectors (hand lexicon of SNLI artifact words) vote per class; hypothesis trigram coverage of premise sets thresholds.
+nli-snli,0.4850,success,e04_same_with_dev_report,1.29e+06,Same weights as e03; adds a measurement-only confusion matrix on a separate seed.
+nli-snli,0.5250,success,e05_lower_entail_threshold,1.29e+06,Lower the coverage threshold for entailment from 0.8 to 0.65 to raise entailment recall.
+nli-snli,0.5500,success,e06_exclusive_group_conflicts,2.23e+06,Adds mutually exclusive concept groups: a hypothesis word whose group is in the premise but whose member is not votes contradiction.
+nli-snli,0.5550,success,e07_low_coverage_means_neutral,2.23e+06,"Lower COV_LOW from 0.35 to 0.15: with explicit conflicts, low coverage now points to neutral rather than contradiction."
+nli-snli,0.5650,success,e08_length_difference_vote,2.25e+06,Two pooling heads measure sentence padding; a longer hypothesis votes neutral and a shorter one votes entailment.
+nli-snli,0.5550,success,e09_centered_length_vote,2.25e+06,Center the length difference at -24 chars so only unusually long or short hypotheses cast a vote.
+nli-snli,0.5950,success,e10_length_center_minus12,2.25e+06,"Length center halfway at -12 chars, between the entail-heavy e08 (0) and the neutral-heavy e09 (-24)."
+nli-snli,0.5900,success,e11_broader_action_place_groups,2.34e+06,Adds transport-like actions and more places to the mutually exclusive groups.
+nli-snli,0.5900,success,e12_coverage_ignores_function_words,2.37e+06,Stop-word prefix units clear the VALID flag so coverage is measured on content words only.
+nli-snli,0.5950,success,e13_fourgram_coverage,2.60e+06,Reverts the e12 stop words (no gain) and measures coverage with 4-grams instead of trigrams.
+nli-snli,0.6000,success,e14_neutral_added_information_words,2.37e+06,"Back to trigram coverage; adds neutral votes for emotions, motives and subjective descriptions a premise rarely confirms."
+nli-snli,0.6100,success,e15_concept_agreement_vote,2.39e+06,Each hypothesis concept word whose member (or synonym) appears in the premise votes entailment.
+nli-snli,0.5950,success,e16_weaker_agreement_vote,2.39e+06,Agreement vote reduced from 1.0 to 0.3 because e15 over-predicted entailment on the dev seed.
+nli-snli,0.5900,success,e17_new_topic_votes_neutral,2.39e+06,Drops the agreement vote (no dev gain); a hypothesis concept whose group is absent from the premise votes neutral.
+nli-snli,0.5950,success,e18_new_topic_votes_contradiction,2.39e+06,"Flips e17: SNLI contradictions often describe another scene, so a concept new to the premise votes contradiction at 0.5."
+nli-snli,0.5650,success,e19_absolute_hypothesis_length,2.39e+06,"New-topic vote disabled; length vote uses hypothesis length alone, centered at 30 chars, ignoring premise length."
+nli-snli,0.5700,success,e20_absolute_length_center_38,2.39e+06,Hypothesis-length vote recentered at 38 chars because a 30-char center over-predicted neutral.
+nli-snli,0.6000,success,e21_cleanup_back_to_e14,2.37e+06,Removes the new-topic circuit and restores relative length; a sanity check that should reproduce e14 exactly.
+nli-snli,0.5950,success,e22_softer_conflict_vote,2.37e+06,Conflict vote lowered from 4.0 to 2.5 so that one flagged word no longer nearly decides the label.
+nli-snli,0.5900,success,e23_stronger_length_vote,2.37e+06,Conflict vote back at 4.0; length vote raised from 0.08 to 0.12 logits per character.
+nli-snli,0.6000,success,e24_entailment_hypernyms,2.39e+06,Length vote back at 0.08; adds entailment votes for hypernyms and generic descriptions.
+nli-snli,0.6000,success,e25_last_word_in_premise,2.65e+06,Drops the e24 hypernyms (no gain); votes entailment when the last hypothesis trigram is found in the premise.
+nli-snli,0.5900,success,e26_entail_threshold_055,2.65e+06,Last-word vote disabled (no gain); entailment coverage threshold moved from 0.65 to 0.55.
+nli-snli,0.5950,success,e27_entail_threshold_075,2.65e+06,"Brackets the entailment coverage threshold from above at 0.75, after 0.55 over-predicted entailment."
+nli-snli,0.6050,success,e28_ablate_narrow_groups,2.26e+06,"Simplification: removes the last-word circuit and the number, day/night, instrument and sport conflict groups."
+nli-snli,0.5900,success,e29_ablate_color_group,2.20e+06,"Simplification: removes the color conflict group, since color differences in SNLI are often incidental."
+nli-snli,0.6050,success,e30_ablate_activity_group,2.20e+06,Colors restored (they cost contradiction recall); removes the eat/drink/cook/read/paint/sing activity conflict group.
+nli-snli,0.5550,success,e31_ablate_all_conflicts,2.20e+06,"Mechanism ablation: conflict vote set to zero, measuring what the whole exclusive-group circuit contributes."
+nli-snli,0.5550,success,e32_ablate_length,2.20e+06,"Mechanism ablation: length vote set to zero, measuring what relative hypothesis length contributes."
+nli-snli,0.5750,success,e33_ablate_coverage,2.20e+06,"Mechanism ablation: coverage gain set to zero, measuring what trigram overlap with the premise contributes."
+nli-snli,0.5450,success,e34_ablate_lexicon,2.20e+06,"Mechanism ablation: every lexicon vote scaled to zero, measuring what the hand word list contributes."
+nli-snli,0.6100,success,e35_lexicon_scale_150,2.20e+06,All four mechanisms restored; every lexicon vote scaled by 1.5.
+nli-snli,0.6350,success,e36_lexicon_scale_200,2.20e+06,"Every lexicon vote scaled by 2.0, following the gain at 1.5."
+nli-snli,0.6100,success,e37_coverage_gain_11,2.20e+06,"Lexicon scale back at 1.5, which dev preferred over 2.0; coverage gain raised from 8 to 11."
+nli-snli,0.6250,success,e38_coverage_gain_6,2.20e+06,"Coverage gain lowered to 6, after 11 lost accuracy, so other votes can settle borderline cases."
+nli-snli,0.6050,success,e39_ablate_weak_contradiction_words,2.19e+06,Coverage gain back at 8; simplification removes the weaker contradiction word list.
+nli-snli,0.6100,success,e40_clothing_conflict_group,2.26e+06,"Weak contradiction words restored; adds a clothing conflict group, by analogy with the useful color group."
+nli-snli,0.6100,success,e41_probe_conflict_registers,2.26e+06,Same weights as e40; a measurement-only probe reads CONF directly because e40 matched e35 in every confusion cell.
+nli-snli,0.6150,success,e42_length_center_minus15,2.20e+06,Clothing group and probe removed (group was wired correctly but changed nothing); length center moved to -15.
+nli-snli,0.6000,success,e43_length_center_minus9,2.20e+06,"Brackets the length center from the other side at -9, after -15 over-predicted neutral."
+nli-snli,0.5900,success,e44_cov_low_025,2.20e+06,Length center back at -12; low coverage threshold raised from 0.15 to 0.25.
+nli-snli,0.6050,success,e45_cov_low_008,2.20e+06,"Brackets the low coverage threshold from below at 0.08, after 0.25 over-predicted contradiction."
+nli-snli,0.6000,success,e46_ablate_vehicle_group,2.15e+06,Low coverage threshold back at 0.15; simplification removes the vehicle conflict group.
+nli-snli,0.6000,success,e47_window_13,1.95e+06,"Simplification: drops the two 12-letter words so the window shrinks to 13, removing one attention head."
+nli-snli,0.6000,success,e48_window_10_with_stems,1.41e+06,"Simplification: long words become prefixes of at most 8 letters, so the window shrinks to 10 and three more heads go."
+nli-snli,0.5850,success,e49_ablate_motive_words,1.40e+06,"Simplification: removes the motive and status word line, whose words are the most common and ambiguous."
+nli-snli,0.6000,success,e50_final_simplified,1.41e+06,"Final model: e48 weights restored (the e49 motive words were useful); lexicon, length, coverage and conflict circuits with a 10-char window."

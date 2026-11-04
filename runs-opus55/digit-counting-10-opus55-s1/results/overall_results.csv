@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+digit-counting-10,0.0000,success,e00_random_baseline,1.52e+05,Baseline: default architecture with random init; logs the task object's interface.
+digit-counting-10,0.0000,success,e01_random_examples,1.52e+05,Random init; logs task signatures and sample examples to learn the prompt/answer format.
+digit-counting-10,1.0000,success,e02_softmax_counter_onehot,2.37e+03,"2-layer attention-only, no LN/MLP: query self-attention weight gives 1/(1+c), copied to pos 11/12, decoded by parabola-template linear head."
+digit-counting-10,1.0000,success,e03_phase_code_digits,8.16e+02,"Softmax counter with digits as 2D unit-circle phase codes instead of 10D one-hots (d_model=8, BETA=100)."
+digit-counting-10,1.0000,success,e04_one_register,5.16e+02,"Merge C and X into the query-marker channel: one register carries 1+x from pos 10 to pos 11/12, which self-attend in layer 1 to stay clean (d_model=6)."
+digit-counting-10,1.0000,success,e05_sin_as_tens_flag,3.90e+02,Drop the token-is-1 flag: the SIN phase component already separates previous output 1 from 0 (d_model=5).
+digit-counting-10,1.0000,success,e06_single_answer_flag,2.80e+02,Merge the pos-11 and pos-12 markers into one ANS flag; COS (nonzero only at pos 12) tells the two answer steps apart in the head (d_model=4).
+digit-counting-10,1.0000,success,e07_no_output_projection,2.48e+02,Remove W_o from attention: W_v alone chooses which channel each layer writes (d_model=4).
+digit-counting-10,1.0000,success,e08_raw_keys,2.16e+02,"Remove W_k too: every position's key is its raw hidden state, and only W_q decides what each layer looks for (d_model=4)."
+digit-counting-10,1.0000,success,e09_register_values,1.84e+02,"Remove W_v: attention values are hard-wired to the single register channel, so W_q is the only attention parameter (d_model=4)."
+digit-counting-10,1.0000,success,e10_three_position_rows,1.32e+02,"Keep only the three position embeddings that are nonzero (query, tens, units); digit positions need no position signal (d_model=4)."
+digit-counting-10,1.0000,success,e11_beta_30,1.32e+02,Sharpness sweep: lower BETA from 100 to 30 to find where non-matching digits start leaking into the count.
+digit-counting-10,0.9900,success,e12_beta_15,1.32e+02,"Sharpness sweep: BETA=15, where a neighbouring digit's attention weight is only about e^-2.9 of a match, to probe the failure boundary."
+digit-counting-10,0.0000,success,e13_anchor_w10_beta15,1.32e+02,"Boost the query's own attention by an anchor weight W=10 so x=W/(W+c) has wider gaps and less relative leakage, at the failing BETA=15."
+digit-counting-10,1.0000,success,e14_anchor_threshold_fix,1.32e+02,"Anchor W=10 at BETA=15 with the tens-digit threshold corrected for the new template slope (e13 assumed slope -1, which only holds at W=1)."
+digit-counting-10,0.8850,success,e15_anchor_beta10,1.32e+02,"Sharpness sweep with anchor W=10: BETA=10, softer attention than the unanchored circuit could tolerate."
+digit-counting-10,1.0000,success,e16_slim_onehot_beta10,5.88e+02,"Slim architecture with one-hot digits instead of the phase code: readable weights and a full score gap of BETA between digits, at BETA=10 (d_model=12)."
+digit-counting-10,1.0000,success,e17_slim_onehot_beta5,5.88e+02,"Sharpness sweep for the one-hot circuit: BETA=5 with anchor W=10, to find its failure boundary."
+digit-counting-10,1.0000,success,e18_stock_arch_ballast,1.52e+05,Softmax counter on the unmodified stock architecture: zero-sum signals plus +/-M ballast channels turn every LayerNorm into a known constant scale that its gain cancels; MLPs are no-ops.
+digit-counting-10,0.0000,success,e19_ballast_m10,1.52e+05,"Ballast sweep on the stock architecture: M=10 instead of 1000, so LayerNorm's divisor now varies slightly with the signal itself."
+digit-counting-10,1.0000,success,e20_ballast_m100,1.52e+05,"Ballast sweep on the stock architecture: M=100, predicted to cut the LayerNorm scale error to about 0.05%, inside the template gap."
+digit-counting-10,1.0000,success,e21_histogram_and_gates,6.64e+03,"One layer: head 0 builds a digit histogram, head 1 fetches the query, 10 ReLU AND gates select the integer count, and a parabola head decodes it."
+digit-counting-10,1.0000,success,e22_query_weighted_histogram,3.48e+03,"One layer, one head: weighting the query position Q=100 times folds count and query into one histogram, and ReLU(H[d]-Q) gates extract the integer count."
+digit-counting-10,1.0000,success,e23_histogram_on_tokens,1.80e+03,"One layer, one head: the histogram is written straight onto the token one-hot channels, with pos 12's embedding cancelling its '0' token (d_model=15)."
+digit-counting-10,1.0000,success,e24_histogram_raw_attention,1.12e+03,"Histogram circuit with raw keys, raw digit-channel values and one scalar gain, leaving W_q as the only attention matrix (d_model=15)."
+digit-counting-10,1.0000,success,e25_query_weight_11,1.12e+03,"Query-weight sweep: Q=11, the smallest value allowed by count <= 10 < Q."
+digit-counting-10,0.9900,success,e26_query_weight_4,1.12e+03,"Deliberately below the bound: Q=4 lets a non-query digit seen 5+ times fire its gate, which should be rare in random prompts but show up in the stress test."
+digit-counting-10,1.0000,success,e27_hist_beta5,1.12e+03,"Sharpness sweep for the histogram circuit: BETA=5 with Q=11; the only leak is onto answer positions, whose digit channels are almost empty."
+digit-counting-10,0.9750,success,e28_hist_beta1,1.12e+03,"Extreme sharpness sweep for the histogram circuit: BETA=1, where answer positions keep real attention weight on themselves, scaling the histogram down."
+digit-counting-10,1.0000,success,e29_final_one_layer,1.08e+03,"Final one-layer model: query-weighted histogram with Q=11 and BETA=20, only W_q plus a gain in attention, and just the 13 position rows it uses."

@@ -1,0 +1,266 @@
+"""
+Hand-written transformer that computes gcd(a, b) for prompts like "392,567=".
+Nothing is trained: write_weights() sets every parameter in closed form.
+
+Failed variant, kept for the record: zigzag with zeros at EVEN multiples of b.
+It reflects (n, n-1) -> (n-1, n-2), so the worst case stays near 1000 steps at
+any width. Reached 0.88 at 16 steps.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import os
+import sys
+import time
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+sys.path.insert(0, os.path.dirname(__file__))
+from src.eval import evaluate, plot_accuracy_over_iterations
+import src.task
+
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+OVERALL_CSV = os.path.join(RESULTS_DIR, "overall_results.csv")
+OVERALL_CSV_COLS = ["task", "accuracy", "status", "model_shorthand_name", "n_params", "description"]
+
+
+# ---------------------------------------------------------------------------
+# Architecture (edit freely — but NO TRAINING)
+# ---------------------------------------------------------------------------
+
+class CausalSelfAttention(nn.Module):
+    """Scalar heads: each head has one query/key/value number (d_head = 1)."""
+
+    def __init__(self, d_model: int, n_heads: int):
+        super().__init__()
+        self.W_q = nn.Linear(d_model, n_heads, bias=False)
+        self.W_k = nn.Linear(d_model, n_heads, bias=False)
+        self.W_v = nn.Linear(d_model, n_heads, bias=False)
+        self.W_o = nn.Linear(n_heads, d_model, bias=False)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        T = x.shape[1]
+        q, k, v = (w(x).transpose(1, 2) for w in (self.W_q, self.W_k, self.W_v))  # (B, H, T)
+        scores = q.unsqueeze(-1) * k.unsqueeze(-2)               # (B, H, T, T): query i, key j
+        mask = torch.triu(torch.ones(T, T, dtype=torch.bool, device=x.device), diagonal=1)
+        attn = scores.masked_fill(mask, float("-inf")).softmax(dim=-1)  # (B, H, T, T)
+        return self.W_o((attn @ v.unsqueeze(-1)).squeeze(-1).transpose(1, 2))
+
+
+class MLP(nn.Module):
+    def __init__(self, d_model: int, d_ff: int):
+        super().__init__()
+        self.fc1 = nn.Linear(d_model, d_ff)
+        self.fc2 = nn.Linear(d_ff, d_model, bias=False)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.fc2(F.relu(self.fc1(x)))
+
+
+class AttnBlock(nn.Module):
+    """x + attention(x). No LayerNorm: the state holds exact integers."""
+
+    def __init__(self, d_model: int, n_heads: int):
+        super().__init__()
+        self.attn = CausalSelfAttention(d_model, n_heads)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x + self.attn(x)
+
+
+class MLPBlock(nn.Module):
+    """x + MLP(x)."""
+
+    def __init__(self, d_model: int, d_ff: int):
+        super().__init__()
+        self.mlp = MLP(d_model, d_ff)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x + self.mlp(x)
+
+
+# Named coordinates of the hidden state.
+ONE, VAL = 0, 1                 # constant 1, digit value of the current token
+POS = 2                         # POS+p is the one-hot flag for position p (16 flags)
+A, B, HUND, TENS, OUT = 18, 19, 20, 21, 22
+D_MODEL = 23
+N_EUCLID = 16                   # tied Euclid steps
+W = 998                         # zigzag width: quotients up to W collapse in one step (even)
+
+
+class SimpleTransformer(nn.Module):
+    """read (attention) -> Euclid step (tied N times) -> max -> write (MLP)."""
+
+    def __init__(self, vocab_size: int, max_seq_len: int = 32, d_model: int = D_MODEL,
+                 n_heads: int = 8, n_euclid: int = N_EUCLID, width: int = W):
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.max_seq_len = max_seq_len
+        self.d_model = d_model
+        self.n_euclid = n_euclid
+        self.token_emb = nn.Embedding(vocab_size, d_model)
+        self.pos_emb = nn.Embedding(max_seq_len, d_model)
+        self.read = AttnBlock(d_model, n_heads)
+        self.euclid = MLPBlock(d_model, width + 2)   # same weights at every step
+        self.maxout = MLPBlock(d_model, 1)
+        self.write = MLPBlock(d_model, 3)
+        self.head = nn.Linear(d_model, vocab_size, bias=False)
+
+    def forward(self, ids: torch.Tensor) -> torch.Tensor:
+        pos = torch.arange(ids.shape[1], device=ids.device)
+        h = self.read(self.token_emb(ids) + self.pos_emb(pos)[None, :, :])
+        for _ in range(self.n_euclid):
+            h = self.euclid(h)
+        return self.head(self.write(self.maxout(h)))
+
+
+# ---------------------------------------------------------------------------
+# Agent's interpretable weight assignment (edit this)
+# ---------------------------------------------------------------------------
+
+def write_weights(model: SimpleTransformer, task) -> None:
+    """Hand-written weights for Euclid's algorithm. Nothing is trained."""
+    with torch.no_grad():
+        for p in model.parameters():
+            p.zero_()
+
+        # Embeddings: token -> (ONE=1, VAL=digit); position -> one-hot flag.
+        for ch, idx in task.stoi.items():
+            model.token_emb.weight[idx, ONE] = 1.0
+            model.token_emb.weight[idx, VAL] = float(int(ch)) if ch.isdigit() else 0.0
+        for p in range(model.max_seq_len):
+            model.pos_emb.weight[p, POS + p] = 1.0
+
+        # READ. Query = BETA for every head; key = per-head priority of each
+        # position; value = VAL. Softmax then picks the highest visible priority.
+        BETA = 200.0
+        at = model.read.attn
+        at.W_q.weight[:, ONE] = BETA
+        at.W_v.weight[:, VAL] = 1.0
+        places = [(0, A, 100.), (1, A, 10.), (2, A, 1.), (4, B, 100.), (5, B, 10.), (6, B, 1.)]
+        for head, (p, dim, scale) in enumerate(places):
+            at.W_k.weight[head, POS + p] = 1.0
+            at.W_o.weight[dim, head] = scale
+        # Emitted digits. Causal masking hides a digit until it exists, and the
+        # head falls back to '=' (position 7, VAL 0), which reads as "emitted 0".
+        for head, (p, dim) in zip((6, 7), ((8, HUND), (9, TENS))):
+            at.W_k.weight[head, POS + p] = 2.0
+            at.W_k.weight[head, POS + 7] = 1.0
+            at.W_o.weight[dim, head] = 1.0
+
+        # EUCLID: (a, b) -> (b, z(a, b)). z is a zigzag in a with period 2b: it
+        # keeps a congruent to +-a mod b, so gcd is preserved, and sits in [0, b]
+        # for a < W b. Past that it continues as a - W b.
+        #   z = a - 2 relu(a - b) + 2 relu(a - 2b) - 2 relu(a - 3b) + ...
+        e1, e2 = model.euclid.mlp.fc1, model.euclid.mlp.fc2
+        n = e1.weight.shape[0] - 2                      # the width W
+        e1.weight[0, A] = 1.0                           # u0 = relu(a) = a
+        e1.weight[1, B] = 1.0                           # u1 = relu(b) = b
+        e2.weight[A, 0], e2.weight[A, 1] = -1.0, 1.0    # a += b - a
+        e2.weight[B, 0], e2.weight[B, 1] = 1.0, -1.0    # b += a - b
+        for k in range(1, n + 1):
+            e1.weight[k + 1, A], e1.weight[k + 1, B] = 1.0, -float(k)   # relu(a - k b)
+            e2.weight[B, k + 1] = -2.0 if k % 2 else 2.0                # zigzag slope flips
+
+        # MAXOUT: the cycle ends in (g, 0), (0, g) or (g, g), so max(a, b) = g.
+        model.maxout.mlp.fc1.weight[0, A], model.maxout.mlp.fc1.weight[0, B] = 1.0, -1.0
+        model.maxout.mlp.fc2.weight[B, 0] = 1.0
+
+        # WRITE: OUT = the remaining value, scaled for the digit due at this
+        # position. Each unit is switched off by -M unless its position is on.
+        M = 1000.0
+        w1, w2 = model.write.mlp.fc1, model.write.mlp.fc2
+        w1.bias[:] = -M
+        w1.weight[0, POS + 7] = M
+        w1.weight[0, B] = 0.01                                     # g / 100
+        w1.weight[1, POS + 8] = M
+        w1.weight[1, B], w1.weight[1, HUND] = 0.1, -10.0           # (g - 100h) / 10
+        w1.weight[2, POS + 9] = M
+        w1.weight[2, B], w1.weight[2, HUND], w1.weight[2, TENS] = 1.0, -100.0, -10.0
+        w2.weight[OUT, :] = 1.0
+
+        # HEAD: logit_d = -(OUT - c - d)^2 up to terms independent of d. Linear
+        # in (OUT, ONE), and argmax is floor(OUT) with c just under 1/2.
+        c = 0.495
+        model.head.weight[:, ONE] = -1e4                           # never , or =
+        for d in range(10):
+            model.head.weight[task.stoi[str(d)], OUT] = 2.0 * d
+            model.head.weight[task.stoi[str(d)], ONE] = -(2.0 * d * c + d * d)
+
+
+# A unique shorthand name + 1-2 sentence description of what this attempt does.
+# Used as the row identifier in results/overall_results.csv.
+model_shorthand_name = f"Zigzag_W{W}_N{N_EUCLID}"
+model_description = (f"Tied MLP with {W}+2 ReLUs does (a,b)->(b,zigzag(a mod 2b)) for {N_EUCLID} steps; "
+                     "max(a,b) readout; attention read and autoregressive digit write.")
+
+
+# ---------------------------------------------------------------------------
+# Evaluation harness (do not edit below)
+# ---------------------------------------------------------------------------
+
+def upsert_overall_results(rows: list[dict], results_dir: str) -> None:
+    os.makedirs(results_dir, exist_ok=True)
+    path = os.path.join(results_dir, "overall_results.csv")
+    new_keys = {(r["model_shorthand_name"], r["task"]) for r in rows}
+    existing: list[dict] = []
+    if os.path.exists(path):
+        with open(path, newline="") as f:
+            for row in csv.DictReader(f):
+                if (row.get("model_shorthand_name"), row.get("task")) not in new_keys:
+                    existing.append(row)
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=OVERALL_CSV_COLS)
+        writer.writeheader()
+        writer.writerows(existing + [{k: r.get(k, "") for k in OVERALL_CSV_COLS} for r in rows])
+    print(f"Overall results saved → {path}")
+
+
+
+def build_model(task) -> SimpleTransformer:
+    max_seq_len = max(task.seq_len, 16)
+    model = SimpleTransformer(vocab_size=task.vocab_size, max_seq_len=max_seq_len)
+    write_weights(model, task)
+    model.eval()
+    return model
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--task", help="Task name (see src/task.py)", choices=list(src.task.TASK_REGISTRY.keys()))
+    parser.add_argument("--n-samples", type=int, default=200)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--verbose", action="store_true")
+    args = parser.parse_args()
+
+    t0 = time.time()
+    task = src.task.get_task(args.task)
+    model = build_model(task).to(args.device)
+
+    accuracy, _ = evaluate(
+        model, task, n_samples=args.n_samples, seed=args.seed,
+        device=args.device, verbose=args.verbose,
+    )
+
+    n_params = sum(p.numel() for p in model.parameters())
+
+    upsert_overall_results([{
+        "task":        args.task,
+        "accuracy":    f"{accuracy:.4f}",
+        "status":      "",
+        "model_shorthand_name":  model_shorthand_name,
+        "n_params":    f"{n_params:.2e}",
+        "description": model_description,
+    }], RESULTS_DIR)
+    plot_accuracy_over_iterations(RESULTS_DIR)
+
+    print()
+    print("---")
+    print(f"task:          {args.task}")
+    print(f"accuracy:      {accuracy:.4f}  ({int(round(accuracy * args.n_samples))}/{args.n_samples})")
+    print(f"total_seconds: {time.time() - t0:.1f}s")

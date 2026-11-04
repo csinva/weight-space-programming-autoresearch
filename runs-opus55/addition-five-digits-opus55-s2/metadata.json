@@ -1,0 +1,40 @@
+{
+ "run": "addition-five-digits-opus55-s2",
+ "task": "addition-five-digits",
+ "seed": 2,
+ "model": "claude-opus-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "6d05c311-88f3-4f84-92e9-c0c1d65515d2",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 11.297453199999994,
+   "turns": 233,
+   "seconds": 2485,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-04T01:05:35.432899+00:00",
+ "finished": "2026-11-04T01:47:00.184487+00:00",
+ "attempts": 30
+}

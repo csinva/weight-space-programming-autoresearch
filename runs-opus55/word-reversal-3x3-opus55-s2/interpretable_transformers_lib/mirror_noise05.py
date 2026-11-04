@@ -1,0 +1,167 @@
+"""Interpretable transformer, hand-written weights (no training) for word-reversal-3x3:
+"abc_def_ghi=" -> "ghi_def_abc". The whole algorithm is one reflection in attention.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import math
+import os
+import sys
+import time
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+sys.path.insert(0, os.path.dirname(__file__))
+from src.eval import evaluate, plot_accuracy_over_iterations
+import src.task
+
+RESULTS_DIR = os.path.join(os.path.dirname(__file__), "results")
+OVERALL_CSV = os.path.join(RESULTS_DIR, "overall_results.csv")
+OVERALL_CSV_COLS = ["task", "accuracy", "status", "model_shorthand_name", "n_params", "description"]
+
+
+# ---------------------------------------------------------------------------
+# Architecture (edit freely — but NO TRAINING)
+# ---------------------------------------------------------------------------
+
+class MirrorAttention(nn.Module):
+    """Causal distance attention. Addresses steer it; token values pass through."""
+
+    def __init__(self):
+        super().__init__()
+        self.q_scale = nn.Parameter(torch.zeros(2))  # diagonal of W_q
+        self.q_bias = nn.Parameter(torch.zeros(2))
+
+    def forward(self, addr: torch.Tensor) -> torch.Tensor:
+        """addr is (T, 2). Returns the (T, T) attention matrix."""
+        T = addr.shape[0]
+        q = addr * self.q_scale + self.q_bias
+        scores = -((q[:, None, :] - addr[None, :, :]) ** 2).sum(-1)
+        mask = torch.triu(torch.ones(T, T, dtype=torch.bool, device=addr.device), diagonal=1)
+        return scores.masked_fill(mask, float("-inf")).softmax(dim=-1)
+
+
+class SimpleTransformer(nn.Module):
+    def __init__(self, vocab_size: int, max_seq_len: int = 32):
+        super().__init__()
+        self.vocab_size = vocab_size
+        self.max_seq_len = max_seq_len
+        self.token_emb = nn.Embedding(vocab_size, 1)  # one number per token
+        self.pos_emb = nn.Embedding(max_seq_len - 1, 2)  # (word, letter) per position
+        self.attn = MirrorAttention()
+
+    def forward(self, ids: torch.Tensor) -> torch.Tensor:
+        T = ids.shape[1]
+        tok = self.token_emb(ids)[:, :, 0]  # (B, T)
+        addr = self.pos_emb(torch.arange(T, device=ids.device))  # (T, 2)
+        copied = (tok @ self.attn(addr).T)[:, :, None]  # (B, T, 1)
+        # Tied head: the logit of token i is minus the distance from the copy to its embedding.
+        return -(copied - self.token_emb.weight[:, 0]) ** 2
+
+
+# ---------------------------------------------------------------------------
+# Agent's interpretable weight assignment (edit this)
+# ---------------------------------------------------------------------------
+
+@torch.no_grad()
+def write_weights(model: SimpleTransformer, task) -> None:
+    """Word timeline: prompt 0,1,2, the '=' pivot at 3, answer 4,5,6.
+    The four attention parameters say: word -> 6-word, letter -> letter.
+    Separators sit at letter column 4, so the missing (2, sep) lands on (1, sep)."""
+    SPACE = 10.0
+    model.attn.q_scale.copy_(torch.tensor([-1.0, 1.0]))
+    model.attn.q_bias.copy_(torch.tensor([6.0 * SPACE, 0.0]))
+
+    def address(i):  # character i of "www_www_www" -> (word, letter column)
+        return i // 4, (4 if i % 4 == 3 else i % 4)
+
+    for i in range(task.vocab_size):
+        model.token_emb.weight[i, 0] = float(i)
+    for s in range(task.prompt_len - 1):
+        w, l = address(s)
+        model.pos_emb.weight[s] = torch.tensor([SPACE * w, SPACE * l])
+    for k in range(task.answer_len):
+        w, l = address(k)
+        model.pos_emb.weight[task.prompt_len - 1 + k] = torch.tensor([SPACE * (4 + w), SPACE * l])
+
+    NOISE = 0.05  # robustness probe: seeded multiplicative noise on every parameter
+    torch.manual_seed(0)
+    for p in model.parameters():
+        p.mul_(1.0 + NOISE * torch.randn_like(p))
+
+
+# A unique shorthand name + 1-2 sentence description of what this attempt does.
+# Used as the row identifier in results/overall_results.csv.
+model_shorthand_name = "mirror_noise05"
+model_description = "Robustness probe: mirror_minimal with 5% seeded multiplicative noise on every parameter, predicted to hold since the q_bias shift stays under half a word spacing."
+
+
+# ---------------------------------------------------------------------------
+# Evaluation harness (do not edit below)
+# ---------------------------------------------------------------------------
+
+def upsert_overall_results(rows: list[dict], results_dir: str) -> None:
+    os.makedirs(results_dir, exist_ok=True)
+    path = os.path.join(results_dir, "overall_results.csv")
+    new_keys = {(r["model_shorthand_name"], r["task"]) for r in rows}
+    existing: list[dict] = []
+    if os.path.exists(path):
+        with open(path, newline="") as f:
+            for row in csv.DictReader(f):
+                if (row.get("model_shorthand_name"), row.get("task")) not in new_keys:
+                    existing.append(row)
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=OVERALL_CSV_COLS)
+        writer.writeheader()
+        writer.writerows(existing + [{k: r.get(k, "") for k in OVERALL_CSV_COLS} for r in rows])
+    print(f"Overall results saved → {path}")
+
+
+
+def build_model(task) -> SimpleTransformer:
+    max_seq_len = max(task.seq_len, 16)
+    model = SimpleTransformer(vocab_size=task.vocab_size, max_seq_len=max_seq_len)
+    write_weights(model, task)
+    model.eval()
+    return model
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--task", help="Task name (see src/task.py)", choices=list(src.task.TASK_REGISTRY.keys()))
+    parser.add_argument("--n-samples", type=int, default=200)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--verbose", action="store_true")
+    args = parser.parse_args()
+
+    t0 = time.time()
+    task = src.task.get_task(args.task)
+    model = build_model(task).to(args.device)
+
+    accuracy, _ = evaluate(
+        model, task, n_samples=args.n_samples, seed=args.seed,
+        device=args.device, verbose=args.verbose,
+    )
+
+    n_params = sum(p.numel() for p in model.parameters())
+
+    upsert_overall_results([{
+        "task":        args.task,
+        "accuracy":    f"{accuracy:.4f}",
+        "status":      "",
+        "model_shorthand_name":  model_shorthand_name,
+        "n_params":    f"{n_params:.2e}",
+        "description": model_description,
+    }], RESULTS_DIR)
+    plot_accuracy_over_iterations(RESULTS_DIR)
+
+    print()
+    print("---")
+    print(f"task:          {args.task}")
+    print(f"accuracy:      {accuracy:.4f}  ({int(round(accuracy * args.n_samples))}/{args.n_samples})")
+    print(f"total_seconds: {time.time() - t0:.1f}s")

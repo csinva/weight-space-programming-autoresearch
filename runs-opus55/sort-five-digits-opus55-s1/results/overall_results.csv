@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,0.0000,success,e01_baseline_probe,1.52e+05,"Baseline: default architecture, random init; prints the task object's public attributes (vocab/format)."
+sort-five-digits,0.0000,success,e02_format_probe,1.52e+05,"Random init; prints task lengths, method signatures and sample examples to learn the prompt/answer format."
+sort-five-digits,1.0000,success,e03_pinball_quantile,1.00e+03,"1 block, d_model=11, no MLP use: uniform attention over the prompt plus a position tilt gives the negative pinball loss; its argmax is the k-th smallest digit."
+sort-five-digits,1.0000,success,e04_pinball_no_mlp,9.46e+02,e03 with the unused MLP and ln2 deleted from Block: the model is one attention layer between embeddings and a linear head.
+sort-five-digits,1.0000,success,e05_pinball_no_ln,9.02e+02,"e04 with every LayerNorm removed: embeddings + one attention layer + linear head, identity digit head plus a position-scaled tilt column."
+sort-five-digits,1.0000,success,e06_thermometer_d10,7.80e+02,"d_model=10: thermometer token codes make attention compute cumulative counts C_j; the head integrates k + 1/2 - C_j, whose argmax is the k-th smallest digit."
+sort-five-digits,1.0000,success,e07_thermometer_d9,6.66e+02,"d_model=9, one channel per threshold: position lives on the all-ones direction, so the attention output is directly C_j - k - 1/2 and the head integrates it."
+sort-five-digits,1.0000,success,e08_scalar_attention,3.61e+02,e07 with attention reduced to its essentials: scalar query and key projections and one output gain; W_v and W_o are deleted.
+sort-five-digits,1.0000,success,e09_tied_head,2.62e+02,"e08 with the head tied to the token embedding: logits are dot products with the thermometer codes, using the kernel 9 - max(x, d)."
+sort-five-digits,1.0000,success,e10_what_where_streams,1.26e+02,"Separate what/where streams: one number per position sets attention scores and the rank threshold, tokens are values only, so the eps and offset workarounds are gone."
+sort-five-digits,0.7950,success,e11_sine_modes_r6,9.00e+01,"d_model=6: digit embedding is the top 6 closed-form sine eigenmodes of the min(i, i') kernel, testing how far the thermometer can be compressed."
+sort-five-digits,1.0000,success,e12_sine_modes_r8,1.14e+02,"d_model=8: top 8 closed-form sine eigenmodes of the min(i, i') kernel; one mode fewer than the exact thermometer. NOT perfect: exhaustive accuracy is 0.99837 over all 100000 inputs."
+sort-five-digits,0.9200,success,e13_sine_modes_r7,1.02e+02,"d_model=7: top 7 closed-form sine eigenmodes of the min(i, i') kernel; locates where truncation starts to hurt."
+sort-five-digits,1.0000,success,e14_one_register_base6,6.50e+01,"d_model=1: the multiset is packed into one base-6 number, emitted digits are subtracted, and a threshold staircase head reads off the smallest remaining digit. Autoregressive."
+sort-five-digits,1.0000,success,e15_register_base5p5,6.50e+01,"e14 with non-integer base 5.5: the counts no longer decode uniquely, but the leading term still dominates, so the sort should survive with a thinner margin."
+sort-five-digits,1.0000,success,e16_register_base5,6.50e+01,"e14 with base 5, past the theoretical limit: five copies of digit d+1 are worth exactly one d, so inputs of five equal digits should be misread. NOT perfect: exhaustive accuracy is 0.99992 (8 of 100000 inputs fail)."
+sort-five-digits,0.9750,success,e17_register_float32,6.50e+01,e14 in float32: tests whether subtracting emitted digits from the register loses small remainders to rounding.
+sort-five-digits,1.0000,success,e18_autoregressive_counts,1.40e+02,"Truly autoregressive thermometer sort: channels hold prompt counts minus emitted counts, position gives only a sign and gain, and it runs in float32."
+sort-five-digits,1.0000,success,e19_e10_sharp3,1.26e+02,e10 with attention sharpness 3 instead of 30: tests how hard the gate onto the prompt positions must be.
+sort-five-digits,1.0000,success,e20_e10_sharp1,1.26e+02,"e10 with attention sharpness 1: attention leaks onto '=' and emitted digits, testing whether the sort survives a soft gate."
+sort-five-digits,0.0050,success,e21_e10_sharp0,1.26e+02,"e10 with attention sharpness 0: plain uniform averaging over everything so far, with no gate on the prompt at all."
+sort-five-digits,0.7800,success,e22_e10_noise05,1.26e+02,e10 with seeded Gaussian noise of std 0.05 added to the digit embeddings: robustness of the hand-written weights.
+sort-five-digits,1.0000,success,e23_e10_noise01,1.26e+02,e10 with seeded Gaussian noise of std 0.01 on the digit embeddings: tests the prediction that logit error scales as noise times the norm of h.
+sort-five-digits,0.0000,success,e24_e10_no_tilt_control,1.26e+02,"Negative control: e10 with the tilt set to zero, so position cannot select the rank and every step should give the same answer."
+sort-five-digits,1.0000,success,e25_e10_channel_scales,1.26e+02,"e10 with random positive per-channel scales on embedding and tilt: score increments become c_j^2 * s_j, so only their signs matter and the sort should stay exact."
+sort-five-digits,1.0000,success,e26_e10_no_scalars,1.15e+02,"e10 with tilt, sharp and gain removed from the parameters: sharpness is fixed at 1 (the soft gate from e20), so the only weights are the thermometer table and one number per position."
+sort-five-digits,1.0000,success,e27_e10_pos_rows10,1.09e+02,e26 with the position table trimmed to the 10 rows that generation actually uses.
+sort-five-digits,1.0000,success,e28_thermo_minimal,1.00e+02,e27 with no weights for '=': its code is zero and its logit is the mean of the digit logits. 100 params: a 10x9 thermometer table plus one number per position.
+sort-five-digits,1.0000,success,e29_register_trimmed,5.30e+01,"e14 with both position tables trimmed to the 10 used rows: the smallest model found, d_model=1 in float64."
+sort-five-digits,1.0000,success,e30_autoregressive_trimmed,1.10e+02,"e18 trimmed like e28: no weights for '=', 10 position rows and a constant -1/2 offset. Rank comes only from the emitted digits, in float32."
