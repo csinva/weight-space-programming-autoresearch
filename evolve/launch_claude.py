@@ -22,7 +22,8 @@ TASKS = {
     "addition-five-digits": "easy", "multiplication-five-digits": "easy", "sort-five-digits": "easy", "digit-counting-10": "easy",
     "parity-upto10-bits": "easy", "boolean-circuit-5-bits": "easy", "linear-interpolation-two-points": "easy",
     "word-reversal-3x3": "harder", "gcd-three-digits": "harder", "decimal-to-binary-8bit": "harder",
-    "sentiment-sst2": "real", "paraphrase-mrpc": "real", "nli-snli": "real",
+    "edit-distance-8": "harder", "smallest-prime-factor": "harder",
+    "sentiment-sst2": "real", "paraphrase-mrpc": "real", "nli-snli": "real", "trec-coarse": "real", "date-normalization": "real",
 }
 TARGET = dict(easy=30, harder=40, real=50)
 MAX_SESSIONS = 25

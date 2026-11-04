@@ -563,6 +563,190 @@ class NLISNLITask(Task):
         return [Example(prompt=f"{p}|{h}=", answer=lab) for p, h, lab in sampled]
 
 
+class EditDistanceTask(Task):
+    """Levenshtein edit distance between two 8-letter strings over {a, b, c, d}.
+
+    prompt: "AAAAAAAA,BBBBBBBB="   (18 tokens)
+    answer: "D"                    (1 token; distance 0-8)
+
+    The second string is the first after 0-8 random insertions, deletions and substitutions
+    (kept at length 8), so distances are spread out instead of concentrated near 5.
+
+    Example: "abcdabcd,abddabca=" -> "2"
+    """
+
+    name = "edit-distance-8"
+    vocab = list("abcd,=012345678")
+    prompt_len = 18
+    answer_len = 1
+
+    @staticmethod
+    def distance(a: str, b: str) -> int:
+        prev = list(range(len(b) + 1))
+        for i, ca in enumerate(a, 1):
+            cur = [i]
+            for j, cb in enumerate(b, 1):
+                cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+            prev = cur
+        return prev[-1]
+
+    def generate_examples(self, n: int, seed: int = None) -> list[Example]:
+        rng = random.Random(seed) if seed is not None else random.Random()
+        out = []
+        for _ in range(n):
+            a = "".join(rng.choice("abcd") for _ in range(8))
+            b = list(a)
+            for _ in range(rng.randint(0, 8)):
+                op, i = rng.choice("ids"), rng.randrange(8)
+                if op == "s":
+                    b[i] = rng.choice("abcd")
+                elif op == "d":
+                    del b[i]
+                    b.append(rng.choice("abcd"))
+                else:
+                    b.insert(i, rng.choice("abcd"))
+                    b.pop()
+            b = "".join(b)
+            out.append(Example(prompt=f"{a},{b}=", answer=str(self.distance(a, b))))
+        return out
+
+
+class SmallestPrimeFactorTask(Task):
+    """Smallest prime factor of an integer below 100000 (a prime is its own smallest factor).
+
+    prompt: "NNNNN="   (6 tokens; left-padded with zeros)
+    answer: "SSSSS"    (5 tokens; left-padded with zeros)
+
+    One third of the inputs are prime; the rest are composites whose smallest prime factor is drawn
+    uniformly from the primes up to 313, so always answering 2 scores near chance.
+
+    Example: "03127=" -> "00053"  (3127 = 53 * 59)
+    """
+
+    name = "smallest-prime-factor"
+    vocab = list("0123456789=")
+    prompt_len = 6
+    answer_len = 5
+
+    @staticmethod
+    def spf_table(limit: int = 100000) -> list[int]:
+        spf = list(range(limit))
+        for i in range(2, int(limit ** 0.5) + 1):
+            if spf[i] == i:
+                for j in range(i * i, limit, i):
+                    if spf[j] == j:
+                        spf[j] = i
+        return spf
+
+    def generate_examples(self, n: int, seed: int = None) -> list[Example]:
+        rng = random.Random(seed) if seed is not None else random.Random()
+        spf = self.spf_table()
+        primes = [i for i in range(2, 100000) if spf[i] == i]
+        by_factor: dict[int, list[int]] = {}
+        for i in range(4, 100000):
+            if spf[i] != i:
+                by_factor.setdefault(spf[i], []).append(i)
+        small = sorted(by_factor)
+        out = []
+        for k in range(n):
+            x = rng.choice(primes) if rng.random() < 1 / 3 else rng.choice(by_factor[rng.choice(small)])
+            out.append(Example(prompt=f"{x:05d}=", answer=f"{spf[x]:05d}"))
+        return out
+
+
+class TRECCoarseTask(Task):
+    """Six-way question classification on a small subset of TREC (coarse labels).
+
+    Questions are lowercased, restricted to the task vocabulary (unknown characters become spaces),
+    and truncated or padded with '_' to 80 characters.
+
+    prompt: "<question padded to 80 chars>="   (81 tokens)
+    answer: "L"                                (1 token; 0 ABBR, 1 ENTY, 2 DESC, 3 HUM, 4 LOC, 5 NUM)
+    """
+
+    name = "trec-coarse"
+    vocab = list("abcdefghijklmnopqrstuvwxyz '_=012345")
+    prompt_len = 81
+    answer_len = 1
+
+    SENTENCE_LEN = 80
+    SUBSET_SIZE = 2000
+
+    _pool: list[tuple[str, str]] | None = None
+
+    @classmethod
+    def _load_pool(cls) -> list[tuple[str, str]]:
+        if cls._pool is not None:
+            return cls._pool
+        from datasets import load_dataset
+        allowed = set("abcdefghijklmnopqrstuvwxyz '")
+        ds = load_dataset("CogComp/trec", split="train", revision="refs/convert/parquet")
+        pool: list[tuple[str, str]] = []
+        for ex in ds:
+            text = _clean_text(ex["text"], allowed, cls.SENTENCE_LEN)
+            pool.append((text, str(ex["coarse_label"])))
+            if len(pool) >= cls.SUBSET_SIZE:
+                break
+        cls._pool = pool
+        return pool
+
+    def generate_examples(self, n: int, seed: int = None) -> list[Example]:
+        pool = self._load_pool()
+        rng = random.Random(seed) if seed is not None else random.Random()
+        sampled = rng.sample(pool, n) if n <= len(pool) else [rng.choice(pool) for _ in range(n)]
+        return [Example(prompt=t + "=", answer=a) for t, a in sampled]
+
+
+class DateNormalizationTask(Task):
+    """Rewrite a date written in one of nine common formats as YYYY-MM-DD.
+
+    Years run from 1900 to 2099. Slash dates are always month first, and two-digit years mean 20YY.
+
+    prompt: "<date padded to 31 chars>="   (32 tokens)
+    answer: "YYYY-MM-DD"                   (10 tokens)
+
+    Example: "march 3rd 2021_________________=" -> "2021-03-03"
+    """
+
+    name = "date-normalization"
+    vocab = list("abcdefghijklmnopqrstuvwxyz0123456789 ,./-_=")
+    prompt_len = 32
+    answer_len = 10
+
+    MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august",
+              "september", "october", "november", "december"]
+    TEXT_LEN = 31
+
+    @staticmethod
+    def ordinal(d: int) -> str:
+        suffix = "th" if 11 <= d <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(d % 10, "th")
+        return f"{d}{suffix}"
+
+    def generate_examples(self, n: int, seed: int = None) -> list[Example]:
+        import calendar
+        rng = random.Random(seed) if seed is not None else random.Random()
+        out = []
+        for _ in range(n):
+            fmt = rng.randrange(9)
+            y = rng.randint(2000, 2099) if fmt == 8 else rng.randint(1900, 2099)
+            m = rng.randint(1, 12)
+            d = rng.randint(1, calendar.monthrange(y, m)[1])
+            name, abbr = self.MONTHS[m - 1], self.MONTHS[m - 1][:3]
+            text = [
+                f"{name} {self.ordinal(d)} {y}",
+                f"{name} {d}, {y}",
+                f"{d} {name} {y}",
+                f"the {self.ordinal(d)} of {name}, {y}",
+                f"{abbr}. {d}, {y}",
+                f"{d}-{abbr}-{y}",
+                f"{m}/{d}/{y}",
+                f"{y}.{m:02d}.{d:02d}",
+                f"{m:02d}/{d:02d}/{y % 100:02d}",
+            ][fmt]
+            out.append(Example(prompt=text.ljust(self.TEXT_LEN, "_") + "=", answer=f"{y:04d}-{m:02d}-{d:02d}"))
+        return out
+
+
 TASK_REGISTRY: dict[str, type[Task]] = {
     FiveDigitAdditionTask.name: FiveDigitAdditionTask,
     FiveDigitMultiplicationTask.name: FiveDigitMultiplicationTask,
@@ -577,6 +761,10 @@ TASK_REGISTRY: dict[str, type[Task]] = {
     SentimentSST2Task.name: SentimentSST2Task,
     ParaphraseMRPCTask.name: ParaphraseMRPCTask,
     NLISNLITask.name: NLISNLITask,
+    EditDistanceTask.name: EditDistanceTask,
+    SmallestPrimeFactorTask.name: SmallestPrimeFactorTask,
+    TRECCoarseTask.name: TRECCoarseTask,
+    DateNormalizationTask.name: DateNormalizationTask,
 }
 
 
