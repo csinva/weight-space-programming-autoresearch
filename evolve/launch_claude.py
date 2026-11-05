@@ -32,10 +32,12 @@ ALLOWED = ["Bash(uv run interpretable_transformer.py:*)", "Edit", "Write"]
 
 FIRST = ("Read and follow the instructions in program.md. Your task name is `{task}`. Notes on this harness: the run folder has already been created "
          "and you are in it, so skip the setup steps that create it; run experiments on CPU (the default device); the only shell command available "
-         "is `uv run interpretable_transformer.py --task {task}` (redirecting output, e.g. `> run.log 2>&1`, is fine), so use the Read and Grep "
-         "tools to inspect run.log and results/overall_results.csv, and save each snapshot by writing a copy of interpretable_transformer.py to "
-         "interpretable_transformers_lib/<model_shorthand_name>.py with the Write tool. Keep looping: do at least {target} experiments "
-         "(each one logged as a row of results/overall_results.csv); there are {n} so far.")
+         "is `uv run interpretable_transformer.py --task {task}`, so use the Read and Grep tools to inspect results/overall_results.csv, and save each "
+         "snapshot by writing a copy of interpretable_transformer.py to interpretable_transformers_lib/<model_shorthand_name>.py with the Write tool.{hint} "
+         "Keep looping: do at least {target} experiments (each one logged as a row of results/overall_results.csv); there are {n} so far.")
+HINT = (" src/task.py and src/eval.py are symlinks outside this folder, so the file tools cannot read them; to learn the task format, add temporary "
+        "print statements to interpretable_transformer.py (for example, print a few examples from task.generate_examples) and run it. Output "
+        "redirection is not available: run the command plainly and read its output directly.")
 CONT = ("Continue the autoresearch loop from program.md for task `{task}`. results/overall_results.csv now has {n} experiments; keep going "
         "until there are at least {target}, then keep simplifying if time allows. Same rules and tools as before.")
 
@@ -59,14 +61,14 @@ def run_one(task, seed):
     meta_path = os.path.join(run_dir, "metadata.json")
     meta = json.load(open(meta_path)) if os.path.exists(meta_path) else dict(
         run=tag, task=task, seed=seed, model=MODELS[SHORT], effort="default", driver="claude -p (headless Claude Code)", tools=TOOLS,
-        allowed=ALLOWED, target=TARGET[TASKS[task]], sessions=[], started=datetime.now(timezone.utc).isoformat())
+        allowed=ALLOWED, prompt_hint=SHORT != "opus55", target=TARGET[TASKS[task]], sessions=[], started=datetime.now(timezone.utc).isoformat())
     target, stalls, sid = meta["target"], 0, (meta["sessions"][-1]["session_id"] if meta["sessions"] else None)
     env = dict(os.environ, HF_HOME=os.path.join(ROOT, ".hf_home"), OMP_NUM_THREADS="8", MKL_NUM_THREADS="8")
     while len(meta["sessions"]) < MAX_SESSIONS:
         n0 = n_attempts(run_dir)
         if n0 >= target:
             break
-        prompt = (FIRST if sid is None else CONT).format(task=task, target=target, n=n0)
+        prompt = (FIRST if sid is None else CONT).format(task=task, target=target, n=n0, hint=HINT if SHORT != "opus55" else "")
         cmd = ["claude", "-p", prompt, "--model", MODELS[SHORT], "--restricted", "--tools", TOOLS, "--strict-mcp-config",
                "--output-format", "stream-json", "--verbose", "--allowedTools", *ALLOWED] + (["--resume", sid] if sid else [])
         k = len(meta["sessions"])
