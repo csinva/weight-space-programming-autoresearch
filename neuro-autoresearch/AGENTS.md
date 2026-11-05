@@ -21,6 +21,6 @@ the current search workflow, evaluation protocols and commands.
 - When creating Git commits or otherwise acting on GitHub for the user, use the user's name, Yash Mehta. Before committing, verify that the Git author name is `Yash Mehta`.
 - During autonomous model search, only `model.py` and the proposer's notes/scratch are editable. Infrastructure maintenance is a separate task.
 - Search requires `--region early|ventral`; dataset defaults to LAION and metric to RSA (`--metric encoding` is supported). Region/metric/dataset are fixed per run. Reward is the pooled stream score, averaged over subjects; stream-restricted subregion values are diagnostics only.
-- LAION-fMRI and Triple-N supply search feedback; Triple-N early is unavailable without full-cohort coverage. NSD and TVSD are final-only encoding datasets; never use their data or scores to guide search, repair, coordination or model selection.
+- LAION-fMRI and Triple-N supply search feedback; Triple-N early is unavailable without full-cohort coverage. LAION includes all image sources, including NSD-source stimuli with LAION responses. NSD and TVSD neural responses, scores and final artifacts are final-only; never use them to guide search, repair, coordination or model selection. Final NSD evaluation is not image-held-out from LAION search.
 - Keep all subjects, fixed image policies, source filters, source metric kernels and explicit protocol provenance intact when maintaining `neuro_eval/`.
 - Do not commit run databases, data files, caches, credentials or machine-local `.env` settings.

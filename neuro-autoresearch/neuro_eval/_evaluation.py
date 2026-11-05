@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 import json
 import os
 import time
@@ -12,7 +13,7 @@ import torch
 
 from neuro_eval.benchmarks import SOURCE_REVISION, VISION_DATASETS, protocol_for, SEARCH_REGIONS, search_subregions, DIAGNOSTIC_POLICY_VERSION
 from neuro_eval.datasets import Dataset
-from neuro_eval.model import _forward, robust_n_params
+from neuro_eval.model import _forward, robust_n_params, IsolatedModel, _validate_model_size
 
 
 def matrix(value, name: str, *, rows: int | None = None) -> torch.Tensor:
@@ -305,6 +306,42 @@ def forward(model, inputs, device, label, *, full_batch=False):
     with torch.no_grad():
         output = model(copied) if full_batch else _forward(model, copied)
     return matrix(output, label, rows=len(inputs))
+
+
+
+ENCODING_FORWARD_BATCH = 1024
+
+
+def encoding_forward(model, inputs, device, label, *, batch_size=None):
+    """Bound search encoding forwards and validate each batch before retaining it.
+
+    Isolated candidates reuse one GPU worker without independence probes.
+    Ordinary models retain ``forward``'s tensor/NumPy and device behavior.
+    """
+    if batch_size is None:
+        batch_size = ENCODING_FORWARD_BATCH
+    if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
+        raise ValueError("encoding batch_size must be a positive integer")
+    parts = []
+    width = None
+    session = model.encoding_session(device) if isinstance(model, IsolatedModel) else nullcontext()
+    with session:
+        # Keep empty-input handling compatible with forward: the model supplies D.
+        for start in range(0, max(1, len(inputs)), batch_size):
+            batch = inputs[start:start + batch_size]
+            if isinstance(model, IsolatedModel):
+                copied = batch.detach().cpu().clone() if torch.is_tensor(batch) else np.array(batch, copy=True)
+                with torch.no_grad():
+                    value = model.forward_encoding(copied, device)
+                output = matrix(value, label, rows=len(batch))
+            else:
+                output = forward(model, batch, device, label, full_batch=True)
+            _validate_model_size(model, output.shape[1])
+            if width is not None and output.shape[1] != width:
+                raise ValueError("Encoding representation width differs between batches")
+            width = output.shape[1]
+            parts.append(output)
+    return parts[0] if len(parts) == 1 else torch.cat(parts, dim=0)
 
 
 def evaluate_subjects(model, dataset: Dataset, scorer, *, stage: str) -> dict:

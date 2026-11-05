@@ -11,6 +11,7 @@ space noise from a float32 sample-space solve when features are fewer than image
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 import time
 
 import numpy as np
@@ -18,7 +19,8 @@ import torch
 
 from neuro_eval import _evaluation as common
 from neuro_eval._evaluation import matrix, region_masks
-from neuro_eval.model import _validate_model_size, _readout_device
+from neuro_eval.model import IsolatedModel, _validate_model_size, _readout_device
+from neuro_eval.rsa import _image_key
 
 ALPHAS = np.logspace(-10, 10, 20)
 N_FOLDS = 5
@@ -161,7 +163,33 @@ def encoding_scores(train_features, test_features, train_targets, test_targets, 
             "encoding_alpha_min": float(alphas.min()), "encoding_alpha_max": float(alphas.max())}
 
 
-def evaluate_on_split(model, split, dataset):
+# One raw test representation at most; no training features or fitted readouts.
+# A maximal search representation for 1,492 images occupies less than 60 MiB.
+_TEST_FEATURE_CACHE_BYTES = 128 * 1024 * 1024
+
+
+class _TestFeatureCache:
+    def __init__(self):
+        self.clear()
+
+    def clear(self):
+        self.key = None
+        self.features = None
+
+    def get(self, key):
+        if key == self.key and self.features is not None:
+            # Callers/scorers never receive the cache's own mutable storage.
+            return self.features.clone()
+        return None
+
+    def put(self, key, features):
+        self.clear()
+        if features.numel() * features.element_size() <= _TEST_FEATURE_CACHE_BYTES:
+            self.features = features.detach().cpu().clone()
+            self.key = key
+
+
+def evaluate_on_split(model, split, dataset, *, _test_cache=None):
     common._validate_contract(dataset)
     if dataset.metric != "encoding":
         raise ValueError("Encoding evaluator requires metric=encoding")
@@ -169,11 +197,22 @@ def evaluate_on_split(model, split, dataset):
     X_train, X_test, Y_train, Y_test, masks, _ = split
     masks = common.selected_masks(masks, dataset)
     device = _readout_device()
-    A_train = common.forward(model, X_train, device, "training model features")
-    A_test = common.forward(model, X_test, device, "test model features")
+    feature_forward = common.encoding_forward if dataset.stage == "search" else common.forward
+    A_train = feature_forward(model, X_train, device, "training model features")
+    key = _image_key(X_test) if _test_cache is not None and dataset.stage == "search" else None
+    A_test = _test_cache.get(key) if key is not None else None
+    cache_hit = A_test is not None
+    if not cache_hit:
+        A_test = feature_forward(model, X_test, device, "test model features")
+    # A model can materialize more parameters during another subject's training
+    # forward; reuse must never bypass the current model's limits.
+    if cache_hit:
+        _validate_model_size(model, A_test.shape[1])
     if A_train.shape[1] != A_test.shape[1]:
         raise ValueError("Model representation width differs between training and test stimuli")
     n_params = _validate_model_size(model, A_train.shape[1])
+    if key is not None and not cache_hit:
+        _test_cache.put(key, A_test)
     scored = encoding_scores(A_train, A_test, Y_train, Y_test, masks, device)
     common.select_reward(scored, dataset)
     return common.result_row(model, split, dataset, scored, n_params, started)
@@ -188,4 +227,17 @@ def evaluate_subjects(model, dataset, *, stage=None):
         return common._error_row(model, None, dataset, ValueError("Encoding evaluator requires metric=encoding"), 0)
     if stage is not None and stage != dataset.stage:
         return common._error_row(model, None, dataset, ValueError("Evaluator stage conflicts with dataset"), 0)
-    return common.evaluate_subjects(model, dataset, evaluate_on_split, stage=dataset.stage)
+    if dataset.stage != "search":
+        return common.evaluate_subjects(model, dataset, evaluate_on_split, stage=dataset.stage)
+    cache = _TestFeatureCache()
+
+    def scorer(model, split, subject_dataset):
+        return evaluate_on_split(model, split, subject_dataset, _test_cache=cache)
+
+    try:
+        session = model.encoding_session(_readout_device()) if isinstance(model, IsolatedModel) else nullcontext()
+        with session:
+            return common.evaluate_subjects(model, dataset, scorer, stage=dataset.stage)
+    finally:
+        # No representation survives success, an error row, or an exception.
+        cache.clear()

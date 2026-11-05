@@ -38,13 +38,12 @@ def native_split():
         'nsd_source_ids': ['2', '5']}
 
 
-def test_laion_encoding_excludes_nsd_from_both_source_splits():
+def test_laion_keeps_all_shared_test_and_native_training_images():
     native = native_split()
-    assert _selected_ids(get_dataset('laion', metric='rsa'), native, 0) == ([], ['4', '6'])
-    assert _selected_ids(get_dataset('laion', metric='encoding'), native, 0) == (['1', '3'], ['4', '6'])
+    assert _selected_ids(get_dataset('laion', metric='rsa'), native, 0) == ([], ['4', '5', '6'])
+    assert _selected_ids(get_dataset('laion', metric='encoding'), native, 0) == (['1', '2', '3'], ['4', '5', '6'])
     del native['nsd_source_ids']
-    with pytest.raises(ValueError, match='source labels'):
-        _selected_ids(get_dataset('laion', metric='encoding'), native, 0)
+    assert _selected_ids(get_dataset('laion', metric='encoding'), native, 0) == (['1', '2', '3'], ['4', '5', '6'])
 
 
 def test_triplen_rsa_keeps_all_images_encoding_retains_source_fold():
@@ -102,16 +101,18 @@ def test_rsa_source_groups_use_selected_region(region):
     masks = {'early visual stream': np.arange(7) < 3,
              'ventral visual stream': np.arange(7) >= 3}
     split = VisionSplit((images[:0], images, responses[:0], responses, masks, None),
-                        source_groups={'laion': [0, 2, 4, 6, 8], 'ood': [1]})
+                        source_groups={'laion': [0, 2, 4, 6, 8], 'nsd': [3, 5, 7, 9, 11], 'ood': [1]})
     class Model:
         n_params = 0
         def __call__(self, x):
             return x
     dataset = get_dataset('laion', region=region)
     row = rsa.evaluate_on_split(Model(), split, dataset)
-    subgroup = row['rsa_diagnostics']['source_groups']['laion']
-    assert subgroup['rsa'] == subgroup['regions'][dataset.reward_roi]
-    assert set(subgroup['regions']) == {dataset.reward_roi}
+    for source in ('laion', 'nsd'):
+        subgroup = row['rsa_diagnostics']['source_groups'][source]
+        assert subgroup['status'] == 'ok'
+        assert subgroup['rsa'] == subgroup['regions'][dataset.reward_roi]
+        assert set(subgroup['regions']) == {dataset.reward_roi}
     assert row['rsa_diagnostics']['source_groups']['ood']['status'] == 'unavailable'
     assert row['reward'] == row['roi_corr'][dataset.reward_roi]['test']
 

@@ -17,7 +17,7 @@ import signal
 import subprocess
 import sys
 
-DEFAULT_ROSTER = "codex:gpt-6-astra:medium claude:opus5.5:medium agy:argon4:medium"
+DEFAULT_ROSTER = "codex:gpt-6-astra:medium codex:gpt-6-astra:medium agy:argon4:medium agy:argon4:medium"
 PROVIDER_UNAVAILABLE = 78
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 

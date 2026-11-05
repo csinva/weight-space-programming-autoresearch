@@ -87,7 +87,7 @@ def write_env_json(run_dir: str, dataset: str, region: str | None = None, metric
 
 
 def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
-                 n_proposers: int = 3, *, region: str | None = None, metric: str | None = None) -> str:
+                 n_proposers: int = 4, *, region: str | None = None, metric: str | None = None) -> str:
     """Create (or idempotently complete) ``search_runs/<dataset>__<region>__<metric>__<date>/`` + N proposer sandboxes + eval.
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).

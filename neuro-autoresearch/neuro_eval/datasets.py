@@ -131,12 +131,12 @@ class VisionSplit(tuple):
 
 
 def _source_groups(d: Dataset, native: dict, ids: list[str]) -> dict[str, list[int]]:
-    # An explicit allowlist prevents NSD and the overlapping no_ood grouping
-    # from entering feedback. Intersect with the already filtered fixed cohort.
+    # Report each source separately, excluding the overlapping no_ood grouping.
+    # NSD here labels images with LAION responses, not final NSD responses.
     if dataset_key(d) != "laion":
         return {}
     return {name: [i for i, sid in enumerate(ids) if sid in members]
-            for name in ("laion", "thingsplus", "ood")
+            for name in ("laion", "thingsplus", "ood", "nsd")
             for members in [set(native["test_subsets"].get(name, []))]}
 
 
@@ -230,17 +230,11 @@ def _selected_ids(d: Dataset, native: dict, subject: int):
             raise ValueError(f"Stimulus IDs differ across regions for {region}")
     if name == "laion":
         shared = set(native["shared_test_ids"])
-        # Exclude source-labelled NSD images before exposing pixels or responses
-        # to search. The remaining non-NSD source images are the fixed reward set.
-        test_ids = shared - set(native["test_subsets"]["nsd"])
+        # All shared images contribute, including NSD-source stimuli measured
+        # in LAION. Final NSD neural responses remain unavailable to search.
+        test_ids = shared
         if d.metric == "rsa":
             train_ids = set()
-        else:
-            if "nsd_source_ids" not in native:
-                raise ValueError("LAION encoding requires source labels for all training and test images")
-            excluded = set(native["nsd_source_ids"])
-            train_ids -= excluded
-            test_ids -= excluded
     elif name == "triplen" and d.metric == "rsa":
         test_ids |= train_ids
         train_ids = set()

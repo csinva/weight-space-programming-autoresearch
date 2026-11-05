@@ -40,7 +40,8 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     monkeypatch.setattr(providers, 'preflight', lambda agents: observed.extend(agents))
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     assert run.main(['laion', '--region', 'ventral', '--preflight']) == 0
-    assert {agent.provider for agent in observed} == {'codex', 'claude', 'agy'}
+    # Two Codex proposers plus the coordinator and optional repair agent.
+    assert Counter(agent.provider for agent in observed) == {'codex': 4, 'agy': 2}
 
     source.write_bytes(b'')
     observed.clear()

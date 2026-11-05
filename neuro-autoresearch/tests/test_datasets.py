@@ -63,34 +63,43 @@ def _dataset(name, subject=None):
     return replace(with_subject(result, subject or result.subject), imsize=2)
 
 
-def test_laion_excludes_nsd_source_and_private_images_preserving_alignment(tmp_path, monkeypatch):
+@pytest.mark.parametrize("metric", ["rsa", "encoding"])
+def test_laion_includes_nsd_source_preserving_native_split_and_alignment(tmp_path, monkeypatch, metric):
     from neuro_eval.readers import _LAION_REGION_MAP
     root = tmp_path / "laion"
     monkeypatch.setenv("LAION_DATA_DIR", str(root / "processed"))
     monkeypatch.setenv("LAION_FMRI_DIR", str(root))
-    # Deliberately unsorted source rows; 0 and 3 are private, 2 is NSD-source.
+    # Deliberately unsorted rows; 0 and 3 are private, 0 and 2 are NSD-source.
     response = _response([4, 0, 2, 1, 3], ncsnr=[0.2, 0.25, 0.8], x=[0, 1, 2], y=[0, 0, 0], z=[0, 0, 0])
     source = {
         "data": {key: {0: response} for key in _LAION_REGION_MAP.values()},
         "voxel_counts": {key: {0: (3, 3)} for key in _LAION_REGION_MAP.values()},
         "ncsnr_threshold": 0.2, "shared_ids": {1, 2, 4},
-        "stimuli": pd.DataFrame({"dataset": ["LAION", "LAION", "NSD", "LAION", "OOD"]}),
+        "stimuli": pd.DataFrame({"dataset": ["NSD", "LAION", "NSD", "LAION", "OOD"]}),
     }
     _write_pickle(root / "processed/laion_data.pkl", source)
     _write_images(root / "stimuli/images/task-images_stimuli.h5", encoded=True)
-    d = _dataset("laion")
+    d = replace(_dataset("laion"), metric=metric)
     Xtr, Xte, Ytr, Yte, masks, nc = load_split(d)
-    assert Xtr.shape == (0, 12) and Ytr.shape == (0, 2)
-    assert Xte.shape == (2, 12) and Yte.shape == (2, 2)
-    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 128 / 255])
-    np.testing.assert_allclose(Xte[1], 128 / 255)
-    np.testing.assert_array_equal(Yte[:, :2], [[11, 12], [41, 42]])
+    if metric == "rsa":
+        assert Xtr.shape == (0, 12) and Ytr.shape == (0, 2)
+        assert dataset_provenance(d)["train_ids"] == []
+    else:
+        assert Xtr.shape == (2, 12) and Ytr.shape == (2, 2)
+        np.testing.assert_allclose(Xtr[:, 0], [0, 60 / 255])
+        np.testing.assert_array_equal(Ytr, [[1, 2], [31, 32]])
+        assert dataset_provenance(d)["train_ids"] == ["0", "3"]
+    assert Xte.shape == (3, 12) and Yte.shape == (3, 2)
+    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 40 / 255, 128 / 255])
+    np.testing.assert_allclose(Xte[2], 128 / 255)
+    np.testing.assert_array_equal(Yte[:, :2], [[11, 12], [21, 22], [41, 42]])
     assert set(masks) == {"ventral visual stream", "hV4", "FFA", "PPA"}
     assert all(mask.sum() == 2 for mask in masks.values())
     assert nc is None
-    assert dataset_provenance(d)["test_ids"] == ["1", "4"]
-    assert load_split(d).source_groups == {"laion": [0], "thingsplus": [], "ood": [1]}
-    assert dataset_provenance(d)["source_group_counts"] == {"laion": 1, "thingsplus": 0, "ood": 1}
+    assert dataset_provenance(d)["test_ids"] == ["1", "2", "4"]
+    if metric == "rsa":
+        assert load_split(d).source_groups == {"laion": [0], "thingsplus": [], "ood": [2], "nsd": [1]}
+        assert dataset_provenance(d)["source_group_counts"] == {"laion": 1, "thingsplus": 0, "ood": 1, "nsd": 1}
 
 
 def test_triplen_uses_all_images_and_each_monkeys_available_regions(tmp_path, monkeypatch):

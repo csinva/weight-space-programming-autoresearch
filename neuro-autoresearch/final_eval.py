@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Freeze a search-selected model, then evaluate its paired OOD dataset with encoding.
+"""Freeze a search-selected model, then evaluate its paired final dataset with encoding.
 
     python final_eval.py --run search_runs/laion__ventral__rsa__2026-10-21
     python final_eval.py --model model.py --search-dataset triplen --region ventral
 
 No encoding result is written to the search database. Model selection finishes
 before any final-dataset responses are loaded.
+NSD neural responses remain final-only, but LAION search includes NSD-source
+stimuli, so final NSD encoding is not an image-held-out evaluation from search.
 """
 from __future__ import annotations
 
@@ -149,12 +151,21 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
         with frozen.open("xb") as file:
             file.write(model_bytes)
     from neuro_eval.model import evaluation_sha256, runtime_versions
+    evaluation_scope = {"final_neural_data_usage": "final_only"}
+    if protocol.final_dataset == "nsd":
+        evaluation_scope.update(
+            image_held_out_from_search=False,
+            limitation=("LAION search includes NSD-source stimuli. Final NSD neural "
+                        "responses remain final-only, but final NSD encoding must not "
+                        "be interpreted as image-held-out generalization from search."),
+        )
     manifest = {
         "schema_version": 1, "stage": "frozen_before_final",
         "model_sha256": selection["sha256"], "frozen_model": str(frozen),
         "selection": {k: v for k, v in selection.items() if k != "environment"},
         "search_environment": selection["environment"],
         "protocol": protocol.to_dict(), "source_revision": SOURCE_REVISION,
+        "evaluation_scope": evaluation_scope,
         "evaluation_sha256": evaluation_sha256(), "runtime_versions": runtime_versions(),
     }
     manifest_path = output.parent / "selection.json"
@@ -189,6 +200,7 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
         "encoding_score": result["test_corr"],
         "result": result,
         "data_provenance": data,
+        "evaluation_scope": manifest["evaluation_scope"],
     }
     # Strict JSON rejects incomplete/nonfinite scores. Create once; never overwrite
     # a prior final evaluation or update the search database.

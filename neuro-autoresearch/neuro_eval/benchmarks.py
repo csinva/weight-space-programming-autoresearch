@@ -1,7 +1,8 @@
 """Immutable cross-dataset evaluation contracts (standard-library only).
 
 Subject names are public dataset identifiers, never zero-based pickle indices.
-Search rewards use a selected region and RSA or encoding; final datasets stay held out.
+Search rewards use a selected region and RSA or encoding; final neural responses
+stay held out. LAION search includes NSD-source images, so NSD is not image-held-out.
 """
 
 from __future__ import annotations
@@ -9,7 +10,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, replace
 
 
-PROTOCOL_VERSION = "looped-cross-dataset-v3"
+PROTOCOL_VERSION = "looped-cross-dataset-v4"
 DIAGNOSTIC_POLICY_VERSION = "selected-stream-intersection-v1"
 SEARCH_SUBREGIONS = {
     "laion": {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA")},
@@ -49,7 +50,7 @@ PROTOCOLS = {
         search_dataset="laion", final_dataset="nsd",
         search_subjects=("sub-01", "sub-03", "sub-05", "sub-06", "sub-07"),
         final_subjects=tuple(f"{i:02d}" for i in range(1, 9)),
-        image_policy="shared_test_excluding_nsd_source",
+        image_policy="shared_test_all_sources",
     ),
     "triplen": Protocol(
         name="triplen-rsa-to-tvsd-encoding",
@@ -126,7 +127,7 @@ def protocol_for(dataset: str, region: str = "ventral", metric: str = "rsa") -> 
         raise ValueError("Triple-N early search requires all M1–M5, but early responses are unavailable for M2, M3, M5")
     policy = base.image_policy
     if metric == "encoding":
-        policy = ("source_train_shared_test_excluding_nsd_source_in_both_splits" if base.search_dataset == "laion"
+        policy = ("source_train_shared_test_all_sources" if base.search_dataset == "laion"
                   else "source_fold_0_train_test")
     return replace(base, search_region=region, search_metric=metric, image_policy=policy,
                    name=f"{base.search_dataset}-{region}-{metric}-to-{base.final_dataset}-encoding")

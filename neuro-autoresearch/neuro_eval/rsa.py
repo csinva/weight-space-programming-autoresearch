@@ -208,7 +208,7 @@ def rsa_diagnostics(features, targets, masks, device, scored, source_groups=None
     masks = region_masks(masks, targets.shape[1])
     groups = {}
     for name, indices in (source_groups or {}).items():
-        if name not in {"laion", "thingsplus", "ood"}:
+        if name not in {"laion", "thingsplus", "ood", "nsd"}:
             continue
         indices = np.asarray(indices, dtype=np.int64)
         entry = {"n_stimuli": len(indices), "status": "unavailable", "rsa": None, "regions": {}}

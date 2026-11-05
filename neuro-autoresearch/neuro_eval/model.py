@@ -8,11 +8,13 @@ runtime inputs; datasets, run directories, HOME and the repository are not mount
 from __future__ import annotations
 
 from pathlib import Path
+from contextlib import contextmanager
 import glob
 import hashlib
 import json
 import os
 import re
+import select
 import shutil
 import subprocess
 import sys
@@ -73,11 +75,21 @@ class IsolatedModel:
         self.repair_log = ''
 
     def __call__(self, images):
+        import torch
+        device = str(images.device) if torch.is_tensor(images) else 'cpu'
+        return self.forward_on_device(images, device)
+
+    def forward_on_device(self, images, device):
+        """Stage images on CPU while choosing the fresh worker's execution device.
+
+        This avoids uploading inputs in the trusted parent merely to communicate
+        the target device. The same fresh-process independence probes still run.
+        """
         self.repair_log = ""
         import torch
         import numpy as np
         array = images.detach().cpu().numpy() if torch.is_tensor(images) else np.asarray(images)
-        device = str(images.device) if torch.is_tensor(images) else 'cpu'
+        device = str(torch.device(device))
         features = self._execute(array, device)
         if len(array):
             # Decide in the trusted parent, never in the candidate's interpreter.
@@ -103,6 +115,87 @@ class IsolatedModel:
                         self.repair_log = 'Representation depends on batch composition or mutable state'
                         raise RuntimeError(self.repair_log)
         return features
+
+    @contextmanager
+    def encoding_session(self, device):
+        """Keep one image-only worker alive across all encoding batches/subjects."""
+        import torch
+        device = str(torch.device(device))
+        if getattr(self, '_encoding_worker', None) is not None:
+            if device != self._encoding_device:
+                raise ValueError('Encoding device cannot change during a session')
+            yield self
+            return
+        with tempfile.TemporaryDirectory(prefix='neuro-encoding-') as temp:
+            root = Path(temp)
+            (root / 'model.py').write_bytes(self.source)
+            inputs, output = root / 'input', root / 'output'
+            inputs.mkdir()
+            output.mkdir()
+            devices = []
+            for path in sorted(glob.glob('/dev/nvidia*')):
+                if not Path(path).is_dir():
+                    devices += ['--dev-bind', path, path]
+            if devices and Path('/sys').is_dir():
+                devices += ['--ro-bind', '/sys', '/sys']
+            argv = [*sandbox_command(), *devices,
+                    '--setenv', 'NEURO_CANDIDATE_DEVICE', device,
+                    '--setenv', 'CUDA_VISIBLE_DEVICES', os.environ.get('CUDA_VISIBLE_DEVICES', '0'),
+                    '--ro-bind', str(root / 'model.py'), '/model.py',
+                    '--ro-bind', str(inputs), '/input',
+                    '--ro-bind', str(Path(__file__)), '/worker.py',
+                    '--bind', str(output), '/output', '--chdir', '/tmp',
+                    sys.executable, '-I', '/worker.py', '--encoding']
+            with (root / 'stderr.log').open('w+b') as errors:
+                process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                           stderr=errors)
+                self._encoding_worker = process
+                self._encoding_device = device
+                self._encoding_root = root
+                self._encoding_errors = errors
+                try:
+                    yield self
+                finally:
+                    self._encoding_worker = None
+                    if process.poll() is None:
+                        process.kill()
+                    process.wait()
+                    process.stdin.close()
+                    process.stdout.close()
+
+    def forward_encoding(self, images, device):
+        """Forward in the active encoding worker, without independence probes."""
+        import numpy as np
+        import torch
+        device = str(torch.device(device))
+        process = getattr(self, '_encoding_worker', None)
+        if process is None:
+            with self.encoding_session(device):
+                return self.forward_encoding(images, device)
+        if device != self._encoding_device:
+            raise ValueError('Encoding device cannot change during a session')
+        self.repair_log = ''
+        array = images.detach().cpu().numpy() if torch.is_tensor(images) else np.asarray(images)
+        try:
+            np.save(self._encoding_root / 'input' / 'images.npy', array, allow_pickle=False)
+            process.stdin.write(b'\n')
+            process.stdin.flush()
+            timeout = int(os.environ.get('NEURO_EVAL_TIMEOUT', '420'))
+            ready, _, _ = select.select([process.stdout], [], [], timeout)
+            if not ready:
+                raise subprocess.TimeoutExpired(process.args, timeout)
+            if process.stdout.read(1) != b'\n':
+                errors = self._encoding_errors
+                errors.seek(0, os.SEEK_END)
+                errors.seek(max(0, errors.tell() - 3000))
+                self.repair_log = errors.read().decode(errors='replace')
+                raise RuntimeError('Isolated candidate failed: ' + self.repair_log)
+            return self._read_output(self._encoding_root / 'output', len(array))
+        except BaseException:
+            if process.poll() is None:
+                process.kill()
+            process.wait()
+            raise
 
     def _execute(self, array, device):
         """Run one fresh image-only process; metadata counts remain best-effort."""
@@ -135,29 +228,34 @@ class IsolatedModel:
                     errors.seek(max(0, errors.tell() - 3000))
                     self.repair_log = errors.read().decode(errors='replace')
                     raise RuntimeError('Isolated candidate failed: ' + self.repair_log)
-            feature_path = output / 'features.npy'
-            info_path = output / 'metadata.json'
-            for path, limit in ((feature_path, 2_000_000_000), (info_path, 8192)):
-                if path.is_symlink() or not path.is_file() or path.stat().st_size > limit:
-                    raise ValueError('Invalid candidate output file')
-            features = np.load(feature_path, allow_pickle=False, mmap_mode='r')
-            if features.ndim != 2 or len(features) != len(array) or features.shape[1] >= 10_000:
-                self.repair_log = f"Feature shape {features.shape}; expected ({len(array)}, D) with D < 10000"
-            elif features.dtype.kind not in 'fiu':
-                self.repair_log = f"Feature dtype {features.dtype}; expected real numeric values"
-            elif not np.isfinite(features).all():
-                self.repair_log = "Feature array contains NaN or infinite values"
-            if self.repair_log:
-                raise ValueError(self.repair_log)
-            metadata = json.loads(info_path.read_text())
-            reported = int(metadata['n_params'])
-            if reported < 0:
-                raise ValueError('Invalid candidate parameter count')
-            self.n_params = max(self.n_params, reported)
-            self._n_params_observed = True
-            for key in ('name', 'description', 'insight', 'idea'):
-                setattr(self, key, str(metadata.get(key, ''))[:600])
-            return np.array(features, copy=True)
+            return self._read_output(output, len(array))
+
+    def _read_output(self, output, n_images):
+        import numpy as np
+
+        feature_path = output / 'features.npy'
+        info_path = output / 'metadata.json'
+        for path, limit in ((feature_path, 2_000_000_000), (info_path, 8192)):
+            if path.is_symlink() or not path.is_file() or path.stat().st_size > limit:
+                raise ValueError('Invalid candidate output file')
+        features = np.load(feature_path, allow_pickle=False, mmap_mode='r')
+        if features.ndim != 2 or len(features) != n_images or features.shape[1] >= 10_000:
+            self.repair_log = f"Feature shape {features.shape}; expected ({n_images}, D) with D < 10000"
+        elif features.dtype.kind not in 'fiu':
+            self.repair_log = f"Feature dtype {features.dtype}; expected real numeric values"
+        elif not np.isfinite(features).all():
+            self.repair_log = "Feature array contains NaN or infinite values"
+        if self.repair_log:
+            raise ValueError(self.repair_log)
+        metadata = json.loads(info_path.read_text())
+        reported = int(metadata['n_params'])
+        if reported < 0:
+            raise ValueError('Invalid candidate parameter count')
+        self.n_params = max(self.n_params, reported)
+        self._n_params_observed = True
+        for key in ('name', 'description', 'insight', 'idea'):
+            setattr(self, key, str(metadata.get(key, ''))[:600])
+        return np.array(features, copy=True)
 
 
 MAX_DOUT = 10_000
@@ -349,6 +447,10 @@ def _candidate_worker():
     import numpy as np
     import torch
 
+    if '--encoding' in sys.argv:
+        completion_fd = os.dup(sys.stdout.fileno())
+        os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
+
     resource.setrlimit(resource.RLIMIT_FSIZE, (2_000_000_000, 2_000_000_000))
     spec = importlib.util.spec_from_file_location('candidate', '/model.py')
     module = importlib.util.module_from_spec(spec)
@@ -359,57 +461,66 @@ def _candidate_worker():
     device = os.environ['NEURO_CANDIDATE_DEVICE']
     if device.startswith('cuda') and not torch.cuda.is_available():
         raise RuntimeError('CUDA unavailable inside candidate isolation; refusing device fallback')
-    images = torch.from_numpy(np.load('/images.npy', allow_pickle=False)).to(device)
-    with torch.no_grad():
-        output = model(images)
-    if torch.is_tensor(output):
-        output = output.detach().cpu().numpy()
-    output = np.asarray(output)
-    np.save('/output/features.npy', output, allow_pickle=False)
-    # Best-effort accounting, not a proof against hostile Python: include globals
-    # and NumPy weights, including candidate-defined class attributes. Skip imported
-    # runtime modules/classes and functions. Locals that
-    # were discarded during forward and deliberate introspection tricks can evade
-    # counting; candidate source still requires audit.
-    import types
-    seen = set()
-    def count(value, depth=0):
-        if depth > 8 or id(value) in seen:
-            return 0
-        seen.add(id(value))
-        if isinstance(value, torch.Tensor):
-            return value.numel()
-        if isinstance(value, np.ndarray):
-            return value.size
-        if isinstance(value, torch.nn.Module):
-            # Registered weights/buffers can live below arbitrarily nested
-            # containers. Do not let the loose-object depth guard skip them.
-            total = 0
-            for tensors in (value.parameters(recurse=True), value.buffers(recurse=True)):
-                for tensor in tensors:
-                    if id(tensor) not in seen:
-                        seen.add(id(tensor))
-                        total += tensor.numel()
-            return total + count(vars(value), depth + 1)
-        if isinstance(value, type):
-            if value.__module__ != module.__name__:
+    def forward(image_path):
+        images = torch.from_numpy(np.load(image_path, allow_pickle=False)).to(device)
+        with torch.no_grad():
+            output = model(images)
+        if torch.is_tensor(output):
+            output = output.detach().cpu().numpy()
+        output = np.asarray(output)
+        np.save('/output/features.npy', output, allow_pickle=False)
+        # Best-effort accounting, not a proof against hostile Python: include globals
+        # and NumPy weights, including candidate-defined class attributes. Skip imported
+        # runtime modules/classes and functions. Locals that
+        # were discarded during forward and deliberate introspection tricks can evade
+        # counting; candidate source still requires audit.
+        import types
+        seen = set()
+        def count(value, depth=0):
+            if depth > 8 or id(value) in seen:
                 return 0
-            return (sum(count(v, depth + 1) for v in vars(value).values())
-                    + sum(count(base, depth + 1) for base in value.__bases__))
-        if isinstance(value, (types.ModuleType, types.FunctionType)):
+            seen.add(id(value))
+            if isinstance(value, torch.Tensor):
+                return value.numel()
+            if isinstance(value, np.ndarray):
+                return value.size
+            if isinstance(value, torch.nn.Module):
+                # Registered weights/buffers can live below arbitrarily nested
+                # containers. Do not let the loose-object depth guard skip them.
+                total = 0
+                for tensors in (value.parameters(recurse=True), value.buffers(recurse=True)):
+                    for tensor in tensors:
+                        if id(tensor) not in seen:
+                            seen.add(id(tensor))
+                            total += tensor.numel()
+                return total + count(vars(value), depth + 1)
+            if isinstance(value, type):
+                if value.__module__ != module.__name__:
+                    return 0
+                return (sum(count(v, depth + 1) for v in vars(value).values())
+                        + sum(count(base, depth + 1) for base in value.__bases__))
+            if isinstance(value, (types.ModuleType, types.FunctionType)):
+                return 0
+            if isinstance(value, dict):
+                return sum(count(v, depth + 1) for v in value.values())
+            if isinstance(value, (tuple, list, set)):
+                return sum(count(v, depth + 1) for v in value)
+            if hasattr(value, '__dict__'):
+                return count(vars(value), depth + 1)
             return 0
-        if isinstance(value, dict):
-            return sum(count(v, depth + 1) for v in value.values())
-        if isinstance(value, (tuple, list, set)):
-            return sum(count(v, depth + 1) for v in value)
-        if hasattr(value, '__dict__'):
-            return count(vars(value), depth + 1)
-        return 0
-    metadata = {key: str(getattr(model, key, ''))[:600] for key in ('name', 'description', 'insight', 'idea')}
-    metadata['n_params'] = max(int(getattr(model, 'n_params', 0)),
-                               count(model) + count(vars(module)))
-    with open('/output/metadata.json', 'w') as file:
-        json.dump(metadata, file)
+        metadata = {key: str(getattr(model, key, ''))[:600] for key in ('name', 'description', 'insight', 'idea')}
+        metadata['n_params'] = max(int(getattr(model, 'n_params', 0)),
+                                   count(model) + count(vars(module)))
+        with open('/output/metadata.json', 'w') as file:
+            json.dump(metadata, file)
+
+    if '--encoding' in sys.argv:
+        for request in sys.stdin.buffer:
+            forward('/input/images.npy')
+            os.write(completion_fd, b'\n')
+    else:
+        forward('/images.npy')
+
 
 
 if __name__ == "__main__":

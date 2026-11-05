@@ -11,8 +11,10 @@ Only the candidate `model.py` evolves during search; the scientific code stays f
 | fMRI | LAION-fMRI, all five subjects, RSA or encoding | NSD, all eight subjects, encoding |
 | Spiking | Triple-N, all five monkeys, RSA or encoding | TVSD, both monkeys, encoding |
 
-NSD and TVSD data and scores must never guide search, coordination, repair or model
-selection. A high search score is predictive evidence, not a mechanistic explanation.
+NSD and TVSD neural responses, scores and final artifacts must never guide search,
+coordination, repair or model selection. LAION search includes its NSD-source images
+with LAION responses; final NSD evaluation is therefore not image-held-out from search.
+A high search score is predictive evidence, not a mechanistic explanation.
 
 ## Run
 
@@ -53,7 +55,7 @@ Its short `scratch/notes.md`, current directions and search results persist and
 remain available through the workspace/API. Start a new run after changing the
 evaluation code.
 
-The default proposer roster is Astra, Opus and Argon at medium effort, with an
+The default proposer roster is two Codex Astra and two agy Argon agents at medium effort, with an
 Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
 repair is off by default (the worker's `--max-repairs` flag enables it). Defaults live in
 [`search/config.env`](search/config.env). Provider CLIs reuse existing machine
@@ -154,7 +156,7 @@ checks. Every subject and prescribed region is still scored separately. Models
 must bound intermediate memory (internal chunking is allowed); encoding
 retains its batched forwards.
 
-- For RSA, LAION uses shared test images excluding all NSD-source stimuli: 1,252 images
+- For RSA, LAION uses all shared test images, including NSD-source stimuli: 1,492 images
   in the current prepared release, for sub-01, sub-03, sub-05, sub-06 and sub-07.
   Subject-private training images are excluded.
 - For RSA, Triple-N combines its source folds and uses all 1,000 images for M1–M5.
@@ -171,14 +173,14 @@ and parent delta first, selected-stream subregion scores/deltas, then identity a
 execution information. `--json` returns compact structured feedback with full
 numeric precision. Failures show a specific reason and suggested action first;
 bounded candidate traces are available through `--details`. Detailed subject
-coverage and LAION RSA source-group diagnostics (`laion`, `thingsplus`, `ood`) are
+coverage and LAION RSA source-group diagnostics (`laion`, `thingsplus`, `ood`, `nsd`) are
 available through `status <id> --details`. A subregion or source-group cohort score
 requires all subjects; unavailable diagnostics do not change the pooled reward.
 Repeatedly optimized search scores are not independent held-out confirmation.
 
 **Encoding:** use the dataset's existing source train/test split. For LAION search,
-exclude NSD-source stimuli from both splits: 4,712 private training images and
-1,252 shared test images per subject in the prepared release (including OOD images).
+include all source groups in both splits: each subject's private training images and
+all 1,492 shared test images in the prepared release (including NSD and OOD images).
 Triple-N uses source fold 0. For final evaluation, freeze the selected model before
 loading any paired final-dataset responses. Center features and normalize
 their overall scale using training data; z-score targets with training statistics.
@@ -187,9 +189,25 @@ source's 20-alpha grid. Report test Pearson r for the pooled selected stream,
 averaged equally over the full cohort. Search subregion values reuse the same
 per-unit predictions; they do not add readout fits. Final evaluation retains the selected
 region and always uses encoding, regardless of the search metric.
+Search encoding extracts features in bounded 1,024-image batches and validates
+feature shape, finiteness and parameter limits after each batch, before continuing.
+Isolated models receive CPU-staged inputs; only the image-only worker uploads them
+to the GPU. One worker loads the model once and handles all batches and subjects
+for that candidate. Encoding search does not run singleton or shuffled-context
+verification probes. The worker is closed when that candidate finishes or fails.
+Within one candidate's search evaluation, identical ordered test images reuse a
+validated raw feature matrix (bounded to 128 MiB). Private training features and
+subject-specific readouts are not shared. The cache is discarded on completion or
+failure; final evaluation retains its existing batching and no feature cache.
+These execution changes leave image policies, cohorts, ridge CV and rewards intact.
+Evaluation-code identity still changes, so use a new run after updating the evaluator.
+
 Both RSA and encoding are raw scores, without noise-ceiling normalization.
-Known NSD-source images are excluded from LAION search; this is not a comprehensive
-pixel-level duplicate audit across releases.
+NSD-source stimuli in LAION contribute LAION neural responses to search. Final NSD
+responses remain reserved for evaluation after model selection, but these results
+are not image-held-out confirmation. No comprehensive pixel-level duplicate audit
+across releases is claimed. This all-source policy uses protocol v4; start a new
+run rather than resuming a run scored under the previous image policy.
 
 ### LAION region definitions
 

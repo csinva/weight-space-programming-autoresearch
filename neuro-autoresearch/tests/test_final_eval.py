@@ -193,3 +193,10 @@ def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, 
     assert artifact['selection']['search_region'] == region
     assert artifact['selection']['search_metric'] == metric
     assert set(artifact['data_provenance']) == set(protocol.final_subjects)
+    scope = artifact['evaluation_scope']
+    assert scope['final_neural_data_usage'] == 'final_only'
+    assert scope['image_held_out_from_search'] is False
+    assert 'NSD-source stimuli' in scope['limitation']
+    assert 'must not be interpreted as image-held-out' in scope['limitation']
+    manifest = json.loads((output.parent / 'selection.json').read_text())
+    assert manifest['evaluation_scope'] == scope

@@ -128,15 +128,20 @@ def test_repair_cannot_redirect_host_read(tmp_path):
         worker._read_repair(candidate)
 
 
-@pytest.mark.parametrize("change", ["settings", "data"])
+@pytest.mark.parametrize("change", ["settings", "data", "image_policy"])
 def test_resume_preserves_identity_before_writing(run, clean_environment, monkeypatch, change):
     root = str(run.parents[1])
     before = (run / "env.json").read_bytes()
     assert Path(scaffold_run("laion", "2026-10-21", root, 2)) == run
     if change == "settings":
         monkeypatch.setenv("NEURO_IMSIZE", "256")
-    else:
+    elif change == "data":
         clean_environment.write_bytes(b"different responses")
+    else:
+        previous = json.loads(before)
+        previous["protocol"]["image_policy"] = "shared_test_excluding_nsd_source"
+        (run / "env.json").write_text(json.dumps(previous))
+        before = (run / "env.json").read_bytes()
     with pytest.raises(ValueError, match="changed evaluation contract"):
         scaffold_run("laion", "2026-10-21", root, 2)
     assert (run / "env.json").read_bytes() == before

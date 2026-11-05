@@ -159,8 +159,8 @@ def test_source_group_rsa_is_aligned_and_does_not_change_primary_reward():
     assert row["roi_corr"] == baseline["roi_corr"]
     feedback = row["rsa_diagnostics"]
     assert feedback["primary_rsa"] == row["reward"]
-    assert set(feedback["source_groups"]) == {"laion", "thingsplus", "ood"}
-    for name in ("laion", "thingsplus"):
+    assert set(feedback["source_groups"]) == {"laion", "thingsplus", "ood", "nsd"}
+    for name in ("laion", "thingsplus", "nsd"):
         idx = groups[name]
         expected = rsa_scores(split[1][idx], split[3][idx], split[4], torch.device("cpu"))
         actual = feedback["source_groups"][name]
