@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.0000,success,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sentiment-sst2,0.6650,success,LexiconShiftWindow_v1,6.88e+05,Layer-1 shift heads build an 8-char window; MLP neurons detect ~290 lexicon stems (+/-1); layer-2 uniform attention averages score; sign -> answer. No LayerNorm.
+sentiment-sst2,0.6650,success,LexiconShiftWindow_v2_small,3.88e+05,Same circuit as v1 but layer 2 shrunk to one 1-dim head and unused head dropped (half the params).
+sentiment-sst2,0.6650,success,LexiconShiftWindow_v3_graded,3.88e+05,v2 plus graded weights (+/-2 for strong words); accuracy unchanged since most examples have no lexicon hit.
+sentiment-sst2,0.6700,success,LexiconShiftWindow_v4_bos,4.08e+05,v3 plus BOS flag at position 0 acting as a virtual leading space so sentence-initial words match.
+sentiment-sst2,0.7250,success,LexiconShiftWindow_v5_biglex,6.35e+05,"v4 with lexicon expanded to ~900 stems (more pos/neg words, n't cue)."
+sentiment-sst2,0.5050,success,LexiconShiftWindow_v6_prior_neg,6.35e+05,v5 with negative prior; bug: ties fell to an arbitrary token since '0'/'1' logits were not above the rest.
+sentiment-sst2,0.6850,success,LexiconShiftWindow_v7_prior_neg_fixed,6.35e+05,v6 with constant logits added for '0' and '1' so ties resolve to digits; negative prior is worse than positive.
+sentiment-sst2,0.7250,success,LexiconShiftWindow_v8_prior_pos012,6.35e+05,Positive prior 0.012 (same accuracy as v5).
+sentiment-sst2,0.7250,success,LexiconShiftWindow_v9_suffix_less,6.37e+05,"Adds unanchored suffix detectors (less, dull, tedium); no change."
+sentiment-sst2,0.7550,success,LexiconShiftWindow_v10_not_no,6.39e+05,Adds negative cue words ' not ' and ' no '.
+sentiment-sst2,0.7550,success,LexiconShiftWindow_v11_but_only,6.40e+05,Adds ' but ' and ' only ' at -0.5; no change.
+sentiment-sst2,0.7600,success,LexiconShiftWindow_v12_extra_words,6.87e+05,Adds EXTRA_POS/EXTRA_NEG word lists; filters stems to vocab characters.
+sentiment-sst2,0.7600,success,LexiconShiftWindow_v13_strong3,6.87e+05,Strong-word weight 3 instead of 2; no change.
+sentiment-sst2,0.7350,success,LexiconShiftWindow_v14_window6,4.37e+05,Window shortened to 6 chars (stems truncated); worse.
+sentiment-sst2,0.7650,success,LexiconShiftWindow_v15_window7,5.61e+05,Window of 7 chars; better than 6 and fewer params than 8.
+sentiment-sst2,0.7650,success,LexiconShiftWindow_v16_prior006,5.61e+05,Prior 0.006; same.
+sentiment-sst2,0.6700,success,LexiconShiftWindow_v17_prior030,5.61e+05,"Prior 0.03; too positive, worse."
+sentiment-sst2,0.7650,success,LexiconShiftWindow_v18_prior018,5.61e+05,Prior 0.018; same.
+sentiment-sst2,0.7750,success,LexiconShiftWindow_v19_weakcues,5.74e+05,Adds weak (+/-0.5) function-word cues; included buggy ' wo' stem.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v20_weakcues_fix,5.74e+05,Weak cues with the ' wo' stem removed.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v21_weak1,5.74e+05,Weak cue weight 1.0; same.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v22_more_words,5.85e+05,Adds POS2/NEG2 word lists (weak weight back to 0.5); same.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v23_nostrong,5.85e+05,"Strong weight 1 (no grading); same, so grading is unnecessary."
+sentiment-sst2,0.7750,success,LexiconShiftWindow_v24_nt2,5.85e+05,' n't' weight -2; slightly worse.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v25_no_but_only,5.84e+05,Drops ' but ' / ' only ' cues (simplification); same.
+sentiment-sst2,0.7750,success,LexiconShiftWindow_v26_no_suffixes,5.82e+05,Drops suffix detectors; slightly worse.
+sentiment-sst2,0.7800,success,LexiconShiftWindow_v27_window8,7.16e+05,Window 8 with suffixes restored; no better than 7.
+sentiment-sst2,0.7550,success,LexiconShiftWindow_v28_neggain15,5.84e+05,Negative-word gain 1.5; worse.
+sentiment-sst2,0.7750,success,LexiconShiftWindow_v29_neggain08,5.84e+05,Negative-word gain 0.8; slightly worse.
+sentiment-sst2,0.7350,success,NegationFlip_v30,5.94e+05,"First negation circuit (3 layers: negator flag, gated attention + flip MLP, average); negators lose their own negative cue; worse."
+sentiment-sst2,0.7400,success,NegationFlip_v31_gate_off,5.94e+05,Negation gate disabled to check the baseline without negator cues.
+sentiment-sst2,0.7900,success,NegationFlip_v32_cue_kept,5.97e+05,Negators keep their own unflipped -1 cue in a separate CUE dim; best so far.
+sentiment-sst2,0.7800,success,NegationFlip_v33_gate_b010,5.97e+05,Negation gate width b=0.1 (shorter range).
+sentiment-sst2,0.7850,success,NegationFlip_v34_gate_b040,5.97e+05,Negation gate width b=0.4 (longer range).
+sentiment-sst2,0.7700,success,NegationFlip_v35_two_negators,5.95e+05,Only ' not ' and ' n't' as negators; worse.
+sentiment-sst2,0.7900,success,NegationFlip_v36_eight_negators,5.98e+05,"Eight negators (not, n't, no, never, without, hardly, nor, barely)."
+sentiment-sst2,0.7900,success,NegationFlip_v37_cue05,5.98e+05,Negator own cue weight 0.5; same.
+sentiment-sst2,0.7800,success,NegationFlip_v38_cue15,5.98e+05,Negator own cue weight 1.5; slightly worse.
+sentiment-sst2,0.7850,success,NegationFlip_v39_flip15,5.98e+05,Partial flip (1.5) instead of full sign flip; slightly worse.
+sentiment-sst2,0.7850,success,NegationFlip_v40_lexicon3,7.30e+05,"Adds ~500 more stems (POS3/NEG3); no gain, ~130k more params."
+sentiment-sst2,0.7900,success,NegationFlip_v41_revert_lex3,5.98e+05,Reverts lexicon3.
+sentiment-sst2,0.7900,success,NegationFlip_v42_no_strong_lists,5.98e+05,Removes strong-word lists (simplification); same.
+sentiment-sst2,0.7900,success,NegationFlip_v43_no_extra_lists,5.61e+05,Removes EXTRA lists; same with fewer params.
+sentiment-sst2,0.7850,success,NegationFlip_v44_no_pos2neg2,5.49e+05,Removes POS2/NEG2 lists; -1 example.
+sentiment-sst2,0.7350,success,NegationFlip_v45_no_more_lists,3.53e+05,"Removes MORE_POS/MORE_NEG lists; large drop, so they matter."
+sentiment-sst2,0.7850,success,NegationFlip_v46_core_lists,5.49e+05,Restores MORE lists; core lists POS/NEG/MORE/WEAK + suffixes.
+sentiment-sst2,0.7800,success,NegationFlip_v47_gate_b030,5.49e+05,Gate b=0.3.
+sentiment-sst2,0.7800,success,NegationFlip_v48_gate_b018,5.49e+05,Gate b=0.18.
+sentiment-sst2,0.7850,success,NegationFlip_v49_final,5.49e+05,"3 layers, no LayerNorm. L1: 6 shift heads give a 7-char window; MLP lexicon-stem neurons -> SCORE, negator neurons -> NEGF. L2: gated attention finds a negator within ~14 chars, MLP flips SCORE. L3: uniform average -> sign readout."
+sentiment-sst2,0.7850,success,NegationFlip_v50_cleaned,5.49e+05,"Cleaned v49: dead word lists removed, shared n-gram neuron helper. 3 layers, no LayerNorm: 7-char window via shift heads, lexicon + negator neurons, gated negation flip, uniform average."

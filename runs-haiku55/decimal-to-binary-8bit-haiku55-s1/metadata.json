@@ -1,0 +1,41 @@
+{
+ "run": "decimal-to-binary-8bit-haiku55-s1",
+ "task": "decimal-to-binary-8bit",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "b62d808a-c7ab-4997-aa46-1ab29d48696c",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.6954220599999998,
+   "turns": 229,
+   "seconds": 1384,
+   "attempts_before": 0,
+   "attempts_after": 41,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:45:44.514387+00:00",
+ "finished": "2026-11-05T21:08:48.574425+00:00",
+ "attempts": 41
+}

@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.0500,,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+trec-coarse,0.6100,success,TRECKwDecisionList_v1,6.63e+05,"2-layer LayerNorm-free transformer: prev-char attention heads + trigram MLP detectors for ~70 TREC keywords, layer-2 priority attention picks the highest-priority keyword's class (default ENTY). Hand-written, no training."
+trec-coarse,0.5850,success,TRECKwDecisionList_v2_defDESC,6.63e+05,Same keyword decision list as v1 but default class changed from ENTY to DESC when no keyword fires.
+trec-coarse,0.6100,success,TRECKwDecisionList_v3_entyExtra,6.63e+05,"v1 decision list (default ENTY) plus low-priority ENTY trigrams appended at the end: dog, cat, bird, language, music, shape, letter, element, substance."
+trec-coarse,0.6100,success,TRECKwDecisionList_v4_isDesc,6.63e+05,v3 plus a lowest-priority DESC trigram 'is ' so 'what is ...' questions with no other keyword are DESC.
+trec-coarse,0.5850,success,TRECKwDecisionList_v5_manNum,6.63e+05,v4 but 'any' (matches 'company') replaced by 'man' (matches 'many'); 'woman'/'human' trigrams added at top priority as HUM.
+trec-coarse,0.6000,success,TRECKwDecisionList_v6_humNouns,6.63e+05,"v4 plus 'woman'/'human' HUM trigrams at top priority, and HUM occupation/role nouns (actress, actor, athlete, lawyer, president, team, king, crooner, writer) in the HUM group."
+trec-coarse,0.5950,success,TRECKwDecisionList_v7_humNounsPrecise,6.63e+05,"v6 but dropping the noisy HUM trigrams (ath, pre, eam, roo, rit); keeps woman/human and actress/actor/lawyer HUM trigrams."
+trec-coarse,0.7050,success,TRECKwWordBoundary_v8,1.12e+06,Adds a third previous-char head so keywords match whole word starts (' xyz') or 4-letter words instead of substrings; same priority list otherwise.
+trec-coarse,0.6900,success,TRECKwWordBoundary_v9_measureNation,1.12e+06,"v8 plus NUM measure words (big, tall, high, deep, wide) and LOC 'nation'."
+trec-coarse,0.6950,success,TRECKwWordBoundary_v10_noIsDesc,1.12e+06,v9 without the lowest-priority 'is ' DESC fallback (it turned ENTY questions into DESC).
+trec-coarse,0.7000,success,TRECKwWordBoundary_v11_humGroupNouns,1.53e+06,"v9 (with 'is ' fallback) plus ~20 person/group nouns in the HUM group (son, boy, girl, kid, father, wife, friend, family, leader, king, queen, emperor, doctor, nurse, teacher, poet, coach, army, club, government, musician, president)."
+trec-coarse,0.6800,success,TRECKwWordBoundary_v12_locPlaces,1.53e+06,"v11 plus LOC cues: address, town, village, province, America, Asia, Africa, Canada, Japan, Mexico."
+trec-coarse,0.6950,success,TRECKwWordBoundary_v13_locNoAmer,1.53e+06,"v12 but without 'amer' (it matched 'American' in person questions and sent them to LOC): LOC cues address, town, village, province, Asia, Africa, Canada, Japan, Mexico."
+trec-coarse,0.6900,success,TRECKwWordBoundary_v14_howLowPriority,1.53e+06,"v13 but 'how' moved from DESC-high-priority to lowest priority (after ENTY keywords), so 'how' no longer overrides ENTY cues like animal/color/food."
+trec-coarse,0.6900,success,TRECKwWordBoundary_v15_humAboveLoc,1.53e+06,"BUGGY: meant to move HUM above LOC, but the LOC block was duplicated and HUM stayed below LOC, so this is v14 plus duplicate LOC entries (no real reorder). Fixed as v20."
+trec-coarse,0.6600,success,TRECKwWordBoundary_v16_defaultDesc,1.53e+06,v15 with default class DESC instead of ENTY (keywords unchanged).
+trec-coarse,0.6800,success,TRECKwWordBoundary_v17_numPrune,1.53e+06,"On the buggy v15 base (duplicate LOC block), default ENTY, with weaker NUM cues removed: time, day, tal, hig, deep, wide (stan kept)."
+trec-coarse,0.6750,success,TRECKwWordBoundary_v18_entyPrune,1.53e+06,"v17 with generic ENTY cues removed (game, word, book, film, name, bird, lang, music, shape, letter, element); specific ENTY cues kept (animal, color, food, car, religion, currency, metal, sport, symbol, dog, substance)."
+trec-coarse,0.6850,success,TRECKwWordBoundary_v19_entyAdd,1.53e+06,"v17 plus more specific ENTY cues appended after the existing ones: plant, fruit, vegetable, tree, fish, horse, snake, drug, chemical, song, drink, coin, ship, disease."
+trec-coarse,0.6800,success,TRECKwWordBoundary_v20_humAboveLocFixed,1.53e+06,"v19 with the HUM group placed above the LOC group (fixes v15, which duplicated the LOC block instead of moving it)."
+trec-coarse,0.6750,success,TRECKwWordBoundary_v21_humAboveNum,1.53e+06,v20 with the HUM group moved above the NUM group (so person cues beat 'many/when/year' cues).
+trec-coarse,0.6750,success,TRECKwWordBoundary_v22_locAboveNum,1.53e+06,v21 with the LOC group moved above the NUM group (so place cues beat 'many/when/year' cues).
+trec-coarse,0.6750,success,TRECKwWordBoundary_v23_noBig,1.53e+06,v22 without the NUM cue ' big' (it matched 'big' in non-measure questions).
+trec-coarse,0.6650,success,TRECKwWordBoundary_v24_numWeakPrune,1.53e+06,"v23 without weak NUM cues: cos, rat, wag, wei, stan (prefix/substring matches of 'cost', 'rate', 'wage', 'weight', 'distance')."
+trec-coarse,0.6700,success,TRECKwWordBoundary_v25_locWeakPrune,1.53e+06,"v24 without the weaker LOC cues: address, town, village, province, Asia, Africa, Canada, Japan, Mexico."
+trec-coarse,0.6500,success,TRECKwWordBoundary_v26_descWeakPrune,1.53e+06,"v25 without the weaker DESC cues: reason, cause, purpose, difference."
+trec-coarse,0.6650,success,TRECKwWordBoundary_v27_numExtra,1.53e+06,"v25 plus more NUM cues: age, money, price, speed, height, length, miles, feet, hour, week, birth, dollars, minute."
+trec-coarse,0.6450,success,TRECKwWordBoundary_v28_descExtra,1.53e+06,"v27 plus more DESC cues: way, method, process, step, effect, example, origin, history, explain, use."
+trec-coarse,0.6450,success,TRECKwWordBoundary_v29_humExtra,1.53e+06,"v28 plus more HUM cues: member, owner, student, employer, scientist, inventor, director."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v30_locExtra,1.53e+06,"v29 plus more LOC cues: road, street, park, building, bridge, airport."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v31_abbrFull,1.53e+06,"v30 plus an ABBR cue ' ful' (word starting 'ful', e.g. 'full form') at top priority."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v32_alpha6,1.53e+06,v31 with attention sharpness ALPHA=6 instead of 15 (weaker priority separation; a sensitivity check).
+trec-coarse,0.6400,success,TRECKwWordBoundary_v33_alpha30,1.53e+06,"v32 with attention sharpness ALPHA=30 (sharper priority selection; sensitivity check, expected ~same)."
+trec-coarse,0.6450,success,TRECKwWordBoundary_v34_noIsTail,1.53e+06,v31 base (ALPHA=15) without the lowest-priority 'is ' DESC tail cue (ablation).
+trec-coarse,0.6400,success,TRECKwWordBoundary_v35_nameHum,1.53e+06,v31 base with 'name' moved from ENTY to HUM (questions like 'name the author/actor' are about people).
+trec-coarse,0.6150,success,TRECKwWordBoundary_v36_defaultDescV31,1.53e+06,"v31 base (name back in ENTY, 'is ' tail kept) with default class DESC instead of ENTY."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v37_noWomaHuma,1.53e+06,v31 base without the top-priority 'woman'/'human' HUM trigrams (ablation).
+trec-coarse,0.6400,success,TRECKwWordBoundary_v38_noAbbr,1.53e+06,"v37 without the ABBR cues ' abb', ' acr', ' ful' (ablation; ABBR is rare in TREC)."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v39_noHumExtra,1.53e+06,"v37 (ABBR kept) without the v29 HUM additions: member, owner, student, employer, scientist, inventor, director."
+trec-coarse,0.6450,success,TRECKwWordBoundary_v40_noNumExtra,1.53e+06,"v39 without the v27 NUM additions: age, money, price, speed, height, length, miles, feet, hour, week, birth, dollars, minute."
+trec-coarse,0.6650,success,TRECKwWordBoundary_v41_noDescExtra,1.53e+06,"v40 without the v28 DESC additions: way, method, process, step, effect, example, origin, history, explain, use."
+trec-coarse,0.6700,success,TRECKwWordBoundary_v42_noLocExtra,1.53e+06,"v41 without the v30 LOC additions: road, street, park, building, bridge, airport."
+trec-coarse,0.6650,success,TRECKwWordBoundary_v43_noEntyExtra,1.53e+06,"v42 without the v19 ENTY additions: plant, fruit, vegetable, tree, fish, horse, snake, drug, chemical, song, drink, coin, ship, disease."
+trec-coarse,0.6700,success,TRECKwWordBoundary_v44_howInDesc,1.53e+06,v43 with 'how' moved up into the DESC group (above ENTY cues) instead of the lowest-priority tail.
+trec-coarse,0.6450,success,TRECKwWordBoundary_v45_noYearDate,1.53e+06,"v44 without the NUM cues 'year' and 'date' (ablation: these also match 'yearbook', 'update', 'candidate')."
+trec-coarse,0.6350,success,TRECKwWordBoundary_v46_noManyMuch,1.53e+06,v44 without the measure cues 'many' and 'much' (ablation; 'how many/much' is then caught only by 'how' or 'when'/'year').
+trec-coarse,0.6600,success,TRECKwWordBoundary_v47_noGenericEnty,1.53e+06,"v44 without the generic ENTY cues: game, word, book, film, bird, language, music, shape, letter, element, substance."
+trec-coarse,0.6600,success,TRECKwWordBoundary_v48_noWeakNum,1.53e+06,"v44 without the weaker NUM cues 'pop', 'numb', 'perc', 'tury' (population/number/percent/century)."
+trec-coarse,0.6400,success,TRECKwWordBoundary_v49_noWeakDesc,1.53e+06,"v48 without the weaker DESC cues 'reason', 'cause', 'purpose', 'difference'."
+trec-coarse,0.6700,success,TRECKwWordBoundary_v50_final,1.53e+06,"Final cleanup of the v44 configuration (word-boundary trigram/4-gram cues, HUM above NUM and LOC above NUM, default ENTY, debug code removed)."

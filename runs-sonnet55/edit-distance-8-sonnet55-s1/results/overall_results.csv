@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+edit-distance-8,1.0000,success,WavefrontDP33,6.14e+05,"Levenshtein DP as anti-diagonal wavefront: 16 steps x 2 blocks, column per position, neighbour attention + anti-diagonal cost attention, relu-MLP min, no LayerNorm."
+edit-distance-8,1.0000,success,WavefrontDP17,2.16e+05,"One block per anti-diagonal (17 layers, d=50): min(A+1,B+1,C+1-match) via DP adjacency invariant as one gated relu layer; mirrored virtual cells in pos-emb."
+edit-distance-8,1.0000,success,WavefrontDP17_slimattn,1.24e+05,"WavefrontDP17 with slim attention: per-head d_qk=19 (one-hot positions), d_v=4, instead of full d_model projections."
+edit-distance-8,1.0000,success,slimattn_G15,1.24e+05,slimattn with softer attention sharpness: logit gap 15 instead of 40 (robustness check).
+edit-distance-8,0.1100,success,slimattn_G6,1.24e+05,slimattn with logit gap 6 (soft attention leaks ~e^-6 per key; finds the sharpness breaking point).
+edit-distance-8,1.0000,success,slimattn_G10,1.24e+05,slimattn with logit gap 10 (between the failing gap 6 and the working gap 15).
+edit-distance-8,1.0000,success,pipelined_match,1.15e+05,"Match flag M computed one block early (cost head fetches next step's s1 letter), so the min-gating needs 4 relu units instead of 16; d_ff 25->18, d_model 51."
+edit-distance-8,1.0000,success,shift_registers,8.12e+04,"pipelined_match with two shift registers R1=S_{t-1}, R2=S_{t-2} instead of 18 per-step slots (d_model 35, d_ff 20); virtual cells reproduced by the rule itself."
+edit-distance-8,1.0000,success,shift_reg_K1,8.12e+04,shift_registers with readout logit scale K=1 (margin between adjacent digits is 1 logit).
+edit-distance-8,1.0000,success,head_bias,7.89e+04,shift_reg (K=1) with a bias on the output head replacing the constant residual dim: d_model 34.
+edit-distance-8,1.0000,success,no_last_mlp,7.75e+04,"head_bias, and the final readout block has no MLP (it was all zeros)."
+edit-distance-8,1.0000,success,tied_blocks,1.66e+04,no_last_mlp with all 17 blocks tied to one shared set of weights (same recurrent step every diagonal); only the per-layer read pointer W_qc (cost-head query) differs.
+edit-distance-8,1.0000,success,quadratic_pointer,2.66e+03,"tied_blocks with one-hot positions replaced by scalar features (p, p^2) and quadratic-score pointers; d_model 18, d_qk 2; the only per-layer weight is the anti-diagonal offset t+7."
+edit-distance-8,1.0000,success,merge_C_unit,2.63e+03,quadratic_pointer with the gated 'add C' unit merged with the NB2 cleanup unit (ungated; junk columns never read) -> d_ff 19.
+edit-distance-8,1.0000,success,scalar_letters,1.59e+03,"merge_C_unit with letters as one scalar code (a..d=0..3): mismatch = clipped |difference| via 4 relu units, no one-hot TOK; d_model 12, d_ff 16."
+edit-distance-8,0.0200,success,scalar_beta4,1.59e+03,"scalar_letters with quadratic-pointer sharpness beta=4 (neighbour logit gap 4, 2*4 for distance 2)."
+edit-distance-8,0.9600,success,scalar_beta8,1.59e+03,scalar_letters with quadratic-pointer sharpness beta=8 (bracketing the beta=4 failure).
+edit-distance-8,1.0000,success,scalar_G2_30,1.59e+03,scalar_letters (beta=12) with the gating constant G2=30 instead of 200 (gate only has to exceed the largest ReLU argument).
+edit-distance-8,1.0000,success,scalar_G2_12,1.59e+03,"scalar_letters (beta=12) with gating constant G2=12; the gate must exceed the largest ReLU argument (cell values up to ~17), so this probes the breaking point."
+edit-distance-8,1.0000,success,scalar_G2_4,1.59e+03,"scalar_letters (beta=12) with gating constant G2=4; the R1-removal unit's argument is the cell value (up to 16), so a gate this small should leak."
+edit-distance-8,1.0000,success,scalar_G2_20,1.59e+03,"scalar_letters (beta=12) with gating constant G2=20 (> any cell value 0..17, so gates are exact). Note G2=4 also scored 1.0 but its comma counter saturates, so it is not trusted."
+edit-distance-8,1.0000,success,perm_letter_code,1.59e+03,"scalar_G2_20 with a permuted scalar letter code (a,b,c,d = 3,1,0,2): checks the mismatch test only depends on equality of codes."
+edit-distance-8,1.0000,success,beta16,1.59e+03,scalar_G2_20 (natural letter code) with pointer sharpness beta=16.
+edit-distance-8,0.2100,success,ablate_M_clear,1.59e+03,"Ablation: the old match flag M is not cleared each block, so M accumulates (expected to break the gating)."
+edit-distance-8,0.7750,success,ablate_comma_counter,1.59e+03,"Ablation: the comma column (D[t][0]=t) no longer counts up, so the left DP border is wrong (expected large drop)."
+edit-distance-8,1.0000,success,bias_pointer,1.14e+03,"Query projections get a bias: pointer offset t+7 is a per-layer bias, W_qc weight tied across layers; constant-1 residual dim removed (d_model 11)."
+edit-distance-8,1.0000,success,bias_pointer_K10,1.14e+03,bias_pointer (beta=16) with readout logit scale K=10 instead of 1.
+edit-distance-8,0.1400,success,ablate_R2_shift,1.14e+03,"Ablation: R2 (= S_{t-2}) is cleared but never refreshed from R1, so the diagonal neighbour C = D[i-1][j-1] is wrong (expected failure)."
+edit-distance-8,1.0000,success,letter_code_x2,1.14e+03,"R2 shift restored; letter codes spaced by 2 (0,2,4,6): the clipped-|difference| mismatch test should be unaffected."
+edit-distance-8,1.0000,success,beta10_K10,1.14e+03,"Natural letter code restored; pointer sharpness beta=10 (between the beta=8 partial failure and beta=12), K=10."
+edit-distance-8,0.2300,success,ablate_pointer_off1,1.14e+03,"Ablation: the anti-diagonal pointer is off by one (target (t+6)-p instead of (t+7)-p), so costs compare the wrong s1 letter (expected failure)."
+edit-distance-8,1.0000,success,beta10_G2_100,1.14e+03,"Pointer offset restored (t+7); beta=10, K=10, gating constant G2=100."
+edit-distance-8,1.0000,success,beta40,1.14e+03,"Very sharp pointers (beta=40): checks float32 precision of the (p, p^2) quadratic scores (score magnitudes ~1e4)."
+edit-distance-8,1.0000,success,K_quarter,1.14e+03,"beta=16, G2=20, readout scale K=0.25 (digit logit margin 0.25; argmax still exact)."
+edit-distance-8,1.0000,success,beta24,1.14e+03,"beta=24, G2=20, K=1."
+edit-distance-8,0.9850,success,ablate_R1_gate,1.14e+03,"Ablation: the 'remove old R1' unit is no longer gated by the active-column flag, so the comma column's counter is wiped each step (expected to hurt)."
+edit-distance-8,1.0000,success,head_bias_100,1.14e+03,"Gate restored (beta=24, G2=20); non-digit tokens get head bias -100 instead of -10000 (milder, more readable)."
+edit-distance-8,0.2150,success,ablate_nbr_pointer,1.14e+03,"Ablation: the neighbour head points at p-2 instead of p-1, so A/B/C come from the wrong column (expected failure)."
+edit-distance-8,1.0000,success,final_compact,1.14e+03,"Clean compact model: 17 tied blocks, d_model 11, d_ff 16, d_qk 2; DP wavefront with shift registers, quadratic pointers (beta=16), gate G2=20, scalar letters, head bias."

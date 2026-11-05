@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+parity-upto10-bits,0.5100,success,RandomInitInterpretable,1.51e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+parity-upto10-bits,1.0000,success,uniform_attn_count_ramp_parity,8.44e+02,1 layer 1 head uniform attention averages ones-votes; MLP of 10 ramp-step pairs computes parity of count; head reads parity.
+parity-upto10-bits,1.0000,success,uniform_attn_triangle_wave,6.74e+02,"1 layer 1 head uniform attention averages ones-votes; 10-ReLU MLP is a piecewise-linear triangle wave through (count, parity); head reads parity."
+parity-upto10-bits,1.0000,success,triangle_wave_d6,4.60e+02,"1 layer 1 head uniform attention averages ones-votes; 10-ReLU MLP is a piecewise-linear triangle wave through (count, parity); head reads parity."
+parity-upto10-bits,1.0000,success,triangle_wave_d4,2.78e+02,"d_model=4: embedding dims 0-1 = bit sign, dims 2-3 = pad/'='; vote average added to dim 0, parity written to dim 1. 10-ReLU triangle wave MLP."
+parity-upto10-bits,1.0000,success,triangle_wave_d4_zero_embed,2.78e+02,"d_model=4 as triangle_wave_d4, but '0' and pad embed to zero vector (only '1' votes); W_v has a single nonzero entry."
+parity-upto10-bits,1.0000,success,triangle_wave_d3,1.99e+02,"d_model=3: E['1']=(1,-1,0), E['=']=(0,1,-1), 0/pad zero; vote avg in dim0, parity in dim1, head reads zero-sum direction x1-x2. 10-ReLU triangle wave."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_posconst,1.99e+02,"d_model=3 as triangle_wave_d3 but the constant (0,1,-1) is a position embedding at pos 10, so '=', '0', pad all embed to zero."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_seq12,1.87e+02,"As triangle_wave_d3_posconst but position table sized to task.seq_len (12) instead of 16, saving 12 params."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_meanattn,1.57e+02,"As triangle_wave_d3_seq12 but attention is a q/k-free causal mean of a scalar value channel (W_v 3->1, W_o 1->3)."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_noln1,1.51e+02,"As triangle_wave_d3_meanattn but ln1 is Identity (attention reads raw embeddings, vote scale 1/2 directly)."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_noln12,1.45e+02,"As triangle_wave_d3_noln1 and ln2 is Identity too: MLP knots are equally spaced at k/22, only final_ln remains."
+parity-upto10-bits,1.0000,success,triangle_wave_d3_nolayernorm,1.39e+02,No LayerNorm anywhere (all three Identity): embed -> uniform-mean attention -> 10-ReLU triangle wave -> linear head.
+parity-upto10-bits,1.0000,success,triangle_wave_d2_nolayernorm,9.60e+01,"d_model=2, no LayerNorm: E['1']=(1,0) else 0; mean attention gives k/11 in dim 0; 10-ReLU triangle wave writes parity-0.5 to dim 1; head reads dim 1."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_nopos,7.20e+01,As triangle_wave_d2_nolayernorm but with no positional embedding at all (mean attention is order-free).
+parity-upto10-bits,1.0000,success,triangle_wave_d2_integer,7.20e+01,"As triangle_wave_d2_nopos but E['1']=11 so the attention mean is exactly k; knots at integers, fc2 weights 1,-2,2,-2,..."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_ff9_skip,6.70e+01,"As triangle_wave_d2_integer with d_ff=9: the initial slope of the triangle wave is read from the residual (head reads dim 0=k), so one ReLU is saved."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_nofc2bias,6.50e+01,As triangle_wave_d2_ff9_skip but fc2 has no bias; the -0.5 offset is the '=' token embedding in dim 1.
+parity-upto10-bits,1.0000,success,triangle_wave_d2_fc1_scalar,5.60e+01,"As triangle_wave_d2_nofc2bias but fc1 is Linear(1, d_ff) reading only residual dim 0 (the count), dropping 9 always-zero weights."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_fc2_scalar,4.70e+01,"As triangle_wave_d2_fc1_scalar and fc2 is Linear(d_ff, 1) writing only residual dim 1, dropping 9 more always-zero weights."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_scalar_head,4.10e+01,"As triangle_wave_d2_fc2_scalar but head is Linear(d_model,1) giving a scalar s; logits = s*sign with fixed +1/-1 buffer on '1'/'0' tokens."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_scalar_emb_headbias,3.80e+01,"As triangle_wave_d2_scalar_head but token embedding is one scalar per token (vote in dim 0, dim 1 zero-padded) and the -0.5 offset is a head bias."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_bias_only_fc1,2.90e+01,"As triangle_wave_d2_scalar_emb_headbias but fc1 is a bias-only layer: unit j = ReLU(k - j), fixed unit weight, 9 knot biases."
+parity-upto10-bits,1.0000,success,triangle_wave_d2_paramfree_attn,2.50e+01,As triangle_wave_d2_bias_only_fc1 but attention has no parameters: causal mean of residual dim 0 written back to dim 0.
+parity-upto10-bits,1.0000,success,scalar_residual_d1,2.40e+01,d_model=1: the residual is one scalar. Embedding 11 for '1'; param-free mean attention gives k; MLP adds slope changes so x becomes the triangle wave (k mod 2); head = x - 0.5.
+parity-upto10-bits,1.0000,success,scalar_residual_d1_vote1,2.40e+01,As scalar_residual_d1 but the vote is E['1']=1 and attention is a plain causal SUM of votes instead of a mean (no division by position).
+parity-upto10-bits,1.0000,success,scalar_residual_d1_softmax,2.80e+01,"d_model=1 with genuine softmax attention (W_q=W_k=0 -> uniform, W_v=W_o=1), E['1']=11 so the mean at '=' is k; rest as scalar_residual_d1."
+parity-upto10-bits,1.0000,success,scalar_residual_d1_ff8_ablation,2.60e+01,"ABLATION, NOT A VALID SOLUTION: scalar_residual_d1_softmax with d_ff=8 (knots 1..8 only). By construction it predicts the wrong parity when the prompt has exactly 10 ones (f(10)=2); 200/200 only because such prompts are very rare in the 200-sample eval."
+parity-upto10-bits,1.0000,success,scalar_residual_d1_final,2.80e+01,"Cleaned d_model=1 model with genuine softmax attention (q=k=0), 9-ReLU triangle wave exact for k=0..10, scalar head; docs rewritten. Restores d_ff=9 after the d_ff=8 ablation."
+parity-upto10-bits,1.0000,success,scalar_residual_d1_verified,2.80e+01,"Same weights as scalar_residual_d1_final plus an exhaustive forward-pass self-check over all 1024 full-length 10-bit prompts (covers k=10, which the 200-sample eval rarely hits)."

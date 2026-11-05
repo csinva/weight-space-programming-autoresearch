@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.0000,success,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sentiment-sst2,0.6450,success,lexicon-v1,2.52e+06,"Hand-wired sentiment lexicon (~150 words) with 'not'/""n't"" negation flipping; 2-layer model: char-offset copy heads + word-end detector MLP, uniform averaging readout."
+sentiment-sst2,0.6500,success,lexicon-v2-start,2.90e+06,lexicon-v1 plus sentence-initial word detectors (position-pinned neurons) so the first word of a sentence is counted.
+sentiment-sst2,0.6500,success,lexicon-v3-no,3.28e+06,lexicon-v2-start plus 'no ' as a negator (flips the following sentiment word).
+sentiment-sst2,0.6700,success,lexicon-v4-big,5.82e+06,lexicon-v3-no with the sentiment lexicon expanded from ~150 to ~400 general sentiment words.
+sentiment-sst2,0.3400,success,lexicon-v5-tie-neg,5.82e+06,"lexicon-v4-big with the readout bias flipped to -0.5, so zero-score sentences (no lexicon hit) are predicted negative instead of positive."
+sentiment-sst2,0.6700,success,lexicon-v6-bias-pos,5.82e+06,"lexicon-v4-big with the readout bias raised to +1.5, so sentences with a net score of -1 are still predicted positive."
+sentiment-sst2,0.6800,success,lexicon-v7-morph,3.09e+07,"lexicon-v4-big (bias +0.5) with each lexicon root expanded by common inflections (-s, -ly, -ness, -ed/-d, -ing)."
+sentiment-sst2,0.6800,success,lexicon-v8-very,3.97e+07,lexicon-v7-morph plus a 'very ' intensifier neuron that doubles the score of the following word.
+sentiment-sst2,0.6800,success,lexicon-v9-strong,3.97e+07,lexicon-v8-very with graded valence: ~50 intense words score +-2 instead of +-1.
+sentiment-sst2,0.6800,success,lexicon-v10-but,5.96e+07,lexicon-v9-strong plus a 3rd layer for contrast: words after 'but' are counted twice (attention-based after-but flag times score).
+sentiment-sst2,0.7050,success,lexicon-v11-big2,8.96e+07,"lexicon-v10-but with a second lexicon expansion (~250 more roots, pos and neg, with inflections)."
+sentiment-sst2,0.7050,success,lexicon-v12-big3,1.06e+08,"lexicon-v11-big2 with a third lexicon expansion (~150 more roots, pos and neg)."
+sentiment-sst2,0.7050,success,lexicon-v13-never,1.31e+08,lexicon-v12-big3 plus 'never ' as a negator (flips the following sentiment word).
+sentiment-sst2,0.7050,success,lexicon-v14-compact,4.41e+07,"lexicon-v13-never with per-layer widths: layer 1 has 1 head / 2 neurons, layer 2 has 2 heads / 1 neuron (same logic, far fewer parameters)."
+sentiment-sst2,0.7050,success,lexicon-v15-contrast,4.41e+07,"lexicon-v14-compact with 'however', 'though', 'although' added as contrast words that switch on the after-contrast weighting (like 'but')."
+sentiment-sst2,0.7000,success,lexicon-v16-noambig,4.25e+07,"lexicon-v15-contrast with ~30 ambiguous roots removed (like, fine, fresh, sad, tired, ...)."
+sentiment-sst2,0.7050,success,lexicon-v17-after3x,4.41e+07,lexicon-v15-contrast (ambiguous-root removal reverted) with words after a contrast word weighted 3x instead of 2x.
+sentiment-sst2,0.7050,success,lexicon-v18-neg-neutral,4.41e+07,lexicon-v17-after3x with negation as a cancel (-1x) instead of a flip (-2x): 'not good' -> 0.
+sentiment-sst2,0.7100,success,lexicon-v19-big4,6.09e+07,"lexicon-v17-after3x (negation flip restored) with a fourth lexicon round (~120 pos, ~120 neg roots)."
+sentiment-sst2,0.7100,success,lexicon-v20-strong3,6.09e+07,"lexicon-v19-big4 with intense words scored +-3 instead of +-2 (graded valence, 3 levels)."
+sentiment-sst2,0.6900,success,lexicon-v21-nostart,6.09e+07,"lexicon-v19-big4 with the sentence-initial word detectors ablated (value 0), to measure their effect."
+sentiment-sst2,0.7100,success,lexicon-v22-nocontrast,6.09e+07,"lexicon-v19-big4 (sentence-initial detectors restored) with the after-contrast weighting ablated (words after 'but' etc. count 1x), to measure its effect."
+sentiment-sst2,0.7100,success,lexicon-v23-novery,6.09e+07,"lexicon-v19-big4 (contrast weighting restored to 3x) with the 'very ' intensifier ablated (value 0), to measure its effect."
+sentiment-sst2,0.7100,success,lexicon-v24-nonegation,6.09e+07,"lexicon-v19-big4 with 'not'/""n't""/'no' negation neurons ablated (value 0), to measure the effect of negation."
+sentiment-sst2,0.7100,success,lexicon-v25-boundary,6.31e+07,"lexicon-v19-big4 with word-boundary checks added to the 'very', 'never' and 'no' detectors (fixes false hits like 'every good')."
+sentiment-sst2,0.7100,success,lexicon-v26-really-so,8.64e+07,lexicon-v25-boundary plus 'really ' and 'so ' intensifiers (each adds the score again).
+sentiment-sst2,0.7100,success,lexicon-v27-pos5,9.21e+07,lexicon-v26-really-so with a fifth positive-lexicon round (~80 more positive roots).
+sentiment-sst2,0.7150,success,lexicon-v28-neg5,9.83e+07,lexicon-v27-pos5 with a fifth negative-lexicon round (~80 more negative roots).
+sentiment-sst2,0.6200,success,lexicon-v29-bias25,9.83e+07,lexicon-v28-neg5 with readout bias +2.5 (predict positive iff net score >= -1).
+sentiment-sst2,0.7150,success,lexicon-v30-strong2,9.83e+07,lexicon-v28-neg5 (bias back to +0.5) with ~25 more intense words weighted 2x.
+sentiment-sst2,0.7100,success,lexicon-v31-pos6,1.03e+08,lexicon-v30-strong2 with a sixth positive-lexicon round (~60 more positive roots).
+sentiment-sst2,0.7150,success,lexicon-v32-neg6,1.08e+08,lexicon-v31-pos6 with a sixth negative-lexicon round (~60 more negative roots).
+sentiment-sst2,0.7100,success,lexicon-v33-noambig2,1.06e+08,"lexicon-v32-neg6 with ~30 ambiguous roots removed (like, fine, fresh, sad, tired, ...), retested."
+sentiment-sst2,0.5950,success,lexicon-v34-soft-attn,1.08e+08,lexicon-v32-neg6 with attention sharpness beta reduced from 5000 to 50 (ablation: soft copy heads).
+sentiment-sst2,0.5950,success,lexicon-v35-attn500,1.08e+08,lexicon-v32-neg6 with attention sharpness beta reduced from 5000 to 500 (intermediate ablation).
+sentiment-sst2,0.7150,success,lexicon-v36-after2x,1.08e+08,lexicon-v32-neg6 (beta back to 5000) with the after-contrast weighting at 2x instead of 3x.
+sentiment-sst2,0.7150,success,lexicon-v37-pos7,1.13e+08,lexicon-v36-after2x (after-contrast 2x kept) with a seventh positive-lexicon round (~50 roots).
+sentiment-sst2,0.7200,success,lexicon-v38-neg7,1.18e+08,lexicon-v37-pos7 with a seventh negative-lexicon round (~60 roots).
+sentiment-sst2,0.7200,success,lexicon-v39-notfix,1.33e+08,"lexicon-v38-neg7 with 'not' split from ""n't"": 'not' needs a word boundary before it."
+sentiment-sst2,0.7200,success,lexicon-v40-neg8,1.36e+08,lexicon-v39-notfix with an eighth negative-lexicon round (~40 more roots).
+sentiment-sst2,0.7200,success,lexicon-v41-pos8,1.39e+08,lexicon-v40-neg8 with an eighth positive-lexicon round (~40 more roots).
+sentiment-sst2,0.7200,success,lexicon-v42-pinweak,1.39e+08,lexicon-v41-pos8 with the sentence-initial position-pin strength reduced from 1000 to 100.
+sentiment-sst2,0.7200,success,lexicon-v43-pos9,1.42e+08,lexicon-v41-pos8 (pin strength restored to 1000) with a ninth positive round of comparatives/superlatives.
+sentiment-sst2,0.7200,success,lexicon-v44-comparatives,1.90e+08,"lexicon-v43-pos9 with comparative/superlative inflections (-er/-est, -ier/-iest, -r/-st) added to every root."
+sentiment-sst2,0.7150,success,lexicon-v45-noambig3,1.86e+08,"lexicon-v44-comparatives with ~30 ambiguous roots removed (like, fine, fresh, sad, tired, ...), retested."
+sentiment-sst2,0.7200,success,lexicon-v46-but-only,1.90e+08,lexicon-v44-comparatives with 'but' as the only contrast word (however/though/although removed).
+sentiment-sst2,0.7200,success,lexicon-v47-noso-really,1.90e+08,lexicon-v44-comparatives with the 'so ' and 'really ' intensifiers ablated (value 0).
+sentiment-sst2,0.7200,success,lexicon-v48-strong3-final,1.90e+08,lexicon-v44-comparatives (so/really restored) with intense words weighted +-3 instead of +-2.
+sentiment-sst2,0.7000,success,lexicon-v49-nostart2,1.90e+08,"lexicon-v48-strong3 with the sentence-initial detectors ablated again (value 0), to re-check their effect."
+sentiment-sst2,0.7200,success,lexicon-v50-final,1.90e+08,"Final configuration: hand-wired sentiment lexicon (morphological inflections, intense words x2, negation via not/n't/no/never, very/really/so intensifiers, contrast words switching on 2x weighting after but/however/though/although, sentence-initial detectors, 80-char position-pinned copy heads)."

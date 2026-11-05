@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.6800,success,AlwaysOne,1.61e+05,"Constant baseline: always predict '1' (majority-ish class, ~66% of pool pairs are paraphrases)."
+paraphrase-mrpc,0.6400,success,TrigramSinkV1,9.02e+05,"4 layers, 1 head, d=230. Prev-char shift heads (2) build trigram keys; layer 3 counts sink-gated trigram matches of each s2 char vs s1; layer 4 averages over s2; threshold 0.5 of the slope."
+paraphrase-mrpc,0.6600,success,TrigramSinkT31,9.02e+05,"Same trigram circuit as TrigramSinkV1, threshold THETA=0.31 (tuned on seed-1 sample): predict 1 iff >=31% of s2 trigrams occur in s1."
+paraphrase-mrpc,0.6350,success,BigramSinkV1,5.11e+05,"K=2 (bigram) version of the sink-gated k-gram circuit: 3 layers, d=197; predict 1 iff >=50% of s2 bigrams occur in s1."
+paraphrase-mrpc,0.6800,success,UnigramSinkK1,2.51e+05,"Ablation K=1 (single-character matching, no previous-char heads): 2 layers, d=164; predict 1 iff >=50% of s2 characters occur in s1."
+paraphrase-mrpc,0.6550,success,UnigramSinkK1T87,2.51e+05,K=1 unigram ablation with threshold THETA=0.87 (tuned on seed-1 sample): predict 1 iff >=87% of s2 characters occur in s1.
+paraphrase-mrpc,0.6850,success,BigramSinkT40,5.11e+05,K=2 bigram circuit with threshold THETA=0.40: predict 1 iff >=40% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6800,success,BigramSinkT45,5.11e+05,K=2 bigram circuit with threshold THETA=0.45: predict 1 iff >=45% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6500,success,BigramSinkT55,5.11e+05,K=2 bigram circuit with threshold THETA=0.55: predict 1 iff >=55% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6450,success,BigramSinkT60,5.11e+05,K=2 bigram circuit with threshold THETA=0.60: predict 1 iff >=60% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6550,success,TrigramSinkT37,9.02e+05,K=3 trigram circuit with threshold THETA=0.37: predict 1 iff >=37% of s2 trigrams occur in s1.
+paraphrase-mrpc,0.6450,success,TrigramSinkT43,9.02e+05,K=3 trigram circuit with threshold THETA=0.43: predict 1 iff >=43% of s2 trigrams occur in s1.
+paraphrase-mrpc,0.6600,success,FourgramSinkT27,1.45e+06,"K=4 four-gram circuit (5 layers, d=263) with threshold THETA=0.27 (tuned on seed-1 sample): predict 1 iff >=27% of s2 4-grams occur in s1."
+paraphrase-mrpc,0.6800,success,BigramTU40,5.11e+05,Robustness: K=2 bigram circuit with a weaker match score T_UNIT=40 (THETA=0.45): predict 1 iff >=45% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6800,success,BigramTU100,5.11e+05,Robustness: K=2 bigram circuit with a stronger match score T_UNIT=100 (THETA=0.45): predict 1 iff >=45% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6800,success,BigramNoSink,5.11e+05,"Ablation: K=2 bigram circuit with the separator sink removed (attention cannot abstain): M is always ~1, so F is constant."
+paraphrase-mrpc,0.6300,success,BigramNoS2Pen,5.11e+05,Ablation: K=2 bigram circuit with no attention penalty on sentence-2 keys (s2 positions can attend to earlier s2 positions).
+paraphrase-mrpc,0.6800,success,BigramPadsInMean,5.11e+05,Ablation: K=2 bigram circuit where the final mean also averages over padding positions (no pad penalty in the readout layer).
+paraphrase-mrpc,0.6800,success,BigramPEN5,5.11e+05,Robustness: K=2 bigram circuit with a weak key penalty PEN=5 (s2/pad keys are only mildly suppressed).
+paraphrase-mrpc,0.6800,success,BigramPEN50,5.11e+05,Robustness: K=2 bigram circuit with a strong key penalty PEN=50 (disallowed keys fully suppressed).
+paraphrase-mrpc,0.6800,success,FourgramSinkT20,1.45e+06,"K=4 four-gram circuit (5 layers, d=263), threshold THETA=0.20, readout offset fixed (re-run; the original run had a negative '0' logit bug). Predict 1 iff >=20% of s2 4-grams occur in s1."
+paraphrase-mrpc,0.6500,success,BigramCM003,5.11e+05,Robustness: K=2 bigram circuit with a smaller match-channel scale CM=0.03 (threshold rescaled accordingly; readout offset fixed so both answer logits are positive).
+paraphrase-mrpc,0.6800,success,BigramKappaLo,5.11e+05,Sink-margin test: K=2 bigram circuit with the sink lowered to K-0.7 (1.3 matches); sink still beats 1-match keys but is closer to the bigram level.
+paraphrase-mrpc,0.6800,success,BigramKappaHi,5.11e+05,"Sink-margin test: K=2 bigram circuit with the sink raised to K-0.3 (1.7 matches), closer to the full bigram level."
+paraphrase-mrpc,0.6850,success,BigramT42,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.42: predict 1 iff >=42% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6400,success,BigramT48,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.48: predict 1 iff >=48% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6450,success,BigramT52,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.52: predict 1 iff >=52% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6850,success,BigramT38,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.38: predict 1 iff >=38% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6550,success,BigramT58,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.58: predict 1 iff >=58% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6500,success,BigramT46,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.46: predict 1 iff >=46% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6550,success,TrigramT33,9.02e+05,K=3 trigram circuit (default readout/pads/penalties) with THETA=0.33: predict 1 iff >=33% of s2 trigrams occur in s1.
+paraphrase-mrpc,0.6800,success,TrigramNoSink,9.02e+05,"Ablation: K=3 trigram circuit with the separator sink removed; attention cannot abstain, so the readout is near-constant."
+paraphrase-mrpc,0.6550,success,TrigramPadsInMean,9.02e+05,Ablation: K=3 trigram circuit where the final mean also averages over padding positions.
+paraphrase-mrpc,0.6550,success,TrigramTU100,9.02e+05,Robustness: K=3 trigram circuit with a stronger match score T_UNIT=100 (THETA=0.33).
+paraphrase-mrpc,0.6550,success,TrigramPEN5,9.02e+05,Robustness: K=3 trigram circuit with a weak key penalty PEN=5 (THETA=0.33).
+paraphrase-mrpc,0.6600,success,TrigramT28,9.02e+05,Threshold sweep: K=3 trigram circuit with THETA=0.28: predict 1 iff >=28% of s2 trigrams occur in s1.
+paraphrase-mrpc,0.6550,success,TrigramT34,9.02e+05,Threshold sweep: K=3 trigram circuit with THETA=0.34: predict 1 iff >=34% of s2 trigrams occur in s1.
+paraphrase-mrpc,0.6800,success,UnigramNoSink,2.51e+05,Ablation: K=1 unigram circuit with the sink removed (attention cannot abstain); the readout is near-constant.
+paraphrase-mrpc,0.6850,success,UnigramT80,2.51e+05,Threshold sweep: K=1 unigram circuit with THETA=0.80: predict 1 iff >=80% of s2 characters occur in s1.
+paraphrase-mrpc,0.5700,success,UnigramT95,2.51e+05,Threshold sweep: K=1 unigram circuit with THETA=0.95: predict 1 iff >=95% of s2 characters occur in s1.
+paraphrase-mrpc,0.6750,success,FourgramT23,1.45e+06,"Threshold sweep: K=4 four-gram circuit (5 layers, d=263) with THETA=0.23: predict 1 iff >=23% of s2 4-grams occur in s1."
+paraphrase-mrpc,0.6600,success,FourgramT31,1.45e+06,"Threshold sweep: K=4 four-gram circuit (5 layers, d=263) with THETA=0.31: predict 1 iff >=31% of s2 4-grams occur in s1."
+paraphrase-mrpc,0.6800,success,BigramTU20,5.11e+05,Robustness: K=2 bigram circuit with a weak match score T_UNIT=20 (THETA=0.45).
+paraphrase-mrpc,0.6550,success,TrigramTU40,9.02e+05,Robustness: K=3 trigram circuit with a weaker match score T_UNIT=40 (THETA=0.33).
+paraphrase-mrpc,0.6800,success,BigramPEN10,5.11e+05,Robustness: K=2 bigram circuit with a weak key penalty PEN=10 (THETA=0.45).
+paraphrase-mrpc,0.6800,success,BigramCM030,5.11e+05,"Robustness: K=2 bigram circuit with a larger match-channel scale CM=0.3 (THETA=0.45, threshold rescaled)."
+paraphrase-mrpc,0.6350,success,BigramT50,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.50: predict 1 iff >=50% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6800,success,BigramT44,5.11e+05,Threshold sweep: K=2 bigram circuit with THETA=0.44: predict 1 iff >=44% of s2 bigrams occur in s1.
+paraphrase-mrpc,0.6750,success,FourgramT25,1.45e+06,"Threshold sweep: K=4 four-gram circuit (5 layers, d=263) with THETA=0.25: predict 1 iff >=25% of s2 4-grams occur in s1."
+paraphrase-mrpc,0.6800,success,TrigramSinkT25,9.02e+05,K=3 trigram circuit with THETA=0.25 (re-run after fixing the negative-'0'-logit readout bug): predict 1 iff >=25% of s2 trigrams occur in s1.

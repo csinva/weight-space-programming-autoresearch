@@ -1,0 +1,40 @@
+{
+ "run": "sort-five-digits-sonnet55-s2",
+ "task": "sort-five-digits",
+ "seed": 2,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "483429a5-5bc9-44e1-8e13-acfa5af2b8b2",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.2457058999999997,
+   "turns": 143,
+   "seconds": 640,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:53:23.221879+00:00",
+ "finished": "2026-11-05T21:04:02.877068+00:00",
+ "attempts": 30
+}

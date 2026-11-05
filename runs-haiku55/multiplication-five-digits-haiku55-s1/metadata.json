@@ -1,0 +1,40 @@
+{
+ "run": "multiplication-five-digits-haiku55-s1",
+ "task": "multiplication-five-digits",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "39ed3276-a7a3-4e36-a9ea-11bc839703eb",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 2.05030112,
+   "turns": 208,
+   "seconds": 1476,
+   "attempts_before": 0,
+   "attempts_after": 31,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:09:18.188936+00:00",
+ "finished": "2026-11-05T21:33:54.551022+00:00",
+ "attempts": 31
+}

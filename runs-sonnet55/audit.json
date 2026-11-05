@@ -1,0 +1,502 @@
+{
+ "addition-five-digits-sonnet55-s1": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "addition-five-digits-sonnet55-s2": {
+  "n_snapshots": 1,
+  "flagged": {}
+ },
+ "boolean-circuit-5-bits-sonnet55-s1": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "boolean-circuit-5-bits-sonnet55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "date-normalization-sonnet55-s1": {
+  "n_snapshots": 8,
+  "flagged": {}
+ },
+ "date-normalization-sonnet55-s2": {
+  "n_snapshots": 2,
+  "flagged": {
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "decimal-to-binary-8bit-sonnet55-s1": {
+  "n_snapshots": 5,
+  "flagged": {}
+ },
+ "decimal-to-binary-8bit-sonnet55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "digit-counting-10-sonnet55-s1": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "digit-counting-10-sonnet55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "edit-distance-8-sonnet55-s1": {
+  "n_snapshots": 6,
+  "flagged": {}
+ },
+ "edit-distance-8-sonnet55-s2": {
+  "n_snapshots": 5,
+  "flagged": {}
+ },
+ "gcd-three-digits-sonnet55-s1": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "gcd-three-digits-sonnet55-s2": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "linear-interpolation-two-points-sonnet55-s1": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "linear-interpolation-two-points-sonnet55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "multiplication-five-digits-sonnet55-s1": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "multiplication-five-digits-sonnet55-s2": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "nli-snli-sonnet55-s1": {
+  "n_snapshots": 50,
+  "flagged": {
+   "tri_nb_overlap_v1": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K1000_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K1371_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K200_lam0.25_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K200_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K200_lam1.0_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v2_K500_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v3heldout_K1000_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v3heldout_K20_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v3heldout_K300_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K1000_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.25_b16.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b16.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng2": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam0.5_b8.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K100_lam2.0_b16.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K150_lam0.5_b4.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.35_b8.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b4.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc10_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len0.0_ovs0.5": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len0.0_ovs2.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K200_lam0.75_b8.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K300_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K300_lam0.5_b4.0_minc3_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.35_b8.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc4_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng3_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng5_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc8_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b20.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b6.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.5_b8.0_minc6_ng4_len1.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K400_lam0.75_b8.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K500_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K500_lam0.5_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K500_lam0.5_b8.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K500_lam1.0_b8.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K50_lam0.5_b8.0_minc3": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v4novel_K700_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "tri_nb_v6simple_K400_lam0.5_b12.0_minc6_ng4": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "nli-snli-sonnet55-s2": {
+  "n_snapshots": 2,
+  "flagged": {
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "paraphrase-mrpc-sonnet55-s1": {
+  "n_snapshots": 0,
+  "flagged": {}
+ },
+ "paraphrase-mrpc-sonnet55-s2": {
+  "n_snapshots": 1,
+  "flagged": {
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "parity-upto10-bits-sonnet55-s1": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "parity-upto10-bits-sonnet55-s2": {
+  "n_snapshots": 28,
+  "flagged": {
+   "interpretable_transformer": {
+    "paths": [
+     "/ 1024"
+    ]
+   }
+  }
+ },
+ "sentiment-sst2-sonnet55-s1": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "sentiment-sst2-sonnet55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "smallest-prime-factor-sonnet55-s1": {
+  "n_snapshots": 4,
+  "flagged": {}
+ },
+ "smallest-prime-factor-sonnet55-s2": {
+  "n_snapshots": 6,
+  "flagged": {}
+ },
+ "sort-five-digits-sonnet55-s1": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "sort-five-digits-sonnet55-s2": {
+  "n_snapshots": 4,
+  "flagged": {}
+ },
+ "trec-coarse-sonnet55-s1": {
+  "n_snapshots": 1,
+  "flagged": {
+   "ShiftKeywordBag_final": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "trec-coarse-sonnet55-s2": {
+  "n_snapshots": 2,
+  "flagged": {
+   "kw_priority_final": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "kw_priority_v26": {
+    "eval_data": [
+     "generate_examples\\("
+    ]
+   },
+   "interpretable_transformer": {
+    "eval_data": [
+     "\\.answer\\b",
+     "generate_examples\\("
+    ]
+   }
+  }
+ },
+ "word-reversal-3x3-sonnet55-s1": {
+  "n_snapshots": 9,
+  "flagged": {}
+ },
+ "word-reversal-3x3-sonnet55-s2": {
+  "n_snapshots": 7,
+  "flagged": {}
+ }
+}

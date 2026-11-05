@@ -1,0 +1,32 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sort-five-digits,0.3350,success,HaikuSortCountCircuit-v0-largeK,3.15e+04,"Earlier version of the count circuit. Pad was non-zero-mean (+100 on 17 channels), so LayerNorm scale variation (~0.5%) times the mean offset (~26.6) shifted the gate units. Overwritten by v1 under the same shorthand name; snapshot not kept."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-v1,3.15e+04,"1 layer, 1 head, 95 MLP units. Attention averages the 5 input digits into cumulative counts C_m; MLP thresholds [C_m>=j+1] per output step j; sorted digit = [C_d>=j+1]-[C_{d-1}>=j+1]. LayerNorm made affine by a zero-mean constant pad block (+/-300)."
+sort-five-digits,0.0250,success,HaikuSortCountCircuit-padK10,3.15e+04,Same circuit as v1 with pad magnitude K=10 (was 300). Tests how large the constant LayerNorm pad must be to keep LN approximately affine.
+sort-five-digits,0.8850,success,HaikuSortCountCircuit-padK30,3.15e+04,Same circuit as v1 with pad magnitude K=30 (was 300). Sweep of the constant LayerNorm pad magnitude.
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-padK100,3.15e+04,Same circuit as v1 with pad magnitude K=100 (was 300). Sweep of the constant LayerNorm pad magnitude.
+sort-five-digits,0.0950,success,HaikuSortCountCircuit-gate1,3.15e+04,Pad K=100 with position-gate strength BIG=1 (was 10). Tests how strong the one-hot position gate must be.
+sort-five-digits,0.0500,success,HaikuSortCountCircuit-gate3,3.15e+04,Pad K=100 with position-gate strength BIG=3 (was 10). Tests how strong the one-hot position gate must be.
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gate30,3.15e+04,Pad K=100 with position-gate strength BIG=30 (was 10). Checks whether a very strong gate is harmless.
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gap2,3.15e+04,"Pad K=100, gate BIG=30, attention score gap 2 (was 40). Tests how sharp the uniform input-position attention must be."
+sort-five-digits,0.4800,success,HaikuSortCountCircuit-npad2,3.15e+04,"Pad K=100 but only 2 pad channels (one +K, one -K; was 16). Tests how many constant channels LayerNorm needs."
+sort-five-digits,0.9300,success,HaikuSortCountCircuit-npad4,3.15e+04,Pad K=100 with 4 pad channels (was 16). Tests how many constant channels LayerNorm needs.
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-npad8,3.15e+04,Pad K=100 with 8 pad channels (was 16). Tests how many constant channels LayerNorm needs.
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-noEqSuppress,3.15e+04,"Pad K=100, 8 pad channels, but the '=' logit row is 0 instead of -pad (was suppressed). Tests whether the digit one-hot alone wins argmax."
+sort-five-digits,0.0000,success,HaikuSortCountCircuit-noCancelOffset,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) but attention values are not corrected for the LayerNorm mean offset. Tests whether the constant offset is harmful."
+sort-five-digits,0.5850,success,HaikuSortCountCircuit-dropNine,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) but the constant unit for digit 9 is removed. Tests how much of the output needs that unit."
+sort-five-digits,0.0000,success,HaikuSortCountCircuit-noZCompanion,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) but the companion channel -sum_m C_m is not written. Tests whether the companion is needed to keep the LayerNorm mean constant."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-K1000,3.15e+04,"Base (8 pads, no '=' suppression) with pad magnitude K=1000 (was 100). Checks whether a larger pad keeps working."
+sort-five-digits,0.4150,success,HaikuSortCountCircuit-gap0,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) with attention score gap 0 (was 40), i.e. uniform attention over all keys. Tests whether the input-only restriction is necessary."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gap10,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) with attention score gap 10 (was 40). Tests how sharp the input-only attention must be between 0 and 40."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gap5,3.15e+04,"Base (K=100, 8 pads, no '=' suppression) with attention score gap 5 (was 40). Tests how sharp the input-only attention must be between 0 and 10."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gate6,3.15e+04,"Base (K=100, 8 pads, no '=' suppression, gap 40) with position-gate strength BIG=6 (was 30). Tests the lower end of the gate range."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-npad6,3.15e+04,"Base (K=100, gate 6, gap 40, no '=' suppression) with 6 pad channels (was 8). Tests the pad-count threshold between 4 and 8."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-npad2K1000,3.15e+04,"Gate 6, gap 40, no '=' suppression, with only 2 pad channels but pad magnitude K=1000. Tests whether a larger pad can replace extra pad channels."
+sort-five-digits,0.0600,success,HaikuSortCountCircuit-npad2K30,3.15e+04,"Gate 6, gap 40, no '=' suppression, 2 pad channels with pad magnitude K=30 (was 1000). Finds the magnitude threshold for 2 pad channels."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-npad2K300,3.15e+04,"Gate 6, gap 40, no '=' suppression, 2 pad channels with pad magnitude K=300 (was 1000 and 30). Narrows the magnitude threshold for 2 pad channels."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gap20,3.15e+04,"Gate 6, 2 pads at K=300, no '=' suppression, attention score gap 20 (was 40). Tests the gap between 10 and 40 in the smaller-pad setting."
+sort-five-digits,0.0350,success,HaikuSortCountCircuit-gate2,3.15e+04,"Gap 20, 2 pads at K=300, no '=' suppression, gate BIG=2 (was 6). Tests whether a weak gate still works in the smaller-pad setting."
+sort-five-digits,0.4150,success,HaikuSortCountCircuit-gate4,3.15e+04,"Gap 20, 2 pads at K=300, no '=' suppression, gate BIG=4 (was 2 and 6). Locates the gate threshold between 2 and 6."
+sort-five-digits,0.0500,success,HaikuSortCountCircuit-gate3b,3.15e+04,"Gap 20, 2 pads at K=300, no '=' suppression, gate BIG=3 (was 2, 4, 5, 6). Completes the gate sweep."
+sort-five-digits,1.0000,success,HaikuSortCountCircuit-gate5,3.15e+04,"Gap 20, 2 pads at K=300, no '=' suppression, gate BIG=5 (was 4 and 6). Narrows the gate threshold between 4 and 6."

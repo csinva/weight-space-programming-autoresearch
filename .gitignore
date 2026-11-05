@@ -40,3 +40,4 @@ systematic-tests/**/bundle/weights/
 systematic-tests/**/dense_effects.npz
 
 .hf_home/
+runs-*/*/reconstructed/

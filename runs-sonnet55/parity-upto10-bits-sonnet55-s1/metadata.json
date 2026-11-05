@@ -1,0 +1,57 @@
+{
+ "run": "parity-upto10-bits-sonnet55-s1",
+ "task": "parity-upto10-bits",
+ "seed": 1,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "3093998d-2d1d-4487-baf6-a75534acf767",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.3102797,
+   "turns": 27,
+   "seconds": 131,
+   "attempts_before": 0,
+   "attempts_after": 5,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  },
+  {
+   "k": 1,
+   "session_id": "3093998d-2d1d-4487-baf6-a75534acf767",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.3254538,
+   "turns": 121,
+   "seconds": 479,
+   "attempts_before": 5,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_01.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:57:10.587746+00:00",
+ "finished": "2026-11-05T21:07:20.362649+00:00",
+ "attempts": 30
+}

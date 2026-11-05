@@ -1,0 +1,41 @@
+{
+ "run": "paraphrase-mrpc-haiku55-s1",
+ "task": "paraphrase-mrpc",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "9e9ecd1e-d495-4199-add6-49c510078216",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 2.32707269,
+   "turns": 288,
+   "seconds": 1928,
+   "attempts_before": 0,
+   "attempts_after": 50,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.113216+00:00",
+ "finished": "2026-11-05T20:33:39.075883+00:00",
+ "attempts": 50
+}

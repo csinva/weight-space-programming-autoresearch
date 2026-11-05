@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.0000,success,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+trec-coarse,0.4750,,KeywordVoteV1,5.58e+06,"No-LayerNorm 2-layer circuit: relative-offset heads detect whole-word keywords (boundary-delimited, <=9 letters); uniform pooling counts them; hand-set per-class vote table."
+trec-coarse,0.5800,,KeywordStartBonus0p5,5.58e+06,Adds question-initial word detectors; each vote on a word that starts the question gets an extra 0.5x bonus (START_BONUS=0.5).
+trec-coarse,0.6850,,KeywordVoteV2,6.42e+06,Fixes double-counting of question-initial words (any-position detector needs a real boundary); question-initial words get (1+0.5)x vote; lower weights for how/is/are; more HUM nouns.
+trec-coarse,0.6850,,KeywordVoteV3,7.67e+06,V2 plus plural and extra LOC/NUM/ENTY nouns; year/years raised to 3.0; 'what'/'which' default weight lowered to 0.8.
+trec-coarse,0.6950,success,KeywordBigramV4,1.00e+07,"V3 plus two-word detectors (how many/long/old..., what is/kind/type, who was/is) with their own votes; detectors fire only at real word boundaries."
+trec-coarse,0.6950,success,BigramV4_enty_bias_m0p5,1.00e+07,BigramV4 with ENTY class bias lowered to -0.5 (ENTY was over-predicted for 'what' questions).
+trec-coarse,0.6700,success,BigramV4_enty_bias_m1p0,1.00e+07,BigramV4 with ENTY class bias lowered to -1.0 (ENTY was over-predicted for 'what' questions).
+trec-coarse,0.6950,success,BigramV4_start_bonus_0,1.00e+07,BigramV4 with START_BONUS=0: question-initial words get the same vote as any other occurrence.
+trec-coarse,0.7100,success,BigramV5_vocab,1.75e+07,"BigramV4 plus ~200 extra content words (people/roles, places, quantities/units, explanation nouns, animals/food/arts/materials) with unigram votes; START_BONUS=0.5."
+trec-coarse,0.7100,success,BigramV5_dedup,1.75e+07,BigramV5 with the duplicate 'hero' vote removed (it had been counted twice).
+trec-coarse,0.7100,success,BigramV6_vocab2,3.33e+07,BigramV5 plus a second vocabulary batch (~250 more people/place/quantity/explanation/object words).
+trec-coarse,0.7050,success,BigramV6_start_bonus_1,3.33e+07,BigramV6 with START_BONUS=1.0 (question-initial unigram votes doubled).
+trec-coarse,0.7100,success,BigramV6_uni_scale_0p8,3.33e+07,BigramV6 with all unigram votes scaled by 0.8 relative to phrase votes.
+trec-coarse,0.7050,success,BigramV6_bi_scale_0p5,3.33e+07,BigramV6 with unigram votes at 0.8 and phrase (bigram) votes at 0.5.
+trec-coarse,0.7050,success,BigramV6_bi_scale_1p5,3.33e+07,BigramV6 with unigram votes at 0.8 and phrase (bigram) votes at 1.5.
+trec-coarse,0.6550,success,BigramV6_desc_bias_1p0,3.33e+07,"BigramV6 (unigram 0.8, phrase 1.0) with the DESC class bias raised to 1.0."
+trec-coarse,0.7250,success,BigramV6_desc_bias_0,3.33e+07,"BigramV6 (unigram 0.8, phrase 1.0) with all class biases set to 0 (DESC bias removed)."
+trec-coarse,0.7150,success,BigramV6_enty_bias_0p3,3.33e+07,BigramV6 with zero class biases except ENTY = +0.3 (ENTY is the default when no votes fire).
+trec-coarse,0.7200,success,BigramV6_start_bonus_0p25,3.33e+07,BigramV6 with zero class biases and START_BONUS=0.25 (question-initial word votes x1.25).
+trec-coarse,0.7250,success,BigramV6_start_bonus_0p75,3.33e+07,BigramV6 with zero class biases and START_BONUS=0.75 (question-initial word votes x1.75).
+trec-coarse,0.7250,success,BigramV6_uni_scale_1p0,3.33e+07,"BigramV6 with zero class biases, START_BONUS=0.5, unigram and phrase votes both at full weight (1.0)."
+trec-coarse,0.7250,success,BigramV6_what_0p4,3.33e+07,"BigramV6 (zero biases, scales 1.0) with the 'what'/'which' ENTY votes lowered from 0.8 to 0.4."
+trec-coarse,0.7300,success,BigramV6_is_are_0p5,3.33e+07,"BigramV6 (zero biases, scales 1.0) with the unigram 'is'/'are' DESC votes lowered from 1.0 to 0.5."
+trec-coarse,0.7200,success,BigramV6_how_0,3.33e+07,BigramV6_is_are_0p5 with the unigram 'how' DESC vote removed (how-questions decided by their NUM/DESC phrases).
+trec-coarse,0.7300,success,BigramV6_why_4,3.33e+07,BigramV6_is_are_0p5 with the 'why' DESC vote raised from 3.0 to 4.0.
+trec-coarse,0.7350,success,BigramV6_who_4,3.33e+07,BigramV6_why_4 with the 'who' HUM vote raised from 3.0 to 4.0.
+trec-coarse,0.7350,success,BigramV6_when_4,3.33e+07,BigramV6_who_4 with the 'when' NUM vote raised from 3.0 to 4.0.
+trec-coarse,0.7350,success,BigramV6_where_4,3.33e+07,BigramV6_when_4 with the 'where' LOC vote raised from 3.0 to 4.0.
+trec-coarse,0.7350,success,BigramV6_year_2,3.33e+07,BigramV6_where_4 with the 'year'/'years' NUM votes lowered from 3.0 to 2.0.
+trec-coarse,0.7350,success,BigramV6_hum_bias_0p3,3.33e+07,BigramV6_year_2 with a +0.3 HUM class bias (the default class when no vote fires).
+trec-coarse,0.7400,success,BigramV6_num_bias_0p3,3.33e+07,BigramV6_year_2 with a +0.3 NUM class bias (the default class when no vote fires).
+trec-coarse,0.7300,success,BigramV6_num_bias_0p6,3.33e+07,BigramV6_num_bias_0p3 with the NUM class bias raised to +0.6.
+trec-coarse,0.7300,success,BigramV6_num0p3_desc_0p3,3.33e+07,BigramV6_num_bias_0p3 plus a +0.3 DESC class bias.
+trec-coarse,0.7400,success,BigramV6_many_4,3.33e+07,BigramV6_num_bias_0p3 with the unigram 'many' NUM vote raised from 3.0 to 4.0.
+trec-coarse,0.7350,success,BigramV6_what_0p2,3.33e+07,BigramV6_many_4 with the 'what'/'which' ENTY votes lowered from 0.4 to 0.2.
+trec-coarse,0.7300,success,BigramV6_uni0p8_num0p3,3.33e+07,"BigramV6_many_4 with unigram votes scaled to 0.8 (phrase votes 1.0, NUM bias 0.3)."
+trec-coarse,0.7300,success,BigramV6_bi1p5_num0p3,3.33e+07,"BigramV6_many_4 with phrase votes scaled to 1.5 (unigram 1.0, NUM bias 0.3)."
+trec-coarse,0.7400,success,BigramV6_how_many_4p5,3.33e+07,BigramV6_many_4 with the 'how many' phrase vote raised from 3.5 to 4.5.
+trec-coarse,0.7350,success,BigramV6_is_are_0,3.33e+07,BigramV6_how_many_4p5 with the unigram 'is'/'are' DESC votes set to 0.
+trec-coarse,0.7450,success,BigramV6_loc_bias_0p3,3.33e+07,BigramV6_how_many_4p5 with a +0.3 LOC class bias on top of the NUM bias.
+trec-coarse,0.7400,success,BigramV6_hum_loc_num_bias_0p3,3.33e+07,"BigramV6_loc_bias_0p3 plus a +0.3 HUM class bias (HUM, LOC, NUM all at +0.3)."
+trec-coarse,0.7450,success,BigramV6_loc_bias_0p6,3.33e+07,BigramV6_loc_bias_0p3 with the LOC class bias raised to +0.6 (NUM stays +0.3).
+trec-coarse,0.7350,success,BigramV6_loc_num_start0p25,3.33e+07,BigramV6_loc_bias_0p3 with START_BONUS=0.25 (question-initial unigram votes x1.25).
+trec-coarse,0.7350,success,BigramV6_loc_num_uni0p8,3.33e+07,BigramV6_loc_bias_0p3 with unigram votes scaled to 0.8 (phrase votes 1.0).
+trec-coarse,0.7450,success,BigramV6_loc_num_why3,3.33e+07,BigramV6_loc_bias_0p3 with the 'why' DESC vote lowered from 4.0 to 3.0.
+trec-coarse,0.7450,success,BigramV6_loc_num_what0p6,3.33e+07,BigramV6_loc_bias_0p3 with the 'what'/'which' ENTY votes raised from 0.4 to 0.6.
+trec-coarse,0.7300,success,BigramV6_loc_num_bi0p8,3.33e+07,"BigramV6_loc_num with the phrase (bigram) votes scaled to 0.8 (unigram 1.0, what 0.6)."
+trec-coarse,0.7350,success,BigramV6_loc_num_is1p0,3.33e+07,BigramV6_loc_num with the unigram 'is'/'are' DESC votes raised from 0.5 to 1.0.
+trec-coarse,0.7450,success,BigramV6_loc_num_stand3,3.33e+07,"BigramV6_loc_bias_0p3 (LOC and NUM biases +0.3, is/are 0.5) with the unigram 'stand' ABBR vote raised from 2.0 to 3.0."

@@ -1,0 +1,41 @@
+{
+ "run": "smallest-prime-factor-haiku55-s2",
+ "task": "smallest-prime-factor",
+ "seed": 2,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "ba508cf0-cc17-4db3-9490-aeb8b33a587d",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.7767396000000002,
+   "turns": 212,
+   "seconds": 1568,
+   "attempts_before": 0,
+   "attempts_after": 41,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Monitor",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:07:13.421034+00:00",
+ "finished": "2026-11-05T21:33:21.755721+00:00",
+ "attempts": 41
+}

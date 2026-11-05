@@ -1,0 +1,52 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.0000,success,RandomInitInterpretable,1.58e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+date-normalization,1.0000,success,ClosersRoles2L,1.72e+06,"2-layer no-LayerNorm model. L1: shift heads copy previous 4 chars; MLP flags 'closer' tokens (non-digit after digit) with year/month/day roles by delimiter type/position, plus month-name trigram lookup. L2: one head per field attends to its role flag; MLP routes digits by output position."
+date-normalization,1.0000,success,ClosersRoles2L_A12_ff84,1.69e+06,Same circuit as ClosersRoles2L (closer role flags + per-field heads) with attention sharpness 12 and d_ff=84.
+date-normalization,1.0000,success,compact288_A5,7.98e+05,compact288 circuit with attention sharpness lowered to 5 (tests how sharp the hard-attention heads must be).
+date-normalization,0.0200,success,compact288_A2,7.98e+05,compact288 circuit with attention sharpness lowered to 2 (expected to blur the hard-attention heads and break).
+date-normalization,1.0000,success,ClosersRoles2L_compact288,7.98e+05,"Same circuit, compacted residual: d_model=288, 6 heads; C3/C4 stored as digit one-hots, month-name lookup written straight into MT/MU, digit-only OUT."
+date-normalization,1.0000,success,compact288_A8,7.98e+05,"compact288 circuit, attention sharpness 8."
+date-normalization,0.2850,success,compact288_A3p5,7.98e+05,"compact288 circuit, attention sharpness 3.5 (locating the sharpness threshold between 2 and 5)."
+date-normalization,0.8250,success,ablate_no_answer_gate,7.98e+05,compact288 with the answer-region penalty removed from the day-closer unit: generated '-' after a digit looks like a second day source.
+date-normalization,0.9300,success,ablate_no_B_flag,7.98e+05,"compact288 with the YYYY.MM.DD format flag (head 4) disabled: end-of-text is always the year, so that format fails."
+date-normalization,1.0000,success,noBhead_290_5h,8.08e+05,"Drops the absolute-position format head: the YYYY.MM.DD format is detected at the end closer from a '.' flag on the char 3 back (C3). 5 heads, d_model=290, A=12."
+date-normalization,0.8350,success,abl2_no_slashE,8.08e+05,noBhead_290_5h (d_model 290) with the early-slash->month unit left out (ablation).
+date-normalization,0.9300,success,abl2_no_dot4,8.08e+05,noBhead_290_5h (d_model 290) with the 'YYYY.' -> year unit left out (ablation).
+date-normalization,0.9350,success,abl2_no_dot7,8.08e+05,noBhead_290_5h (d_model 290) with the 'YYYY.MM.' -> month unit left out (ablation).
+date-normalization,0.7900,success,abl2_no_suffix,8.08e+05,noBhead_290_5h (d_model 290) with ordinal-suffix letters (s n r t) removed from the day-closer set (ablation).
+date-normalization,0.9100,success,abl2_no_ys,8.08e+05,noBhead_290_5h (d_model 290) with 2-digit-year handling ('20' prefix units) left out (ablation).
+date-normalization,0.7450,success,abl2_no_pad,8.08e+05,noBhead_290_5h (d_model 290) with the zero-pad units for missing tens digits left out (ablation).
+date-normalization,0.9650,success,abl2_no_may,8.08e+05,noBhead_290_5h (d_model 290) with the 'may' name unit left out (ablation).
+date-normalization,0.8500,success,abl2_no_fallback,8.08e+05,noBhead_290_5h (d_model 290) with the self-fallback of the shift heads replaced by attending to position 0 (ablation).
+date-normalization,0.9400,success,abl2_no_jan,8.08e+05,noBhead_290_5h (d_model 290) with the 'jan' name unit left out (ablation).
+date-normalization,0.3500,success,abl2_no_other,8.08e+05,noBhead_290_5h (d_model 290) with the named-format day-closer unit left out (ablation).
+date-normalization,0.9650,success,abl2_no_feb,8.08e+05,noBhead_290_5h (d_model 290) with the 'feb' name unit left out (ablation).
+date-normalization,0.9200,success,abl2_no_mar,8.08e+05,noBhead_290_5h (d_model 290) with the 'mar' name unit left out (ablation).
+date-normalization,0.9700,success,abl2_no_apr,8.08e+05,noBhead_290_5h (d_model 290) with the 'apr' name unit left out (ablation).
+date-normalization,0.9250,success,abl2_no_jun,8.08e+05,noBhead_290_5h (d_model 290) with the 'jun' name unit left out (ablation).
+date-normalization,0.9450,success,abl2_no_jul,8.08e+05,noBhead_290_5h (d_model 290) with the 'jul' name unit left out (ablation).
+date-normalization,0.9400,success,abl2_no_aug,8.08e+05,noBhead_290_5h (d_model 290) with the 'aug' name unit left out (ablation).
+date-normalization,0.9650,success,abl2_no_sep,8.08e+05,noBhead_290_5h (d_model 290) with the 'sep' name unit left out (ablation).
+date-normalization,0.9400,success,abl2_no_oct,8.08e+05,noBhead_290_5h (d_model 290) with the 'oct' name unit left out (ablation).
+date-normalization,0.9450,success,abl2_no_nov,8.08e+05,noBhead_290_5h (d_model 290) with the 'nov' name unit left out (ablation).
+date-normalization,0.9400,success,abl2_no_dec,8.08e+05,noBhead_290_5h (d_model 290) with the 'dec' name unit left out (ablation).
+date-normalization,0.6400,success,noBhead_A4,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 4."
+date-normalization,0.9700,success,noBhead_A4.5,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 4.5."
+date-normalization,1.0000,success,noBhead_A6,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 6."
+date-normalization,1.0000,success,noBhead_A5,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 5."
+date-normalization,1.0000,success,noBhead_A20,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 20."
+date-normalization,1.0000,success,noBhead_A8,8.08e+05,"noBhead model (d_model 290, 5 heads), attention sharpness 8."
+date-normalization,1.0000,success,noBhead_A8_ff19_84,7.70e+05,"noBhead model, attention sharpness 8, per-layer MLP widths (19, 84) instead of (84, 84); d_model 290, 5 heads."
+date-normalization,1.0000,success,noBhead_A8_288_4h,7.60e+05,"noBhead model, A=8, MLP widths (19, 84), d_model 288 with 4 heads (d_head 72)."
+date-normalization,1.0000,success,noBhead_A6_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 6."
+date-normalization,1.0000,success,noBhead_A5_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 5."
+date-normalization,1.0000,success,noBhead_A10_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 10."
+date-normalization,0.0750,success,abl2_no_endY,7.02e+05,276-wide 4-head model with the end-of-text -> year unit left out (ablation).
+date-normalization,0.9300,success,abl2_no_endB,7.02e+05,276-wide 4-head model with the end-of-text -> day (YYYY.MM.DD) unit left out (ablation).
+date-normalization,0.7950,success,abl2_no_slashL,7.02e+05,276-wide 4-head model with the late-slash -> day unit left out (ablation).
+date-normalization,1.0000,success,noBhead_A15_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 15."
+date-normalization,1.0000,success,noBhead_A30_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 30."
+date-normalization,1.0000,success,noBhead_A60_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 60."
+date-normalization,1.0000,success,noBhead_A8_276_6h,7.02e+05,"Same 276-wide model with 6 heads (d_head 46), attention sharpness 8."
+date-normalization,1.0000,success,noBhead_A7_276_4h,7.02e+05,"Same 276-wide 4-head model, attention sharpness 7."
+date-normalization,1.0000,success,noBhead_A8_276_4h,7.02e+05,"noBhead model, A=8, MLP widths (19, 84), d_model 276 with 4 heads; C1/C2 slots shrunk to 36 letter/digit dims."

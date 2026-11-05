@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,0.0000,success,RandomInitInterpretable,1.51e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+boolean-circuit-5-bits,1.0000,success,AffineGF2Circuit,1.32e+05,"Hand-built 3-layer circuit (LayerNorm->identity): L1 gathers tokens and maps each (op,b) to GF(2) affine (a_t,c_t); L2 ANDs the affine products; L3 computes parity via threshold pairs. Left-to-right evaluation, expected 100% accuracy."
+boolean-circuit-5-bits,1.0000,success,PackedAffineCircuit,9.39e+04,"Same affine GF(2) circuit with packed residual layout (10 position slots, d_model=84), 12 heads (dh=7), layer-1 LUT reduced to the 3 (op,b) indicators used (&0,|1,^1; d_ff=13). Left-to-right evaluation."
+boolean-circuit-5-bits,1.0000,success,Heads14Dh6,9.39e+04,"Packed affine circuit (d_model=84, 3-entry LUT, d_ff=13) with 14 heads of dh=6 (smallest head size that holds a gathered token), instead of 12 heads of dh=7."
+boolean-circuit-5-bits,1.0000,success,AttnScore10,9.39e+04,Heads14Dh6 circuit with the gather-head score margin lowered from 30 to 10 (sensitivity check: how sharp must the attention lookup be).
+boolean-circuit-5-bits,1.0000,success,AttnScore5,9.39e+04,Heads14Dh6 circuit with the gather-head score margin lowered from 30 to 5 (sensitivity check: how sharp must the attention lookup be).
+boolean-circuit-5-bits,0.5400,success,AttnScore2,9.39e+04,Heads14Dh6 circuit with the gather-head score margin lowered from 30 to 2 (sensitivity check: how sharp must the attention lookup be).
+boolean-circuit-5-bits,1.0000,success,Logit3,9.39e+04,AttnScore5 circuit with the output-head logit scale reduced from 10 to 3 (sensitivity check: how large must the logit margin be for argmax to be correct).
+boolean-circuit-5-bits,1.0000,success,Logit1,9.39e+04,AttnScore5 circuit with the output-head logit scale reduced from 10 to 1 (sensitivity check: how large must the logit margin be for argmax to be correct).
+boolean-circuit-5-bits,1.0000,success,Floor5Parity,9.39e+04,AttnScore5 circuit (logit scale 1) with layer-3 parity rewritten as S - 2[S>=2] - 2[S>=4] using 5 ReLU units instead of 10 threshold units (S mod 2 is exact for S in 0..5).
+boolean-circuit-5-bits,0.4850,success,LayerNormBlocks,9.49e+04,"Floor5Parity circuit with nn.LayerNorm restored in the residual blocks (default init, no training). Ablation: does the exact hand-built routing survive the normalization?"
+boolean-circuit-5-bits,0.5200,success,AttnScore3,9.39e+04,Floor5Parity circuit (identity LayerNorm) with the gather-head score margin set to 3 (between the failing margin 2 and the passing margin 5).
+boolean-circuit-5-bits,0.9600,success,AttnScore4,9.39e+04,Floor5Parity circuit (identity LayerNorm) with the gather-head score margin set to 4 (locating the lower edge of the passing range between 3 and 5).
+boolean-circuit-5-bits,1.0000,success,ConstFromPos,9.39e+04,"Floor5Parity circuit with score margin 5, but the constant unit and the '0' logit read the answer-position one-hot (position 9) instead of the '=' token embedding."
+boolean-circuit-5-bits,1.0000,success,Logit0p1,9.39e+04,"ConstFromPos circuit with the output-head logit scale reduced to 0.1 (argmax is scale-invariant, so this should still pass)."
+boolean-circuit-5-bits,1.0000,success,Full6LUT,1.00e+05,"ConstFromPos circuit (logit scale 0.1) with the layer-1 LUT expanded to all 6 (op,b) indicators (d_ff=25) instead of the 3 used; checks whether the unused indicators change anything."
+boolean-circuit-5-bits,1.0000,success,AttnScore50,9.39e+04,Logit0p1 circuit (3-entry LUT) with the gather-head score margin raised to 50 (sensitivity check on the upper side: a sharper lookup should still pass).
+boolean-circuit-5-bits,1.0000,success,Logit100,9.39e+04,"ConstFromPos circuit (3-entry LUT, score margin 5) with the output-head logit scale raised to 100 (the other end of the logit-scale sweep)."
+boolean-circuit-5-bits,1.0000,success,Logit2,9.39e+04,"ConstFromPos circuit (3-entry LUT, score margin 5) with the output-head logit scale set to 2 (intermediate point of the logit-scale sweep)."
+boolean-circuit-5-bits,0.4850,success,FinalLayerNorm,9.40e+04,Logit2 circuit with nn.LayerNorm restored only on the final residual before the head (blocks stay identity). Ablation: is the output-side normalization harmless?
+boolean-circuit-5-bits,1.0000,success,Heads12Dh7,9.39e+04,"Logit2 circuit with 12 heads of dh=7 (instead of 14 heads of dh=6); same function, different head partition of d_model=84."
+boolean-circuit-5-bits,1.0000,success,PaddedDff32,1.04e+05,Heads12Dh7 circuit with the MLP width padded from 13 to 32 (unused units are zero); checks that spare capacity does not change the function.
+boolean-circuit-5-bits,1.0000,success,Pos16Heads15,1.17e+05,PaddedDff32 circuit with the position one-hot padded to 16 slots (d_model=90) and 15 heads of dh=6; checks that padding the position code does not change the function.
+boolean-circuit-5-bits,0.5050,success,AttnScore1,1.17e+05,Pos16Heads15 circuit with the gather-head score margin set to 1 (lower extreme of the attention-margin sweep).
+boolean-circuit-5-bits,1.0000,success,AttnScore6,1.17e+05,Pos16Heads15 circuit with the gather-head score margin set to 6 (just above the passing threshold found between 4 and 5).
+boolean-circuit-5-bits,1.0000,success,AttnScore8,1.17e+05,Pos16Heads15 circuit with the gather-head score margin set to 8 (mid-range value on the passing side of the attention-margin sweep).
+boolean-circuit-5-bits,1.0000,success,Logit0p5,1.17e+05,AttnScore8 circuit with the output-head logit scale set to 0.5 (another point in the logit-scale sweep).
+boolean-circuit-5-bits,1.0000,success,AttnScore20,1.17e+05,Logit0p5 circuit with the gather-head score margin set to 20 (well into the passing range of the attention-margin sweep).
+boolean-circuit-5-bits,1.0000,success,AttnScore100,1.17e+05,Logit0p5 circuit with the gather-head score margin set to 100 (upper end of the attention-margin sweep; the lookup becomes effectively hard).
+boolean-circuit-5-bits,1.0000,success,Logit10Final,1.17e+05,AttnScore100 circuit with the output-head logit scale restored to the original 10 (closes the logit sweep at the value used in the first hand-built circuit).

@@ -1,0 +1,39 @@
+{
+ "run": "parity-upto10-bits-haiku55-s1",
+ "task": "parity-upto10-bits",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "411a3377-dcef-43c0-ab60-d18823b8bdf1",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.60805957,
+   "turns": 206,
+   "seconds": 1336,
+   "attempts_before": 0,
+   "attempts_after": 31,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:30:07.132479+00:00",
+ "finished": "2026-11-05T21:52:22.981102+00:00",
+ "attempts": 31
+}

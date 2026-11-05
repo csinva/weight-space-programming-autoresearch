@@ -1,0 +1,132 @@
+{
+ "addition-five-digits-sonnet55-s1": {
+  "program": "CarryLookahead2L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "addition-five-digits-sonnet55-s2": {
+  "program": "TwoLayerLookaheadCarry",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "boolean-circuit-5-bits-sonnet55-s1": {
+  "program": "FoldChain4L_v3_U3.3",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "boolean-circuit-5-bits-sonnet55-s2": {
+  "program": "chain5L_bipolar",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "date-normalization-sonnet55-s1": {
+  "program": "ClosersRoles2L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "date-normalization-sonnet55-s2": {
+  "program": "anchor_pointer_v2_dff150",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "decimal-to-binary-8bit-sonnet55-s1": {
+  "program": "gather3_lookup256_bitselect",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "decimal-to-binary-8bit-sonnet55-s2": {
+  "program": "digit_gather_and_units",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "digit-counting-10-sonnet55-s1": {
+  "program": "AttnCountTent",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "digit-counting-10-sonnet55-s2": {
+  "program": "SinkCountV0",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "edit-distance-8-sonnet55-s1": {
+  "program": "WavefrontDP33",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "edit-distance-8-sonnet55-s2": {
+  "program": "dp_jacobi_tied16",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "gcd-three-digits-sonnet55-s1": {
+  "program": "DivisorCircuit150",
+  "eval_200": 1.0,
+  "fresh_seed": 0.998
+ },
+ "gcd-three-digits-sonnet55-s2": {
+  "program": "divisor_onehot_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "linear-interpolation-two-points-sonnet55-s1": {
+  "program": "AffineLookupLN4",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "linear-interpolation-two-points-sonnet55-s2": {
+  "program": "gather_slope_onehot_5blk",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "multiplication-five-digits-sonnet55-s1": {
+  "program": "schoolbook_ripple_carry",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "multiplication-five-digits-sonnet55-s2": {
+  "program": "SquaresColumnSumThreshold",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "parity-upto10-bits-sonnet55-s1": {
+  "program": "uniform_attn_count_relu_zigzag",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "parity-upto10-bits-sonnet55-s2": {
+  "program": "uniform_attn_count_ramp_parity",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "smallest-prime-factor-sonnet55-s1": {
+  "program": "spf_residue_lookup_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "smallest-prime-factor-sonnet55-s2": {
+  "program": "TrialDivision65",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "sort-five-digits-sonnet55-s1": {
+  "program": "hist_cumcount_1L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "sort-five-digits-sonnet55-s2": {
+  "program": "rank_count_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "word-reversal-3x3-sonnet55-s1": {
+  "program": "OneHeadPosCopy",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "word-reversal-3x3-sonnet55-s2": {
+  "program": "PosCopy1L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ }
+}

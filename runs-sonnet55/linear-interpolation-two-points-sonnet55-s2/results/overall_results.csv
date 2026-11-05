@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+linear-interpolation-two-points,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+linear-interpolation-two-points,1.0000,success,gather_slope_onehot_5blk,1.48e+05,"No-LN 5-block net: L0 heads gather 7 digits; MLPs compute slope one-hot, gated s*(q-x1), tens/ones one-hot, pos-gated readout."
+linear-interpolation-two-points,1.0000,success,scalar_slots_d72,5.31e+04,"Same circuit but heads gather digits as scalar values (7 slot dims instead of one-hot), d_model 72."
+linear-interpolation-two-points,1.0000,success,scalar_tens_gated_4blk,5.88e+04,4 blocks: scalar slots; slope one-hot; A; tens scalar via steps; position-gated triangle readout of tens/ones.
+linear-interpolation-two-points,1.0000,success,per_block_dff,3.91e+04,"4-block scalar-slot net with per-block MLP widths (15,11,18,60) sized exactly to the units each stage uses."
+linear-interpolation-two-points,1.0000,success,d56_7heads,2.69e+04,Per-block widths plus d_model shrunk to 56 with 7 heads (one per gathered digit).
+linear-interpolation-two-points,1.0000,success,dhead2_attn,1.75e+04,"Attention inner width decoupled from d_model: d_head=2 (value dim + qk dim), 7 heads."
+linear-interpolation-two-points,1.0000,success,clean_final_d56,1.75e+04,"Cleaned-up dhead2 model: 7 gather heads (d_head 2), slope one-hot, gated s*(q-x1), tens scalar, pos-gated readout; d_model 56, 4 blocks."
+linear-interpolation-two-points,1.0000,success,attn_writes_y1,1.74e+04,Y1 heads also write 10*tens+ones directly into the answer scalar A; removes the Y1 copy unit from block 1 MLP (d_ff 10).
+linear-interpolation-two-points,1.0000,success,attn_writes_derived,1.74e+04,"Gather heads write coefficient-weighted digits directly into derived scalars dx, dy, q-x1 and A=y1 (3 dims instead of 7 slots)."
+linear-interpolation-two-points,1.0000,success,dhead1,1.58e+04,"d_head=1: each head's query, key and value are scalars (position match score, digit value)."
+linear-interpolation-two-points,1.0000,success,compact_d46,1.30e+04,"Compact residual layout, d_model 46 (13 token, 13 position, dx/dy/q-x1/A, slope one-hot, tens, 10 outputs)."
+linear-interpolation-two-points,1.0000,success,neg_distance_readout,1.11e+04,"Readout logit_k = -|V-k| (2 ReLUs per digit, position-gated) instead of 3-ReLU indicator triangles; final MLP width 40."
+linear-interpolation-two-points,0.3750,success,tens_from_A,1.11e+04,"Tens logit read directly from A as -distance(A,[10k,10k+9]); FAILED (0.375) because gate G=20 is smaller than A (<=99) so the gated-off units leak."
+linear-interpolation-two-points,1.0000,success,tens_from_A_G100,1.11e+04,Same tens-from-A readout with gate G=100 > max A; fixes the leak.
+linear-interpolation-two-points,1.0000,success,digit_tok_used_pos_d39,9.44e+03,Residual keeps only 10 digit-token dims and 9 used position dims; d_model 39.
+linear-interpolation-two-points,1.0000,success,scalar_token_d30,7.28e+03,Token embedding is a single scalar dim holding the digit value (non-digits 0); d_model 30.
+linear-interpolation-two-points,1.0000,success,quad_pos_d24,6.52e+03,"Position embedding (p, p^2, 1): heads match a source position via -(p-sp)^2 score; readout gate linear in p. d_model 24."
+linear-interpolation-two-points,0.0050,success,attn_sharp10,6.52e+03,quad_pos_d24 with attention sharpness 30 -> 10. Failed; I first blamed leakage amplified by gate gain M=50 but later found the logit-tie bug (see logit_margin rows) is also involved.
+linear-interpolation-two-points,1.0000,success,attn_sharp20,6.52e+03,quad_pos_d24 with attention sharpness 20 (neighbour weight e^-20).
+linear-interpolation-two-points,1.0000,success,ones_scalar_direct,6.56e+03,Block 2 writes the ones digit A mod 10 directly (A - 10*sum of steps) instead of a tens scalar; block 3 reads it.
+linear-interpolation-two-points,1.0000,success,tens_readout_block2,6.56e+03,"Tens-digit readout (distance of A to [10k,10k+9]) moved into block 2 next to the ones-scalar; block 3 only reads out the ones digit."
+linear-interpolation-two-points,1.0000,success,query_bias_d23,6.31e+03,Target-position query comes from W_q bias instead of a constant 'one' residual dim; d_model 23.
+linear-interpolation-two-points,1.0000,success,slope_mismatch_abs,6.07e+03,Slope hypothesis score = |dy - s*dx| (2 ReLUs per s) and block 1 gates with -50*mismatch instead of a 3-ReLU indicator; block 0 width 10.
+linear-interpolation-two-points,1.0000,success,gate_M46,6.07e+03,slope_mismatch_abs with the smallest safe gate gain M=46 (> max |s*t| = 45).
+linear-interpolation-two-points,0.1050,success,sharp15_M46,6.07e+03,gate_M46 with sharpness 15 (no logit margin yet). Failed: correct digit logit ~ -1e-5 loses to non-digit logit 0 (debugged by printing predictions).
+linear-interpolation-two-points,1.0000,success,logit_margin_sharp15,6.07e+03,"Fix: +0.5 margin on digit logits via last fc2 bias; sharpness 15, M=46."
+linear-interpolation-two-points,0.4600,success,logit_margin_sharp8,6.07e+03,"With the margin, probe how soft attention can be: sharpness 8. 46% (genuine attention leakage amplified by M)."
+linear-interpolation-two-points,1.0000,success,margin_sharp12,6.07e+03,"Probe: sharpness 12 with margin, 1000/1000 on seed 3 (row accuracy re-measured later with the sharpness-20 build, 2000/2000)."
+linear-interpolation-two-points,1.0000,success,final_margin_sharp20,6.07e+03,"Final: scalar token/quadratic position embeddings, 7 d_head-2 heads write dx,dy,q-x1,A; slope-mismatch gating (M=46); ones scalar; -dist readouts with +0.5 margin; sharpness 20; d_model 23, 4 blocks."

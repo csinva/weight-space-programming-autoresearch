@@ -1,0 +1,40 @@
+{
+ "run": "date-normalization-sonnet55-s2",
+ "task": "date-normalization",
+ "seed": 2,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "7daa17fb-5f8b-403a-ad31-c5dbc1743adf",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 2.7982945,
+   "turns": 223,
+   "seconds": 1389,
+   "attempts_before": 0,
+   "attempts_after": 51,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:18:45.688381+00:00",
+ "finished": "2026-11-05T20:41:55.163181+00:00",
+ "attempts": 51
+}

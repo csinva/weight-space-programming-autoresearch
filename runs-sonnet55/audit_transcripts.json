@@ -1,0 +1,586 @@
+{
+ "addition-five-digits-sonnet55-s1": {
+  "tools": {
+   "Read": 7,
+   "Bash": 45,
+   "Edit": 63,
+   "Write": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 36,
+   "python3 -": 1,
+   "sleep 0;": 5,
+   "grep -n": 2
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "addition-five-digits-sonnet55-s2": {
+  "tools": {
+   "Read": 6,
+   "Edit": 104,
+   "Bash": 33,
+   "Write": 1,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "uv run": 32,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "boolean-circuit-5-bits-sonnet55-s1": {
+  "tools": {
+   "Read": 11,
+   "Glob": 1,
+   "Edit": 93,
+   "Bash": 36,
+   "Write": 5,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "uv run": 35,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "boolean-circuit-5-bits-sonnet55-s2": {
+  "tools": {
+   "Read": 16,
+   "Glob": 1,
+   "Edit": 110,
+   "Bash": 43,
+   "Write": 5,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 41,
+   "python3 -": 1,
+   "echo noop": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "date-normalization-sonnet55-s1": {
+  "tools": {
+   "Read": 14,
+   "Bash": 61,
+   "Edit": 122,
+   "Write": 10,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 56,
+   "sed -n": 1,
+   "date": 1,
+   "echo ok": 1,
+   "cp interpretable_transformer.py": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "date-normalization-sonnet55-s2": {
+  "tools": {
+   "Read": 9,
+   "Bash": 58,
+   "Edit": 144,
+   "Write": 5,
+   "Grep": 6
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 54,
+   "sed -i": 1,
+   "echo skip": 1,
+   "ls interpretable_transformers_lib;": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-sonnet55-s1": {
+  "tools": {
+   "Read": 18,
+   "Glob": 1,
+   "Edit": 124,
+   "Bash": 57,
+   "Write": 8
+  },
+  "bash_commands": {
+   "uv run": 55,
+   "python3 -": 1,
+   "cp interpretable_transformer.py": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-sonnet55-s2": {
+  "tools": {
+   "Read": 14,
+   "Bash": 52,
+   "Edit": 109,
+   "Write": 4
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 49,
+   "python3 -": 1,
+   "grep -n": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "digit-counting-10-sonnet55-s1": {
+  "tools": {
+   "Read": 11,
+   "Bash": 44,
+   "Edit": 87,
+   "Write": 3,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 40,
+   "python3 -": 1,
+   "grep -n": 2
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "digit-counting-10-sonnet55-s2": {
+  "tools": {
+   "Read": 9,
+   "Bash": 47,
+   "Edit": 92,
+   "Write": 5,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 42,
+   "ls src": 1,
+   "sed -n": 1,
+   "sed -i": 1,
+   "cat interpretable_transformer.py": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "edit-distance-8-sonnet55-s1": {
+  "tools": {
+   "Read": 15,
+   "Bash": 45,
+   "Edit": 134,
+   "Write": 9,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 42,
+   "python3 -": 1,
+   "cp interpretable_transformer.py": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "edit-distance-8-sonnet55-s2": {
+  "tools": {
+   "Read": 9,
+   "Bash": 43,
+   "Edit": 139,
+   "Write": 7,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 41,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "gcd-three-digits-sonnet55-s1": {
+  "tools": {
+   "Read": 12,
+   "Bash": 43,
+   "Edit": 113,
+   "Write": 5,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 41,
+   "sed -i": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "gcd-three-digits-sonnet55-s2": {
+  "tools": {
+   "Read": 6,
+   "Bash": 45,
+   "Edit": 97,
+   "Write": 4,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 43,
+   "cat >": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "linear-interpolation-two-points-sonnet55-s1": {
+  "tools": {
+   "Read": 7,
+   "Glob": 1,
+   "Edit": 81,
+   "Bash": 42,
+   "Grep": 1,
+   "Write": 3
+  },
+  "bash_commands": {
+   "uv run": 39,
+   "python3 -": 1,
+   "sed -n": 1,
+   "DBG=1 uv": 1
+  },
+  "refused_calls": 3,
+  "paths_outside_run": []
+ },
+ "linear-interpolation-two-points-sonnet55-s2": {
+  "tools": {
+   "Read": 14,
+   "Glob": 1,
+   "Edit": 112,
+   "Bash": 38,
+   "Write": 7,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 37,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-sonnet55-s1": {
+  "tools": {
+   "Read": 11,
+   "Edit": 104,
+   "Bash": 37,
+   "Write": 6,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 36,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-sonnet55-s2": {
+  "tools": {
+   "Read": 9,
+   "Glob": 1,
+   "Edit": 75,
+   "Bash": 38,
+   "Write": 5,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "uv run": 35,
+   "sed -i": 1,
+   "cp interpretable_transformer.py": 1,
+   "echo placeholder": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "nli-snli-sonnet55-s1": {
+  "tools": {
+   "Read": 6,
+   "Bash": 65,
+   "Grep": 2,
+   "Edit": 107,
+   "Write": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 55,
+   "python3 -": 1,
+   "cp interpretable_transformer.py": 1,
+   "grep -n": 4,
+   "echo skip": 1,
+   "sed -n": 2
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "nli-snli-sonnet55-s2": {
+  "tools": {
+   "Read": 8,
+   "Bash": 71,
+   "Edit": 82,
+   "Write": 6,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "cat results/overall_results.csv": 1,
+   "uv run": 63,
+   "python3 -": 1,
+   "grep -n": 3,
+   "sed -n": 1,
+   "cp interpretable_transformer.py": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "paraphrase-mrpc-sonnet55-s1": {
+  "tools": {
+   "Read": 9,
+   "Bash": 60,
+   "Edit": 68,
+   "Write": 3,
+   "Grep": 5
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 57,
+   "pwd; ls": 1,
+   "grep -n": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "paraphrase-mrpc-sonnet55-s2": {
+  "tools": {
+   "Read": 8,
+   "Glob": 1,
+   "Edit": 146,
+   "Bash": 70,
+   "Write": 3,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 57,
+   "python3 -": 1,
+   "grep -n": 4,
+   "sed -n": 3,
+   "sed -i": 1,
+   "tail -3": 1,
+   "echo skip": 1,
+   "grep -c": 2
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-sonnet55-s1": {
+  "tools": {
+   "Read": 16,
+   "Bash": 38,
+   "Edit": 88,
+   "Write": 4
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 36,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-sonnet55-s2": {
+  "tools": {
+   "Read": 16,
+   "Glob": 1,
+   "Edit": 132,
+   "Bash": 33,
+   "Write": 30,
+   "Grep": 10
+  },
+  "bash_commands": {
+   "uv run": 31,
+   "python3 -": 1,
+   "sed -i": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "sentiment-sst2-sonnet55-s1": {
+  "tools": {
+   "Read": 14,
+   "Bash": 67,
+   "Edit": 140,
+   "Write": 11,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 60,
+   "sed -i": 1,
+   "cat interpretable_transformer.py": 1,
+   "grep -n": 1,
+   "echo placeholder": 1,
+   "echo skip": 1,
+   "grep -c": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "sentiment-sst2-sonnet55-s2": {
+  "tools": {
+   "Read": 16,
+   "Bash": 69,
+   "Edit": 124,
+   "Write": 6,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 66,
+   "python3 -": 1,
+   "cp interpretable_transformer.py": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "smallest-prime-factor-sonnet55-s1": {
+  "tools": {
+   "Read": 14,
+   "Glob": 1,
+   "Edit": 118,
+   "Bash": 49,
+   "Write": 8,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "uv run": 44,
+   "cp interpretable_transformer.py": 2,
+   "python3 -": 1,
+   "grep -n": 2
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "smallest-prime-factor-sonnet55-s2": {
+  "tools": {
+   "Read": 16,
+   "Glob": 1,
+   "Edit": 155,
+   "Bash": 43,
+   "Write": 8,
+   "Grep": 9
+  },
+  "bash_commands": {
+   "uv run": 42,
+   "cat >": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "sort-five-digits-sonnet55-s1": {
+  "tools": {
+   "Read": 11,
+   "Bash": 32,
+   "Edit": 82,
+   "Write": 5
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 30,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "sort-five-digits-sonnet55-s2": {
+  "tools": {
+   "Read": 11,
+   "Bash": 39,
+   "Edit": 84,
+   "Grep": 3,
+   "Write": 5
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 37,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "trec-coarse-sonnet55-s1": {
+  "tools": {
+   "Read": 12,
+   "Bash": 66,
+   "Edit": 148,
+   "Write": 3,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 63,
+   "sed -n": 1,
+   "grep -c": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "trec-coarse-sonnet55-s2": {
+  "tools": {
+   "Read": 13,
+   "Glob": 1,
+   "Edit": 179,
+   "Bash": 93,
+   "Write": 5,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "uv run": 88,
+   "echo": 3,
+   "echo skip": 1,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "word-reversal-3x3-sonnet55-s1": {
+  "tools": {
+   "Read": 11,
+   "Bash": 44,
+   "Edit": 143,
+   "Write": 10,
+   "Grep": 5
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 42,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "word-reversal-3x3-sonnet55-s2": {
+  "tools": {
+   "Read": 11,
+   "Bash": 43,
+   "Edit": 108,
+   "Write": 10,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "ls": 1,
+   "uv run": 40,
+   "grep -n": 1,
+   "sed -i": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ }
+}

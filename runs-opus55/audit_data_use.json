@@ -2,205 +2,239 @@
  "summary": {
   "addition-five-digits-opus55-s1": {
    "data_independent": 29,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "addition-five-digits-opus55-s2": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "boolean-circuit-5-bits-opus55-s1": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "boolean-circuit-5-bits-opus55-s2": {
    "data_independent": 29,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 1
   },
   "date-normalization-opus55-s1": {
    "data_independent": 50,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "date-normalization-opus55-s2": {
    "data_independent": 50,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "decimal-to-binary-8bit-opus55-s1": {
    "data_independent": 39,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "decimal-to-binary-8bit-opus55-s2": {
    "data_independent": 38,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 2
   },
   "digit-counting-10-opus55-s1": {
    "data_independent": 28,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 1
   },
   "digit-counting-10-opus55-s2": {
    "data_independent": 29,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "edit-distance-8-opus55-s1": {
    "data_independent": 39,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "edit-distance-8-opus55-s2": {
    "data_independent": 36,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 4
   },
   "gcd-three-digits-opus55-s1": {
    "data_independent": 40,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "gcd-three-digits-opus55-s2": {
    "data_independent": 40,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "linear-interpolation-two-points-opus55-s1": {
    "data_independent": 27,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "linear-interpolation-two-points-opus55-s2": {
    "data_independent": 29,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "multiplication-five-digits-opus55-s1": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "multiplication-five-digits-opus55-s2": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "nli-snli-opus55-s1": {
    "data_independent": 50,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "nli-snli-opus55-s2": {
    "data_independent": 49,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "paraphrase-mrpc-opus55-s1": {
    "data_independent": 48,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "paraphrase-mrpc-opus55-s2": {
    "data_independent": 37,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 1
   },
   "parity-upto10-bits-opus55-s1": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "parity-upto10-bits-opus55-s2": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "sentiment-sst2-opus55-s1": {
    "data_independent": 47,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "sentiment-sst2-opus55-s2": {
    "data_independent": 47,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "smallest-prime-factor-opus55-s1": {
    "data_independent": 40,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "smallest-prime-factor-opus55-s2": {
    "data_independent": 40,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "sort-five-digits-opus55-s1": {
    "data_independent": 30,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "sort-five-digits-opus55-s2": {
    "data_independent": 29,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 1,
    "error": 0
   },
   "trec-coarse-opus55-s1": {
    "data_independent": 50,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "trec-coarse-opus55-s2": {
    "data_independent": 49,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "word-reversal-3x3-opus55-s1": {
    "data_independent": 38,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   },
   "word-reversal-3x3-opus55-s2": {
    "data_independent": 40,
-   "data_dependent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
    "nondeterministic": 0,
    "error": 0
   }

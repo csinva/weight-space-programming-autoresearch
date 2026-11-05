@@ -1,0 +1,39 @@
+{
+ "run": "addition-five-digits-sonnet55-s1",
+ "task": "addition-five-digits",
+ "seed": 1,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "eec9fe91-fa73-4301-9815-4f429bf0bb49",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.5963964000000004,
+   "turns": 119,
+   "seconds": 802,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:42:58.386829+00:00",
+ "finished": "2026-11-05T20:56:19.962817+00:00",
+ "attempts": 30
+}

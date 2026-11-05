@@ -1,0 +1,32 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+multiplication-five-digits,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+multiplication-five-digits,1.0000,success,schoolbook_ripple_carry,5.40e+05,"No-LN 11-layer net: attention gathers 10 digits, MLP forms 25 exact digit products into column sums, 9 MLP layers ripple carries via step sums, final MLP selects digit by position."
+multiplication-five-digits,1.0000,success,ripple_trimmed,3.27e+05,"Same schoolbook ripple-carry circuit, D=130 and per-stage step counts trimmed to the max possible carry."
+multiplication-five-digits,1.0000,success,carry_group2,3.26e+05,"Carry resolved 2 columns per MLP layer (thresholds at n*10^j on c_k0+10c_k0+1+cy), 5 carry layers instead of 9."
+multiplication-five-digits,1.0000,success,carry_group3,3.26e+05,"Carry resolved 3 columns per MLP layer (thresholds at n*10^j on c_k0+10c_k0+1+cy), 3 carry layers."
+multiplication-five-digits,1.0000,success,carry_group5,3.26e+05,"Carry resolved 5 columns per MLP layer (thresholds at n*10^j on c_k0+10c_k0+1+cy), 2 carry layers."
+multiplication-five-digits,0.0450,success,carry_group9,3.26e+05,"All 9 carries resolved in ONE MLP layer (thresholds at n*10^j on sum_{i<j} c_i 10^i); 3-layer net, float32 precision is the risk (fails)."
+multiplication-five-digits,0.0400,success,carry_group9_fp64,3.26e+05,Same single carry layer with model.double() requested; still fails (cause not isolated; evaluation may not run in float64).
+multiplication-five-digits,1.0000,success,split_readout_g5,2.58e+05,"G=5 carry groups (2 carry layers) plus a split readout: 10-unit position-gated digit select, then 30-unit triangle one-hot (was 300 units)."
+multiplication-five-digits,1.0000,success,binary_products_d90,1.42e+05,"Digit products via binary decomposition of a_i (4 gated units per pair, 100 total instead of 225); a_i passed as 4 bits; D=90. G=5 carries, split readout."
+multiplication-five-digits,1.0000,success,d90_ripple_g1,1.43e+05,"binary_products_d90 but carries rippled one column per layer (G=1, 9 carry layers): depth/params comparison."
+multiplication-five-digits,1.0000,success,d90_group3,1.42e+05,binary_products_d90 with carries resolved 3 columns per layer (3 carry layers).
+multiplication-five-digits,1.0000,success,d90_g5_sharp10,1.42e+05,binary_products_d90 (G=5) with attention logit gap reduced to 10 (S=40): tests how sharp the position-selecting heads must be.
+multiplication-five-digits,0.0000,success,d90_g5_sharp4,1.42e+05,binary_products_d90 (G=5) with attention logit gap of 4 (S=16): leaks onto other positions and breaks exact digit reads.
+multiplication-five-digits,1.0000,success,step_readout,1.40e+05,"d90 G=5 circuit, S=60, readout via shared step units [s>=v] (18 units, 9 dims); head takes differences STEP_v - STEP_{v+1} so no one-hot slots are stored."
+multiplication-five-digits,1.0000,success,two_level_carry,9.64e+04,"Carry per column in two MLP layers (floor(t/100) steps scaled by 10, then floor((t-100h)/10) steps): 192 carry units instead of 440, 18 carry layers. Step readout, S=60."
+multiplication-five-digits,1.0000,success,pos_grid_d80,8.25e+04,"two_level_carry with positions encoded as 2-hot (row,col) on a 5x5 grid (10 dims instead of 22); attention/gating match both; D=80."
+multiplication-five-digits,1.0000,success,no_empty_layers,8.23e+04,pos_grid_d80 with the two zero-width hundreds layers (columns 0 and 8) removed: 16 carry layers.
+multiplication-five-digits,0.9850,success,grid_S30,8.23e+04,no_empty_layers with a weaker attention scale S=30 (full-match vs half-match logit gap ~10.6): sharpness check for the 2-hot position code (3 errors).
+multiplication-five-digits,1.0000,success,fused_readout,1.07e+05,"no_empty_layers (S=60) with position gate and step readout fused into one 180-unit layer (one layer fewer, more params)."
+multiplication-five-digits,1.0000,success,split50_carry,7.60e+04,"two-level carry split at 50 instead of 100 (fewer total threshold units: 152 vs 192); unfused readout, S=60."
+multiplication-five-digits,1.0000,success,split60_carry,7.67e+04,two-level carry split at 60 (156 threshold units); compare with split 50 (152) and 100 (192).
+multiplication-five-digits,1.0000,success,erase_reuse_d70,6.73e+04,split50 carry + scratch erasure: product layer zeroes the operand slots and writes column sums into the same dims; token vector only for digits; D=70.
+multiplication-five-digits,1.0000,success,erase_reuse_d60,5.65e+04,erase_reuse_d70 plus the token one-hot dims are erased after attention and reused as the carry slots; D=60 (DH=6).
+multiplication-five-digits,1.0000,success,erase_reuse_d50,4.52e+04,"erase_reuse_d60 plus readout slots (step values, selected digit) placed in erased operand-bit dims; D=50 (DH=5)."
+multiplication-five-digits,1.0000,success,no_const_dim,4.52e+04,erase_reuse_d50 without the constant-1 dimension: constant query/logit come from the sum of the 5 position-row dims (always 1).
+multiplication-five-digits,1.0000,success,clean_d40_bitcode,3.41e+04,"Cleaned final circuit: 4-bit token code feeds the product bits directly, scratch dims reused for carries/readout, D=40, split-50 two-level carries, step readout."
+multiplication-five-digits,1.0000,success,clean_d40_n2000,3.41e+04,Same clean_d40_bitcode circuit evaluated on 2000 samples with seed 1 as a generalisation check (not a different model); accuracy 2000/2000.
+multiplication-five-digits,1.0000,success,clean_d40_S45,3.41e+04,clean_d40 circuit with attention scale S=45: checks the margin above the S=30 failure.
+multiplication-five-digits,1.0000,success,clean_d40_split100,3.73e+04,"clean_d40 circuit (S=60) with the carry split at 100 instead of 50: more threshold units, shows the effect of the radix choice."
+multiplication-five-digits,1.0000,,final_clean_d40,3.41e+04,"Final: 4-bit token code, binary-gated digit products, D=40 with reused scratch dims, two-level (50/10) step carries, gated step readout; 10 heads, attention only in block 0, no LayerNorm."

@@ -1,0 +1,40 @@
+{
+ "run": "gcd-three-digits-haiku55-s2",
+ "task": "gcd-three-digits",
+ "seed": 2,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "c3a9a139-cbfe-4bd3-aab8-6cf3f140b323",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 2.07721401,
+   "turns": 230,
+   "seconds": 1513,
+   "attempts_before": 0,
+   "attempts_after": 40,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:44:04.799671+00:00",
+ "finished": "2026-11-05T21:09:18.143229+00:00",
+ "attempts": 40
+}

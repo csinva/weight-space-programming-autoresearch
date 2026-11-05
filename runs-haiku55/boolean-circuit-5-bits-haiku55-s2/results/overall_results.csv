@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,1.0000,success,scan5_noLN_v1,9.18e+04,"5-layer scan with no LayerNorm: layer L attends to prev state (i-2) and op (i-1), 12-entry AND-gate MLP computes running left-to-right value at operand positions; answer read from final state at '='."
+boolean-circuit-5-bits,1.0000,success,scan5_d50,5.77e+04,"Same 5-layer scan as scan5_noLN_v1 but d_model 64->50 (head dim 25): drops unused residual width, all 49 used dims still fit."
+boolean-circuit-5-bits,1.0000,success,scan5_scalar_formula,3.92e+04,"Scalar running bit S (d_model 42, d_ff 6): MLP is 6 AND/OR/XOR gates on (prev, op, x, pos==2L) instead of a 12-entry truth table; constant ONE dim for output bias."
+boolean-circuit-5-bits,1.0000,success,scan5_1head,3.92e+04,"scan5_scalar_formula with a single attention head: each query attends equally to i-1 (operator) and i-2 (prev value), values doubled in W_o to undo the 1/2 weighting. d_model 42, d_ff 6."
+boolean-circuit-5-bits,1.0000,success,scan5_1head_selftest,3.92e+04,scan5_1head plus a diagnostic exhaustive self-test over all 2592 expressions (no change to the model).
+boolean-circuit-5-bits,0.6800,success,scan5_1head_nogate,3.92e+04,Ablation of scan5_1head: remove the pos==2L input from the MLP AND-gates. Fails (0.68): the averaged attention also gathers the previous operator at odd positions, so gates fire there and corrupt the running bit.
+boolean-circuit-5-bits,0.4850,success,scan5_1head_noopcopy,3.92e+04,"Ablation of scan5_1head: attention no longer copies the operator token, so no AND/OR/XOR gate can fire and the running value stays 0."
+boolean-circuit-5-bits,0.4850,success,scan5_1head_beta1,3.92e+04,scan5_1head with attention sharpness reduced to 1 (score gap 1 instead of 100): the match-vs-nonmatch softmax is too soft to pick out single positions.
+boolean-circuit-5-bits,0.6450,success,scan5_1head_beta3,3.92e+04,scan5_1head with attention sharpness 3 (score gap 3 instead of 100): sweep point between beta1 (fails) and beta100 (exact).
+boolean-circuit-5-bits,1.0000,success,scan5_1head_beta10,3.92e+04,scan5_1head with attention sharpness 10 (score gap 10 instead of 100): sweep point between beta3 and beta100.
+boolean-circuit-5-bits,1.0000,success,scan5_1head_beta30,3.92e+04,"scan5_1head with attention sharpness 30: sweep point above the beta10 threshold, expected exact."
+boolean-circuit-5-bits,0.7050,success,scan5_1head_nooneb,3.92e+04,"scan5_1head without the constant ONE output bias: logit0 = -g5, logit1 = g5. Fails (0.705): at g5=0 the logits tie and float leakage (~e^-100) from attention flips the argmax to '1'; the ONE bias gives a margin."
+boolean-circuit-5-bits,0.8450,success,scan5_1head_dropAND,3.92e+04,"scan5_1head with the AND gate deleted (drop_units=(0,)): all AND cases output 0."
+boolean-circuit-5-bits,0.8650,success,scan5_1head_dropORa,3.92e+04,"scan5_1head with the OR gate for (prev=1, x=0) deleted (drop_units=(1,))."
+boolean-circuit-5-bits,0.6750,success,scan5_1head_dropORb,3.92e+04,"scan5_1head with the OR gate for (prev=0, x=1) deleted (drop_units=(2,))."
+boolean-circuit-5-bits,0.8150,success,scan5_1head_dropORc,3.92e+04,"scan5_1head with the OR gate for (prev=1, x=1) deleted (drop_units=(3,))."
+boolean-circuit-5-bits,0.8650,success,scan5_1head_dropXORa,3.92e+04,"scan5_1head with the XOR gate for (prev=1, x=0) deleted (drop_units=(4,))."
+boolean-circuit-5-bits,0.8500,success,scan5_1head_dropXORb,3.92e+04,"scan5_1head with the XOR gate for (prev=0, x=1) deleted (drop_units=(5,))."
+boolean-circuit-5-bits,0.9250,success,scan5_1head_nocopyx0,3.92e+04,scan5_1head with layer 1 not copying the raw bit x0 into g_1: the first running value is 0 instead of x0.
+boolean-circuit-5-bits,0.4850,success,scan5_1head_outscale1,3.92e+04,"scan5_1head with the MLP output weight halved (out_scale 1.0): every gate fires with value 0.5 instead of 1, so the running bit is 0.5 and the output decision is ambiguous."
+boolean-circuit-5-bits,0.4900,success,scan5_1head_dropALLOR,3.92e+04,"scan5_1head with all three OR gates deleted (drop_units=(1,2,3)): OR cases output 0."
+boolean-circuit-5-bits,0.6500,success,scan5_1head_outscale1p5,3.92e+04,"scan5_1head with the MLP output weight 1.5: fails (0.65). A firing gate writes 1.5, which the next layer reads as prev=1.5 and the fixed AND/OR/XOR thresholds mis-fire."
+boolean-circuit-5-bits,1.0000,success,scan5_1head_beta300,3.92e+04,"scan5_1head with attention sharpness 300 (score gap 300): the circuit should be unchanged, showing that the sharpness only needs to exceed about 10."
+boolean-circuit-5-bits,0.7500,success,scan5_1head_dropBOTHXOR,3.92e+04,"scan5_1head with both XOR gates deleted (drop_units=(4,5)): XOR cases output 0."
+boolean-circuit-5-bits,0.6800,success,scan5_1head_nogate_beta1000,3.75e+04,"scan5_1head_nogate with attention sharpness 1000: removing the position gate still fails with very sharp attention, so the failure is not caused by soft attention."
+boolean-circuit-5-bits,1.0000,success,scan5_1head_beta1000,3.75e+04,scan5_1head with attention sharpness 1000 (position gate on): sanity check that very sharp attention leaves the exact circuit unchanged.
+boolean-circuit-5-bits,0.4850,success,scan5_1head_nogates,3.75e+04,"scan5_1head with all six MLP gates deleted (drop_units=(0..5)): the running bit stays 0, so the output is the constant '0'."
+boolean-circuit-5-bits,0.8100,success,scan5_1head_outscale3,3.75e+04,"scan5_1head with the MLP output weight 3.0: a firing gate writes 3, so the running bit is 3 and the next layer's gate thresholds mis-fire."
+boolean-circuit-5-bits,0.8100,success,scan5_1head_outscale2p5,3.75e+04,"scan5_1head with the MLP output weight 2.5: a firing gate writes 2.5 (between 2.0 pass and 3.0 fail); the next layer's gate thresholds are tuned for value 1, so this is expected to fail."
+boolean-circuit-5-bits,1.0000,success,scan5_1head_d41,3.75e+04,"scan5_1head with d_model 42->41, the smallest width for this layout (last used dim is g_5 at index 40)."

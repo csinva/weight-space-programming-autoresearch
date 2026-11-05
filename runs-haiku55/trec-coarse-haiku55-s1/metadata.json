@@ -1,0 +1,41 @@
+{
+ "run": "trec-coarse-haiku55-s1",
+ "task": "trec-coarse",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "a6e64af6-37e4-4ae8-8dce-065005a18043",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 5.577792220000003,
+   "turns": 301,
+   "seconds": 3376,
+   "attempts_before": 0,
+   "attempts_after": 50,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.136259+00:00",
+ "finished": "2026-11-05T20:57:47.086357+00:00",
+ "attempts": 50
+}

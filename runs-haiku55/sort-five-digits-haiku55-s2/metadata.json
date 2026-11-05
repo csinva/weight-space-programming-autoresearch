@@ -1,0 +1,41 @@
+{
+ "run": "sort-five-digits-haiku55-s2",
+ "task": "sort-five-digits",
+ "seed": 2,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "d8c1636a-d68f-4a70-9d36-2a047c19aec5",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.8311446999999998,
+   "turns": 221,
+   "seconds": 1346,
+   "attempts_before": 0,
+   "attempts_after": 31,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:22:26.291126+00:00",
+ "finished": "2026-11-05T21:44:51.877164+00:00",
+ "attempts": 31
+}

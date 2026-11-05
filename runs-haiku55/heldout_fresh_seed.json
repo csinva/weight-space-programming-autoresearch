@@ -1,0 +1,132 @@
+{
+ "addition-five-digits-haiku55-s1": {
+  "program": "Scale0p5-2L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "addition-five-digits-haiku55-s2": {
+  "program": "HandCircuitCarryLookahead-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "boolean-circuit-5-bits-haiku55-s1": {
+  "program": "AffineGF2Circuit",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "boolean-circuit-5-bits-haiku55-s2": {
+  "program": "scan5_noLN_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "date-normalization-haiku55-s1": {
+  "program": "HandCircuitV1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "date-normalization-haiku55-s2": {
+  "program": "HandWiredDateCircuit-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "decimal-to-binary-8bit-haiku55-s1": {
+  "program": "LookupGatherExact",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "decimal-to-binary-8bit-haiku55-s2": {
+  "program": "SawtoothGatedComparators1L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "digit-counting-10-haiku55-s1": {
+  "program": "HistSelectCircuit",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "digit-counting-10-haiku55-s2": {
+  "program": "HistQueryCircuit-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "edit-distance-8-haiku55-s1": {
+  "program": "WavefrontLevenshtein_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "edit-distance-8-haiku55-s2": {
+  "program": "ThermoDP-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "gcd-three-digits-haiku55-s1": {
+  "program": "AllFlags16",
+  "eval_200": 0.99,
+  "fresh_seed": 0.992
+ },
+ "gcd-three-digits-haiku55-s2": {
+  "program": "Stein10Steps",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "linear-interpolation-two-points-haiku55-s1": {
+  "program": "LinInterpCircuitV1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "linear-interpolation-two-points-haiku55-s2": {
+  "program": "LinInterpHypEnum",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "multiplication-five-digits-haiku55-s1": {
+  "program": "MulCircuitGatherCarryLookahead",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "multiplication-five-digits-haiku55-s2": {
+  "program": "CarryChainV1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "parity-upto10-bits-haiku55-s1": {
+  "program": "ParityCountStaircaseV1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "parity-upto10-bits-haiku55-s2": {
+  "program": "ParityCountReLU_v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "smallest-prime-factor-haiku55-s1": {
+  "program": "SPF-circuit-full",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "smallest-prime-factor-haiku55-s2": {
+  "program": "SPF_all65primes",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "sort-five-digits-haiku55-s1": {
+  "program": "HaikuSortCountCircuit-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "sort-five-digits-haiku55-s2": {
+  "program": "CountThermoSort-v1",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "word-reversal-3x3-haiku55-s1": {
+  "program": "copy-perm-d128-g4",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ },
+ "word-reversal-3x3-haiku55-s2": {
+  "program": "PosPermCopy-d80-1L",
+  "eval_200": 1.0,
+  "fresh_seed": 1.0
+ }
+}

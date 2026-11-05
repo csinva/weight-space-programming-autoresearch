@@ -1,0 +1,32 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,0.0000,,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sort-five-digits,1.0000,success,CountThermoSort-v1,2.18e+04,"One layer, 1 head: attention averages digit thermometers into cumulative counts C(v); MLP compares C(v) with output position i; head outputs U_{k-1}-U_k, i.e. the i-th sorted digit."
+sort-five-digits,1.0000,success,CountThermoSort-d48,1.33e+04,Same circuit as CountThermoSort-v1 with d_model reduced from 64 to 48 (residual has 42 used dims); tests width reduction.
+sort-five-digits,1.0000,success,CountThermoSort-d42,1.06e+04,"Same circuit with d_model = 42, the minimum width that holds all used residual dims (TOK, POS, THERMO, U, ONE, ZERO)."
+sort-five-digits,1.0000,success,CountThermoSort-d42-ff19,1.06e+04,"d_model = 42 and d_ff = 19, the minimum MLP width (18 comparison neurons plus the constant neuron)."
+sort-five-digits,1.0000,success,CountThermoSort-S10,1.06e+04,d42/ff19 circuit with scaffold scale S = 10 instead of 100; tests how well the LayerNorm-constant approximation holds at a smaller scale.
+sort-five-digits,1.0000,success,CountThermoSort-flag2,1.06e+04,d42/ff19 circuit with the attention flag weakened from 10 to 2 (score margin 4 instead of 20); masked digit-free positions leak into the average.
+sort-five-digits,0.5850,success,CountThermoSort-noOneTie,1.06e+04,"d42/ff19 circuit with the constant ONE term removed from logit_0 (logit_0 = -U_0); the N=0 case has tied logits that are only approximately zero, so argmax picks a noisy digit."
+sort-five-digits,1.0000,success,CountThermoSort-S1,1.06e+04,d42/ff19 circuit with scaffold scale S = 1 (LayerNorm-scale approximation is still accurate at S = 1 on 200 samples).
+sort-five-digits,0.0100,success,CountThermoSort-noN2,1.06e+04,"d42/ff19 circuit with the N2 neurons dropped (U_v = relu(i - C(v) + 1) only); the step is no longer exact, so the unary indicators are wrong."
+sort-five-digits,0.8200,success,CountThermoSort-noZeroSumFix,1.06e+04,d42/ff19 circuit without the zero-sum fix on TOK weights; the LayerNorm mean then leaks into the MLP pre-activations through the feature sum.
+sort-five-digits,0.0100,success,CountThermoSort-lnScaleX2,1.06e+04,d42/ff19 circuit with the MLP input weights scaled by 2x the assumed LayerNorm std; tests sensitivity to the LN scale constant.
+sort-five-digits,1.0000,success,CountThermoSort-flag1,1.06e+04,d42/ff19 circuit at S = 100 with the attention key flag at 1 (score margin 2 instead of 20); tests how strongly the flag must separate digit keys.
+sort-five-digits,0.0050,success,CountThermoSort-biasHalf,1.06e+04,"d42/ff19 circuit with both comparison thresholds shifted by 0.5 (N1 = relu(d+0.5), N2 = relu(d-0.5)); at d=0 the difference is 0.5 instead of 1, so U is not a 0/1 indicator and accuracy collapses."
+sort-five-digits,1.0000,success,CountThermoSort-S3,1.06e+04,"d42/ff19 circuit with scaffold scale S = 3 (between S = 1, which works, and S = 10); checks the LN approximation at intermediate scale."
+sort-five-digits,1.0000,success,CountThermoSort-S30,1.06e+04,"d42/ff19 circuit with scaffold scale S = 30; the LayerNorm scale is larger, so the feature perturbation is smaller relative to the scaffold."
+sort-five-digits,1.0000,success,CountThermoSort-S1000,1.06e+04,d42/ff19 circuit with scaffold scale S = 1000; the feature perturbation of the LayerNorm scale is negligible here.
+sort-five-digits,1.0000,success,CountThermoSort-d64,2.17e+04,d42/ff19 circuit at S = 100 embedded in d_model = 64 (the original width); 22 residual dims are unused and must not change the output.
+sort-five-digits,0.5450,success,CountThermoSort-noQueryFlag,2.17e+04,"d64 circuit with the query flag removed, so every causal key gets a score of zero and attention averages all tokens including '=' and the answer prefix."
+sort-five-digits,1.0000,success,CountThermoSort-noZeroTerm,1.06e+04,d42/ff19 circuit with the ZERO term removed from logit_9 (logit_9 = U_8 alone); tests whether the zero-valued ZERO dim was really needed.
+sort-five-digits,1.0000,success,CountThermoSort-oneViaBias,1.05e+04,"d42/ff18 circuit with the ZERO head term removed (as in noZeroTerm) and the constant ONE written through the MLP output bias, so the 19th hidden neuron is unnecessary."
+sort-five-digits,1.0000,success,CountThermoSort-qFlag0.5,1.01e+04,d41/ff18 circuit with the query flag halved to 0.5 (score margin 5 instead of 10); sensitivity of the attention averaging to the query weight.
+sort-five-digits,1.0000,success,CountThermoSort-kFlag50,1.01e+04,d41/ff18 circuit with the key flag raised to 50 (score margin 50 instead of 10); the attention average should still be uniform over the 5 digit positions.
+sort-five-digits,0.6400,success,CountThermoSort-S0.5,1.01e+04,"d41/ff18 circuit with scaffold scale S = 0.5, the smallest scale tested; checks whether the LayerNorm-constant approximation still holds."
+sort-five-digits,0.9500,success,CountThermoSort-S0.75,1.01e+04,"d41/ff18 circuit with scaffold scale S = 0.75, between the working S = 1 and the failing S = 0.5; locates the breakdown threshold."
+sort-five-digits,0.0000,success,CountThermoSort-oneBias2,1.01e+04,"d41/ff18 circuit with the ONE constant doubled to 2; logit_0 = 2 - U_0 then competes with the digit logits, so the constant must be exactly 1."
+sort-five-digits,1.0000,success,CountThermoSort-headScale2,1.01e+04,"d41/ff18 circuit with all output-head weights doubled; every logit is scaled by 2, so the argmax and the answer should be unchanged."
+sort-five-digits,1.0000,success,CountThermoSort-extraIdentityLayer,1.85e+04,d41/ff18 circuit plus a second transformer layer whose attention output and MLP output are zero (an exact identity); the answer should be unchanged.
+sort-five-digits,0.9800,success,CountThermoSort-S0.9,1.01e+04,"d41/ff18 single-layer circuit with scaffold scale S = 0.9, between the working S = 1 and the S = 0.75 that gave 95%; refines the breakdown threshold."
+sort-five-digits,0.9750,success,CountThermoSort-S0.85,1.01e+04,"d41/ff18 single-layer circuit with scaffold scale S = 0.85, between S = 0.75 (95%) and S = 0.9 (98%); completes the breakdown-threshold sweep."
+sort-five-digits,1.0000,,CountThermoSort-d41,1.01e+04,d41/ff18 circuit: the unused ZERO residual dim is dropped (d_model 42 -> 41); the LayerNorm std formula is unchanged in form.

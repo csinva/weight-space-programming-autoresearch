@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+parity-upto10-bits,0.0000,success,RandomInitInterpretable,1.51e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+parity-upto10-bits,1.0000,success,uniform_attn_count_relu_zigzag,6.74e+02,"1 layer d=8: uniform attention counts 1s at '=', MLP ReLU knots build parity zig-zag, head reads +-d."
+parity-upto10-bits,1.0000,success,zigzag_robust_seed1_n1000,6.74e+02,"Same circuit as uniform_attn_count_relu_zigzag, evaluated on 1000 examples with seed 1 as a robustness check."
+parity-upto10-bits,1.0000,success,zigzag_d16,1.85e+03,Same zigzag circuit with d_model=16 (extra unused dims) to check LayerNorm-exact knots still work.
+parity-upto10-bits,1.0000,success,zigzag_2heads,6.74e+02,"Same zigzag circuit with 2 heads (d_head=4); both heads uniform, head split of the value dims 4/5 and 6/7 is checked."
+parity-upto10-bits,1.0000,success,zigzag_nopos_2heads,5.46e+02,"Zigzag circuit with the unused position embedding removed (parity is order-free), 2 heads."
+parity-upto10-bits,1.0000,success,zigzag_noLN_d6,3.28e+02,"LayerNorm removed (Identity), pos-emb removed, d_model=6, 1 head: attn count c/11 in dim 4, 10 integer ReLU knots, answer in dim 5."
+parity-upto10-bits,1.0000,success,zigzag_noLN_d4,1.90e+02,"d_model=4 (= vocab, no extra dims): count signal reuses the '_' dim, answer reuses the '0' dim at the final '=' position; no LN, no pos-emb."
+parity-upto10-bits,1.0000,success,zigzag_noLN_d4_noqk,1.58e+02,As zigzag_noLN_d4 but W_q/W_k parameters deleted: attention is hard-wired uniform (q=k=0 was already the case).
+parity-upto10-bits,1.0000,success,ablate_dff9,1.49e+02,"Ablation: d_ff=9 (drop the last knot); only wrong when all 10 bits are 1 (1000 examples, none hit)."
+parity-upto10-bits,0.9940,success,ablate_dff7,1.31e+02,Ablation: d_ff=7 (knots for c>=7 missing); 1000 examples.
+parity-upto10-bits,0.9400,success,ablate_dff5,1.13e+02,"Ablation: d_ff=5 (exact only for counts 0..5); accuracy/size tradeoff, not a real solution."
+parity-upto10-bits,1.0000,success,exact_d4_dff10_countscale,1.58e+02,"Exact d_model=4/d_ff=10 circuit, value scaled by n so the attention output is the integer count c and fc1 weights are 1; 1000 examples."
+parity-upto10-bits,1.0000,success,biasfree_d4_dff11,1.52e+02,"Bias-free MLP: the '=' token dim (=1 at the answer position) acts as the constant; 11 units (10 knots + 1 offset unit); d_model=4, no LN/pos/qk."
+parity-upto10-bits,1.0000,success,biasfree_d3_dff11,1.08e+02,"d_model=3: dims = [is-1 / count, is-'=' constant, answer]; '0' and '_' embed to zero. Bias-free, no LN/pos/qk, 11 MLP units."
+parity-upto10-bits,1.0000,success,biasfree_d2_dff11,6.80e+01,"d_model=2: dims = [is-1 -> count -> answer, is-'=' constant]; MLP unit 0 (=c) cancels the count while writing the answer. Bias-free, no LN/pos/qk."
+parity-upto10-bits,1.0000,success,d2_dff10_headdiff,6.40e+01,"d_model=2, d_ff=10: offset unit removed; MLP writes a=d+1 in {0,2} and the head reads a - [=] (the constant dim). Bias-free, no LN/pos/qk."
+parity-upto10-bits,1.0000,success,d2_dff10_2heads,6.40e+01,"As d2_dff10_headdiff but with 2 attention heads of width 1 (head 0 counts, head 1 idle): checks head-splitting is harmless."
+parity-upto10-bits,1.0000,success,d2_dff10_1head_n5000_seed3,6.40e+01,"d_model=2, 1 head, d_ff=10 circuit (head reads a-[=]) evaluated on 5000 examples, seed 3."
+parity-upto10-bits,1.0000,success,two_layer_split_knots,1.20e+02,"2 blocks x d_ff=5, d_model=3: layer 1 attention counts; knots 0-4 in block 0 MLP, knots 5-9 in block 1 MLP, both add into the answer dim; block 1 attention idle."
+parity-upto10-bits,0.9990,success,two_layer_split_ablate_dff4,1.08e+02,"Ablation of the 2-layer split model: 2 blocks x d_ff=4 (8 knots total, counts >=8 wrong); accuracy vs size tradeoff."
+parity-upto10-bits,0.9820,success,one_layer_ablate_dff6,7.80e+01,"Ablation: 1 block, d_model=3, d_ff=6 (knots 0-5 only, wrong for counts >=6); accuracy vs size tradeoff."
+parity-upto10-bits,0.8780,success,one_layer_ablate_dff4,6.60e+01,"Ablation: 1 block, d_model=3, d_ff=4 (knots 0-3 only, wrong for counts >=4); accuracy vs size tradeoff."
+parity-upto10-bits,0.9990,success,one_layer_ablate_dff8,9.00e+01,"Ablation: 1 block, d_model=3, d_ff=8 (knots 0-7 only, wrong for counts >=8); accuracy vs size tradeoff."
+parity-upto10-bits,1.0000,success,d2_with_final_ln,6.80e+01,"Clean d_model=2 circuit but with the standard final LayerNorm restored (weight 1): LN of (a,1) is a sign readout, so the head still works."
+parity-upto10-bits,1.0000,success,depth3_two_idle_blocks,1.60e+02,Clean d_model=2 circuit inside the default 3-block depth: blocks 1 and 2 are all-zero (identity residual); shows extra depth is unnecessary.
+parity-upto10-bits,1.0000,success,dff14_four_dead_units,8.00e+01,Clean d_model=2 circuit with d_ff=14: units 10-13 are all-zero dead units; extras are inert.
+parity-upto10-bits,1.0000,success,final_d2_dff10_clean_n10000_seed7,6.40e+01,"Final clean exact circuit (d_model=2, 1 head, 10 ReLU knots, no LN/pos/bias/qk; 64 params) on 10000 examples, seed 7."
+parity-upto10-bits,1.0000,success,final_d2_clean_2heads_seed5,6.40e+01,"Clean d_model=2 circuit with 2 width-1 heads (head 0 counts, head 1 idle) on 2000 examples, seed 5."
+parity-upto10-bits,1.0000,success,final_d2_dff10_clean,6.40e+01,"Final clean exact circuit: d_model=2 (is-1/count/answer, is-'='), 1 head, 10 ReLU knots, no LN/pos/bias/qk; 64 params. Default 200 examples, seed 0."

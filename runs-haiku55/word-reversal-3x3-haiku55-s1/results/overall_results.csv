@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+word-reversal-3x3,0.0000,success,RandomInitInterpretable,1.54e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+word-reversal-3x3,1.0000,success,copy-perm-d128-g4,7.86e+04,"One attention head routes query at answer step j to prompt position SRC_POS[j] (position-one-hot Q/K, token one-hot V, copy block unembed), d=128, 1 layer, MLP zeroed."
+word-reversal-3x3,1.0000,success,copy-perm-d128-g1,7.86e+04,"Same copy circuit as copy-perm-d128-g4 but attention gain 1.0 (softer routing), to test how sharp the attention must be."
+word-reversal-3x3,1.0000,success,copy-perm-d128-g0.5,7.86e+04,"Same copy circuit with attention gain 0.5, to find the lower bound on routing sharpness."
+word-reversal-3x3,0.9100,success,copy-perm-d128-g0.25,7.86e+04,"Same copy circuit with attention gain 0.25, to find the lower bound on routing sharpness."
+word-reversal-3x3,0.0000,success,copy-perm-d128-g0.1,7.86e+04,"Same copy circuit with attention gain 0.1, to locate where routing sharpness breaks the copy."
+word-reversal-3x3,1.0000,success,copy-perm-d79-g4,3.30e+04,"Compact width: same copy circuit with d_model=79 (token 0..27, position 28..50, copy 51..78), gain 4."
+word-reversal-3x3,0.0200,success,copy-perm-d79-g0.25,3.30e+04,Compact d_model=79 copy circuit at gain 0.25: checks whether the routing threshold moves with width.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-g4,7.73e+03,"Binary token codes: each token is a 5-bit +/-1 code (d 28->5 for tokens, d_model=33), copy block 5 bits, head = dot with codes."
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN1-g40,7.66e+03,Bits5 circuit with the attention-input LayerNorm removed (ln1 = identity); one-hot query then needs gain 40 to keep routing sharp.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g40,7.53e+03,"Bits5 circuit with every LayerNorm removed (ln1, ln2, final_ln = identity): the network is linear except for softmax and ReLU."
+word-reversal-3x3,0.0000,success,copy-bits5-d33-noLN-g4,7.53e+03,No-LayerNorm bits5 circuit at attention gain 4: tests whether the no-LN routing is still sharp enough at a small gain.
+word-reversal-3x3,0.8050,success,copy-bits5-d33-noLN-g15,7.53e+03,No-LayerNorm bits5 circuit at attention gain 15: locating the no-LN routing threshold between gain 4 and 40.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g100,7.53e+03,No-LayerNorm bits5 circuit at attention gain 100: checks that the no-LN routing stays correct at very sharp gains.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-ff0-g100,7.00e+03,No-LayerNorm bits5 circuit at gain 100 with d_ff=0 (MLP removed entirely): does the copy need the MLP at all?
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-L2-g100,1.14e+04,"No-LayerNorm bits5 circuit with a second (all-zero, inert) block: checks that extra untouched layers do not change the copy."
+word-reversal-3x3,0.0000,success,sanity-identity-map,7.00e+03,"Sanity check: same circuit with SRC_POS = identity (copy the prompt unchanged); should fail, since the answer is not the prompt."
+word-reversal-3x3,1.0000,success,alt-separator-source,7.00e+03,"Same circuit, but the separator answer positions copy from prompt position 7 instead of 3 (both are '_'): should still be 100%."
+word-reversal-3x3,0.0000,success,copy-bits5-d33-noLN-g1,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 1: lower end of the no-LN gain sweep.
+word-reversal-3x3,0.0050,success,copy-bits5-d33-noLN-g8,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 8: between the failing gain-4 and the 80% gain-15 runs.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g25,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 25: pins down the no-LN threshold between gain 15 and 40.
+word-reversal-3x3,0.0000,success,copy-bits01-d33-noLN-g25,7.00e+03,"Failure test: token codes are 0/1 bits instead of +/-1. Dot product with 0/1 codes is not unique-max, so this should fail."
+word-reversal-3x3,0.0000,success,copy-bits4-d33-noLN-g25,7.00e+03,"Undersized code: only 4 +/-1 bits (16 codes for 28 tokens). Tokens 16+ alias, and the '_' separator (26) aliases to 'k' (10), so the copy always fails. Shows 5 bits are the minimum."
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g20,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 20: refining the no-LN threshold between gain 15 and 25.
+word-reversal-3x3,0.1600,success,copy-bits5-d33-noLN-g12,7.00e+03,"No-LayerNorm bits5 circuit (d_ff=0) at attention gain 12: lower edge of the no-LN threshold (gain 8 fails, 15 gives 80%)."
+word-reversal-3x3,0.9400,success,copy-bits5-d33-noLN-g16,7.00e+03,"No-LayerNorm bits5 circuit (d_ff=0) at attention gain 16: just above the gain-15 80% run, checking where the threshold saturates."
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g30,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 30: checks the upper end of the no-LN gain range that works.
+word-reversal-3x3,0.0000,success,copy-bits5-d33-noLN-g0,7.00e+03,"No-LayerNorm bits5 circuit with attention gain 0: uniform attention over the prefix, so the copy has no positional routing. Should fail."
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g60,7.00e+03,"No-LayerNorm bits5 circuit at attention gain 60: an even sharper router, to confirm high gains do not break the copy."
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g200,7.00e+03,"No-LayerNorm bits5 circuit at attention gain 200: extreme router sharpness, to confirm there is no upper limit on the gain."
+word-reversal-3x3,1.0000,success,copy-bits5-d64pad-noLN-g30,2.15e+04,Same no-LN bits5 circuit padded to d_model=64 (31 unused zero dims): checks that the circuit does not depend on the width being minimal.
+word-reversal-3x3,0.0000,success,overlap-copy-into-token-block,2.15e+04,"Failure test: copy block placed on top of the token-code dims (COPY_OFF=0). Own token then contaminates the read-out, so this should fail."
+word-reversal-3x3,1.0000,success,overlap-copy-into-pos-block,2.15e+04,"Copy block placed on top of position-one-hot dims 5..9 (COPY_OFF=5). Still 100%: query positions 11..21 have no one-hot bit in those dims, so the write does not collide. Expected a failure; it does not."
+word-reversal-3x3,0.0000,success,copy-bits5-d33-LN-g0.5,7.13e+03,Bits5 circuit with LayerNorm restored (ln1 and final_ln) at attention gain 0.5: how sharp must routing be when LN is present?
+word-reversal-3x3,0.0250,success,copy-bits5-d33-LN-g2,7.13e+03,Bits5 circuit with LayerNorm restored (ln1 and final_ln) at attention gain 2.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-LN-g8,7.13e+03,Bits5 circuit with LayerNorm restored (ln1 and final_ln) at attention gain 8.
+word-reversal-3x3,0.0000,success,copy-bits5-d33-LN-g1,7.13e+03,Bits5 circuit with LayerNorm restored (ln1 and final_ln) at attention gain 1.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-LN-g16,7.13e+03,Bits5 circuit with LayerNorm restored (ln1 and final_ln) at attention gain 16.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g35,7.00e+03,No-LayerNorm bits5 circuit (d_ff=0) at attention gain 35: inside the 25..60 range where the no-LN circuit is fully correct.
+word-reversal-3x3,1.0000,success,copy-bits5-d33-noLN-g50,7.00e+03,"No-LayerNorm bits5 circuit (d_ff=0) at attention gain 50: final point of the no-LN gain sweep, inside the fully-correct range."

@@ -1,0 +1,125 @@
+{
+ "run": "paraphrase-mrpc-sonnet55-s2",
+ "task": "paraphrase-mrpc",
+ "seed": 2,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.21395559999999997,
+   "turns": 23,
+   "seconds": 303,
+   "attempts_before": 0,
+   "attempts_after": 2,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  },
+  {
+   "k": 1,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.5364046,
+   "turns": 23,
+   "seconds": 226,
+   "attempts_before": 2,
+   "attempts_after": 4,
+   "tools_used": [
+    "Bash",
+    "Edit"
+   ],
+   "log": "agent_logs/session_01.jsonl"
+  },
+  {
+   "k": 2,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.6842143000000002,
+   "turns": 18,
+   "seconds": 80,
+   "attempts_before": 4,
+   "attempts_after": 8,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_02.jsonl"
+  },
+  {
+   "k": 3,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.033924,
+   "turns": 38,
+   "seconds": 257,
+   "attempts_before": 8,
+   "attempts_after": 15,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read"
+   ],
+   "log": "agent_logs/session_03.jsonl"
+  },
+  {
+   "k": 4,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.2492616,
+   "turns": 31,
+   "seconds": 233,
+   "attempts_before": 15,
+   "attempts_after": 23,
+   "tools_used": [
+    "Bash",
+    "Edit"
+   ],
+   "log": "agent_logs/session_04.jsonl"
+  },
+  {
+   "k": 5,
+   "session_id": "8a21e5d7-6aa6-4540-8205-0de443daffda",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.9938482,
+   "turns": 103,
+   "seconds": 405,
+   "attempts_before": 23,
+   "attempts_after": 50,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read"
+   ],
+   "log": "agent_logs/session_05.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.066562+00:00",
+ "finished": "2026-11-05T20:26:35.659391+00:00",
+ "attempts": 50
+}

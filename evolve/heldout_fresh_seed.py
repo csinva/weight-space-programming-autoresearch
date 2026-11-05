@@ -17,7 +17,9 @@ def score(rd):
     rows = list(csv.DictReader(open(os.path.join(rd, "results", "overall_results.csv"))))
     top = max(float(r["accuracy"] or 0) for r in rows)
     for r in rows:
-        path = os.path.join(rd, "interpretable_transformers_lib", r["model_shorthand_name"] + ".py")
+        name = re.sub(r"[^A-Za-z0-9_.-]", "_", r["model_shorthand_name"])
+        path = next((p for p in [os.path.join(rd, "reconstructed", name + ".py"), os.path.join(rd, "interpretable_transformers_lib", name + ".py"),
+                                 os.path.join(rd, "interpretable_transformers_lib", r["model_shorthand_name"] + ".py")] if os.path.exists(p)), "")
         if float(r["accuracy"] or 0) < top or not os.path.exists(path):
             continue
         try:

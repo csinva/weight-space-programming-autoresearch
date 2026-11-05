@@ -1,0 +1,53 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.0000,success,RandomInitInterpretable,1.58e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+date-normalization,1.0000,success,HandCircuitV1,1.59e+06,"3-layer hand-built circuit (no LayerNorm): previous-token gathers, digit-run and month-name detectors, uniform run-ordinal counting, retrieval, gated output."
+date-normalization,1.0000,success,HandCircuitV2-DH43,1.17e+06,"3-layer hand-built circuit (no LayerNorm): previous-token gathers, digit-run and month-name detectors, uniform run-ordinal counting, retrieval, gated output."
+date-normalization,1.0000,success,HandCircuitV3-tightFF,1.14e+06,DH=43 plus MLP widths set to exactly the neuron counts used (15/69/136) instead of padded 16/80/160.
+date-normalization,1.0000,success,HandCircuitV4-BIG10,1.14e+06,V3 with attention match score BIG reduced from 30 to 10 (sink 15 -> 5): tests how large the attention margin must be.
+date-normalization,0.0000,success,HandCircuitV5-BIG6,1.14e+06,V4 with attention match score BIG reduced from 10 to 6 (sink 5 -> 3): continues the attention-margin sweep.
+date-normalization,0.6600,success,HandCircuitV6-BIG8,1.14e+06,V5 with attention match score BIG raised from 6 to 8 (sink 3 -> 4): bisects the attention margin between the 6 (fails) and 10 (works) settings.
+date-normalization,0.7200,success,HandCircuitV7-BIG9,1.14e+06,V6 with attention match score BIG raised from 8 to 9 (sink kept at 4): narrows the attention-margin threshold.
+date-normalization,0.5000,success,HandCircuitV8-BIG10-S1,1.14e+06,V7 with BIG=10 and sink lowered to 1: checks whether the no-match sink or the match margin is the load-bearing setting.
+date-normalization,0.5450,success,HandCircuitV9-BIG10-S2,1.14e+06,"BIG=10 with sink 2 (between the failing sink=1 and the working sink=5), to map out the sink sweep."
+date-normalization,0.7200,success,HandCircuitV10-BIG10-S3,1.14e+06,BIG=10 with sink 3 (continuing the sink sweep between 2 and 5).
+date-normalization,0.8950,success,HandCircuitV11-BIG10-S4,1.14e+06,BIG=10 with sink 4 (continuing the sink sweep between 3 and 5).
+date-normalization,0.0000,success,HandCircuitV12-BIG10-S7,1.14e+06,"BIG=10 with sink 7 (sink above the match score's half-way point, tests the upper side)."
+date-normalization,1.0000,success,HandCircuitV13-GE300,1.14e+06,Back to the working BIG=10/SINK=5 setting with the threshold sharpness GE_SCALE cut from 1000 to 300.
+date-normalization,1.0000,success,HandCircuitV14-GE100,1.14e+06,BIG=10/SINK=5 with threshold sharpness GE_SCALE cut further from 300 to 100.
+date-normalization,1.0000,success,HandCircuitV15-GE30,1.14e+06,BIG=10/SINK=5 with threshold sharpness GE_SCALE cut from 100 to 30.
+date-normalization,0.6700,success,HandCircuitV16-GE10,1.14e+06,BIG=10/SINK=5 with threshold sharpness GE_SCALE cut from 30 to 10 (clip no longer saturates).
+date-normalization,1.0000,success,HandCircuitV17-GE3000,1.14e+06,BIG=10/SINK=5 with threshold sharpness GE_SCALE raised from 1000 to 3000 (upper end of the sweep).
+date-normalization,0.5700,success,HandCircuitV18-L1-nosink,1.14e+06,BIG=10/SINK=5/GE=1000 with the layer-1 gather sinks disabled (-1e4): ablation that tests whether the no-match sink is needed for the previous-token gathers.
+date-normalization,0.7200,success,HandCircuitV19-L3-nosink,1.14e+06,Restores layer-1 sinks (SINK=5) and disables the layer-3 retrieval sinks (-1e4): ablation that tests whether the no-match sink is needed for retrieval.
+date-normalization,1.0000,success,HandCircuitV20-noPromptGate,1.14e+06,Working BIG=10/SINK=5 circuit with the prompt-position gate removed (PROMPT=1 on every position): ablation that tests whether answer-position tokens must be excluded.
+date-normalization,0.2800,success,HandCircuitV21-noMonthNames,1.14e+06,Working BIG=10/SINK=5 circuit with the month-name trigram detectors removed (named-month formats lose their month): ablation of the named-month path.
+date-normalization,0.0900,success,HandCircuitV22-noLongRun,1.14e+06,"Working BIG=10/SINK=5 circuit with the 4-digit run detector E4 switched off, so years must come from the 2-digit fallback: ablation of the long-year path."
+date-normalization,1.0000,success,HandCircuitV23-BIG10-S4.5,1.14e+06,BIG=10 with sink 4.5 (fine sink sweep between 4 and 5); E4 detector restored.
+date-normalization,1.0000,success,HandCircuitV24-BIG20-S10,1.14e+06,Scale test: BIG=20 and SINK=10 (same 0.5 sink/BIG ratio as the working BIG=10/SINK=5).
+date-normalization,1.0000,success,HandCircuitV25-BIG50-S25,1.14e+06,Scale test: BIG=50 and SINK=25 (same 0.5 sink/BIG ratio).
+date-normalization,1.0000,success,HandCircuitV26-BIG20-S8,1.14e+06,"Ratio test at scale 20: BIG=20 and SINK=8 (sink/BIG = 0.4, the level that gave 89.5% at BIG=10)."
+date-normalization,1.0000,success,HandCircuitV27-countSink,1.14e+06,BIG=20/SINK=8 circuit with the layer-2 running counter given a sink (sink=0) instead of uniform averaging: ablation of the counting mechanism.
+date-normalization,0.7300,success,HandCircuitV28-numDayOrd1,1.14e+06,BIG=20/SINK=8 circuit where numeric-format days read the ordinal-1 short run (the month) instead of ordinal 2 (the layer-2 counter still had sink=0 from the previous ablation): ablation of the day-selection rule.
+date-normalization,1.0000,success,HandCircuitV29-BIG20-S8-restored,1.14e+06,Working BIG=20/SINK=8 circuit with the layer-2 counter (uniform) and the numeric-day ordinal-2 rule restored; repeat check after the two ablations.
+date-normalization,1.0000,success,HandCircuitV30-BIG100-S50,1.14e+06,Scale test: BIG=100 and SINK=50 (same 0.5 sink/BIG ratio).
+date-normalization,1.0000,success,HandCircuitV31-BIG20-S12,1.14e+06,"Ratio test at scale 20: BIG=20 and SINK=12 (sink/BIG = 0.6, above the 0.5 working ratio)."
+date-normalization,0.8950,success,HandCircuitV32-BIG20-S4,1.14e+06,"Ratio test at scale 20: BIG=20 and SINK=4 (sink/BIG = 0.2, low end of the sink range)."
+date-normalization,1.0000,success,HandCircuitV33-GE50,1.14e+06,BIG=20/SINK=8 circuit with the threshold sharpness GE_SCALE set to 50.
+date-normalization,1.0000,success,HandCircuitV34-GE20,1.14e+06,BIG=20/SINK=8 circuit with the threshold sharpness GE_SCALE set to 20.
+date-normalization,0.2350,success,HandCircuitV35-noE1NonDigit,1.14e+06,BIG=20/SINK=8 circuit (GE_SCALE restored to 1000) with the 1-digit run detector E1 lacking its non-digit terminator check: ablation of run-end detection.
+date-normalization,1.0000,success,HandCircuitV36-DH44,1.16e+06,BIG=20/SINK=8 circuit with the per-head dimension changed from 43 to 44 (one spare dimension): a size-invariance check.
+date-normalization,1.0000,success,HandCircuitV37-DH64,1.55e+06,BIG=20/SINK=8 circuit with the per-head dimension set back to 64 (the original V1 size): size-invariance check at the largest head size.
+date-normalization,1.0000,success,HandCircuitV38-BIG15-S7,1.14e+06,Scale sweep at 15: BIG=15 and SINK=7 (sink/BIG = 0.47); head dimension back to 43.
+date-normalization,1.0000,success,HandCircuitV39-BIG12-S6,1.14e+06,Scale sweep at 12: BIG=12 and SINK=6 (sink/BIG = 0.5).
+date-normalization,0.9100,success,HandCircuitV40-noOrd3,1.14e+06,BIG=12/SINK=6 circuit with the ordinal-3 short-run retrieval head removed: ablation of the 2-digit-year path (format 8 only).
+date-normalization,0.0000,success,HandCircuitV41-noOrd1,1.14e+06,BIG=12/SINK=6 circuit with the ordinal-1 short-run retrieval head removed: ablation of the named-format day and numeric-format month.
+date-normalization,0.0000,success,HandCircuitV42-BIG5-S2.5,1.14e+06,"Small-scale test: BIG=5 and SINK=2.5 (sink/BIG = 0.5), all retrieval heads restored."
+date-normalization,1.0000,success,HandCircuitV43-BIG40-S20,1.14e+06,Scale test: BIG=40 and SINK=20 (sink/BIG = 0.5).
+date-normalization,1.0000,success,HandCircuitV44-BIG20-S9,1.14e+06,Sink sweep at BIG=20: SINK=9 (sink/BIG = 0.45).
+date-normalization,1.0000,success,HandCircuitV45-BIG20-S6,1.14e+06,Sink sweep at BIG=20: SINK=6 (sink/BIG = 0.3).
+date-normalization,1.0000,success,HandCircuitV46-BIG20-S5,1.14e+06,Sink sweep at BIG=20: SINK=5 (sink/BIG = 0.25).
+date-normalization,1.0000,success,HandCircuitV47-BIG10-S5.5,1.14e+06,Sink sweep at BIG=10: SINK=5.5 (between the working 5 and the failing 6 at BIG=10 scale).
+date-normalization,1.0000,success,HandCircuitV48-BIG10-S6,1.14e+06,Sink sweep at BIG=10: SINK=6 (between the working 5.5 and the failing 7).
+date-normalization,0.0900,success,HandCircuitV49-BIG10-S6.5,1.14e+06,Sink sweep at BIG=10: SINK=6.5 (between the working 6 and the failing 7).
+date-normalization,1.0000,success,HandCircuitV50-BIG16-S8,1.14e+06,Scale test: BIG=16 and SINK=8 (sink/BIG = 0.5).
+date-normalization,1.0000,success,HandCircuitV51-BIG20-S7,1.14e+06,Sink sweep at BIG=20: SINK=7 (sink/BIG = 0.35).

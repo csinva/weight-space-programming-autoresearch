@@ -1,0 +1,143 @@
+{
+ "run": "paraphrase-mrpc-sonnet55-s1",
+ "task": "paraphrase-mrpc",
+ "seed": 1,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.1544228,
+   "turns": 20,
+   "seconds": 130,
+   "attempts_before": 0,
+   "attempts_after": 2,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  },
+  {
+   "k": 1,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.4033614,
+   "turns": 15,
+   "seconds": 163,
+   "attempts_before": 2,
+   "attempts_after": 6,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Write"
+   ],
+   "log": "agent_logs/session_01.jsonl"
+  },
+  {
+   "k": 2,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.5831529999999999,
+   "turns": 28,
+   "seconds": 142,
+   "attempts_before": 6,
+   "attempts_after": 15,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read"
+   ],
+   "log": "agent_logs/session_02.jsonl"
+  },
+  {
+   "k": 3,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.6586068999999999,
+   "turns": 11,
+   "seconds": 80,
+   "attempts_before": 15,
+   "attempts_after": 19,
+   "tools_used": [
+    "Bash",
+    "Edit"
+   ],
+   "log": "agent_logs/session_03.jsonl"
+  },
+  {
+   "k": 4,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.7850748999999997,
+   "turns": 18,
+   "seconds": 93,
+   "attempts_before": 19,
+   "attempts_after": 25,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep"
+   ],
+   "log": "agent_logs/session_04.jsonl"
+  },
+  {
+   "k": 5,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.9754937999999996,
+   "turns": 18,
+   "seconds": 119,
+   "attempts_before": 25,
+   "attempts_after": 32,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_05.jsonl"
+  },
+  {
+   "k": 6,
+   "session_id": "2bbf2fd3-c380-48cd-9935-522953117344",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.3418354,
+   "turns": 42,
+   "seconds": 281,
+   "attempts_before": 32,
+   "attempts_after": 51,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_06.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.057110+00:00",
+ "finished": "2026-11-05T20:18:20.320667+00:00",
+ "attempts": 51
+}

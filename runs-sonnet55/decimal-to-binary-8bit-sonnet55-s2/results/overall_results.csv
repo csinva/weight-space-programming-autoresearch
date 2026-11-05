@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+decimal-to-binary-8bit,1.0000,success,digit_gather_and_units,1.19e+05,L1 attn: 3 heads copy the 3 digits; L1 MLP: 256 AND-units (one per N) write bits; L2 MLP selects bit by position.
+decimal-to-binary-8bit,1.0000,success,no_attn_L2_ff16,6.36e+04,Same as digit_gather_and_units but layer 2 has no attention and d_ff=16 (only the 16 select units).
+decimal-to-binary-8bit,1.0000,success,no_const_dim,6.36e+04,no_attn_L2_ff16 without the constant dim: attention query is the sum of position one-hots.
+decimal-to-binary-8bit,1.0000,success,d69_logits_in_tokdims,6.02e+04,"no_const_dim plus logit scratch reusing unused token dims 2,3 -> d_model 69."
+decimal-to-binary-8bit,1.0000,success,no_complement_d60,5.34e+04,Drop NOT-bit dims; bit=0 select unit uses weight -1 on bit_j. d_model 63.
+decimal-to-binary-8bit,1.0000,success,remainder_division_d30,5.93e+03,"Long division: 10 fixed-position heads sum 100a+10b+c minus emitted bits*2^k into R; 16 gated threshold units test r>=2^(7-j). 1 layer, d_model 30 (+C/-C constant pair keeps LayerNorm scale independent of R)."
+decimal-to-binary-8bit,1.0000,success,remainder_d26_h13,4.72e+03,Remainder circuit with d_model 26 and 13 heads (3 unused).
+decimal-to-binary-8bit,1.0000,success,remainder_d24_R_in_tokdim,4.17e+03,Remainder circuit with R stored in unused token dim 9; d_model 24 and 12 heads.
+decimal-to-binary-8bit,1.0000,success,remainder_d24_Cv30,4.17e+03,Sweep: constant-pair magnitude Cv=30 (eps rescaled).
+decimal-to-binary-8bit,1.0000,success,remainder_d24_Cv10,4.17e+03,Sweep: constant-pair magnitude Cv=10 (eps rescaled).
+decimal-to-binary-8bit,1.0000,success,remainder_d24_Cv3,4.17e+03,Sweep: constant-pair magnitude Cv=3 (eps rescaled).
+decimal-to-binary-8bit,1.0000,success,remainder_d24_Cv1,4.17e+03,Sweep: constant-pair magnitude Cv=1 (eps rescaled).
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_default0,3.78e+03,"d_ff 16->8: only the bit=1 threshold unit per position; '0' is a constant default logit read from the constant dim."
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_K100,3.78e+03,Sweep: attention sharpness K=100.
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_K30,3.78e+03,Sweep: attention sharpness K=30.
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_K8,3.78e+03,Sweep: attention sharpness K=8 (still exact).
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_K30_G2,3.78e+03,Sweep: position-gate weight G=2.
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_K30_G0p5,3.78e+03,Sweep: position-gate weight G=0.5.
+decimal-to-binary-8bit,0.0500,success,remainder_ff8_K30_G0_nogate,3.78e+03,Ablation: no position gate (G=0) -> every unit fires at every position; fails.
+decimal-to-binary-8bit,1.0000,success,remainder_ff8_clean,3.78e+03,"Cleaned-up ff8 version (K=30, G=2), d_model 24, 12 heads; verified 3000/3000."
+decimal-to-binary-8bit,1.0000,success,remainder_eps_x0p1,3.78e+03,Sweep: R scale eps x0.1.
+decimal-to-binary-8bit,0.0000,success,remainder_eps_x10,3.78e+03,Ablation: R scale eps x10 -> LayerNorm scale depends on R too much; fails.
+decimal-to-binary-8bit,1.0000,success,remainder_eps_x3,3.78e+03,Sweep: R scale eps x3.
+decimal-to-binary-8bit,0.1850,success,remainder_no_sink,3.78e+03,Ablation: no '=' sink key for unemitted bit heads -> they attend garbage; fails.
+decimal-to-binary-8bit,1.0000,success,remainder_sink_quarter,3.78e+03,Sweep: sink key strength K/4.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_noconst,3.29e+03,"Dropped the +C/-C constant dims: query reads tokens '0','1','=' (exactly one active), d_model 22 with 11 heads."
+decimal-to-binary-8bit,1.0000,success,remainder_d22_G4,3.29e+03,Sweep: d22 with G=4.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_K200_G4,3.29e+03,Sweep: d22 with K=200.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_eps2x,3.29e+03,Sweep: d22 with eps x2.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_eps4x,3.29e+03,Sweep: d22 with eps x4.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_default0p25,3.29e+03,Sweep: constant default '0' logit weight 0.25.
+decimal-to-binary-8bit,0.0150,success,remainder_d22_default1p5_toohigh,3.29e+03,Ablation: default '0' logit weight 1.5 so '0' always wins; fails.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_final,3.29e+03,"d_model 22 reference design (G=4, K=30, default weight 0.5); 3000/3000. Snapshot saved."
+decimal-to-binary-8bit,1.0000,success,remainder_d22_G10,3.29e+03,Sweep: G=10.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_G10_sink75,3.29e+03,Sweep: G=10 with sink strength 0.75K.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_no_zero_sum,3.29e+03,Digit-head value = eps*c*d (dropped the zero-sum d-4.5 trick); still exact.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_simple,3.29e+03,"Same simplified digit values (eps*c*d) with G=10, K=30; 3000/3000."
+decimal-to-binary-8bit,1.0000,success,remainder_d22_simple_epshalf,3.29e+03,Sweep: simplified design with eps x0.5.
+decimal-to-binary-8bit,1.0000,success,remainder_d22_clean_final,3.29e+03,"Final: d_model 22, 1 layer, 11 heads, d_ff 8, eps 0.0031, K 30, G 4, sink K/4; 3000/3000."

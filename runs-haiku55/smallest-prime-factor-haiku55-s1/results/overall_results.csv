@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+smallest-prime-factor,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+smallest-prime-factor,1.0000,success,SPF-circuit-full,4.22e+06,"Full hand-built circuit: residues mod all 65 primes <= 313, divisibility bumps, first-hit select, copy fallback (no LayerNorm)."
+smallest-prime-factor,0.3000,success,SPF-N00-copy,4.22e+06,"Sweep point N=0 primes: no divisibility tests, output copies the input (correct only on primes)."
+smallest-prime-factor,0.3150,success,SPF-N01,4.22e+06,Sweep point N=1 prime (divisibility by 2 only); fallback copies the input.
+smallest-prime-factor,0.3300,success,SPF-N02,4.22e+06,Sweep point N=2 primes (divisibility by 2 and 3); fallback copies the input.
+smallest-prime-factor,0.3400,success,SPF-N03,4.22e+06,"Sweep point N=3 primes (divisibility by 2, 3, 5); fallback copies the input."
+smallest-prime-factor,0.3450,success,SPF-N04,4.22e+06,"Sweep point N=4 primes (divisibility by 2, 3, 5, 7); fallback copies the input."
+smallest-prime-factor,0.3500,success,SPF-N05,4.22e+06,"Sweep point N=5 primes (divisibility by 2, 3, 5, 7, 11); fallback copies the input."
+smallest-prime-factor,0.3750,success,SPF-N06,4.22e+06,Sweep point N=6 primes (divisibility by 2 through 13); fallback copies the input.
+smallest-prime-factor,0.3800,success,SPF-N07,4.22e+06,Sweep point N=7 primes (divisibility by 2 through 17); fallback copies the input.
+smallest-prime-factor,0.3950,success,SPF-N08,4.22e+06,Sweep point N=8 primes (divisibility by 2 through 19); fallback copies the input.
+smallest-prime-factor,0.4050,success,SPF-N09,4.22e+06,Sweep point N=9 primes (divisibility by 2 through 23); fallback copies the input.
+smallest-prime-factor,0.4250,success,SPF-N10,4.22e+06,Sweep point N=10 primes (divisibility by 2 through 29); fallback copies the input.
+smallest-prime-factor,0.4500,success,SPF-N12,4.22e+06,Sweep point N=12 primes (divisibility by 2 through 37); fallback copies the input.
+smallest-prime-factor,0.4650,success,SPF-N14,4.22e+06,Sweep point N=14 primes (divisibility by 2 through 43); fallback copies the input.
+smallest-prime-factor,0.4850,success,SPF-N16,4.22e+06,Sweep point N=16 primes (divisibility by 2 through 53); fallback copies the input.
+smallest-prime-factor,0.5050,success,SPF-N18,4.22e+06,Sweep point N=18 primes (divisibility by 2 through 61); fallback copies the input.
+smallest-prime-factor,0.5450,success,SPF-N20,4.22e+06,Sweep point N=20 primes (divisibility by 2 through 71); fallback copies the input.
+smallest-prime-factor,0.5550,success,SPF-N22,4.22e+06,Sweep point N=22 primes (divisibility by 2 through 79); fallback copies the input.
+smallest-prime-factor,0.5700,success,SPF-N24,4.22e+06,Sweep point N=24 primes (divisibility by 2 through 89); fallback copies the input.
+smallest-prime-factor,0.5900,success,SPF-N26,4.22e+06,Sweep point N=26 primes (divisibility by 2 through 101); fallback copies the input.
+smallest-prime-factor,0.6200,success,SPF-N28,4.22e+06,Sweep point N=28 primes (divisibility by 2 through 107); fallback copies the input.
+smallest-prime-factor,0.6350,success,SPF-N30,4.22e+06,Sweep point N=30 primes (divisibility by 2 through 113); fallback copies the input.
+smallest-prime-factor,0.6400,success,SPF-N32,4.22e+06,Sweep point N=32 primes (divisibility by 2 through 131); fallback copies the input.
+smallest-prime-factor,0.6800,success,SPF-N34,4.22e+06,Sweep point N=34 primes (divisibility by 2 through 137); fallback copies the input.
+smallest-prime-factor,0.6900,success,SPF-N36,4.22e+06,Sweep point N=36 primes (divisibility by 2 through 149); fallback copies the input.
+smallest-prime-factor,0.7150,success,SPF-N38,4.22e+06,Sweep point N=38 primes (divisibility by 2 through 163); fallback copies the input.
+smallest-prime-factor,0.7400,success,SPF-N40,4.22e+06,Sweep point N=40 primes (divisibility by 2 through 173); fallback copies the input.
+smallest-prime-factor,0.7600,success,SPF-N42,4.22e+06,Sweep point N=42 primes (divisibility by 2 through 181); fallback copies the input.
+smallest-prime-factor,0.8050,success,SPF-N44,4.22e+06,Sweep point N=44 primes (divisibility by 2 through 193); fallback copies the input.
+smallest-prime-factor,0.8300,success,SPF-N48,4.22e+06,Sweep point N=48 primes (divisibility by 2 through 211); fallback copies the input.
+smallest-prime-factor,0.8600,success,SPF-N52,4.22e+06,Sweep point N=52 primes (divisibility by 2 through 239); fallback copies the input.
+smallest-prime-factor,0.9100,success,SPF-N56,4.22e+06,Sweep point N=56 primes (divisibility by 2 through 257); fallback copies the input.
+smallest-prime-factor,0.9400,success,SPF-N60,4.22e+06,Sweep point N=60 primes (divisibility by 2 through 281); fallback copies the input.
+smallest-prime-factor,0.9650,success,SPF-N62,4.22e+06,Sweep point N=62 primes (divisibility by 2 through 293); fallback copies the input.
+smallest-prime-factor,0.9950,success,SPF-N64,4.22e+06,Sweep point N=64 primes (divisibility by 2 through 311); fallback copies the input.
+smallest-prime-factor,1.0000,success,SPF-full-A10,4.22e+06,Full 65-prime circuit with attention sharpness A=10 (robustness check; was 40).
+smallest-prime-factor,0.1200,success,SPF-full-A4,4.22e+06,Full 65-prime circuit with attention sharpness A=4 (robustness check; was 40).
+smallest-prime-factor,0.0300,success,SPF-full-A2,4.22e+06,Full 65-prime circuit with attention sharpness A=2 (robustness check; was 40).
+smallest-prime-factor,0.6450,success,SPF-full-A6,4.22e+06,Full 65-prime circuit with attention sharpness A=6 (robustness threshold check between A=4 and A=10).

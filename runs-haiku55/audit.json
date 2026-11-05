@@ -1,0 +1,205 @@
+{
+ "addition-five-digits-haiku55-s1": {
+  "n_snapshots": 29,
+  "flagged": {}
+ },
+ "addition-five-digits-haiku55-s2": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "boolean-circuit-5-bits-haiku55-s1": {
+  "n_snapshots": 28,
+  "flagged": {}
+ },
+ "boolean-circuit-5-bits-haiku55-s2": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "date-normalization-haiku55-s1": {
+  "n_snapshots": 52,
+  "flagged": {}
+ },
+ "date-normalization-haiku55-s2": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "decimal-to-binary-8bit-haiku55-s1": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
+ "decimal-to-binary-8bit-haiku55-s2": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
+ "digit-counting-10-haiku55-s1": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "digit-counting-10-haiku55-s2": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "edit-distance-8-haiku55-s1": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
+ "edit-distance-8-haiku55-s2": {
+  "n_snapshots": 38,
+  "flagged": {}
+ },
+ "gcd-three-digits-haiku55-s1": {
+  "n_snapshots": 38,
+  "flagged": {}
+ },
+ "gcd-three-digits-haiku55-s2": {
+  "n_snapshots": 40,
+  "flagged": {}
+ },
+ "linear-interpolation-two-points-haiku55-s1": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "linear-interpolation-two-points-haiku55-s2": {
+  "n_snapshots": 29,
+  "flagged": {}
+ },
+ "multiplication-five-digits-haiku55-s1": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "multiplication-five-digits-haiku55-s2": {
+  "n_snapshots": 2,
+  "flagged": {}
+ },
+ "nli-snli-haiku55-s1": {
+  "n_snapshots": 4,
+  "flagged": {
+   "bigram-overlap-v1": {
+    "paths": [
+     "/\\"
+    ]
+   },
+   "trigram-A5-K5-negev-final": {
+    "paths": [
+     "/ev); "
+    ]
+   },
+   "interpretable_transformer": {
+    "paths": [
+     "/ev); "
+    ]
+   }
+  }
+ },
+ "nli-snli-haiku55-s2": {
+  "n_snapshots": 3,
+  "flagged": {}
+ },
+ "paraphrase-mrpc-haiku55-s1": {
+  "n_snapshots": 50,
+  "flagged": {}
+ },
+ "paraphrase-mrpc-haiku55-s2": {
+  "n_snapshots": 50,
+  "flagged": {}
+ },
+ "parity-upto10-bits-haiku55-s1": {
+  "n_snapshots": 31,
+  "flagged": {}
+ },
+ "parity-upto10-bits-haiku55-s2": {
+  "n_snapshots": 26,
+  "flagged": {}
+ },
+ "sentiment-sst2-haiku55-s1": {
+  "n_snapshots": 46,
+  "flagged": {}
+ },
+ "sentiment-sst2-haiku55-s2": {
+  "n_snapshots": 11,
+  "flagged": {
+   "lexicon-v1": {
+    "paths": [
+     "/\\"
+    ]
+   },
+   "lexicon-v15-contrast": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v19-big4": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v21-nostart": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v28-neg5": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v30-strong2": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v40-neg8": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v41-pos8": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v42-pinweak": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   },
+   "lexicon-v50-final": {
+    "paths": [
+     "/...\n        for j, cw in enumerate(CONTRAST_WORDS):\n            nb = n + 1 + j\n            cons = [DELIMS] + [[cw[len(cw) - m]] for m in range(1, len(cw) + 1)] + [["
+    ]
+   }
+  }
+ },
+ "smallest-prime-factor-haiku55-s1": {
+  "n_snapshots": 39,
+  "flagged": {}
+ },
+ "smallest-prime-factor-haiku55-s2": {
+  "n_snapshots": 39,
+  "flagged": {}
+ },
+ "sort-five-digits-haiku55-s1": {
+  "n_snapshots": 29,
+  "flagged": {}
+ },
+ "sort-five-digits-haiku55-s2": {
+  "n_snapshots": 30,
+  "flagged": {}
+ },
+ "trec-coarse-haiku55-s1": {
+  "n_snapshots": 45,
+  "flagged": {}
+ },
+ "trec-coarse-haiku55-s2": {
+  "n_snapshots": 50,
+  "flagged": {}
+ },
+ "word-reversal-3x3-haiku55-s1": {
+  "n_snapshots": 39,
+  "flagged": {}
+ },
+ "word-reversal-3x3-haiku55-s2": {
+  "n_snapshots": 40,
+  "flagged": {}
+ }
+}

@@ -1,5 +1,5 @@
 """Score each trec-coarse run's best program on data outside its 2,000-example pool: the official test split and the rest of the training split."""
-import contextlib, csv, glob, importlib.util, io, json, os, sys
+import contextlib, csv, glob, importlib.util, io, json, os, re, sys
 import torch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,7 +16,10 @@ def main():
         import src.task as T
         from src.eval import autoregressive_generate
         from datasets import load_dataset
-        path = os.path.join(rd, "interpretable_transformers_lib", best["model_shorthand_name"] + ".py")
+        name = re.sub(r"[^A-Za-z0-9_.-]", "_", best["model_shorthand_name"])
+        path = next((p for p in [os.path.join(rd, "reconstructed", name + ".py"), os.path.join(rd, "interpretable_transformers_lib", name + ".py")] if os.path.exists(p)), None)
+        if path is None:
+            print("no program for", rd, best["model_shorthand_name"]); continue
         spec = importlib.util.spec_from_file_location("snap_" + os.path.basename(rd).replace("-", "_"), path)
         mod = importlib.util.module_from_spec(spec)
         with contextlib.redirect_stdout(io.StringIO()):

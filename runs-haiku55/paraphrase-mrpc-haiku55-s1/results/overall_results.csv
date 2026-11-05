@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.0000,success,RandomInitInterpretable,1.61e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+paraphrase-mrpc,0.6800,success,const-one-v1,6.67e+04,"Constant baseline: always predict '1' (via a constant residual flag, no attention/MLP)."
+paraphrase-mrpc,0.6800,success,l1hist-tau0.5,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.5 -> '1'."
+paraphrase-mrpc,0.5600,success,l1hist-tau0.3,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.3 -> '1'."
+paraphrase-mrpc,0.6450,success,l1hist-tau0.4,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.4 -> '1'."
+paraphrase-mrpc,0.6750,success,l1hist-tau0.6,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.6 -> '1'."
+paraphrase-mrpc,0.6700,success,l1hist-tau0.7,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.7 -> '1'."
+paraphrase-mrpc,0.6750,success,l1hist-tau0.8,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.8 -> '1'."
+paraphrase-mrpc,0.6800,success,l1hist-tau0.9,6.67e+04,"2-layer: attention builds char histograms of both sentences at '=', MLP computes L1 distance, threshold 0.9 -> '1'."
+paraphrase-mrpc,0.4400,success,l1hist-swap-tau0.3,6.67e+04,2-layer L1 char-histogram distance; reversed direction: predict '1' iff distance >= 0.3.
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.5,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.5.
+paraphrase-mrpc,0.5650,success,l1hist-nospace-tau0.3,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.3.
+paraphrase-mrpc,0.6550,success,l1hist-nospace-tau0.4,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.4.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau0.6,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.6.
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.8,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.8.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau1.0,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 1.0.
+paraphrase-mrpc,0.6700,success,l1hist-nospace-tau0.7,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.7.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau0.9,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.9.
+paraphrase-mrpc,0.4600,success,l1hist-nospace-tau0.2,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.2.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau0.45,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.45.
+paraphrase-mrpc,0.6650,success,l1hist-nospace-tau0.55,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.55.
+paraphrase-mrpc,0.6700,success,l1hist-nospace-tau0.65,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.65.
+paraphrase-mrpc,0.6450,success,l1hist-nospace-tau0.35,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.35.
+paraphrase-mrpc,0.5050,success,l1hist-nospace-tau0.25,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.25.
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.75,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.75.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau0.85,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.85.
+paraphrase-mrpc,0.6700,success,l1hist-spaces-tau0.45,6.67e+04,2-layer L1 char-histogram distance including spaces (same as tau0.45 baseline); predict '1' iff distance < 0.45.
+paraphrase-mrpc,0.4350,success,l1hist-nospace-swap-tau0.3,6.67e+04,"2-layer L1 char-histogram distance without spaces, reversed direction: predict '1' iff distance >= 0.3."
+paraphrase-mrpc,0.6650,success,l1hist-spaces-tau0.55,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.55.
+paraphrase-mrpc,0.6700,success,l1hist-spaces-tau0.65,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.65.
+paraphrase-mrpc,0.6700,success,l1hist-spaces-tau0.75,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.75.
+paraphrase-mrpc,0.6500,success,l1hist-spaces-tau0.35,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.35.
+paraphrase-mrpc,0.5000,success,l1hist-spaces-tau0.25,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.25.
+paraphrase-mrpc,0.6750,success,l1hist-spaces-tau0.85,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.85.
+paraphrase-mrpc,0.6800,success,l1hist-spaces-tau1.0,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 1.0.
+paraphrase-mrpc,0.6800,success,l1hist-spaces-tau0.95,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.95.
+paraphrase-mrpc,0.6800,success,l1hist-spaces-tau1.2,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 1.2.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau1.2,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 1.2.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau1.5,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 1.5.
+paraphrase-mrpc,0.4200,success,l1hist-nospace-tau0.1,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.1.
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.5-K5,6.67e+04,"2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.5, with a wider threshold ramp (STEP_K=5)."
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.5-K500,6.67e+04,"2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.5, with a sharp threshold ramp (STEP_K=500)."
+paraphrase-mrpc,0.6650,success,l1hist-nospace-tau0.5-A3,6.67e+04,"2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.5, with a weak attention logit (ATTN_SCORE=3)."
+paraphrase-mrpc,0.6750,success,l1hist-nospace-tau0.5-A30,6.67e+04,"2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.5, with a sharp attention logit (ATTN_SCORE=30)."
+paraphrase-mrpc,0.4000,success,l1hist-nospace-tau0.05,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.05.
+paraphrase-mrpc,0.4250,success,l1hist-nospace-tau0.15,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.15.
+paraphrase-mrpc,0.4250,success,l1hist-spaces-tau0.15,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.15.
+paraphrase-mrpc,0.6800,success,l1hist-spaces-tau0.5,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 0.5.
+paraphrase-mrpc,0.6800,success,l1hist-spaces-tau1.1,6.67e+04,2-layer L1 char-histogram distance including spaces; predict '1' iff distance < 1.1.
+paraphrase-mrpc,0.6800,success,l1hist-nospace-tau0.95,6.67e+04,2-layer L1 char-histogram distance without the space character; predict '1' iff distance < 0.95.

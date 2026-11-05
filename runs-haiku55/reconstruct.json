@@ -1,0 +1,206 @@
+{
+ "addition-five-digits-haiku55-s1": {
+  "programs": 30,
+  "edits": 90,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "addition-five-digits-haiku55-s2": {
+  "programs": 3,
+  "edits": 40,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "boolean-circuit-5-bits-haiku55-s1": {
+  "programs": 30,
+  "edits": 70,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "boolean-circuit-5-bits-haiku55-s2": {
+  "programs": 31,
+  "edits": 84,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "date-normalization-haiku55-s1": {
+  "programs": 52,
+  "edits": 121,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "date-normalization-haiku55-s2": {
+  "programs": 52,
+  "edits": 129,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "decimal-to-binary-8bit-haiku55-s1": {
+  "programs": 41,
+  "edits": 89,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "decimal-to-binary-8bit-haiku55-s2": {
+  "programs": 38,
+  "edits": 104,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "digit-counting-10-haiku55-s1": {
+  "programs": 31,
+  "edits": 86,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "digit-counting-10-haiku55-s2": {
+  "programs": 3,
+  "edits": 41,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "edit-distance-8-haiku55-s1": {
+  "programs": 41,
+  "edits": 90,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "edit-distance-8-haiku55-s2": {
+  "programs": 41,
+  "edits": 100,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "gcd-three-digits-haiku55-s1": {
+  "programs": 40,
+  "edits": 47,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "gcd-three-digits-haiku55-s2": {
+  "programs": 41,
+  "edits": 92,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "linear-interpolation-two-points-haiku55-s1": {
+  "programs": 30,
+  "edits": 76,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "linear-interpolation-two-points-haiku55-s2": {
+  "programs": 31,
+  "edits": 96,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "multiplication-five-digits-haiku55-s1": {
+  "programs": 31,
+  "edits": 92,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "multiplication-five-digits-haiku55-s2": {
+  "programs": 30,
+  "edits": 81,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "nli-snli-haiku55-s1": {
+  "programs": 50,
+  "edits": 146,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "nli-snli-haiku55-s2": {
+  "programs": 51,
+  "edits": 143,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "paraphrase-mrpc-haiku55-s1": {
+  "programs": 50,
+  "edits": 114,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "paraphrase-mrpc-haiku55-s2": {
+  "programs": 51,
+  "edits": 154,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "parity-upto10-bits-haiku55-s1": {
+  "programs": 31,
+  "edits": 88,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "parity-upto10-bits-haiku55-s2": {
+  "programs": 31,
+  "edits": 86,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sentiment-sst2-haiku55-s1": {
+  "programs": 51,
+  "edits": 135,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sentiment-sst2-haiku55-s2": {
+  "programs": 51,
+  "edits": 144,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "smallest-prime-factor-haiku55-s1": {
+  "programs": 40,
+  "edits": 50,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "smallest-prime-factor-haiku55-s2": {
+  "programs": 3,
+  "edits": 48,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sort-five-digits-haiku55-s1": {
+  "programs": 30,
+  "edits": 87,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "sort-five-digits-haiku55-s2": {
+  "programs": 31,
+  "edits": 94,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "trec-coarse-haiku55-s1": {
+  "programs": 50,
+  "edits": 136,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "trec-coarse-haiku55-s2": {
+  "programs": 51,
+  "edits": 128,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "word-reversal-3x3-haiku55-s1": {
+  "programs": 40,
+  "edits": 99,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "word-reversal-3x3-haiku55-s2": {
+  "programs": 38,
+  "edits": 109,
+  "edits_not_applied": 0,
+  "final_matches": true
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "run": "boolean-circuit-5-bits-sonnet55-s1",
+ "task": "boolean-circuit-5-bits",
+ "seed": 1,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "b0241cb3-edaa-4415-9af4-6a4711669872",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.6105644,
+   "turns": 148,
+   "seconds": 765,
+   "attempts_before": 0,
+   "attempts_after": 31,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:58:43.491030+00:00",
+ "finished": "2026-11-05T21:11:28.442198+00:00",
+ "attempts": 31
+}

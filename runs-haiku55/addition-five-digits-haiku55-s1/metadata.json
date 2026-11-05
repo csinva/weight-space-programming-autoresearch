@@ -1,0 +1,41 @@
+{
+ "run": "addition-five-digits-haiku55-s1",
+ "task": "addition-five-digits",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "7390c074-0d2b-465b-a4a0-87b5ea08bfd0",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.8325201899999997,
+   "turns": 204,
+   "seconds": 1352,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:07:34.604546+00:00",
+ "finished": "2026-11-05T21:30:07.086865+00:00",
+ "attempts": 30
+}

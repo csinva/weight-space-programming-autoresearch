@@ -1,0 +1,485 @@
+{
+ "summary": {
+  "addition-five-digits-sonnet55-s1": {
+   "data_independent": 2,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "addition-five-digits-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 1
+  },
+  "boolean-circuit-5-bits-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "boolean-circuit-5-bits-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "date-normalization-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 8
+  },
+  "date-normalization-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "decimal-to-binary-8bit-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 5
+  },
+  "decimal-to-binary-8bit-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "digit-counting-10-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "digit-counting-10-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "edit-distance-8-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 6
+  },
+  "edit-distance-8-sonnet55-s2": {
+   "data_independent": 5,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "gcd-three-digits-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "gcd-three-digits-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "linear-interpolation-two-points-sonnet55-s1": {
+   "data_independent": 2,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "linear-interpolation-two-points-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "multiplication-five-digits-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "multiplication-five-digits-sonnet55-s2": {
+   "data_independent": 2,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "nli-snli-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 50,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "nli-snli-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "paraphrase-mrpc-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 1
+  },
+  "parity-upto10-bits-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "parity-upto10-bits-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 28
+  },
+  "sentiment-sst2-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 2
+  },
+  "sentiment-sst2-sonnet55-s2": {
+   "data_independent": 3,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "smallest-prime-factor-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 4
+  },
+  "smallest-prime-factor-sonnet55-s2": {
+   "data_independent": 1,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 5
+  },
+  "sort-five-digits-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 3
+  },
+  "sort-five-digits-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 4
+  },
+  "trec-coarse-sonnet55-s1": {
+   "data_independent": 1,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "trec-coarse-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 2,
+   "nondeterministic": 0,
+   "error": 0
+  },
+  "word-reversal-3x3-sonnet55-s1": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 9
+  },
+  "word-reversal-3x3-sonnet55-s2": {
+   "data_independent": 0,
+   "label_dependent": 0,
+   "input_dependent": 0,
+   "nondeterministic": 0,
+   "error": 7
+  }
+ },
+ "per_snapshot": {
+  "addition-five-digits-sonnet55-s1": {
+   "CarryLookahead2L": "data_independent",
+   "D54_Final_gam2_mask30": "data_independent"
+  },
+  "addition-five-digits-sonnet55-s2": {
+   "TwoLayerLookaheadCarry": "error: AttributeError: module 'snap_TwoLayerLookaheadCarry' has no attribute 'build_model'"
+  },
+  "boolean-circuit-5-bits-sonnet55-s1": {
+   "FoldChain4L_final_d33": "error: AttributeError: module 'snap_FoldChain4L_final_d33' has no attribute 'build_model'",
+   "FoldChain4L_v3_U3.3": "error: AttributeError: module 'snap_FoldChain4L_v3_U3_3' has no attribute 'build_model'",
+   "Fold_shared_d33_U2.35": "error: AttributeError: module 'snap_Fold_shared_d33_U2_35' has no attribute 'build_model'"
+  },
+  "boolean-circuit-5-bits-sonnet55-s2": {
+   "chain4L_final_v2": "error: AttributeError: module 'snap_chain4L_final_v2' has no attribute 'build_model'",
+   "chain5L_bipolar": "error: AttributeError: module 'snap_chain5L_bipolar' has no attribute 'build_model'",
+   "chain5L_singlerelu14_K30": "error: AttributeError: module 'snap_chain5L_singlerelu14_K30' has no attribute 'build_model'"
+  },
+  "date-normalization-sonnet55-s1": {
+   "ClosersRoles2L": "error: AttributeError: module 'snap_ClosersRoles2L' has no attribute 'build_model'",
+   "ClosersRoles2L_A12_ff84": "error: AttributeError: module 'snap_ClosersRoles2L_A12_ff84' has no attribute 'build_model'",
+   "ClosersRoles2L_compact288": "error: AttributeError: module 'snap_ClosersRoles2L_compact288' has no attribute 'build_model'",
+   "ablations_note": "error: AttributeError: module 'snap_ablations_note' has no attribute 'build_model'",
+   "compact288_A2": "error: AttributeError: module 'snap_compact288_A2' has no attribute 'build_model'",
+   "compact288_A5": "error: AttributeError: module 'snap_compact288_A5' has no attribute 'build_model'",
+   "noBhead_290_5h": "error: AttributeError: module 'snap_noBhead_290_5h' has no attribute 'build_model'",
+   "noBhead_A8_276_4h": "error: AttributeError: module 'snap_noBhead_A8_276_4h' has no attribute 'build_model'"
+  },
+  "date-normalization-sonnet55-s2": {
+   "anchor_pointer_v1": "error: AttributeError: module 'snap_anchor_pointer_v1' has no attribute 'build_model'",
+   "final_v50_anchor_pointer_compact": "error: AttributeError: module 'snap_final_v50_anchor_pointer_compact' has no attribute 'build_model'"
+  },
+  "decimal-to-binary-8bit-sonnet55-s1": {
+   "d57_const_restored": "error: AttributeError: module 'snap_d57_const_restored' has no attribute 'build_model'",
+   "d63_3heads": "error: AttributeError: module 'snap_d63_3heads' has no attribute 'build_model'",
+   "gather3_lookup256_bitselect": "error: AttributeError: module 'snap_gather3_lookup256_bitselect' has no attribute 'build_model'",
+   "layer2_ff8": "error: AttributeError: module 'snap_layer2_ff8' has no attribute 'build_model'",
+   "one_layer_Wo1_S2": "error: AttributeError: module 'snap_one_layer_Wo1_S2' has no attribute 'build_model'"
+  },
+  "decimal-to-binary-8bit-sonnet55-s2": {
+   "no_attn_L2_ff16": "error: AttributeError: module 'snap_no_attn_L2_ff16' has no attribute 'build_model'",
+   "remainder_d22_clean_final": "error: AttributeError: module 'snap_remainder_d22_clean_final' has no attribute 'build_model'",
+   "remainder_d22_final": "error: AttributeError: module 'snap_remainder_d22_final' has no attribute 'build_model'"
+  },
+  "digit-counting-10-sonnet55-s1": {
+   "AttnCountTent": "error: AttributeError: module 'snap_AttnCountTent' has no attribute 'build_model'",
+   "FinalCountingAttn": "error: AttributeError: module 'snap_FinalCountingAttn' has no attribute 'build_model'"
+  },
+  "digit-counting-10-sonnet55-s2": {
+   "SinkCountV1": "error: AttributeError: module 'snap_SinkCountV1' has no attribute 'build_model'",
+   "SinkCount_final": "error: AttributeError: module 'snap_SinkCount_final' has no attribute 'build_model'",
+   "SinkCount_final2": "error: AttributeError: module 'snap_SinkCount_final2' has no attribute 'build_model'"
+  },
+  "edit-distance-8-sonnet55-s1": {
+   "WavefrontDP17": "error: AttributeError: module 'snap_WavefrontDP17' has no attribute 'build_model'",
+   "WavefrontDP17_slimattn": "error: AttributeError: module 'snap_WavefrontDP17_slimattn' has no attribute 'build_model'",
+   "WavefrontDP33": "error: AttributeError: module 'snap_WavefrontDP33' has no attribute 'build_model'",
+   "final_compact": "error: AttributeError: module 'snap_final_compact' has no attribute 'build_model'",
+   "quadratic_pointer": "error: AttributeError: module 'snap_quadratic_pointer' has no attribute 'build_model'",
+   "shift_registers": "error: AttributeError: module 'snap_shift_registers' has no attribute 'build_model'"
+  },
+  "edit-distance-8-sonnet55-s2": {
+   "d222_final": "data_independent",
+   "dp_jacobi_tied16": "data_independent",
+   "final_top_pin_tied10": "data_independent",
+   "tied10_inhib7_final": "data_independent",
+   "tied10_split_heads": "data_independent"
+  },
+  "gcd-three-digits-sonnet55-s1": {
+   "ConstOne": "error: AttributeError: module 'snap_ConstOne' has no attribute 'build_model'",
+   "JointTent2LayerTight_N150": "error: AttributeError: module 'snap_JointTent2LayerTight_N150' has no attribute 'build_model'",
+   "SlimDivisor99": "error: AttributeError: module 'snap_SlimDivisor99' has no attribute 'build_model'"
+  },
+  "gcd-three-digits-sonnet55-s2": {
+   "divisor_onehot_v1": "error: AttributeError: module 'snap_divisor_onehot_v1' has no attribute 'build_model'",
+   "exact_final": "error: AttributeError: module 'snap_exact_final' has no attribute 'build_model'"
+  },
+  "linear-interpolation-two-points-sonnet55-s1": {
+   "AffineLookupLN4": "data_independent",
+   "Final_Compact_d48": "data_independent"
+  },
+  "linear-interpolation-two-points-sonnet55-s2": {
+   "clean_final_d56": "error: AttributeError: module 'snap_clean_final_d56' has no attribute 'build_model'",
+   "final_margin_sharp20": "error: AttributeError: module 'snap_final_margin_sharp20' has no attribute 'build_model'",
+   "gather_slope_onehot_5blk": "error: AttributeError: module 'snap_gather_slope_onehot_5blk' has no attribute 'build_model'"
+  },
+  "multiplication-five-digits-sonnet55-s1": {
+   "binary_products_d90": "error: NameError: name 'SimpleTransformer' is not defined",
+   "final_clean_d40": "error: NameError: name 'SimpleTransformer' is not defined",
+   "schoolbook_ripple_carry": "error: AttributeError: module 'snap_schoolbook_ripple_carry' has no attribute 'build_model'"
+  },
+  "multiplication-five-digits-sonnet55-s2": {
+   "HTU_S50_Gate450": "data_independent",
+   "SquaresColumnSumThreshold": "data_independent"
+  },
+  "nli-snli-sonnet55-s1": {
+   "tri_nb_overlap_v1": "label_dependent",
+   "tri_nb_v2_K1000_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v2_K1371_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v2_K200_lam0.25_b8.0": "label_dependent",
+   "tri_nb_v2_K200_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v2_K200_lam1.0_b8.0": "label_dependent",
+   "tri_nb_v2_K500_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v3heldout_K1000_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v3heldout_K20_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v3heldout_K300_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v4novel_K1000_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.25_b16.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b16.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng2": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng3": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b4.0_minc3_ng5": "label_dependent",
+   "tri_nb_v4novel_K100_lam0.5_b8.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K100_lam2.0_b16.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K150_lam0.5_b4.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.35_b8.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b4.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc10_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len0.0_ovs0.5": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len0.0_ovs2.0": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc3_ng4_len1.0": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K200_lam0.75_b8.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K300_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K300_lam0.5_b4.0_minc3_ng4": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.35_b8.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc4_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng3_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc6_ng5_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b12.0_minc8_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b20.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b6.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.5_b8.0_minc6_ng4_len1.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K400_lam0.75_b8.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K500_lam0.5_b12.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v4novel_K500_lam0.5_b8.0": "label_dependent",
+   "tri_nb_v4novel_K500_lam0.5_b8.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K500_lam1.0_b8.0": "label_dependent",
+   "tri_nb_v4novel_K50_lam0.5_b8.0_minc3": "label_dependent",
+   "tri_nb_v4novel_K700_lam0.5_b8.0_minc6_ng4_len0.0_ovs1.0": "label_dependent",
+   "tri_nb_v6simple_K400_lam0.5_b12.0_minc6_ng4": "label_dependent"
+  },
+  "nli-snli-sonnet55-s2": {
+   "BigramNovelty3L_v2": "error: AttributeError: module 'snap_BigramNovelty3L_v2' has no attribute 'build_model'",
+   "Final_BigramNovelty_Len_v50": "error: AttributeError: module 'snap_Final_BigramNovelty_Len_v50' has no attribute 'build_model'"
+  },
+  "paraphrase-mrpc-sonnet55-s2": {
+   "const_one": "error: AttributeError: module 'snap_const_one' has no attribute 'build_model'"
+  },
+  "parity-upto10-bits-sonnet55-s1": {
+   "final_d2_dff10_clean": "error: AttributeError: module 'snap_final_d2_dff10_clean' has no attribute 'build_model'",
+   "uniform_attn_count_relu_zigzag": "error: AttributeError: module 'snap_uniform_attn_count_relu_zigzag' has no attribute 'build_model'"
+  },
+  "parity-upto10-bits-sonnet55-s2": {
+   "scalar_residual_d1": "error: AttributeError: module 'snap_scalar_residual_d1' has no attribute 'build_model'",
+   "scalar_residual_d1_ff8_ablation": "error: AttributeError: module 'snap_scalar_residual_d1_ff8_ablation' has no attribute 'build_model'",
+   "scalar_residual_d1_softmax": "error: AttributeError: module 'snap_scalar_residual_d1_softmax' has no attribute 'build_model'",
+   "scalar_residual_d1_verified": "error: AttributeError: module 'snap_scalar_residual_d1_verified' has no attribute 'build_model'",
+   "scalar_residual_d1_vote1": "error: AttributeError: module 'snap_scalar_residual_d1_vote1' has no attribute 'build_model'",
+   "triangle_wave_d2_bias_only_fc1": "error: AttributeError: module 'snap_triangle_wave_d2_bias_only_fc1' has no attribute 'build_model'",
+   "triangle_wave_d2_fc1_scalar": "error: AttributeError: module 'snap_triangle_wave_d2_fc1_scalar' has no attribute 'build_model'",
+   "triangle_wave_d2_fc2_scalar": "error: AttributeError: module 'snap_triangle_wave_d2_fc2_scalar' has no attribute 'build_model'",
+   "triangle_wave_d2_ff9_skip": "error: AttributeError: module 'snap_triangle_wave_d2_ff9_skip' has no attribute 'build_model'",
+   "triangle_wave_d2_integer": "error: AttributeError: module 'snap_triangle_wave_d2_integer' has no attribute 'build_model'",
+   "triangle_wave_d2_nofc2bias": "error: AttributeError: module 'snap_triangle_wave_d2_nofc2bias' has no attribute 'build_model'",
+   "triangle_wave_d2_nolayernorm": "error: AttributeError: module 'snap_triangle_wave_d2_nolayernorm' has no attribute 'build_model'",
+   "triangle_wave_d2_nopos": "error: AttributeError: module 'snap_triangle_wave_d2_nopos' has no attribute 'build_model'",
+   "triangle_wave_d2_paramfree_attn": "error: AttributeError: module 'snap_triangle_wave_d2_paramfree_attn' has no attribute 'build_model'",
+   "triangle_wave_d2_scalar_emb_headbias": "error: AttributeError: module 'snap_triangle_wave_d2_scalar_emb_headbias' has no attribute 'build_model'",
+   "triangle_wave_d2_scalar_head": "error: AttributeError: module 'snap_triangle_wave_d2_scalar_head' has no attribute 'build_model'",
+   "triangle_wave_d3": "error: AttributeError: module 'snap_triangle_wave_d3' has no attribute 'build_model'",
+   "triangle_wave_d3_meanattn": "error: AttributeError: module 'snap_triangle_wave_d3_meanattn' has no attribute 'build_model'",
+   "triangle_wave_d3_nolayernorm": "error: AttributeError: module 'snap_triangle_wave_d3_nolayernorm' has no attribute 'build_model'",
+   "triangle_wave_d3_noln1": "error: AttributeError: module 'snap_triangle_wave_d3_noln1' has no attribute 'build_model'",
+   "triangle_wave_d3_noln12": "error: AttributeError: module 'snap_triangle_wave_d3_noln12' has no attribute 'build_model'",
+   "triangle_wave_d3_posconst": "error: AttributeError: module 'snap_triangle_wave_d3_posconst' has no attribute 'build_model'",
+   "triangle_wave_d3_seq12": "error: AttributeError: module 'snap_triangle_wave_d3_seq12' has no attribute 'build_model'",
+   "triangle_wave_d4": "error: AttributeError: module 'snap_triangle_wave_d4' has no attribute 'build_model'",
+   "triangle_wave_d4_zero_embed": "error: AttributeError: module 'snap_triangle_wave_d4_zero_embed' has no attribute 'build_model'",
+   "triangle_wave_d6": "error: AttributeError: module 'snap_triangle_wave_d6' has no attribute 'build_model'",
+   "uniform_attn_count_ramp_parity": "error: TypeError: build_model() missing 1 required positional argument: 'SimpleTransformer'",
+   "uniform_attn_triangle_wave": "error: AttributeError: module 'snap_uniform_attn_triangle_wave' has no attribute 'build_model'"
+  },
+  "sentiment-sst2-sonnet55-s1": {
+   "LexiconShiftWindow_v1": "error: AttributeError: module 'snap_LexiconShiftWindow_v1' has no attribute 'build_model'",
+   "NegationFlip_v50_cleaned": "error: AttributeError: module 'snap_NegationFlip_v50_cleaned' has no attribute 'build_model'"
+  },
+  "sentiment-sst2-sonnet55-s2": {
+   "LexiconBig1": "data_independent",
+   "PrefixCancel": "data_independent",
+   "W5_PlainWords_G8": "data_independent"
+  },
+  "smallest-prime-factor-sonnet55-s1": {
+   "spf_3layer_merged_priority_fix": "error: AttributeError: module 'snap_spf_3layer_merged_priority_fix' has no attribute 'build_model'",
+   "spf_final_tidy": "error: AttributeError: module 'snap_spf_final_tidy' has no attribute 'build_model'",
+   "spf_residue_lookup_v1": "error: AttributeError: module 'snap_spf_residue_lookup_v1' has no attribute 'build_model'",
+   "spf_slice_mlps": "error: AttributeError: module 'snap_spf_slice_mlps' has no attribute 'build_model'"
+  },
+  "smallest-prime-factor-sonnet55-s2": {
+   "GroupScan4_Final": "error: AttributeError: module 'snap_GroupScan4_Final' has no attribute 'build_model'",
+   "TrialDivB80": "error: AttributeError: module 'snap_TrialDivB80' has no attribute 'build_model'",
+   "TrialDivHead5": "data_independent",
+   "TrialDivNoneOnP4": "error: AttributeError: module 'snap_TrialDivNoneOnP4' has no attribute 'build_model'",
+   "TrialDivSumDF": "error: ModuleNotFoundError: No module named 'TrialDivB80'",
+   "TrialDivision65": "error: AttributeError: module 'snap_TrialDivision65' has no attribute 'build_model'"
+  },
+  "sort-five-digits-sonnet55-s1": {
+   "d43_B3_q16": "error: AttributeError: module 'snap_d43_B3_q16' has no attribute 'build_model'",
+   "final_d37_ff18_B8": "error: AttributeError: module 'snap_final_d37_ff18_B8' has no attribute 'build_model'",
+   "hist_cumcount_d49_ff20": "error: AttributeError: module 'snap_hist_cumcount_d49_ff20' has no attribute 'build_model'"
+  },
+  "sort-five-digits-sonnet55-s2": {
+   "final_ff9_geom6": "error: AttributeError: module 'snap_final_ff9_geom6' has no attribute 'build_model'",
+   "rank_count_ff20": "error: AttributeError: module 'snap_rank_count_ff20' has no attribute 'build_model'",
+   "rank_count_v1": "error: AttributeError: module 'snap_rank_count_v1' has no attribute 'build_model'",
+   "scalar_pos_d35": "error: AttributeError: module 'snap_scalar_pos_d35' has no attribute 'build_model'"
+  },
+  "trec-coarse-sonnet55-s1": {
+   "ShiftKeywordBag_final": "data_independent"
+  },
+  "trec-coarse-sonnet55-s2": {
+   "kw_priority_final": "input_dependent",
+   "kw_priority_v26": "input_dependent"
+  },
+  "word-reversal-3x3-sonnet55-s1": {
+   "AntiIdentityCanonical": "error: AttributeError: module 'snap_AntiIdentityCanonical' has no attribute 'build_model'",
+   "AntiIdentityReversal": "error: AttributeError: module 'snap_AntiIdentityReversal' has no attribute 'build_model'",
+   "FactorizedWordChar": "error: AttributeError: module 'snap_FactorizedWordChar' has no attribute 'build_model'",
+   "NarrowQK": "error: AttributeError: module 'snap_NarrowQK' has no attribute 'build_model'",
+   "NoLayerNorms_QG40": "error: AttributeError: module 'snap_NoLayerNorms_QG40' has no attribute 'build_model'",
+   "OneHeadPosCopy": "error: AttributeError: module 'snap_OneHeadPosCopy' has no attribute 'build_model'",
+   "SharedTokDims": "error: AttributeError: module 'snap_SharedTokDims' has no attribute 'build_model'",
+   "SplitKeyQueryCodes": "error: AttributeError: module 'snap_SplitKeyQueryCodes' has no attribute 'build_model'",
+   "TiedUnembed": "error: AttributeError: module 'snap_TiedUnembed' has no attribute 'build_model'"
+  },
+  "word-reversal-3x3-sonnet55-s2": {
+   "BinaryCodeAll1L_C10": "error: AttributeError: module 'snap_BinaryCodeAll1L_C10' has no attribute 'build_model'",
+   "BinaryCodeCopy1L": "error: AttributeError: module 'snap_BinaryCodeCopy1L' has no attribute 'build_model'",
+   "ConstWeightCode1L_d15": "error: AttributeError: module 'snap_ConstWeightCode1L_d15' has no attribute 'build_model'",
+   "ConstWeightCode1L_d15_C10_g1_final": "error: AttributeError: module 'snap_ConstWeightCode1L_d15_C10_g1_final' has no attribute 'build_model'",
+   "PointerKeyCopy1L": "error: AttributeError: module 'snap_PointerKeyCopy1L' has no attribute 'build_model'",
+   "PosCopy1L": "error: AttributeError: module 'snap_PosCopy1L' has no attribute 'build_model'",
+   "PosCopy1L_T22_dff0_C5": "error: AttributeError: module 'snap_PosCopy1L_T22_dff0_C5' has no attribute 'build_model'"
+  }
+ }
+}

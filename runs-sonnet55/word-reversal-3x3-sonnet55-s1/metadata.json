@@ -1,0 +1,58 @@
+{
+ "run": "word-reversal-3x3-sonnet55-s1",
+ "task": "word-reversal-3x3",
+ "seed": 1,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "affe9e6f-93d8-4d9e-aa13-d38269a1ddb7",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 0.2554283,
+   "turns": 33,
+   "seconds": 102,
+   "attempts_before": 0,
+   "attempts_after": 4,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  },
+  {
+   "k": 1,
+   "session_id": "affe9e6f-93d8-4d9e-aa13-d38269a1ddb7",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.6173681000000002,
+   "turns": 182,
+   "seconds": 499,
+   "attempts_before": 4,
+   "attempts_after": 41,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_01.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:19:54.889106+00:00",
+ "finished": "2026-11-05T20:29:55.984357+00:00",
+ "attempts": 41
+}

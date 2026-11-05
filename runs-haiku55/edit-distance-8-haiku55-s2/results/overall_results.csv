@@ -1,0 +1,42 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,0.0350,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+edit-distance-8,1.0000,success,ThermoDP-v1,4.28e+07,Closed-form edit-distance circuit: layer 0 attention gathers the 16 chars into slots and computes match bits; 15 MLP layers each run one Jacobi step of the 8x8 DP using thermometer (AND/shift) encoding; LayerNorm removed. Expected 100% accuracy.
+edit-distance-8,1.0000,success,ThermoDP-depth14,4.28e+07,"Ablation of ThermoDP-v1 with only 14 DP (Jacobi) layers instead of 15; tests whether the T(8,8)=15 depth bound is needed for exact edit distance."
+edit-distance-8,1.0000,success,ThermoDP-depth12,4.28e+07,"ThermoDP with 12 DP (Jacobi) layers instead of 15. An optimal alignment (cost <= 8) has at most 12 interior DP cells, so 12 steps should already be exact."
+edit-distance-8,1.0000,success,ThermoDP-depth11,4.28e+07,"ThermoDP with 11 DP (Jacobi) layers, INF=8 start. Exact on the 200-sample harness; the later 20000-pair stress test (ThermoDP-d11-inf8) also gives 0 errors."
+edit-distance-8,1.0000,success,ThermoDP-depth10,4.28e+07,ThermoDP with 10 DP (Jacobi) layers. Probes how far the DP depth can be cut before optimal alignments with many interior cells are missed.
+edit-distance-8,0.9850,success,ThermoDP-depth9,4.28e+07,ThermoDP with 9 DP (Jacobi) layers. Depth sweep continues below the exactness bound.
+edit-distance-8,0.7600,success,ThermoDP-depth8,4.28e+07,ThermoDP with 8 DP (Jacobi) layers. Depth sweep: 8 steps just covers the all-diagonal path.
+edit-distance-8,1.0000,success,ThermoDP-inf0,4.28e+07,"ThermoDP with 11 DP layers but interior cells initialised to 0 instead of INF=8. Still 100%: a walk from a zero-initialised interior cell must take exactly 11 steps, so it costs at least 8 and never beats the true distance."
+edit-distance-8,1.0000,success,ThermoDP-d10-inf0,4.28e+07,"ThermoDP with 10 DP layers and interior cells initialised to 0. Passes the 200-sample harness but has 11/20000 stress errors: at 10 steps, zero-initialised walks can cost 6 < true distance."
+edit-distance-8,1.0000,success,ThermoDP-d13-inf0,4.28e+07,ThermoDP with 13 DP layers and zero-initialised interior cells. Extra depth beyond the exact bound should not change the answer.
+edit-distance-8,0.4250,success,ThermoDP-d7-inf0,4.28e+07,"ThermoDP with 7 DP layers and zero-initialised interior cells. Too shallow: the DP has not reached (8,8) for many inputs."
+edit-distance-8,0.3450,success,ThermoDP-d6-inf0,4.28e+07,ThermoDP with 6 DP layers and zero-initialised interior cells. Too shallow for most inputs.
+edit-distance-8,0.2550,success,ThermoDP-d5-inf0,4.28e+07,ThermoDP with 5 DP layers and zero-initialised interior cells. Too shallow for most inputs.
+edit-distance-8,0.2150,success,ThermoDP-d4-inf0,4.28e+07,ThermoDP with 4 DP layers and zero-initialised interior cells. Too shallow for most inputs.
+edit-distance-8,0.1850,success,ThermoDP-d3-inf0,4.28e+07,ThermoDP with 3 DP layers and zero-initialised interior cells. Too shallow for most inputs.
+edit-distance-8,1.0000,success,ThermoDP-d11-inf1,4.28e+07,ThermoDP with 11 DP layers and interior cells initialised to 1. INF sweep at the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d11-inf2,4.28e+07,ThermoDP with 11 DP layers and interior cells initialised to 2. INF sweep at the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d11-inf3,4.28e+07,ThermoDP with 11 DP layers and interior cells initialised to 3. INF sweep at the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d11-inf4,4.28e+07,ThermoDP with 11 DP layers and interior cells initialised to 4. INF sweep at the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d11-inf5,4.28e+07,ThermoDP with 11 DP layers and interior cells initialised to 5. INF sweep at the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d10-inf1,4.28e+07,ThermoDP with 10 DP layers and interior cells initialised to 1. Probes init sensitivity below the exact depth.
+edit-distance-8,1.0000,success,ThermoDP-d10-inf2,4.28e+07,ThermoDP with 10 DP layers and interior cells initialised to 2. Probes init sensitivity below the exact depth.
+edit-distance-8,0.1700,success,ThermoDP-attn3,4.28e+07,"ThermoDP (11 DP layers, zero init) with gather-head attention logit gap reduced from 30 to 3. Tests how sharp the gather attention must be."
+edit-distance-8,1.0000,success,ThermoDP-attn6,4.28e+07,"ThermoDP (11 DP layers, zero init) with gather-head attention logit gap reduced from 30 to 6. Passes the 200-sample harness but has 28/20000 stress errors (soft attention leaks mass)."
+edit-distance-8,1.0000,success,ThermoDP-attn9,4.28e+07,"ThermoDP (11 DP layers, zero init) with gather-head attention logit gap set to 9 (base is 30)."
+edit-distance-8,1.0000,success,ThermoDP-attn7,4.28e+07,"ThermoDP (11 DP layers, zero init) with gather-head attention logit gap set to 7 (base is 30). Passes the 200-sample harness but has 5/20000 stress errors."
+edit-distance-8,1.0000,success,ThermoDP-attn8,4.28e+07,"ThermoDP (11 DP layers, zero init) with gather-head attention logit gap set to 8 (base is 30)."
+edit-distance-8,,crash,ThermoDP-dff256,,Attempt to shrink MLP width d_ff 1536 -> 256 (assumed 192 units per DP layer; actually 64 cells x 8 thresholds x 3 units = 1536). IndexError at layer 0/DP write; reverted.
+edit-distance-8,1.0000,success,ThermoDP-attn30-d11-inf0,4.28e+07,"ThermoDP base construction (11 DP layers, zero init, attention logit 30) with the attention and DP settings restored after the attn sweep."
+edit-distance-8,1.0000,success,ThermoDP-d12-inf0,4.28e+07,"ThermoDP with 12 DP layers and zero-initialised interior cells, attention logit 30. Extra depth beyond the exact bound should not change the answer."
+edit-distance-8,0.0000,success,ThermoDP-ablate-nopass,4.28e+07,"Ablation: ThermoDP base with the pass-through subtraction removed (fc2 weight on u3 set to 0). The old thermometer bit is no longer cancelled, so the DP state accumulates. Measured 0% (0/200; 19998/20000 wrong): every output saturates at 8."
+edit-distance-8,1.0000,success,ThermoDP-d15-inf0,4.28e+07,"ThermoDP with 15 DP layers (the full T(8,8) depth) and zero-initialised interior cells, attention logit 30. Over-deep relative to the 12-step bound; should stay exact."
+edit-distance-8,1.0000,success,ThermoDP-d11-inf8,4.28e+07,"ThermoDP with 11 DP layers and interior cells initialised to 8, the original INF value. Checks the INF sweep endpoint."
+edit-distance-8,0.1400,success,ThermoDP-ablate-nomatch,4.28e+07,"Ablation: ThermoDP base with the match bit removed from the diagonal AND (h1 ignores m). Measured 14% (28/200; 16854/20000 wrong): the diagonal move is taken whenever its neighbours allow it, so the min is wrong."
+edit-distance-8,1.0000,success,ThermoDP-attn8-d11-inf0,4.28e+07,"ThermoDP with 11 DP layers, zero init, and the smallest gather-attention logit that was exact (8). Minimal-sharpness version of the circuit."
+edit-distance-8,0.9850,success,ThermoDP-d9-inf8,4.28e+07,"ThermoDP with 9 DP layers, interior cells initialised to 8 (gather logit 8). Tests whether the INF=8 start still helps one step below depth 10."
+edit-distance-8,1.0000,success,ThermoDP-d10-inf8,4.28e+07,"ThermoDP with 10 DP layers, interior cells initialised to 8 (gather logit 8). Measured 0/20000 stress errors, unlike zero-init at depth 10 (11/20000)."
+edit-distance-8,1.0000,success,ThermoDP-d12-inf8,4.28e+07,"ThermoDP with 12 DP layers, interior cells initialised to 8 (gather logit 8). Depth 12 with the INF=8 start, above the exact bound."
+edit-distance-8,0.6200,success,ThermoDP-ablate-boundary,4.28e+07,"Ablation: ThermoDP (11 DP layers, zero init) with the DP boundary row/column set to 0 instead of D[0][j]=j and D[i][0]=i. Measured 62% (124/200; 7039/20000 wrong): the base cases are needed."
+edit-distance-8,1.0000,success,ThermoDP-final-d11-attn8,4.28e+07,"Final base construction: 11 DP layers, zero init, gather-attention logit 8, full boundary. Restored after the ablations; 0/20000 stress errors."

@@ -1,0 +1,40 @@
+{
+ "run": "word-reversal-3x3-sonnet55-s2",
+ "task": "word-reversal-3x3",
+ "seed": 2,
+ "model": "claude-sonnet-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 40,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "8260f2b2-3d25-4d94-a4ad-eb6276a0d091",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.365241,
+   "turns": 176,
+   "seconds": 696,
+   "attempts_before": 0,
+   "attempts_after": 40,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:22:29.059306+00:00",
+ "finished": "2026-11-05T20:34:04.635938+00:00",
+ "attempts": 40
+}

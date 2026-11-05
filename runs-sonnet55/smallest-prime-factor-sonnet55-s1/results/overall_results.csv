@@ -1,0 +1,42 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+smallest-prime-factor,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+smallest-prime-factor,1.0000,success,spf_residue_lookup_v1,2.84e+07,"No-LN 4-layer net: attn gathers 5 digits; MLP one-hots first-2/last-3 digit groups; per-(prime,residue) AND-neurons test divisibility by 65 primes<=313; priority neuron picks smallest; final MLP emits digits by position."
+smallest-prime-factor,0.7200,success,spf_3layer_merged_priority,2.68e+07,3-layer net merging priority into output layer; bug: composite-zero neuron relu(c+pos-1) fires at wrong positions when N has >=2 prime divisors.
+smallest-prime-factor,1.0000,success,spf_3layer_merged_priority_fix,2.68e+07,3-layer net with priority folded into the output MLP; composite-zero neuron uses pos weight 10 / bias -10 so it stays off when N has several prime divisors.
+smallest-prime-factor,1.0000,success,spf_3layer_dhead10,2.67e+07,Same as merged_priority_fix but attention d_head 16 -> 10 (minimum to hold a digit one-hot).
+smallest-prime-factor,1.0000,success,spf_attn_score9_soft,2.67e+07,"Attention score 38 -> 9.5 (query 3): still exact enough, 200/200."
+smallest-prime-factor,0.3000,success,spf_attn_score3_too_soft,2.67e+07,"Attention score ~3.2 (query 1): heads blur digits, one-hot AND-neurons break, accuracy 30%."
+smallest-prime-factor,0.8250,success,spf_primes_le200,1.41e+07,Ablation: only test primes <=200; 17.5% of examples have smallest prime factor >200 and fail.
+smallest-prime-factor,1.0000,success,spf_slice_mlps,1.23e+07,"3-layer no-LN net where each MLP reads/writes only its slice of the residual stream (removes dense zero weights): attn gathers digits; one-hot of first2/last3 digits; (prime,residue) AND-neurons for 65 primes<=313; priority + position logits in last MLP."
+smallest-prime-factor,1.0000,success,spf_split3_2,1.23e+07,"Same as spf_slice_mlps but N = 100*A + B with A = first 3 digits (1000 one-hot) and B = last 2 digits (100 one-hot); same size, same accuracy."
+smallest-prime-factor,1.0000,success,spf_no_const_dim,1.23e+07,spf_split3_2 but the head query comes from the answer-position one-hots instead of a constant-1 dimension (CONST unused).
+smallest-prime-factor,1.0000,success,spf_p2p5_single_neuron,1.23e+07,"Primes 2 and 5 divide 100, so divisibility depends only on B (last two digits): one neuron each instead of p. (Dense n_params unchanged.)"
+smallest-prime-factor,1.0000,success,spf_attn_q30,1.23e+07,"p2p5 single neuron model with attention query 30 (score ~95): hard attention, same result."
+smallest-prime-factor,0.8350,success,spf_ablate_priority,1.23e+07,"Ablation: no suppression by smaller divisors in the last MLP, so every dividing prime votes for its digits."
+smallest-prime-factor,1.0000,success,spf_priority_w3,1.23e+07,Priority suppression weight -3 instead of -1 (stronger margin); matches the -1 version.
+smallest-prime-factor,1.0000,success,spf_general_split_3_2,1.23e+07,"Refactor: A/B digit split generalised via NA (here NA=3: A=first 3 digits, B=last 2), priority weight -3, attention query from answer-position one-hots (q=30)."
+smallest-prime-factor,1.0000,success,spf_split_2_3,1.23e+07,General-split model with NA=2 (A=first 2 digits one-hot of 100; B=last 3 digits one-hot of 1000); same size as 3/2.
+smallest-prime-factor,1.0000,success,spf_split_4_1,1.96e+08,General-split model with NA=4 (A=first 4 digits one-hot of 10^4; B=last digit): 16x more parameters in the residue layer.
+smallest-prime-factor,1.0000,success,spf_merged_zero_neuron,1.23e+07,"NA=3 split; the two leading-zero neurons (answer positions 0,1) merged into one neuron with weight 10 on both position one-hots."
+smallest-prime-factor,1.0000,success,spf_head_scale3,1.23e+07,Merged-zero-neuron model with output head weights 3 instead of 1 (argmax invariant to logit scale).
+smallest-prime-factor,1.0000,success,spf_l2_margin,1.23e+07,"Residue neurons use weights 2 / bias -3 (match on both sides gives 1, one side gives -1): a margin against noise."
+smallest-prime-factor,0.0000,success,spf_l1_leaky_and,1.23e+07,Negative test: L1 digit-AND neurons with bias raised by 0.5 so partial digit matches leak 0.5 into the one-hots.
+smallest-prime-factor,1.0000,success,spf_l1_l2_margin,1.23e+07,"Margin AND-gates in both L1 (weights 2, bias -(2nd-1)) and L2 (weights 2, bias -3): a missing input gives -1, not 0."
+smallest-prime-factor,1.0000,success,spf_all_margin,1.23e+07,"Margin AND-gates (weights 2, bias -(2n-1) style) in L1, L2 and L3: every neuron is exactly 1 on its pattern and <=0 when any input is off."
+smallest-prime-factor,1.0000,success,spf_all_margin_q3,1.23e+07,"All-margin gates with softer attention (query 3, score ~9.5)."
+smallest-prime-factor,0.3250,success,spf_all_margin_q1p5,1.23e+07,"All-margin gates with much softer attention (query 1.5, score ~4.7)."
+smallest-prime-factor,1.0000,success,spf_all_margin_q2p2,1.23e+07,All-margin gates with attention query 2.2 (score ~6.9): probing the softness threshold between q=1.5 (fails) and q=3 (works).
+smallest-prime-factor,0.4050,success,spf_all_margin_q1p8,1.23e+07,"All-margin gates with attention query 1.8 (score ~5.7): narrowing the softness threshold (q=1.5 fails, q=2.2 works)."
+smallest-prime-factor,1.0000,success,spf_primes_le400,1.80e+07,"All-margin model, query 6, with superfluous primes up to 400 (only <=313 are reachable): nothing breaks, costs params."
+smallest-prime-factor,1.0000,success,spf_margin_q6_final_candidate,1.23e+07,"Clean candidate: NA=3 split, margin gates in all MLPs, attention query 6 (score ~19), primes<=313, p=2,5 single neurons, merged zero neuron."
+smallest-prime-factor,1.0000,success,spf_hundreds_groups,1.23e+07,"Candidate plus: hundreds digit of the smallest factor via 4 group neurons (primes in [0,100),[100,200),...) instead of 65 per-prime neurons."
+smallest-prime-factor,1.0000,success,spf_hundreds_groups_split2_3,1.23e+07,"Hundreds-group model with the 2/3 digit split (A=100 one-hot, B=1000 one-hot, p=2,5 read B only)."
+smallest-prime-factor,1.0000,success,spf_uniform_residue_neurons,1.23e+07,"Hundreds-group model, NA=3, with the p=2,5 single-neuron special case switched off: every prime uses the same (prime,residue) AND-neurons (uniform, simpler code path)."
+smallest-prime-factor,1.0000,success,spf_eq_token_zero,1.23e+07,Uniform-residue model where the '=' token embedding is all zeros (position embedding alone marks the answer start).
+smallest-prime-factor,1.0000,success,spf_zero_neuron_w6,1.23e+07,Zero-token embedding model with leading-zero neuron weight 6 / bias -6 (c<=6 distinct prime divisors below 1e5).
+smallest-prime-factor,0.9950,success,spf_zero_neuron_w3_neg,1.23e+07,Negative test: leading-zero neuron weight 3 / bias -3 misfires at later positions when N has >=4 distinct prime divisors.
+smallest-prime-factor,1.0000,success,spf_zero_w6_exact_bound,1.23e+07,"Leading-zero neuron weight 6 / bias -6, provably enough since N<1e5 has at most 6 distinct prime factors; fixes the weight-3 misfire (0.995)."
+smallest-prime-factor,1.0000,success,spf_attn_k2_q30,1.23e+07,"Attention key weight 2 and query weight 30 (product 60, score ~19 same as before): only the product q*k matters."
+smallest-prime-factor,1.0000,success,spf_final_clean_split2_3,1.23e+07,"Final clean model with the 2/3 split (A=first 2 digits, B=last 3): same circuit, same size as 3/2."
+smallest-prime-factor,1.0000,success,spf_final_clean,1.23e+07,"Final clean model: 3 layers, no LN, slice-MLPs; attn (key 10, query 6) gathers digits; margin AND-gates; A=first 3 digits, B=last 2; uniform (prime,residue) neurons for 65 primes; hundreds via 4 group neurons; zero-neuron w6."
+smallest-prime-factor,1.0000,success,spf_final_tidy,1.23e+07,"Same as spf_final_clean after removing dead code (CONST dim, p=2/5 special case flag) and fixing comments/docstring."

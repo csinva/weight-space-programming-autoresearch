@@ -1,0 +1,32 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+addition-five-digits,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+addition-five-digits,1.0000,success,TwoLayerLookaheadCarry,2.04e+05,"2-layer exact adder: L1 fetches a_j and looks up a_j+b_j; L2 head A fetches own sum, head B attends nearest non-9 lower digit for carry; MLP lookup (s,carry)->digit."
+addition-five-digits,1.0000,success,Lookahead_d96_h2_ff101,1.18e+05,"Same 2-layer lookahead-carry adder shrunk to d_model=96, 2 heads, d_ff=101 (exactly the units used)."
+addition-five-digits,1.0000,success,Lookahead_d92_h4_ff101,1.10e+05,"Same 2-layer lookahead-carry adder with d_model=92 (tight packing of subspaces), 4 heads, d_ff=101."
+addition-five-digits,1.0000,success,Lookahead_d92_h2_ff101,1.10e+05,"Same 2-layer lookahead-carry adder with d_model=92, only 2 heads (head A / head B in layer 2), d_ff=101."
+addition-five-digits,1.0000,success,Lookahead_sharp1,1.10e+05,d92/h2/ff101 lookahead adder with 4x softer position attention (SHARP=1.0): tests robustness of hard attention.
+addition-five-digits,0.0050,success,Lookahead_sharp0p3,1.10e+05,d92/h2/ff101 lookahead adder with much softer position attention (SHARP=0.3): finds where hard attention breaks.
+addition-five-digits,1.0000,success,Lookahead_sharp0p6,1.10e+05,d92/h2/ff101 lookahead adder with softer position attention (SHARP=0.6): bisecting where hard attention breaks (0.3 failed).
+addition-five-digits,0.9800,success,Lookahead_ninepen10,1.10e+05,d92/h2/ff101 lookahead adder with a weaker penalty (10 instead of 40) on s==9 keys in the carry head.
+addition-five-digits,0.0600,success,Lookahead_th1p7,1.10e+05,d92/h2/ff101 lookahead adder with the layer-1 pair-unit threshold raised to 1.7 (matched pair has margin 0.1 only).
+addition-five-digits,1.0000,success,Lookahead_th1p0,1.10e+05,d92/h2/ff101 lookahead adder with the layer-1 pair-unit threshold lowered to 1.0 (partial matches may leak).
+addition-five-digits,1.0000,success,Lookahead_th1p5,1.10e+05,d92/h2/ff101 lookahead adder with the layer-1 pair-unit threshold at 1.5 (between 1.3 which works and 1.7 which fails).
+addition-five-digits,1.0000,success,Lookahead_ninepen20,1.10e+05,"d92/h2/ff101 lookahead adder with 9-key penalty 20 (10 gave 98%, 40 gave 100%)."
+addition-five-digits,1.0000,success,Lookahead_final_d92_h2,1.10e+05,"Final config: d92/h2/ff101 2-layer lookahead-carry adder with SHARP=4, NINE_PEN=40, TH1=1.3 (parameterized constants, centered position attention)."
+addition-five-digits,1.0000,success,Lookahead_sharp2,1.10e+05,d92/h2/ff101 lookahead adder with SHARP=2 (medium-sharp position attention).
+addition-five-digits,1.0000,success,Lookahead_sharp16,1.10e+05,d92/h2/ff101 lookahead adder with very sharp attention SHARP=16 (checks saturation causes no numeric trouble).
+addition-five-digits,0.3600,success,Lookahead_step1,1.10e+05,d92/h2/ff101 lookahead adder where the carry head's nearest-non-9 preference drops 1 per digit (instead of 4).
+addition-five-digits,1.0000,success,Lookahead_step2,1.10e+05,"d92/h2/ff101 lookahead adder where the carry head's nearest-non-9 preference drops 2 per digit (step 1 gave 36%, step 4 gave 100%)."
+addition-five-digits,0.3600,success,Lookahead_step1p5,1.10e+05,"d92/h2/ff101 lookahead adder with carry-head distance step 1.5 (step 1: 36%, step 2: 100%)."
+addition-five-digits,1.0000,success,Lookahead_step3,1.10e+05,"d92/h2/ff101 lookahead adder with carry-head distance step 3 (step 1.5: 36%, step 2: 100%)."
+addition-five-digits,1.0000,success,Lookahead_d128_h4_ff256,2.70e+05,"Lookahead adder in a roomier d128/h4/ff256 model (extra capacity unused), step 4: sanity check of size independence."
+addition-five-digits,1.0000,success,Lookahead_ninepen80,1.10e+05,d92/h2/ff101 lookahead adder with 9-key penalty 80 (stronger than default 40).
+addition-five-digits,1.0000,success,Lookahead_th1p2,1.10e+05,d92/h2/ff101 lookahead adder with layer-1 pair threshold 1.2.
+addition-five-digits,1.0000,success,Lookahead_th1p4,1.10e+05,d92/h2/ff101 lookahead adder with layer-1 pair threshold 1.4.
+addition-five-digits,1.0000,success,Lookahead_sharp8,1.10e+05,d92/h2/ff101 lookahead adder with SHARP=8 position attention.
+addition-five-digits,1.0000,success,Lookahead_ninepen15,1.10e+05,"d92/h2/ff101 lookahead adder with 9-key penalty 15 (10: 98%, 20: 100%)."
+addition-five-digits,1.0000,success,Lookahead_d100_h4_ff101,1.26e+05,"Lookahead adder at d_model=100, 4 heads (d_head 25), d_ff=101."
+addition-five-digits,1.0000,success,Lookahead_d96_h4_ff128,1.28e+05,"Lookahead adder at d_model=96, 4 heads (d_head 24), d_ff=128."
+addition-five-digits,1.0000,success,Lookahead_sharp1_step4,1.10e+05,d92/h2/ff101 lookahead adder with SHARP=1 and step 4 (step 4 at default sharpness works; check the combination).
+addition-five-digits,1.0000,success,Lookahead_ninepen30,1.10e+05,d92/h2/ff101 lookahead adder with 9-key penalty 30.
+addition-five-digits,1.0000,success,Lookahead_canonical_v2,1.10e+05,"Canonical d92/h2/ff101 2-layer lookahead-carry adder: SHARP=4, NINE_PEN=40, TH1=1.3, STEP=4 (cleaned constants)."

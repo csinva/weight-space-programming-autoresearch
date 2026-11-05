@@ -1,0 +1,33 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+multiplication-five-digits,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init)."
+multiplication-five-digits,1.0000,success,SquaresColumnSumThreshold,2.07e+05,"float64 net: 10 fixed-position heads gather digits; ReLU squares give exact a_i*b_j column sums; position-gated 10^(q-p) sum u; 451 steep-ramp thresholds give floor(u) mod 10 (K=1e10, S=60)."
+multiplication-five-digits,1.0000,success,SquaresColumnSumThreshold_K5e9,2.07e+05,"Same as SquaresColumnSumThreshold with K=5e9, EPS=3e-10."
+multiplication-five-digits,1.0000,success,Sq_K5e9_S30,2.07e+05,"Same, attention sharpness S=30."
+multiplication-five-digits,1.0000,success,SharedSquares,1.68e+05,Shared a^2/b^2 units: ab=(s^2-a^2-b^2)/2 (540 units instead of 900 in block 0).
+multiplication-five-digits,1.0000,success,SharedSquares_Gate500,1.68e+05,Position gate constant 1000 -> 500.
+multiplication-five-digits,1.0000,success,SharedSquares_Gate500_V450,1.68e+05,Threshold range 451 -> 450.
+multiplication-five-digits,0.9950,success,TwoStageFloorMod,8.31e+04,"floor(u) mod 10 in two stages (45 tens-steps, then 10 unit-steps) with no snapping: float noise from huge-K ramps causes 1 error."
+multiplication-five-digits,1.0000,success,TwoStageFloorMod_Snap,9.48e+04,TwoStage plus a snap block (K2=100 steps at m-0.5) that rounds the tens count to an exact integer.
+multiplication-five-digits,0.4400,success,TwoStage_S15,9.48e+04,TwoStage_Snap with attention sharpness S=15: softmax leakage (e^-15) too large for exact arithmetic.
+multiplication-five-digits,0.4450,success,TwoStage_S25,9.48e+04,S=25: leakage still breaks exactness.
+multiplication-five-digits,1.0000,success,TwoStage_S40,9.48e+04,S=40 works.
+multiplication-five-digits,1.0000,success,TwoStage_S40_K2e9,9.48e+04,"K=2e9, EPS=6e-10."
+multiplication-five-digits,1.0000,success,TwoStage_S40_K2e9_Gate410,9.48e+04,Gate constant 410.
+multiplication-five-digits,1.0000,success,HundTensUnits,8.33e+04,Hierarchical floor/mod: hundreds (4 steps) -> snap -> tens (9 steps) -> snap -> units (10 steps); 7 blocks.
+multiplication-five-digits,1.0000,success,HundTensUnits_Snap1000,8.33e+04,Snap sharpness 1000.
+multiplication-five-digits,1.0000,success,HundTensUnits_Snap20,8.33e+04,Snap sharpness 20.
+multiplication-five-digits,1.0000,success,HTU_Snap20_K1.5e9,8.33e+04,"K=1.5e9, EPS=7e-10."
+multiplication-five-digits,1.0000,success,HTU_K5e8_EPS5e-9_expectfail,8.33e+04,"Deliberately unsound constants K=5e8, EPS=5e-9 (EPS above the 1e-9 grain); passes on this sample but not guaranteed."
+multiplication-five-digits,1.0000,success,HTU_S60,8.33e+04,"Sound constants K=1.5e9, EPS=7e-10; S=60."
+multiplication-five-digits,1.0000,success,HTU_S35,8.33e+04,S=35.
+multiplication-five-digits,1.0000,success,HTU_NoTensSnap,8.33e+04,Ablation: units block reads raw tens (no snap); passes here but not guaranteed.
+multiplication-five-digits,1.0000,success,HTU_Snap5,8.33e+04,Snap sharpness 5.
+multiplication-five-digits,1.0000,success,HTU_Snap5_Gate1000,8.33e+04,Gate constant 1000.
+multiplication-five-digits,1.0000,success,HTU_Snap5_Gate1000_K3e9,8.33e+04,"K=3e9, EPS=4e-10."
+multiplication-five-digits,1.0000,success,HTU_S45_K3e9,8.33e+04,S=45.
+multiplication-five-digits,1.0000,success,HTU_S45_K1e10,8.33e+04,"K=1e10, EPS=1.5e-10."
+multiplication-five-digits,1.0000,success,HTU_S45_K1e10_Snap2,8.33e+04,Snap sharpness 2.
+multiplication-five-digits,1.0000,success,HTU_NoHundSnapAblation,8.33e+04,Ablation: tens stage reads raw hundreds (no snap); passes here but not guaranteed.
+multiplication-five-digits,1.0000,success,HTU_S45_Gate450,8.33e+04,Gate constant 450; snap restored.
+multiplication-five-digits,1.0000,success,HTU_S80_Gate450,8.33e+04,S=80.
+multiplication-five-digits,1.0000,success,HTU_S50_Gate450,8.33e+04,float64 net: 10 fixed-position heads gather digits; shared ReLU squares give exact a_i*b_j column sums; position-gated 10^(q-p) sum u; hundreds/tens/units via steep ramp steps with snapping.

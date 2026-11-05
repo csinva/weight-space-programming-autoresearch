@@ -1,0 +1,51 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.0000,success,RandomInitInterpretable,1.59e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sentiment-sst2,0.6850,success,LexiconGather8,1.13e+06,"2-layer: L1 attn heads gather previous 8 chars (sin/cos position match), L1 MLP = one neuron per lexicon word (AND of chars + word-boundary), L2 head 0 averages polarity; head reads sign."
+sentiment-sst2,0.7200,success,LexiconBig1,1.65e+06,"Same circuit as LexiconGather8 (L1 attn gathers 8 previous chars, MLP neuron per lexicon word, L2 head averages polarity) but lexicon expanded to ~700 entries."
+sentiment-sst2,0.6500,success,LexiconBig1_TieNeg,1.65e+06,LexiconBig1 circuit with the tie prior flipped: when no lexicon word fires the model answers 0 (negative) instead of 1.
+sentiment-sst2,0.7200,success,LexiconBig1_Strong3,1.65e+06,"LexiconBig1 circuit, tie prior back to positive, strong-polarity words weighted 3 instead of 2 (mild words stay at 1)."
+sentiment-sst2,0.7400,success,LexiconBig2,1.75e+06,"Strong weight 3; lexicon extended from error analysis on dev seeds (cynical, tragic, devastating, ...) and false-positive stems removed (mess*, harm*, sag*, ...)."
+sentiment-sst2,0.7550,success,LexiconNegPhrases,1.82e+06,"LexiconBig2 plus ~60 short negative phrases containing spaces (not good, n't work, too long, ...) matched like words; the 8-char window handles them."
+sentiment-sst2,0.7600,success,LexiconPosPhrases,1.89e+06,"LexiconNegPhrases plus ~55 short positive phrases (well made, a joy, one of the best, ...) matched with the same 8-char window."
+sentiment-sst2,0.7600,success,LexiconStrong4,1.89e+06,LexiconPosPhrases with strong-polarity weight 4 instead of 3 (no effect).
+sentiment-sst2,0.7350,success,LeadingBoundary,1.89e+06,Strong 4; whole-word neurons also get a negative weight on any letter just before the word (so 'pleasant' no longer fires inside 'unpleasant'). Worse: gather at sentence start is spurious and kills first words.
+sentiment-sst2,0.7650,success,LexiconBig3,1.92e+06,"Strong 4 with phrases; extra negative words from dev-seed errors (maudlin, neither, nor, hopeless, unpleasant* stem to cancel 'pleasant'); leading-boundary penalty dropped."
+sentiment-sst2,0.7650,success,LexiconBig3_Slim,1.35e+06,"LexiconBig3 with the unused layer-2 MLP shrunk to width 1 (fewer parameters, same function)."
+sentiment-sst2,0.7550,success,LexiconNegHeavy,1.52e+06,"LexiconBig3_Slim plus ~400 extra negative-leaning words/stems (un-/over- prefixed adjectives, sloppy, mawkish, subpar, ...)."
+sentiment-sst2,0.7650,success,LexiconNegPruned,1.50e+06,"LexiconNegHeavy with ambiguous generic words pruned (plain, tin, static, wrong, dead, die, blood, violence, pain, ...) to cut false negatives."
+sentiment-sst2,0.7350,success,TwoFreqPos,1.50e+06,LexiconNegPruned lexicon (pruned generic negatives) with position code reduced to two frequencies (periods 96 and 7) instead of three.
+sentiment-sst2,0.7300,success,SoftAttnG1,1.50e+06,"Back to three position frequencies (96, 8, 5); attention gain lowered from 4 to 1 to test how sharp the position-selecting heads must be. (Two frequencies 96/7 gave 0.735: aliasing.)"
+sentiment-sst2,0.7650,success,LexiconBest_G4,1.50e+06,"Best config so far: three position frequencies (96, 8, 5), attention gain 4, pruned ~1500-entry lexicon with phrases, layer-2 MLP width 1. (G=1 gave 0.730, two frequencies gave 0.735.)"
+sentiment-sst2,0.7750,success,CompactLex,1.15e+06,"Same circuit, lexicon rewritten as a compact curated list (~700 entries incl. phrases) without the noisy bulk additions."
+sentiment-sst2,0.7750,success,CompactLex_S2,1.15e+06,CompactLex (0.775) with strong weight 2 instead of 4.
+sentiment-sst2,0.7750,success,CompactLex_Flat,1.15e+06,"CompactLex with every single word weighted +-1 (strong = mild), phrases +-2: one polarity bit per word."
+sentiment-sst2,0.7750,success,CompactLex_AllOnes,1.15e+06,"CompactLex with every entry, words and phrases, weighted exactly +-1 (pure vote counting)."
+sentiment-sst2,0.7600,success,AllOnes_NoPhrases,1.08e+06,All-ones lexicon with the multi-word phrase entries removed (ablation: how much do phrases give?).
+sentiment-sst2,0.7650,success,AllOnes_NoStems,1.15e+06,All-ones lexicon with phrases restored but stem (prefix*) entries removed. (Dropping phrases instead gave 0.760.)
+sentiment-sst2,0.7900,success,PrefixCancel,1.16e+06,"All-ones lexicon (phrases and stems back in; ablations: no phrases 0.760, no stems 0.765) plus ~25 new negatives from dev errors and weight -2 for un-/dis-/mis- words that embed a positive word (unfunny contains funny)."
+sentiment-sst2,0.7900,success,NegatedPositives,1.18e+06,PrefixCancel plus generated 'not X' / 'n't X' phrases (weight -2) for every positive word X of at most 4 letters: a rule-based negation flip inside the 8-char window.
+sentiment-sst2,0.7900,success,MoreStems,1.25e+06,"NegatedPositives plus ~100 extra positive/negative stems (generic prefixes like horrib*, terrif*) and positive words from dev errors (genial, buoyant, interesting, ...)."
+sentiment-sst2,0.7850,success,Window6,8.65e+05,"MoreStems lexicon (0.790 with an 8-char window) but only 6 gather heads (d_model 240): words up to 5 letters + boundary, longer words/phrases truncated to 7-char stems."
+sentiment-sst2,0.7400,success,Window4,5.44e+05,"MoreStems lexicon with only 4 gather heads (d_model 176): whole words up to 4 letters + boundary, longer entries truncated to 5-char stems. (6 heads gave 0.785, 8 heads 0.790.)"
+sentiment-sst2,0.7700,success,Window5,7.06e+05,"MoreStems lexicon with 5 gather heads (d_model 210): whole words up to 5 letters + boundary, longer entries truncated to 6-char stems. (4 heads 0.740, 6 heads 0.785, 8 heads 0.790.)"
+sentiment-sst2,0.7800,success,Window7,1.06e+06,"MoreStems lexicon with 7 gather heads (d_model 273). (4 heads 0.740, 5 heads 0.770, 6 heads 0.785, 8 heads 0.790.)"
+sentiment-sst2,0.7800,success,Window10,1.72e+06,"MoreStems lexicon with 10 gather heads (d_model 370): whole words/phrases up to 10 chars. (4 heads 0.740, 5: 0.770, 6: 0.785, 7: 0.780, 8: 0.790.)"
+sentiment-sst2,0.7950,success,RecencyAvg1,1.25e+06,"Back to 8 gather heads (10 heads gave 0.780, 7: 0.780, 6: 0.785, 5: 0.770, 4: 0.740). Layer-2 averaging head now favours recent positions: attention logit 1.0*cos(2pi(t-s)/96) instead of uniform."
+sentiment-sst2,0.7550,success,RecencyAvg2,1.25e+06,"8 gather heads; layer-2 averaging head favours recent positions with logit 2.0*cos(2pi(t-s)/96) (1.0 gave 0.795, uniform 0.790)."
+sentiment-sst2,0.7900,success,EarlyAvg1,1.25e+06,"8 gather heads; layer-2 averaging head favours EARLY positions: logit -1.0*cos(2pi(t-s)/96). (+1.0 recency gave 0.795, +2.0 gave 0.755, uniform 0.790.)"
+sentiment-sst2,0.7900,success,UniformAvgFinal,1.25e+06,"8 gather heads, plain uniform averaging in layer 2 (recency 0); same model as MoreStems. Position-weighting variants were within noise: +1.0 0.795, +2.0 0.755, -1.0 0.790."
+sentiment-sst2,0.7950,success,DevRound5,1.26e+06,"Uniform averaging; ~15 more negatives and 4 negative phrases from a fresh dev seed (51, where the previous model scored 0.815)."
+sentiment-sst2,0.8150,success,DevRound6,1.28e+06,"DevRound5 (0.795) plus ~25 words and 6 phrases from errors on dev seed 61 (where the previous model scored 0.770): crippled, dawdle*, anemic, lack*, money back, ..."
+sentiment-sst2,0.6800,success,DevRound6_TieNeg,1.28e+06,DevRound6 (0.815) with the no-word tie flipped to answer 0 instead of 1.
+sentiment-sst2,0.8150,success,DevRound6_Prior3x,1.28e+06,DevRound6 (0.815) with the positive prior tripled (0.006 instead of 0.002): one negative word no longer fully outvotes the default. (Flipping the tie to 0 gave 0.680.)
+sentiment-sst2,0.6650,success,DevRound6_Prior10x,1.28e+06,"DevRound6 with a strong positive prior (0.02, ten times the default; prior 0.006 gave the same 0.815): a lone negative word is outvoted by the default."
+sentiment-sst2,0.8150,success,DevRound6_Prior4x,1.28e+06,"DevRound6 with positive prior 0.009 (default 0.002, 0.006 gave the same 0.815, 0.02 collapsed to 0.665): probing where a lone negative word stops winning."
+sentiment-sst2,0.8200,success,DevRound7,1.30e+06,"DevRound6 (0.815, prior back to 0.002; priors 0.006/0.009 identical, 0.02 collapsed) plus ~20 words/phrases from errors on dev seed 71 (queasy*, horror*, rip off, no business, ...)."
+sentiment-sst2,0.8350,success,DevRound8,1.31e+06,"DevRound7 (0.820) plus ~15 words and 5 phrases from errors on dev seed 81 (drown*, problematic, anachronistic, vanity, sorely lacking, ...). Tuned on dev seeds that overlap the 2000-example pool, so this number is optimistic."
+sentiment-sst2,0.8100,success,DevRound8_NoHandPhrases,1.23e+06,DevRound8 (0.835 with hand-listed phrases) with every hand-written multi-word phrase removed; only single words/stems and the generated 'not X' / 'n't X' phrases remain. On a fresh 400-example seed (111) this scored 0.7325.
+sentiment-sst2,0.8200,success,NoHandPhrases_W6,8.49e+05,"Single-word lexicon (no hand-listed phrases) with only 6 gather heads (d_model 240)."
+sentiment-sst2,0.8200,success,NoHandPhrases_W5,6.92e+05,"Single-word lexicon (no hand-listed phrases) with only 5 gather heads (d_model 210). 6 heads gave 0.820, 8 heads 0.810 on the default seed."
+sentiment-sst2,0.7900,success,NoHandPhrases_W4,5.33e+05,"Single-word lexicon (no hand-listed phrases) with only 4 gather heads (d_model 176). 5 and 6 heads gave 0.820, 8 heads 0.810 on the default seed."
+sentiment-sst2,0.8200,success,W5_NoPrefixCancel,6.92e+05,5-head single-word model (0.820) with the un-/dis-/mis- prefix-cancel rule disabled (ablation). 4 heads gave 0.790.
+sentiment-sst2,0.8150,success,W5_PlainWordsOnly,6.72e+05,"5-head model with prefix-cancel (no effect, 0.820) and generated 'not X' phrases also disabled: a pure single-word/stem vote counter."
+sentiment-sst2,0.8150,success,W5_PlainWords_G8,6.72e+05,Pure single-word/stem vote counter (0.815) with 5 gather heads and attention gain doubled to 8 (sharper position selection).

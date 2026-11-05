@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+sort-five-digits,1.0000,success,rank_count_v1,1.33e+04,1 layer/1 head: attention averages prompt digits into counts; MLP selects digit d with cum_lt(d)<=k<cum_le(d) via two step functions (40 units; one-hot positions; d_model=44).
+sort-five-digits,1.0000,success,rank_count_ff20,1.15e+04,1 layer/1 head: attention counts prompt digits; MLP (20 units) one step per digit [cum_le(d)>k] weighted (10-d) so the smallest qualifying digit wins.
+sort-five-digits,1.0000,success,ff20_scale3,1.15e+04,rank_count_ff20 with embedding scales T=P=C=3 (robustness check).
+sort-five-digits,1.0000,success,ff20_scale100,1.15e+04,rank_count_ff20 with embedding scales T=P=C=100 (robustness check).
+sort-five-digits,1.0000,success,ff20_scale1,1.15e+04,rank_count_ff20 with embedding scales T=P=C=1 (robustness check).
+sort-five-digits,1.0000,success,scalar_pos_d35,7.90e+03,ff20 sort with scalar position counter k (plus mirror 5-k and answer flag) instead of one-hot positions; d_model=35.
+sort-five-digits,1.0000,success,single_k_d33,7.18e+03,"ff20 sort; one scalar position dim (k+1, 0 in prompt) serves both key mask and MLP; LN mean offset solved analytically; d_model=33."
+sort-five-digits,1.0000,success,single_k_pen3,7.18e+03,single_k_d33 with key-mask penalty -3 instead of -30 (still works).
+sort-five-digits,0.0000,success,single_k_pen0p3,7.18e+03,single_k_d33 with key-mask penalty -0.3: attention leaks onto answer positions and the count signal is destroyed (ablation).
+sort-five-digits,1.0000,success,single_k_scale1,7.18e+03,single_k_d33 with embedding scales 1.
+sort-five-digits,1.0000,success,single_k_mixed_scales,7.18e+03,"single_k_d33 with unequal embedding scales T=2,P=7,C=20."
+sort-five-digits,1.0000,success,ff18_baseline9,7.18e+03,single_k_d33 with digit-9 units removed and replaced by a small const baseline in the head (d_ff still 20).
+sort-five-digits,1.0000,success,ff18_d33,7.05e+03,"1 layer/1 head sort: attention counts prompt digits, one scalar position dim k+1; MLP has 18 units (9 digit steps, digit 9 is the const-baseline default); d_model=33."
+sort-five-digits,1.0000,success,ff18_base0p001,7.05e+03,ff18_d33 with digit-9 baseline 0.001 (any small positive value works).
+sort-five-digits,0.0000,success,ff18_base1p0,7.05e+03,ff18_d33 with digit-9 baseline 1.0: baseline beats real scores so 9 is always output (ablation).
+sort-five-digits,0.0150,success,ff9_ramp,6.44e+03,"9 units, ramp relu(cum_le(d)-k) only, linear weights (10-d): ramp magnitude grows with d so the argmax is wrong (ablation)."
+sort-five-digits,0.9950,success,ff9_ramp_geom,6.44e+03,"9 ramp units with geometric weights 6^(9-d), digit-9 baseline 0.001: one float-noise failure."
+sort-five-digits,1.0000,success,ff9_ramp_geom_b05,6.44e+03,ff9 ramp units geometric weights 6^(9-d) with digit-9 baseline 0.05.
+sort-five-digits,0.6550,success,ff9_geom3,6.44e+03,Ramp units with geometric ratio 3 (too small: ramp up to 5 can outweigh the weight gap; ablation).
+sort-five-digits,0.9900,success,ff9_geom10,6.44e+03,Ramp units with geometric ratio 10 (float32 noise on huge weights causes 2 errors).
+sort-five-digits,1.0000,success,ff9_geom6_scale3,6.44e+03,ff9 geom-6 with embedding scales 3.
+sort-five-digits,0.6250,success,ff9_geom6_scale30,6.44e+03,"ff9 geom-6 with embedding scale 30: the const baseline for digit 9 scales with the const dim and overtakes real scores (ablation, fragile)."
+sort-five-digits,0.0250,success,ff9_geom6_heads3,6.44e+03,ff9 geom-6 with n_heads=3: heads split the residual into 11-dim chunks and break the hand-wired circuit (ablation).
+sort-five-digits,1.0000,success,ff9_geom6_pen10,6.44e+03,ff9 geom-6 with key-mask penalty -10.
+sort-five-digits,1.0000,success,ff9_geom6_pen100,6.44e+03,ff9 geom-6 with key-mask penalty -100.
+sort-five-digits,1.0000,success,ff9_geom6_base0p02,6.44e+03,ff9 geom-6 with digit-9 baseline 0.02 and penalty -100.
+sort-five-digits,1.0000,success,ff9_geom6_scale5,6.44e+03,ff9 geom-6 with embedding scales 5 and penalty -100.
+sort-five-digits,1.0000,success,ff9_geom8_scale5,6.44e+03,ff9 with geometric ratio 8 and embedding scales 5.
+sort-five-digits,1.0000,success,final_ff9_geom6,6.44e+03,1 layer/1 head sort: attention averages prompt digits into counts; 9 MLP ramp units relu(cum_le(d)-k) weighted 6^(9-d) so the smallest digit with cum_le(d)>k wins (9 is a const-baseline default); d_model=33.

@@ -1,0 +1,39 @@
+{
+ "run": "sentiment-sst2-haiku55-s2",
+ "task": "sentiment-sst2",
+ "seed": 2,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "7071b655-53ea-4f6f-b4fc-53ba178c2b5c",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.9086789000000004,
+   "turns": 279,
+   "seconds": 2307,
+   "attempts_before": 0,
+   "attempts_after": 51,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.103935+00:00",
+ "finished": "2026-11-05T20:39:57.621088+00:00",
+ "attempts": 51
+}

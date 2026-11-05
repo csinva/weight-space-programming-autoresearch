@@ -1,0 +1,40 @@
+{
+ "run": "boolean-circuit-5-bits-haiku55-s1",
+ "task": "boolean-circuit-5-bits",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 30,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "8045fa66-aba1-4093-89a0-e7efab04299a",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.46211127,
+   "turns": 180,
+   "seconds": 1266,
+   "attempts_before": 0,
+   "attempts_after": 30,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Grep",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T21:33:54.593811+00:00",
+ "finished": "2026-11-05T21:55:00.286411+00:00",
+ "attempts": 30
+}

@@ -1,0 +1,551 @@
+{
+ "addition-five-digits-haiku55-s1": {
+  "tools": {
+   "Bash": 48,
+   "Edit": 119,
+   "Write": 31,
+   "Read": 3,
+   "Glob": 1,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "cat interpretable_transformer.py": 1,
+   "uv run": 45
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "addition-five-digits-haiku55-s2": {
+  "tools": {
+   "Read": 4,
+   "Bash": 33,
+   "Edit": 38,
+   "Write": 33
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "ls -la": 1,
+   "uv run": 31
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "boolean-circuit-5-bits-haiku55-s1": {
+  "tools": {
+   "Read": 7,
+   "Bash": 37,
+   "Edit": 102,
+   "Write": 30,
+   "Grep": 3
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 36
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "boolean-circuit-5-bits-haiku55-s2": {
+  "tools": {
+   "Bash": 43,
+   "Edit": 125,
+   "Read": 6,
+   "Write": 31,
+   "Grep": 6,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "pwd; ls": 2,
+   "cat interpretable_transformer.py;": 1,
+   "uv run": 37,
+   "cat >": 3
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "date-normalization-haiku55-s1": {
+  "tools": {
+   "Read": 6,
+   "Bash": 58,
+   "Edit": 174,
+   "Write": 53,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "pwd &&": 1,
+   "uv run": 56,
+   "grep -n": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "date-normalization-haiku55-s2": {
+  "tools": {
+   "Read": 7,
+   "Bash": 57,
+   "Edit": 130,
+   "Write": 6,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 56
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-haiku55-s1": {
+  "tools": {
+   "Bash": 46,
+   "Edit": 132,
+   "Read": 5,
+   "Write": 43,
+   "Grep": 1,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "pwd; ls": 2,
+   "cat interpretable_transformer.py;": 1,
+   "uv run": 43
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "decimal-to-binary-8bit-haiku55-s2": {
+  "tools": {
+   "Read": 9,
+   "Bash": 47,
+   "Edit": 147,
+   "Write": 47,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 46
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "digit-counting-10-haiku55-s1": {
+  "tools": {
+   "Read": 8,
+   "Edit": 115,
+   "Bash": 35,
+   "Write": 32
+  },
+  "bash_commands": {
+   "uv run": 35
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "digit-counting-10-haiku55-s2": {
+  "tools": {
+   "Read": 4,
+   "Bash": 37,
+   "Edit": 44,
+   "Write": 32,
+   "Grep": 4,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 36
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "edit-distance-8-haiku55-s1": {
+  "tools": {
+   "Read": 6,
+   "Edit": 132,
+   "Bash": 46,
+   "Write": 41
+  },
+  "bash_commands": {
+   "uv run": 46
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "edit-distance-8-haiku55-s2": {
+  "tools": {
+   "Read": 6,
+   "Bash": 56,
+   "Edit": 146,
+   "Write": 40,
+   "Grep": 10
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 52,
+   "grep -n": 1,
+   "python3 -": 1,
+   "awk -F','": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "gcd-three-digits-haiku55-s1": {
+  "tools": {
+   "Read": 3,
+   "Bash": 45,
+   "Edit": 45,
+   "Write": 41
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 43
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "gcd-three-digits-haiku55-s2": {
+  "tools": {
+   "Read": 6,
+   "Bash": 48,
+   "Edit": 133,
+   "Write": 41,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 45,
+   "python3 -": 1,
+   "echo noop": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "linear-interpolation-two-points-haiku55-s1": {
+  "tools": {
+   "Read": 7,
+   "Edit": 78,
+   "Bash": 34,
+   "Write": 32,
+   "Grep": 3,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "uv run": 34
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "linear-interpolation-two-points-haiku55-s2": {
+  "tools": {
+   "Read": 4,
+   "Edit": 93,
+   "Bash": 38,
+   "Write": 34
+  },
+  "bash_commands": {
+   "uv run": 38
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-haiku55-s1": {
+  "tools": {
+   "Read": 8,
+   "Edit": 127,
+   "Bash": 39,
+   "Write": 31,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 38,
+   "python3 -": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "multiplication-five-digits-haiku55-s2": {
+  "tools": {
+   "Read": 5,
+   "Edit": 115,
+   "Bash": 41,
+   "Write": 3,
+   "Grep": 4
+  },
+  "bash_commands": {
+   "uv run": 41
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "nli-snli-haiku55-s1": {
+  "tools": {
+   "Read": 12,
+   "Bash": 64,
+   "Edit": 149,
+   "Write": 6
+  },
+  "bash_commands": {
+   "pwd &&": 1,
+   "uv run": 63
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "nli-snli-haiku55-s2": {
+  "tools": {
+   "Read": 10,
+   "Bash": 62,
+   "Edit": 147,
+   "Write": 6,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "pwd &&": 1,
+   "uv run": 61
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "paraphrase-mrpc-haiku55-s1": {
+  "tools": {
+   "Read": 9,
+   "Bash": 58,
+   "Edit": 165,
+   "Write": 51,
+   "Grep": 3,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "pwd &&": 1,
+   "ls -la": 1,
+   "uv run": 56
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "paraphrase-mrpc-haiku55-s2": {
+  "tools": {
+   "Read": 5,
+   "Bash": 72,
+   "Edit": 209,
+   "Write": 53,
+   "Grep": 3,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 70,
+   "cat /data/chandan.singh/weight-space-programming-autoresearch/runs-haiku55/paraphrase-mrpc-haiku55-s2/results/overall_results.csv": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-haiku55-s1": {
+  "tools": {
+   "Read": 6,
+   "Edit": 125,
+   "Bash": 41,
+   "Write": 33
+  },
+  "bash_commands": {
+   "uv run": 41
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "parity-upto10-bits-haiku55-s2": {
+  "tools": {
+   "Read": 7,
+   "Bash": 41,
+   "Edit": 89,
+   "Write": 27,
+   "Grep": 1
+  },
+  "bash_commands": {
+   "ls -la": 2,
+   "uv run": 37,
+   "cat results/overall_results.csv": 1,
+   "ls interpretable_transformers_lib/": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "sentiment-sst2-haiku55-s1": {
+  "tools": {
+   "Read": 4,
+   "Bash": 68,
+   "Edit": 136,
+   "Write": 49,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 66,
+   "python3 -": 1
+  },
+  "refused_calls": 1,
+  "paths_outside_run": []
+ },
+ "sentiment-sst2-haiku55-s2": {
+  "tools": {
+   "Read": 6,
+   "Bash": 62,
+   "Edit": 197,
+   "Write": 13
+  },
+  "bash_commands": {
+   "ls -la": 1,
+   "uv run": 60,
+   "grep -n": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "smallest-prime-factor-haiku55-s1": {
+  "tools": {
+   "Read": 3,
+   "Bash": 47,
+   "Edit": 50,
+   "Write": 41,
+   "Grep": 38
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "uv run": 45,
+   "cat >": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": []
+ },
+ "smallest-prime-factor-haiku55-s2": {
+  "tools": {
+   "Read": 18,
+   "Bash": 56,
+   "Edit": 94,
+   "Write": 40,
+   "Monitor": 1,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 46,
+   "sleep 100;": 1,
+   "until grep": 1,
+   "timeout 110": 1,
+   "date; ps": 1,
+   "ps aux": 1,
+   "ps -eo": 1,
+   "sleep 240;": 1,
+   "sleep 200;": 1,
+   "sleep 280;": 1
+  },
+  "refused_calls": 2,
+  "paths_outside_run": [
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-haiku55-smallest-prime-factor-haiku55-s2/ba508cf0-cc17-4db3-9490-aeb8b33a587d/tasks/b9jjp75bb.output",
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-haiku55-smallest-prime-factor-haiku55-s2/ba508cf0-cc17-4db3-9490-aeb8b33a587d/tasks/bnc9jgi0k.output",
+   "/tmp/claude-1018/-data-chandan-singh-weight-space-programming-autoresearch-runs-haiku55-smallest-prime-factor-haiku55-s2/ba508cf0-cc17-4db3-9490-aeb8b33a587d/tasks/buaecvqzh.output"
+  ]
+ },
+ "sort-five-digits-haiku55-s1": {
+  "tools": {
+   "Read": 7,
+   "Edit": 120,
+   "Bash": 36,
+   "Write": 30,
+   "Grep": 2,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "uv run": 36
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "sort-five-digits-haiku55-s2": {
+  "tools": {
+   "Read": 8,
+   "Bash": 43,
+   "Edit": 137,
+   "Write": 30,
+   "Grep": 1,
+   "Glob": 1
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 42
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "trec-coarse-haiku55-s1": {
+  "tools": {
+   "Read": 8,
+   "Glob": 1,
+   "Edit": 183,
+   "Bash": 58,
+   "Write": 47,
+   "Grep": 2
+  },
+  "bash_commands": {
+   "uv run": 58
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "trec-coarse-haiku55-s2": {
+  "tools": {
+   "Read": 6,
+   "Bash": 66,
+   "Edit": 181,
+   "Grep": 1,
+   "Write": 53
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 56,
+   "cat /home/chandan.singh/.claude/projects/-data-chandan-singh-weight-space-programming-autoresearch-runs-haiku55-trec-coarse-haiku55-s2/d0febca3-ea97-48fd-8c84-4c0b32bb3b46/tool-results/bimk0bjje.txt": 1,
+   "cd /tmp": 1,
+   "echo \"snapshot": 1,
+   "ls /data/chandan.singh/weight-space-programming-autoresearch/runs-haiku55/trec-coarse-haiku55-s2/interpretable_transformers_lib/": 1,
+   "echo \"pending:": 1,
+   "grep -n": 1,
+   "echo ok": 1,
+   "echo noop": 1,
+   "wc -l": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": [
+   "/home/chandan.singh/.claude/projects/-data-chandan-singh-weight-space-programming-autoresearch-runs-haiku55-trec-coarse-haiku55-s2/d0febca3-ea97-48fd-8c84-4c0b32bb3b46/tool-results/bimk0bjje.txt"
+  ]
+ },
+ "word-reversal-3x3-haiku55-s1": {
+  "tools": {
+   "Read": 7,
+   "Bash": 47,
+   "Edit": 141,
+   "Write": 39
+  },
+  "bash_commands": {
+   "pwd; ls": 1,
+   "uv run": 46
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ },
+ "word-reversal-3x3-haiku55-s2": {
+  "tools": {
+   "Read": 4,
+   "Bash": 74,
+   "Edit": 152,
+   "Write": 41
+  },
+  "bash_commands": {
+   "ls -la;": 1,
+   "uv run": 68,
+   "grep -n": 2,
+   "ls interpretable_transformers_lib/": 1,
+   "echo \"data": 1,
+   "wc -l": 1
+  },
+  "refused_calls": 0,
+  "paths_outside_run": []
+ }
+}

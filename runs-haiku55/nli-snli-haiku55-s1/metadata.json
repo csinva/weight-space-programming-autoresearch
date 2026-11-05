@@ -1,0 +1,39 @@
+{
+ "run": "nli-snli-haiku55-s1",
+ "task": "nli-snli",
+ "seed": 1,
+ "model": "claude-haiku-5-5",
+ "effort": "default",
+ "driver": "claude -p (headless Claude Code)",
+ "tools": "Read,Edit,Write,Glob,Grep,Bash",
+ "allowed": [
+  "Bash(uv run interpretable_transformer.py:*)",
+  "Edit",
+  "Write"
+ ],
+ "prompt_hint": true,
+ "target": 50,
+ "sessions": [
+  {
+   "k": 0,
+   "session_id": "897f94f6-6bc7-4e88-8ebf-f96c7557ec7a",
+   "exit": 0,
+   "is_error": false,
+   "cost_usd": 1.1377139000000003,
+   "turns": 232,
+   "seconds": 1320,
+   "attempts_before": 0,
+   "attempts_after": 50,
+   "tools_used": [
+    "Bash",
+    "Edit",
+    "Read",
+    "Write"
+   ],
+   "log": "agent_logs/session_00.jsonl"
+  }
+ ],
+ "started": "2026-11-05T20:01:31.133533+00:00",
+ "finished": "2026-11-05T20:23:31.237633+00:00",
+ "attempts": 50
+}

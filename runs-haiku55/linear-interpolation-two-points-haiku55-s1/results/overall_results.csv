@@ -1,0 +1,31 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+linear-interpolation-two-points,1.0000,success,LinInterpCircuitV1,5.31e+05,"Exact hand-built circuit, no LayerNorm: attention gathers the 5 digits, MLP finds slope m by testing dy == m*dx (m=1..5), computes y1+m*(xq-x1) with ReLU gating, one-hot of the answer, then tens digit at pos 11 and units digit at pos 12 via a position flag."
+linear-interpolation-two-points,0.0900,success,LinInterpNoFlagAblation,5.31e+05,"Ablation of V1: position-flag gating removed from layer 4, so tens and units logits are both active at every position. Expected to fail."
+linear-interpolation-two-points,0.0350,success,LinInterpBeta8,5.31e+05,V1 with attention sharpness BETA=8 (match score 2 instead of 40): tests how sharp the copy heads must be.
+linear-interpolation-two-points,0.1450,success,LinInterpBeta16,5.31e+05,V1 with attention sharpness BETA=16 (match score 4 instead of 40): sharpness sweep point.
+linear-interpolation-two-points,0.8700,success,LinInterpBeta24,5.31e+05,V1 with attention sharpness BETA=24 (match score 6 instead of 40): sharpness sweep point.
+linear-interpolation-two-points,1.0000,success,LinInterpBeta40,5.31e+05,V1 with attention sharpness BETA=40 (match score 10 instead of 40): sharpness sweep point.
+linear-interpolation-two-points,1.0000,success,LinInterpBeta80,5.31e+05,V1 with attention sharpness BETA=80 (match score 20 instead of 40): sharpness sweep point.
+linear-interpolation-two-points,1.0000,success,LinInterpLogitScale1,5.31e+05,V1 (BETA=40) with head logit scale 1 instead of 10: checks that the output margin is not critical.
+linear-interpolation-two-points,1.0000,success,LinInterpDff165,4.38e+05,"V1 (BETA=40, logit scale 10) with MLP hidden width d_ff=165, the minimum the circuit's largest layer (one-hot of the answer) needs."
+linear-interpolation-two-points,,crash,LinInterpDff128,,"V1 (BETA=40, logit scale 10) with MLP hidden width d_ff=128, below the 165 the one-hot layer needs: expected to crash on indexing."
+linear-interpolation-two-points,1.0000,success,LinInterpDmodel112H7,3.54e+05,"V1 (BETA=40, logit scale 10) with a narrower residual stream: d_model=112, 7 heads (one per gathered prompt position), d_ff=165. All 112 registers are used exactly."
+linear-interpolation-two-points,0.0100,success,LinInterpWithLayerNorm,3.56e+05,"V1 (d_model=112 version) with standard nn.LayerNorm restored in every block: normalization destroys the exact digit/indicator scale, so accuracy is expected to drop."
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Gate200,7.12e+05,"Depth-3 rewrite (3 blocks, d_ff=825): the answer one-hot is computed directly from the slope indicators in block 2 (gated by I_m with big-M 200), removing the separate A step."
+linear-interpolation-two-points,0.9900,success,LinInterpDepth3Gate50,7.12e+05,Depth-3 variant with big-M gating constant 50 (too small: the ungated candidates can leak into the one-hot). Expected to fail.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Gate100,7.12e+05,Depth-3 variant with big-M gating constant 100: the smallest value that keeps every ungated candidate's ReLU at zero (A_m - v + 1 <= 100).
+linear-interpolation-two-points,0.4400,success,LinInterpDepth3Gate20,7.12e+05,Depth-3 variant with big-M gating constant 20 (far too small): ungated slope candidates leak into the one-hot. Expected to fail badly.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Gate75,7.12e+05,Depth-3 variant with big-M gating constant 75: between the 50 (99%) and 100 (100%) points of the gate-constant sweep.
+linear-interpolation-two-points,0.0350,success,LinInterpDepth3Beta8,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=8: attention sweep in the 3-block model.
+linear-interpolation-two-points,0.1450,success,LinInterpDepth3Beta16,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=16: attention sweep in the 3-block model.
+linear-interpolation-two-points,0.8700,success,LinInterpDepth3Beta24,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=24: attention sweep in the 3-block model.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Beta32,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=32: attention sweep in the 3-block model.
+linear-interpolation-two-points,0.0850,success,LinInterpDepth3Beta12,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=12: attention sweep in the 3-block model.
+linear-interpolation-two-points,0.4050,success,LinInterpDepth3Beta20,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=20: attention sweep in the 3-block model.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Beta28,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=28: attention sweep in the 3-block model.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Beta60,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=60: attention sweep in the 3-block model.
+linear-interpolation-two-points,0.0300,success,LinInterpDepth3Beta4,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=4 (near-uniform attention): attention sweep in the 3-block model.
+linear-interpolation-two-points,0.0250,success,LinInterpDepth3Beta2,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=2 (almost uniform attention): lower end of the attention sweep.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Beta1000,7.12e+05,Depth-3 variant (gate 100) with attention sharpness BETA=1000 (effectively hard attention): upper end of the attention sweep.
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3LogitScale1,7.12e+05,"Depth-3 variant (BETA=40, gate 100) with head logit scale 1 instead of 10: output margin check in the 3-block model."
+linear-interpolation-two-points,1.0000,success,LinInterpDepth3Gate1000,7.12e+05,"Depth-3 variant (BETA=40, logit scale 10) with big-M gating constant 1000: loose-bound check that the gate is exact for any large M."

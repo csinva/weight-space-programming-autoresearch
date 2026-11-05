@@ -1,0 +1,42 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,0.0000,success,RandomInitInterpretable,1.52e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+edit-distance-8,1.0000,success,dp_jacobi_tied16,3.33e+05,Threshold-coded Levenshtein DP; row r at position 9+r; 1 setup block + 16 weight-tied Jacobi relaxation blocks; no LayerNorm.
+edit-distance-8,1.0000,success,dp_jacobi_tied12,3.33e+05,Same as dp_jacobi_tied16 but only 12 weight-tied Jacobi relaxation blocks (test how many iterations are needed).
+edit-distance-8,0.9850,success,dp_jacobi_tied9,3.33e+05,Same as dp_jacobi_tied16 but only 9 weight-tied Jacobi relaxation blocks (test how many iterations are needed).
+edit-distance-8,1.0000,success,dp_jacobi_tied10,3.33e+05,Same as dp_jacobi_tied16 but only 10 weight-tied Jacobi relaxation blocks (test how many iterations are needed).
+edit-distance-8,1.0000,success,tied10_sharp10,3.33e+05,tied10 with softer attention sharpness (logit gap 10 instead of 30).
+edit-distance-8,0.5150,success,tied10_sharp5,3.33e+05,tied10 with softer attention sharpness (logit gap 5).
+edit-distance-8,1.0000,success,tied10_sharp20,3.33e+05,"tied10 with attention logit gap 20 (gap 5 fails at 0.515, gap 10 works)."
+edit-distance-8,1.0000,success,tied10_split_heads,2.54e+05,"tied10, gap 20; setup attention split into 8 small heads (dim 8) for s1 lookup + one dim-L head for previous token (fewer params)."
+edit-distance-8,1.0000,success,tied10_seq18,2.53e+05,tied10_split_heads with max_seq_len=18 (only prompt positions 0..17 exist).
+edit-distance-8,0.9100,success,tied10_inhib6,2.53e+05,"tied10_seq18 with weaker 'already set' inhibition weight -6 instead of -10 (max s is 8, so some leakage expected)."
+edit-distance-8,1.0000,success,tied10_inhib7,2.53e+05,tied10_seq18 with 'already set' inhibition weight -7 (the theoretical minimum: max s excluding the cell itself is 8; -6 gave 0.91).
+edit-distance-8,0.6500,success,ablate_up,2.53e+05,Ablation of tied10_inhib7: remove the 'up' (D[i-1][r]+1) term from the relaxation rule; expected to fail.
+edit-distance-8,0.6100,success,ablate_left,2.53e+05,Ablation of tied10_inhib7: remove the 'left' (D[i][r-1]+1) term from the relaxation rule (up restored); expected to fail.
+edit-distance-8,0.2900,success,ablate_diag_mismatch,2.53e+05,Ablation of tied10_inhib7: remove the diagonal-mismatch (D[i-1][r-1]+1) term (left/up restored); diag-match term remains.
+edit-distance-8,1.0000,success,tied10_inhib7_final,2.53e+05,"tied10_inhib7 restored after ablations: tied-weight Jacobi DP, gap 20, inhibition -7, split setup heads, seq len 18."
+edit-distance-8,1.0000,success,tied10_gap12,2.53e+05,tied10_inhib7_final with attention logit gap 12 instead of 20.
+edit-distance-8,0.7600,success,tied8_gap12,2.53e+05,tied10_gap12 with only 8 weight-tied DP blocks (expected to degrade).
+edit-distance-8,0.7600,success,tied8_upchain,2.53e+05,8 tied DP blocks; the 'up' term is extended to the whole in-column chain (D[i-k][r]+k for all k) so vertical propagation takes one block; inhibition -40.
+edit-distance-8,0.9950,success,tied9_upchain,2.53e+05,9 tied DP blocks; the 'up' term is extended to the whole in-column chain (D[i-k][r]+k for all k) so vertical propagation takes one block; inhibition -40.
+edit-distance-8,0.0000,success,ablate_match,2.53e+05,Ablation of tied10_gap12: remove the match bit M from the diagonal-match term (cells never see equal characters); expected to fail.
+edit-distance-8,1.0000,success,tied10_gap12_final,2.53e+05,"Restored working model after ablations: 10 tied DP blocks, gap 12, inhibition -7, split setup heads, seq len 18."
+edit-distance-8,0.9300,success,ablate_pin_row0,2.53e+05,Ablation: do not pin D[0][r]=r (top boundary) in pos_emb; expected to fail.
+edit-distance-8,0.2600,success,ablate_clearP,2.53e+05,"Ablation: do not clear the P (previous-position copy) slots after each block, so P accumulates; expected to fail."
+edit-distance-8,0.9900,success,tied10_gap8,2.53e+05,"Working model (10 tied blocks, inhibition -7) with attention logit gap 8 (gap 5 fails, 10 works)."
+edit-distance-8,1.0000,success,tied10_gap12_d223,2.52e+05,"Working model (10 tied blocks, gap 12, inhibition -7) with d_model trimmed to exactly 223 (all slots used)."
+edit-distance-8,1.0000,success,tied11_gap12_d223,2.52e+05,tied10_gap12_d223 with 11 tied blocks (margin check).
+edit-distance-8,1.0000,success,d222_overflow,2.51e+05,"d_model=222: with 18 positions the slot layout fits exactly in 222 dims (my 'expected crash' guess was wrong); 10 tied blocks, gap 12, inhibition -7."
+edit-distance-8,1.0000,success,d222_inhib9,2.51e+05,"d_model=222, 10 tied blocks, gap 12, inhibition -9 (margin over the -7 minimum)."
+edit-distance-8,1.0000,success,d222_gap40,2.51e+05,"d_model=222, 10 tied blocks, inhibition -7, very sharp attention (gap 40) to check numerical stability."
+edit-distance-8,1.0000,success,d222_final,2.51e+05,"Current best compact model: d_model=222, 10 weight-tied DP blocks, attention gap 12, inhibition -7, split setup heads, 18 positions."
+edit-distance-8,1.0000,success,d222_gap10,2.51e+05,d222_final with GAP constant refactor and gap 10.
+edit-distance-8,0.9450,success,d222_gap7,2.51e+05,"d222_final with attention gap 7 (gap 8 gave 0.99, gap 5 gave 0.515)."
+edit-distance-8,0.7750,success,ub_init_tied8,2.51e+05,"Initialise every DP cell to the upper bound D[i][r] <= max(i,r) in pos_emb so relaxation starts closer; only 8 tied blocks, gap 12."
+edit-distance-8,0.9850,success,ub_init_tied9,2.51e+05,"Upper-bound init D[i][r] <= max(i,r) in pos_emb with 9 tied blocks, gap 12 (8 blocks gave 0.775)."
+edit-distance-8,1.0000,success,d222_tied12,2.51e+05,"d222 model (no upper-bound init: it gave no gain) with 12 tied blocks, gap 12, as margin check."
+edit-distance-8,1.0000,success,ablate_pin_col0,2.51e+05,Ablation: do not pin the left boundary D[i][0]=i at position 9 (only D[0][0]); expected to fail.
+edit-distance-8,1.0000,success,top_pin_only,2.51e+05,Cleaner d222 model: only the top boundary D[0][r]=r is pinned in pos_emb (left boundary is derived by the up rule; ablation scored 1.0); 12 tied blocks.
+edit-distance-8,1.0000,success,top_pin_only_tied10,2.51e+05,"Top-boundary-only pinning with 10 tied blocks, gap 12, inhibition -7, d_model 222."
+edit-distance-8,0.9850,success,top_pin_only_tied9,2.51e+05,"Top-boundary-only pinning with 9 tied blocks, gap 12, inhibition -7, d_model 222."
+edit-distance-8,1.0000,success,final_top_pin_tied10,2.51e+05,"Final compact model: 10 weight-tied Jacobi DP blocks, threshold-coded cells, top-boundary pin only, gap 12, inhibition -7, d_model 222, 18 positions."

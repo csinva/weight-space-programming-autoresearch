@@ -1,0 +1,30 @@
+{
+ "trec-coarse-haiku55-s1": {
+  "run": "trec-coarse-haiku55-s1",
+  "program": "BigramV6_loc_bias_0p3",
+  "eval_200": 0.745,
+  "pool_2000": 0.718,
+  "rest_of_train": [
+   0.7048088064889919,
+   3452
+  ],
+  "official_test": [
+   0.728,
+   500
+  ]
+ },
+ "trec-coarse-haiku55-s2": {
+  "run": "trec-coarse-haiku55-s2",
+  "program": "TRECKwWordBoundary_v8",
+  "eval_200": 0.705,
+  "pool_2000": 0.653,
+  "rest_of_train": [
+   0.6309385863267671,
+   3452
+  ],
+  "official_test": [
+   0.694,
+   500
+  ]
+ }
+}

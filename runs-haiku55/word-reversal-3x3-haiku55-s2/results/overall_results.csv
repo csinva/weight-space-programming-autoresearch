@@ -1,0 +1,41 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+word-reversal-3x3,0.0000,success,RandomInitInterpretable,1.54e+05,"Default architecture, no weight assignment (random init, expected ~0% accuracy)."
+word-reversal-3x3,1.0000,success,PosPermCopy-d80-1L,3.26e+04,"One attention layer (d80, 1 head). Query at answer step k attends to fixed prompt position PERM[k] via position one-hots; value copies the token one-hot into a separate block read by the head."
+word-reversal-3x3,1.0000,success,PosPermCopy-noLN,3.22e+04,Same circuit as PosPermCopy-d80-1L but all LayerNorms replaced by identity (GAIN=20 so the attention stays near-hard). Tests whether LN is needed at all.
+word-reversal-3x3,1.0000,success,PosPermCopy-noLN-noMLP,3.19e+04,"PosPermCopy-noLN with the MLP removed (d_ff=0, Block skips it). The circuit is now only embeddings + one attention head + a linear read-out."
+word-reversal-3x3,1.0000,success,PosPermCopy-BitCode-d33,6.96e+03,"PosPermCopy-noLN-noMLP with token and copied-token identities encoded as 5-bit +-1 codes instead of one-hots (d_model 80 -> 33). Head reads <code_c, copied bits>, exact argmax."
+word-reversal-3x3,0.0000,success,BitCode-d33-gain0.5,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=0.5 (attention nearly uniform over prompt).
+word-reversal-3x3,0.0000,success,BitCode-d33-gain1,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=1.0 (attention still nearly uniform).
+word-reversal-3x3,0.0000,success,BitCode-d33-gain2,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=2.0.
+word-reversal-3x3,0.0050,success,BitCode-d33-gain3,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=3.0.
+word-reversal-3x3,1.0000,success,BitCode-d33-gain5,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=5.0.
+word-reversal-3x3,0.9400,success,BitCode-d33-gain4,6.96e+03,Gain sweep on PosPermCopy-BitCode-d33: GAIN=4.0.
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-q012,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): query weights zeroed for answer steps 0-2 (the first copied word).
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-q345,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): query weights zeroed for answer steps 3-7 (separator and middle word).
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-q89a,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): query weights zeroed for answer steps 8-10 (the last copied word).
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-qall,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): all query weights zeroed (attention becomes uniform over the prefix).
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-kall,6.96e+03,"Ablation on PosPermCopy-BitCode-d33 (GAIN=5): all key weights zeroed (every key scores 0, so attention is uniform over the prefix)."
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-vall,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): all value weights zeroed (attention still selects correctly but carries no token information).
+word-reversal-3x3,0.0000,success,BitCode-d33-ablate-oall,6.96e+03,Ablation on PosPermCopy-BitCode-d33 (GAIN=5): output projection W_o zeroed (attention copies nothing into the residual).
+word-reversal-3x3,0.0000,success,BitCode-d33-shared-tok-cpy,6.96e+03,PosPermCopy-BitCode-d33 with the copied-token block placed on top of the token block (CPY=TOK=0). Tests whether a separate copy subspace is needed.
+word-reversal-3x3,1.0000,success,BitCode-d33-nomask,6.96e+03,PosPermCopy-BitCode-d33 with the causal mask removed from attention (queries see future positions too). Tests whether the circuit relies on causality.
+word-reversal-3x3,1.0000,success,BitCode-d33-2layers,1.13e+04,"PosPermCopy-BitCode-d33 with a second, all-zero block appended (n_layers=2). Residual pass-through, so depth should not change the result."
+word-reversal-3x3,1.0000,success,BitCode-pad64,2.14e+04,PosPermCopy-BitCode-d33 with d_model padded to 64 (unused dims are all zero). Checks that unused residual width is inert.
+word-reversal-3x3,1.0000,success,BitCode-d33-mlp8zero,7.53e+03,PosPermCopy-BitCode-d33 with an 8-wide MLP present but all-zero (d_ff=8). Checks that an idle MLP is inert.
+word-reversal-3x3,1.0000,success,BitCode-d33-LN,7.16e+03,"PosPermCopy-BitCode-d33 with LayerNorm restored (ln1, ln2, final_ln; gains 1, biases 0, no MLP). Checks whether normalization breaks the exact copy."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain6,7.16e+03,LN version of PosPermCopy-BitCode-d33 with GAIN=6.0 (gain sweep under LayerNorm).
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain4,7.16e+03,LN version of PosPermCopy-BitCode-d33 with GAIN=4.0 (gain sweep under LayerNorm).
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-01codes,7.16e+03,LN version (GAIN=5) with 0/1 bit codes instead of +-1 for token and copied-token codes. Tests whether the +-1 sign convention is necessary for the head's argmax.
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-revbits,7.16e+03,"LN version (GAIN=5, +-1 codes) with the bit order reversed in the token and head codes. Checks that the particular code assignment is arbitrary."
+word-reversal-3x3,0.0000,success,BitCode-d33-LN-identityPERM,7.16e+03,"LN version with PERM = identity (copy the prompt in place). Control: the task's word reversal must come from PERM, not from the weights' code assignment."
+word-reversal-3x3,0.6400,success,BitCode-d33-LN-pos0.5,7.16e+03,"LN version (GAIN=5, standard codes) with the position one-hot scaled to 0.5. Checks how the scale of the position embedding interacts with the gain."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-pos2.0,7.16e+03,"LN version (GAIN=5, standard codes) with the position one-hot scaled to 2.0. Checks how the scale of the position embedding interacts with the gain."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain3,7.16e+03,"LN version (standard codes, position scale 1.0) with GAIN=3.0. Gain sweep under LayerNorm, lower end."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain2,7.16e+03,"LN version (standard codes, position scale 1.0) with GAIN=2.0. Gain sweep under LayerNorm, lower end."
+word-reversal-3x3,0.0000,success,BitCode-d33-LN-gain1,7.16e+03,"LN version (standard codes, position scale 1.0) with GAIN=1.0. Gain sweep under LayerNorm, lower end."
+word-reversal-3x3,0.6450,success,BitCode-d33-LN-codes2x,7.16e+03,"LN version (GAIN=5) with token and copied-token codes scaled to +-2 (token emb and head). Checks that the magnitude of the codes does not matter, only the argmax."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-head0.1,7.16e+03,"LN version (GAIN=5, standard codes) with the read-out head scaled by 0.1. Logits shrink uniformly, so argmax (and accuracy) should be unchanged."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain10,7.16e+03,"LN version (standard codes, position scale 1.0, head scale 1.0) with GAIN=10.0. Upper end of the gain sweep under LayerNorm."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain20,7.16e+03,"LN version (standard codes, position scale 1.0, head scale 1.0) with GAIN=20.0. Upper end of the gain sweep under LayerNorm."
+word-reversal-3x3,1.0000,success,BitCode-d33-LN-gain50,7.16e+03,"LN version (standard codes, position scale 1.0, head scale 1.0) with GAIN=50.0. Last point of the gain sweep under LayerNorm."
+word-reversal-3x3,0.0000,success,BitCode-d33-noLN-01codes,6.96e+03,"No-LayerNorm version (GAIN=5, no MLP) with 0/1 bit codes for token and copied-token codes. Checks whether the 0/1 result seen with LayerNorm also holds without it."

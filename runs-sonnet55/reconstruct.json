@@ -1,0 +1,206 @@
+{
+ "addition-five-digits-sonnet55-s1": {
+  "programs": 9,
+  "edits": 62,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "addition-five-digits-sonnet55-s2": {
+  "programs": 31,
+  "edits": 72,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "boolean-circuit-5-bits-sonnet55-s1": {
+  "programs": 31,
+  "edits": 92,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "boolean-circuit-5-bits-sonnet55-s2": {
+  "programs": 31,
+  "edits": 110,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "date-normalization-sonnet55-s1": {
+  "programs": 11,
+  "edits": 108,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "date-normalization-sonnet55-s2": {
+  "programs": 51,
+  "edits": 143,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "decimal-to-binary-8bit-sonnet55-s1": {
+  "programs": 42,
+  "edits": 123,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "decimal-to-binary-8bit-sonnet55-s2": {
+  "programs": 40,
+  "edits": 108,
+  "edits_not_applied": 1,
+  "final_matches": false
+ },
+ "digit-counting-10-sonnet55-s1": {
+  "programs": 30,
+  "edits": 86,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "digit-counting-10-sonnet55-s2": {
+  "programs": 31,
+  "edits": 91,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "edit-distance-8-sonnet55-s1": {
+  "programs": 40,
+  "edits": 132,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "edit-distance-8-sonnet55-s2": {
+  "programs": 41,
+  "edits": 97,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "gcd-three-digits-sonnet55-s1": {
+  "programs": 40,
+  "edits": 111,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "gcd-three-digits-sonnet55-s2": {
+  "programs": 41,
+  "edits": 94,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "linear-interpolation-two-points-sonnet55-s1": {
+  "programs": 32,
+  "edits": 79,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "linear-interpolation-two-points-sonnet55-s2": {
+  "programs": 30,
+  "edits": 109,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "multiplication-five-digits-sonnet55-s1": {
+  "programs": 31,
+  "edits": 102,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "multiplication-five-digits-sonnet55-s2": {
+  "programs": 32,
+  "edits": 75,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "nli-snli-sonnet55-s1": {
+  "programs": 2,
+  "edits": 108,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "nli-snli-sonnet55-s2": {
+  "programs": 52,
+  "edits": 80,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "paraphrase-mrpc-sonnet55-s1": {
+  "programs": 6,
+  "edits": 64,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "paraphrase-mrpc-sonnet55-s2": {
+  "programs": 4,
+  "edits": 100,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "parity-upto10-bits-sonnet55-s1": {
+  "programs": 30,
+  "edits": 87,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "parity-upto10-bits-sonnet55-s2": {
+  "programs": 30,
+  "edits": 100,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sentiment-sst2-sonnet55-s1": {
+  "programs": 51,
+  "edits": 140,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sentiment-sst2-sonnet55-s2": {
+  "programs": 50,
+  "edits": 124,
+  "edits_not_applied": 0,
+  "final_matches": false
+ },
+ "smallest-prime-factor-sonnet55-s1": {
+  "programs": 41,
+  "edits": 114,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "smallest-prime-factor-sonnet55-s2": {
+  "programs": 41,
+  "edits": 122,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sort-five-digits-sonnet55-s1": {
+  "programs": 30,
+  "edits": 81,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "sort-five-digits-sonnet55-s2": {
+  "programs": 30,
+  "edits": 82,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "trec-coarse-sonnet55-s1": {
+  "programs": 51,
+  "edits": 145,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "trec-coarse-sonnet55-s2": {
+  "programs": 51,
+  "edits": 179,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "word-reversal-3x3-sonnet55-s1": {
+  "programs": 40,
+  "edits": 103,
+  "edits_not_applied": 0,
+  "final_matches": true
+ },
+ "word-reversal-3x3-sonnet55-s2": {
+  "programs": 40,
+  "edits": 93,
+  "edits_not_applied": 0,
+  "final_matches": true
+ }
+}
