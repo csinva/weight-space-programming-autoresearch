@@ -7,7 +7,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
     out = {}
-    for rd in sorted(glob.glob(os.path.join(ROOT, "runs-opus55", "trec-coarse-opus55-s*"))):
+    root = os.path.join(ROOT, sys.argv[1] if len(sys.argv) > 1 else "runs-opus55")
+    for rd in sorted(glob.glob(os.path.join(root, "trec-coarse-*-s[0-9]"))):
         rows = list(csv.DictReader(open(os.path.join(rd, "results", "overall_results.csv"))))
         best = max(rows, key=lambda r: float(r["accuracy"] or 0))
         sys.path.insert(0, rd)
@@ -38,7 +39,7 @@ def main():
         out[res["run"]] = res
         print(res)
         sys.path.remove(rd)
-    json.dump(out, open(os.path.join(ROOT, "runs-opus55", "heldout_trec.json"), "w"), indent=1)
+    json.dump(out, open(os.path.join(root, "heldout_trec.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":

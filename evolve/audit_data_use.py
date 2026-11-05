@@ -10,7 +10,7 @@ with its labels shuffled; the evaluation function returns a constant.
   error            : the program failed to build
 
   uv run evolve/audit_data_use.py runs-opus55      -> runs-opus55/audit_data_use.json"""
-import contextlib, importlib.util, io, json, os, random, sys
+import contextlib, importlib.util, io, json, os, random, re, sys
 from concurrent.futures import ProcessPoolExecutor
 
 os.environ.setdefault("OMP_NUM_THREADS", "2")
@@ -33,7 +33,7 @@ def check(args):
     os.chdir(run_dir)
     import src.task as T
     import src.eval as E
-    task_name = os.path.basename(run_dir.rstrip("/")).rsplit("-opus55-s", 1)[0]
+    task_name = re.sub(r"-(opus|sonnet|haiku)55-s\d+$", "", os.path.basename(run_dir.rstrip("/")))
     try:
         spec = importlib.util.spec_from_file_location("snap_" + os.path.basename(path)[:-3].replace("-", "_").replace(".", "_"), path)
         mod = importlib.util.module_from_spec(spec)

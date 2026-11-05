@@ -1,5 +1,5 @@
 """Score each generated-task run's best program (first attempt at its best accuracy, among saved programs) on 2,000 new examples from an unseen seed."""
-import contextlib, csv, glob, importlib.util, io, json, os, sys
+import contextlib, csv, glob, importlib.util, io, json, os, re, sys
 from concurrent.futures import ProcessPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,7 +13,7 @@ def score(rd):
     os.chdir(rd)
     import src.task as T
     from src.eval import evaluate
-    task_name = os.path.basename(rd).rsplit("-opus55-s", 1)[0]
+    task_name = re.sub(r"-(opus|sonnet|haiku)55-s\d+$", "", os.path.basename(rd))
     rows = list(csv.DictReader(open(os.path.join(rd, "results", "overall_results.csv"))))
     top = max(float(r["accuracy"] or 0) for r in rows)
     for r in rows:
@@ -35,10 +35,11 @@ def score(rd):
 
 
 if __name__ == "__main__":
-    runs = [d.rstrip("/") for d in sorted(glob.glob(os.path.join(ROOT, "runs-opus55", "*-opus55-s*/"))) if not os.path.basename(d.rstrip("/")).startswith(DATASET)]
+    root = os.path.join(ROOT, sys.argv[1] if len(sys.argv) > 1 else "runs-opus55")
+    runs = [d.rstrip("/") for d in sorted(glob.glob(os.path.join(root, "*-s[0-9]/"))) if not os.path.basename(d.rstrip("/")).startswith(DATASET)]
     out = {}
     with ProcessPoolExecutor(13) as ex:
         for k, v in ex.map(score, runs):
             out[k] = v
             print(k, v, flush=True)
-    json.dump(out, open(os.path.join(ROOT, "runs-opus55", "heldout_fresh_seed.json"), "w"), indent=1)
+    json.dump(out, open(os.path.join(root, "heldout_fresh_seed.json"), "w"), indent=1)

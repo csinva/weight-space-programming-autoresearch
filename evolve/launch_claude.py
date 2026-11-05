@@ -1,8 +1,8 @@
 """Run the autoresearch loop with Claude Code in headless mode (`claude -p`), several independent runs per task.
 
-  uv run evolve/launch_claude.py --tasks all --seeds 1 2 --workers 8
+  uv run evolve/launch_claude.py --model opus55 --tasks all --seeds 1 2 --workers 8
 
-Each run gets a fresh folder runs-opus55/<task>-opus55-s<seed>/ made by setup_run.py (its own copy of program.md with the
+Each run gets a fresh folder runs-<model>/<task>-<model>-s<seed>/ made by setup_run.py (its own copy of program.md with the
 task name filled in). The agent works only there: tools are restricted to Read/Edit/Write/Glob/Grep/Bash, file reads outside
 the folder are refused (restricted mode), and the only shell command it may run is `uv run interpretable_transformer.py ...`.
 The driver resumes the same session until results/overall_results.csv has the target number of attempts
@@ -16,8 +16,8 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 from setup_run import setup_run
 
-MODEL = "claude-opus-5-5"
-RUNS_SUBDIR = "runs-opus55"
+MODELS = dict(opus55="claude-opus-5-5", sonnet55="claude-sonnet-5-5", haiku55="claude-haiku-5-5")
+SHORT = "opus55"  # set from --model
 TASKS = {
     "addition-five-digits": "easy", "multiplication-five-digits": "easy", "sort-five-digits": "easy", "digit-counting-10": "easy",
     "parity-upto10-bits": "easy", "boolean-circuit-5-bits": "easy", "linear-interpolation-two-points": "easy",
@@ -47,10 +47,10 @@ def n_attempts(run_dir):
 
 
 def run_one(task, seed):
-    tag = f"{task}-opus55-s{seed}"
-    run_dir = os.path.join(ROOT, RUNS_SUBDIR, tag)
+    tag, runs_subdir = f"{task}-{SHORT}-s{seed}", f"runs-{SHORT}"
+    run_dir = os.path.join(ROOT, runs_subdir, tag)
     if not os.path.exists(run_dir):
-        setup_run(tag, runs_subdir=RUNS_SUBDIR)
+        setup_run(tag, runs_subdir=runs_subdir)
         pm = os.path.join(run_dir, "program.md")
         s = open(pm).read()
         s = re.sub(r"your task name is `[^`]+`", f"your task name is `{task}`", s, count=1)
@@ -58,7 +58,7 @@ def run_one(task, seed):
     os.makedirs(os.path.join(run_dir, "agent_logs"), exist_ok=True)
     meta_path = os.path.join(run_dir, "metadata.json")
     meta = json.load(open(meta_path)) if os.path.exists(meta_path) else dict(
-        run=tag, task=task, seed=seed, model=MODEL, effort="default", driver="claude -p (headless Claude Code)", tools=TOOLS,
+        run=tag, task=task, seed=seed, model=MODELS[SHORT], effort="default", driver="claude -p (headless Claude Code)", tools=TOOLS,
         allowed=ALLOWED, target=TARGET[TASKS[task]], sessions=[], started=datetime.now(timezone.utc).isoformat())
     target, stalls, sid = meta["target"], 0, (meta["sessions"][-1]["session_id"] if meta["sessions"] else None)
     env = dict(os.environ, HF_HOME=os.path.join(ROOT, ".hf_home"), OMP_NUM_THREADS="8", MKL_NUM_THREADS="8")
@@ -67,7 +67,7 @@ def run_one(task, seed):
         if n0 >= target:
             break
         prompt = (FIRST if sid is None else CONT).format(task=task, target=target, n=n0)
-        cmd = ["claude", "-p", prompt, "--model", MODEL, "--restricted", "--tools", TOOLS, "--strict-mcp-config",
+        cmd = ["claude", "-p", prompt, "--model", MODELS[SHORT], "--restricted", "--tools", TOOLS, "--strict-mcp-config",
                "--output-format", "stream-json", "--verbose", "--allowedTools", *ALLOWED] + (["--resume", sid] if sid else [])
         k = len(meta["sessions"])
         log = os.path.join(run_dir, "agent_logs", f"session_{k:02d}.jsonl")
@@ -75,7 +75,7 @@ def run_one(task, seed):
         with open(log, "w") as fh:
             p = subprocess.run(cmd, cwd=run_dir, stdout=fh, stderr=subprocess.STDOUT, text=True, env=env, timeout=6 * 3600)
         res, tools_used = {}, set()
-        for line in open(log):  # transcripts are gzipped after the runs (gzip -9 runs-opus55/*/agent_logs/*.jsonl)
+        for line in open(log):  # transcripts are gzipped after the runs (gzip -9 runs-*/*/agent_logs/*.jsonl)
             try:
                 d = json.loads(line)
             except json.JSONDecodeError:
@@ -104,10 +104,12 @@ def run_one(task, seed):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
+    ap.add_argument("--model", choices=list(MODELS), default="opus55")
     ap.add_argument("--tasks", nargs="+", default=["all"])
     ap.add_argument("--seeds", nargs="+", type=int, default=[1, 2])
     ap.add_argument("--workers", type=int, default=8)
     a = ap.parse_args()
+    SHORT = a.model
     tasks = list(TASKS) if a.tasks == ["all"] else a.tasks
     # hardest first so the long runs start early
     order = sorted([(t, s) for t in tasks for s in a.seeds], key=lambda x: {"real": 0, "harder": 1, "easy": 2}[TASKS[x[0]]])
