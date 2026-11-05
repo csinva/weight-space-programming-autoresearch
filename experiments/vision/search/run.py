@@ -152,8 +152,8 @@ def main(argv=None):
                              'early/ventral select one stream (Triple-N default: ventral)')
     parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', DEFAULT_SEARCH_METRIC))
     parser.add_argument('--hours', type=float, default=12)
-    parser.add_argument('--epoch-mins', type=float, default=30,
-                        help='Coordinator start interval from run startup (default: 30 minutes; occupied slots skipped; 0 disables)')
+    parser.add_argument('--epoch-mins', type=float, default=60,
+                        help='Coordinator start interval from run startup (default: 60 minutes; occupied slots skipped; 0 disables)')
     parser.add_argument('--gpu', default=os.environ.get('CUDA_VISIBLE_DEVICES', ''))
     parser.add_argument('--date', default=None)
     parser.add_argument('--preflight', '--dry-run', action='store_true')

@@ -51,7 +51,7 @@ Run configurations sequentially on a single GPU. Each run is stored as
 `<dataset>__<region>__<metric>__<date>`; `--date YYYY-MM-DD` selects the date.
 Relaunching the same configuration/date resumes only if code, data and scientific
 settings still match. Search defaults to 12 hours; `--hours` overrides it. Ctrl+C
-stops the search. The coordinator starts at startup and every 30 minutes thereafter
+stops the search. The coordinator starts at startup and every 60 minutes thereafter
 (on a fixed schedule); an occupied slot is skipped to prevent overlapping reviews.
 `--epoch-mins` changes this interval and `--epoch-mins 0` disables coordination.
 Each review starts a fresh provider conversation without the preceding transcript.
