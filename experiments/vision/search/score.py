@@ -9,14 +9,14 @@ def score(model_file: str, dataset: str | None = None, *, region: str | None = N
     No candidate code is imported into this process. Isolation errors fail closed.
     """
     import contextlib, io, traceback
-    from neuro_eval.benchmarks import validate_search_dataset, canonical_region, validate_search_metric
+    from neuro_eval.benchmarks import validate_search_dataset, canonical_region, validate_search_metric, default_search_region, DEFAULT_SEARCH_METRIC
     dataset = validate_search_dataset(dataset or os.environ.get("NEURO_DATASET", "laion"))
     if os.environ.get("LAB_RUN"):
         contract = search_contract(find_run(), dataset, region, metric)
         region = region or contract["NEURO_REGION"]
         metric = metric or contract["NEURO_METRIC"]
-    region = canonical_region(region or os.environ.get("NEURO_REGION", ""))
-    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", "rsa"))
+    region = canonical_region(region or os.environ.get("NEURO_REGION") or default_search_region(dataset))
+    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
     if os.environ.get("NEURO_STAGE", "search") != "search":
         raise ValueError("search.score is search-only; final evaluation goes through final_eval.py")
     os.environ.update(NEURO_DATASET=dataset, NEURO_REGION=region, NEURO_METRIC=metric)
@@ -54,8 +54,8 @@ def main(argv=None):
     import json
     parser = argparse.ArgumentParser(description='Score a model on the complete search cohort.')
     parser.add_argument('--dataset', default='laion', choices=('laion', 'triplen'))
-    parser.add_argument('--region', required=True, choices=('early', 'ventral'))
-    parser.add_argument('--metric', default='rsa', choices=('rsa', 'encoding'))
+    parser.add_argument('--region', default=None, choices=('visual', 'early', 'ventral'))
+    parser.add_argument('--metric', default=None, choices=('rsa', 'encoding'))
     parser.add_argument('--model', default='model.py')
     args = parser.parse_args(argv)
     result = score(args.model, args.dataset, region=args.region, metric=args.metric)

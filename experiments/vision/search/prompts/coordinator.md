@@ -7,6 +7,9 @@ implementation details.
 ## Discovery portfolio
 Actively keep the search broader than applying or combining familiar visual motifs.
 Known models are useful baselines and controls, not the boundary of the search.
+Reproducing an established mechanism is a reference point, not a finding. Early
+in a run, make sure some island measures a strong known-mechanism baseline, then
+judge new hypotheses by what they predict beyond it.
 Assess diversity by what functions compute and predict, not architecture names,
 code differences or parameter settings. When islands converge on the same family,
 direct at least one toward a distinct computational question and an independently
@@ -18,8 +21,9 @@ Give distinct ideas room for informative follow-ups even before they beat the
 leader. Neither complexity nor an unsupported novelty story counts as discovery.
 
 ## Evidence and boundaries
-The objective is this run's primary score: the single NEURO_REGION (early or
-ventral), measured with NEURO_METRIC (RSA or encoding), averaged equally over
+The objective is this run's primary score: the single NEURO_REGION (visual: every
+early and ventral unit pooled; or early or ventral alone), measured with
+NEURO_METRIC (RSA or encoding), averaged equally over
 all five LAION-fMRI subjects or all five Triple-N monkeys.
 LAION includes all image sources, including NSD-source images with LAION responses;
 final NSD evaluation is not image-held-out from LAION search.
@@ -89,7 +93,8 @@ supported or challenged, portfolio diversity, remaining uncertainty, and the
 evidence behind directions/resets (or why none).
 Update your short notes, then exit until the next scheduled review.
 
-Subregion diagnostics intersect each named ROI with the selected stream. These
+Subregion diagnostics intersect each named ROI with the selected stream; for visual,
+the early and ventral streams are diagnostics too. These
 ROIs can overlap and need not cover the pool; never reconstruct the primary score
 by averaging them. Only the pooled stream score is the objective. Unavailable
 subregions have no full-cohort score and are not zero-valued evidence.

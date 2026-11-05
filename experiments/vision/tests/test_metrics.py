@@ -18,6 +18,7 @@ from neuro_eval import encoding, rsa
 def clean_evaluation_env(monkeypatch):
     for key in ("NEURO_SUBJECT", "NEURO_STAGE", "NEURO_METRIC", "NEURO_MAX_PARAMS"):
         monkeypatch.delenv(key, raising=False)
+    monkeypatch.setenv("NEURO_METRIC", "rsa")  # these fixtures exercise the RSA contract
     monkeypatch.setattr("neuro_eval.rsa._readout_device", lambda: torch.device("cpu"))
     monkeypatch.setattr("neuro_eval.encoding._readout_device", lambda: torch.device("cpu"))
 
@@ -239,6 +240,7 @@ def test_phase_entry_points_reject_other_phase_before_loading(monkeypatch, phase
     ("tvsd", ["F", "N"]),
 ])
 def test_final_encoding_keeps_complete_cohort_and_equal_subject_mean(monkeypatch, name, subjects):
+    monkeypatch.delenv("NEURO_METRIC", raising=False)
     from neuro_eval.encoding import evaluate_subjects as evaluate_final
 
     seen = []

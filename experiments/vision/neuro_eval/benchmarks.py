@@ -1,7 +1,8 @@
 """Immutable cross-dataset evaluation contracts (standard-library only).
 
 Subject names are public dataset identifiers, never zero-based pickle indices.
-Search rewards use a selected region and RSA or encoding; final neural responses
+Search rewards use a selected region (pooled early + ventral by default) and
+encoding (default) or RSA; final neural responses
 stay held out. LAION search includes NSD-source images, so NSD is not image-held-out.
 """
 
@@ -13,8 +14,10 @@ from dataclasses import asdict, dataclass, replace
 PROTOCOL_VERSION = "looped-cross-dataset-v4"
 DIAGNOSTIC_POLICY_VERSION = "selected-stream-intersection-v1"
 SEARCH_SUBREGIONS = {
-    "laion": {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA")},
-    "triplen": {"early": (), "ventral": ("IT",)},
+    "laion": {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA"),
+              "visual": ("early visual stream", "ventral visual stream",
+                         "V1", "V2", "V3", "hV4", "FFA", "PPA")},
+    "triplen": {"early": (), "ventral": ("IT",), "visual": ()},
 }
 
 
@@ -96,15 +99,30 @@ def validate_search_dataset(dataset: str) -> str:
     return key
 
 
-SEARCH_REGIONS = {"early": "early visual stream", "ventral": "ventral visual stream"}
+SEARCH_REGIONS = {"early": "early visual stream", "ventral": "ventral visual stream",
+                  "visual": "early and ventral visual streams"}
+# Anatomical stream blocks loaded for each pooled search ROI. The union pools
+# every retained unit of both (disjoint) streams; streams are not reweighted.
+STREAM_COMPONENTS = {"early": ("early visual stream",), "ventral": ("ventral visual stream",),
+                     "visual": ("early visual stream", "ventral visual stream")}
+UNION_ROIS = {SEARCH_REGIONS[k]: v for k, v in STREAM_COMPONENTS.items() if len(v) > 1}
+DEFAULT_SEARCH_REGION = "visual"  # Triple-N lacks full-cohort early data: ventral
+DEFAULT_SEARCH_METRIC = "encoding"
 
 
 def canonical_region(region: str) -> str:
     key = region.strip().lower()
     aliases = {**{r: r for r in SEARCH_REGIONS}, **{v: k for k, v in SEARCH_REGIONS.items()}}
     if key not in aliases:
-        raise ValueError(f"Unknown search region {region!r}; choose early or ventral")
+        raise ValueError(f"Unknown search region {region!r}; choose visual, early or ventral")
     return aliases[key]
+
+
+def default_search_region(dataset: str) -> str:
+    """Pooled early + ventral where the full cohort has both streams, else ventral."""
+    key = canonical_dataset(dataset)
+    base = PROTOCOLS.get(key) or next((p for p in PROTOCOLS.values() if key == p.final_dataset), None)
+    return "ventral" if base is not None and base.search_dataset == "triplen" else DEFAULT_SEARCH_REGION
 
 
 def validate_search_metric(metric: str) -> str:
@@ -123,8 +141,9 @@ def protocol_for(dataset: str, region: str = "ventral", metric: str = "rsa") -> 
         base = next((p for p in PROTOCOLS.values() if key == p.final_dataset), None)
     if base is None:
         raise ValueError(f"No cross-dataset protocol for {dataset!r}")
-    if base.search_dataset == "triplen" and region == "early":
-        raise ValueError("Triple-N early search requires all M1–M5, but early responses are unavailable for M2, M3, M5")
+    if base.search_dataset == "triplen" and region in ("early", "visual"):
+        raise ValueError(f"Triple-N {region} search requires early responses for all M1–M5, "
+                         "but they are unavailable for M2, M3, M5; use --region ventral")
     policy = base.image_policy
     if metric == "encoding":
         policy = ("source_train_shared_test_all_sources" if base.search_dataset == "laion"

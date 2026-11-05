@@ -216,7 +216,7 @@ def main(argv=None):
     source.add_argument("--run", help="search run from which to select the champion")
     source.add_argument("--model", help="explicit model file, without claiming a searched champion")
     parser.add_argument("--search-dataset", help="laion or triplen; required with --model")
-    parser.add_argument("--region", choices=("early", "ventral"), help="required with --model; inferred from --run")
+    parser.add_argument("--region", choices=("visual", "early", "ventral"), help="required with --model; inferred from --run")
     parser.add_argument("--output", help="final JSON path outside the search run")
     args = parser.parse_args(argv)
     if args.run:

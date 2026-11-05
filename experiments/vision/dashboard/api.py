@@ -55,8 +55,9 @@ async def get_config(request: Request) -> JSONResponse:
     metric = env.get("NEURO_METRIC", protocol.get("search_metric", "rsa"))
     metric = metric if metric in ("rsa", "encoding") else "unknown"
     region = env.get("NEURO_REGION", protocol.get("search_region"))
-    region = region if region in ("early", "ventral") else None
-    target = f"{region} visual cortex" if region else "early and ventral visual cortex"
+    region = region if region in ("visual", "early", "ventral") else None
+    target = (f"{region} visual cortex" if region in ("early", "ventral")
+              else "early and ventral visual cortex")
     measure = "RSA" if metric == "rsa" else metric
     return JSONResponse({
         "task": {

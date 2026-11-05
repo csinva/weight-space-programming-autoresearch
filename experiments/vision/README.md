@@ -2,7 +2,7 @@
 
 Open-ended agentic search for computational models of the visual cortex: discover
 image-to-representation functions and the computational principles they express.
-Search a selected brain region with **RSA** (default) or **encoding**, then freeze
+Search a selected brain region with **encoding** (default) or **RSA**, then freeze
 the winner and measure transfer with final encoding evaluation.
 Only the candidate `model.py` evolves during search; the scientific code stays fixed.
 
@@ -25,23 +25,28 @@ uv sync --extra dev --extra dashboard
 source "$(git rev-parse --show-toplevel)/.venv/bin/activate"
 
 # Print settings, then check data, providers and isolation without model requests.
-python -m search.run --region early --show-config
-python -m search.run --region early --preflight
+python -m search.run --show-config
+python -m search.run --preflight
 
 # Phase 1: autonomous search, 12 hours by default (sends real model requests).
+# Default: LAION, pooled early + ventral streams (--region visual), encoding.
+python -m search.run --gpu 0
 python -m search.run --region early --gpu 0
-python -m search.run --region ventral --gpu 0
 
 # Phase 2: freeze the search winner and evaluate it on NSD.
 # Use the run directory printed by the search launcher.
-python final_eval.py --run search_runs/laion__early__rsa__2026-10-23
+python final_eval.py --run search_runs/laion__visual__encoding__2026-11-05
 ```
 
-Choose `--region early` or `--region ventral` explicitly. `--dataset laion` and
-`--metric rsa` are defaults; `--metric encoding` uses a ridge readout of the same
-image representation. For the spiking track use `--dataset triplen --region ventral`;
-final evaluation chooses TVSD automatically. Triple-N early search is unavailable
-because M2/M3/M5 lack early responses; the full five-monkey cohort is mandatory.
+`--dataset laion`, `--region visual` and `--metric encoding` are defaults.
+`visual` pools every retained early and ventral unit into one target set, so its
+score is the mean over all union units (streams are not reweighted); the two
+streams are disjoint and roughly equal in size for LAION. `--region early` or
+`--region ventral` selects one stream; `--metric rsa` compares representational
+geometry instead of a ridge readout. For the spiking track use `--dataset triplen`,
+which defaults to `--region ventral`; final evaluation chooses TVSD automatically.
+Triple-N early and visual search are unavailable because M2/M3/M5 lack early
+responses; the full five-monkey cohort is mandatory.
 Run configurations sequentially on a single GPU. Each run is stored as
 `<dataset>__<region>__<metric>__<date>`; `--date YYYY-MM-DD` selects the date.
 Relaunching the same configuration/date resumes only if code, data and scientific
@@ -84,11 +89,11 @@ Other entry points:
 
 ```bash
 # Score one model on a complete search cohort.
-python -m search.score --region ventral --model model.py
-python -m search.score --region early --metric encoding --model model.py
+python -m search.score --model model.py
+python -m search.score --region ventral --metric rsa --model model.py
 
 # Evaluate an explicitly supplied frozen model, recording that selection method.
-python final_eval.py --model model.py --search-dataset laion --region early
+python final_eval.py --model model.py --search-dataset laion --region visual
 
 # Optional read-only dashboard over search_runs/.
 python -m dashboard
@@ -162,7 +167,8 @@ retains its batched forwards.
   pooled-stream scores equally across all required subjects. Never average the
   subregion scores to obtain the reward. Missing pooled-stream coverage or a
   missing subject fails evaluation. Search diagnostics include only subregions
-  within the selected stream.
+  within the selected stream; for `visual`, the early and ventral streams are
+  diagnostics as well.
 - Fixed source filters are ncsnr >0.2 for LAION/NSD, reliability >0.4 for Triple-N,
   and oracle >0.4 for TVSD.
 
@@ -230,7 +236,9 @@ ncsnr >0.2 filter, retained voxel counts are:
 All coordinates matched their masks, with no early/ventral overlap. These are the
 source sector masks, not a reconstruction from separately voxelized named areas.
 
-Early diagnostics report **V1, V2, V3**; ventral diagnostics report **hV4, FFA, PPA**.
+Early diagnostics report **V1, V2, V3**; ventral diagnostics report **hV4, FFA, PPA**;
+`visual` reports both streams and all six areas. The union is the concatenation of
+both stream blocks; loading fails if the streams share a unit.
 Each diagnostic mask is the intersection of that named area's retained coordinates
 with the selected stream's retained coordinates. These diagnostic areas can overlap
 and do not necessarily exhaust the stream. The pooled response matrix is stored

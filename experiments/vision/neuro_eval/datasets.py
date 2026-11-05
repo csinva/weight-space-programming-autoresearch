@@ -13,7 +13,7 @@ from PIL import Image
 import numpy as np
 import torch
 
-from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS, SEARCH_REGIONS, search_subregions, DIAGNOSTIC_POLICY_VERSION
+from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS, SEARCH_REGIONS, STREAM_COMPONENTS, UNION_ROIS, default_search_region, DEFAULT_SEARCH_METRIC, search_subregions, DIAGNOSTIC_POLICY_VERSION
 from neuro_eval import readers
 
 
@@ -94,8 +94,8 @@ def get_dataset(name: str, subject: str | None = None, *, region: str | None = N
     """
     dataset = PRESETS[canonical_dataset(name)]
     if dataset.stage == "search":
-        protocol = protocol_for(dataset.loader, region or os.environ.get("NEURO_REGION", "ventral"),
-                                metric or os.environ.get("NEURO_METRIC", "rsa"))
+        protocol = protocol_for(dataset.loader, region or os.environ.get("NEURO_REGION") or default_search_region(dataset.loader),
+                                metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
         dataset = replace(dataset, search_region=protocol.search_region, search_metric=protocol.search_metric,
                           metric=protocol.search_metric,
                           reward_roi=SEARCH_REGIONS[protocol.search_region])
@@ -182,7 +182,7 @@ def dataset_cache_key(d: Dataset) -> tuple:
 def _load_native(d: Dataset):
     name = dataset_key(d)
     d = with_subject(d, d.subject)
-    regions = [d.reward_roi] if d.stage == "search" else list(REGIONS[name])
+    regions = list(STREAM_COMPONENTS[d.search_region]) if d.stage == "search" else list(REGIONS[name])
     cfg = dict(FILTERS[name])
     if name == "nsd":
         subject = int(d.subject) - 1
@@ -202,13 +202,17 @@ def _load_native(d: Dataset):
         data = readers.load_all_tvsd_data(cfg, subjects=[subject], regions=regions)
     else:
         raise ValueError(f"Not a looped vision dataset: {name}")
-    if d.reward_roi != "all" and d.reward_roi not in data["regions"]:
-        raise ValueError(f"Selected region {d.reward_roi!r} unavailable for {d.subject}")
+    missing = [] if d.reward_roi == "all" else [
+        r for r in UNION_ROIS.get(d.reward_roi, (d.reward_roi,)) if r not in data["regions"]]
+    if missing:
+        raise ValueError(f"Selected region {d.reward_roi!r} unavailable for {d.subject}: missing {missing}")
     if d.stage == "search":
         # Diagnostic data never change the pooled response block or image policy.
         data["diagnostic_units"], data["unavailable_regions"] = {}, {}
         loader = readers.load_all_laion_data if name == "laion" else readers.load_all_triplen_data
         for region in search_subregions(name, d.search_region):
+            if region in data["regions"]:
+                continue  # a stream block of the pooled union already has exact masks
             try:
                 diagnostic = loader(cfg, subjects=[subject], regions=[region])
                 data["diagnostic_units"][region] = diagnostic["units"][region][subject]
@@ -305,6 +309,31 @@ def _pack_responses(native: dict, subject: int, train_ids: list[str], test_ids: 
     return values[:len(train_ids)], values[len(train_ids):], masks
 
 
+def _union_masks(d, native, subject, masks):
+    """Add a pooled union ROI: every retained unit of its component streams.
+
+    Units are pooled, not stream-averaged, so the score is the mean over all
+    union units. Overlapping stream membership would double-count a unit and
+    is rejected rather than silently deduplicated.
+    """
+    components = UNION_ROIS.get(d.reward_roi)
+    if components is None:
+        return masks
+    seen = set()
+    for region in components:
+        units = native.get("units", {}).get(region, {}).get(subject)
+        if units is None:
+            raise ValueError(f"Unit identifiers for {region!r} are required to pool {d.reward_roi!r}")
+        ids = set(map(tuple, np.asarray(units).tolist()))
+        if ids & seen:
+            raise ValueError(f"Streams of {d.reward_roi!r} share units for {d.subject}; refusing to double-count")
+        seen |= ids
+    union = np.zeros_like(masks[components[0]], dtype=bool)
+    for region in components:
+        union |= masks[region]
+    return {d.reward_roi: union, **masks}
+
+
 def _stream_masks(d, native, subject, masks):
     """Intersect anatomical coordinates/unit IDs with the retained pooled units.
 
@@ -314,8 +343,15 @@ def _stream_masks(d, native, subject, masks):
     if d.stage != "search":
         return masks, {}
     unavailable = dict(native.get("unavailable_regions", {}))
-    pooled = native.get("units", {}).get(d.reward_roi, {}).get(subject)
+    units = native.get("units", {})
+    if d.reward_roi in UNION_ROIS:
+        blocks = [units.get(region, {}).get(subject) for region in native["regions"]]
+        pooled = None if any(b is None for b in blocks) else np.concatenate([np.asarray(b) for b in blocks])
+    else:
+        pooled = units.get(d.reward_roi, {}).get(subject)
     for name in search_subregions(dataset_key(d), d.search_region):
+        if name in masks:
+            continue  # stream blocks of a union are exact packed masks
         units = native.get("diagnostic_units", {}).get(name)
         if pooled is None or units is None:
             unavailable.setdefault(name, "Anatomical unit membership unavailable")
@@ -344,6 +380,7 @@ def load_looped(d: Dataset):
     train_ids, test_ids = _selected_ids(d, native, subject)
     X = _pixels(native["stimuli"], train_ids + test_ids, d.imsize)
     Ytr, Yte, masks = _pack_responses(native, subject, train_ids, test_ids)
+    masks = _union_masks(d, native, subject, masks)
     masks, unavailable = _stream_masks(d, native, subject, masks)
     groups = _source_groups(d, native, train_ids + test_ids)
     protocol = protocol_for(dataset_key(d), d.search_region, d.metric if d.stage == "search" else d.search_metric)

@@ -10,11 +10,24 @@ from search.run import EVAL_ENV_KEYS, PROVIDER_ENV_KEYS, scaffold_run
 
 REPO = Path(__file__).resolve().parents[1]
 
+
+@pytest.fixture(autouse=True)
+def legacy_contract_environment(monkeypatch):
+    """Existing fixtures exercise the ventral/RSA contract explicitly.
+
+    Production defaults (pooled early + ventral encoding) are covered by tests
+    that clear these variables themselves.
+    """
+    monkeypatch.setenv("NEURO_REGION", "ventral")
+    monkeypatch.setenv("NEURO_METRIC", "rsa")
+
+
 @pytest.fixture
 def clean_environment(monkeypatch, tmp_path):
     for key in (*EVAL_ENV_KEYS, *PROVIDER_ENV_KEYS, "NEURO_DATASET", "NEURO_REGION", "NEURO_METRIC", "NEURO_STAGE", "LAB_RUN", "LAB_PROPOSER", "VANILLA_AUTORESEARCH"):
         monkeypatch.delenv(key, raising=False)
     monkeypatch.setenv("NEURO_REGION", "ventral")
+    monkeypatch.setenv("NEURO_METRIC", "rsa")
     from neuro_eval import datasets
     responses, stimuli = tmp_path / "responses.pkl", tmp_path / "stimuli.h5"
     responses.write_bytes(b"fixture responses")

@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO not in sys.path:
     sys.path.insert(0, REPO)
-from neuro_eval.benchmarks import protocol_for, validate_search_dataset, canonical_region, validate_search_metric, SOURCE_REVISION
+from neuro_eval.benchmarks import protocol_for, validate_search_dataset, canonical_region, validate_search_metric, SOURCE_REVISION, default_search_region, DEFAULT_SEARCH_METRIC
 
 from neuro_eval.model import EVAL_ENV_KEYS, evaluation_sha256, runtime_versions
 PROVIDER_ENV_KEYS = (
@@ -32,8 +32,8 @@ def evaluation_environment(dataset: str, region: str | None = None, metric: str 
     from dotenv import load_dotenv
     load_dotenv(os.path.join(REPO, ".env"))
     dataset = validate_search_dataset(dataset)
-    region = canonical_region(region or os.environ.get("NEURO_REGION", ""))
-    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", "rsa"))
+    region = canonical_region(region or os.environ.get("NEURO_REGION") or default_search_region(dataset))
+    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
     protocol = protocol_for(dataset, region=region, metric=metric)
     subjects = tuple(s.strip() for s in os.environ.get("NEURO_SUBJECT", "").split(",") if s.strip())
     if subjects and subjects != protocol.search_subjects:
@@ -97,8 +97,8 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
         raise ValueError("n_proposers must be positive")
     date = date or datetime.now(ZoneInfo("America/New_York")).strftime("%Y-%m-%d")
     datetime.strptime(date, "%Y-%m-%d")
-    region = canonical_region(region or os.environ.get("NEURO_REGION", ""))
-    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", "rsa"))
+    region = canonical_region(region or os.environ.get("NEURO_REGION") or default_search_region(dataset))
+    metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
     run_dir = os.path.join(repo_root, "search_runs", f"{dataset}__{region}__{metric}__{date}")
     from search.agents import make_sandbox
     sys.path.insert(0, repo_root)
@@ -143,11 +143,14 @@ def main(argv=None):
     import shlex
     from search.providers import resolve, command, preflight
     configure()
-    parser = argparse.ArgumentParser(description='Launch an early or ventral visual-cortex search.')
+    parser = argparse.ArgumentParser(description='Launch a visual-cortex search (default: pooled early + ventral streams, encoding).')
     parser.add_argument('legacy_dataset', nargs='?', choices=('laion', 'triplen'))
     parser.add_argument('--dataset', choices=('laion', 'triplen'), default=None)
-    parser.add_argument('--region', '--config', required=True, choices=('early', 'ventral'))
-    parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', 'rsa'))
+    parser.add_argument('--region', '--config', choices=('visual', 'early', 'ventral'),
+                        default=os.environ.get('NEURO_REGION') or None,
+                        help='visual pools every early and ventral unit (LAION default); '
+                             'early/ventral select one stream (Triple-N default: ventral)')
+    parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', DEFAULT_SEARCH_METRIC))
     parser.add_argument('--hours', type=float, default=12)
     parser.add_argument('--epoch-mins', type=float, default=30,
                         help='Coordinator start interval from run startup (default: 30 minutes; occupied slots skipped; 0 disables)')
@@ -168,6 +171,7 @@ def main(argv=None):
         if args.dataset and args.legacy_dataset and args.dataset != args.legacy_dataset:
             raise ValueError("Conflicting dataset arguments")
         dataset = validate_search_dataset(args.dataset or args.legacy_dataset or "laion")
+        args.region = args.region or default_search_region(dataset)
         os.environ.update(NEURO_REGION=args.region, NEURO_METRIC=args.metric)
         protocol_for(dataset, args.region, args.metric)  # fail unavailable configurations before provider setup
         roster = os.environ['NEURO_MODEL_ROSTER'].split()

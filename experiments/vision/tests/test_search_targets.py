@@ -48,7 +48,7 @@ def test_laion_keeps_all_shared_test_and_native_training_images():
 
 def test_triplen_rsa_keeps_all_images_encoding_retains_source_fold():
     native = native_split()
-    assert _selected_ids(get_dataset('triplen'), native, 0) == ([], ['1', '2', '3', '4', '5', '6'])
+    assert _selected_ids(get_dataset('triplen', metric='rsa'), native, 0) == ([], ['1', '2', '3', '4', '5', '6'])
     assert _selected_ids(get_dataset('triplen', metric='encoding'), native, 0) == (['1', '2', '3'], ['4', '5', '6'])
 
 
@@ -106,7 +106,7 @@ def test_rsa_source_groups_use_selected_region(region):
         n_params = 0
         def __call__(self, x):
             return x
-    dataset = get_dataset('laion', region=region)
+    dataset = get_dataset('laion', region=region, metric='rsa')
     row = rsa.evaluate_on_split(Model(), split, dataset)
     for source in ('laion', 'nsd'):
         subgroup = row['rsa_diagnostics']['source_groups'][source]
@@ -131,21 +131,21 @@ def test_rsa_unavailable_other_region_does_not_invalidate_selected_reward():
         n_params = 0
         def __call__(self, x):
             return x
-    valid = rsa.evaluate_on_split_safe(Model(), split, get_dataset('laion', region='ventral'))
+    valid = rsa.evaluate_on_split_safe(Model(), split, get_dataset('laion', region='ventral', metric='rsa'))
     assert valid['status'] == 'ok'
     assert np.isfinite(valid['reward'])
     assert 'early visual stream' not in valid['rsa_diagnostics']['regions']
     group = valid['rsa_diagnostics']['source_groups']['laion']
     assert group['status'] == 'ok'
     assert group['rsa'] == group['regions']['ventral visual stream']
-    invalid = rsa.evaluate_on_split_safe(Model(), split, get_dataset('laion', region='early'))
+    invalid = rsa.evaluate_on_split_safe(Model(), split, get_dataset('laion', region='early', metric='rsa'))
     assert invalid['status'].startswith('error:')
     assert invalid['reward'] is None
 
 
 def test_stream_masks_intersect_unit_identity_without_duplicate_targets():
     from neuro_eval.datasets import _stream_masks
-    d = get_dataset('laion', region='ventral')
+    d = get_dataset('laion', region='ventral', metric='rsa')
     pooled = np.array([[1, 0, 0], [2, 0, 0], [3, 0, 0], [4, 0, 0]])
     native = {'units': {d.reward_roi: {0: pooled}}, 'diagnostic_units': {
         'hV4': pooled[[0, 1]], 'FFA': np.array([[99, 0, 0]]),
@@ -227,7 +227,7 @@ def test_undefined_subregion_rsa_preserves_valid_pool():
     generator = torch.Generator().manual_seed(125)
     x = torch.randn(12, 5, generator=generator)
     y = torch.randn(12, 8, generator=generator)
-    d = get_dataset('laion', region='ventral')
+    d = get_dataset('laion', region='ventral', metric='rsa')
     masks = {d.reward_roi: np.ones(8, dtype=bool), 'hV4': np.arange(8) == 0}
     split = VisionSplit((x[:0], x, y[:0], y, masks, None))
     class Model:

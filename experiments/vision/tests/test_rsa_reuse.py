@@ -13,6 +13,7 @@ from neuro_eval.datasets import VisionSplit, get_dataset, with_subject
 def evaluation_environment(monkeypatch):
     for key in ("NEURO_SUBJECT", "NEURO_STAGE", "NEURO_METRIC", "NEURO_MAX_PARAMS"):
         monkeypatch.delenv(key, raising=False)
+    monkeypatch.setenv("NEURO_METRIC", "rsa")  # these fixtures exercise the RSA contract
     monkeypatch.setattr(rsa, "_readout_device", lambda: torch.device("cpu"))
     monkeypatch.setattr(encoding, "_readout_device", lambda: torch.device("cpu"))
     # Exercise a multi-batch input without constructing a large synthetic RDM.
@@ -168,7 +169,8 @@ def test_neural_subgroup_cache_reuses_fixed_responses_and_invalidates_mutation(m
     assert first["rsa_diagnostics"] != changed["rsa_diagnostics"]
 
 
-def test_final_encoding_still_batches_train_and_test_separately():
+def test_final_encoding_still_batches_train_and_test_separately(monkeypatch):
+    monkeypatch.delenv("NEURO_METRIC", raising=False)
     generator = torch.Generator().manual_seed(12)
     images = torch.randn(20, 5, generator=generator)
     targets = images @ torch.randn(5, 6, generator=generator)

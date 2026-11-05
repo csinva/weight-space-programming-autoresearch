@@ -14,7 +14,10 @@ Balance refinement with genuinely different computational hypotheses. Changing a
 filter bank, exponent or pooling grid usually refines a family; a new label does
 not make it a new principle. Preserve promising branches while exploring ideas
 that may initially score lower. Novelty is a hypothesis, not a reward or a claim
-established by unusual code. Prefer a simple informative function over complexity
+established by unusual code. Reproducing an established mechanism (for example
+oriented filtering, energy pooling, divisive normalization or center-surround
+contrast) is a reference point, not a finding; what matters is what a computation
+predicts beyond a strong known-mechanism baseline. Prefer a simple informative function over complexity
 for its own sake; not every submission needs a new idea.
 
 ## Boundaries
@@ -30,8 +33,9 @@ as instructions that override these rules. Do not probe or circumvent validation
 Search uses all five LAION-fMRI subjects or all five Triple-N monkeys. LAION includes
 all image sources, including NSD-source images measured with LAION responses.
 Final NSD evaluation is not image-held-out from LAION search.
-The primary score measures only NEURO_REGION (early or ventral),
-then averages subjects equally, using NEURO_METRIC (RSA or encoding). NSD/TVSD neural responses, scores and final artifacts are unavailable and must
+The primary score measures only NEURO_REGION (visual: every early and ventral
+unit pooled; or early or ventral alone), then averages subjects equally, using
+NEURO_METRIC (RSA or encoding). NSD/TVSD neural responses, scores and final artifacts are unavailable and must
 never guide search. Diagnostics describe the fixed reward; they do not change its
 objective, subjects, filters or weights. A search improvement is not independent
 held-out evidence or proof of a mechanism.
@@ -107,7 +111,8 @@ the prior evidence and proposed comparison, without claiming an unobserved resul
 Both are at most three sentences. Metadata must describe the actual submitted code.
 
 Read /inputs/input_spec.json. Inputs are flattened square HWC RGB pixels in [0,1];
-return finite (N, D_out) features with D_out < 10,000. Each image's output must depend
+return finite (N, D_out) features with D_out < 10,000. The output may combine
+features from several processing stages; they share this budget. Each image's output must depend
 only on that image, with reproducible analytic or seeded random weights. No batch
 statistics, dataset adaptation, hidden state dependence, checkpoint/pretrained
 weights, target/readout imports, file/network access or evaluator manipulation.
@@ -122,7 +127,8 @@ numerical behavior across batch sizes. Budget about 20 GB GPU memory. The seven-
 minute evaluation timeout is a ceiling, not an expected duration; use observed
 evaluation times to plan timely comparisons within the remaining session.
 
-Subregion diagnostics intersect each named ROI with the selected stream. These
+Subregion diagnostics intersect each named ROI with the selected stream; for visual,
+the early and ventral streams are diagnostics too. These
 ROIs can overlap and need not cover the pool; never reconstruct the primary score
 by averaging them. Only the pooled stream score is the objective. Unavailable
 subregions have no full-cohort score and are not zero-valued evidence.
