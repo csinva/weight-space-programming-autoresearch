@@ -244,7 +244,7 @@ SHARED_DEFS = """
     <p><b>Evaluation.</b> Running <code>uv run interpretable_transformer.py --task &lt;task&gt;</code> builds the network, generates the answer greedily
       (argmax at each step) for a fixed number of answer tokens, and scores <b>accuracy</b>: the fraction of examples whose generated answer string
       exactly matches the target (no partial credit or numerical tolerance). Each attempt is scored on the same 200 examples, produced by the task's
-      generator with seed 0, so there is no separate held-out set, and the agent could read the generator code. For the four dataset tasks the
+      generator with seed 0, so there is no separate held-out set, and the agent's own program could call the generator to see examples. For the four dataset tasks the
       examples are sampled from a fixed subset of 2,000 examples of the training split (SST-2, GLUE/MRPC, SNLI, TREC), lowercased, with characters
       outside the task vocabulary replaced by spaces and each sentence truncated or padded to a fixed length. The real-world group also includes
       date normalization, whose examples are generated from nine common date formats rather than drawn from a dataset.</p>
@@ -274,7 +274,10 @@ def definitions(new_runs: list[dict]) -> str:
       evaluation code (<code>src/</code>) is a symlink to the shared <code>evolve/src</code>, so scoring is identical across runs. Claude Code runs in
       restricted mode with only the Read, Edit, Write, Glob, Grep and Bash tools: file reads are confined to the run folder (so the earlier runs'
       solutions cannot be opened), there is no web access, and the only shell command it may run, apart from read-only listings of its own folder, is
-      <code>uv run interpretable_transformer.py ...</code>; every other command is refused. Snapshots are saved with the Write tool. The rules on training,
+      <code>uv run interpretable_transformer.py ...</code>; every other command is refused. Because <code>src/</code> is a symlink outside the run folder, the
+      agent's attempts to read <code>src/task.py</code> and <code>src/eval.py</code> were refused too (all 63 attempts across the Opus runs), although <code>program.md</code>
+      lists them as files to read. The agents instead learned each task's format by running programs that print examples. Output redirection was also usually refused.
+      Snapshots are saved with the Write tool. The rules on training,
       outside computation and pretrained weights remain instructions: the agent's own Python could in principle break them, which the snapshots are checked for.</p>
     <p><b>Audits after the runs.</b> Four checks, all in <code>evolve/</code>.
       <i>Transcripts</i> (<code>audit_transcripts.py</code>): every tool call of every session. Runs used only the six allowed tools, and no call read or
