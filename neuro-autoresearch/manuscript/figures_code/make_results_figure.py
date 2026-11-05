@@ -20,7 +20,7 @@ from matplotlib.lines import Line2D
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = HERE.parents[1]
 OUT = HERE.parent / 'neuro_autoresearch_latex' / 'figures'
 INK, MUTED, GRID = '#202A32', '#64717B', '#E5E9EC'
 REFERENCE = '#81786E'  # warm gray, distinct from the blue-gray model bars

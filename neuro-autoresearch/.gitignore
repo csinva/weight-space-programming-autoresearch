@@ -24,8 +24,6 @@ __pycache__/
 # Independent manuscript repository
 /manuscript_natneuro/
 
-# Independent LaTeX repository for the NeurIPS 2026 workshop paper
-/manuscript/neurips_workshop_2026/neuro_autoresearch_latex/
 /manuscript/nature_neuro/
 
 # Local scratch and OS noise
