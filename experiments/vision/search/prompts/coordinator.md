@@ -24,7 +24,8 @@ leader. Neither complexity nor an unsupported novelty story counts as discovery.
 The objective is this run's primary score: the single NEURO_REGION (visual: every
 early and ventral unit pooled; or early or ventral alone), measured with
 NEURO_METRIC (RSA or encoding), averaged equally over
-all five LAION-fMRI subjects or all five Triple-N monkeys.
+all five LAION-fMRI subjects or the run's fixed Triple-N monkeys (all five for ventral;
+M1 and M4, the only monkeys with early units, for early or visual).
 LAION includes all image sources, including NSD-source images with LAION responses;
 final NSD evaluation is not image-held-out from LAION search.
 NSD/TVSD neural responses, scores and final artifacts must

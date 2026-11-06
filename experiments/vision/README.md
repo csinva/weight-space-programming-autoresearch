@@ -9,7 +9,7 @@ Only the candidate `model.py` evolves during search; the scientific code stays f
 | Track | Phase 1: search feedback | Phase 2: final evaluation |
 | --- | --- | --- |
 | fMRI | LAION-fMRI, all five subjects, RSA or encoding | NSD, all eight subjects, encoding |
-| Spiking | Triple-N, all five monkeys, RSA or encoding | TVSD, both monkeys, encoding |
+| Spiking | Triple-N, all five monkeys (ventral) or M1 and M4 (early/visual), RSA or encoding | TVSD, both monkeys, encoding |
 
 NSD and TVSD neural responses, scores and final artifacts must never guide search,
 coordination, repair or model selection. LAION search includes its NSD-source images
@@ -45,8 +45,9 @@ streams are disjoint and roughly equal in size for LAION. `--region early` or
 `--region ventral` selects one stream; `--metric rsa` compares representational
 geometry instead of a ridge readout. For the spiking track use `--dataset triplen`,
 which defaults to `--region ventral`; final evaluation chooses TVSD automatically.
-Triple-N early and visual search are unavailable because M2/M3/M5 lack early
-responses; the full five-monkey cohort is mandatory.
+Triple-N ventral (IT) search uses all five monkeys. Only M1 and M4 have early
+(V1, V2, V4) responses, so `--region early|visual` on Triple-N uses exactly that
+two-monkey cohort, with V1, V2 and V4 as diagnostics.
 Run configurations sequentially on a single GPU. Each run is stored as
 `<dataset>__<region>__<metric>__<date>`; `--date YYYY-MM-DD` selects the date.
 Relaunching the same configuration/date resumes only if code, data and scientific

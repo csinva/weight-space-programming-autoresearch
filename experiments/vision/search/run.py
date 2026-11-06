@@ -149,7 +149,8 @@ def main(argv=None):
     parser.add_argument('--region', '--config', choices=('visual', 'early', 'ventral'),
                         default=os.environ.get('NEURO_REGION') or None,
                         help='visual pools every early and ventral unit (LAION default); '
-                             'early/ventral select one stream (Triple-N default: ventral)')
+                             'early/ventral select one stream (Triple-N default: ventral, all five monkeys; '
+                             'Triple-N early/visual use M1 and M4, the monkeys with early units)')
     parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', DEFAULT_SEARCH_METRIC))
     parser.add_argument('--hours', type=float, default=12)
     parser.add_argument('--epoch-mins', type=float, default=60,

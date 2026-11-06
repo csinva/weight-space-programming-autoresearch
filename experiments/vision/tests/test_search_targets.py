@@ -23,8 +23,10 @@ def test_config_contract_and_unsupported_cohort(metric):
     assert early.name != ventral.name
     assert early.search_subjects == ventral.search_subjects
     assert early.search_metric == metric
-    with pytest.raises(ValueError, match='M2, M3, M5'):
-        protocol_for('triplen', region='early', metric=metric)
+    # Only M1 and M4 have early units: Triple-N early/visual search uses that cohort.
+    for region in ('early', 'visual'):
+        assert protocol_for('triplen', region=region, metric=metric).search_subjects == ('M1', 'M4')
+    assert protocol_for('triplen', region='ventral', metric=metric).search_subjects == ('M1', 'M2', 'M3', 'M4', 'M5')
     for name in ('nsd', 'tvsd'):
         with pytest.raises(ValueError, match='reserved'):
             validate_search_dataset(name)

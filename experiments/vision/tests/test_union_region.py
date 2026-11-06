@@ -34,8 +34,8 @@ def test_laion_defaults_to_pooled_visual_encoding_and_triplen_to_ventral():
     assert default_search_region("nsd") == "visual"
     t = get_dataset("triplen")
     assert (t.search_region, t.metric) == ("ventral", "encoding")
-    with pytest.raises(ValueError, match="Triple-N visual"):
-        protocol_for("triplen", "visual", "encoding")
+    visual = protocol_for("triplen", "visual", "encoding")
+    assert (visual.name, visual.search_subjects) == ("triplen-visual-encoding-to-tvsd-encoding", ("M1", "M4"))
     assert protocol_for("laion", "visual", "encoding").name == "laion-visual-encoding-to-nsd-encoding"
 
 

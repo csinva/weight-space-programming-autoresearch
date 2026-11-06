@@ -17,7 +17,9 @@ SEARCH_SUBREGIONS = {
     "laion": {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA"),
               "visual": ("early visual stream", "ventral visual stream",
                          "V1", "V2", "V3", "hV4", "FFA", "PPA")},
-    "triplen": {"early": (), "ventral": ("IT",), "visual": ()},
+    # Triple-N ventral = IT; its early stream pools V1, V2, the V1/V2 border and V4.
+    "triplen": {"early": ("V1", "V2", "V4"), "ventral": ("IT",),
+                "visual": ("early visual stream", "ventral visual stream", "V1", "V2", "V4")},
 }
 
 
@@ -107,6 +109,8 @@ STREAM_COMPONENTS = {"early": ("early visual stream",), "ventral": ("ventral vis
                      "visual": ("early visual stream", "ventral visual stream")}
 UNION_ROIS = {SEARCH_REGIONS[k]: v for k, v in STREAM_COMPONENTS.items() if len(v) > 1}
 DEFAULT_SEARCH_REGION = "visual"  # Triple-N lacks full-cohort early data: ventral
+# Triple-N early responses exist only for these monkeys; early and visual search use this cohort.
+TRIPLEN_EARLY_SUBJECTS = ("M1", "M4")
 DEFAULT_SEARCH_METRIC = "encoding"
 
 
@@ -119,7 +123,7 @@ def canonical_region(region: str) -> str:
 
 
 def default_search_region(dataset: str) -> str:
-    """Pooled early + ventral where the full cohort has both streams, else ventral."""
+    """Pooled early + ventral where the full cohort has both streams, else ventral (all five monkeys)."""
     key = canonical_dataset(dataset)
     base = PROTOCOLS.get(key) or next((p for p in PROTOCOLS.values() if key == p.final_dataset), None)
     return "ventral" if base is not None and base.search_dataset == "triplen" else DEFAULT_SEARCH_REGION
@@ -142,8 +146,8 @@ def protocol_for(dataset: str, region: str = "ventral", metric: str = "rsa") -> 
     if base is None:
         raise ValueError(f"No cross-dataset protocol for {dataset!r}")
     if base.search_dataset == "triplen" and region in ("early", "visual"):
-        raise ValueError(f"Triple-N {region} search requires early responses for all M1–M5, "
-                         "but they are unavailable for M2, M3, M5; use --region ventral")
+        # M2, M3 and M5 have no early units: the cohort is the monkeys with both streams.
+        base = replace(base, search_subjects=TRIPLEN_EARLY_SUBJECTS)
     policy = base.image_policy
     if metric == "encoding":
         policy = ("source_train_shared_test_all_sources" if base.search_dataset == "laion"

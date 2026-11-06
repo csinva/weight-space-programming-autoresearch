@@ -236,7 +236,6 @@ def test_supervisor_refreshes_usage_on_resume_and_shutdown(tmp_path, monkeypatch
 
 
 @pytest.mark.parametrize('args', [[], ['--dataset', 'laion'],
-                                  ['--region', 'early', '--dataset', 'triplen', '--show-config'],
                                   ['--region', 'joint'],
                                   ['--region', 'early', '--metric', 'unknown']])
 def test_launcher_requires_supported_explicit_configuration(args, monkeypatch):
