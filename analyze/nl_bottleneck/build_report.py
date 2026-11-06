@@ -75,6 +75,15 @@ cr = [R[t]["control"][f"{t}-r1"]["n_params"] / R[t]["orig_params"] for t in GEN]
 rec_within = sum(all(0.5 <= x <= 2 for x in r) for r in rr)
 rec_gm, ctl_gm, ctl_min = gmean([x for r in rr for x in r]), gmean(cr), min(cr)
 one_shot = sum(x["experiments"] == 1 for x in meta)
+TOK = json.load(open(f"{NB}/tokens.json"))
+def tsum(prefix, k):
+    return sum(v[k] or 0 for n, v in TOK.items() if n.startswith(prefix))
+tok_rows = "".join(f"<tr><td>{lab}</td><td>{sum(1 for n in TOK if n.startswith(p))}</td><td>{tsum(p, 'output'):,}</td><td>{tsum(p, 'thinking'):,}</td><td>{tsum(p, 'cache_write'):,}</td><td>{tsum(p, 'cache_read'):,}</td><td>{tsum(p, 'input'):,}</td><td>${tsum(p, 'cost'):.2f}</td></tr>" for lab, p in [("reconstruct (with description)", "recon/"), ("control (no description)", "recon_control/")])
+size_rows = ""
+for t in sorted(R):
+    fb_ = os.path.getsize(f"{NB}/originals/{t}.py"); db_ = len(open(f"{NB}/summaries/{t}.txt").read().encode())
+    rb = [os.path.getsize(f"{NB}/recon_final/{t}-r{k}.py") for k in (1, 2)]
+    size_rows += f"<tr><td>{t}</td><td>{fb_ / 1024:.1f}</td><td>{db_ / 1024:.2f}</td><td>{fb_ / db_:.0f}</td><td>{rb[0] / 1024:.1f} / {rb[1] / 1024:.1f}</td></tr>"
 aud = json.load(open(f"{NB}/audit_recon_final.json")); aud_c = json.load(open(f"{NB}/audit_recon_control_final.json"))
 fb = [k for k, v in json.load(open(f"{NB}/recon_selected.json")).items() if v["fallback_to_last_file"]]
 
@@ -118,7 +127,7 @@ css = open(f"{HERE}/../systematic_tests/report.html").read().split("<style>")[1]
 page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Can a 200-word description recreate a weight program?</title><style>{css}
 tr.sub td {{ color:var(--dim); font-style:italic; }} .scroll {{ overflow-x:auto; }}</style></head><body><div class="wrap">
-<div class="top"><a href="../index.html">&larr; Analysis Reports index</a></div>
+<div class="top"><a href="../index.html">&larr; Analysis Reports index</a> &middot; <a href="report_raw.html">Raw data</a> (prompts, every description, example inputs, per-run logs)</div>
 <h1>Can a 200-word description recreate a hand-written weight program?</h1>
 
 <div class="summary">
@@ -164,6 +173,7 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 
 <h2 id="sec-5">5. Limitations</h2>
 <ul>
+<li>Token counts for the summarizer calls were not recorded.</li>
 <li>One original program per task, two reconstructions and one control. Differences of 1 to 2 points on 2,000 examples are within sampling noise.</li>
 <li>Selecting the original by visible accuracy picked programs tuned to the visible 200 examples. The hidden numbers are the fair comparison.</li>
 <li>The reconstructor is told the original's visible accuracy and parameter count, and may score on the visible 200 examples. These are task context, not weights, but they let it calibrate; most runs ({one_shot} of {len(meta)}) used a single experiment.</li>
@@ -172,7 +182,14 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 </ul>
 
 <h2 id="sec-6">6. Descriptions</h2>
-<p>The 200-word descriptions that the reconstructors received.</p>{sums}
+<p>The 200-word descriptions that the reconstructors received. Prompts, example inputs, attempts and per-example disagreements are in the <a href="report_raw.html">raw data page</a>.</p>{sums}
+
+<h2 id="sec-7">7. Token and dollar cost</h2>
+<p id="tab-4"><b>Table 4.</b> Opus 5.5 usage of the reconstruction and control sessions (list-price dollars, as reported by Claude Code). Cache read tokens are the context re-read on each turn and dominate the totals; output tokens are what the model generated. The 17 summarizer calls cost ${cost['sum']:.2f} in total ({mean([x['cost'] for x in slog]):.2f} each, 2 to 3 turns) but did not record token counts. Per-run numbers are in the <a href="report_raw.html#sec-5">raw data</a>.</p>
+<table><thead><tr><th>step</th><th>sessions</th><th>output tokens</th><th>of which thinking</th><th>cache write</th><th>cache read</th><th>uncached input</th><th>cost</th></tr></thead><tbody>{tok_rows}</tbody></table>
+<p>All three steps together cost ${cost['sum'] + cost['rec'] + cost['ctl']:.2f}. A reconstruction costs about ${cost['rec'] / len(meta):.2f} on average and a control ${cost['ctl'] / len(cmeta):.2f}, so the description does not make rebuilding cheaper; its value is in the program it produces. The most expensive reconstructions are TREC ($3.01 and $2.15), edit distance ($2.34) and date normalization ($2.11); the most expensive control is SNLI ($4.46). Twenty-three of the 34 reconstructions cost under $1.</p>
+<p id="tab-5"><b>Table 5.</b> Size of the description against the program it describes (file sizes in KB, the original file includes its comments and helper code, so the ratio is a rough measure of compression). The last column gives the sizes of the two final reconstructions.</p>
+<div class="scroll"><table><thead><tr><th>task</th><th>original file KB</th><th>description KB</th><th>file / description</th><th>reconstructions KB</th></tr></thead><tbody>{size_rows}</tbody></table></div>
 
 <details><summary>Computational cost</summary>
 <p>No GPU was used (0 H100 node hours). Models are tiny and were scored on CPU (about 0.3 to 190 s per program for 2,200 to 22,200 examples, 8 to 16 processes at a time). The cost is Opus 5.5 usage through headless Claude Code, at list price:</p>
@@ -197,7 +214,9 @@ Code, all in nl-bottleneck/ (run in this order from that folder):
  05_eval_recon.py recon; 05_eval_recon.py recon_control    final program = best visible snapshot (fallback: the sandbox's last file if the snapshot is truncated), scored with eval_program.py
  07_audit.py recon_final; 07_audit.py recon_control_final; 08_audit_transcripts.py recon   audits
  06_analyze.py      agreement, kappa, phi, conditional error rates -> results.json
- analyze/nl_bottleneck/build_report.py   renders this report
+ 09_tokens.py        token usage and final messages from the transcripts -> tokens.json
+ analyze/nl_bottleneck/build_report.py   renders this report (needs HF_HOME offline cache, as above)
+ analyze/nl_bottleneck/build_report_raw.py   renders report_raw.html (prompts, descriptions, attempts, example inputs and disagreements; needs nl-bottleneck/preds/)
 Sandboxes live outside the repo (/data18/chandan.singh/wsp-nl/sandbox); set HF_HOME to an offline copy of the HF cache and HF_HUB_OFFLINE=1.
 Expected: all 13 generated tasks 100% for all models on all sets; hidden accuracies on SST-2/MRPC/SNLI/TREC about 78.7/68.9/57.9/82.3 for the originals. Reconstruction numbers vary with the agent's sampling.</pre></details>
 </div></body></html>"""

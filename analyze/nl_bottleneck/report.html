@@ -15,7 +15,7 @@ details { margin:14px 0; border:1px solid var(--line); border-radius:8px; paddin
 pre { white-space:pre-wrap; font-size:12px; background:var(--panel); padding:10px; border-radius:6px; }
 
 tr.sub td { color:var(--dim); font-style:italic; } .scroll { overflow-x:auto; }</style></head><body><div class="wrap">
-<div class="top"><a href="../index.html">&larr; Analysis Reports index</a></div>
+<div class="top"><a href="../index.html">&larr; Analysis Reports index</a> &middot; <a href="report_raw.html">Raw data</a> (prompts, every description, example inputs, per-run logs)</div>
 <h1>Can a 200-word description recreate a hand-written weight program?</h1>
 
 <div class="summary">
@@ -61,6 +61,7 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 
 <h2 id="sec-5">5. Limitations</h2>
 <ul>
+<li>Token counts for the summarizer calls were not recorded.</li>
 <li>One original program per task, two reconstructions and one control. Differences of 1 to 2 points on 2,000 examples are within sampling noise.</li>
 <li>Selecting the original by visible accuracy picked programs tuned to the visible 200 examples. The hidden numbers are the fair comparison.</li>
 <li>The reconstructor is told the original's visible accuracy and parameter count, and may score on the visible 200 examples. These are task context, not weights, but they let it calibrate; most runs (29 of 34) used a single experiment.</li>
@@ -69,7 +70,7 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 </ul>
 
 <h2 id="sec-6">6. Descriptions</h2>
-<p>The 200-word descriptions that the reconstructors received.</p><details><summary>addition-five-digits (198 words; original RingLinearTokens, 100.0% visible, 27 params)</summary><pre>This model adds in one cross-attention read, treating the sum as an angle on a ten-sector ring. The only table is a 2-D position embedding. Digit values are the digit times one scalar, and the readout is a cosine.
+<p>The 200-word descriptions that the reconstructors received. Prompts, example inputs, attempts and per-example disagreements are in the <a href="report_raw.html">raw data page</a>.</p><details><summary>addition-five-digits (198 words; original RingLinearTokens, 100.0% visible, 27 params)</summary><pre>This model adds in one cross-attention read, treating the sum as an angle on a ten-sector ring. The only table is a 2-D position embedding. Digit values are the digit times one scalar, and the readout is a cosine.
 
 Attention: every query reads only the 11 prompt positions, never its own outputs. Digits a_c and b_c share the key for place value c: (1, −c·ln10). Output step i (0–5) has query (ln t_i, 1), so the score is log(t_i·10^−c) and softmax weights are proportional to place value. The &#x27;+&#x27; key is at the origin, scores 0 and has value 0, acting as a sink. t_i is set so the output equals 1e-5·(A+B)/10^(5−i), shifting the decimal point so the target digit becomes the units digit.
 
@@ -212,6 +213,13 @@ Value and readout: the value is the token id as one scalar, capped at the separa
 Errors: selection is exact with no softmax leakage, so accuracy should be 100%, even with repeated letters.
 </pre></details>
 
+<h2 id="sec-7">7. Token and dollar cost</h2>
+<p id="tab-4"><b>Table 4.</b> Opus 5.5 usage of the reconstruction and control sessions (list-price dollars, as reported by Claude Code). Cache read tokens are the context re-read on each turn and dominate the totals; output tokens are what the model generated. The 17 summarizer calls cost $5.06 in total (0.30 each, 2 to 3 turns) but did not record token counts. Per-run numbers are in the <a href="report_raw.html#sec-5">raw data</a>.</p>
+<table><thead><tr><th>step</th><th>sessions</th><th>output tokens</th><th>of which thinking</th><th>cache write</th><th>cache read</th><th>uncached input</th><th>cost</th></tr></thead><tbody><tr><td>reconstruct (with description)</td><td>34</td><td>1,028,600</td><td>431,657</td><td>1,522,791</td><td>14,569,157</td><td>924</td><td>$35.67</td></tr><tr><td>control (no description)</td><td>17</td><td>513,326</td><td>131,510</td><td>856,101</td><td>8,455,757</td><td>492</td><td>$18.81</td></tr></tbody></table>
+<p>All three steps together cost $59.54. A reconstruction costs about $1.05 on average and a control $1.11, so the description does not make rebuilding cheaper; its value is in the program it produces. The most expensive reconstructions are TREC ($3.01 and $2.15), edit distance ($2.34) and date normalization ($2.11); the most expensive control is SNLI ($4.46). Twenty-three of the 34 reconstructions cost under $1.</p>
+<p id="tab-5"><b>Table 5.</b> Size of the description against the program it describes (file sizes in KB, the original file includes its comments and helper code, so the ratio is a rough measure of compression). The last column gives the sizes of the two final reconstructions.</p>
+<div class="scroll"><table><thead><tr><th>task</th><th>original file KB</th><th>description KB</th><th>file / description</th><th>reconstructions KB</th></tr></thead><tbody><tr><td>addition-five-digits</td><td>9.4</td><td>1.12</td><td>8</td><td>7.9 / 7.2</td></tr><tr><td>boolean-circuit-5-bits</td><td>8.9</td><td>1.01</td><td>9</td><td>8.0 / 7.8</td></tr><tr><td>date-normalization</td><td>13.4</td><td>1.09</td><td>12</td><td>13.1 / 13.4</td></tr><tr><td>decimal-to-binary-8bit</td><td>8.7</td><td>1.05</td><td>8</td><td>7.5 / 8.0</td></tr><tr><td>digit-counting-10</td><td>9.5</td><td>1.14</td><td>8</td><td>8.7 / 10.5</td></tr><tr><td>edit-distance-8</td><td>10.8</td><td>1.12</td><td>10</td><td>11.6 / 11.0</td></tr><tr><td>gcd-three-digits</td><td>14.0</td><td>1.02</td><td>14</td><td>11.8 / 10.7</td></tr><tr><td>linear-interpolation-two-points</td><td>11.6</td><td>1.11</td><td>10</td><td>10.5 / 9.7</td></tr><tr><td>multiplication-five-digits</td><td>10.8</td><td>1.11</td><td>10</td><td>10.6 / 10.1</td></tr><tr><td>nli-snli</td><td>16.5</td><td>1.30</td><td>13</td><td>16.6 / 18.5</td></tr><tr><td>paraphrase-mrpc</td><td>10.1</td><td>1.05</td><td>10</td><td>11.3 / 9.9</td></tr><tr><td>parity-upto10-bits</td><td>9.3</td><td>1.02</td><td>9</td><td>7.3 / 6.6</td></tr><tr><td>sentiment-sst2</td><td>26.9</td><td>1.25</td><td>22</td><td>31.5 / 35.6</td></tr><tr><td>smallest-prime-factor</td><td>12.1</td><td>1.10</td><td>11</td><td>8.8 / 8.7</td></tr><tr><td>sort-five-digits</td><td>8.3</td><td>0.99</td><td>8</td><td>8.3 / 7.2</td></tr><tr><td>trec-coarse</td><td>14.4</td><td>1.17</td><td>12</td><td>22.5 / 14.4</td></tr><tr><td>word-reversal-3x3</td><td>7.8</td><td>1.00</td><td>8</td><td>9.6 / 6.7</td></tr></tbody></table></div>
+
 <details><summary>Computational cost</summary>
 <p>No GPU was used (0 H100 node hours). Models are tiny and were scored on CPU (about 0.3 to 190 s per program for 2,200 to 22,200 examples, 8 to 16 processes at a time). The cost is Opus 5.5 usage through headless Claude Code, at list price:</p>
 <table><thead><tr><th>step</th><th>runs</th><th>API cost</th><th>agent time (sum over runs)</th></tr></thead><tbody>
@@ -235,7 +243,9 @@ Code, all in nl-bottleneck/ (run in this order from that folder):
  05_eval_recon.py recon; 05_eval_recon.py recon_control    final program = best visible snapshot (fallback: the sandbox's last file if the snapshot is truncated), scored with eval_program.py
  07_audit.py recon_final; 07_audit.py recon_control_final; 08_audit_transcripts.py recon   audits
  06_analyze.py      agreement, kappa, phi, conditional error rates -> results.json
- analyze/nl_bottleneck/build_report.py   renders this report
+ 09_tokens.py        token usage and final messages from the transcripts -> tokens.json
+ analyze/nl_bottleneck/build_report.py   renders this report (needs HF_HOME offline cache, as above)
+ analyze/nl_bottleneck/build_report_raw.py   renders report_raw.html (prompts, descriptions, attempts, example inputs and disagreements; needs nl-bottleneck/preds/)
 Sandboxes live outside the repo (/data18/chandan.singh/wsp-nl/sandbox); set HF_HOME to an offline copy of the HF cache and HF_HUB_OFFLINE=1.
 Expected: all 13 generated tasks 100% for all models on all sets; hidden accuracies on SST-2/MRPC/SNLI/TREC about 78.7/68.9/57.9/82.3 for the originals. Reconstruction numbers vary with the agent's sampling.</pre></details>
 </div></body></html>
