@@ -1,0 +1,16 @@
+{
+ "task": "edit-distance-8",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.792127,
+ "turns": 18,
+ "seconds": 171,
+ "tools": {
+  "Bash": 6,
+  "Read": 4,
+  "Grep": 1,
+  "Edit": 5,
+  "Write": 1
+ },
+ "final_text": "ismatch cost. Every value stays a whole number, so the result is exact.\n- **Reading out the answer:** the output score for digit d is 2\u00b7d\u00b7D \u2212 d\u00b2, which is highest when d equals the computed distance D. Non-digit tokens get a large negative score.\n\nI changed the architecture in two ways: I removed LayerNorm so the numbers in the model stay exact, and I made the attention head size independent of the model width.\n\nFinal model: `interpretable_transformers_lib/ExactDPGatherMLP.py` (accuracy 1.0000)."
+}

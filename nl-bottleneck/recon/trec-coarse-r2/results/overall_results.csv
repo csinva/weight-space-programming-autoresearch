@@ -1,0 +1,5 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.8450,,trec_kwlist_v1,2.72e+05,"2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+trec-coarse,0.8450,,trec_kwlist_v2,3.24e+05,"2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+trec-coarse,0.8450,,trec_kwlist_v3_stems,3.07e+05,"2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+trec-coarse,0.8450,,trec_kwlist_v4_selftest,3.07e+05,"2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."

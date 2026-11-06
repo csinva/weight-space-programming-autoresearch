@@ -1,0 +1,15 @@
+{
+ "task": "sentiment-sst2",
+ "rep": 1,
+ "experiments": 4,
+ "cost_usd": 2.2837286,
+ "turns": 41,
+ "seconds": 588,
+ "tools": {
+  "Bash": 14,
+  "Write": 5,
+  "Read": 4,
+  "Edit": 17
+ },
+ "final_text": "er word lists, \"very X\" phrases | **76.5%** |\n| 4 | `LexiconNegFiller_v4` | + negation across one word (\"not a good\") | **76.5%** |\n\nv3 and v4 scored the same. I'm choosing v3 because it's much smaller: v4 needs about 38k detector neurons, roughly 40\u00d7 as many as v3. Note that `interpretable_transformer.py` currently contains v4, so swap in the v3 snapshot if you want the working file to match the final model.\n\n**Final model: `interpretable_transformers_lib/LexiconExpandedIntens_v3.py` (76.5%).**"
+}

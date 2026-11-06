@@ -1,0 +1,15 @@
+{
+ "task": "paraphrase-mrpc",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.8563828,
+ "turns": 14,
+ "seconds": 195,
+ "tools": {
+  "Bash": 8,
+  "Read": 2,
+  "Write": 2,
+  "Edit": 1
+ },
+ "final_text": "and reworded paraphrases give \"0\".\n\nTwo differences from the original:\n- **Size:** my model has about 38,800 parameters against the original's 43,000.\n- **Architecture:** I removed the LayerNorms and gave each layer its own head sizes so the hand-set values pass through unchanged.\n\nMatching accuracy doesn't prove the same mistakes. The description gives no per-example errors to compare against, so I couldn't check that directly.\n\nFinal model: `interpretable_transformers_lib/WindowHashMatch8.py`."
+}

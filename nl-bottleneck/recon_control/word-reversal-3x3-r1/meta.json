@@ -1,0 +1,16 @@
+{
+ "task": "word-reversal-3x3",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.45189779999999996,
+ "turns": 16,
+ "seconds": 100,
+ "tools": {
+  "Bash": 8,
+  "Grep": 1,
+  "Read": 2,
+  "Edit": 3,
+  "Write": 1
+ },
+ "final_text": "pt position. The attention value carries that position's token and writes it into the empty dimensions.\n- **Output:** the MLP is all zeros. The output layer reads the copied-token dimensions directly, and the final layer norm doesn't change which character scores highest.\n\nThe first snapshot write was cut off at the end. I restored the missing lines and checked that it is identical to `interpretable_transformer.py`.\n\n**Final model: `interpretable_transformers_lib/PosCopy1L.py` (100% accuracy).**"
+}

@@ -1,0 +1,3 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.9750,,date_parser_2L_markers,9.60e+05,2-layer no-LN hand-wired parser: L1 copies prev 4 tokens and detects year/month/day end markers + month trigrams; L2 attends to markers and reads out digits per output position.
+date-normalization,1.0000,,date_parser_2L_markers_v2,9.60e+05,2-layer no-LN hand-wired parser: L1 copies prev 4 tokens and detects year/month/day end markers + month trigrams; L2 attends to markers and reads out digits per output position.

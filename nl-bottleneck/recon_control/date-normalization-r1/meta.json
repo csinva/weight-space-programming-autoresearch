@@ -1,0 +1,16 @@
+{
+ "task": "date-normalization",
+ "rep": 1,
+ "experiments": 2,
+ "cost_usd": 1.4396396000000002,
+ "turns": 25,
+ "seconds": 379,
+ "tools": {
+  "Bash": 8,
+  "Grep": 1,
+  "Read": 4,
+  "Edit": 9,
+  "Write": 2
+ },
+ "final_text": "napshot is an exact copy of the file that scored 100%. The run-1 snapshot is not: the first save failed, so I rebuilt it from the v2 file with the old day-run test and name put back and comments removed. It should score 97.5% again, but I haven't rerun it.\n- In v2, the docstring line describing the day-run test is out of date; the code is correct. I left it alone so the snapshot matches the scored file.\n\nFinal model: `interpretable_transformers_lib/date_parser_2L_markers_v2.py` (200/200 = 100%)."
+}

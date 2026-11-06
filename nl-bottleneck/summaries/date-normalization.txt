@@ -1,0 +1,9 @@
+A 2-layer transformer with no LayerNorm, 3 heads per layer, character tokens and positions on a period-48 circle. Layer 1 has attention plus an MLP; layer 2 has attention only.
+
+Layer-1 heads match positions rotary-style to copy features from 1, 2 and 3 tokens back: digit value, is-digit flag and letter codes on a circle. At position 1, the "2 back" head reads itself.
+
+MLP ReLU AND-gates tag the token ending each digit run. Default is DAY; a dot at position 4 is YEAR; a slash at position ≤2 or a dot after a digit is MONTH; padding is half YEAR, half DAY. One unit per month matches letters 2–3, tags MONTH and writes the month's digits. March ("ar") gets half weight so January/February win.
+
+Layer-2 heads attend sharply (about 20·√d) to the token tagged with the current field, reading digits 2 back (tens) and 1 back (ones), or else "=" (zeros). The first year digit is 2 − (digit 3 back)/9; the second is ReLU(18 − 9·first). The readout picks the digit nearest a scalar. Hyphens come from position.
+
+Errors: tied tags (two dots) get averaged; unseen separators or field orders fall back to DAY.

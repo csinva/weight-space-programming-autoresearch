@@ -1,0 +1,14 @@
+{
+ "task": "linear-interpolation-two-points",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.8629441999999998,
+ "turns": 12,
+ "seconds": 251,
+ "tools": {
+  "Bash": 8,
+  "Write": 2,
+  "Read": 1
+ },
+ "final_text": "- **Readout.** The digit logit is 2d\u00b7out \u2212 d\u00b2. At the tens step, the \"=\" embedding shifts `out` by \u22120.45 so rounding acts as a floor. At the units step, the printed tens digit's embedding subtracts 10\u00b7tens. Punctuation is pushed down by \u22121000.\n\nOne difference from the original: my model has 1026 parameters, not 864. The layout of the per-head weight matrices doesn't match the original's exactly; the algorithm is the same.\n\n**Final model: `interpretable_transformers_lib/attn2L_read5_fit4_v1.py`**"
+}

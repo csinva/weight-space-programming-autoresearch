@@ -1,0 +1,16 @@
+{
+ "task": "digit-counting-10",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6399258,
+ "turns": 16,
+ "seconds": 138,
+ "tools": {
+  "Bash": 6,
+  "Read": 5,
+  "Grep": 1,
+  "Edit": 2,
+  "Write": 1
+ },
+ "final_text": " k)` for digit d. Large gate terms switch it off unless d is the query digit and the unit belongs to the current output position. Summing neighbouring units as `relu(c-k+1) - 2\u00b7relu(c-k) + relu(c-k-1)` gives exactly 1 when the count equals k and 0 otherwise. Position 11 writes the tens digit ('1' only when the count is 10) and position 12 writes `count % 10`, straight into logit slots that the output head reads.\n\nFinal model: `interpretable_transformers_lib/QueryCopyHistRamp.py` (100% accuracy)."
+}

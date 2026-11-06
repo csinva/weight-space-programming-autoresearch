@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,1.0000,,CountingSortBase6_d1,5.30e+01,"1 layer, 1 head, d_model=1 counting sort: digit d worth 6^(8-d), sign +1 prompt/-1 answer, zero attention scores average, times (t+1) gives remaining-count sum R; threshold readout tau_d=0.9*6^(8-d); float64."

@@ -1,0 +1,14 @@
+{
+ "task": "nli-snli",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 1.2609868000000002,
+ "turns": 14,
+ "seconds": 360,
+ "tools": {
+  "Bash": 8,
+  "Read": 3,
+  "Write": 2
+ },
+ "final_text": "is the position matching in the layer-1 heads. It doesn't change the algorithm.\n\n**Choices I made where the description is unclear:**\n- I read the lexicon numbers as raw votes that are then doubled, so a negation adds +12 to contradiction.\n- A conflict counts whenever the premise has a different member of the group, even if it also has the same word.\n- The first word of the premise is never matched, because nothing comes before it.\n\nFinal model: `interpretable_transformers_lib/nli_lexcov_v1.py`."
+}

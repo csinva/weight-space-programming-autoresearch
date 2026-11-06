@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+gcd-three-digits,1.0000,,gcd_divisor_lattice_v1,3.66e+07,"Attn copies digits; MLP1 builds exact one-hot of a,b via ReLU ramps and sums over multiples to get [d|a],[d|b]; MLP2 ANDs to common divisors; MLP3 picks the common divisor with no common-divisor multiple (=gcd), position-gated digit output."

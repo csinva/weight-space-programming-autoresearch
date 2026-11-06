@@ -1,0 +1,16 @@
+{
+ "task": "linear-interpolation-two-points",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6538673999999999,
+ "turns": 18,
+ "seconds": 149,
+ "tools": {
+  "Bash": 6,
+  "Read": 4,
+  "Grep": 1,
+  "Edit": 5,
+  "Write": 1
+ },
+ "final_text": " that are switched off unless that slope's flag is on.\n4. **Layer 3 MLP:** turns yq (0\u201354) into a single digit for output. At the `=` position it scores the tens digit, and at the next position it scores the ones digit. The output layer just reads those 10 digit scores.\n\nThe answer is generated one token at a time inside the network; Python never computes it.\n\nFinal model: `interpretable_transformers_lib/GatherSlopeIndicatorDecode.py` (identical to `interpretable_transformer.py`, 100% accuracy)."
+}

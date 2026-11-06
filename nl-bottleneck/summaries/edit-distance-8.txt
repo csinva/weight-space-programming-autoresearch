@@ -1,0 +1,9 @@
+This untrained transformer runs the Levenshtein DP table: one shared block applied 9 times (width 7, no LayerNorm, 2 single-scalar heads, 3-unit ReLU MLP), one DP row per pass.
+
+The comma and eight second-string tokens hold columns 0–8 as W[l] = D[i][l] − l, initialised to 0; first-string tokens start at W = 16 so they never win a minimum. Letters are unit-ring points (a, b, c, d at 90° steps). Each token keeps a countdown Y = position − pass and Y², frozen at the comma.
+
+Head 1 is a soft minimum over strictly earlier tokens (softmax of −4·W, averaging W). Head 2 selects the first-string letter with zero countdown via a −32·Y² peak, scoring +8 on match and −8 on mismatch against 0 for the comma, yielding a soft match bit. The MLP sets W ← min(W+1, softmin − match) with one ReLU and advances the countdown.
+
+At "=" the answer is W + 8, read out with parabolic digit logits 2d·v − d², i.e. round(v).
+
+Errors: the soft minimum averages, biasing W upward about 0.018 per near-tied column one above the minimum; accumulated over passes, this occasionally rounds up by one, so mistakes should be rare overestimates.

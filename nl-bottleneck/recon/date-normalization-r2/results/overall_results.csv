@@ -1,0 +1,3 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,0.9900,,rotcopy_tags_v1,9.17e+03,"2-layer no-LN transformer: L1 rotary-style copy heads (1/2/3 back, period-48 circle, step 17) + ReLU AND-gate tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half Y/D, month letter units); L2 tens/ones/high heads attend sharply to field tag or '='; nearest-digit readout."
+date-normalization,1.0000,,rotcopy_tags_v2_sharp40,9.17e+03,"2-layer no-LN transformer: L1 rotary-style copy heads (1/2/3 back, period-48 circle, step 17) + ReLU AND-gate tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half Y/D, month letter units); L2 tens/ones/high heads attend sharply to field tag or '='; nearest-digit readout."

@@ -1,0 +1,16 @@
+{
+ "task": "date-normalization",
+ "rep": 2,
+ "experiments": 2,
+ "cost_usd": 2.1116148,
+ "turns": 26,
+ "seconds": 623,
+ "tools": {
+  "Bash": 12,
+  "Read": 6,
+  "Grep": 1,
+  "Write": 4,
+  "Edit": 2
+ },
+ "final_text": "e algorithm is the same; the size is not.\n\nI didn't test the failure modes the description lists (two dots get averaged, unseen separators fall back to DAY). They aren't in the 200 examples, and running a custom test needs your approval. The mechanism that causes them is in place.\n\nRun 1's snapshot (`rotcopy_tags_v1.py`) isn't a full copy: I saved it late, so it loads v2 and halves the layer-2 sharpness to recreate run 1.\n\nFinal model: `interpretable_transformers_lib/rotcopy_tags_v2_sharp40.py`."
+}

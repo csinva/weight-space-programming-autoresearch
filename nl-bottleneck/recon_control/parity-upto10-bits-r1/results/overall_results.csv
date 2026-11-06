@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+parity-upto10-bits,1.0000,,UniformCountParityMLP,1.50e+05,"LayerNorms removed; layer-1 uniform-attention head counts 1s at the '=' token, a ReLU zigzag MLP maps the count to parity logits; layers 2-3 zeroed."

@@ -1,0 +1,14 @@
+{
+ "task": "parity-upto10-bits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.38200839999999997,
+ "turns": 11,
+ "seconds": 85,
+ "tools": {
+  "Bash": 6,
+  "Edit": 3,
+  "Write": 1
+ },
+ "final_text": " and the output weight multiplies by 11 to get back the whole count c (0\u201310).\n- **Layer 1 MLP:** 11 ReLU units at thresholds 0\u201310 build a zigzag function that is 0 at even counts and 1 at odd counts. It writes logit('1') = 10\u00b7f(c) and logit('0') = 10\u00b7(1 \u2212 f(c)), so the right answer always wins by 10.\n- **Layers 2\u20133:** all zero, so they pass values through unchanged.\n\nThe run added a row to `results/overall_results.csv`.\n\n**Final model: `interpretable_transformers_lib/UniformCountParityMLP.py`.**"
+}

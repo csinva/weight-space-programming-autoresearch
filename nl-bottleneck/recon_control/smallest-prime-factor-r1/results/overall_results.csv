@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+smallest-prime-factor,1.0000,,SPF_ModSumBump_v1,8.69e+05,2-layer no-LN transformer: attention gathers 5 digits; MLP1 tests p|N for 65 primes<=313 via integer bump on sum of digit residues; MLP2 picks first divisor (or copies N if prime).

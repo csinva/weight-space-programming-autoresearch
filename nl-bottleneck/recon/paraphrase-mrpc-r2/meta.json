@@ -1,0 +1,16 @@
+{
+ "task": "paraphrase-mrpc",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.7803589999999999,
+ "turns": 15,
+ "seconds": 194,
+ "tools": {
+  "Bash": 7,
+  "Grep": 1,
+  "Read": 3,
+  "Write": 2,
+  "Edit": 1
+ },
+ "final_text": "positions without touching `|` are checked.\n- There is no meaning involved, only shared character patterns.\n\nI made three design choices of my own:\n- I removed LayerNorm and the MLPs and use per-layer head sizes.\n- The `|` position fetches only itself in layer 1, so its window is all zeros and the sentinel key always scores exactly 15.5.\n- Sentence-1 windows that would start before position 0 are blocked from being matched.\n\nFinal model: `interpretable_transformers_lib/hash8_window_match_v1.py`."
+}

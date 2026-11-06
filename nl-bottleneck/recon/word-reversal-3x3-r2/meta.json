@@ -1,0 +1,14 @@
+{
+ "task": "word-reversal-3x3",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.3841174,
+ "turns": 11,
+ "seconds": 82,
+ "tools": {
+  "Bash": 6,
+  "Read": 2,
+  "Write": 2
+ },
+ "final_text": ".\n- **Readout.** The logits are `\u2212(read \u2212 vocab_id)\u00b2`. An exact match scores 0, and a tie goes to the lower id, because argmax picks the first maximum.\n- **The 3 parameters.** They're set directly in `write_weights`: `q_offset = 9`, `q_stride = 8` and `v_cap = 26` (the id of `_`).\n- **Errors.** The description predicts none, because selection is exact with no softmax leakage. Accordingly, I didn't add any error behaviour.\n\n**Final model: `interpretable_transformers_lib/PointerHardArgmax3p.py`.**"
+}

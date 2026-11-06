@@ -1,0 +1,14 @@
+{
+ "task": "linear-interpolation-two-points",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.9058432,
+ "turns": 13,
+ "seconds": 252,
+ "tools": {
+  "Bash": 9,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "0 on prompt tokens. That leaves a softmax leak of about e^-10, as described.\n- **Readout:** each digit d gets the logit 2d\u00b7out \u2212 d\u00b2, which picks the digit nearest to `out`. On the \"=\" step `out` is shifted by \u22120.45, so the tens digit rounds down. On the units step, the tens digit just printed contributes \u221210\u00b7tens through its embedding, leaving y mod 10. Punctuation is suppressed with a \u2212100 logit.\n\n**Final model:** `interpretable_transformers_lib/AttnOnly2L_Read5_Fit4.py` (100%, 864 parameters)."
+}

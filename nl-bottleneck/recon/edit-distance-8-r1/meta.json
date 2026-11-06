@@ -1,0 +1,14 @@
+{
+ "task": "edit-distance-8",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 2.3427673999999996,
+ "turns": 18,
+ "seconds": 725,
+ "tools": {
+  "Bash": 12,
+  "Write": 3,
+  "Read": 2
+ },
+ "final_text": "rked at \u2212100 rather than literally \"position \u2212 pass\". The comma's countdown is frozen at 0.\n\nThis is a reconstruction of behaviour, not a weight-level copy: it can't be compared to the unseen original beyond accuracy and parameter count. Since it scored 100%, these 200 examples show none of the rare over-by-one mistakes the description predicts, so they give no evidence about whether its mistakes match the original's elsewhere.\n\nFinal model: `interpretable_transformers_lib/ed8_softmin_dp_v1.py`."
+}

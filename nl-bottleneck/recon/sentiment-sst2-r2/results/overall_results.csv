@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.8000,,LexNeg_v1,2.18e+06,"Shift-register (12 heads) + AND-gate lexicon MLP (+1 pos, -1.5 neg, +-0.4 weak), negators -1 and flip positives to -1 within next 15 chars, uniform-sum sign readout."

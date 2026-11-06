@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+smallest-prime-factor,1.0000,,spf_sieve_pulse_v1,7.02e+03,2-block no-LN float64 scalar transformer: attn1 builds n via 10^(4-i)/11111 softmax; MLP1 cos-pulse sieve over 65 primes<=313 with lateral inhibition writes smallest factor digits; attn2 Gaussian copy head; MLP2 ReLU gate copies n if no factor else releases factor digits.

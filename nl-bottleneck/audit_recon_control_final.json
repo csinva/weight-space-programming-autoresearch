@@ -1,0 +1,19 @@
+{
+ "addition-five-digits-r1": "data_independent",
+ "boolean-circuit-5-bits-r1": "data_independent",
+ "date-normalization-r1": "data_independent",
+ "decimal-to-binary-8bit-r1": "data_independent",
+ "digit-counting-10-r1": "data_independent",
+ "edit-distance-8-r1": "data_independent",
+ "gcd-three-digits-r1": "data_independent",
+ "linear-interpolation-two-points-r1": "data_independent",
+ "multiplication-five-digits-r1": "data_independent",
+ "nli-snli-r1": "data_independent",
+ "paraphrase-mrpc-r1": "data_independent",
+ "parity-upto10-bits-r1": "data_independent",
+ "sentiment-sst2-r1": "data_independent",
+ "smallest-prime-factor-r1": "data_independent",
+ "sort-five-digits-r1": "data_independent",
+ "trec-coarse-r1": "data_independent",
+ "word-reversal-3x3-r1": "data_independent"
+}

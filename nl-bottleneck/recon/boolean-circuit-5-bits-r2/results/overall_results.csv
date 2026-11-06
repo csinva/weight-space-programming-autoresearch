@@ -1,0 +1,3 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,0.4850,,RecurrentCA_v1,5.70e+01,"Recurrent cellular-automaton transformer: 1 tied block (keyless sinusoidal prev-cell attention, 2-ReLU fold MLP) applied 10x; centred scalar state; readout +/-4*state."
+boolean-circuit-5-bits,1.0000,,RecurrentCA_v2,5.70e+01,"Recurrent cellular-automaton transformer: 1 tied block (keyless sinusoidal prev-cell attention, 2-ReLU fold MLP) applied 10x; centred scalar state; readout +/-4*state."

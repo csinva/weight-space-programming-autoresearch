@@ -1,0 +1,14 @@
+{
+ "task": "decimal-to-binary-8bit",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.5969116,
+ "turns": 12,
+ "seconds": 140,
+ "tools": {
+  "Bash": 7,
+  "Read": 2,
+  "Write": 2
+ },
+ "final_text": "in the description), and I left that as it is.\n\n**Parameter count:** mine has 368 parameters, not the original's 89. Its layer is dense, while the original was probably sparse. This changes the size only, not the algorithm or its behaviour.\n\n**Not checked:** I only scored the 200 examples. I did not run all 256 inputs or measure the logit margins, so the description's \"all 256 correct\" is not confirmed for my version.\n\nFinal model: `interpretable_transformers_lib/GreedyBinExp_2head_logplace.py`."
+}

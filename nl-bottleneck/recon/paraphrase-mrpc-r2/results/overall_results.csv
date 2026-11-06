@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.6950,,hash8_window_match_v1,4.27e+04,2-bit char hash; L1 8 binary-position heads build 8-char window codes; L2 one head looks up each s2 window in s1 with '|' sentinel at 15.5/16; L3 '=' averages flags over first 40 s2 positions; output 1 iff >=1 match (logit 50*(count-0.5)).

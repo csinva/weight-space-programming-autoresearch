@@ -1,0 +1,3538 @@
+{
+ "addition-five-digits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 27,
+  "recon": {
+   "addition-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 27,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "addition-five-digits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 25,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "addition-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 19744,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "boolean-circuit-5-bits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 51,
+  "recon": {
+   "boolean-circuit-5-bits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 49,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "boolean-circuit-5-bits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 57,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "boolean-circuit-5-bits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 11376,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "date-normalization": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 345,
+  "recon": {
+   "date-normalization-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 7708,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "date-normalization-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 9174,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "date-normalization-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 959616,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "decimal-to-binary-8bit": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 89,
+  "recon": {
+   "decimal-to-binary-8bit-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 89,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "decimal-to-binary-8bit-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 432,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "decimal-to-binary-8bit-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 150976,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "digit-counting-10": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 75,
+  "recon": {
+   "digit-counting-10-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 150,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "digit-counting-10-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 186,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "digit-counting-10-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 102408,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "edit-distance-8": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 507,
+  "recon": {
+   "edit-distance-8-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 507,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "edit-distance-8-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 471,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "edit-distance-8-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 5210704,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "gcd-three-digits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 332,
+  "recon": {
+   "gcd-three-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 612,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "gcd-three-digits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 1344,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "gcd-three-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 36581077,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "linear-interpolation-two-points": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 864,
+  "recon": {
+   "linear-interpolation-two-points-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 1026,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "linear-interpolation-two-points-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 864,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "linear-interpolation-two-points-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 200640,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "multiplication-five-digits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 304,
+  "recon": {
+   "multiplication-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 434,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "multiplication-five-digits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 490,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "multiplication-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 249344,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "nli-snli": {
+  "orig": {
+   "visible": 0.635,
+   "hidden": 0.579
+  },
+  "orig_params": 2202474,
+  "recon": {
+   "nli-snli-r1": {
+    "acc": {
+     "visible": 0.59,
+     "hidden": 0.5415
+    },
+    "n_params": 2495338,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 73,
+      "err_b": 82,
+      "both_wrong": 69,
+      "jaccard": 0.8023255813953488,
+      "phi": 0.8250156492384895,
+      "p_b_given_a_wrong": 0.9452054794520548,
+      "p_b_given_a_right": 0.10236220472440945,
+      "agree": 0.89,
+      "same_wrong": 0.927536231884058,
+      "kappa": 0.8340061115931641,
+      "expected_both_if_independent": 29.93
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 842,
+      "err_b": 917,
+      "both_wrong": 756,
+      "jaccard": 0.7537387836490529,
+      "phi": 0.7518922148981917,
+      "p_b_given_a_wrong": 0.8978622327790974,
+      "p_b_given_a_right": 0.13903281519861832,
+      "agree": 0.8515,
+      "same_wrong": 0.9338624338624338,
+      "kappa": 0.7738051083488765,
+      "expected_both_if_independent": 386.057
+     }
+    },
+    "pred_dist": {
+     "0": 0.3905,
+     "1": 0.357,
+     "2": 0.2525
+    },
+    "recall": {
+     "0": 0.6228070175438597,
+     "1": 0.5322338830584707,
+     "2": 0.46533127889060094
+    }
+   },
+   "nli-snli-r2": {
+    "acc": {
+     "visible": 0.575,
+     "hidden": 0.539
+    },
+    "n_params": 7905527,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 73,
+      "err_b": 85,
+      "both_wrong": 69,
+      "jaccard": 0.7752808988764045,
+      "phi": 0.797822177800312,
+      "p_b_given_a_wrong": 0.9452054794520548,
+      "p_b_given_a_right": 0.12598425196850394,
+      "agree": 0.87,
+      "same_wrong": 0.9130434782608695,
+      "kappa": 0.8039659202292091,
+      "expected_both_if_independent": 31.025
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 842,
+      "err_b": 922,
+      "both_wrong": 752,
+      "jaccard": 0.7430830039525692,
+      "phi": 0.7391845568848661,
+      "p_b_given_a_wrong": 0.8931116389548693,
+      "p_b_given_a_right": 0.14680483592400692,
+      "agree": 0.8435,
+      "same_wrong": 0.9295212765957447,
+      "kappa": 0.7616302359479882,
+      "expected_both_if_independent": 388.162
+     }
+    },
+    "pred_dist": {
+     "0": 0.3925,
+     "1": 0.354,
+     "2": 0.2535
+    },
+    "recall": {
+     "0": 0.6286549707602339,
+     "1": 0.5217391304347826,
+     "2": 0.4622496147919877
+    }
+   }
+  },
+  "control": {
+   "nli-snli-r1": {
+    "acc": {
+     "visible": 0.57,
+     "hidden": 0.5965
+    },
+    "n_params": 9104521,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 73,
+      "err_b": 86,
+      "both_wrong": 55,
+      "jaccard": 0.5288461538461539,
+      "phi": 0.4952916893844199,
+      "p_b_given_a_wrong": 0.7534246575342466,
+      "p_b_given_a_right": 0.2440944881889764,
+      "agree": 0.7,
+      "same_wrong": 0.8,
+      "kappa": 0.5443672400045562,
+      "expected_both_if_independent": 31.39
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 842,
+      "err_b": 807,
+      "both_wrong": 553,
+      "jaccard": 0.5045620437956204,
+      "phi": 0.44020789828383494,
+      "p_b_given_a_wrong": 0.6567695961995249,
+      "p_b_given_a_right": 0.21934369602763384,
+      "agree": 0.6705,
+      "same_wrong": 0.7902350813743219,
+      "kappa": 0.49781522953425594,
+      "expected_both_if_independent": 339.747
+     }
+    },
+    "pred_dist": {
+     "0": 0.363,
+     "1": 0.398,
+     "2": 0.239
+    },
+    "recall": {
+     "0": 0.6783625730994152,
+     "1": 0.5937031484257871,
+     "2": 0.5130970724191063
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 82,
+    "err_b": 85,
+    "both_wrong": 82,
+    "jaccard": 0.9647058823529412,
+    "phi": 0.969628517327721,
+    "p_b_given_a_wrong": 1.0,
+    "p_b_given_a_right": 0.025423728813559324,
+    "agree": 0.98,
+    "same_wrong": 0.9878048780487805,
+    "kappa": 0.9698522761531504,
+    "expected_both_if_independent": 34.85
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 917,
+    "err_b": 922,
+    "both_wrong": 902,
+    "jaccard": 0.9626467449306296,
+    "phi": 0.9647841510565961,
+    "p_b_given_a_wrong": 0.9836423118865867,
+    "p_b_given_a_right": 0.018467220683287166,
+    "agree": 0.9785,
+    "same_wrong": 0.991130820399113,
+    "kappa": 0.9672426875013332,
+    "expected_both_if_independent": 422.737
+   }
+  },
+  "orig_pred_dist": {
+   "0": 0.3905,
+   "1": 0.355,
+   "2": 0.2545
+  },
+  "orig_recall": {
+   "0": 0.6783625730994152,
+   "1": 0.5502248875562219,
+   "2": 0.5038520801232665
+  },
+  "majority": 0.342
+ },
+ "paraphrase-mrpc": {
+  "orig": {
+   "visible": 0.695,
+   "hidden": 0.6894484412470024
+  },
+  "orig_params": 43032,
+  "recon": {
+   "paraphrase-mrpc-r1": {
+    "acc": {
+     "visible": 0.695,
+     "hidden": 0.6894484412470024
+    },
+    "n_params": 38752,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 61,
+      "err_b": 61,
+      "both_wrong": 61,
+      "jaccard": 1.0,
+      "phi": 1.0,
+      "p_b_given_a_wrong": 1.0,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": 1.0,
+      "kappa": 1.0,
+      "expected_both_if_independent": 18.605
+     },
+     "hidden": {
+      "n": 1668,
+      "err_a": 518,
+      "err_b": 518,
+      "both_wrong": 518,
+      "jaccard": 1.0,
+      "phi": 1.0,
+      "p_b_given_a_wrong": 1.0,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": 1.0,
+      "kappa": 1.0,
+      "expected_both_if_independent": 160.86570743405275
+     }
+    },
+    "pred_dist": {
+     "0": 0.09832134292565947,
+     "1": 0.9016786570743405
+    },
+    "recall": {
+     "0": 0.1596153846153846,
+     "1": 0.9294425087108014
+    }
+   },
+   "paraphrase-mrpc-r2": {
+    "acc": {
+     "visible": 0.695,
+     "hidden": 0.6906474820143885
+    },
+    "n_params": 42680,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 61,
+      "err_b": 61,
+      "both_wrong": 61,
+      "jaccard": 1.0,
+      "phi": 1.0,
+      "p_b_given_a_wrong": 1.0,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": 1.0,
+      "kappa": 1.0,
+      "expected_both_if_independent": 18.605
+     },
+     "hidden": {
+      "n": 1668,
+      "err_a": 518,
+      "err_b": 516,
+      "both_wrong": 516,
+      "jaccard": 0.9961389961389961,
+      "phi": 0.9972008765337044,
+      "p_b_given_a_wrong": 0.9961389961389961,
+      "p_b_given_a_right": 0.0,
+      "agree": 0.9988009592326139,
+      "same_wrong": 1.0,
+      "kappa": 0.9932740850658882,
+      "expected_both_if_independent": 160.24460431654677
+     }
+    },
+    "pred_dist": {
+     "0": 0.09952038369304557,
+     "1": 0.9004796163069544
+    },
+    "recall": {
+     "0": 0.16346153846153846,
+     "1": 0.9294425087108014
+    }
+   }
+  },
+  "control": {
+   "paraphrase-mrpc-r1": {
+    "acc": {
+     "visible": 0.68,
+     "hidden": 0.6882494004796164
+    },
+    "n_params": 999087,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 61,
+      "err_b": 64,
+      "both_wrong": 54,
+      "jaccard": 0.7605633802816901,
+      "phi": 0.8027226067490207,
+      "p_b_given_a_wrong": 0.8852459016393442,
+      "p_b_given_a_right": 0.07194244604316546,
+      "agree": 0.915,
+      "same_wrong": 1.0,
+      "kappa": 0.0,
+      "expected_both_if_independent": 19.52
+     },
+     "hidden": {
+      "n": 1668,
+      "err_a": 518,
+      "err_b": 520,
+      "both_wrong": 437,
+      "jaccard": 0.7271214642262895,
+      "phi": 0.7706408472795276,
+      "p_b_given_a_wrong": 0.8436293436293436,
+      "p_b_given_a_right": 0.07217391304347825,
+      "agree": 0.9016786570743405,
+      "same_wrong": 1.0,
+      "kappa": 0.0,
+      "expected_both_if_independent": 161.48681055155876
+     }
+    },
+    "pred_dist": {
+     "0": 0.0,
+     "1": 1.0
+    },
+    "recall": {
+     "0": 0.0,
+     "1": 1.0
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 61,
+    "err_b": 61,
+    "both_wrong": 61,
+    "jaccard": 1.0,
+    "phi": 1.0,
+    "p_b_given_a_wrong": 1.0,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": 1.0,
+    "kappa": 1.0,
+    "expected_both_if_independent": 18.605
+   },
+   "hidden": {
+    "n": 1668,
+    "err_a": 518,
+    "err_b": 516,
+    "both_wrong": 516,
+    "jaccard": 0.9961389961389961,
+    "phi": 0.9972008765337044,
+    "p_b_given_a_wrong": 0.9961389961389961,
+    "p_b_given_a_right": 0.0,
+    "agree": 0.9988009592326139,
+    "same_wrong": 1.0,
+    "kappa": 0.9932740850658882,
+    "expected_both_if_independent": 160.24460431654677
+   }
+  },
+  "orig_pred_dist": {
+   "0": 0.09832134292565947,
+   "1": 0.9016786570743405
+  },
+  "orig_recall": {
+   "0": 0.1596153846153846,
+   "1": 0.9294425087108014
+  },
+  "majority": 0.6882494004796164
+ },
+ "parity-upto10-bits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 15,
+  "recon": {
+   "parity-upto10-bits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 15,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "parity-upto10-bits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 15,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "parity-upto10-bits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 149952,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "sentiment-sst2": {
+  "orig": {
+   "visible": 0.8,
+   "hidden": 0.7865
+  },
+  "orig_params": 497631,
+  "recon": {
+   "sentiment-sst2-r1": {
+    "acc": {
+     "visible": 0.78,
+     "hidden": 0.7805
+    },
+    "n_params": 3434041,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 40,
+      "err_b": 44,
+      "both_wrong": 29,
+      "jaccard": 0.5272727272727272,
+      "phi": 0.6095407438514003,
+      "p_b_given_a_wrong": 0.725,
+      "p_b_given_a_right": 0.09375,
+      "agree": 0.87,
+      "same_wrong": 1.0,
+      "kappa": 0.7134986225895317,
+      "expected_both_if_independent": 8.8
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 427,
+      "err_b": 439,
+      "both_wrong": 334,
+      "jaccard": 0.6278195488721805,
+      "phi": 0.7083107936315018,
+      "p_b_given_a_wrong": 0.7822014051522248,
+      "p_b_given_a_right": 0.06675143038779402,
+      "agree": 0.901,
+      "same_wrong": 1.0,
+      "kappa": 0.7874462308741865,
+      "expected_both_if_independent": 93.7265
+     }
+    },
+    "pred_dist": {
+     "0": 0.3505,
+     "1": 0.6495
+    },
+    "recall": {
+     "0": 0.647191011235955,
+     "1": 0.8873873873873874
+    }
+   },
+   "sentiment-sst2-r2": {
+    "acc": {
+     "visible": 0.8,
+     "hidden": 0.772
+    },
+    "n_params": 2184811,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 40,
+      "err_b": 40,
+      "both_wrong": 32,
+      "jaccard": 0.6666666666666666,
+      "phi": 0.75,
+      "p_b_given_a_wrong": 0.8,
+      "p_b_given_a_right": 0.05,
+      "agree": 0.92,
+      "same_wrong": 1.0,
+      "kappa": 0.8274932614555257,
+      "expected_both_if_independent": 8.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 427,
+      "err_b": 456,
+      "both_wrong": 327,
+      "jaccard": 0.5881294964028777,
+      "phi": 0.6678835246567626,
+      "p_b_given_a_wrong": 0.765807962529274,
+      "p_b_given_a_right": 0.08200890019071837,
+      "agree": 0.8855,
+      "same_wrong": 1.0,
+      "kappa": 0.7528919198895027,
+      "expected_both_if_independent": 97.356
+     }
+    },
+    "pred_dist": {
+     "0": 0.34,
+     "1": 0.66
+    },
+    "recall": {
+     "0": 0.6258426966292134,
+     "1": 0.8891891891891892
+    }
+   }
+  },
+  "control": {
+   "sentiment-sst2-r1": {
+    "acc": {
+     "visible": 0.765,
+     "hidden": 0.748
+    },
+    "n_params": 32442262,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 40,
+      "err_b": 47,
+      "both_wrong": 26,
+      "jaccard": 0.4262295081967213,
+      "phi": 0.48938815356008064,
+      "p_b_given_a_wrong": 0.65,
+      "p_b_given_a_right": 0.13125,
+      "agree": 0.825,
+      "same_wrong": 1.0,
+      "kappa": 0.6045197740112993,
+      "expected_both_if_independent": 9.4
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 427,
+      "err_b": 504,
+      "both_wrong": 286,
+      "jaccard": 0.4434108527131783,
+      "phi": 0.5013669987994783,
+      "p_b_given_a_wrong": 0.6697892271662763,
+      "p_b_given_a_right": 0.1385886840432295,
+      "agree": 0.8205,
+      "same_wrong": 1.0,
+      "kappa": 0.5991406647788685,
+      "expected_both_if_independent": 107.604
+     }
+    },
+    "pred_dist": {
+     "0": 0.272,
+     "1": 0.728
+    },
+    "recall": {
+     "0": 0.5224719101123596,
+     "1": 0.9288288288288288
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 44,
+    "err_b": 40,
+    "both_wrong": 34,
+    "jaccard": 0.68,
+    "phi": 0.7604171655967965,
+    "p_b_given_a_wrong": 0.7727272727272727,
+    "p_b_given_a_right": 0.038461538461538464,
+    "agree": 0.92,
+    "same_wrong": 1.0,
+    "kappa": 0.8207684552481238,
+    "expected_both_if_independent": 8.8
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 439,
+    "err_b": 456,
+    "both_wrong": 365,
+    "jaccard": 0.6886792452830188,
+    "phi": 0.7627553956974027,
+    "p_b_given_a_wrong": 0.8314350797266514,
+    "p_b_given_a_right": 0.05829596412556054,
+    "agree": 0.9175,
+    "same_wrong": 1.0,
+    "kappa": 0.8175424628450105,
+    "expected_both_if_independent": 100.092
+   }
+  },
+  "orig_pred_dist": {
+   "0": 0.3855,
+   "1": 0.6145
+  },
+  "orig_recall": {
+   "0": 0.6932584269662921,
+   "1": 0.8612612612612612
+  },
+  "majority": 0.555
+ },
+ "smallest-prime-factor": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 2729,
+  "recon": {
+   "smallest-prime-factor-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 7015,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "smallest-prime-factor-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 7084,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "smallest-prime-factor-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 868608,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "sort-five-digits": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 53,
+  "recon": {
+   "sort-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 53,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "sort-five-digits-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 53,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "sort-five-digits-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 51904,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ },
+ "trec-coarse": {
+  "orig": {
+   "visible": 0.92,
+   "hidden": 0.8225
+  },
+  "orig_params": 57753,
+  "recon": {
+   "trec-coarse-r1": {
+    "acc": {
+     "visible": 0.84,
+     "hidden": 0.7745
+    },
+    "n_params": 363789,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 16,
+      "err_b": 32,
+      "both_wrong": 11,
+      "jaccard": 0.2972972972972973,
+      "phi": 0.4243008574703845,
+      "p_b_given_a_wrong": 0.6875,
+      "p_b_given_a_right": 0.11413043478260869,
+      "agree": 0.855,
+      "same_wrong": 0.7272727272727273,
+      "kappa": 0.8186139604703527,
+      "expected_both_if_independent": 2.56
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 355,
+      "err_b": 451,
+      "both_wrong": 278,
+      "jaccard": 0.5265151515151515,
+      "phi": 0.6198247434639016,
+      "p_b_given_a_wrong": 0.7830985915492957,
+      "p_b_given_a_right": 0.10516717325227963,
+      "agree": 0.861,
+      "same_wrong": 0.8992805755395683,
+      "kappa": 0.8259510164804978,
+      "expected_both_if_independent": 80.0525
+     }
+    },
+    "pred_dist": {
+     "0": 0.011,
+     "1": 0.282,
+     "2": 0.184,
+     "3": 0.188,
+     "4": 0.1525,
+     "5": 0.1825
+    },
+    "recall": {
+     "0": 0.6129032258064516,
+     "1": 0.7620137299771167,
+     "2": 0.6521739130434783,
+     "3": 0.7472283813747228,
+     "4": 0.867109634551495,
+     "5": 0.9154518950437318
+    }
+   },
+   "trec-coarse-r2": {
+    "acc": {
+     "visible": 0.845,
+     "hidden": 0.7815
+    },
+    "n_params": 272394,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 16,
+      "err_b": 31,
+      "both_wrong": 14,
+      "jaccard": 0.42424242424242425,
+      "phi": 0.5866639103989396,
+      "p_b_given_a_wrong": 0.875,
+      "p_b_given_a_right": 0.09239130434782608,
+      "agree": 0.905,
+      "same_wrong": 1.0,
+      "kappa": 0.8809262682919187,
+      "expected_both_if_independent": 2.48
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 355,
+      "err_b": 437,
+      "both_wrong": 296,
+      "jaccard": 0.5967741935483871,
+      "phi": 0.6917193375359514,
+      "p_b_given_a_wrong": 0.8338028169014085,
+      "p_b_given_a_right": 0.08571428571428572,
+      "agree": 0.889,
+      "same_wrong": 0.9256756756756757,
+      "kappa": 0.8609290503239507,
+      "expected_both_if_independent": 77.5675
+     }
+    },
+    "pred_dist": {
+     "0": 0.011,
+     "1": 0.274,
+     "2": 0.208,
+     "3": 0.1855,
+     "4": 0.149,
+     "5": 0.1725
+    },
+    "recall": {
+     "0": 0.6129032258064516,
+     "1": 0.7459954233409611,
+     "2": 0.7345537757437071,
+     "3": 0.720620842572062,
+     "4": 0.8637873754152824,
+     "5": 0.9096209912536443
+    }
+   }
+  },
+  "control": {
+   "trec-coarse-r1": {
+    "acc": {
+     "visible": 0.825,
+     "hidden": 0.803
+    },
+    "n_params": 206914601,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 16,
+      "err_b": 35,
+      "both_wrong": 11,
+      "jaccard": 0.275,
+      "phi": 0.39773970833722394,
+      "p_b_given_a_wrong": 0.6875,
+      "p_b_given_a_right": 0.13043478260869565,
+      "agree": 0.84,
+      "same_wrong": 0.7272727272727273,
+      "kappa": 0.7989444584066346,
+      "expected_both_if_independent": 2.8
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 355,
+      "err_b": 394,
+      "both_wrong": 230,
+      "jaccard": 0.44315992292870904,
+      "phi": 0.5266333590385172,
+      "p_b_given_a_wrong": 0.647887323943662,
+      "p_b_given_a_right": 0.09969604863221884,
+      "agree": 0.8375,
+      "same_wrong": 0.8434782608695652,
+      "kappa": 0.7964811273818362,
+      "expected_both_if_independent": 69.935
+     }
+    },
+    "pred_dist": {
+     "0": 0.0125,
+     "1": 0.2635,
+     "2": 0.21,
+     "3": 0.2005,
+     "4": 0.1485,
+     "5": 0.165
+    },
+    "recall": {
+     "0": 0.7096774193548387,
+     "1": 0.7414187643020596,
+     "2": 0.7711670480549199,
+     "3": 0.7849223946784922,
+     "4": 0.867109634551495,
+     "5": 0.8979591836734694
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 32,
+    "err_b": 31,
+    "both_wrong": 23,
+    "jaccard": 0.575,
+    "phi": 0.6798493702942286,
+    "p_b_given_a_wrong": 0.71875,
+    "p_b_given_a_right": 0.047619047619047616,
+    "agree": 0.89,
+    "same_wrong": 0.782608695652174,
+    "kappa": 0.8624828103512938,
+    "expected_both_if_independent": 4.96
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 451,
+    "err_b": 437,
+    "both_wrong": 366,
+    "jaccard": 0.7011494252873564,
+    "phi": 0.7743707949326026,
+    "p_b_given_a_wrong": 0.811529933481153,
+    "p_b_given_a_right": 0.045836023240800515,
+    "agree": 0.912,
+    "same_wrong": 0.9453551912568307,
+    "kappa": 0.8893445392944772,
+    "expected_both_if_independent": 98.5435
+   }
+  },
+  "orig_pred_dist": {
+   "0": 0.011,
+   "1": 0.2395,
+   "2": 0.2155,
+   "3": 0.2095,
+   "4": 0.1515,
+   "5": 0.173
+  },
+  "orig_recall": {
+   "0": 0.6129032258064516,
+   "1": 0.7528604118993135,
+   "2": 0.7963386727688787,
+   "3": 0.8137472283813747,
+   "4": 0.8870431893687708,
+   "5": 0.9183673469387755
+  },
+  "majority": 0.2255
+ },
+ "word-reversal-3x3": {
+  "orig": {
+   "visible": 1.0,
+   "hidden": 1.0,
+   "extra": 1.0
+  },
+  "orig_params": 3,
+  "recon": {
+   "word-reversal-3x3-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 3,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   },
+   "word-reversal-3x3-r2": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 3,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "control": {
+   "word-reversal-3x3-r1": {
+    "acc": {
+     "visible": 1.0,
+     "hidden": 1.0,
+     "extra": 1.0
+    },
+    "n_params": 45892,
+    "vs_orig": {
+     "visible": {
+      "n": 200,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "hidden": {
+      "n": 2000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     },
+     "extra": {
+      "n": 20000,
+      "err_a": 0,
+      "err_b": 0,
+      "both_wrong": 0,
+      "jaccard": null,
+      "phi": null,
+      "p_b_given_a_wrong": null,
+      "p_b_given_a_right": 0.0,
+      "agree": 1.0,
+      "same_wrong": null,
+      "kappa": 1.0,
+      "expected_both_if_independent": 0.0
+     }
+    }
+   }
+  },
+  "recon_pair": {
+   "visible": {
+    "n": 200,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "hidden": {
+    "n": 2000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   },
+   "extra": {
+    "n": 20000,
+    "err_a": 0,
+    "err_b": 0,
+    "both_wrong": 0,
+    "jaccard": null,
+    "phi": null,
+    "p_b_given_a_wrong": null,
+    "p_b_given_a_right": 0.0,
+    "agree": 1.0,
+    "same_wrong": null,
+    "kappa": 1.0,
+    "expected_both_if_independent": 0.0
+   }
+  }
+ }
+}

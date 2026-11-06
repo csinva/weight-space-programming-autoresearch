@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+edit-distance-8,1.0000,,ed8_softmin_dp_v1,5.07e+02,"Shared 7-wide block x9 (no LN, 2 scalar heads, 3 ReLU): W=D-l columns, head1 softmin(-4W) over earlier tokens, head2 countdown -32Y^2 letter match vs comma, MLP W<-min(W+1,S-M); '=' reads W+8 with parabolic digit logits."

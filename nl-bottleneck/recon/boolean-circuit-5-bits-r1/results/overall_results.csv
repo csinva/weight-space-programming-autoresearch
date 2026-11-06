@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,1.0000,,CA_recurrent_fold_v1,4.90e+01,"Recurrent cellular-automaton transformer: scalar centred state per cell, one tied block (keyless 30deg sinusoidal prev-cell attention x200, 2-ReLU fold MLP) applied 10 times; op cells carry flags+identity bit; readout +-4*state."

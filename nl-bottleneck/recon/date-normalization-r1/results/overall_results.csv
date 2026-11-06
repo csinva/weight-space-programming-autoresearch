@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+date-normalization,1.0000,,DateNorm_TagRead_v1,7.71e+03,"2-layer no-LN transformer: rotary k-back copy heads, MLP AND-gate field tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half YEAR/DAY, month letter-pair units, march half), layer-2 sharp tag readers for hundreds/tens/ones, nearest-digit readout."

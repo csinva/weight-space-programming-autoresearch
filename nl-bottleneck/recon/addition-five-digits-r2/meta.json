@@ -1,0 +1,14 @@
+{
+ "task": "addition-five-digits",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.4505467999999999,
+ "turns": 11,
+ "seconds": 115,
+ "tools": {
+  "Bash": 7,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "* mine has 25 parameters (a 12\u00d72 position table plus one value scale), against the original's 27. The description doesn't say what the other two were, so I didn't guess.\n- **Float32 behaviour:** I didn't run the model in float32. The description says the original falls to about 0.5% there because of rounding near sector boundaries. My model follows the same arithmetic, so it should fail the same way, but I haven't checked.\n\nFinal model: `interpretable_transformers_lib/RingAdder_xattn_cos_f64.py`"
+}

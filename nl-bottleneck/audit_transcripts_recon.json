@@ -1,0 +1,899 @@
+{
+ "addition-five-digits-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 3,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [
+   "/tmp/new_mid.py",
+   "/tmp/snap.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-addition-five-di",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    2
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "addition-five-digits-r2": {
+  "tools": {
+   "Bash": 7,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-addition-five-di",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "boolean-circuit-5-bits-r1": {
+  "tools": {
+   "Bash": 7,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 0,
+  "outside": [
+   "/tmp/new_arch.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-boolean-circuit-",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "boolean-circuit-5-bits-r2": {
+  "tools": {
+   "Bash": 9,
+   "Read": 3,
+   "Write": 3,
+   "Edit": 3
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-boolean-circuit-",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    2
+   ],
+   [
+    "sed -i",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ]
+  ]
+ },
+ "date-normalization-r1": {
+  "tools": {
+   "Bash": 8,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [
+   "/tmp/dn_build",
+   "/tmp/dn_build/*",
+   "/tmp/dn_build/head.py",
+   "/tmp/dn_build/tail.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-date-normalizati",
+    7
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-date-normalizat",
+    1
+   ]
+  ]
+ },
+ "date-normalization-r2": {
+  "tools": {
+   "Bash": 12,
+   "Read": 6,
+   "Grep": 1,
+   "Write": 4,
+   "Edit": 2
+  },
+  "refused": 4,
+  "outside": [
+   "/tmp/dbg.py",
+   "/tmp/dbg_date.py",
+   "/tmp/head.txt",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    4
+   ],
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-date-normalizati",
+    2
+   ],
+   [
+    "cat results/*",
+    1
+   ],
+   [
+    "python3 -",
+    1
+   ]
+  ]
+ },
+ "decimal-to-binary-8bit-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 2,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [
+   "/tmp/snap_check.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-decimal-to-binar",
+    7
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-decimal-to-bina",
+    1
+   ]
+  ]
+ },
+ "decimal-to-binary-8bit-r2": {
+  "tools": {
+   "Bash": 7,
+   "Read": 2,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-decimal-to-binar",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat interpretable_transformer.py",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "digit-counting-10-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 3,
+   "Edit": 2,
+   "Write": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-digit-counting-1",
+    6
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "mkdir -p",
+    1
+   ]
+  ]
+ },
+ "digit-counting-10-r2": {
+  "tools": {
+   "Bash": 8,
+   "Read": 2,
+   "Edit": 3,
+   "Write": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-digit-counting-1",
+    8
+   ]
+  ]
+ },
+ "edit-distance-8-r1": {
+  "tools": {
+   "Bash": 12,
+   "Write": 3,
+   "Read": 2
+  },
+  "refused": 2,
+  "outside": [
+   "/tmp/edsim/sim.py",
+   "/tmp/sim.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-edit-distance-8-",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    3
+   ],
+   [
+    "grep -n",
+    1
+   ],
+   [
+    "sed -n",
+    1
+   ]
+  ]
+ },
+ "edit-distance-8-r2": {
+  "tools": {
+   "Bash": 8,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 0,
+  "outside": [
+   "/tmp/new_arch.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-edit-distance-8-",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "mkdir -p",
+    1
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-edit-distance-8",
+    1
+   ]
+  ]
+ },
+ "gcd-three-digits-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 6,
+   "Grep": 1,
+   "Write": 2,
+   "Edit": 1
+  },
+  "refused": 3,
+  "outside": [
+   "/tmp/head.txt",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    3
+   ],
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-gcd-three-digits",
+    2
+   ],
+   [
+    "python3 -",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ]
+  ]
+ },
+ "gcd-three-digits-r2": {
+  "tools": {
+   "Bash": 10,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 0,
+  "outside": [
+   "/tmp/gcd_arch.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-gcd-three-digits",
+    3
+   ],
+   [
+    "grep -n",
+    2
+   ],
+   [
+    "sed -n",
+    2
+   ],
+   [
+    "cat >",
+    1
+   ]
+  ]
+ },
+ "linear-interpolation-two-points-r1": {
+  "tools": {
+   "Bash": 8,
+   "Write": 2,
+   "Read": 1
+  },
+  "refused": 1,
+  "outside": [
+   "/tmp/head.txt",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-linear-interpola",
+    8
+   ]
+  ]
+ },
+ "linear-interpolation-two-points-r2": {
+  "tools": {
+   "Bash": 9,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-linear-interpola",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-linear-interpol",
+    1
+   ]
+  ]
+ },
+ "multiplication-five-digits-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-multiplication-f",
+    8
+   ]
+  ]
+ },
+ "multiplication-five-digits-r2": {
+  "tools": {
+   "Bash": 8,
+   "Read": 3,
+   "Write": 2
+  },
+  "refused": 0,
+  "outside": [
+   "/tmp/newsec.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-multiplication-f",
+    6
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ]
+  ]
+ },
+ "nli-snli-r1": {
+  "tools": {
+   "Bash": 12,
+   "Grep": 1,
+   "Read": 5,
+   "Write": 5,
+   "Edit": 3
+  },
+  "refused": 2,
+  "outside": [
+   "/tmp/mid.py",
+   "/tmp/nli_check/check.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-nli-snli-r1;",
+    9
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    2
+   ],
+   [
+    "mkdir -p",
+    1
+   ]
+  ]
+ },
+ "nli-snli-r2": {
+  "tools": {
+   "Bash": 8,
+   "Read": 3,
+   "Write": 2
+  },
+  "refused": 3,
+  "outside": [
+   "/tmp/head.txt",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-nli-snli-r2;",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    3
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "paraphrase-mrpc-r1": {
+  "tools": {
+   "Bash": 8,
+   "Read": 2,
+   "Write": 2,
+   "Edit": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-paraphrase-mrpc-",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "paraphrase-mrpc-r2": {
+  "tools": {
+   "Bash": 7,
+   "Grep": 1,
+   "Read": 3,
+   "Write": 2,
+   "Edit": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-paraphrase-mrpc-",
+    3
+   ],
+   [
+    "python3 -",
+    1
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-paraphrase-mrpc",
+    1
+   ]
+  ]
+ },
+ "parity-upto10-bits-r1": {
+  "tools": {
+   "Bash": 5,
+   "Read": 3,
+   "Edit": 4,
+   "Write": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-parity-upto10-bi",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ]
+  ]
+ },
+ "parity-upto10-bits-r2": {
+  "tools": {
+   "Bash": 7,
+   "Read": 3,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-parity-upto10-bi",
+    3
+   ],
+   [
+    "grep -n",
+    1
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ]
+  ]
+ },
+ "sentiment-sst2-r1": {
+  "tools": {
+   "Bash": 10,
+   "Grep": 1,
+   "Read": 6,
+   "Write": 3,
+   "Edit": 10
+  },
+  "refused": 2,
+  "outside": [
+   "/tmp/sst_chk",
+   "/tmp/sst_chk/chk.py"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-sentiment-sst2-r",
+    3
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    3
+   ],
+   [
+    "ls /data18/chandan.singh/wsp-nl/sandbox/rec-sentiment-sst2-r",
+    1
+   ],
+   [
+    "grep -n",
+    1
+   ]
+  ]
+ },
+ "sentiment-sst2-r2": {
+  "tools": {
+   "Bash": 10,
+   "Grep": 1,
+   "Read": 4,
+   "Write": 3,
+   "Edit": 5
+  },
+  "refused": 3,
+  "outside": [
+   "/tmp/head.txt",
+   "/tmp/lexcheck",
+   "/tmp/lexcheck/check.py",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-sentiment-sst2-r",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    3
+   ],
+   [
+    "mkdir -p",
+    1
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-sentiment-sst2-",
+    1
+   ]
+  ]
+ },
+ "smallest-prime-factor-r1": {
+  "tools": {
+   "Bash": 8,
+   "Grep": 1,
+   "Read": 5,
+   "Write": 2
+  },
+  "refused": 2,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-smallest-prime-f",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    2
+   ],
+   [
+    "cat /data18/chandan.singh/wsp-nl/sandbox/rec-smallest-prime-",
+    1
+   ],
+   [
+    "cp /data18/chandan.singh/wsp-nl/sandbox/rec-smallest-prime-f",
+    1
+   ]
+  ]
+ },
+ "smallest-prime-factor-r2": {
+  "tools": {
+   "Bash": 8,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 2,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-smallest-prime-f",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    2
+   ],
+   [
+    "cat interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "sort-five-digits-r1": {
+  "tools": {
+   "Bash": 7,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-sort-five-digits",
+    5
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "sort-five-digits-r2": {
+  "tools": {
+   "Bash": 7,
+   "Read": 1,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-sort-five-digits",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ],
+   [
+    "cp interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "trec-coarse-r1": {
+  "tools": {
+   "Bash": 14,
+   "Grep": 1,
+   "Read": 11,
+   "Edit": 35,
+   "Write": 5
+  },
+  "refused": 2,
+  "outside": [
+   "/tmp/head.txt",
+   "/tmp/sanity.py",
+   "/tmp/tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    5
+   ],
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-trec-coarse-r1;",
+    3
+   ],
+   [
+    "grep -n",
+    2
+   ],
+   [
+    "python3 -",
+    1
+   ]
+  ]
+ },
+ "trec-coarse-r2": {
+  "tools": {
+   "Bash": 14,
+   "Write": 6,
+   "Read": 4,
+   "Edit": 11
+  },
+  "refused": 3,
+  "outside": [
+   "/tmp/trec_*.txt",
+   "/tmp/trec_head.txt",
+   "/tmp/trec_tail.txt"
+  ],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-trec-coarse-r2;",
+    7
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    6
+   ],
+   [
+    "cp /data18/chandan.singh/wsp-nl/sandbox/rec-trec-coarse-r2/i",
+    1
+   ]
+  ]
+ },
+ "word-reversal-3x3-r1": {
+  "tools": {
+   "Bash": 7,
+   "Read": 3,
+   "Edit": 3,
+   "Write": 1
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-word-reversal-3x",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat results/overall_results.csv",
+    1
+   ],
+   [
+    "diff interpretable_transformer.py",
+    1
+   ]
+  ]
+ },
+ "word-reversal-3x3-r2": {
+  "tools": {
+   "Bash": 6,
+   "Read": 2,
+   "Write": 2
+  },
+  "refused": 1,
+  "outside": [],
+  "top_cmds": [
+   [
+    "cd /data18/chandan.singh/wsp-nl/sandbox/rec-word-reversal-3x",
+    4
+   ],
+   [
+    "/home/chandan.singh/weight-space-programming-autoresearch/.v",
+    1
+   ],
+   [
+    "cat interpretable_transformer.py",
+    1
+   ]
+  ]
+ }
+}

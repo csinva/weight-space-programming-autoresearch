@@ -1,0 +1,15 @@
+{
+ "task": "sort-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.4765768,
+ "turns": 16,
+ "seconds": 101,
+ "tools": {
+  "Bash": 7,
+  "Read": 2,
+  "Edit": 5,
+  "Write": 1
+ },
+ "final_text": "input digits are \u2264 d, and 0 otherwise.\n4. **Output head:** the score for digit d is `10\u00b7(g_d \u2212 g_{d\u22121})`. That is 10 only for the smallest digit whose cumulative count is above k, which is the k-th sorted digit, and 0 for all the others.\n\nTo make this work I changed the architecture: I replaced all LayerNorms with identity so the count arithmetic stays exact, and cut the model to 1 layer with 1 head. Nothing was trained or fitted.\n\nFinal model: `interpretable_transformers_lib/CountingSort1L.py`."
+}

@@ -1,0 +1,3 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+trec-coarse,0.8150,,LexiconVotes_v1,6.99e+07,"Look-back attention (40 chars) + MLP phrase detectors from a hand-written TREC lexicon casting class votes, pooled by uniform attention; argmax of votes + prior."
+trec-coarse,0.8250,,LexiconVotes_v2,2.07e+08,"v1 + expanded hand-written lexicon (auto plurals, more head nouns/prefixes, extra DESC/ENTY/HUM/NUM cue phrases)."

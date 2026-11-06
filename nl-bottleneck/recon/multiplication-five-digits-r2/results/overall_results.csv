@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+multiplication-five-digits,1.0000,,attn2_sink_tropical_v1,4.90e+02,"Two attention-only float64 layers on 7 channels: L1 sink-trick head computes b*A at B digits; L2 head1 sums 10^(10-t)-weighted b*A (x11111) to P, head2 sink-trick reads emitted value V; tropical readout argmax floor((P-V+0.5)/place)."

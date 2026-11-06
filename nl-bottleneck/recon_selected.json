@@ -1,0 +1,541 @@
+{
+ "addition-five-digits-r1": {
+  "task": "addition-five-digits",
+  "attempts": [
+   {
+    "name": "RingAngleCrossAttn27",
+    "visible": 1.0,
+    "n_params": 27.0,
+    "snapshot": true,
+    "description": "Single cross-attention read over prompt positions; 2-D pos-embedding keys (1,-c ln10), queries (ln t_i,1), '+' sink; value scale 2pi/10/1e-5 turns the shifted sum into an angle; cosine sector readout; float64, 27 params."
+   }
+  ],
+  "final": "RingAngleCrossAttn27",
+  "fallback_to_last_file": false
+ },
+ "addition-five-digits-r2": {
+  "task": "addition-five-digits",
+  "attempts": [
+   {
+    "name": "RingAdder_xattn_cos_f64",
+    "visible": 1.0,
+    "n_params": 25.0,
+    "snapshot": true,
+    "description": "One cross-attention read over the 11 prompt positions with 2-D place-value keys (1,-c ln10) and queries (ln t_i,1), '+' as zero sink; digit*2pi/10/1e-5 values give an angle; cosine readout over 10 sectors with 5e-6 shift; float64."
+   }
+  ],
+  "final": "RingAdder_xattn_cos_f64",
+  "fallback_to_last_file": false
+ },
+ "boolean-circuit-5-bits-r1": {
+  "task": "boolean-circuit-5-bits",
+  "attempts": [
+   {
+    "name": "CA_recurrent_fold_v1",
+    "visible": 1.0,
+    "n_params": 49.0,
+    "snapshot": true,
+    "description": "Recurrent cellular-automaton transformer: scalar centred state per cell, one tied block (keyless 30deg sinusoidal prev-cell attention x200, 2-ReLU fold MLP) applied 10 times; op cells carry flags+identity bit; readout +-4*state."
+   }
+  ],
+  "final": "CA_recurrent_fold_v1",
+  "fallback_to_last_file": false
+ },
+ "boolean-circuit-5-bits-r2": {
+  "task": "boolean-circuit-5-bits",
+  "attempts": [
+   {
+    "name": "RecurrentCA_v1",
+    "visible": 0.485,
+    "n_params": 57.0,
+    "snapshot": true,
+    "description": "Recurrent cellular-automaton transformer: 1 tied block (keyless sinusoidal prev-cell attention, 2-ReLU fold MLP) applied 10x; centred scalar state; readout +/-4*state."
+   },
+   {
+    "name": "RecurrentCA_v2",
+    "visible": 1.0,
+    "n_params": 57.0,
+    "snapshot": true,
+    "description": "Recurrent cellular-automaton transformer: 1 tied block (keyless sinusoidal prev-cell attention, 2-ReLU fold MLP) applied 10x; centred scalar state; readout +/-4*state."
+   }
+  ],
+  "final": "RecurrentCA_v2",
+  "fallback_to_last_file": false
+ },
+ "date-normalization-r1": {
+  "task": "date-normalization",
+  "attempts": [
+   {
+    "name": "DateNorm_TagRead_v1",
+    "visible": 1.0,
+    "n_params": 7710.0,
+    "snapshot": true,
+    "description": "2-layer no-LN transformer: rotary k-back copy heads, MLP AND-gate field tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half YEAR/DAY, month letter-pair units, march half), layer-2 sharp tag readers for hundreds/tens/ones, nearest-digit readout."
+   }
+  ],
+  "final": "DateNorm_TagRead_v1",
+  "fallback_to_last_file": false
+ },
+ "date-normalization-r2": {
+  "task": "date-normalization",
+  "attempts": [
+   {
+    "name": "rotcopy_tags_v1",
+    "visible": 0.99,
+    "n_params": 9170.0,
+    "snapshot": true,
+    "description": "2-layer no-LN transformer: L1 rotary-style copy heads (1/2/3 back, period-48 circle, step 17) + ReLU AND-gate tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half Y/D, month letter units); L2 tens/ones/high heads attend sharply to field tag or '='; nearest-digit readout."
+   },
+   {
+    "name": "rotcopy_tags_v2_sharp40",
+    "visible": 1.0,
+    "n_params": 9170.0,
+    "snapshot": true,
+    "description": "2-layer no-LN transformer: L1 rotary-style copy heads (1/2/3 back, period-48 circle, step 17) + ReLU AND-gate tags (DAY default, dot@4 YEAR, slash<=2/dot MONTH, pad half Y/D, month letter units); L2 tens/ones/high heads attend sharply to field tag or '='; nearest-digit readout."
+   }
+  ],
+  "final": "rotcopy_tags_v2_sharp40",
+  "fallback_to_last_file": false
+ },
+ "decimal-to-binary-8bit-r1": {
+  "task": "decimal-to-binary-8bit",
+  "attempts": [
+   {
+    "name": "greedy_binexp_2head_89p",
+    "visible": 1.0,
+    "n_params": 89.0,
+    "snapshot": true,
+    "description": "1-layer 2-head attention-only (89 params): head0 log-place weights 100:10:1 -> n/111, head1 bit weights 2^j + '=' 2^(k+1) -> (S+2^k)/256; logit1 = 222h0-512h1+1, logit0 = -logit1; +-6 region bias."
+   }
+  ],
+  "final": "greedy_binexp_2head_89p",
+  "fallback_to_last_file": false
+ },
+ "decimal-to-binary-8bit-r2": {
+  "task": "decimal-to-binary-8bit",
+  "attempts": [
+   {
+    "name": "GreedyBinExp_2head_logplace",
+    "visible": 1.0,
+    "n_params": 432.0,
+    "snapshot": true,
+    "description": "1-layer 2-head attn-only: head0 place-value softmax over digits -> n/111, head1 over '=' and emitted bits -> (S+2^k)/256; logit1 = 1+222a0-512a1 = 2(r-2^k)+1; +-6 positional region bias."
+   }
+  ],
+  "final": "GreedyBinExp_2head_logplace",
+  "fallback_to_last_file": false
+ },
+ "digit-counting-10-r1": {
+  "task": "digit-counting-10",
+  "attempts": [
+   {
+    "name": "CircleFlagCount_v1",
+    "visible": 1.0,
+    "n_params": 150.0,
+    "snapshot": true,
+    "description": "2-layer attn-only width-3: circle digit matching counts via softmax into flag (1+1/(k+1)); layer2 copies query flag to '='/tens (rho-1); nearest-prototype linear readout, circle channels give constants."
+   }
+  ],
+  "final": "CircleFlagCount_v1",
+  "fallback_to_last_file": false
+ },
+ "digit-counting-10-r2": {
+  "task": "digit-counting-10",
+  "attempts": [
+   {
+    "name": "CircleFlagSoftmaxCount",
+    "visible": 1.0,
+    "n_params": 186.0,
+    "snapshot": true,
+    "description": "2-layer attn-only width-3: circle digit channels + signed flag; L1 softmax counts matches into query flag 1+1/(k+1); L2 copies it to '='/tens giving rho-1; linear nearest-prototype readout on rho with circle-channel constants."
+   }
+  ],
+  "final": "CircleFlagSoftmaxCount",
+  "fallback_to_last_file": false
+ },
+ "edit-distance-8-r1": {
+  "task": "edit-distance-8",
+  "attempts": [
+   {
+    "name": "ed8_softmin_dp_v1",
+    "visible": 1.0,
+    "n_params": 507.0,
+    "snapshot": true,
+    "description": "Shared 7-wide block x9 (no LN, 2 scalar heads, 3 ReLU): W=D-l columns, head1 softmin(-4W) over earlier tokens, head2 countdown -32Y^2 letter match vs comma, MLP W<-min(W+1,S-M); '=' reads W+8 with parabolic digit logits."
+   }
+  ],
+  "final": "ed8_softmin_dp_v1",
+  "fallback_to_last_file": false
+ },
+ "edit-distance-8-r2": {
+  "task": "edit-distance-8",
+  "attempts": [
+   {
+    "name": "EditDistDP_softmin_v1",
+    "visible": 1.0,
+    "n_params": 471.0,
+    "snapshot": true,
+    "description": "Width-7 shared block x9, one Levenshtein DP row per pass: head1 softmin(-4W) over strictly earlier tokens, head2 countdown-selected match bit (+-8 vs comma), MLP W<-min(W+1,S-m), parabolic readout of W+8 at '='."
+   }
+  ],
+  "final": "EditDistDP_softmin_v1",
+  "fallback_to_last_file": false
+ },
+ "gcd-three-digits-r1": {
+  "task": "gcd-three-digits",
+  "attempts": [
+   {
+    "name": "gcd_euclid_radix4_fold_v1",
+    "visible": 1.0,
+    "n_params": 612.0,
+    "snapshot": true,
+    "description": "6-head parser attention (logit 40) builds exact A,B; comma self-attends as zero slot; 12 tied rounds of 4 residual ReLU triangle-wave folds (s=64,16,4,1; s=1 swaps) give A+B=g; readout mixes with zero slot minus 100x/10x emitted digits; head -(X-d-0.495)^2."
+   }
+  ],
+  "final": "gcd_euclid_radix4_fold_v1",
+  "fallback_to_last_file": false
+ },
+ "gcd-three-digits-r2": {
+  "task": "gcd-three-digits",
+  "attempts": [
+   {
+    "name": "gcd_euclid_radix4_folds_v1",
+    "visible": 1.0,
+    "n_params": 1340.0,
+    "snapshot": true,
+    "description": "Parser attn (6 heads, logit 40) builds exact A,B; 12 tied rounds of 4 residual ReLU triangle-wave folds (s=64,16,4,1; s=1 swaps) run Euclid to a (g,0)/(0,g) 2-cycle; readout attn mixes with comma zero-slot for X=(A+B)/100,/10,/1 minus emitted digits; head -(X-d-0.495)^2."
+   }
+  ],
+  "final": "gcd_euclid_radix4_folds_v1",
+  "fallback_to_last_file": false
+ },
+ "linear-interpolation-two-points-r1": {
+  "task": "linear-interpolation-two-points",
+  "attempts": [
+   {
+    "name": "attn2L_read5_fit4_v1",
+    "visible": 1.0,
+    "n_params": 1030.0,
+    "snapshot": true,
+    "description": "Attention-only 2-layer, 9 channels. L1: 5 positional read heads (x1,y1,x2,y2,xq; y tens:units 10:1, '=' 9x weight -> 1/10 scale) write dy,dx,dq and out=y1+3dq. L2: slope heads 1,2,4,5 score -2000(dy-k dx)^2 + stay bonus, fall back to comma. Readout 2d*out-d^2 with -0.45 floor shift and -10*tens subtraction."
+   }
+  ],
+  "final": "attn2L_read5_fit4_v1",
+  "fallback_to_last_file": false
+ },
+ "linear-interpolation-two-points-r2": {
+  "task": "linear-interpolation-two-points",
+  "attempts": [
+   {
+    "name": "AttnOnly2L_Read5_Fit4",
+    "visible": 1.0,
+    "n_params": 864.0,
+    "snapshot": true,
+    "description": "Attention-only 2-layer, 9 channels. L1: 5 read heads (x1,y1,x2,y2,xq; 10:1 tens:units, '=' self-attn gives 1/10 scale at tens step) write dy,dx,dq and default y1+3dq. L2: slope heads 1,2,4,5 score -2000(dy-k dx)^2 + stay bonus, add (k-3)dq. Readout 2d*out-d^2 with -0.45 shift at '='; tens digit emb subtracts 10*tens."
+   }
+  ],
+  "final": "AttnOnly2L_Read5_Fit4",
+  "fallback_to_last_file": false
+ },
+ "multiplication-five-digits-r1": {
+  "task": "multiplication-five-digits",
+  "attempts": [
+   {
+    "name": "SinkExpMul_v1",
+    "visible": 1.0,
+    "n_params": 434.0,
+    "snapshot": true,
+    "description": "2-layer attention-only float64 7-channel model: sink-exponential head computes b*A, layer 2 sums to P=A*B and subtracts emitted value V via a 1e22 sink; tropical argmax readout floor(X/place)."
+   }
+  ],
+  "final": "SinkExpMul_v1",
+  "fallback_to_last_file": false
+ },
+ "multiplication-five-digits-r2": {
+  "task": "multiplication-five-digits",
+  "attempts": [
+   {
+    "name": "attn2_sink_tropical_v1",
+    "visible": 1.0,
+    "n_params": 490.0,
+    "snapshot": true,
+    "description": "Two attention-only float64 layers on 7 channels: L1 sink-trick head computes b*A at B digits; L2 head1 sums 10^(10-t)-weighted b*A (x11111) to P, head2 sink-trick reads emitted value V; tropical readout argmax floor((P-V+0.5)/place)."
+   }
+  ],
+  "final": "attn2_sink_tropical_v1",
+  "fallback_to_last_file": false
+ },
+ "nli-snli-r1": {
+  "task": "nli-snli",
+  "attempts": [
+   {
+    "name": "nli_rules_v1",
+    "visible": 0.595,
+    "n_params": 2500000.0,
+    "snapshot": true,
+    "description": "3-layer no-LN transformer: 13 offset heads, MLP word/trigram detectors, trigram-coverage + group-conflict heads, aggregation at '='; logits per description."
+   },
+   {
+    "name": "nli_rules_v2",
+    "visible": 0.59,
+    "n_params": 2500000.0,
+    "snapshot": true,
+    "description": "v1 with contradiction-6/3 and entailment-4 lexicons restricted to the words the description lists literally (no person/outdoors/television/sofa extras)."
+   }
+  ],
+  "final": "nli_rules_v2",
+  "fallback_to_last_file": true
+ },
+ "nli-snli-r2": {
+  "task": "nli-snli",
+  "attempts": [
+   {
+    "name": "nli_lexcov_v1",
+    "visible": 0.575,
+    "n_params": 7910000.0,
+    "snapshot": true,
+    "description": "3-layer char transformer: 13 offset heads, MLP word/prefix detectors for hyp lexicon votes and exclusive-group classes, trigram-coverage attention, soft conflicts, length delta; linear logits per description."
+   }
+  ],
+  "final": "nli_lexcov_v1",
+  "fallback_to_last_file": false
+ },
+ "paraphrase-mrpc-r1": {
+  "task": "paraphrase-mrpc",
+  "attempts": [
+   {
+    "name": "WindowHashMatch8",
+    "visible": 0.695,
+    "n_params": 38800.0,
+    "snapshot": true,
+    "description": "2-bit char hash; L1 8 heads build 8-char window codes; L2 looks up s2 windows in s1 with sentinel on '|'; L3 counts matches over first 40 s2 positions; '1' if count>=1."
+   }
+  ],
+  "final": "WindowHashMatch8",
+  "fallback_to_last_file": false
+ },
+ "paraphrase-mrpc-r2": {
+  "task": "paraphrase-mrpc",
+  "attempts": [
+   {
+    "name": "hash8_window_match_v1",
+    "visible": 0.695,
+    "n_params": 42700.0,
+    "snapshot": true,
+    "description": "2-bit char hash; L1 8 binary-position heads build 8-char window codes; L2 one head looks up each s2 window in s1 with '|' sentinel at 15.5/16; L3 '=' averages flags over first 40 s2 positions; output 1 iff >=1 match (logit 50*(count-0.5))."
+   }
+  ],
+  "final": "hash8_window_match_v1",
+  "fallback_to_last_file": false
+ },
+ "parity-upto10-bits-r1": {
+  "task": "parity-upto10-bits",
+  "attempts": [
+   {
+    "name": "ParityTentMapScalar15p",
+    "visible": 1.0,
+    "n_params": 15.0,
+    "snapshot": true,
+    "description": "Scalar residual, no positions: uniform causal averaging gives c/16-1/2 at '=', then a tied 2-ReLU tent-map MLP applied 4x folds to +-1/2 by parity; logits +-x. 15 params."
+   }
+  ],
+  "final": "ParityTentMapScalar15p",
+  "fallback_to_last_file": false
+ },
+ "parity-upto10-bits-r2": {
+  "task": "parity-upto10-bits",
+  "attempts": [
+   {
+    "name": "ParityTentMap15p",
+    "visible": 1.0,
+    "n_params": 15.0,
+    "snapshot": true,
+    "description": "Scalar residual, no positions; uniform causal averaging gives c/16-1/2 at '='; tied 2-unit ReLU MLP applied 4x as tent map 1/2-2|x| folds to +-1/2; logit('1')=x, logit('0')=-x. 15 params."
+   }
+  ],
+  "final": "ParityTentMap15p",
+  "fallback_to_last_file": false
+ },
+ "sentiment-sst2-r1": {
+  "task": "sentiment-sst2",
+  "attempts": [
+   {
+    "name": "LexNeg_v1",
+    "visible": 0.78,
+    "n_params": 3430000.0,
+    "snapshot": true,
+    "description": "12-head shift register + AND-gate lexicon (+1.0 pos / -1.5 neg / +-0.4 weak), negators -1.0 flag next 15 chars and flip positives to -1.0; uniform-sum sign readout."
+   }
+  ],
+  "final": "LexNeg_v1",
+  "fallback_to_last_file": false
+ },
+ "sentiment-sst2-r2": {
+  "task": "sentiment-sst2",
+  "attempts": [
+   {
+    "name": "LexNeg_v1",
+    "visible": 0.8,
+    "n_params": 2180000.0,
+    "snapshot": true,
+    "description": "Shift-register (12 heads) + AND-gate lexicon MLP (+1 pos, -1.5 neg, +-0.4 weak), negators -1 and flip positives to -1 within next 15 chars, uniform-sum sign readout."
+   }
+  ],
+  "final": "LexNeg_v1",
+  "fallback_to_last_file": false
+ },
+ "smallest-prime-factor-r1": {
+  "task": "smallest-prime-factor",
+  "attempts": [
+   {
+    "name": "spf_sieve_pulse_v1",
+    "visible": 1.0,
+    "n_params": 7020.0,
+    "snapshot": true,
+    "description": "2-block no-LN float64 scalar transformer: attn1 builds n via 10^(4-i)/11111 softmax; MLP1 cos-pulse sieve over 65 primes<=313 with lateral inhibition writes smallest factor digits; attn2 Gaussian copy head; MLP2 ReLU gate copies n if no factor else releases factor digits."
+   }
+  ],
+  "final": "spf_sieve_pulse_v1",
+  "fallback_to_last_file": false
+ },
+ "smallest-prime-factor-r2": {
+  "task": "smallest-prime-factor",
+  "attempts": [
+   {
+    "name": "spf_sieve_v1",
+    "visible": 1.0,
+    "n_params": 7080.0,
+    "snapshot": true,
+    "description": "2-block float64 scalar transformer: attn1 assembles n via softmax weights 10^(4-i)/11111; MLP1 cosine-pulse sieve over 65 primes with lateral inhibition writes factor digits; attn2 Gaussian copy head; MLP2 ReLU gate; quadratic nearest-digit readout."
+   }
+  ],
+  "final": "spf_sieve_v1",
+  "fallback_to_last_file": false
+ },
+ "sort-five-digits-r1": {
+  "task": "sort-five-digits",
+  "attempts": [
+   {
+    "name": "CountingSortBase6_d1",
+    "visible": 1.0,
+    "n_params": 53.0,
+    "snapshot": true,
+    "description": "1 layer, 1 head, d_model=1 counting sort: digit d worth 6^(8-d), sign +1 prompt/-1 answer, zero attention scores average, times (t+1) gives remaining-count sum R; threshold readout tau_d=0.9*6^(8-d); float64."
+   }
+  ],
+  "final": "CountingSortBase6_d1",
+  "fallback_to_last_file": false
+ },
+ "sort-five-digits-r2": {
+  "task": "sort-five-digits",
+  "attempts": [
+   {
+    "name": "CountSortBase6_d1",
+    "visible": 1.0,
+    "n_params": 53.0,
+    "snapshot": true,
+    "description": "1-layer 1-head d_model=1 counting sort: signed base-6 digit weights 6^(8-d), uniform causal attention x(t+1) gives remaining-count sum R; readout thresholds 0.9*w_d; float64."
+   }
+  ],
+  "final": "CountSortBase6_d1",
+  "fallback_to_last_file": false
+ },
+ "trec-coarse-r1": {
+  "task": "trec-coarse",
+  "attempts": [
+   {
+    "name": "KeywordDecisionList_v1",
+    "visible": 0.795,
+    "n_params": 323000.0,
+    "snapshot": true,
+    "description": "2-block hand-built keyword decision list: 20 Gaussian copy heads + ~400 exact AND-gate keyword neurons; '=' attends to max 300*priority-3*pos and copies the class vote; default ENTY."
+   },
+   {
+    "name": "KeywordDecisionList_v2",
+    "visible": 0.82,
+    "n_params": 369000.0,
+    "snapshot": true,
+    "description": "v2: one AND-gate neuron per keyword (left word edge = boundary OR start flag), ~400 keywords from general knowledge; '=' attends to max 300*prio-3*pos, copies vote; default ENTY."
+   },
+   {
+    "name": "KeywordDecisionList_v3",
+    "visible": 0.84,
+    "n_params": 364000.0,
+    "snapshot": true,
+    "description": "v3: v2 minus co-firing/over-broad keywords (proper nouns, mass, square, old...), short 'what is' gate moved off word-end positions; decision list by 300*prio-3*pos; default ENTY."
+   },
+   {
+    "name": "KeywordDecisionList_v4",
+    "visible": 0.84,
+    "n_params": 364000.0,
+    "snapshot": true,
+    "description": "v4: v3 with question-initial 'who' as a stem (who/whom/whose); 20 Gaussian copy heads, ~580 AND-gate keyword neurons, '=' picks max 300*prio-3*pos and copies its vote; default ENTY."
+   }
+  ],
+  "final": "KeywordDecisionList_v4",
+  "fallback_to_last_file": true
+ },
+ "trec-coarse-r2": {
+  "task": "trec-coarse",
+  "attempts": [
+   {
+    "name": "trec_kwlist_v1",
+    "visible": 0.845,
+    "n_params": 272000.0,
+    "snapshot": true,
+    "description": "2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+   },
+   {
+    "name": "trec_kwlist_v2",
+    "visible": 0.845,
+    "n_params": 324000.0,
+    "snapshot": true,
+    "description": "2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+   },
+   {
+    "name": "trec_kwlist_v3_stems",
+    "visible": 0.845,
+    "n_params": 307000.0,
+    "snapshot": true,
+    "description": "2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+   },
+   {
+    "name": "trec_kwlist_v4_selftest",
+    "visible": 0.845,
+    "n_params": 307000.0,
+    "snapshot": true,
+    "description": "2-block hand-written keyword decision list: 20 Gaussian copy heads + ~400 AND-gate keyword neurons, '=' attends to max 300*priority-3*pos salience and copies class vote; default ENTY."
+   }
+  ],
+  "final": "trec_kwlist_v1",
+  "fallback_to_last_file": false
+ },
+ "word-reversal-3x3-r1": {
+  "task": "word-reversal-3x3",
+  "attempts": [
+   {
+    "name": "HardArgmaxPointer3p",
+    "visible": 1.0,
+    "n_params": 3.0,
+    "snapshot": true,
+    "description": "1-layer 1-head hard-argmax attention, key=1-based pos, query=9+i-8*floor(i/4), score=-(q-k)^2; value=min(id,'_'); logits=-(v-id)^2. 3 params, no MLP."
+   }
+  ],
+  "final": "HardArgmaxPointer3p",
+  "fallback_to_last_file": false
+ },
+ "word-reversal-3x3-r2": {
+  "task": "word-reversal-3x3",
+  "attempts": [
+   {
+    "name": "PointerHardArgmax3p",
+    "visible": 1.0,
+    "n_params": 3.0,
+    "snapshot": true,
+    "description": "No-MLP: one hard-argmax head, key=1-based pos, query=9+i-8*floor(i/4), score=-(q-k)^2; value=min(id,'_'), logits=-(v-id)^2. 3 params."
+   }
+  ],
+  "final": "PointerHardArgmax3p",
+  "fallback_to_last_file": false
+ }
+}

@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,1.0000,,CountSortBase6_d1,5.30e+01,"1-layer 1-head d_model=1 counting sort: signed base-6 digit weights 6^(8-d), uniform causal attention x(t+1) gives remaining-count sum R; readout thresholds 0.9*w_d; float64."

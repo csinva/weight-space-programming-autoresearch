@@ -1,0 +1,15 @@
+{
+ "task": "smallest-prime-factor",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.7372756,
+ "turns": 16,
+ "seconds": 152,
+ "tools": {
+  "Bash": 5,
+  "Read": 4,
+  "Edit": 5,
+  "Write": 1
+ },
+ "final_text": " If no prime divides N, then N is prime (since 317\u00b2 > 99999), and the copied digit of N is written instead.\n\nBecause each step is exact, the circuit should give the right answer for every input from 2 to 99999, not just the 200 test examples. Only the 200 examples were actually run.\n\nThe saved copy at first had a cut-off last line. I fixed it, and it is now byte-identical to `interpretable_transformer.py`.\n\n**Final model: `interpretable_transformers_lib/SPF_ModSumBump_v1.py` (accuracy 1.0000).**"
+}

@@ -1,0 +1,13 @@
+{
+ "task": "date-normalization",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 1.4417748000000001,
+ "turns": 11,
+ "seconds": 413,
+ "tools": {
+  "Bash": 8,
+  "Write": 2
+ },
+ "final_text": "lf aren't treated as day separators. The description doesn't say how the original handled this.\n\n**Not checked:** the original's described mistakes (two dots averaging their tags, unseen separators or field orders falling back to DAY) never occur in the 200 examples. A quick test on such inputs needed your approval, so I skipped it. These mistakes are built into the same rules, but I haven't confirmed them by running anything.\n\nFinal model: `interpretable_transformers_lib/DateNorm_TagRead_v1.py`"
+}

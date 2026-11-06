@@ -1,0 +1,15 @@
+{
+ "task": "trec-coarse",
+ "rep": 2,
+ "experiments": 4,
+ "cost_usd": 2.1481122000000004,
+ "turns": 36,
+ "seconds": 591,
+ "tools": {
+  "Bash": 14,
+  "Write": 6,
+  "Read": 4,
+  "Edit": 11
+ },
+ "final_text": "by tuning. I used 4 of the 6 allowed runs.\n\nTwo differences from the original:\n- **Size:** by my estimate the model has about 300k parameters, against the original's 57,800, because of the wide residual layout I chose. The run printed accuracy but not the parameter count, so this is unconfirmed.\n- **Extra keywords:** a few, such as \"stand for\" alongside \"stands for\", come from my own knowledge rather than the description.\n\nFinal model: `interpretable_transformers_lib/trec_kwlist_v4_selftest.py`."
+}

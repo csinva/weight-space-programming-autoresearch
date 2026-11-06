@@ -1,0 +1,15 @@
+{
+ "task": "trec-coarse",
+ "rep": 1,
+ "experiments": 2,
+ "cost_usd": 1.7263366000000002,
+ "turns": 24,
+ "seconds": 489,
+ "tools": {
+  "Bash": 9,
+  "Read": 5,
+  "Write": 3,
+  "Edit": 6
+ },
+ "final_text": "ould have been to read the misclassified questions in the scored set and add rules for them. That would be fitting to the evaluation examples, which the rules forbid. Without that feedback, more lexicon changes would just be guesses.\n\n**Checks I couldn't run.** I wanted to test a few questions I made up before the first scored run, but those ad-hoc commands needed approval, so I didn't run them. The scored runs are the only tests.\n\nFinal model: `interpretable_transformers_lib/LexiconVotes_v2.py`"
+}

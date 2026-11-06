@@ -1,0 +1,9 @@
+A hand-built keyword decision list with no training.
+
+Block 1: each character is embedded as a 5-bit letter code with flags for word boundary, start and padding, plus position. Head h of 20 copies the character h steps back using a Gaussian position kernel. Each MLP neuron is an exact AND gate for one of about 400 keyword patterns: words, stems, or question-initial words.
+
+Block 2: '=' attends to the highest salience, 300 × priority minus 3 × position, so the earliest match wins ties. It copies that position's class vote. If nothing matches, the answer is ENTY.
+
+Priority order: ABBR for "stands for" and "abbreviat"; DESC for "comes from"; then initial "who" (HUM), "where" (LOC), initial "when" (NUM) and "why" (DESC); definition or cause words such as mean, origin and reason (DESC); "how did/does/is" (DESC); other "how" (NUM); "what is X" questions under 17 characters (DESC); topical nouns, with people HUM, places LOC, measures NUM and things ENTY; "called" and "what kind" (ENTY); "what are the" (ENTY); and last, initial "what is" (DESC).
+
+Errors come from brittle surface matching: missing keywords, the wrong noun winning, and long "what is the" questions falling through to DESC.

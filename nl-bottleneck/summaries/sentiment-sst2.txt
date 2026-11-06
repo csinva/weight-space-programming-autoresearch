@@ -1,0 +1,11 @@
+This model is a hand-built lexicon-and-negation scorer that outputs the sign of summed character-level evidence.
+
+**Layer 1:** twelve attention heads form a shift register, with head i copying the character i steps back through sharp positional matching. Each MLP neuron is an AND gate for one lexicon entry: whole words (bounded by space, '_' or sentence start), stems ("charm*"), suffixes ("*less") or short phrases. Entries too long for the 12-character window are cut to 11-character stems. Words truncated at 80 characters can still fire as stems.
+
+**Lexicon:** about 800 positive entries add +1.0, and about 800 negative entries add −1.5. Weak cues add ±0.4: "film", "performance" and "and" lean positive; "movie", "plot", "just", "would", "un*", "dis*", "over*" and "*less" lean negative. All overlapping matches count.
+
+**Layer 2:** about 40 negators (not, n't, no, never, without, too, less, lacks, fails, rather than) each add −1.0 and flag the next 15 characters. Flagged positives, including weak ones, count as −1.0 instead. Negatives are never flipped, so "not bad" stays negative.
+
+**Layer 3:** uniform attention sums the scores, and a total of zero or above gives '1'.
+
+**Errors:** negative bias, sarcasm, words outside the lexicon, and long-range negation.

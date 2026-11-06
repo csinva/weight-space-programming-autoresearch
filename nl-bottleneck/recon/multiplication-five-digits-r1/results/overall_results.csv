@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+multiplication-five-digits,1.0000,,SinkExpMul_v1,4.34e+02,"2-layer attention-only float64 7-channel model: sink-exponential head computes b*A, layer 2 sums to P=A*B and subtracts emitted value V via a 1e22 sink; tropical argmax readout floor(X/place)."

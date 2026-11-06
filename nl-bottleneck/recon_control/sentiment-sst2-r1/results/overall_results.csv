@@ -1,0 +1,5 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.7300,,LexiconNegation_v1,1.27e+07,"Lookback attention (24 heads) + MLP word detectors for hand-written sentiment lexicon with negation phrases, uniform pooling of polarity, sign -> 0/1."
+sentiment-sst2,0.7400,,LexiconStemsContrast_v2,1.24e+07,v1 + prefix-stem word detectors and 'but/however' contrast flag (attn+MLP) that upweights later-clause polarity in the final attention pooling.
+sentiment-sst2,0.7650,,LexiconExpandedIntens_v3,3.24e+07,v2 + expanded hand-written lexicon/stems and intensifier phrases ('very X' -> 1.5x).
+sentiment-sst2,0.7650,,LexiconNegFiller_v4,9.41e+07,"v3 + negation across one filler word ('not a good', ""n't very funny""), 28-char lookback, vectorized weight writing."

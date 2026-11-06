@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+word-reversal-3x3,1.0000,,PointerHardArgmax3p,3.00e+00,"No-MLP: one hard-argmax head, key=1-based pos, query=9+i-8*floor(i/4), score=-(q-k)^2; value=min(id,'_'), logits=-(v-id)^2. 3 params."

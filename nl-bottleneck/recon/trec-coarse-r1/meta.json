@@ -1,0 +1,16 @@
+{
+ "task": "trec-coarse",
+ "rep": 1,
+ "experiments": 4,
+ "cost_usd": 3.0058190000000002,
+ "turns": 67,
+ "seconds": 760,
+ "tools": {
+  "Bash": 14,
+  "Grep": 1,
+  "Read": 11,
+  "Edit": 35,
+  "Write": 5
+ },
+ "final_text": "and about 364k parameters against the original's 57,800. Each copied character takes 8 dimensions, which makes the model much wider.\n\n**Housekeeping:**\n- The snapshots contain the full model code but leave out the unchanged evaluation section at the bottom of the template, because I couldn't copy the file directly.\n- I left an unused helper, `results/sanity_check.py`, which never ran because it needed approval.\n\n**Final model: `interpretable_transformers_lib/KeywordDecisionList_v4.py` (84.0%).**"
+}

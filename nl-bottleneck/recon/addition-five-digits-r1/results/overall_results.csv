@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+addition-five-digits,1.0000,,RingAngleCrossAttn27,2.70e+01,"Single cross-attention read over prompt positions; 2-D pos-embedding keys (1,-c ln10), queries (ln t_i,1), '+' sink; value scale 2pi/10/1e-5 turns the shifted sum into an angle; cosine sector readout; float64, 27 params."

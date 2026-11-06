@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+gcd-three-digits,1.0000,,gcd_euclid_radix4_fold_v1,6.12e+02,"6-head parser attention (logit 40) builds exact A,B; comma self-attends as zero slot; 12 tied rounds of 4 residual ReLU triangle-wave folds (s=64,16,4,1; s=1 swaps) give A+B=g; readout mixes with zero slot minus 100x/10x emitted digits; head -(X-d-0.495)^2."

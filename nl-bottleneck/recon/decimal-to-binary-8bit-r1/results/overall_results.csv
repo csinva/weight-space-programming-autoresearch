@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,1.0000,,greedy_binexp_2head_89p,8.90e+01,"1-layer 2-head attention-only (89 params): head0 log-place weights 100:10:1 -> n/111, head1 bit weights 2^j + '=' 2^(k+1) -> (S+2^k)/256; logit1 = 222h0-512h1+1, logit0 = -logit1; +-6 region bias."

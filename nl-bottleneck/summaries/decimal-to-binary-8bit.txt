@@ -1,0 +1,9 @@
+The model does exact greedy binary expansion, MSB first: at each output step it computes r = n − (value of bits already emitted) and outputs 1 if r ≥ 2^k, where k is the current bit. It uses one layer, two attention heads and no MLP or LayerNorm. Attention values are a scalar token value: digit face value, 0/1 for emitted bits, 0.5 for "=".
+
+Each position carries a log-place-value feature (ln100, ln10, 0 for digits; (11−p)·ln2 for "=" and fed-back bits), so softmax turns scores into place-value weights.
+
+Head 0 attends from output positions to the digits, weighted 100:10:1, returning n/111. Head 1 attends to "=" and emitted bits, each bit weighted 2^j and "=" weighted 2^(k+1), so weights total 256 and it returns (S + 2^k)/256, S being the emitted bits' value.
+
+Scaling the heads by +222 and −512 and adding +1 gives 1 + 2(r − 2^k), an odd integer, never zero. That is the "1" logit; "0" gets its negative.
+
+A ±6 positional bias separates the heads' regions; the e^−12 leakage shifts logits about 0.01 against a margin near 1. All 256 inputs are correct.

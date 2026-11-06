@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+word-reversal-3x3,1.0000,,PosCopy1L,4.59e+04,"1-layer 1-head positional copy: query at answer step j attends to fixed source position SRC[j]; value carries token one-hot, unembedding reads it."

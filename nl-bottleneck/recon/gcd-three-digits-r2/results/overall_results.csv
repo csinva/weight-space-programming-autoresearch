@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+gcd-three-digits,1.0000,,gcd_euclid_radix4_folds_v1,1.34e+03,"Parser attn (6 heads, logit 40) builds exact A,B; 12 tied rounds of 4 residual ReLU triangle-wave folds (s=64,16,4,1; s=1 swaps) run Euclid to a (g,0)/(0,g) 2-cycle; readout attn mixes with comma zero-slot for X=(A+B)/100,/10,/1 minus emitted digits; head -(X-d-0.495)^2."

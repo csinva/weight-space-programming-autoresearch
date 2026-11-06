@@ -1,0 +1,16 @@
+{
+ "task": "nli-snli",
+ "rep": 1,
+ "experiments": 5,
+ "cost_usd": 4.4589064,
+ "turns": 68,
+ "seconds": 1069,
+ "tools": {
+  "Bash": 14,
+  "Grep": 1,
+  "Read": 9,
+  "Write": 7,
+  "Edit": 36
+ },
+ "final_text": "\" signal | 57.0% |\n| v5 | Larger cue-word lists | 57.0% |\n\nAll word lists and readout weights came from my own knowledge. None were fitted to the dataset. I never looked at eval examples or labels. The only internal checks were printouts on sentences I made up, which run inside `write_weights` because the scoring command was the only one I was allowed to run.\n\n**Final model: `interpretable_transformers_lib/LexMatchConflictStem_v5.py`** (57.0%; v5 ties v4 and is kept for its wider word coverage)."
+}

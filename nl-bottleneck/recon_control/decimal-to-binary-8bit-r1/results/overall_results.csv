@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,1.0000,,DigitGatherStepBits,1.51e+05,1-layer no-LN transformer: 3 attention heads gather digits into N=100a+10b+c; position-gated ReLU step pairs compute bit_(10-pos)(N) as alternating sum of thresholds.

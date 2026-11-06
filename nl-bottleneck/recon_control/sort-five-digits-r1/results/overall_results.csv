@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sort-five-digits,1.0000,,CountingSort1L,5.19e+04,1-layer no-LN counting sort: attention averages input digit one-hots into cumulative counts; MLP thresholds count vs output index; head picks first crossing.

@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+sentiment-sst2,0.7800,,LexNeg_v1,3.43e+06,"12-head shift register + AND-gate lexicon (+1.0 pos / -1.5 neg / +-0.4 weak), negators -1.0 flag next 15 chars and flip positives to -1.0; uniform-sum sign readout."

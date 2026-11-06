@@ -1,0 +1,15 @@
+{
+ "task": "addition-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6529041999999999,
+ "turns": 15,
+ "seconds": 151,
+ "tools": {
+  "Bash": 7,
+  "Read": 1,
+  "Edit": 5,
+  "Write": 1
+ },
+ "final_text": "r each digit d is 2d\u00b7s \u2212 d\u00b2, which ranks digits the same way as \u2212(s \u2212 d)\u00b2. So greedy decoding emits exactly the digit s computed in step 3. The `+` and `=` tokens get a score of \u221210\u2074 so they are never chosen.\n\nBecause all the arithmetic is exact, the model should be correct on every pair of 5-digit inputs, not just the 200 scored examples. I only measured the 200.\n\nFinal model: `interpretable_transformers_lib/CarryLookaheadExact.py` (identical to `interpretable_transformer.py`), 200/200 correct."
+}

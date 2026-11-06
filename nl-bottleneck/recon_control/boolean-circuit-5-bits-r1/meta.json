@@ -1,0 +1,14 @@
+{
+ "task": "boolean-circuit-5-bits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6547608,
+ "turns": 15,
+ "seconds": 157,
+ "tools": {
+  "Bash": 10,
+  "Write": 3,
+  "Read": 1
+ },
+ "final_text": "t left-to-right evaluation.\n- **Output:** the score for `1` is 10\u00b7r\u2084 and the score for `0` is 10\u00b7(1\u2212r\u2084). The other tokens score 0, so they never win.\n\nThe model has about 2.3k parameters. The result is logged in `results/overall_results.csv`.\n\n**Leftover file:** a scratch file, `results/_new_section.py`, is still there because the permission prompt blocked deleting it. You can delete it; it isn't used.\n\nFinal model: snapshot `interpretable_transformers_lib/GatherThenChainMLP.py` (100% accuracy)."
+}

@@ -1,0 +1,14 @@
+{
+ "task": "addition-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.5136186,
+ "turns": 14,
+ "seconds": 126,
+ "tools": {
+  "Bash": 8,
+  "Read": 3,
+  "Write": 2
+ },
+ "final_text": "Value and readout:** digit value = digit \u00d7 2\u03c0/10/1e-5. The digit logits are cos(z \u2212 2\u03c0/10\u00b7(d + 0.5 \u2212 5e-6)), and the non-digit tokens are masked. Everything runs in float64.\n\nI haven't checked the description's float32 claim (accuracy dropping to about 0.5%). The script to test it was blocked pending your approval, so I skipped it. The model fits the description as written, and I didn't make it more robust than the original.\n\nFinal model: `interpretable_transformers_lib/RingAngleCrossAttn27.py`."
+}

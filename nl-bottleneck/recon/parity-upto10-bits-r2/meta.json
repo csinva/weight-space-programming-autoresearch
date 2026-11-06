@@ -1,0 +1,14 @@
+{
+ "task": "parity-upto10-bits",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.40791600000000006,
+ "turns": 13,
+ "seconds": 89,
+ "tools": {
+  "Bash": 7,
+  "Read": 3,
+  "Write": 2
+ },
+ "final_text": "four rounds x is exactly \u22121/2 for an even count or +1/2 for an odd one.\n- **Readout with no bias.** logit('1') = x, logit('0') = \u2212x, and the `'='` and `'_'` rows are 0 (4 parameters). That means the winning logit is always 0.5 against at most 0.\n\nThe description says the original makes no mistakes, so there are none to reproduce. I only scored the 200-example set; I didn't run the description's check on all 2047 possible inputs.\n\nFinal model: `interpretable_transformers_lib/ParityTentMap15p.py`."
+}

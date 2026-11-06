@@ -1,0 +1,14 @@
+{
+ "task": "gcd-three-digits",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.7186582,
+ "turns": 14,
+ "seconds": 188,
+ "tools": {
+  "Bash": 10,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "0\u00b7(first digit) \u2212 10\u00b7(second digit).\n- **Output head:** scores digit d as \u2212(X \u2212 d \u2212 0.495)\u00b2, which rounds X down. The \u2212X\u00b2 term is the same for every digit, so I left it out.\n\n**Gap from the original:** my model has about 1,340 parameters, not 332. I stored the attention queries as full 11\u00d711 position matrices instead of packing them compactly. This doesn't change what the model computes, only how many numbers it stores.\n\nFinal model: `interpretable_transformers_lib/gcd_euclid_radix4_folds_v1.py`"
+}

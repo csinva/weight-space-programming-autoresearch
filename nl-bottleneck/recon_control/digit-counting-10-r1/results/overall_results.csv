@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+digit-counting-10,1.0000,,QueryCopyHistRamp,1.02e+05,2-layer no-LN: L1 attn copies query digit to answer positions; L2 attn averages digit one-hots over positions 0-9; L2 MLP selects query bin and decodes count via relu ramps gated by position.

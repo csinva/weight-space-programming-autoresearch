@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+boolean-circuit-5-bits,1.0000,,GatherThenChainMLP,1.14e+04,"No-LN; 9-head positional gather attention copies bits/ops to the '=' slot, then 4 ReLU MLPs each compute r_i=op_i(r_{i-1},b_i) via 12 combo-detector units."

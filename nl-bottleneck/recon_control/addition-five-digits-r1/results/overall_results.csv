@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+addition-five-digits,1.0000,,CarryLookaheadExact,1.97e+04,"2-layer no-LN transformer: heads gather a_i+b_i per place, MLP computes carries via exact integer threshold sum t_i 10^i >= 10^j, layer-2 MLP selects place by position and applies mod 10, quadratic readout."

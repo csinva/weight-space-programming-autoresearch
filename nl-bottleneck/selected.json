@@ -1,0 +1,121 @@
+{
+ "addition-five-digits": {
+  "run": "addition-five-digits-opus55-s2",
+  "program": "RingLinearTokens",
+  "visible": 1.0,
+  "n_params": 27.0,
+  "description": "Back in float64, with token embeddings replaced by digit * one scalar and the head by a scalar turn and phase, leaving the 12-row position table as the only table."
+ },
+ "boolean-circuit-5-bits": {
+  "run": "boolean-circuit-5-bits-opus55-s2",
+  "program": "MinCA_noWk_beta200",
+  "visible": 1.0,
+  "n_params": 51.0,
+  "description": "Scalar-state CA without W_k: keys are raw positions and W_q is a scaled rotation, sharpness beta=200."
+ },
+ "date-normalization": {
+  "run": "date-normalization-opus55-s1",
+  "program": "ptr_v35_noZ3",
+  "visible": 1.0,
+  "n_params": 345.0,
+  "description": "First dot of yyyy.mm.dd found by position (flag O overlaid on i=4) instead of a digit 3 back, dropping the Z3 dim. 25 stream dims used."
+ },
+ "decimal-to-binary-8bit": {
+  "run": "decimal-to-binary-8bit-opus55-s2",
+  "program": "e22_minimal_dof",
+  "visible": 1.0,
+  "n_params": 89.0,
+  "description": "Degrees-of-freedom probe: W_v and W_o replaced by hard-wired read of VAL and two output scales, head reads only MODE. Bespoke rather than a standard transformer."
+ },
+ "digit-counting-10": {
+  "run": "digit-counting-10-opus55-s2",
+  "program": "MetricAttention",
+  "visible": 1.0,
+  "n_params": 75.0,
+  "description": "Attention is a bilinear metric per layer, score = x diag(m) x', with the value fixed to the flag channel: 6 attention numbers in total, in score units. d_model=3."
+ },
+ "edit-distance-8": {
+  "run": "edit-distance-8-opus55-s1",
+  "program": "ScalarValues_d7",
+  "visible": 1.0,
+  "n_params": 507.0,
+  "description": "Each head returns one scalar value, shrinking W_v and W_o from 7x6 to 7x2; shared cell, d=7, ff=3."
+ },
+ "gcd-three-digits": {
+  "run": "gcd-three-digits-opus55-s2",
+  "program": "FinalRadix4FixedPositions",
+  "visible": 1.0,
+  "n_params": 332.0,
+  "description": "Final model: SharedQueryRadix4N12 with positions as a fixed one-hot buffer. Euclid by radix-4 folds, 12 tied rounds, 0/10^6 wrong end to end in float32."
+ },
+ "linear-interpolation-two-points": {
+  "run": "linear-interpolation-two-points-opus55-s2",
+  "program": "NullSlope20NoDigChannel",
+  "visible": 1.0,
+  "n_params": 864.0,
+  "description": "NullSlope19 with dig removed: digit tokens are -10d in out, READ takes value -0.1 out, and the floor shift moves into the head via phase; d_model 9."
+ },
+ "multiplication-five-digits": {
+  "run": "multiplication-five-digits-opus55-s1",
+  "program": "RampKey_v11",
+  "visible": 1.0,
+  "n_params": 304.0,
+  "description": "LinearSink_v10 with one shared ramp K over multiplicand, sink and output digits (7 registers). The multiplicand is shifted down by e^-100, undone by the digit query in block 1 and invisible to block 2."
+ },
+ "nli-snli": {
+  "run": "nli-snli-opus55-s1",
+  "program": "e36_lexicon_scale_200",
+  "visible": 0.635,
+  "n_params": 2200000.0,
+  "description": "Every lexicon vote scaled by 2.0, following the gain at 1.5."
+ },
+ "paraphrase-mrpc": {
+  "run": "paraphrase-mrpc-opus55-s2",
+  "program": "e42_2bit_hash",
+  "visible": 0.695,
+  "n_params": 43000.0,
+  "description": "2-bit char codes: letters share 4 classes, so 8-char windows match by hash; answer 1 iff any window in the first 40 chars of sent2 matches."
+ },
+ "parity-upto10-bits": {
+  "run": "parity-upto10-bits-opus55-s2",
+  "program": "tent_uniform_attn",
+  "visible": 1.0,
+  "n_params": 15.0,
+  "description": "tied_tent_map with attention's four matrices removed: a fixed uniform causal average needs no parameters, so all remaining weights are embeddings, tent map or head."
+ },
+ "sentiment-sst2": {
+  "run": "sentiment-sst2-opus55-s1",
+  "program": "big_w12_negw15",
+  "visible": 0.8,
+  "n_params": 498000.0,
+  "description": "big_w10_negw15 with a 12-character shift register, to see where the register length curve flattens. d_model 117."
+ },
+ "smallest-prime-factor": {
+  "run": "smallest-prime-factor-opus55-s2",
+  "program": "sieve_gaussian_copy",
+  "visible": 1.0,
+  "n_params": 2730.0,
+  "description": "Replaces the 10 position one-hots with a place-value score, s, s^2 and 3 step flags; the copy head becomes Gaussian attention -BETA(i-(s-5))^2 in a 2-dim head."
+ },
+ "sort-five-digits": {
+  "run": "sort-five-digits-opus55-s1",
+  "program": "e29_register_trimmed",
+  "visible": 1.0,
+  "n_params": 53.0,
+  "description": "e14 with both position tables trimmed to the 10 used rows: the smallest model found, d_model=1 in float64."
+ },
+ "trec-coarse": {
+  "run": "trec-coarse-opus55-s2",
+  "program": "e22_what_is_the_desc",
+  "visible": 0.92,
+  "n_params": 57800.0,
+  "description": "Restores the e20 keywords; drops '^what is the'=ENTY so those questions default to DESC."
+ },
+ "word-reversal-3x3": {
+  "run": "word-reversal-3x3-opus55-s1",
+  "program": "E30_HardAttention",
+  "visible": 1.0,
+  "n_params": 3.0,
+  "description": "E27 with softmax replaced by argmax, so no leakage and no beta. Only the 3 query coefficients remain, at the cost of a non-standard attention rule."
+ }
+}

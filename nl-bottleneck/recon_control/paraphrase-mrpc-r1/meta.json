@@ -1,0 +1,15 @@
+{
+ "task": "paraphrase-mrpc",
+ "rep": 1,
+ "experiments": 3,
+ "cost_usd": 1.3030296000000001,
+ "turns": 27,
+ "seconds": 323,
+ "tools": {
+  "Bash": 10,
+  "Read": 5,
+  "Write": 5,
+  "Edit": 6
+ },
+ "final_text": " scored examples, which breaks the no-fitting rule. So I chose the majority-class model over tuning against the labels.\n\nI couldn't run my own test sentences through the circuit here, so the overlap logic was never checked on its own; I only reviewed the code by hand. The snapshots match `interpretable_transformer.py` in weights, but two have shorter comments. The live file is still set to the `prior_always1` configuration.\n\nFinal model: `interpretable_transformers_lib/prior_always1.py` (0.680)."
+}

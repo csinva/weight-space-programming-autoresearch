@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+digit-counting-10,1.0000,,CircleFlagCount_v1,1.50e+02,"2-layer attn-only width-3: circle digit matching counts via softmax into flag (1+1/(k+1)); layer2 copies query flag to '='/tens (rho-1); nearest-prototype linear readout, circle channels give constants."

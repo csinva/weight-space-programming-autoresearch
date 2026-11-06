@@ -1,0 +1,14 @@
+{
+ "task": "multiplication-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.8393651999999999,
+ "turns": 13,
+ "seconds": 227,
+ "tools": {
+  "Bash": 8,
+  "Read": 2,
+  "Write": 2
+ },
+ "final_text": "numbers carried between layers stay exact.\n- Attention heads now have a configurable count and width.\n- The model runs in float64, because A\u00b7B can reach about 10^10 (around 34 bits), which float32 can't hold exactly.\n- Layer 2's attention is unused and set to all zeros.\n- The model has 2.49e5 parameters, and nothing was trained or fitted to examples.\n\n**Final model:** `interpretable_transformers_lib/MulRemainderGated_v1.py` (100% accuracy, identical to the scored `interpretable_transformer.py`)."
+}

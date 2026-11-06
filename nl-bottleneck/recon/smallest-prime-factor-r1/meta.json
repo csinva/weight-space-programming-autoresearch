@@ -1,0 +1,15 @@
+{
+ "task": "smallest-prime-factor",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6871079999999999,
+ "turns": 17,
+ "seconds": 155,
+ "tools": {
+  "Bash": 8,
+  "Grep": 1,
+  "Read": 5,
+  "Write": 2
+ },
+ "final_text": "el has about 7,020 parameters against the original's 2,730. Most of the difference is that I store the inhibition as a dense 65\u00d765 matrix (4,225 entries), while the original probably used something more compact for the running sum. This doesn't change the outputs.\n- **Range checked:** I tried to test every n from 2 to 99999, but that command needed approval, so I skipped it. The 100% figure covers only the 200 scored examples.\n\nFinal model: `interpretable_transformers_lib/spf_sieve_pulse_v1.py`."
+}

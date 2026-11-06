@@ -1,0 +1,7 @@
+Attention-only 2-layer transformer (no MLP, no LayerNorm), 9 named residual channels. Expected essentially exact; no systematic errors, only negligible softmax leakage (~e^-10).
+
+Layer 1 (read): five heads, one per number (x1, y1, x2, y2, xq). At answer positions each attends sharply (logit gap ~20) to its number's digits; for two-digit y it weights tens:units 10:1, so averaging and scaling by 11 gives the value. Outputs dy=y2−y1, dx=x2−x1, dq=xq−x1, and writes a default answer y1+3·dq into an "out" channel. At the "=" step each head also gives "=" (value 0) nine times its number's weight, so everything reads at 1/10 scale, yielding y/10 for the tens digit.
+
+Layer 2 (fit): four heads for slopes 1, 2, 4, 5 (3 is default). Head k scores itself −2000·(dy−k·dx)² plus a stay bonus; if k fits exactly it attends to itself and adds (k−3)·dq to out, else falls back to a zero-valued comma.
+
+Readout: digit logit 2d·out−d². At the tens step out is shifted −0.45, making rounding a floor. At the units step the printed tens digit's embedding (−10·tens) is subtracted, so out = y mod 10. Punctuation is suppressed.

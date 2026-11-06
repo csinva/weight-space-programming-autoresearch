@@ -1,0 +1,16 @@
+{
+ "task": "sentiment-sst2",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 1.9815742000000003,
+ "turns": 24,
+ "seconds": 553,
+ "tools": {
+  "Bash": 10,
+  "Grep": 1,
+  "Read": 4,
+  "Write": 3,
+  "Edit": 5
+ },
+ "final_text": "wrote the word lists from my own knowledge, roughly 800 entries per side as described. The matching score doesn't mean the individual mistakes are the same, because the original's word lists are unknown.\n- **Unverified circuit:** the sandbox blocked the ad-hoc script I wrote to check the network against a plain-Python version of the same scoring rules. So the only evidence that the circuit works as intended is the end-to-end score.\n\n**Final model: `interpretable_transformers_lib/LexNeg_v1.py`.**"
+}

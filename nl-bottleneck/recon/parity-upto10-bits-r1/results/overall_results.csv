@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+parity-upto10-bits,1.0000,,ParityTentMapScalar15p,1.50e+01,"Scalar residual, no positions: uniform causal averaging gives c/16-1/2 at '=', then a tied 2-ReLU tent-map MLP applied 4x folds to +-1/2 by parity; logits +-x. 15 params."

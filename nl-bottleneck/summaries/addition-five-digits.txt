@@ -1,0 +1,9 @@
+This model adds in one cross-attention read, treating the sum as an angle on a ten-sector ring. The only table is a 2-D position embedding. Digit values are the digit times one scalar, and the readout is a cosine.
+
+Attention: every query reads only the 11 prompt positions, never its own outputs. Digits a_c and b_c share the key for place value c: (1, −c·ln10). Output step i (0–5) has query (ln t_i, 1), so the score is log(t_i·10^−c) and softmax weights are proportional to place value. The '+' key is at the origin, scores 0 and has value 0, acting as a sink. t_i is set so the output equals 1e-5·(A+B)/10^(5−i), shifting the decimal point so the target digit becomes the units digit.
+
+The value scale of 2π/10/1e-5 makes z = 2π·x/10, so higher digits complete whole turns and vanish, and carries come for free.
+
+Readout: digit d's logit is cos(z − 2π/10·(d + 0.5 − 5e-6)), so each digit owns a sector and the tiny shift keeps exact integers off boundaries. Non-digit logits are masked.
+
+Errors: the model needs float64, where it is essentially exact. In float32, rounding near sector boundaries drops accuracy to about 0.5%.

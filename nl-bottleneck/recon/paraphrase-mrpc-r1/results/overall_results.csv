@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.6950,,WindowHashMatch8,3.88e+04,2-bit char hash; L1 8 heads build 8-char window codes; L2 looks up s2 windows in s1 with sentinel on '|'; L3 counts matches over first 40 s2 positions; '1' if count>=1.

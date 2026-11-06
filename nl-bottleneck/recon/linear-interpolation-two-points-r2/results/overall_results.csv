@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+linear-interpolation-two-points,1.0000,,AttnOnly2L_Read5_Fit4,8.64e+02,"Attention-only 2-layer, 9 channels. L1: 5 read heads (x1,y1,x2,y2,xq; 10:1 tens:units, '=' self-attn gives 1/10 scale at tens step) write dy,dx,dq and default y1+3dq. L2: slope heads 1,2,4,5 score -2000(dy-k dx)^2 + stay bonus, add (k-3)dq. Readout 2d*out-d^2 with -0.45 shift at '='; tens digit emb subtracts 10*tens."

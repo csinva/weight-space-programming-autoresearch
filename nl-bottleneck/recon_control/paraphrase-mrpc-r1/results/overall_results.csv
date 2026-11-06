@@ -1,0 +1,4 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+paraphrase-mrpc,0.6500,,char4gram_overlap_t035,9.99e+05,"Hand-wired 3-layer circuit: prev-token heads build char 4-grams, match head (with '|' sink) flags s2 4-grams present in s1, averaging head gives overlap fraction; output 1 if > 0.35."
+paraphrase-mrpc,0.6400,,content4gram_overlap_t030,9.99e+05,"Same circuit, but averaging head only counts s2 4-grams made of 4 letters (content-word substrings, no spaces); output 1 if fraction found in s1 > 0.30."
+paraphrase-mrpc,0.6800,,prior_always1,9.99e+05,"Calibration baseline: same overlap circuit with THETA=-1, so the readout always emits '1' (MRPC majority class)."

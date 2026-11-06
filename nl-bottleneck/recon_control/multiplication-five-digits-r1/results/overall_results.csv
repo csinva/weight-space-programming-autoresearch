@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+multiplication-five-digits,1.0000,,MulRemainderGated_v1,2.49e+05,"float64 LN-free 2-layer transformer: heads gather A (scalar), B digits (one-hot) and generated digits; MLP1 forms R=A*B-prefix via exact ReLU gating; MLP2 counts position-gated thresholds R>=d*10^(9-k); linear unembedding picks the digit."

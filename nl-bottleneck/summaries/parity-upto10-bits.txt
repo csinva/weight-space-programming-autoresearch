@@ -1,0 +1,11 @@
+This model has no position information and a single scalar residual dimension. It counts the 1s, then folds that count with a tent map to get its parity exactly.
+
+Embedding: '0', '_' and '=' all map to −0.25; '1' maps to −0.25 + 11/16.
+
+Attention: one layer with no learned matrices. Each position averages itself and all earlier tokens, and the result is added to the residual. Prompts are always 11 tokens, so at '=' the residual equals c/16 − 1/2, where c is the number of 1s.
+
+MLP: one block with two ReLU hidden units, applied four times with tied weights. It computes the tent map T(x) = 1/2 − 2|x| in residual form: x + ReLU(x + 1/2) − 4·ReLU(x). Each application halves the denominator of c/16 while keeping c's parity, so after four rounds x is exactly −0.5 (even) or +0.5 (odd).
+
+Readout: logit('1') = x, logit('0') = −x; greedy decoding picks the larger.
+
+Errors: none. All values are exact dyadic fractions in floating point, there are no ties, and the scheme works for counts up to 16. It scores 100% on all 2047 inputs.

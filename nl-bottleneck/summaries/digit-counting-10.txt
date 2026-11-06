@@ -1,0 +1,9 @@
+An attention-only 2-layer transformer: one head per layer, no MLP, no LayerNorm, width 3. Two channels hold the digit on the unit circle (angle 2πd/10). The third is a signed flag: +1 at the query digit (position 10), −1 at '=' and the generated tens digit, 0 on input digits. Attention writes only into the flag channel.
+
+Layer 1 matches same digits. The score is the circle dot product, scaled so a match beats the nearest non-match by about 40 logits. The query attends evenly to its k matches plus itself, so its flag becomes 1 + 1/(k+1). Softmax does the counting. '=' and the tens position sit off the unit circle, so they attend only to themselves and their flag becomes −2.
+
+In layer 2 (score about −60·f_q·f_k), negative-flag positions attend to the query and add its flag, leaving ρ−1, where ρ = 1/(k+1).
+
+The readout is a linear nearest-prototype classifier on ρ: logit_u = 2ρ/(u+1) − 1/(u+1)². The circle channels supply the constants. They also suppress digits above 1 for the tens digit, place the tens threshold between k=9 and 10, and force units "0" after tens "1".
+
+Counts 0–10 are exact. There are no known systematic errors.

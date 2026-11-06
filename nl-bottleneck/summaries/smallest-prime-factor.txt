@@ -1,0 +1,11 @@
+Two-block transformer, no LayerNorm, float64, all signals scalar (not one-hot). It should be exactly correct for every n from 2 to 99999, so there is no error pattern to match; aim for 100%.
+
+Block 1 attention: one head, constant query, keys (4−i)·ln10 for prompt digit i, −60 elsewhere. Softmax weights become 10^(4−i)/11111, so summing digit values times 11111 yields n.
+
+Block 1 MLP (sieve): one neuron per prime up to 316 (65 primes) with input n/p and pulse activation relu(1 + 10⁴(cos2πu − 1)), firing only at integers; non-divisors are at least 1/313 away. Lateral inhibition (2·pulse minus cumulative sum over smaller primes) keeps only the smallest firing prime, which writes its three digits.
+
+Block 2 attention: Gaussian copy head, score −40(i−(s−5))², so output position s reads prompt digit s−5.
+
+Block 2 MLP: ReLU gate. Any nonzero factor digit suppresses the copy (weight −9); flags on the last three output steps release the factor's hundreds, tens and units digits. No factor means n is prime and gets copied.
+
+Readout: logit_d = 2d·A − d² picks the nearest digit; "=" is blocked.

@@ -1,0 +1,14 @@
+{
+ "task": "gcd-three-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6820434,
+ "turns": 10,
+ "seconds": 159,
+ "tools": {
+  "Bash": 6,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "the divisors of their gcd g. So `C[d] \u2212 \u03a3_{k\u22652} C[k\u00b7d]` equals 1 only when d = g, and is \u2264 0 for every other d. One copy of these units is switched on at each of the three answer positions, and each writes the matching digit of g to the output. The output layer then turns that into logits.\n\nThe model has about 40M parameters, mostly zeros. It is exact for every pair in 1\u2013999, not just the 200 test examples.\n\nFinal model: `interpretable_transformers_lib/gcd_divisor_lattice_v1.py` (100% accuracy)."
+}

@@ -1,0 +1,15 @@
+{
+ "task": "boolean-circuit-5-bits",
+ "rep": 2,
+ "experiments": 2,
+ "cost_usd": 0.8062925999999999,
+ "turns": 19,
+ "seconds": 212,
+ "tools": {
+  "Bash": 9,
+  "Read": 3,
+  "Write": 3,
+  "Edit": 3
+ },
+ "final_text": "ten one when S is centred; the first term has an extra +0.5 offset.\n- **Parameter count:** it has 57 parameters versus the original's 51, because I used full 3\u00d73 value and output matrices rather than more compact ones.\n\n**Snapshots:** `RecurrentCA_v1.py` is a trimmed copy of run 1 (same model and weights, with comments and some harness text removed), not a byte-for-byte copy. `RecurrentCA_v2.py` is an exact copy of the final file.\n\nFinal model: `interpretable_transformers_lib/RecurrentCA_v2.py`."
+}

@@ -1,0 +1,7 @@
+This model has no MLP: one causal attention read acts as a pointer, followed by a nearest-value lookup.
+
+Attention: one layer, one head, using hard argmax instead of softmax. Each position's key is its 1-based position. The query at each generation step is the slot to copy. With i = position − 11 (the "=" is position 11) and word = floor(i/4), the query is 9 + i − 8·word. The score is negative squared distance between query and key, and the single best earlier position wins. So the answer copies prompt indices 8, 9, 10, 11, 4, 5, 6, 7, 0, 1, 2: word 3, separator, word 2, separator, word 1.
+
+Value and readout: the value is the token id as one scalar, capped at the separator's id, so "=" reads as "_". That lets the first separator be copied from the "=" slot. Logits are the negative squared difference between the read value and each vocabulary id. An exact match scores 0; ties go to the lower id, "_".
+
+Errors: selection is exact with no softmax leakage, so accuracy should be 100%, even with repeated letters.

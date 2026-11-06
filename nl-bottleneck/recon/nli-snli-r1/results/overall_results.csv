@@ -1,0 +1,3 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+nli-snli,0.5950,,nli_rules_v1,2.50e+06,"3-layer no-LN transformer: 13 offset heads, MLP word/trigram detectors, trigram-coverage + group-conflict heads, aggregation at '='; logits per description."
+nli-snli,0.5900,,nli_rules_v2,2.50e+06,v1 with contradiction-6/3 and entailment-4 lexicons restricted to the words the description lists literally (no person/outdoors/television/sofa extras).

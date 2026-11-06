@@ -1,0 +1,7 @@
+A tiny recurrent "cellular automaton" transformer. Each position holds one scalar state, the expression value so far, stored centred as S − 0.5. One tied block (one attention head, 2-neuron ReLU MLP) is applied 10 times; each pass moves information one cell right, enough to reach '='.
+
+Attention has no key matrix: positions are sinusoidal angles at 30° per step, and the query is the position rotated back one step, scaled by 200, giving near-hard attention to the previous cell (position 0 attends to itself). Values copy that cell's AND/XOR flags and put its state on the bit channel; each cell adds its own embedding. Op tokens carry their flag plus identity bit (& 1, | and ^ 0), so op cells and '=' (zero embedding) pass the state through.
+
+The MLP does one fold step: new state = relu(b + S − A) − relu(2(b + S) + X − A − 2), giving OR with no flags, AND with A, XOR with X. State starts at 0; readout logits are ±4 times the centred state.
+
+Errors: expected none (attention leakage ≈ e^−27), though untested.

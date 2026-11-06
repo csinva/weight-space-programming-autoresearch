@@ -1,0 +1,317 @@
+{
+ "addition-five-digits-r1": {
+  "task": "addition-five-digits",
+  "attempts": [
+   {
+    "name": "CarryLookaheadExact",
+    "visible": 1.0,
+    "n_params": 19700.0,
+    "snapshot": true,
+    "description": "2-layer no-LN transformer: heads gather a_i+b_i per place, MLP computes carries via exact integer threshold sum t_i 10^i >= 10^j, layer-2 MLP selects place by position and applies mod 10, quadratic readout."
+   }
+  ],
+  "final": "CarryLookaheadExact",
+  "fallback_to_last_file": false
+ },
+ "boolean-circuit-5-bits-r1": {
+  "task": "boolean-circuit-5-bits",
+  "attempts": [
+   {
+    "name": "GatherThenChainMLP",
+    "visible": 1.0,
+    "n_params": 11400.0,
+    "snapshot": true,
+    "description": "No-LN; 9-head positional gather attention copies bits/ops to the '=' slot, then 4 ReLU MLPs each compute r_i=op_i(r_{i-1},b_i) via 12 combo-detector units."
+   }
+  ],
+  "final": "GatherThenChainMLP",
+  "fallback_to_last_file": false
+ },
+ "date-normalization-r1": {
+  "task": "date-normalization",
+  "attempts": [
+   {
+    "name": "date_parser_2L_markers",
+    "visible": 0.975,
+    "n_params": 960000.0,
+    "snapshot": true,
+    "description": "2-layer no-LN hand-wired parser: L1 copies prev 4 tokens and detects year/month/day end markers + month trigrams; L2 attends to markers and reads out digits per output position."
+   },
+   {
+    "name": "date_parser_2L_markers_v2",
+    "visible": 1.0,
+    "n_params": 960000.0,
+    "snapshot": true,
+    "description": "2-layer no-LN hand-wired parser: L1 copies prev 4 tokens and detects year/month/day end markers + month trigrams; L2 attends to markers and reads out digits per output position."
+   }
+  ],
+  "final": "date_parser_2L_markers_v2",
+  "fallback_to_last_file": false
+ },
+ "decimal-to-binary-8bit-r1": {
+  "task": "decimal-to-binary-8bit",
+  "attempts": [
+   {
+    "name": "DigitGatherStepBits",
+    "visible": 1.0,
+    "n_params": 151000.0,
+    "snapshot": true,
+    "description": "1-layer no-LN transformer: 3 attention heads gather digits into N=100a+10b+c; position-gated ReLU step pairs compute bit_(10-pos)(N) as alternating sum of thresholds."
+   }
+  ],
+  "final": "DigitGatherStepBits",
+  "fallback_to_last_file": false
+ },
+ "digit-counting-10-r1": {
+  "task": "digit-counting-10",
+  "attempts": [
+   {
+    "name": "QueryCopyHistRamp",
+    "visible": 1.0,
+    "n_params": 102000.0,
+    "snapshot": true,
+    "description": "2-layer no-LN: L1 attn copies query digit to answer positions; L2 attn averages digit one-hots over positions 0-9; L2 MLP selects query bin and decodes count via relu ramps gated by position."
+   }
+  ],
+  "final": "QueryCopyHistRamp",
+  "fallback_to_last_file": false
+ },
+ "edit-distance-8-r1": {
+  "task": "edit-distance-8",
+  "attempts": [
+   {
+    "name": "ExactDPGatherMLP",
+    "visible": 1.0,
+    "n_params": 5210000.0,
+    "snapshot": true,
+    "description": "16-head attention gathers both strings to '=', MLP builds 8x8 match matrix, 30 LN-free MLP layers run the Levenshtein DP per anti-diagonal with exact ReLU mins; quadratic-logit readout."
+   }
+  ],
+  "final": "ExactDPGatherMLP",
+  "fallback_to_last_file": false
+ },
+ "gcd-three-digits-r1": {
+  "task": "gcd-three-digits",
+  "attempts": [
+   {
+    "name": "gcd_divisor_lattice_v1",
+    "visible": 1.0,
+    "n_params": 36600000.0,
+    "snapshot": true,
+    "description": "Attn copies digits; MLP1 builds exact one-hot of a,b via ReLU ramps and sums over multiples to get [d|a],[d|b]; MLP2 ANDs to common divisors; MLP3 picks the common divisor with no common-divisor multiple (=gcd), position-gated digit output."
+   }
+  ],
+  "final": "gcd_divisor_lattice_v1",
+  "fallback_to_last_file": false
+ },
+ "linear-interpolation-two-points-r1": {
+  "task": "linear-interpolation-two-points",
+  "attempts": [
+   {
+    "name": "GatherSlopeIndicatorDecode",
+    "visible": 1.0,
+    "n_params": 201000.0,
+    "snapshot": true,
+    "description": "No-LN 3-layer: positional attention gathers digits; MLP slope indicators for m=1..5; gated ReLU products give y(xq); hump one-hot decode to tens/ones by position."
+   }
+  ],
+  "final": "GatherSlopeIndicatorDecode",
+  "fallback_to_last_file": false
+ },
+ "multiplication-five-digits-r1": {
+  "task": "multiplication-five-digits",
+  "attempts": [
+   {
+    "name": "MulRemainderGated_v1",
+    "visible": 1.0,
+    "n_params": 249000.0,
+    "snapshot": true,
+    "description": "float64 LN-free 2-layer transformer: heads gather A (scalar), B digits (one-hot) and generated digits; MLP1 forms R=A*B-prefix via exact ReLU gating; MLP2 counts position-gated thresholds R>=d*10^(9-k); linear unembedding picks the digit."
+   }
+  ],
+  "final": "MulRemainderGated_v1",
+  "fallback_to_last_file": false
+ },
+ "nli-snli-r1": {
+  "task": "nli-snli",
+  "attempts": [
+   {
+    "name": "LexMatchConflict_v1",
+    "visible": 0.525,
+    "n_params": 3640000.0,
+    "snapshot": true,
+    "description": "3-layer hand-built char transformer: look-back heads build word vectors, exact/hypernym match of hyp words to premise, conflict-category head, cue lexicons; counts -> logits."
+   },
+   {
+    "name": "LexMatchConflictStem_v2",
+    "visible": 0.55,
+    "n_params": 7640000.0,
+    "snapshot": true,
+    "description": "v1 + stemming layer (strip -s/-ing before premise matching) and extra conflict categories (day/night, old/young, vehicles, sports, instruments, ...)."
+   },
+   {
+    "name": "LexMatchConflictStem_v3",
+    "visible": 0.555,
+    "n_params": 8200000.0,
+    "snapshot": true,
+    "description": "v2 + prepositions/auxiliaries as stopwords and more synonym/hypernym classes (wearing<-clothes, look/watch, talk, photo, hold/carry, perform, eat, ...)."
+   },
+   {
+    "name": "LexMatchConflictStem_v4",
+    "visible": 0.57,
+    "n_params": 9100000.0,
+    "snapshot": true,
+    "description": "v3 + -ed stemming and a final-MLP 'no overlap' feature relu(U - 2*matchedContent) pushing toward contradiction when the hypothesis describes a different scene."
+   },
+   {
+    "name": "LexMatchConflictStem_v5",
+    "visible": 0.57,
+    "n_params": 9200000.0,
+    "snapshot": true,
+    "description": "v4 + larger hand-written hypothesis cue lexicons (neutral: family/goal/emotion words; entailment: 'at least', instrument; contradiction: frowning)."
+   }
+  ],
+  "final": "LexMatchConflictStem_v4",
+  "fallback_to_last_file": false
+ },
+ "paraphrase-mrpc-r1": {
+  "task": "paraphrase-mrpc",
+  "attempts": [
+   {
+    "name": "char4gram_overlap_t035",
+    "visible": 0.65,
+    "n_params": 999000.0,
+    "snapshot": true,
+    "description": "Hand-wired 3-layer circuit: prev-token heads build char 4-grams, match head (with '|' sink) flags s2 4-grams present in s1, averaging head gives overlap fraction; output 1 if > 0.35."
+   },
+   {
+    "name": "content4gram_overlap_t030",
+    "visible": 0.64,
+    "n_params": 999000.0,
+    "snapshot": true,
+    "description": "Same circuit, but averaging head only counts s2 4-grams made of 4 letters (content-word substrings, no spaces); output 1 if fraction found in s1 > 0.30."
+   },
+   {
+    "name": "prior_always1",
+    "visible": 0.68,
+    "n_params": 999000.0,
+    "snapshot": true,
+    "description": "Calibration baseline: same overlap circuit with THETA=-1, so the readout always emits '1' (MRPC majority class)."
+   }
+  ],
+  "final": "prior_always1",
+  "fallback_to_last_file": false
+ },
+ "parity-upto10-bits-r1": {
+  "task": "parity-upto10-bits",
+  "attempts": [
+   {
+    "name": "UniformCountParityMLP",
+    "visible": 1.0,
+    "n_params": 150000.0,
+    "snapshot": true,
+    "description": "LayerNorms removed; layer-1 uniform-attention head counts 1s at the '=' token, a ReLU zigzag MLP maps the count to parity logits; layers 2-3 zeroed."
+   }
+  ],
+  "final": "UniformCountParityMLP",
+  "fallback_to_last_file": false
+ },
+ "sentiment-sst2-r1": {
+  "task": "sentiment-sst2",
+  "attempts": [
+   {
+    "name": "LexiconNegation_v1",
+    "visible": 0.73,
+    "n_params": 12700000.0,
+    "snapshot": true,
+    "description": "Lookback attention (24 heads) + MLP word detectors for hand-written sentiment lexicon with negation phrases, uniform pooling of polarity, sign -> 0/1."
+   },
+   {
+    "name": "LexiconStemsContrast_v2",
+    "visible": 0.74,
+    "n_params": 12400000.0,
+    "snapshot": true,
+    "description": "v1 + prefix-stem word detectors and 'but/however' contrast flag (attn+MLP) that upweights later-clause polarity in the final attention pooling."
+   },
+   {
+    "name": "LexiconExpandedIntens_v3",
+    "visible": 0.765,
+    "n_params": 32400000.0,
+    "snapshot": true,
+    "description": "v2 + expanded hand-written lexicon/stems and intensifier phrases ('very X' -> 1.5x)."
+   },
+   {
+    "name": "LexiconNegFiller_v4",
+    "visible": 0.765,
+    "n_params": 94100000.0,
+    "snapshot": true,
+    "description": "v3 + negation across one filler word ('not a good', \"n't very funny\"), 28-char lookback, vectorized weight writing."
+   }
+  ],
+  "final": "LexiconExpandedIntens_v3",
+  "fallback_to_last_file": false
+ },
+ "smallest-prime-factor-r1": {
+  "task": "smallest-prime-factor",
+  "attempts": [
+   {
+    "name": "SPF_ModSumBump_v1",
+    "visible": 1.0,
+    "n_params": 869000.0,
+    "snapshot": true,
+    "description": "2-layer no-LN transformer: attention gathers 5 digits; MLP1 tests p|N for 65 primes<=313 via integer bump on sum of digit residues; MLP2 picks first divisor (or copies N if prime)."
+   }
+  ],
+  "final": "SPF_ModSumBump_v1",
+  "fallback_to_last_file": false
+ },
+ "sort-five-digits-r1": {
+  "task": "sort-five-digits",
+  "attempts": [
+   {
+    "name": "CountingSort1L",
+    "visible": 1.0,
+    "n_params": 51900.0,
+    "snapshot": true,
+    "description": "1-layer no-LN counting sort: attention averages input digit one-hots into cumulative counts; MLP thresholds count vs output index; head picks first crossing."
+   }
+  ],
+  "final": "CountingSort1L",
+  "fallback_to_last_file": false
+ },
+ "trec-coarse-r1": {
+  "task": "trec-coarse",
+  "attempts": [
+   {
+    "name": "LexiconVotes_v1",
+    "visible": 0.815,
+    "n_params": 69900000.0,
+    "snapshot": true,
+    "description": "Look-back attention (40 chars) + MLP phrase detectors from a hand-written TREC lexicon casting class votes, pooled by uniform attention; argmax of votes + prior."
+   },
+   {
+    "name": "LexiconVotes_v2",
+    "visible": 0.825,
+    "n_params": 207000000.0,
+    "snapshot": true,
+    "description": "v1 + expanded hand-written lexicon (auto plurals, more head nouns/prefixes, extra DESC/ENTY/HUM/NUM cue phrases)."
+   }
+  ],
+  "final": "LexiconVotes_v2",
+  "fallback_to_last_file": false
+ },
+ "word-reversal-3x3-r1": {
+  "task": "word-reversal-3x3",
+  "attempts": [
+   {
+    "name": "PosCopy1L",
+    "visible": 1.0,
+    "n_params": 45900.0,
+    "snapshot": true,
+    "description": "1-layer 1-head positional copy: query at answer step j attends to fixed source position SRC[j]; value carries token one-hot, unembedding reads it."
+   }
+  ],
+  "final": "PosCopy1L",
+  "fallback_to_last_file": false
+ }
+}

@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+decimal-to-binary-8bit,1.0000,,GreedyBinExp_2head_logplace,4.32e+02,"1-layer 2-head attn-only: head0 place-value softmax over digits -> n/111, head1 over '=' and emitted bits -> (S+2^k)/256; logit1 = 1+222a0-512a1 = 2(r-2^k)+1; +-6 positional region bias."

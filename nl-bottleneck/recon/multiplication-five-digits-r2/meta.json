@@ -1,0 +1,14 @@
+{
+ "task": "multiplication-five-digits",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 1.0443758,
+ "turns": 14,
+ "seconds": 317,
+ "tools": {
+  "Bash": 8,
+  "Read": 3,
+  "Write": 2
+ },
+ "final_text": "0 parameters, against the original's 304. The query and key matrices are full 3\u00d77 and mostly zero, where the original was presumably packed more tightly.\n- **Channel layout:** the 7 channels are my own design, since the description doesn't specify them. Two channels mark which part of the prompt a position is in (first number, second number, or answer region). One channel holds both 10\u207b\u2076\u00b7digit and the answer's place value.\n\nFinal model: `interpretable_transformers_lib/attn2_sink_tropical_v1.py`."
+}

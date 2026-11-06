@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+nli-snli,0.5750,,nli_lexcov_v1,7.91e+06,"3-layer char transformer: 13 offset heads, MLP word/prefix detectors for hyp lexicon votes and exclusive-group classes, trigram-coverage attention, soft conflicts, length delta; linear logits per description."

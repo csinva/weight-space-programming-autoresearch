@@ -1,0 +1,15 @@
+The model predicts "1" when an 8-character substring near the start of sentence 2 also appears in sentence 1. Characters are compared through a coarse 2-bit hash.
+
+Each character gets a 2-bit ±1 code from the low two bits of (token index + 1), so letters fall into 4 classes. Pad, '|', '=', '0' and '1' get zero codes and never match.
+
+Layer 1 has 8 heads using binary position codes. Head k fetches the character at t−k, giving each position an 8-character window code.
+
+Layer 2 is one head. Each sentence-2 window looks for an identical code in sentence 1. A sentinel key on '|' scores just below a full match and catches inexact windows. A match flag is set when the lookup lands in sentence 1.
+
+Layer 3: '=' averages the match flags over the first 40 sentence-2 positions. The output is "1" if there is at least one match; the logit is 50·(count − 0.5).
+
+Flaws:
+- Hash collisions over-predict "1".
+- Windows touching '|' or padding never match.
+- Only about 33 windows are checked.
+- There is no semantics: shared phrases give "1", reworded paraphrases give "0".

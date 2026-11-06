@@ -1,0 +1,14 @@
+{
+ "task": "decimal-to-binary-8bit",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.6277945999999999,
+ "turns": 13,
+ "seconds": 161,
+ "tools": {
+  "Bash": 8,
+  "Read": 2,
+  "Write": 2
+ },
+ "final_text": "y-dependent shift above is added, so the 4th position feature I used may not be exactly how the original did it.\n\n**Not checked:** I didn't confirm the description's claim that all 256 inputs are correct or measure the margins, because the command for that check was declined. By the arithmetic, the logit is always an odd integer (at least 1 in size) and the leakage is about 0.01, so every input should be decoded correctly.\n\nFinal model: `interpretable_transformers_lib/greedy_binexp_2head_89p.py`"
+}

@@ -1,0 +1,6 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+nli-snli,0.5250,,LexMatchConflict_v1,3.64e+06,"3-layer hand-built char transformer: look-back heads build word vectors, exact/hypernym match of hyp words to premise, conflict-category head, cue lexicons; counts -> logits."
+nli-snli,0.5500,,LexMatchConflictStem_v2,7.64e+06,"v1 + stemming layer (strip -s/-ing before premise matching) and extra conflict categories (day/night, old/young, vehicles, sports, instruments, ...)."
+nli-snli,0.5550,,LexMatchConflictStem_v3,8.20e+06,"v2 + prepositions/auxiliaries as stopwords and more synonym/hypernym classes (wearing<-clothes, look/watch, talk, photo, hold/carry, perform, eat, ...)."
+nli-snli,0.5700,,LexMatchConflictStem_v4,9.10e+06,v3 + -ed stemming and a final-MLP 'no overlap' feature relu(U - 2*matchedContent) pushing toward contradiction when the hypothesis describes a different scene.
+nli-snli,0.5700,,LexMatchConflictStem_v5,9.20e+06,"v4 + larger hand-written hypothesis cue lexicons (neutral: family/goal/emotion words; entailment: 'at least', instrument; contradiction: frowning)."

@@ -1,0 +1,14 @@
+{
+ "task": "multiplication-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.9599386000000002,
+ "turns": 12,
+ "seconds": 281,
+ "tools": {
+  "Bash": 8,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "exact layout.\n- **How V is read:** head 2 puts the place value in the score and the digit in the value, rather than putting log(digit\u00b7place) in the score.\n\nI kept the original's limitations rather than fixing them. Leakage around the huge sink scores is roughly 1e-12 relative, which is why float64 is needed. One wrong digit also corrupts the remainder X and every digit after it. I didn't run a float32 test to confirm that it breaks.\n\nFinal model: `interpretable_transformers_lib/SinkExpMul_v1.py`"
+}

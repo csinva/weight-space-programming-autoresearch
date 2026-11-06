@@ -1,0 +1,16 @@
+{
+ "task": "gcd-three-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.8723896,
+ "turns": 19,
+ "seconds": 235,
+ "tools": {
+  "Bash": 8,
+  "Read": 6,
+  "Grep": 1,
+  "Write": 2,
+  "Edit": 1
+ },
+ "final_text": "cts 2sB, which still preserves the gcd, so going out of range isn't fatal.\n- **Parameter count:** my model has 612 parameters against the original's 332. The extra parameters are mostly in the position-based query and key tables of the two attention layers. The computation itself is the same as described.\n\nI haven't checked the description's claim of zero errors on all 10\u2076 pairs; my only result is the 200-example score.\n\nFinal model: `interpretable_transformers_lib/gcd_euclid_radix4_fold_v1.py`."
+}

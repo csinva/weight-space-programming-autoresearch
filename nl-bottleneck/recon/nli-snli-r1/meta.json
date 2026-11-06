@@ -1,0 +1,16 @@
+{
+ "task": "nli-snli",
+ "rep": 1,
+ "experiments": 2,
+ "cost_usd": 1.9903255999999996,
+ "turns": 27,
+ "seconds": 543,
+ "tools": {
+  "Bash": 12,
+  "Grep": 1,
+  "Read": 5,
+  "Write": 5,
+  "Edit": 3
+ },
+ "final_text": "utral word lists and the word groups are from my own knowledge, guided by the description. Synonyms such as `man`/`men` count as the same member of a group.\n- **One judgement call:** I read the conflict rule literally. A hypothesis word scores a conflict if the premise contains any other member of its group, even when the premise also contains the word itself. The rest of the gap to 63.5% probably comes from these word-list choices.\n\nFinal model: `interpretable_transformers_lib/nli_rules_v2.py`."
+}

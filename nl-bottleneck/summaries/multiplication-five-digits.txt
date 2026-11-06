@@ -1,0 +1,9 @@
+This model has no MLP and no LayerNorm: two attention-only layers on a 7-channel float64 residual stream whose registers hold integers up to about 1e10.
+
+Layer 1 (one head) makes each B digit compute b·A. A query at a B digit b scores multiplicand position i at log(b·10^(4−i)) against a huge zero-valued sink key at '*'. Because the sink dominates (scale about 1e17), softmax acts like a plain exponential, so the head reads b·A/scale, rescaled to b·A. Digit 0 attends only to the sink.
+
+In layer 2, head 1 weights B positions proportionally to 10^(10−t); multiplying the average by 11111 gives P = A·B. Head 2 uses the same sink trick (scale about 1e22) to read V, the value of already-emitted answer digits times their place values, and subtracts it, so X = P − V + 0.5, a long-division remainder.
+
+The readout is a tropical decoder: logit_k = k·X − place·k(k+1)/2 with place = 10^(20−t) at answer position t, whose argmax is floor(X/place).
+
+Expect essentially 100% exact match; leakage is about 1e-12 relative, so float64 is required (float32 breaks). One wrong digit corrupts the remainder and all later digits.

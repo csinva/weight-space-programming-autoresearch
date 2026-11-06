@@ -1,0 +1,14 @@
+{
+ "task": "sort-five-digits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.5002614,
+ "turns": 11,
+ "seconds": 112,
+ "tools": {
+  "Bash": 7,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "_j = 0.9\u00b76^(8\u2212j). That works out to a weight of \u03a3 1/\u03c4_j and a bias of \u2212(9\u2212d). Digit 9 gets logit 0, and \"=\" gets a bias of \u22121e9.\n\nThe description doesn't say how a 1-dimensional model applies the sign or the (t+1) scaling. I did both as multiplications in the forward pass, and dropped the residual connection and LayerNorm. I picked this because it gives exactly 53 parameters, but the original may have been built differently.\n\nFinal model: `interpretable_transformers_lib/CountingSortBase6_d1.py`."
+}

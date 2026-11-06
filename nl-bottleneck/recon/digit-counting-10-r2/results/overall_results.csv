@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+digit-counting-10,1.0000,,CircleFlagSoftmaxCount,1.86e+02,2-layer attn-only width-3: circle digit channels + signed flag; L1 softmax counts matches into query flag 1+1/(k+1); L2 copies it to '='/tens giving rho-1; linear nearest-prototype readout on rho with circle-channel constants.

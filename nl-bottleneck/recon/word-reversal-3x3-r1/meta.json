@@ -1,0 +1,15 @@
+{
+ "task": "word-reversal-3x3",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.48213639999999996,
+ "turns": 15,
+ "seconds": 98,
+ "tools": {
+  "Bash": 7,
+  "Read": 3,
+  "Edit": 3,
+  "Write": 1
+ },
+ "final_text": "mplate's original transformer classes are still in the file, but `SimpleTransformer` now points to the new 3-parameter model. So the model the harness builds contains only those 3 parameters, and the results CSV records `3.00e+00`.\n\nMy first attempt to apply the change was a Python script run through the shell, which was declined, so I made the same change with file edits instead. The snapshot is identical to the working file.\n\nFinal model: `interpretable_transformers_lib/HardArgmaxPointer3p.py`"
+}

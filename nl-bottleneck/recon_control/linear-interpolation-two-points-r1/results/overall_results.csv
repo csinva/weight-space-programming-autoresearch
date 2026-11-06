@@ -1,0 +1,2 @@
+task,accuracy,status,model_shorthand_name,n_params,description
+linear-interpolation-two-points,1.0000,,GatherSlopeIndicatorDecode,2.01e+05,No-LN 3-layer: positional attention gathers digits; MLP slope indicators for m=1..5; gated ReLU products give y(xq); hump one-hot decode to tens/ones by position.

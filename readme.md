@@ -56,4 +56,5 @@ Large regenerable files (the formatted weight dumps in each `bundle/weights/` an
 - `evolve`: code for the hand-written weights runs
 - `runs` stores each autoresearch run
 - `systematic-tests`: code and saved predictions for the weight-reading tests
+- `nl-bottleneck`: describe the best Opus 5.5 program per task in 200 words, rebuild it from the description with a fresh Opus 5.5 session, compare accuracy and errors (report in `analyze/nl_bottleneck/report.html`; steps in its Reproducibility section)
 - `analyze` contains code and reports that analyze the runs (note that the run is stored in a folder and doesn't use explicit commits)

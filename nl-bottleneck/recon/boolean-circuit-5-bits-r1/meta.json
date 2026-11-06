@@ -1,0 +1,14 @@
+{
+ "task": "boolean-circuit-5-bits",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.5647374,
+ "turns": 11,
+ "seconds": 145,
+ "tools": {
+  "Bash": 7,
+  "Read": 1,
+  "Write": 2
+ },
+ "final_text": "(2(b+s) + X/2 \u2212 A \u2212 2)) \u2212 0.5, where s is the centred state. I checked this against every operator and input combination by hand. It gives OR with no flags, AND with A and XOR with X.\n2. **Parameter count.** My model has 49 parameters, not 51. The other two probably sit in some bookkeeping detail I can't recover from the description, and I didn't pad to reach 51.\n\nLike the original, it should make no errors on this test set.\n\nFinal model: `interpretable_transformers_lib/CA_recurrent_fold_v1.py`."
+}
