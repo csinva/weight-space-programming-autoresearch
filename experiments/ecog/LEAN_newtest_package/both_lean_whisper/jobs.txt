@@ -1,0 +1,2 @@
+fit=29293422 agg=29293423 (afterok)
+resubmitted fit=29293608 agg=29293609 (first fit 29293422 failed: missing ECOG_TEST_CHUNKS_FILE/EXCLUDE env, caught by frozen-train assert)

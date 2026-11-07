@@ -348,8 +348,65 @@ A100 caps of 8 GPUs per partition.
 | `results/per_trial/`, `results/trial_logs/` | Per-trial JSON records and run logs |
 | `varpart/` | Phase-2/3 scripts, `RESULTS.md`, `results_{family,section,group}.csv`, `perelec_R2.npz`, `fits_primary_float32.npz` (all 135 fits, 317 chunks × 166 electrodes; enough to rerun phase 3), `old_test_reference/` |
 | `figures/` | New-test Figures 1 and 2 (PNG/PDF) and their scripts, plotted data, captions, the old-test figures for comparison |
+| `both_lean_whisper/` | LEAN-v20 + Whisper ("Both") fit and the LEAN-vs-Whisper variance partitioning, old and new test (§12) |
 
 Not included (on disk): full per-chunk per-electrode arrays for every trial
 (`runs-wave/newtest/results/*_rold.npy`, `*_rnew.npy`, 225 MB), full variance-partitioning fits with
 all-493 and old-test r (`runs-wave/varpart-v20-newtest/fits/`, 152 MB), and the aligned segments
 (`runs-wave/newtest/wave_aligned/`, 4.8 GB).
+
+---
+
+## 12. LEAN + Whisper ("Both") and the LEAN-vs-Whisper variance partitioning (`both_lean_whisper/`)
+
+*Added Nov 7, 2026.* This reruns the June "Both" model (`june_diag_combined_v20.py`: LEAN-v20 and
+Whisper features in one ridge) on the held-out test, together with the partitioning between the two
+feature sets.
+
+**Method (`both_varpart.py`).**
+- Canonical LEAN-v20 features (3,852 raw) with the 1,280 Whisper features appended per frame:
+  5,132 raw columns, 20,528 after 4 delays.
+- Whisper rows are found by the MD5 fingerprint of each chunk's first window. The map is extended
+  to the new chunks, and an unknown chunk raises an error.
+- One streamed pass over the frozen 500 training chunks accumulates XᵀX and XᵀY. Three fits use the
+  harness ridge: Both (all columns), LEAN-only and Whisper-only (column subsets of the same pass;
+  per-chunk z-scoring is per column, so these equal standalone fits, as in June).
+- Each model is scored on the old test and on all 493 new chunks; results are reported for the
+  317-chunk primary set.
+- Per electrode, R² = r·|r|:
+  - unique LEAN = R²(Both) − R²(Whisper)
+  - unique Whisper = R²(Both) − R²(LEAN)
+  - shared = R²(LEAN) + R²(Whisper) − R²(Both)
+- Summaries average R² over electrodes. 95% CIs come from a paired bootstrap over test chunks (B = 2000).
+
+**Validation.** All six old-test values reproduce the June runs: Both 0.09204 / 0.10375 (June
+0.0920 / 0.1038), LEAN 0.08079 / 0.09045 (0.0808 / 0.0904), Whisper 0.08172 / 0.09330
+(0.0817 / 0.0933), all-166 / grid. The new-test LEAN-only and Whisper-only scores match the
+independent fits in §7 (0.0735 and 0.0819, grid).
+
+**Results** (unique and shared as % of R²(Both), [95% CI]):
+
+| Test | Electrodes | r Both | r LEAN | r Whisper | Unique LEAN | Unique Whisper | Shared |
+|---|---|---|---|---|---|---|---|
+| old (23) | grid | 0.1038 | 0.0904 | 0.0933 | 6.5% [3.0, 11.0] | 25.4% [21.3, 29.0] | 68.2% [63.3, 73.9] |
+| old (23) | all-166 | 0.0920 | 0.0808 | 0.0817 | 7.8% [4.1, 12.8] | 24.2% [20.5, 27.4] | 68.0% [63.3, 73.5] |
+| **new (317)** | **grid** | **0.0871** | **0.0735** | **0.0819** | **5.0% [4.0, 6.1]** | **26.0% [24.4, 27.5]** | **68.9% [65.6, 72.2]** |
+| new (317) | all-166 | 0.0755 | 0.0646 | 0.0703 | 5.7% [4.6, 6.9] | 25.3% [23.8, 26.8] | 68.9% [65.4, 72.4] |
+| new (493) | grid | 0.0810 | 0.0690 | 0.0752 | 5.8% [4.9, 6.8] | 25.3% [23.8, 26.8] | 68.9% [65.1, 72.9] |
+
+- **The partition holds on held-out data.** About 69% of the Both model's variance is shared,
+  about a quarter is unique to Whisper and 5–6% is unique to LEAN. The old-test values fall inside or
+  next to the new CIs, which are much narrower (317 chunks vs. 23).
+- **Adding LEAN to Whisper still helps.** Both beats Whisper by +0.0052 r on the grid (new test), down
+  from +0.0105 on the old test; the unique-LEAN share itself barely moves (6.5% → 5.0%).
+
+**Files.**
+- `RESULTS.md` and `results.csv`: all tables above, with the CIs and R² values.
+- `perelec.npz`: per-electrode arrays for brain maps. Keys are `{old,new_primary,new_all}__{r_both,
+  r_lean,r_whisper,R2_both,R2_lean,R2_whisper,unique_lean,unique_whisper,shared}`, each of length 166
+  (electrodes 0–124 grid, 125–131 strips, 132–165 depth).
+- `perchunk_r.npz`: per-chunk, per-electrode r for each model on the old test and all 493 new chunks,
+  with the chunk lists.
+- Scripts and job records: `run_fit.sh`, `run_agg.sh`, `jobs.txt`. Fit 29293608: 20 minutes on one
+  A100, about 0.35 GPU-hours. A first submission, 29293422, stopped on the frozen-training-list check
+  because the harness environment variables were missing; nothing was fit.
