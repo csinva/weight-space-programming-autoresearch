@@ -49,7 +49,7 @@ uv run interpretable_transformer.py --task addition-five-digits
 | Algorithmic and language transformers | `experiments/evolve/` | [Experiments guide](experiments/README.md#transformers) |
 | Text bottleneck | `experiments/nl-bottleneck/` | [Experiments guide](experiments/README.md#text-bottleneck) |
 | Story-listening fMRI | `experiments/evolve-neuro/` | [Experiments guide](experiments/README.md#story-listening-fmri) |
-| Visual cortex | `neuro-autoresearch/` | [Its README](neuro-autoresearch/README.md) |
+| Visual cortex | `experiments/vision/` | [Its README](experiments/vision/README.md) |
 | Reading a real model's weights | `experiments/systematic-tests/` | [Experiments guide](experiments/README.md#reading-weights) |
 
 ## Repository layout
@@ -58,13 +58,13 @@ uv run interpretable_transformer.py --task addition-five-digits
 experiments/
   evolve/             harness, prompt and audits for the transformer runs
   evolve-neuro/       harness and prompt for the story-listening fMRI runs
+  vision/             harness for the visual cortex searches, with its own history
   nl-bottleneck/      text bottleneck: describe a model, rebuild it, compare
   systematic-tests/   tests of whether an LLM can read a real model's weights
   runs/               early transformer runs
   runs-opus55/        Claude Opus 5.5 transformer runs (also sonnet55, haiku55)
   runs-neuro/         story-listening fMRI runs
 analyze/              reports and figures built from the runs
-neuro-autoresearch/   the visual cortex harness, with its own history
 ```
 
 The [hosted reports](https://csinva.io/weight-space-programming-autoresearch/analyze/toy_examples/report.html) cover the runs in more depth. Runs live in folders and do not use commits, so every model an agent tried is saved as a snapshot next to its logged score.

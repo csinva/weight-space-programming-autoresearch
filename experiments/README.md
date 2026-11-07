@@ -45,6 +45,10 @@ uv run interpretable_transformer.py --device cpu
 
 Our searches scored 3 stories, but `onapproachtopluto` is not in the public release, so a fresh run scores the other 2 and its numbers will differ slightly from the logged ones.
 
+## Visual cortex
+
+The visual cortex searches have their own harness and commands. See `vision/README.md`, and run them from that folder.
+
 ## Reading weights
 
 These tests ask whether Claude Opus 5.5 can predict what an edit will do from reading a real model's weights. Over 420 edits, the answer is mostly no. The code samples the edits, gives the model what it needs, and measures the true effects:
