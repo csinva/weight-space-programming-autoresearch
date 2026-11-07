@@ -1,4 +1,4 @@
-Read through the results in the `experiments/runs-neuro` directory and the report in `analyze/neuro/report.html`.
+Read through the results in the `experiments/runs/neuro` directory and the report in `analyze/neuro/report.html`.
 
 Your job is to test the generalization of the build models to new subjects and new stories. To do this, take a handful of the best-performing non-redundant models (and a couple unique weak-performing models) from each of the runs and test them in two new settings:
 

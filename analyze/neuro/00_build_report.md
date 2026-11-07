@@ -1,4 +1,4 @@
-Read through the results in the `experiments/runs-neuro` directory and make an interactive html report `analyze/neuro/report.html`.
+Read through the results in the `experiments/runs/neuro` directory and make an interactive html report `analyze/neuro/report.html`.
 
 The report should show the main result (the metric as a function of iterations) for each run, labeling the run with the model / thinking effort it uses. You might need to read the copilot cli logs to find those (if you do, write a `metadata.json` file into each run's folder with the relevant info for the report for next time).
 

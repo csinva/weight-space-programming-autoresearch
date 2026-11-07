@@ -2,7 +2,7 @@
 
   uv run experiments/evolve/launch_claude.py --model opus55 --tasks all --seeds 1 2 --workers 8
 
-Each run gets a fresh folder runs-<model>/<task>-<model>-s<seed>/ made by setup_run.py (its own copy of program.md with the
+Each run gets a fresh folder runs/<model>/<task>-<model>-s<seed>/ made by setup_run.py (its own copy of program.md with the
 task name filled in). The agent works only there: tools are restricted to Read/Edit/Write/Glob/Grep/Bash, file reads outside
 the folder are refused (restricted mode), and the only shell command it may run is `uv run interpretable_transformer.py ...`.
 The driver resumes the same session until results/overall_results.csv has the target number of attempts
@@ -49,7 +49,7 @@ def n_attempts(run_dir):
 
 
 def run_one(task, seed):
-    tag, runs_subdir = f"{task}-{SHORT}-s{seed}", f"runs-{SHORT}"
+    tag, runs_subdir = f"{task}-{SHORT}-s{seed}", f"runs/{SHORT}"
     run_dir = os.path.join(ROOT, runs_subdir, tag)
     if not os.path.exists(run_dir):
         setup_run(tag, runs_subdir=runs_subdir)

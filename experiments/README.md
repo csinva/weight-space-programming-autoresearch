@@ -15,9 +15,9 @@ Use `--model` to choose `opus55`, `sonnet55` or `haiku55`, and `--tasks` to name
 The harness restricts the agent's tools, but it cannot stop the agent's own Python from training, so we audit each run afterward:
 
 ```bash
-uv run experiments/evolve/audit_runs.py runs-opus55         # scan the code for training
-uv run experiments/evolve/audit_data_use.py runs-opus55     # rebuild with altered data, check the weights
-uv run experiments/evolve/audit_transcripts.py runs-opus55  # check the session logs
+uv run experiments/evolve/audit_runs.py runs/opus55         # scan the code for training
+uv run experiments/evolve/audit_data_use.py runs/opus55     # rebuild with altered data, check the weights
+uv run experiments/evolve/audit_transcripts.py runs/opus55  # check the session logs
 ```
 
 `evolve/heldout_fresh_seed.py` and `evolve/heldout_trec.py` compute hidden accuracy.
@@ -39,7 +39,7 @@ Then point your agent at `experiments/evolve-neuro/program.md`. To score a model
 
 ```bash
 uv run experiments/evolve-neuro/setup_run.py demo --skip-baseline
-cd experiments/runs-neuro/demo
+cd experiments/runs/neuro/demo
 uv run interpretable_transformer.py --device cpu
 ```
 

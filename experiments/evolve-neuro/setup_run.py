@@ -9,7 +9,7 @@ Usage:
     uv run setup_run.py <tag> --force-baseline      # (re)run GPT-2 XL regardless
 
 Result:
-    Creates  experiments/runs-neuro/<tag>/  containing:
+    Creates  experiments/runs/neuro/<tag>/  containing:
       src/                                    → symlink to evolve-neuro/src
       interpretable_transformer.py            → fresh local copy (the file you edit)
       results/                                → results dir; seeded with the
@@ -41,7 +41,7 @@ def setup_run(tag: str, repo_root: str | None = None) -> str:
     if repo_root is None:
         repo_root = os.path.dirname(evolve_dir)
 
-    run_dir = os.path.join(repo_root, "runs-neuro", tag)
+    run_dir = os.path.join(repo_root, "runs", "neuro", tag)
     if os.path.exists(run_dir):
         raise FileExistsError(f"Run folder already exists: {run_dir}")
     os.makedirs(run_dir)

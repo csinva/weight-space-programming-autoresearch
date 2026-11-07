@@ -203,7 +203,7 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 <p>Prompt for a coding agent:</p>
 <pre>In the repo https://github.com/csinva/weight-space-programming-autoresearch (use the repo-root uv environment; run on CPU; if /data is full work on /data18), reproduce analyze/nl_bottleneck/report.html.
 Question: can a description of at most 200 words, written by Claude Opus 5.5 from a hand-written transformer program, let a fresh Opus 5.5 session rebuild a program with similar accuracy and similar errors?
-Inputs: the Opus 5.5 runs in runs-opus55/ (results/overall_results.csv, snapshots in reconstructed/ or interpretable_transformers_lib/, audit_data_use.json and audit_data_use_reconstructed.json); the 17 tasks in experiments/evolve/src/task.py; offline HF cache of sst2, glue/mrpc, snli, CogComp/trec.
+Inputs: the Opus 5.5 runs in experiments/runs/opus55/ (results/overall_results.csv, snapshots in reconstructed/ or interpretable_transformers_lib/, audit_data_use.json and audit_data_use_reconstructed.json); the 17 tasks in experiments/evolve/src/task.py; offline HF cache of sst2, glue/mrpc, snli, CogComp/trec.
 Code, all in nl-bottleneck/ (run in this order from that folder):
  01_select.py       best program per task (highest visible accuracy among data_independent programs, ties to fewest params) -> originals/, selected.json
  eval_program.py    scores one program on visible (200, seed 0), hidden (generated: 2,000 at seed 987654321; dataset tasks: up to 2,000 training rows outside the 2,000-example pool, sampled with seed 1) and extra (generated: 20,000 at seed 555)

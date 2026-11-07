@@ -22,10 +22,10 @@ The fixed pipeline lives in `src/` (**do not edit**, you don't need to read thes
 ## Setup
 
 The work happens inside a fresh **run folder**. Each run is an isolated copy
-under `experiments/runs-neuro/<tag>/`.
+under `experiments/runs/neuro/<tag>/`.
 
 1. **Pick a unique run tag** based on today's date and a counter, e.g. `fmri-may27-run1`.
-2. **Create the run folder**: `uv run setup_run.py <tag>`. This creates `experiments/runs-neuro/<tag>/`:
+2. **Create the run folder**: `uv run setup_run.py <tag>`. This creates `experiments/runs/neuro/<tag>/`:
    - `src/` — **symlink** back to `experiments/evolve-neuro/src` (do not modify via the symlink)
    - `interpretable_transformer.py` — **local copy**, this is the file you edit
    - `results/` — stores your runs; seeded with the GPT-2 XL baseline row + plot
@@ -35,7 +35,7 @@ under `experiments/runs-neuro/<tag>/`.
    it is missing (the default on a fresh folder), so `results/overall_results.csv`
    starts with one `GPT2XL-baseline` row to beat. (`--skip-baseline` /
    `--force-baseline` override this.)
-3. **`cd` into the run folder** and stay there: `cd experiments/runs-neuro/<tag>`. Only read your own run folder.
+3. **`cd` into the run folder** and stay there: `cd experiments/runs/neuro/<tag>`. Only read your own run folder.
 4. **Read the in-scope files**: `interpretable_transformer.py`, `src/eval.py`, `src/features.py`, and `results/overall_results.csv`.
 
 ## Experimentation
@@ -98,7 +98,7 @@ It also refreshes `results/corr_over_iterations.pdf`.
 
 ## The experiment loop
 
-You are always inside the run folder (`experiments/runs-neuro/<tag>/`). Do not write anything outside this folder.
+You are always inside the run folder (`experiments/runs/neuro/<tag>/`). Do not write anything outside this folder.
 
 LOOP FOREVER:
 

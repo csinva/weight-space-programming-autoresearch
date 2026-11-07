@@ -7,7 +7,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
     out = {}
-    root = os.path.join(ROOT, sys.argv[1] if len(sys.argv) > 1 else "runs-opus55")
+    root = os.path.join(ROOT, sys.argv[1] if len(sys.argv) > 1 else "runs/opus55")
     for rd in sorted(glob.glob(os.path.join(root, "trec-coarse-*-s[0-9]"))):
         rows = list(csv.DictReader(open(os.path.join(rd, "results", "overall_results.csv"))))
         best = max(rows, key=lambda r: float(r["accuracy"] or 0))

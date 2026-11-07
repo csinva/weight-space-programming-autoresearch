@@ -5,7 +5,7 @@ Usage:
     uv run experiments/evolve/setup_run.py <tag>
 
 Result:
-    Creates  experiments/runs/<tag>/  containing:
+    Creates  experiments/runs/manual/<tag>/  containing:
       src/                                            → symlinks to evolve/*
       interpretable_transformer.py                    → fresh local copy
       results/                                        → empty dir
@@ -27,7 +27,7 @@ SYMLINK_NAMES = ["src"]
 COPY_NAMES = ["interpretable_transformer.py", "results", "program.md"]
 
 
-def setup_run(tag: str, repo_root: str | None = None, runs_subdir: str = "runs") -> str:
+def setup_run(tag: str, repo_root: str | None = None, runs_subdir: str = "runs/manual") -> str:
     evolve_dir = os.path.dirname(os.path.abspath(__file__))
     if repo_root is None:
         repo_root = os.path.dirname(evolve_dir)

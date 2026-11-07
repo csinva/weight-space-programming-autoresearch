@@ -1,10 +1,10 @@
-"""Plot accuracy vs n_params (log scale) for all experiments in experiments/runs/."""
+"""Plot accuracy vs n_params (log scale) for all experiments in experiments/runs/may15/."""
 from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNS_DIR = ROOT / "experiments" / "runs"
+RUNS_DIR = ROOT / "experiments" / "runs" / "may15"
 OUT_PATH = Path(__file__).resolve().parent / "accuracy_vs_nparams.png"
 
 

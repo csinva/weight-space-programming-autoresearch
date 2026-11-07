@@ -2,7 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = []
 # ///
-"""Build an interactive HTML report from experiments/runs/*/results/overall_results.csv.
+"""Build an interactive HTML report from experiments/runs/may15/*/results/overall_results.csv.
 
 For each task it shows accuracy vs. parameter count (points numbered by the
 order tried and connected along the search path) plus an auto-generated writeup
@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNS = ROOT / "experiments" / "runs"
+RUNS = ROOT / "experiments" / "runs" / "may15"
 OUT = Path(__file__).resolve().parent / "report_raw.html"
 
 CATEGORY = {
@@ -175,7 +175,7 @@ def audit_table_html() -> str:
     rows = []
     kinds = ["data_independent", "label_dependent", "input_dependent", "nondeterministic", "error"]
     for short, label in MODELS:
-        root = ROOT / "experiments" / f"runs-{short}"
+        root = ROOT / "experiments" / "runs" / short
         runs = collect(root)
         if not runs:
             continue
@@ -200,7 +200,7 @@ def heldout_section() -> str:
     """Fresh-seed check (generated tasks) and TREC test-split check, for every model with results."""
     fresh_rows, trec_rows = [], []
     for short, label in MODELS:
-        root = ROOT / "experiments" / f"runs-{short}"
+        root = ROOT / "experiments" / "runs" / short
         fp, tp = root / "heldout_fresh_seed.json", root / "heldout_trec.json"
         if fp.exists():
             fr = json.loads(fp.read_text())
@@ -416,7 +416,7 @@ def old_definitions(old_runs: list[dict]) -> str:
     <p class="note" style="font-size:14px">An earlier, smaller study on {RUN_DATE}: one run per task ({sum(len(r['methods']) for r in old_runs)} attempts in total) with Claude,
       model version {model}, thinking effort {effort}, driven by the GitHub Copilot CLI (<code>copilot --autopilot --yolo</code>), prompted with
       "Read and follow the instructions in <code>experiments/evolve/program.md</code>" and told to make at least 20 attempts. Same network, rules and evaluation as above;
-      the run folders are <code>experiments/runs/&lt;task&gt;-may15-run&lt;k&gt;</code>. In these runs the agent had the CLI's default tools and the rules were not
+      the run folders are <code>experiments/runs/may15/&lt;task&gt;-may15-run&lt;k&gt;</code>. In these runs the agent had the CLI's default tools and the rules were not
       enforced by the harness.</p>
 """
 
@@ -520,7 +520,7 @@ __OLDDEFS__
   <div class="card"><div id="summaryPlotOld" style="width:100%;height:520px;"></div></div>
 
   <footer>
-    Generated from <code>experiments/runs-opus55/*/results/overall_results.csv</code> and <code>experiments/runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
+    Generated from <code>experiments/runs/opus55/*/results/overall_results.csv</code> and <code>experiments/runs/may15/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
   </footer>
 </div>
 
@@ -606,7 +606,7 @@ buildTabs(OLD, 'tabsOld', 'taskPlotOld', 'writeupOld'); renderSummary(OLD, 'summ
 
 
 def main():
-    by_model = {k: collect(ROOT / "experiments" / f"runs-{k}") for k, _ in MODELS}
+    by_model = {k: collect(ROOT / "experiments" / "runs" / k) for k, _ in MODELS}
     by_model = {k: v for k, v in by_model.items() if v}
     new_runs = by_model["opus55"]
     old_runs = collect(RUNS)

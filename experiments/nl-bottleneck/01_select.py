@@ -2,7 +2,7 @@
 marks data_independent, ties broken by fewest parameters. Copies each to originals/<task>.py and writes selected.json.
 Reads the source runs from SRC (read-only)."""
 import csv, glob, json, os, re, shutil, sys
-SRC = os.path.expanduser("~/weight-space-programming-autoresearch/runs-opus55")
+SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runs", "opus55")
 HERE = os.path.dirname(os.path.abspath(__file__))
 aud = [json.load(open(os.path.join(SRC, f)))["per_snapshot"] for f in ("audit_data_use.json", "audit_data_use_reconstructed.json")]
 out = {}

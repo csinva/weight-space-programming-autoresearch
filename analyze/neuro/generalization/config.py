@@ -11,7 +11,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)  # for the `src` symlink → experiments/evolve-neuro/src
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-RUNS_DIR = os.path.join(REPO, "experiments", "runs-neuro")
+RUNS_DIR = os.path.join(REPO, "experiments", "runs", "neuro")
 
 # The full shared story sets (intersection of UTS01/UTS02/UTS03 huge training sets).
 from src import data  # noqa: E402

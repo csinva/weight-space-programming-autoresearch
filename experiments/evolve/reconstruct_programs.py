@@ -4,7 +4,7 @@ Starting from the template interpretable_transformer.py, the successful Write an
 replayed in order; each successful `uv run interpretable_transformer.py ...` call saves the current file as reconstructed/<model_shorthand_name>.py
 (the last evaluation of a name wins, matching the row in results/overall_results.csv). The replayed final file is checked against the real one.
 
-  uv run evolve/reconstruct_programs.py runs-sonnet55      -> <run>/reconstructed/*.py, runs-sonnet55/reconstruct.json"""
+  uv run experiments/evolve/reconstruct_programs.py runs/sonnet55      -> <run>/reconstructed/*.py, runs/sonnet55/reconstruct.json"""
 import glob, gzip, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -61,7 +61,7 @@ def replay(run_dir):
 
 
 if __name__ == "__main__":
-    root = os.path.join(os.path.dirname(HERE), sys.argv[1] if len(sys.argv) > 1 else "runs-opus55")
+    root = os.path.join(os.path.dirname(HERE), sys.argv[1] if len(sys.argv) > 1 else "runs/opus55")
     res = {}
     for rd in sorted(glob.glob(os.path.join(root, "*-s[0-9]"))):
         res[os.path.basename(rd)] = r = replay(rd)

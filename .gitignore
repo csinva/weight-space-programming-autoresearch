@@ -40,5 +40,5 @@ experiments/systematic-tests/**/bundle/weights/
 experiments/systematic-tests/**/dense_effects.npz
 
 .hf_home/
-experiments/runs-*/*/reconstructed/
+experiments/runs/*/*/reconstructed/
 experiments/nl-bottleneck/preds/

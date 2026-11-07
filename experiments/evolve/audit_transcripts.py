@@ -1,6 +1,6 @@
 """Audit the agent transcripts of each run: tools used, shell commands, refused calls, and file paths outside the run folder.
 
-  uv run experiments/evolve/audit_transcripts.py runs-opus55      -> runs-opus55/audit_transcripts.json"""
+  uv run experiments/evolve/audit_transcripts.py runs/opus55      -> runs/opus55/audit_transcripts.json"""
 import collections, glob, gzip, json, os, sys
 
 
@@ -42,4 +42,4 @@ def main(root):
 
 
 if __name__ == "__main__":
-    main(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), sys.argv[1] if len(sys.argv) > 1 else "runs-opus55"))
+    main(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), sys.argv[1] if len(sys.argv) > 1 else "runs/opus55"))

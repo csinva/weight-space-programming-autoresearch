@@ -34,11 +34,11 @@ Run the agent on one task. It writes a transformer's weights by hand, scores the
 uv run experiments/evolve/launch_claude.py --model opus55 --tasks gcd-three-digits --seeds 1 --workers 1
 ```
 
-Each run gets its own folder, such as `experiments/runs-opus55/gcd-three-digits-opus55-s1/`, with every model it tried and the agent's transcript. To see the evaluator work without an agent:
+Each run gets its own folder, such as `experiments/runs/opus55/gcd-three-digits-opus55-s1/`, with every model it tried and the agent's transcript. To see the evaluator work without an agent:
 
 ```bash
 uv run experiments/evolve/setup_run.py demo
-cd experiments/runs/demo
+cd experiments/runs/manual/demo
 uv run interpretable_transformer.py --task addition-five-digits
 ```
 
@@ -61,9 +61,7 @@ experiments/
   vision/             harness for the visual cortex searches, with its own history
   nl-bottleneck/      text bottleneck: describe a model, rebuild it, compare
   systematic-tests/   tests of whether an LLM can read a real model's weights
-  runs/               early transformer runs
-  runs-opus55/        Claude Opus 5.5 transformer runs (also sonnet55, haiku55)
-  runs-neuro/         story-listening fMRI runs
+  runs/               every run: opus55, sonnet55, haiku55 and may15 (transformers), neuro (story fMRI)
 analyze/              reports and figures built from the runs
 ```
 
