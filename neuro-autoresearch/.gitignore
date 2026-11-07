@@ -1,0 +1,32 @@
+# Specs and local-only state
+specs/
+.local/
+
+# Machine-written outputs and caches (never commit)
+/data/
+/search_runs/
+/final_results/
+# Existing local outputs from before the reorganization stay untracked.
+/runs/
+/results/
+logs/
+__pycache__/
+.venv/
+*.egg-info/
+.pytest_cache/
+.env
+/build/
+/dist/
+
+# Talk deck (local copy, not tracked)
+/talk/
+
+# Independent manuscript repository
+/manuscript_natneuro/
+
+/manuscript/nature_neuro/
+
+# Local scratch and OS noise
+/tmp/
+.DS_Store
+.auto-pull.launchd.log

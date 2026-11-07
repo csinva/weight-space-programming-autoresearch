@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "fetched_at": "2026-10-22",
+  "description": "Fixed public standard API token-price snapshot for usage estimates, not an invoice.",
+  "assumptions": [
+    "No runtime price lookups. Each run preserves its pricing snapshot.",
+    "Standard synchronous inference; excludes fast mode, priority, batch/flex discounts, regional premiums, negotiated discounts, taxes, subscriptions and non-token tool charges.",
+    "Cache-write rates are total rates for those tokens, not surcharges added to ordinary input.",
+    "Reasoning/thinking tokens are billed at output rates; use provider usage counters without counting included reasoning twice.",
+    "Gemini introductory rates are frozen in this snapshot. Google advertises input/cache-read/output rates of 4/0.20/20 USD per million starting 2026-12-01."
+  ],
+  "sources": [
+    "https://developers.openai.com/api/docs/models/gpt-6-astra",
+    "https://developers.openai.com/api/docs/guides/prompt-caching",
+    "https://platform.claude.com/docs/en/about-claude/pricing",
+    "https://platform.claude.com/docs/en/build-with-claude/thinking",
+    "https://ai.google.dev/gemini-api/docs/pricing",
+    "https://ai.google.dev/gemini-api/docs/latest-model?hl=en",
+    "https://ai.google.dev/gemini-api/docs/thinking",
+    "https://www.antigravity.google/docs/cli/headless/"
+  ],
+  "aliases": {
+    "astra": "gpt-6-astra",
+    "opus5.5": "claude-opus-5-5",
+    "gemini-4-argon": "gemini-4-argon-medium",
+    "gemini-4-argon-low": "gemini-4-argon-medium",
+    "gemini-4-argon-high": "gemini-4-argon-medium"
+  },
+  "models": {
+    "gpt-6-astra": {
+      "input": 10,
+      "cached_input": 1,
+      "cache_write_30m": 12.5,
+      "cache_write_12h": 25,
+      "output": 50,
+      "default_cache_write_ttl": "30m",
+      "tiers": [
+        {
+          "above_input_tokens": 272000,
+          "input": 20,
+          "cached_input": 2,
+          "cache_write_30m": 25,
+          "cache_write_12h": 50,
+          "output": 75
+        }
+      ],
+      "notes": "Input counts include cache reads and writes. A request above the threshold uses the higher rates for its entire input and output."
+    },
+    "claude-opus-5-5": {
+      "input": 4,
+      "cached_input": 0.2,
+      "cache_write_5m": 5,
+      "cache_write_1h": 8,
+      "output": 20,
+      "default_cache_write_ttl": "5m",
+      "tiers": [],
+      "notes": "Standard rates across the full 1M context. Input, cache-read and cache-write counters are separate. Output includes thinking."
+    },
+    "gemini-4-argon-medium": {
+      "input": 2,
+      "cached_input": 0.1,
+      "output": 10,
+      "tiers": [],
+      "introductory_pricing_through": "2026-11-30",
+      "canonical_api_model": "gemini-4-argon",
+      "notes": "Implicit caching only; explicit cache writes are unsupported. No context price tier is published. Local agy models lists the low, medium and high variants as Gemini 4 Argon; official docs identify the canonical model and these thinking levels."
+    }
+  }
+}
