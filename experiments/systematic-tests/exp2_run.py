@@ -1,7 +1,7 @@
 """Experiment 2 (pre-registered like run_round.py): amplification edits; predict the 10 tokens that gain the most probability
 and the target-token dlogp on each prompt.
 
-  uv run python systematic-tests/exp2_run.py build|predict|measure --round R      (commit predictions before measure)"""
+  uv run python experiments/systematic-tests/exp2_run.py build|predict|measure --round R      (commit predictions before measure)"""
 import argparse, glob, json, os, re, shutil, subprocess, tempfile, time
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np

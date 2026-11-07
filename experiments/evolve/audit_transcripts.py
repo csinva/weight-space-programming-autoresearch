@@ -1,6 +1,6 @@
 """Audit the agent transcripts of each run: tools used, shell commands, refused calls, and file paths outside the run folder.
 
-  uv run evolve/audit_transcripts.py runs-opus55      -> runs-opus55/audit_transcripts.json"""
+  uv run experiments/evolve/audit_transcripts.py runs-opus55      -> runs-opus55/audit_transcripts.json"""
 import collections, glob, gzip, json, os, sys
 
 

@@ -2,10 +2,10 @@
 Create a fresh run folder for an autoresearch experiment.
 
 Usage:
-    uv run evolve/setup_run.py <tag>
+    uv run experiments/evolve/setup_run.py <tag>
 
 Result:
-    Creates  <repo_root>/runs/<tag>/  containing:
+    Creates  experiments/runs/<tag>/  containing:
       src/                                            → symlinks to evolve/*
       interpretable_transformer.py                    → fresh local copy
       results/                                        → empty dir

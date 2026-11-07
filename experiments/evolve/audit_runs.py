@@ -1,6 +1,6 @@
 """Audit the saved weight-space programs of each run for rule breaks the harness cannot block (the agent's own Python runs freely).
 
-  uv run evolve/audit_runs.py runs-opus55     -> runs-opus55/audit.json
+  uv run experiments/evolve/audit_runs.py runs-opus55     -> runs-opus55/audit.json
 
 Flags, per snapshot in interpretable_transformers_lib/ (and the final interpretable_transformer.py):
   training : optimizers, .backward(), .fit(, gradient steps, least squares / pseudo-inverse fitting

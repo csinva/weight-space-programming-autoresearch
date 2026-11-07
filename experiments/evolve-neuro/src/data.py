@@ -17,12 +17,14 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(__file__))
 import ridge_utils  # noqa: E402,F401
 
-FMRI_DIR = '/home/chansingh/mntv1/deep-fMRI/data'
+# Data root. Build it from the public release with prepare_public_data.py, or point FMRI_DIR at
+# an existing copy that has huge_data/wordseqs.joblib and huge_data/<subject>_responses.jbl.
+FMRI_DIR = os.path.expanduser(os.environ.get('FMRI_DIR', '~/data/deep-fMRI'))
 HUGE_DIR = join(FMRI_DIR, 'huge_data')
 # named anatomical/functional ROIs: {roi_name: voxel_index_array} into the voxel space
-REGION_IDXS_DIR = '/home/chansingh/mntv1/deep-fMRI/sasc/brain_regions'
+REGION_IDXS_DIR = os.path.expanduser(os.environ.get('FMRI_ROI_DIR', join(FMRI_DIR, 'brain_regions')))
 
-# per-story response cache (read-only mntv1 is never modified). Caching avoids
+# per-story response cache (the data root is never modified). Caching avoids
 # re-reading the ~26GB full-subject response file on every iteration of the loop.
 CACHE_DIR = os.path.expanduser('~/.cache/evolve-lang-fmri')
 
@@ -61,7 +63,14 @@ TEST_STORIES = ['fromboyhoodtofatherhood', 'wheretheressmoke', 'onapproachtoplut
 def get_story_names(num_train=None, num_test=1):
     """Return (train_stories, test_stories)."""
     train = TRAIN_STORIES if num_train is None else TRAIN_STORIES[:num_train]
-    return train, TEST_STORIES[:num_test]
+    # the public release lacks one test story; prepare_public_data.py lists what it holds
+    listing = join(HUGE_DIR, 'stories.txt')
+    test = TEST_STORIES
+    if os.path.exists(listing):
+        with open(listing) as f:
+            available = set(f.read().split())
+        test = [s for s in TEST_STORIES if s in available]
+    return train, test[:num_test]
 
 
 def load_wordseqs(stories):

@@ -9,7 +9,7 @@ Usage:
     uv run setup_run.py <tag> --force-baseline      # (re)run GPT-2 XL regardless
 
 Result:
-    Creates  <repo_root>/runs-neuro/<tag>/  containing:
+    Creates  experiments/runs-neuro/<tag>/  containing:
       src/                                    → symlink to evolve-neuro/src
       interpretable_transformer.py            → fresh local copy (the file you edit)
       results/                                → results dir; seeded with the

@@ -10,7 +10,7 @@ split with random labels). The evaluation function returns a constant in C and B
   nondeterministic : A != A2 (cannot tell)
   error            : the program failed to build
 
-  uv run evolve/audit_data_use.py runs-opus55      -> runs-opus55/audit_data_use.json  (WSP_LIB=reconstructed for rebuilt programs)"""
+  uv run experiments/evolve/audit_data_use.py runs-opus55      -> runs-opus55/audit_data_use.json  (WSP_LIB=reconstructed for rebuilt programs)"""
 import contextlib, importlib.util, io, json, os, random, re, sys
 from concurrent.futures import ProcessPoolExecutor
 

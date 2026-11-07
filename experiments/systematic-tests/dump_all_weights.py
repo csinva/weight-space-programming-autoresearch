@@ -1,7 +1,7 @@
 """Write every tensor of Qwen3.5-0.8B (text part) as plain text for the "Read all weights" condition.
 One file per tensor: line 1 is a header; then each row of the (2D-reshaped) tensor takes ceil(cols/16) lines of 16 values (4 decimals),
 so row r starts at line 2 + r * ceil(cols/16). INDEX.md lists every tensor, its shape, file and lines per row.
-  uv run python systematic-tests/dump_all_weights.py OUT_DIR"""
+  uv run python experiments/systematic-tests/dump_all_weights.py OUT_DIR"""
 import os, sys
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor

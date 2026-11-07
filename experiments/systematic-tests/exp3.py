@@ -8,7 +8,7 @@ next-token distribution and the embedding column, then compute new logits / soft
 Conditions: none (no numbers), raw (exp1/exp2-style weight file), rawplus (raw + every number the calculation needs), compute (rawplus +
 step-by-step calculation instructions). Code baselines: the same procedure run exactly; oracle that uses the true n_d (needs activations).
 
-  uv run python systematic-tests/exp3.py build|predict|measure|analyze"""
+  uv run python experiments/systematic-tests/exp3.py build|predict|measure|analyze"""
 import json, os, re, shutil, subprocess, sys, tempfile, time, glob
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np

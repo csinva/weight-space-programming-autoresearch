@@ -1,9 +1,9 @@
 """Pre-registered predict-then-measure loop for one round.
 
-  uv run python systematic-tests/run_round.py build   --round R   # sample edits (seeded), write predictor bundles
-  uv run python systematic-tests/run_round.py predict --round R   # headless Claude (Opus 5.5), Read tool only, one call per family x condition
+  uv run python experiments/systematic-tests/run_round.py build   --round R   # sample edits (seeded), write predictor bundles
+  uv run python experiments/systematic-tests/run_round.py predict --round R   # headless Claude (Opus 5.5), Read tool only, one call per family x condition
   git add/commit the predictions                                   # measure refuses to run on uncommitted predictions
-  uv run python systematic-tests/run_round.py measure --round R   # apply each edit, record the true next-token changes
+  uv run python experiments/systematic-tests/run_round.py measure --round R   # apply each edit, record the true next-token changes
 
 Bundles for round R include measured effects of rounds < R (feedback), so rounds 0, 1, 2 test learning from 0, 12, 24 examples."""
 import argparse, glob, json, os, re, shutil, subprocess, tempfile, time

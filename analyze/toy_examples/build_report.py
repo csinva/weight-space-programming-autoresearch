@@ -2,7 +2,7 @@
 # requires-python = ">=3.10"
 # dependencies = []
 # ///
-"""Build an interactive HTML report from runs/*/results/overall_results.csv.
+"""Build an interactive HTML report from experiments/runs/*/results/overall_results.csv.
 
 For each task it shows accuracy vs. parameter count (points numbered by the
 order tried and connected along the search path) plus an auto-generated writeup
@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNS = ROOT / "runs"
+RUNS = ROOT / "experiments" / "runs"
 OUT = Path(__file__).resolve().parent / "report_raw.html"
 
 CATEGORY = {
@@ -175,7 +175,7 @@ def audit_table_html() -> str:
     rows = []
     kinds = ["data_independent", "label_dependent", "input_dependent", "nondeterministic", "error"]
     for short, label in MODELS:
-        root = ROOT / f"runs-{short}"
+        root = ROOT / "experiments" / f"runs-{short}"
         runs = collect(root)
         if not runs:
             continue
@@ -200,7 +200,7 @@ def heldout_section() -> str:
     """Fresh-seed check (generated tasks) and TREC test-split check, for every model with results."""
     fresh_rows, trec_rows = [], []
     for short, label in MODELS:
-        root = ROOT / f"runs-{short}"
+        root = ROOT / "experiments" / f"runs-{short}"
         fp, tp = root / "heldout_fresh_seed.json", root / "heldout_trec.json"
         if fp.exists():
             fr = json.loads(fp.read_text())
@@ -217,13 +217,13 @@ def heldout_section() -> str:
     if fresh_rows:
         out += ("""<h3 id="fresh" style="margin-top:24px">Fresh-seed check on generated tasks</h3>
   <p class="note">For the 13 tasks with a generator (the 12 algorithmic tasks and date normalization), the first saved program to reach each run's best accuracy is scored on
-    2,000 new examples from an unseen seed (<code>evolve/heldout_fresh_seed.py</code>).</p>
+    2,000 new examples from an unseen seed (<code>experiments/evolve/heldout_fresh_seed.py</code>).</p>
   <div class="scroll" style="max-height:none"><table class="mlist"><thead><tr><th>model</th><th>runs at 100% on the fixed 200</th><th>of those, 100% on 2,000 fresh examples</th><th>runs that drop on fresh examples</th></tr></thead><tbody>"""
                 + "".join(fresh_rows) + "</tbody></table></div>")
     if trec_rows:
         out += ("""<h3 id="trec-heldout" style="margin-top:24px">Held-out check on TREC</h3>
   <p class="note">The best program of each TREC run, scored on data outside its 2,000-example pool, which the agent never saw: the official test split (500 questions)
-    and the remaining 3,452 training questions (<code>evolve/heldout_trec.py</code>).</p>
+    and the remaining 3,452 training questions (<code>experiments/evolve/heldout_trec.py</code>).</p>
   <div class="scroll" style="max-height:none"><table class="mlist"><thead><tr><th>model</th><th>run</th><th>program</th><th>fixed 200 examples</th><th>official test</th><th>rest of training split</th></tr></thead><tbody>"""
                 + "".join(trec_rows) + "</tbody></table></div>")
     return out
@@ -293,10 +293,10 @@ def results_table(new_tasks: list[dict]) -> str:
 
 
 def task_rows(tasks: list[dict]) -> str:
-    """One table row per task, from the task definitions in evolve/src/task.py."""
+    """One table row per task, from the task definitions in experiments/evolve/src/task.py."""
     import inspect
     import sys
-    sys.path.insert(0, str(ROOT / "evolve"))
+    sys.path.insert(0, str(ROOT / "experiments" / "evolve"))
     from src.task import TASK_REGISTRY
     n_attempts = {}
     for t in tasks:
@@ -319,7 +319,7 @@ SHARED_DEFS = """
       linear output head over a character-level vocabulary specific to each task (4 to 43 symbols). The starting configuration is 3 layers, width 64,
       4 heads and MLP width 256; the agent may change the architecture, depth, width, number of heads and MLP width. All parameters are set inside
       <code>write_weights(model, task)</code>. Parameter count is <code>sum(p.numel() for p in model.parameters())</code>.</p>
-    <p><b>Rules given to the agent</b> (<code>evolve/program.md</code>). Allowed: editing anything in its copy of
+    <p><b>Rules given to the agent</b> (<code>experiments/evolve/program.md</code>). Allowed: editing anything in its copy of
       <code>interpretable_transformer.py</code> except the evaluation code in the main block, including the architecture and hard-coded constants,
       arrays, hand-built attention circuits and lookup tables. Not allowed: any training (gradient descent, optimizer steps, fitting loops,
       backpropagation), computing the task output with Python functions or libraries outside the transformer, using pretrained weights, and
@@ -351,15 +351,15 @@ def definitions(new_runs: list[dict], by_model: dict | None = None) -> str:
       An attempt is one version of the weight-writing code (a <i>weight-space program</i>) and its evaluation.</p>
     <p><b>Agent.</b> Claude Opus 5.5, Sonnet 5.5 or Haiku 5.5 (<code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code>; default
       thinking effort) running headless in Claude Code (<code>claude -p</code>),
-      driven by <code>evolve/launch_claude.py</code>. The prompt tells it to read and follow <code>program.md</code> (the same instructions as the earlier runs,
+      driven by <code>experiments/evolve/launch_claude.py</code>. The prompt tells it to read and follow <code>program.md</code> (the same instructions as the earlier runs,
       with its task name filled in), notes that its run folder already exists, and asks for at least the target number of attempts. If a session ends early,
       the driver resumes the same session with a short "continue the loop" message, until the target is reached or two sessions in a row add no attempts.
       There was no human intervention. One difference between models: the first Sonnet and Haiku sessions stopped after a single attempt because they could not
       read the task files (see below), so their prompt adds two sentences: that <code>src/</code> cannot be read and the task format can be learned by printing
       examples, and that output redirection is unavailable. The Opus runs had already worked this out on their own.</p>
     <p><b>What the harness enforces.</b> Each run works in its own folder <code>runs-&lt;model&gt;/&lt;task&gt;-&lt;model&gt;-s&lt;seed&gt;</code>, created by
-      <code>evolve/setup_run.py</code>, with a private copy of <code>interpretable_transformer.py</code> and <code>program.md</code>; the task and
-      evaluation code (<code>src/</code>) is a symlink to the shared <code>evolve/src</code>, so scoring is identical across runs. Claude Code runs in
+      <code>experiments/evolve/setup_run.py</code>, with a private copy of <code>interpretable_transformer.py</code> and <code>program.md</code>; the task and
+      evaluation code (<code>src/</code>) is a symlink to the shared <code>experiments/evolve/src</code>, so scoring is identical across runs. Claude Code runs in
       restricted mode with only the Read, Edit, Write, Glob, Grep and Bash tools: file reads are confined to the run folder (so the earlier runs'
       solutions cannot be opened), there is no web access, and the only shell command it may run, apart from read-only listings of its own folder, is
       <code>uv run interpretable_transformer.py ...</code>; every other command is refused. Because <code>src/</code> is a symlink outside the run folder, the
@@ -367,7 +367,7 @@ def definitions(new_runs: list[dict], by_model: dict | None = None) -> str:
       lists them as files to read. The agents instead learned each task's format by running programs that print examples. Output redirection was also usually refused.
       Snapshots are saved with the Write tool. The rules on training,
       outside computation and pretrained weights remain instructions: the agent's own Python could in principle break them, which the snapshots are checked for.</p>
-    <p><b>Audits after the runs.</b> Four checks, all in <code>evolve/</code>, applied to every run of every model.
+    <p><b>Audits after the runs.</b> Four checks, all in <code>experiments/evolve/</code>, applied to every run of every model.
       <i>Transcripts</i> (<code>audit_transcripts.py</code>): every tool call of every session. Each session started with only the six allowed tools, and no call read
       or changed another run's files. Besides the evaluation command, the only shell commands that ran were read-only commands that Claude Code approves
       inside the working directory (<code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sed -n</code>, <code>wc</code>, <code>ps</code>, <code>sleep</code>);
@@ -415,8 +415,8 @@ def old_definitions(old_runs: list[dict]) -> str:
     return f"""
     <p class="note" style="font-size:14px">An earlier, smaller study on {RUN_DATE}: one run per task ({sum(len(r['methods']) for r in old_runs)} attempts in total) with Claude,
       model version {model}, thinking effort {effort}, driven by the GitHub Copilot CLI (<code>copilot --autopilot --yolo</code>), prompted with
-      "Read and follow the instructions in <code>evolve/program.md</code>" and told to make at least 20 attempts. Same network, rules and evaluation as above;
-      the run folders are <code>runs/&lt;task&gt;-may15-run&lt;k&gt;</code>. In these runs the agent had the CLI's default tools and the rules were not
+      "Read and follow the instructions in <code>experiments/evolve/program.md</code>" and told to make at least 20 attempts. Same network, rules and evaluation as above;
+      the run folders are <code>experiments/runs/&lt;task&gt;-may15-run&lt;k&gt;</code>. In these runs the agent had the CLI's default tools and the rules were not
       enforced by the harness.</p>
 """
 
@@ -520,7 +520,7 @@ __OLDDEFS__
   <div class="card"><div id="summaryPlotOld" style="width:100%;height:520px;"></div></div>
 
   <footer>
-    Generated from <code>runs-opus55/*/results/overall_results.csv</code> and <code>runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
+    Generated from <code>experiments/runs-opus55/*/results/overall_results.csv</code> and <code>experiments/runs/*/results/overall_results.csv</code> by <code>analyze/toy_examples/build_report.py</code>.
   </footer>
 </div>
 
@@ -606,7 +606,7 @@ buildTabs(OLD, 'tabsOld', 'taskPlotOld', 'writeupOld'); renderSummary(OLD, 'summ
 
 
 def main():
-    by_model = {k: collect(ROOT / f"runs-{k}") for k, _ in MODELS}
+    by_model = {k: collect(ROOT / "experiments" / f"runs-{k}") for k, _ in MODELS}
     by_model = {k: v for k, v in by_model.items() if v}
     new_runs = by_model["opus55"]
     old_runs = collect(RUNS)

@@ -20,7 +20,7 @@ import re
 
 HERE = os.path.dirname(__file__)
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
-RUNS_DIR = os.path.join(REPO, "runs-neuro")
+RUNS_DIR = os.path.join(REPO, "experiments", "runs-neuro")
 OUT = os.path.join(HERE, "report.html")
 MAY27_ANALYSIS = os.path.join(RUNS_DIR, "fmri-may27-run1", "analysis")
 ASSETS = os.path.join(HERE, "assets")
@@ -476,7 +476,7 @@ def code_block(src):
 
 # --- snippets (lightly abbreviated from the real snapshots, faithful to logic) ---
 FEATBAG_TOKENIZE = r'''
-def word_features(w):                    # runs-neuro/fmri-jun03-run4/interpretable_transformer.py
+def word_features(w):                    # experiments/runs-neuro/fmri-jun03-run4/interpretable_transformer.py
     """The one-hot feature tokens a single word emits."""
     feats = [freq_bucket(w)]                      # FREQ_RARE / FREQ_MID / FREQ_COMMON
     ft = func_type(w)                             # pronoun / prep / aux / neg / wh / ...
@@ -512,7 +512,7 @@ if "SEM_PLACE" in wf:  reps += PLACE_BONUS      # RSC / PPA scene network
 '''
 
 STORYARC = r'''
-def _multibasis_pos_block(N):    # runs-neuro/fmri-may27-run1/.../WordNetMorphLingStoryArc.py
+def _multibasis_pos_block(N):    # experiments/runs-neuro/fmri-may27-run1/.../WordNetMorphLingStoryArc.py
     """108-dim positional code per ngram i; depends ONLY on position p=(i+.5)/N."""
     p = (np.arange(N) + 0.5) / N
     x = 2 * p - 1
@@ -545,7 +545,7 @@ DEEPDIVE = f'''
 
   <div class="feat">
     <h3>1 · FeatBag interpretable feature tokens <span class="tag">trimmed-run workhorse · run 4 → 0.082</span></h3>
-    <p class="sub">runs-neuro/fmri-jun03-run4 (and the closely related <code>LexFeat</code> of run 1,
+    <p class="sub">experiments/runs-neuro/fmri-jun03-run4 (and the closely related <code>LexFeat</code> of run 1,
     <code>FeatBag3Head</code> of jun-04). The strongest legitimate models on the trimmed metric.</p>
     <p>Each word is tokenized into a handful of <b>one-hot "feature tokens"</b> — its function-word type
     or <code>CONTENT</code>, ~40 hand-curated semantic categories (emotion, body, motion, place, …),
@@ -574,7 +574,7 @@ DEEPDIVE = f'''
 
   <div class="feat">
     <h3>2 · Multi-basis story-arc positional encoding <span class="tag">biggest single jump · +0.037</span></h3>
-    <p class="sub">runs-neuro/fmri-may27-run1 — the largest one-step gain of any run (0.066 → 0.104).</p>
+    <p class="sub">experiments/runs-neuro/fmri-may27-run1 — the largest one-step gain of any run (0.066 → 0.104).</p>
     <p>This block maps each n-gram to a 108-dim vector that is a deterministic function of its
     <b>normalized position</b> <code>p = (i+½)/N</code> in the story — and nothing else (no word identity,
     no semantics). It stacks several orthogonal function bases so ridge can compose an arbitrary smooth
@@ -595,7 +595,7 @@ DEEPDIVE = f'''
 
   <div class="feat">
     <h3>3 · WordNet supersense + perceptual-modality lexicons <span class="tag">content backbone</span></h3>
-    <p class="sub">runs-neuro/fmri-may27-run1 — the semantic side that the story-arc was added on top of.</p>
+    <p class="sub">experiments/runs-neuro/fmri-may27-run1 — the semantic side that the story-arc was added on top of.</p>
     <p>The content backbone counts, for each 10-gram, how many words fall into each <b>WordNet
     supersense</b> (45 categories: nouns 4–29, verbs 30–44) and into six hand-coded <b>perceptual
     modality</b> lexicons (vision 79, audition 90, touch 83, taste 55, smell 30, motor 129 words —
@@ -618,7 +618,7 @@ TRIMMING = f'''
   <h2>Why the story ends are trimmed (and why may-27 is not comparable)</h2>
   <p class="lead">All trimmed runs drop <b>30 TRs (~60&nbsp;s) off each end of every story</b> before
   fitting and scoring; the may-27 run did not. This note explains why that 30-TR trim matters, drawing on
-  the analysis in <code>runs-neuro/fmri-may27-run1/analysis/report.md</code>.</p>
+  the analysis in <code>experiments/runs-neuro/fmri-may27-run1/analysis/report.md</code>.</p>
   <div class="feat">
     <p>The mean fMRI response (averaged over all ~95k voxels) has a large, content-free
     <b>story-onset / offset arc</b>: a strong positive deflection in the first few TRs, a fast decay over
@@ -851,7 +851,7 @@ HTML = f'''<!doctype html>
   {TRIMMING}
 
   <footer>
-    Generated from <code>runs-neuro/*/results/overall_results.csv</code>. Model / effort labels
+    Generated from <code>experiments/runs-neuro/*/results/overall_results.csv</code>. Model / effort labels
     recovered from <code>~/.copilot/logs</code> (<code>selected_model</code> /
     <code>defaultReasoningEffort</code>). Subject UTS03.
   </footer>

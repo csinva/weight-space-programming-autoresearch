@@ -6,17 +6,17 @@ The model is NEVER trained. The agent must write the weights directly into `inte
 
 ## Setup
 
-The work happens inside a fresh **run folder**. Each run is an isolated copy of `evolve/` under `<repo_root>/runs/<tag>/`.
+The work happens inside a fresh **run folder**. Each run is an isolated copy of `experiments/evolve/` under `experiments/runs/<tag>/`.
 
 1. **Pick a unique run tag** based on today's date and a counter, e.g. `<your_task_name>-may15-run1`.
-2. **Create the run folder**: `uv run evolve/setup_run.py <tag>`. This creates `runs/<tag>/` containing:
+2. **Create the run folder**: `uv run experiments/evolve/setup_run.py <tag>`. This creates `experiments/runs/<tag>/` containing:
 
-- `program.md`, `src/` — **symlinks** back to `evolve/` (do not modify these via the symlinks)
+- `program.md`, `src/` — **symlinks** back to `experiments/evolve/` (do not modify these via the symlinks)
 - `interpretable_transformer.py` — **local copy**, this is the file you edit
 - `results/` — stores output of your runs
 - `interpretable_transformers_lib/` — empty, for snapshots
 
-1. **`cd` into the run folder** and stay there for the rest of the session: `cd runs/<tag>`. Do not read any of the other folders in the runs directory, only your own run folder.
+1. **`cd` into the run folder** and stay there for the rest of the session: `cd experiments/runs/<tag>`. Do not read any of the other folders in the runs directory, only your own run folder.
 2. **Read the in-scope files**: `interpretable_transformer.py`, `src/task.py`, `src/eval.py`, and `results/overall_results.csv` (only one baseline row at first).
 
 ## Experimentation
@@ -75,7 +75,7 @@ Always log to this file after each experiment.
 
 ## The experiment loop
 
-You are always inside the run folder (`runs/<tag>/`).
+You are always inside the run folder (`experiments/runs/<tag>/`).
 
 LOOP FOREVER:
 

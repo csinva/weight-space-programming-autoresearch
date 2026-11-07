@@ -4,7 +4,7 @@
 # ///
 """Build the Weight-Space Programming toy-task blog post.
 
-Reads runs/*/results/overall_results.csv, computes per-task summaries, and
+Reads experiments/runs/*/results/overall_results.csv, computes per-task summaries, and
 fills blog_template.html. Writes a standalone page to
 analyze/toy_examples/report.html.
 
@@ -19,7 +19,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-RUNS = ROOT / "runs"
+RUNS = ROOT / "experiments" / "runs"
 TEMPLATE = HERE / "blog_template.html"
 OUT = HERE / "report.html"
 

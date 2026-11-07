@@ -1,10 +1,10 @@
 """Build analyze/nl_bottleneck/report_raw.html: verbatim prompts, example task inputs, every description, every attempt, token usage per run,
-and per-example disagreements on the dataset tasks. Needs nl-bottleneck/preds/ (regenerate with 02_eval_originals.sh and 05_eval_recon.py)."""
+and per-example disagreements on the dataset tasks. Needs experiments/nl-bottleneck/preds/ (regenerate with 02_eval_originals.sh and 05_eval_recon.py)."""
 import csv, glob, html, importlib.util, json, os, random, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
-NB = f"{REPO}/nl-bottleneck"
-sys.path.insert(0, f"{REPO}/evolve")
+NB = f"{REPO}/experiments/nl-bottleneck"
+sys.path.insert(0, f"{REPO}/experiments/evolve")
 import src.task as T
 R = json.load(open(f"{NB}/results.json")); SEL = json.load(open(f"{NB}/selected.json")); TOK = json.load(open(f"{NB}/tokens.json"))
 RS = json.load(open(f"{NB}/recon_selected.json")); CS = json.load(open(f"{NB}/recon_control_selected.json"))
@@ -63,7 +63,7 @@ def run_block(kind, tag):
     acc = " / ".join(f"{k} {100 * v:.2f}" for k, v in e["acc"].items())
     d = "recon_final" if kind == "recon" else "recon_control_final"
     return (f"<details><summary>{'Reconstruction' if kind == 'recon' else 'Control (no description)'} {tag[-2:]}: {acc}; {int(e['n_params']):,} params; {tk['turns']} turns, ${tk['cost']:.2f}</summary>"
-            f"<p>Final program: <code>nl-bottleneck/{d}/{tag}.py</code> (snapshot <code>{E_(str(sel['final']))}</code>{', agent last file because its copy was truncated' if sel['fallback_to_last_file'] else ''}). "
+            f"<p>Final program: <code>experiments/nl-bottleneck/{d}/{tag}.py</code> (snapshot <code>{E_(str(sel['final']))}</code>{', agent last file because its copy was truncated' if sel['fallback_to_last_file'] else ''}). "
             f"Tokens: {tk['output']:,} output ({tk['thinking'] or 0:,} thinking), {tk['cache_write']:,} cache write, {tk['cache_read']:,} cache read, {tk['input']:,} uncached input.</p>"
             f"{attempts_tab(sel, tag)}<p>Agent's final message:</p>{pre(tk['final_text'])}</details>")
 
@@ -71,7 +71,7 @@ def run_block(kind, tag):
 blocks = []
 for t in sorted(R):
     s = SEL[t]; e = R[t]
-    blocks.append(f"<h3 id='task-{t}'>{t}</h3><p>Original: run <code>{s['run']}</code>, program <code>{E_(s['program'])}</code> (<code>nl-bottleneck/originals/{t}.py</code>), "
+    blocks.append(f"<h3 id='task-{t}'>{t}</h3><p>Original: run <code>{s['run']}</code>, program <code>{E_(s['program'])}</code> (<code>experiments/nl-bottleneck/originals/{t}.py</code>), "
                   f"visible {100 * s['visible']:.1f}%, hidden {100 * e['orig']['hidden']:.2f}%, {int(s['n_params']):,} params.</p>"
                   f"<p>The original agent's own description of this program: <i>{E_(s['description'])}</i></p>"
                   f"<p><b>Description given to the reconstructors</b> ({len(open(f'{NB}/summaries/{t}.txt').read().split())} words):</p>{pre(open(f'{NB}/summaries/{t}.txt').read())}"
@@ -115,7 +115,7 @@ page = f"""<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name
 <div class="top"><a href="../index.html">&larr; Analysis Reports index</a> &middot; <a href="report.html">Main report</a></div>
 <h1>Raw data: the 200-word description experiment</h1>
 <div class="summary"><p>Everything the main report ([Sec. 1](report.html#sec-1) to [Sec. 6](report.html#sec-6)) is computed from: the exact prompts, example task inputs, every description, every attempt and final message of each reconstruction and control session, token usage per run, per-example disagreements on the four dataset tasks, and the full metric table.
-Programs themselves are files in the repo: <code>nl-bottleneck/originals/</code>, <code>recon_final/</code>, <code>recon_control_final/</code>; compressed agent transcripts in <code>recon/*/agent_log.jsonl.gz</code> and <code>recon_control/*/</code>. Contents: [Sec. 1](#sec-1) prompts, [Sec. 2](#sec-2) example inputs, [Sec. 3](#sec-3) per-task descriptions and runs, [Sec. 4](#sec-4) per-example disagreements, [Sec. 5](#sec-5) tokens, [Sec. 6](#sec-6) full metrics.</p></div>
+Programs themselves are files in the repo: <code>experiments/nl-bottleneck/originals/</code>, <code>recon_final/</code>, <code>recon_control_final/</code>; compressed agent transcripts in <code>recon/*/agent_log.jsonl.gz</code> and <code>recon_control/*/</code>. Contents: [Sec. 1](#sec-1) prompts, [Sec. 2](#sec-2) example inputs, [Sec. 3](#sec-3) per-task descriptions and runs, [Sec. 4](#sec-4) per-example disagreements, [Sec. 5](#sec-5) tokens, [Sec. 6](#sec-6) full metrics.</p></div>
 
 <h2 id="sec-1">1. Prompts, verbatim</h2>
 <p>Placeholders in angle brackets are filled per task. All calls used <code>claude -p --model claude-opus-5-5 --restricted --strict-mcp-config</code>; the summarizer had <code>--tools Read</code> only; reconstructors and controls had Read, Edit, Write, Glob, Grep and Bash, with Bash allowed only for the scoring command.</p>

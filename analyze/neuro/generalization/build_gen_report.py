@@ -13,7 +13,7 @@ import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-RUNS_DIR = os.path.join(REPO, "runs-neuro")
+RUNS_DIR = os.path.join(REPO, "experiments", "runs-neuro")
 RESULTS = os.path.join(HERE, "results.csv")
 OUT = os.path.join(HERE, "..", "report_generalization.html")
 
@@ -297,7 +297,7 @@ HTML = f'''<!doctype html>
 
   <footer>
     Generated from <code>generalization/results.csv</code> (harness:
-    <code>generalization/harness.py</code>, models from <code>runs-neuro/*/interpretable_transformers_lib/</code>).
+    <code>generalization/harness.py</code>, models from <code>experiments/runs-neuro/*/interpretable_transformers_lib/</code>).
     Pipeline: 30-TR edge trim, 10-gram, ndelays=4, 8 train stories, bootstrapped ridge over ~95.6k voxels.
   </footer>
 </div>

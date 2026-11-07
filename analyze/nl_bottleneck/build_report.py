@@ -1,4 +1,4 @@
-"""Build analyze/nl_bottleneck/report.html (and its two PNG figures) from nl-bottleneck/results.json and the saved summaries / metadata.
+"""Build analyze/nl_bottleneck/report.html (and its two PNG figures) from experiments/nl-bottleneck/results.json and the saved summaries / metadata.
   ~/weight-space-programming-autoresearch/.venv/bin/python analyze/nl_bottleneck/build_report.py"""
 import glob, html, json, os, re
 import matplotlib
@@ -6,7 +6,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-NB = os.path.join(os.path.dirname(os.path.dirname(HERE)), "nl-bottleneck")
+NB = os.path.join(os.path.dirname(os.path.dirname(HERE)), "experiments", "nl-bottleneck")
 R = json.load(open(f"{NB}/results.json"))
 SEL = json.load(open(f"{NB}/selected.json"))
 NLP = ["sentiment-sst2", "paraphrase-mrpc", "nli-snli", "trec-coarse"]
@@ -142,10 +142,10 @@ When the original is wrong, a reconstruction is wrong with probability 77 to 90%
 </ul></div>
 
 <h2 id="sec-1">1. Setup</h2>
-<p><b>Sets.</b> <i>Visible</i>: the 200 seed-0 examples that every attempt in the original runs was scored on (the reconstructors also see this score). <i>Hidden</i>: generated tasks use 2,000 fresh examples from an unseen seed (987654321, as in <code>evolve/heldout_fresh_seed.py</code>); dataset tasks use up to 2,000 training rows outside the 2,000-example pool the agents saw (1,668 for MRPC, which has no more). <i>Extra</i>: generated tasks only, 20,000 more fresh examples, to find rare errors. One standard error on 2,000 examples is about 1 point, so differences under 2 points on hidden accuracy are noise.</p>
+<p><b>Sets.</b> <i>Visible</i>: the 200 seed-0 examples that every attempt in the original runs was scored on (the reconstructors also see this score). <i>Hidden</i>: generated tasks use 2,000 fresh examples from an unseen seed (987654321, as in <code>experiments/evolve/heldout_fresh_seed.py</code>); dataset tasks use up to 2,000 training rows outside the 2,000-example pool the agents saw (1,668 for MRPC, which has no more). <i>Extra</i>: generated tasks only, 20,000 more fresh examples, to find rare errors. One standard error on 2,000 examples is about 1 point, so differences under 2 points on hidden accuracy are noise.</p>
 <p><b>Summarizer.</b> Headless <code>claude -p --model claude-opus-5-5 --restricted --tools Read</code> in a folder containing only the program file and asked for at most 200 words on the algorithm, practical hints and known imperfections, with no code and no tensor values. Over-length outputs were sent back to shorten.</p>
 <p><b>Reconstructor.</b> A fresh headless Opus 5.5 session in a sandbox outside any repo with the template <code>interpretable_transformer.py</code>, <code>src/</code> and the description in the prompt, plus the task statement, the original's visible accuracy and parameter count, and the repo's rules (no training, no external computation, no fitting to dataset examples). Only the scoring command could be run; the final program is the saved snapshot with the highest visible accuracy (ties to fewest parameters), the rule used for the originals. For {len(fb)} reconstructions ({", ".join(fb)}) the agent's saved copies were truncated, so the agent's last working file was used.
-<b>Audits.</b> All {sum(v == 'data_independent' for v in aud.values())} of {len(aud)} final reconstructions and all {sum(v == 'data_independent' for v in aud_c.values())} of {len(aud_c)} controls are data-independent under the repo's counterfactual audit (<code>evolve/audit_data_use.py</code>); no transcript read outside its sandbox. Agents tried to write scratch files in /tmp, which were refused (47 refused calls over the reconstructions).</p>
+<b>Audits.</b> All {sum(v == 'data_independent' for v in aud.values())} of {len(aud)} final reconstructions and all {sum(v == 'data_independent' for v in aud_c.values())} of {len(aud_c)} controls are data-independent under the repo's counterfactual audit (<code>experiments/evolve/audit_data_use.py</code>); no transcript read outside its sandbox. Agents tried to write scratch files in /tmp, which were refused (47 refused calls over the reconstructions).</p>
 
 <h2 id="sec-2">2. Accuracy of original, reconstructions and control</h2>
 <p id="tab-1"><b>Table 1.</b> Accuracy (%) as visible / hidden / extra (extra only for generated tasks); differences to the original in parentheses. Words = length of the description.</p>
@@ -203,7 +203,7 @@ So on these tasks the 200 words carry the structure of the compressed design (wh
 <p>Prompt for a coding agent:</p>
 <pre>In the repo https://github.com/csinva/weight-space-programming-autoresearch (use the repo-root uv environment; run on CPU; if /data is full work on /data18), reproduce analyze/nl_bottleneck/report.html.
 Question: can a description of at most 200 words, written by Claude Opus 5.5 from a hand-written transformer program, let a fresh Opus 5.5 session rebuild a program with similar accuracy and similar errors?
-Inputs: the Opus 5.5 runs in runs-opus55/ (results/overall_results.csv, snapshots in reconstructed/ or interpretable_transformers_lib/, audit_data_use.json and audit_data_use_reconstructed.json); the 17 tasks in evolve/src/task.py; offline HF cache of sst2, glue/mrpc, snli, CogComp/trec.
+Inputs: the Opus 5.5 runs in runs-opus55/ (results/overall_results.csv, snapshots in reconstructed/ or interpretable_transformers_lib/, audit_data_use.json and audit_data_use_reconstructed.json); the 17 tasks in experiments/evolve/src/task.py; offline HF cache of sst2, glue/mrpc, snli, CogComp/trec.
 Code, all in nl-bottleneck/ (run in this order from that folder):
  01_select.py       best program per task (highest visible accuracy among data_independent programs, ties to fewest params) -> originals/, selected.json
  eval_program.py    scores one program on visible (200, seed 0), hidden (generated: 2,000 at seed 987654321; dataset tasks: up to 2,000 training rows outside the 2,000-example pool, sampled with seed 1) and extra (generated: 20,000 at seed 555)
@@ -216,7 +216,7 @@ Code, all in nl-bottleneck/ (run in this order from that folder):
  06_analyze.py      agreement, kappa, phi, conditional error rates -> results.json
  09_tokens.py        token usage and final messages from the transcripts -> tokens.json
  analyze/nl_bottleneck/build_report.py   renders this report (needs HF_HOME offline cache, as above)
- analyze/nl_bottleneck/build_report_raw.py   renders report_raw.html (prompts, descriptions, attempts, example inputs and disagreements; needs nl-bottleneck/preds/)
+ analyze/nl_bottleneck/build_report_raw.py   renders report_raw.html (prompts, descriptions, attempts, example inputs and disagreements; needs experiments/nl-bottleneck/preds/)
 Sandboxes live outside the repo (/data18/chandan.singh/wsp-nl/sandbox); set HF_HOME to an offline copy of the HF cache and HF_HUB_OFFLINE=1.
 Expected: all 13 generated tasks 100% for all models on all sets; hidden accuracies on SST-2/MRPC/SNLI/TREC about 78.7/68.9/57.9/82.3 for the originals. Reconstruction numbers vary with the agent's sampling.</pre></details>
 </div></body></html>"""

@@ -1,6 +1,6 @@
 """Run the autoresearch loop with Claude Code in headless mode (`claude -p`), several independent runs per task.
 
-  uv run evolve/launch_claude.py --model opus55 --tasks all --seeds 1 2 --workers 8
+  uv run experiments/evolve/launch_claude.py --model opus55 --tasks all --seeds 1 2 --workers 8
 
 Each run gets a fresh folder runs-<model>/<task>-<model>-s<seed>/ made by setup_run.py (its own copy of program.md with the
 task name filled in). The agent works only there: tools are restricted to Read/Edit/Write/Glob/Grep/Bash, file reads outside

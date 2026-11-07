@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from common import ROOT, load_prompts
 from interventions import FAMILIES
 
-OUT = os.path.join(os.path.dirname(ROOT), "analyze", "systematic_tests")
+OUT = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "analyze", "systematic_tests")
 CONDS = ["none", "raw", "views"]
 BASELINES = ["zero", "feedback_mean"]
 TAGS = ["fable"]  # other predictor models, stored in rounds_<tag>/ (same bundles and items)

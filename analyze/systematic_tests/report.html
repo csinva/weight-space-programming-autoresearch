@@ -363,10 +363,10 @@ Question: can Claude Opus 5.5, reading only weight files (Read tool, no code), p
 (revision 2fc06364715b967f1860aea9cf38778875588b17) change the next-token distribution on 8 fixed prompts?
 Code in systematic-tests/: common.py (model, edit context manager), 00_make_prompts.py (data/prompts.json), 00_pilot.py (SCALAR_ADD=4),
 interventions.py + bundles.py + run_round.py (experiment 1), analyze.py, analyze_filtered.py, exp2_interventions.py + exp2_pilot.py + exp2_run.py
-+ exp2_analyze.py (experiment 2), exp3.py + exp3_check.py (experiment 3). The model downloads to systematic-tests/.hf_cache.
++ exp2_analyze.py (experiment 2), exp3.py + exp3_check.py (experiment 3). The model downloads to experiments/systematic-tests/.hf_cache.
 Predictor command, run with cwd = a copy of one bundle directory outside any repository:
   claude -p "Read README.md ... End with the JSON block" --model claude-opus-5-5 --restricted --tools Read --strict-mcp-config --output-format stream-json --verbose
-Experiment 1: uv run python systematic-tests/00_make_prompts.py; for R in 0 1 2: run_round.py build/predict --round R, git commit, run_round.py measure --round R
+Experiment 1: uv run python experiments/systematic-tests/00_make_prompts.py; for R in 0 1 2: run_round.py build/predict --round R, git commit, run_round.py measure --round R
   ; few-shot: run_round.py build/predict --round 2 --variant k0|k4 before measuring set 3.
   Then analyze.main(), analyze_filtered.py.
 Experiment 2: WSP_X2_DIR=exp2_opus WSP_X2_CONDS=none,raw exp2_run.py predict --round 0 (bundles and measured effects as in exp2/; K: neuron x100,
