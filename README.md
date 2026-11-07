@@ -71,4 +71,4 @@ The [hosted reports](https://csinva.io/weight-space-programming-autoresearch/ana
 
 ## Acknowledgements
 
-This work builds on [Sparks of Weight-Space Programming](https://rikiyat.github.io/blog/weight-space-programming/) by Takehi, Teoh, Zhang and Khattab, in which a general-purpose language model reads and writes a network's parameters directly from a natural-language specification.
+This work is pretty similar to [Sparks of Weight-Space Programming](https://rikiyat.github.io/blog/weight-space-programming/)! We were working on it at the same time, but a little more focused on the interpretability angle and applying it to neuroscience.
