@@ -103,6 +103,25 @@ python -m dashboard
 python -m pytest -q
 ```
 
+## Baselines
+
+`baselines/` holds fixed reference models, each a `MODELS` dict that follows the
+candidate output contract: pixels/low-level statistics, Gabor wavelet pyramid
+(Kay et al., 2008) with and without divisive normalization, wavelet scattering
+(Mallat), Portilla–Simoncelli texture statistics on a 2×2 grid (simplifying
+Freeman & Simoncelli, 2011), banana-filter curvature (a proxy for Pasupathy &
+Connor), GIST, HMAX, and ImageNet-trained and seeded-random AlexNet layers.
+They run in-process as trusted code, with the same evaluator, and write to
+`final_results/baselines/`, never to a search run. Their settings are fixed a
+priori or chosen on search data only.
+
+```bash
+pip install -e '.[baselines]'
+python -m baselines.run --dataset laion --region visual            # search protocol
+python -m baselines.run --dataset laion --region visual --final    # paired NSD protocol
+python -m baselines.run --dataset triplen --only gabor,hmax
+```
+
 ## Repository map
 
 | Path | Responsibility |
