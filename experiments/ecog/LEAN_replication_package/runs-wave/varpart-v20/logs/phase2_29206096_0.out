@@ -1,0 +1,5 @@
+task 0/45: 3 fits, 3 to do
+loaded stats 1s
+full                                                                                       raw= 3852 all166=0.0808 grid=0.0904 42s
+drop:flux+formant_dyn+formants+hnr+phonetic+spectral_flatness+spectral_moments+spectral_ro raw= 3769 all166=0.0808 grid=0.0903 34s
+alone:flux+formant_dyn+formants+hnr+phonetic+spectral_flatness+spectral_moments+spectral_r raw=   83 all166=0.0591 grid=0.0668 1s

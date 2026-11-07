@@ -1,0 +1,5 @@
+task 30/45: 3 fits, 3 to do
+loaded stats 1s
+drop:pitch_dyn+pitch_salience+pitch_summary                                                raw= 3833 all166=0.0805 grid=0.0904 72s
+alone:slow_quad_modbank+slow_quad_modbank_dyn                                              raw=  360 all166=0.0637 grid=0.0718 2s
+alone:phonetic                                                                             raw=    5 all166=0.0459 grid=0.0510 1s

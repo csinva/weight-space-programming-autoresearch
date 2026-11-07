@@ -1,0 +1,5 @@
+ok       wave-slurm-23628821__Gammatone_3win_5tau_1446d4                        logged=0.0592 all166=0.05920 grid=0.06621 rc=0 76s
+failed   wave-trim__LEAN_v19_3388e1                                             logged=0.0744 all166=nan grid=nan rc=0 1038s
+ok       reset-C__PHON_v37_b1eb2e                                               logged=0.0708 all166=0.07084 grid=0.07883 rc=0 382s
+ok       reset-F__PC_v19_f48271                                                 logged=0.0682 all166=0.06823 grid=0.07656 rc=0 301s
+ok       reset-I__TFS_IF_v28_273ecc                                             logged=0.0657 all166=0.06569 grid=0.07385 rc=0 369s

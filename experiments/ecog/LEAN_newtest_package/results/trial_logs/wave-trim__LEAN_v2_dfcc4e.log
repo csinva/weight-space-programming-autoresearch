@@ -1,0 +1,4 @@
+### Fri Nov  6 20:28:06 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/wave-trim__LEAN_v2_dfcc4e/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+RESCORE P=7828 all166=0.07638 grid=0.08529 newtest_grid=0.06573 (n=493) (312s)

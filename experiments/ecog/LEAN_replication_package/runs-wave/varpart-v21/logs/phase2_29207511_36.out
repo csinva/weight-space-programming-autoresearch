@@ -1,0 +1,5 @@
+task 36/45: 3 fits, 3 to do
+loaded stats 1s
+drop:formants                                                                              raw= 3368 all166=0.0805 grid=0.0901 59s
+alone:scattering                                                                           raw=  233 all166=0.0647 grid=0.0725 1s
+alone:spectral_moments                                                                     raw=    4 all166=0.0395 grid=0.0444 1s

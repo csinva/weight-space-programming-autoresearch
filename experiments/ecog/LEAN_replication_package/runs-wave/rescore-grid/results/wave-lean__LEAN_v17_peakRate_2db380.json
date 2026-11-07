@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v17_peakRate_2db380", "run": "wave-lean", "name": "LEAN-v17-peakRate", "logged": 0.0761, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v17-peakRate.py", "order": 179, "rc": 0, "seconds": 153, "all166": 0.0760789060659643, "grid": 0.08527352265311973, "P": 6252, "reproduced": true, "status": "ok"}

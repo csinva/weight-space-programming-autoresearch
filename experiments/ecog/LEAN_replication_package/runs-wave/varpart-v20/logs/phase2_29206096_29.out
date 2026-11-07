@@ -1,0 +1,5 @@
+task 29/45: 3 fits, 3 to do
+loaded stats 1s
+drop:gate_signals_dyn                                                                      raw= 3834 all166=0.0806 grid=0.0903 80s
+alone:adapt_delta+cochleagram                                                              raw=  360 all166=0.0601 grid=0.0667 1s
+alone:gate_signals                                                                         raw=    6 all166=0.0015 grid=0.0015 1s

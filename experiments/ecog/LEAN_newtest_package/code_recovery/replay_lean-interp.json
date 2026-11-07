@@ -1,0 +1,4316 @@
+{
+"run": "lean-interp",
+"n_diverged": 0,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T17:28:51.323Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "LEAN-v16",
+"sha": "9412f79b54660f50",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0000_9412f79b54660f50.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--name",
+"INTERP-v0-baseline",
+"--description",
+"v0 baseline: refactored into named groups, cond_mode=none (matches LEAN-v16)"
+],
+"env": {},
+"ts": "2026-06-05T17:37:57.427Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v0-baseline",
+"sha": "53042cc6aff4fe07",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0001_53042cc6aff4fe07.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"col_rms_sqrtd",
+"--name",
+"INTERP-v1a-cond",
+"--description",
+"v1a: per-column /RMS + per-group /sqrt(d_g). 18 named groups."
+],
+"env": {},
+"ts": "2026-06-05T17:42:43.517Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v1a-cond",
+"sha": "53042cc6aff4fe07",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0002_53042cc6aff4fe07.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"rep_target60_k8",
+"--name",
+"INTERP-v1a-cond",
+"--description",
+"\"v1a:",
+"column-replication",
+"banded-ridge",
+"emulation.",
+"Each",
+"small",
+"group",
+"replicated",
+"K=round(60/d_g)",
+"capped",
+"at",
+"8",
+"(so",
+"flatness\u00d78,",
+"hnr\u00d78,",
+"pitch_summary\u00d78",
+"etc"
+],
+"env": {},
+"ts": "2026-06-05T17:52:47.699Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0761,
+0.0761
+],
+"crashed": false,
+"name": "INTERP-v1a-cond",
+"sha": "f9c733a236e7ba65",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0003_f9c733a236e7ba65.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"rep_target120_k16",
+"--name",
+"INTERP-v1b-cond",
+"--description",
+"v1b: aggressive replication, K=round(120/d_g) cap 16. Stronger banded-ridge emulation than v1a."
+],
+"env": {},
+"ts": "2026-06-05T18:01:02.327Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0762,
+0.0762
+],
+"crashed": false,
+"name": "INTERP-v1b-cond",
+"sha": "f9c733a236e7ba65",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0004_f9c733a236e7ba65.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2a",
+"--name",
+"INTERP-v2a-interact",
+"--description",
+"v2a: curated voicing-gated interactions. pitch\u00d7voicing, flux\u00d7voicing, phon\u00d7{flux,loud,voicing}, comb\u00d7voicing, etc. ~34 raw dim \u2192 136 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:08:22.867Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0759,
+0.0759
+],
+"crashed": false,
+"name": "INTERP-v2a-interact",
+"sha": "d8dc32d9c8c00dbb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0005_d8dc32d9c8c00dbb.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2b",
+"--name",
+"INTERP-v2b-interact",
+"--description",
+"v2b: v2a + band-energy log-ratios (4 bands \u2192 high/low, high/mid, mid/low, very-high/very-high, plus voiced/unvoiced sibilance, centroid\u00d7loud). ~41 raw dim \u2192 164 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:13:20.968Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v2b-interact",
+"sha": "d8dc32d9c8c00dbb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0006_d8dc32d9c8c00dbb.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2c",
+"--name",
+"INTERP-v2c-interact",
+"--description",
+"v2c: v2b + envelope\u00d7lag-1 self products (AM proxy) for 4 carriers + flatness\u00d7loud + HNR_d\u00d7\u0394F0. ~47 raw dim \u2192 188 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:18:10.501Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v2c-interact",
+"sha": "d8dc32d9c8c00dbb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0007_d8dc32d9c8c00dbb.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2d",
+"--name",
+"INTERP-v2d-interact",
+"--description",
+"v2d: v2c + formant\u00d7flux + moments\u00d7voicing + F1/F2 loc \u00d7 voicing. ~54 raw dim \u2192 216 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:22:58.229Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v2d-interact",
+"sha": "d8dc32d9c8c00dbb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0008_d8dc32d9c8c00dbb.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2e",
+"--name",
+"INTERP-v2e-interact",
+"--description",
+"v2e: standalone \u2014 squared zero-mean key signals (9, captures DEVIATION energy ridge cannot get) + per-band temporal AM products log_e[t]*log_e[t-3] (20) + per-band energy*onset (20). 49 raw \u2192 196 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:29:14.401Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0758,
+0.0758
+],
+"crashed": false,
+"name": "INTERP-v2e-interact",
+"sha": "9057c8eb190cd10c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0009_9057c8eb190cd10c.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2f",
+"--name",
+"INTERP-v2f-interact",
+"--description",
+"v2f: ultra-tight 5-product set \u2014 hnr_d\u00d7loud, (1-voicing)\u00d7flux, flat\u00d7loud, flat\u00d7flux, (hi-lo)\u00d7flux. Anti-correlated pairs only. 5 raw \u2192 20 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:34:29.537Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0762,
+0.0762
+],
+"crashed": false,
+"name": "INTERP-v2f-interact",
+"sha": "be29b37d2c5002a6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0010_be29b37d2c5002a6.py"
+},
+{
+"k": 11,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"none",
+"--interact-set",
+"v2g",
+"--name",
+"INTERP-v2g-interact",
+"--description",
+"v2g: v2f + 5 more curated pairs (pitch\u00d7flat, pitch\u00d7sib-ratio, formant_disp\u00d7loud, logF0\u00d7flat, hnr_d\u00d7flux). 10 raw \u2192 40 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T18:39:33.940Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0762,
+0.0762,
+0.076
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+]
+],
+"name": "INTERP-v2g-interact",
+"sha": "71eb6517021244ae",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0011_71eb6517021244ae.py"
+},
+{
+"k": 12,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T18:45:13.147Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-final",
+"sha": "d56abce4ca25c98e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0012_d56abce4ca25c98e.py"
+},
+{
+"k": 13,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T18:49:59.431Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0762,
+0.0762,
+0.076,
+0.0762,
+0.0762,
+0.0762,
+0.076,
+0.0762,
+0.0762,
+0.0762
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+]
+],
+"name": "INTERP-final",
+"sha": "3c6e3f80602fdf9d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0013_3c6e3f80602fdf9d.py"
+},
+{
+"k": 14,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2h",
+"--name",
+"INTERP-v2h-interact",
+"--description",
+"v2h: asymmetric (odd-order) nonlinearities \u2014 for 10 zero-mean key signals: ReLU(z), ReLU(-z), signed cube z^3. 30 raw \u2192 120 post-delay. Tests odd-order asymmetry ridge cannot synthesize."
+],
+"env": {},
+"ts": "2026-06-05T18:58:52.199Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0764,
+0.0764
+],
+"crashed": false,
+"name": "INTERP-v2h-interact",
+"sha": "606a5d2bf4e9caef",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0014_606a5d2bf4e9caef.py"
+},
+{
+"k": 15,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2j",
+"--name",
+"INTERP-v2j-interact",
+"--description",
+"v2j: v2g curated products + 6 causal cross-lag products (k=2\u224867ms, phonetic boundary scale): flux[t-2]*hnr_d[t], hnr_d[t-2]*flux[t], flux[t-2]*loud[t], strength[t]*f0_d1[t+2], loud[t]*flux[t+2], hnr_peak[t]*(1-hnr_peak)[t+2]. 16 raw \u2192 64 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T19:03:38.068Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0764,
+0.0764
+],
+"crashed": false,
+"name": "INTERP-v2j-interact",
+"sha": "606a5d2bf4e9caef",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0015_606a5d2bf4e9caef.py"
+},
+{
+"k": 16,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2i",
+"--name",
+"INTERP-v2i-interact",
+"--description",
+"v2i: v2g curated products + v2h asymmetric (odd-order) nonlinearities. 40 raw \u2192 160 post-delay. Tests whether asymmetric + product features combine additively."
+],
+"env": {},
+"ts": "2026-06-05T19:08:21.082Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0764,
+0.0764
+],
+"crashed": false,
+"name": "INTERP-v2i-interact",
+"sha": "606a5d2bf4e9caef",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0016_606a5d2bf4e9caef.py"
+},
+{
+"k": 17,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2k",
+"--name",
+"INTERP-v2k-interact",
+"--description",
+"v2k: per-band asymmetric (odd-order) nonlinearities on z-scored long log_e \u2014 20 bands \u00d7 {ReLU(z), ReLU(-z), z^3} = 60 raw \u2192 240 post-delay. Tests per-band odd nonlinearity for vowel/fricative distinction."
+],
+"env": {},
+"ts": "2026-06-05T19:13:36.835Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076
+],
+"crashed": false,
+"name": "INTERP-v2k-interact",
+"sha": "b88328fbce26f62b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0017_b88328fbce26f62b.py"
+},
+{
+"k": 18,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2l",
+"--name",
+"INTERP-v2l-interact",
+"--description",
+"v2l: v2g products (10) + v2j cross-lag (6) + v2k per-band odd (60). 76 raw \u2192 304 post-delay. Full curated nonlinear kit."
+],
+"env": {},
+"ts": "2026-06-05T19:18:34.241Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "INTERP-v2l-interact",
+"sha": "b88328fbce26f62b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0018_b88328fbce26f62b.py"
+},
+{
+"k": 19,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2m",
+"--name",
+"INTERP-v2m-interact",
+"--description",
+"v2m: v2h asymmetric (30) + v2j cross-lag (6). 36 raw \u2192 144 post-delay. Tests additive composition of asymmetric + cross-lag, both at 0.0764 individually."
+],
+"env": {},
+"ts": "2026-06-05T19:23:38.013Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766
+],
+"crashed": false,
+"name": "INTERP-v2m-interact",
+"sha": "4242be5b05bcad8b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0019_4242be5b05bcad8b.py"
+},
+{
+"k": 20,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2n",
+"--name",
+"INTERP-v2n-interact",
+"--description",
+"v2n: v2g products (10) + v2h asymmetric (30) + v2j cross-lag (6). 46 raw \u2192 184 post-delay. Tests full composition vs v2m=0.0766 best."
+],
+"env": {},
+"ts": "2026-06-05T19:28:49.666Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766
+],
+"crashed": false,
+"name": "INTERP-v2n-interact",
+"sha": "41e75659e0a40ac3",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0020_41e75659e0a40ac3.py"
+},
+{
+"k": 21,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2o",
+"--name",
+"INTERP-v2o-interact",
+"--description",
+"v2o: v2h asymmetric (30) + multi-scale cross-lag k=2,4,8 (=67/133/267ms): 6 pair types \u00d7 3 lags = 18. 48 raw \u2192 192 post-delay. Tests multi-scale temporal products."
+],
+"env": {},
+"ts": "2026-06-05T19:34:11.599Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0765,
+0.0765
+],
+"crashed": false,
+"name": "INTERP-v2o-interact",
+"sha": "3747ea037e047e3e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0021_3747ea037e047e3e.py"
+},
+{
+"k": 22,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2p",
+"--name",
+"INTERP-v2p-interact",
+"--description",
+"v2p: v2m + asymmetric on formant 1-D (f1_loc, f2_loc, f1_amp, f2_amp): 4 sigs \u00d7 {ReLU+, ReLU-, z^3} = 12. 48 raw \u2192 192 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T19:39:46.471Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "INTERP-v2p-interact",
+"sha": "3747ea037e047e3e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0022_3747ea037e047e3e.py"
+},
+{
+"k": 23,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T19:45:16.484Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766,
+0.076,
+0.0762,
+0.0766,
+0.0766,
+0.0766,
+0.0766
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+]
+],
+"name": "INTERP-final2",
+"sha": "6002017fe5d2820c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0023_6002017fe5d2820c.py"
+},
+{
+"k": 24,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2q",
+"--name",
+"INTERP-v2q-interact",
+"--description",
+"v2q: v2m + asymmetric on broader pool (rolloff[0..1], moment skew/kurt, comod[0..5]) = 18 v2m + 6 lag + 24 new = 48 raw asym + 6 lag \u2192 60 raw \u2192 240 post-delay"
+],
+"env": {},
+"ts": "2026-06-05T19:52:38.677Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0765
+],
+"crashed": false,
+"name": "INTERP-v2q-interact",
+"sha": "f323a238b4961144",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0024_f323a238b4961144.py"
+},
+{
+"k": 25,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2r",
+"--name",
+"INTERP-v2r-interact",
+"--description",
+"v2r: v2m (30 asym + 6 lag) + 12 PAIRWISE PRODUCTS of asymmetric ReLU components (co-salience: ReLU(flux+)\u00d7ReLU(loud+), unvoiced\u00d7flux, etc). 48 raw \u2192 192 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T19:58:02.787Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766
+],
+"crashed": false,
+"name": "INTERP-v2r-interact",
+"sha": "29715e4145342f56",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0025_29715e4145342f56.py"
+},
+{
+"k": 26,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2s",
+"--name",
+"INTERP-v2s-interact",
+"--description",
+"v2s: v2m (30 asym + 6 lag) + 10 TRIPLE PRODUCTS (voiced-loud-attack, unvoiced-loud-burst, voiced-sibilance \u00d7 loud \u00d7 voicing, etc). 46 raw \u2192 184 post-delay. Tests depth-3 interactions ridge cannot synthesize from pairwise products."
+],
+"env": {},
+"ts": "2026-06-05T20:04:03.825Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766
+],
+"crashed": false,
+"name": "INTERP-v2s-interact",
+"sha": "f9dfc561eb77cdca",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0026_f9dfc561eb77cdca.py"
+},
+{
+"k": 27,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2t",
+"--name",
+"INTERP-v2t-interact",
+"--description",
+"v2t: v2m (30 asym + 6 lag) + 12 RECTIFIED-TEMPORAL products (ReLU\u00b1[t-2]\u00d7ReLU\u00b1[t]): sustained/onset/offset/quiet states. 48 raw \u2192 192 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:09:54.227Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0765
+],
+"crashed": false,
+"name": "INTERP-v2t-interact",
+"sha": "9472b10562344fb7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0027_9472b10562344fb7.py"
+},
+{
+"k": 28,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2u",
+"--name",
+"INTERP-v2u-interact",
+"--description",
+"v2u: MULTI-SCALE asymmetric. 6 key sigs (loud,strength,logF0,flux,voicing,flat) \u00d7 3 taus (4.5/15/60) \u00d7 {ReLU+,ReLU-,cube} = 54 raw asym + 6 v2j lag \u2192 60 \u2192 240 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:15:30.178Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0767
+],
+"crashed": false,
+"name": "INTERP-v2u-interact",
+"sha": "69d10de194b1b884",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0028_69d10de194b1b884.py"
+},
+{
+"k": 29,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2v",
+"--name",
+"INTERP-v2v-interact",
+"--description",
+"v2v: v2m (30 asym raw) + v2u (54 multi-scale dev asym) + 6 v2j lag = 90 raw \u2192 360 post-delay. Tests additive composition of raw + dev asymmetric."
+],
+"env": {},
+"ts": "2026-06-05T20:21:11.032Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2v-interact",
+"sha": "d28c4074bcc99e06",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0029_d28c4074bcc99e06.py"
+},
+{
+"k": 30,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2w",
+"--name",
+"INTERP-v2w-interact",
+"--description",
+"v2w: v2v extended \u2014 all 10 key sigs \u00d7 3 taus \u00d7 3 asym = 90 + 30 v2m raw asym + 6 v2j lag = 126 raw \u2192 504 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:26:49.311Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2w-interact",
+"sha": "112ee78cf4c093f2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0030_112ee78cf4c093f2.py"
+},
+{
+"k": 31,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2x",
+"--name",
+"INTERP-v2x-interact",
+"--description",
+"v2x: v2w + tau=150 (prosodic 5s scale). 10 key \u00d7 4 taus \u00d7 3 asym = 120 + 30 v2m + 6 v2j = 156 raw \u2192 624 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:32:35.707Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2x-interact",
+"sha": "092fbd4ff6c7fbcc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0031_092fbd4ff6c7fbcc.py"
+},
+{
+"k": 32,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2y",
+"--name",
+"INTERP-v2y-interact",
+"--description",
+"v2y: v2w + multi-scale asym on 5 phonetic templates (sib,vow,nas,plo,fric \u00d7 3 taus \u00d7 3 asym = 45 new). 171 raw \u2192 684 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:38:29.111Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774
+],
+"crashed": false,
+"name": "INTERP-v2y-interact",
+"sha": "0c2c751cb00e2dda",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0032_0c2c751cb00e2dda.py"
+},
+{
+"k": 33,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2z",
+"--name",
+"INTERP-v2z-interact",
+"--description",
+"v2z: v2y + multi-scale asym on 4 formant signals (f1_loc,f2_loc,f1_amp,f2_amp \u00d7 3 taus \u00d7 3 asym = 36). 207 raw \u2192 828 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:44:19.251Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2z-interact",
+"sha": "c14f33ece96e93c6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0033_c14f33ece96e93c6.py"
+},
+{
+"k": 34,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2aa",
+"--name",
+"INTERP-v2aa-interact",
+"--description",
+"v2aa: v2z + multi-scale asym on 10 more scalars (4 moments, 2 rolloff, flux_pos/neg, hnr_d, f0_d1) \u00d7 3 taus \u00d7 3 asym = 90. 297 raw \u2192 1188 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:50:36.744Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2aa-interact",
+"sha": "391514193364fb7c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0034_391514193364fb7c.py"
+},
+{
+"k": 35,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2bb",
+"--name",
+"INTERP-v2bb-interact",
+"--description",
+"v2bb: v2z + multi-scale asym on 3 band ratios (sib=hi-lo, hf=hi-mid, mid=mid-lo) \u00d7 3 taus \u00d7 3 asym = 27. 234 raw \u2192 936 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T20:56:37.937Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774
+],
+"crashed": false,
+"name": "INTERP-v2bb-interact",
+"sha": "777e53be3fd7a904",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0035_777e53be3fd7a904.py"
+},
+{
+"k": 36,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2cc",
+"--name",
+"INTERP-v2cc-interact",
+"--description",
+"v2cc: v2z + LOOK-AHEAD asymmetric (10 sigs \u00d7 2 lags \u00d7 3 asym = 60). 267 raw \u2192 1068 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:02:52.311Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2cc-interact",
+"sha": "9a467f640c688d31",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0036_9a467f640c688d31.py"
+},
+{
+"k": 37,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2dd",
+"--name",
+"INTERP-v2dd-interact",
+"--description",
+"v2dd: v2z + per-band syllabic-scale (tau=15) dev z-scored asym (20 bands \u00d7 3 asym = 60). 267 raw \u2192 1068 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:09:08.141Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2dd-interact",
+"sha": "e4fa7b82fb288ab9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0037_e4fa7b82fb288ab9.py"
+},
+{
+"k": 38,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ee",
+"--name",
+"INTERP-v2ee-interact",
+"--description",
+"v2ee: v2z + RBF tuning curves: 10 sigs \u00d7 5 centers (-2,-1,0,1,2) = 50 new. 257 raw \u2192 1028 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:15:27.447Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0768
+],
+"crashed": false,
+"name": "INTERP-v2ee-interact",
+"sha": "020ca8c5d05f8ca1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0038_020ca8c5d05f8ca1.py"
+},
+{
+"k": 39,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ff",
+"--name",
+"INTERP-v2ff-interact",
+"--description",
+"v2ff: v2z + BAND-PASS asym (lpf_lo - lpf_hi at 3 BPs: phonetic 4.5-15, syllabic 15-60, prosodic 60-150). 10 sigs \u00d7 3 BPs \u00d7 3 asym = 90. 297 raw \u2192 1188 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:22:07.099Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766
+],
+"crashed": false,
+"name": "INTERP-v2ff-interact",
+"sha": "e2d4780c11b2487f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0039_e2d4780c11b2487f.py"
+},
+{
+"k": 40,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2gg",
+"--name",
+"\"INTERP-v2gg-interact\"",
+"--description",
+"\"v2gg:",
+"v2z",
+"but",
+"cube",
+"z^3",
+"replaced",
+"with",
+"signed-root",
+"sign(z)*sqrt("
+],
+"env": {},
+"ts": "2026-06-05T21:28:04.804Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0771
+],
+"crashed": false,
+"name": "\"INTERP-v2gg-interact\"",
+"sha": "c4cd4361e6f067e6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0040_c4cd4361e6f067e6.py"
+},
+{
+"k": 41,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2hh",
+"--name",
+"INTERP-v2hh-interact",
+"--description",
+"v2hh: v2z + multi-lag temporal derivatives asym (10 sigs \u00d7 3 lags k=1,3,6 \u00d7 3 asym = 90). 297 raw \u2192 1188 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:34:23.659Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2hh-interact",
+"sha": "d820a0f8940490b5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0041_d820a0f8940490b5.py"
+},
+{
+"k": 42,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ii",
+"--name",
+"INTERP-v2ii-interact",
+"--description",
+"v2ii: v2z + 6 cross-products of dev-z at same tau (loud\u00d7flux, loud\u00d7voicing, strength\u00d7flux, flux\u00d7voicing, loud\u00d7flat, flux\u00d7flat) \u00d7 3 taus = 18 new. 225 raw \u2192 900 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:40:25.536Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2ii-interact",
+"sha": "8a3b616fd825187a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0042_8a3b616fd825187a.py"
+},
+{
+"k": 43,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T21:46:27.478Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-final3",
+0.0775
+]
+],
+"name": "INTERP-final3",
+"sha": "334759f60de505a5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0043_334759f60de505a5.py"
+},
+{
+"k": 44,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2jj",
+"--name",
+"INTERP-v2jj-interact",
+"--description",
+"v2jj: v2z + 6 syllabic-scale dev-level cross-lag products (tau=15 dev of flux/hnr_d/loud/strength/voicing/f0_d1, k=2 lag). 213 raw \u2192 852 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T21:55:33.833Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774,
+0.0774
+],
+"crashed": false,
+"name": "INTERP-v2jj-interact",
+"sha": "9625ec404ef7f890",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0044_9625ec404ef7f890.py"
+},
+{
+"k": 45,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2kk",
+"--name",
+"INTERP-v2kk-interact",
+"--description",
+"v2kk: v2z + v2j cross-lag REPLICATED at SYLLABIC lag k=4 (~133ms). 6 pairs \u00d7 2 lags (k=2,4) = 12 cross-lag. 213 raw \u2192 852 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:01:29.043Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2kk-interact",
+"sha": "cc2ab8c625bbcfb4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0045_cc2ab8c625bbcfb4.py"
+},
+{
+"k": 46,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2z",
+"--name",
+"INTERP-final3"
+],
+"env": {},
+"ts": "2026-06-05T22:07:13.486Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+]
+],
+"name": "INTERP-final3",
+"sha": "8ec17aafdee84d3e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0046_8ec17aafdee84d3e.py"
+},
+{
+"k": 47,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ll",
+"--shorthand",
+"INTERP-v2ll-interact",
+"--description",
+"v2ll: v2z + per-band PHONETIC scale (tau=4.5) dev asym across 20 cochleagram bands \u00d7 3 asym = 60 new. 267 raw \u2192 1068 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:10:05.545Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "INTERP-final3",
+"sha": "1012d733ab20d74b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0047_1012d733ab20d74b.py"
+},
+{
+"k": 48,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ll",
+"--name",
+"INTERP-v2ll-interact",
+"--description",
+"v2ll: v2z + per-band PHONETIC scale (tau=4.5) dev asym across 20 cochleagram bands \u00d7 3 asym = 60 new. 267 raw \u2192 1068 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:15:46.907Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772,
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2ll-interact",
+"sha": "1012d733ab20d74b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0048_1012d733ab20d74b.py"
+},
+{
+"k": 49,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2mm",
+"--name",
+"INTERP-v2mm-interact",
+"--description",
+"v2mm: v2z + prosodic-tau (150~5s) dev asym on 10 key sigs (10\u00d71\u00d73=30 new). 237 raw \u2192 948 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:21:38.862Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2mm-interact",
+"sha": "cd36cb0508e3efef",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0049_cd36cb0508e3efef.py"
+},
+{
+"k": 50,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2nn",
+"--name",
+"INTERP-v2nn-interact",
+"--description",
+"v2nn: v2z + ACCELERATION (2nd-derivative) asym on 10 key sigs (10\u00d73=30 new). 237 raw \u2192 948 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:27:46.954Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0771,
+0.0771
+],
+"crashed": false,
+"name": "INTERP-v2nn-interact",
+"sha": "092fcd59cb627c0f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0050_092fcd59cb627c0f.py"
+},
+{
+"k": 51,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2oo",
+"--name",
+"INTERP-v2oo-interact",
+"--description",
+"v2oo: v2z + 20 phon\u00d7formant curated products (5 phon \u00d7 4 formant). 227 raw \u2192 908 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:33:39.293Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2oo-interact",
+"sha": "28609f84422acd6c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0051_28609f84422acd6c.py"
+},
+{
+"k": 52,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2pp",
+"--name",
+"INTERP-v2pp-interact",
+"--description",
+"v2pp: v2z minus cube term \u2014 pure ReLU+/ReLU- asym. 138 raw \u2192 552 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:39:27.871Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2pp-interact",
+"sha": "62843c9624aec88a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0052_62843c9624aec88a.py"
+},
+{
+"k": 53,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2qq",
+"--name",
+"INTERP-v2qq-interact",
+"--description",
+"v2qq: v2z + per-band RAW (not dev) z-scored asym on log_e_long (20\u00d73=60 new). 267 raw \u2192 1068 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:45:54.746Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772,
+0.0772
+],
+"crashed": false,
+"name": "INTERP-v2qq-interact",
+"sha": "c8ac8ef798a5ef76",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0053_c8ac8ef798a5ef76.py"
+},
+{
+"k": 54,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2rr",
+"--name",
+"INTERP-v2rr-interact",
+"--description",
+"v2rr: v2z with finer taus (3, 9, 30) instead of (4.5, 15, 60). Same 207 raw \u2192 828 post-delay."
+],
+"env": {},
+"ts": "2026-06-05T22:51:58.756Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0771,
+0.0771,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0771,
+0.0771
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2qq-interact",
+0.0772
+],
+[
+"INTERP-v2rr-interact",
+0.0771
+]
+],
+"name": "INTERP-v2rr-interact",
+"sha": "b06259017d311854",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0054_b06259017d311854.py"
+},
+{
+"k": 55,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:01:31.873Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2ss-interact",
+"sha": "ad4105e044eae840",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0055_ad4105e044eae840.py"
+},
+{
+"k": 56,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:07:18.836Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2vv-interact",
+"sha": "a7c22a079bdce346",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0056_a7c22a079bdce346.py"
+},
+{
+"k": 57,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:13:04.186Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2tt-interact",
+"sha": "b673b087aac52e9d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0057_b673b087aac52e9d.py"
+},
+{
+"k": 58,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:18:43.902Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2uu-interact",
+"sha": "f601b5b809e244cf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0058_f601b5b809e244cf.py"
+},
+{
+"k": 59,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:25:27.227Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2ww-interact",
+"sha": "2ab24b3120c554c6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0059_2ab24b3120c554c6.py"
+},
+{
+"k": 60,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-05T23:31:08.275Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2xx-interact",
+"sha": "acd6f45c320227c2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0060_acd6f45c320227c2.py"
+},
+{
+"k": 61,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ss",
+"--name",
+"INTERP-v2ss-interact",
+"--description",
+"\"v2ss:",
+"v2z",
+"+",
+"CROSS-TAU",
+"DEV",
+"PRODUCTS",
+"(hierarchical",
+"coupling).",
+"6",
+"key",
+"sigs",
+"\u00d7",
+"3",
+"cross-tau",
+"pair",
+"products",
+"(phon\u00d7syll,",
+"syll\u00d7pros,",
+"phon\u00d7pros)",
+"=",
+"18",
+"new.",
+"225",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-05T23:37:24.721Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774,
+0.0774
+],
+"crashed": false,
+"name": "INTERP-v2ss-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0061_93fff16c72aab5d9.py"
+},
+{
+"k": 62,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2tt",
+"--name",
+"INTERP-v2tt-interact",
+"--description",
+"\"v2tt:",
+"v2z",
+"+",
+"ONSET-GATED",
+"ASYM.",
+"10",
+"key",
+"sigs",
+"gated",
+"by",
+"positive-flux",
+"z",
+"(onset",
+"indicator)",
+"\u00d7",
+"3",
+"asym",
+"=",
+"30",
+"new.",
+"237",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-05T23:42:52.372Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v2tt-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0062_93fff16c72aab5d9.py"
+},
+{
+"k": 63,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2uu",
+"--name",
+"INTERP-v2uu-interact",
+"--description",
+"\"v2uu:",
+"v2z",
+"+",
+"DERIVATIVE",
+"CROSS-PRODUCTS",
+"(prosodic",
+"coupling).",
+"7",
+"deriv",
+"pairs",
+"\u00d7",
+"3",
+"asym",
+"=",
+"21",
+"new.",
+"228",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-05T23:48:18.123Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774
+],
+"crashed": false,
+"name": "INTERP-v2uu-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0063_93fff16c72aab5d9.py"
+},
+{
+"k": 64,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2vv",
+"--name",
+"INTERP-v2vv-interact",
+"--description",
+"\"v2vv:",
+"v2z",
+"+",
+"MULTI-SCALE",
+"CROSS-LAG.",
+"6",
+"pairs",
+"\u00d7",
+"3",
+"lags",
+"(k=2,4,8)",
+"=",
+"18",
+"cross-lag",
+"products.",
+"225",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-05T23:53:39.801Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v2vv-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0064_93fff16c72aab5d9.py"
+},
+{
+"k": 65,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2ww",
+"--name",
+"INTERP-v2ww-interact",
+"--description",
+"\"v2ww:",
+"v2z",
+"+",
+"4",
+"SUMMARY-BAND",
+"envelope",
+"dev",
+"asym",
+"\u00d7",
+"3",
+"taus",
+"\u00d7",
+"3",
+"asym",
+"=",
+"36",
+"new.",
+"243",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-05T23:59:08.967Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0771
+],
+"crashed": false,
+"name": "INTERP-v2ww-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0065_93fff16c72aab5d9.py"
+},
+{
+"k": 66,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2xx",
+"--name",
+"INTERP-v2xx-interact",
+"--description",
+"\"v2xx:",
+"v2z",
+"+",
+"PHON",
+"\u00d7",
+"KEY-SIG",
+"curated",
+"products",
+"\u00d7",
+"asym.",
+"5",
+"phon",
+"\u00d7",
+"4",
+"sigs",
+"\u00d7",
+"3",
+"asym",
+"=",
+"60",
+"new.",
+"267",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-06T00:04:35.233Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0776
+],
+"crashed": false,
+"name": "INTERP-v2xx-interact",
+"sha": "93fff16c72aab5d9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0066_93fff16c72aab5d9.py"
+},
+{
+"k": 67,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2yy",
+"--name",
+"INTERP-v2yy-interact",
+"--description",
+"\"v2yy:",
+"v2z",
+"+",
+"v2vv",
+"multi-scale",
+"lag",
+"(18)",
+"+",
+"v2xx",
+"phon\u00d7sig",
+"(60",
+"asym).",
+"Compose",
+"two",
+"small",
+"wins.",
+"285",
+"raw",
+"-"
+],
+"env": {},
+"ts": "2026-06-06T00:10:47.676Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0776
+],
+"crashed": false,
+"name": "INTERP-v2yy-interact",
+"sha": "f4273db89a045ff3",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0067_f4273db89a045ff3.py"
+},
+{
+"k": 68,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T00:16:42.224Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2qq-interact",
+0.0772
+],
+[
+"INTERP-v2rr-interact",
+0.0771
+],
+[
+"INTERP-v2ss-interact",
+0.0774
+],
+[
+"INTERP-v2tt-interact",
+0.0773
+],
+[
+"INTERP-v2uu-interact",
+0.0774
+],
+[
+"INTERP-v2vv-interact",
+0.0775
+],
+[
+"INTERP-v2ww-interact",
+0.0771
+],
+[
+"INTERP-v2xx-interact",
+0.0776
+],
+[
+"INTERP-v2yy-interact",
+0.0776
+],
+[
+"INTERP-final4",
+0.0775
+]
+],
+"name": "INTERP-final4",
+"sha": "487597cb90e88996",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0068_487597cb90e88996.py"
+},
+{
+"k": 69,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v2zz",
+"--name",
+"INTERP-v2zz-interact",
+"--description",
+"v2zz: v2xx + PHON \u00d7 FORMANT curated products \u00d7 asym (5 phon \u00d7 4 formant = 20 products \u00d7 3 asym = 60 new). 327 raw \u2192 1308 post-delay. Tests phon-class-gated formant dynamics."
+],
+"env": {},
+"ts": "2026-06-06T00:24:58.785Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v2zz-interact",
+"sha": "18e85a5a3b84858f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0069_18e85a5a3b84858f.py"
+},
+{
+"k": 70,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3a",
+"--name",
+"INTERP-v3a-interact",
+"--description",
+"v3a: v2zz + KEY-SIG \u00d7 FORMANT curated products \u00d7 asym (4 key sigs \u00d7 4 formants = 16 \u00d7 3 asym = 48 new). 343 raw \u2192 1372 post-delay. Formant dynamics gated by voicing/loud/strength/flux."
+],
+"env": {},
+"ts": "2026-06-06T00:31:13.066Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3a-interact",
+"sha": "87880a005268d7bf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0070_87880a005268d7bf.py"
+},
+{
+"k": 71,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3b",
+"--name",
+"INTERP-v3b-interact",
+"--description",
+"v3b: v2zz + MULTI-SCALE cross-lag (k=2,4,8) replacing single-lag v2j. 339 raw \u2192 1356 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T00:37:25.034Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3b-interact",
+"sha": "39069c66154c66a2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0071_39069c66154c66a2.py"
+},
+{
+"k": 72,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3c",
+"--name",
+"INTERP-v3c-interact",
+"--description",
+"v3c: v2zz + PHON \u00d7 PHON pairwise dev asym at syllabic tau (10 pairs \u00d7 3 asym = 30 new). 337 raw \u2192 1348 post-delay. Phonetic co-activation / competition."
+],
+"env": {},
+"ts": "2026-06-06T00:43:36.317Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0776,
+0.0776
+],
+"crashed": false,
+"name": "INTERP-v3c-interact",
+"sha": "a417ec878f957eeb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0072_a417ec878f957eeb.py"
+},
+{
+"k": 73,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3d",
+"--name",
+"INTERP-v3d-interact",
+"--description",
+"v3d: v2zz + ONSET-GATED / OFFSET-GATED phon products. 5 phon \u00d7 2 gates \u00d7 3 asym = 30 new. 337 raw \u2192 1348 post-delay. Phonetic onsets/offsets."
+],
+"env": {},
+"ts": "2026-06-06T00:49:52.484Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3d-interact",
+"sha": "95d8b808cff02970",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0073_95d8b808cff02970.py"
+},
+{
+"k": 74,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3e",
+"--name",
+"INTERP-v3e-interact",
+"--description",
+"v3e: v2zz + v3a key\u00d7formant (48) + v3d onset/offset phon (30). 405 raw \u2192 1620 post-delay. Composition test."
+],
+"env": {},
+"ts": "2026-06-06T00:56:28.417Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0778,
+0.0778
+],
+"crashed": false,
+"name": "INTERP-v3e-interact",
+"sha": "6adba20fac3e26ca",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0074_6adba20fac3e26ca.py"
+},
+{
+"k": 75,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3f",
+"--name",
+"INTERP-v3f-interact",
+"--description",
+"v3f: v3e but onset/offset gates at 3 taus (4.5/15/60). 5 phon \u00d7 2 gates \u00d7 3 taus \u00d7 3 asym = 90 new. 435 raw \u2192 1740 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T01:03:06.782Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "INTERP-v3f-interact",
+"sha": "afe6d795811e8b83",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0075_afe6d795811e8b83.py"
+},
+{
+"k": 76,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3g",
+"--name",
+"INTERP-v3g-interact",
+"--description",
+"v3g: v3e but KEY \u00d7 FORMANT products expanded to multi-tau dev asym (3 taus). 501 raw \u2192 2004 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T01:09:51.846Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "INTERP-v3g-interact",
+"sha": "1e40375b120594bc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0076_1e40375b120594bc.py"
+},
+{
+"k": 77,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3h",
+"--name",
+"INTERP-v3h-interact",
+"--description",
+"v3h: v3e + 3 band-ratio dev asym at syllabic tau (9 new). 414 raw \u2192 1656 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T01:16:29.454Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0776,
+0.0776
+],
+"crashed": false,
+"name": "INTERP-v3h-interact",
+"sha": "c6eed418e02f57dc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0077_c6eed418e02f57dc.py"
+},
+{
+"k": 78,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T01:22:49.517Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0778,
+0.0778,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0775,
+0.0778,
+0.0775,
+0.0778,
+0.0778
+],
+"crashed": false,
+"rows_seen": [
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2qq-interact",
+0.0772
+],
+[
+"INTERP-v2rr-interact",
+0.0771
+],
+[
+"INTERP-v2ss-interact",
+0.0774
+],
+[
+"INTERP-v2tt-interact",
+0.0773
+],
+[
+"INTERP-v2uu-interact",
+0.0774
+],
+[
+"INTERP-v2vv-interact",
+0.0775
+],
+[
+"INTERP-v2ww-interact",
+0.0771
+],
+[
+"INTERP-v2xx-interact",
+0.0776
+],
+[
+"INTERP-v2yy-interact",
+0.0776
+],
+[
+"INTERP-final4",
+0.0775
+],
+[
+"INTERP-v2zz-interact",
+0.0777
+],
+[
+"INTERP-v3a-interact",
+0.0777
+],
+[
+"INTERP-v3b-interact",
+0.0777
+],
+[
+"INTERP-v3c-interact",
+0.0776
+],
+[
+"INTERP-v3d-interact",
+0.0777
+],
+[
+"INTERP-v3e-interact",
+0.0778
+],
+[
+"INTERP-v3f-interact",
+0.0775
+],
+[
+"INTERP-v3g-interact",
+0.0773
+],
+[
+"INTERP-v3h-interact",
+0.0776
+],
+[
+"INTERP-final5",
+0.0778
+]
+],
+"name": "INTERP-final5",
+"sha": "262fda75b02697a1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0078_262fda75b02697a1.py"
+},
+{
+"k": 79,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3i",
+"--name",
+"INTERP-v3i-interact",
+"--description",
+"v3i: v3e + HNR-onset/HNR-offset gated phon \u00d7 asym (5 phon \u00d7 2 gates \u00d7 3 asym = 30 new). 435 raw \u2192 1740 post-delay. Alternative onset driver to v3d's flux-onset."
+],
+"env": {},
+"ts": "2026-06-06T01:32:27.998Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3i-interact",
+"sha": "a68f88b56325299e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0079_a68f88b56325299e.py"
+},
+{
+"k": 80,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3j",
+"--name",
+"INTERP-v3j-interact",
+"--description",
+"v3j: v3e + voicing-gated band-ratio multi-tau asym. 4 ratios (hi-lo, hi-mid_lo, mid_hi-lo, hi-mid_hi) \u00d7 2 voicing states \u00d7 3 taus (4.5/15/60) \u00d7 3 asym = 72 new. 477 raw \u2192 1908 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T01:38:57.426Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0776,
+0.0776
+],
+"crashed": false,
+"name": "INTERP-v3j-interact",
+"sha": "a68f88b56325299e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0080_a68f88b56325299e.py"
+},
+{
+"k": 81,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3k",
+"--name",
+"INTERP-v3k-interact",
+"--description",
+"v3k: v3e + formant velocity \u00d7 phon \u00d7 asym. 4 formant \u0394 (\u0394f1_loc, \u0394f2_loc, \u0394(f1+f2)_amp, \u0394(f2-f1)) \u00d7 5 phon \u00d7 3 asym = 60 new. Captures vowel-specific formant transitions. 465 raw \u2192 1860 post-delay."
+],
+"env": {},
+"ts": "2026-06-06T01:45:15.423Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3k-interact",
+"sha": "a68f88b56325299e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0081_a68f88b56325299e.py"
+},
+{
+"k": 82,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--interact-set",
+"v3l",
+"--name",
+"INTERP-v3l-interact",
+"--description",
+"v3l: v3e + 6 named CLASS-SPECIFIC curated single-products (HNR_d\u00d7phon_vow, sib-ratio\u00d7phon_fric, flux\u00d7phon_plo, strength\u00d7phon_nas, f12_disp\u00d7phon_vow\u00d7voicing, logF0\u00d7phon_vow\u00d7voicing). 411 raw \u2192 1644 post-delay. Small (6 raw, 24 post-delay) targeted addition."
+],
+"env": {},
+"ts": "2026-06-06T01:52:17.681Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0778,
+0.0778
+],
+"crashed": false,
+"name": "INTERP-v3l-interact",
+"sha": "fae5c5ea46d0b7d2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0082_fae5c5ea46d0b7d2.py"
+},
+{
+"k": 83,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T01:58:42.156Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0778,
+0.0778,
+0.0775,
+0.0778,
+0.0775,
+0.0778,
+0.0778,
+0.0775,
+0.0778,
+0.0778,
+0.076,
+0.0762,
+0.0766,
+0.0775,
+0.0775,
+0.0775,
+0.0778,
+0.0775,
+0.0778,
+0.0778,
+0.0775,
+0.0778,
+0.0778,
+0.0775,
+0.0778,
+0.0778
+],
+"crashed": false,
+"rows_seen": [
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2qq-interact",
+0.0772
+],
+[
+"INTERP-v2rr-interact",
+0.0771
+],
+[
+"INTERP-v2ss-interact",
+0.0774
+],
+[
+"INTERP-v2tt-interact",
+0.0773
+],
+[
+"INTERP-v2uu-interact",
+0.0774
+],
+[
+"INTERP-v2vv-interact",
+0.0775
+],
+[
+"INTERP-v2ww-interact",
+0.0771
+],
+[
+"INTERP-v2xx-interact",
+0.0776
+],
+[
+"INTERP-v2yy-interact",
+0.0776
+],
+[
+"INTERP-final4",
+0.0775
+],
+[
+"INTERP-v2zz-interact",
+0.0777
+],
+[
+"INTERP-v3a-interact",
+0.0777
+],
+[
+"INTERP-v3b-interact",
+0.0777
+],
+[
+"INTERP-v3c-interact",
+0.0776
+],
+[
+"INTERP-v3d-interact",
+0.0777
+],
+[
+"INTERP-v3e-interact",
+0.0778
+],
+[
+"INTERP-v3f-interact",
+0.0775
+],
+[
+"INTERP-v3g-interact",
+0.0773
+],
+[
+"INTERP-v3h-interact",
+0.0776
+],
+[
+"INTERP-final5",
+0.0778
+],
+[
+"INTERP-v3i-interact",
+0.0777
+],
+[
+"INTERP-v3j-interact",
+0.0776
+],
+[
+"INTERP-v3k-interact",
+0.0777
+],
+[
+"INTERP-v3l-interact",
+0.0778
+],
+[
+"INTERP-final6",
+0.0778
+],
+[
+"LEAN-v16",
+0.076
+],
+[
+"INTERP-v0-baseline",
+0.076
+],
+[
+"INTERP-v1a-cond",
+0.0761
+],
+[
+"INTERP-v1b-cond",
+0.0762
+],
+[
+"INTERP-v2a-interact",
+0.0759
+],
+[
+"INTERP-v2b-interact",
+0.076
+],
+[
+"INTERP-v2c-interact",
+0.076
+],
+[
+"INTERP-v2d-interact",
+0.076
+],
+[
+"INTERP-v2e-interact",
+0.0758
+],
+[
+"INTERP-v2f-interact",
+0.0762
+],
+[
+"INTERP-v2g-interact",
+0.0762
+],
+[
+"INTERP-final",
+0.0762
+],
+[
+"INTERP-v2h-interact",
+0.0764
+],
+[
+"INTERP-v2j-interact",
+0.0764
+],
+[
+"INTERP-v2i-interact",
+0.0764
+],
+[
+"INTERP-v2k-interact",
+0.076
+],
+[
+"INTERP-v2l-interact",
+0.0763
+],
+[
+"INTERP-v2m-interact",
+0.0766
+],
+[
+"INTERP-v2n-interact",
+0.0766
+],
+[
+"INTERP-v2o-interact",
+0.0765
+],
+[
+"INTERP-v2p-interact",
+0.0763
+],
+[
+"INTERP-final2",
+0.0766
+],
+[
+"INTERP-v2q-interact",
+0.0765
+],
+[
+"INTERP-v2r-interact",
+0.0766
+],
+[
+"INTERP-v2s-interact",
+0.0766
+],
+[
+"INTERP-v2t-interact",
+0.0765
+],
+[
+"INTERP-v2u-interact",
+0.0767
+],
+[
+"INTERP-v2v-interact",
+0.0772
+],
+[
+"INTERP-v2w-interact",
+0.0773
+],
+[
+"INTERP-v2x-interact",
+0.0772
+],
+[
+"INTERP-v2y-interact",
+0.0774
+],
+[
+"INTERP-v2z-interact",
+0.0775
+],
+[
+"INTERP-v2aa-interact",
+0.0773
+],
+[
+"INTERP-v2bb-interact",
+0.0774
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2cc-interact",
+0.0775
+],
+[
+"INTERP-v2dd-interact",
+0.0773
+],
+[
+"INTERP-v2ee-interact",
+0.0768
+],
+[
+"INTERP-v2ff-interact",
+0.0766
+],
+[
+"INTERP-v2gg-interact",
+0.0771
+],
+[
+"INTERP-v2hh-interact",
+0.0772
+],
+[
+"INTERP-v2ii-interact",
+0.0772
+],
+[
+"INTERP-v2jj-interact",
+0.0774
+],
+[
+"INTERP-v2kk-interact",
+0.0775
+],
+[
+"INTERP-final3",
+0.0775
+],
+[
+"INTERP-v2ll-interact",
+0.0772
+],
+[
+"INTERP-v2mm-interact",
+0.0773
+],
+[
+"INTERP-v2nn-interact",
+0.0771
+],
+[
+"INTERP-v2oo-interact",
+0.0773
+],
+[
+"INTERP-v2pp-interact",
+0.0773
+],
+[
+"INTERP-v2qq-interact",
+0.0772
+],
+[
+"INTERP-v2rr-interact",
+0.0771
+],
+[
+"INTERP-v2ss-interact",
+0.0774
+],
+[
+"INTERP-v2tt-interact",
+0.0773
+],
+[
+"INTERP-v2uu-interact",
+0.0774
+],
+[
+"INTERP-v2vv-interact",
+0.0775
+],
+[
+"INTERP-v2ww-interact",
+0.0771
+],
+[
+"INTERP-v2xx-interact",
+0.0776
+],
+[
+"INTERP-v2yy-interact",
+0.0776
+],
+[
+"INTERP-final4",
+0.0775
+],
+[
+"INTERP-v2zz-interact",
+0.0777
+],
+[
+"INTERP-v3a-interact",
+0.0777
+],
+[
+"INTERP-v3b-interact",
+0.0777
+],
+[
+"INTERP-v3c-interact",
+0.0776
+],
+[
+"INTERP-v3d-interact",
+0.0777
+],
+[
+"INTERP-v3e-interact",
+0.0778
+],
+[
+"INTERP-v3f-interact",
+0.0775
+],
+[
+"INTERP-v3g-interact",
+0.0773
+],
+[
+"INTERP-v3h-interact",
+0.0776
+],
+[
+"INTERP-final5",
+0.0778
+],
+[
+"INTERP-v3i-interact",
+0.0777
+],
+[
+"INTERP-v3j-interact",
+0.0776
+],
+[
+"INTERP-v3k-interact",
+0.0777
+],
+[
+"INTERP-v3l-interact",
+0.0778
+],
+[
+"INTERP-final6",
+0.0778
+]
+],
+"name": "INTERP-final6",
+"sha": "2db751324592eabb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0083_2db751324592eabb.py"
+},
+{
+"k": 84,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T02:09:45.826Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3m-interact",
+"sha": "509b10f0045859d8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0084_509b10f0045859d8.py"
+},
+{
+"k": 85,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T02:16:50.900Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0777,
+0.0777
+],
+"crashed": false,
+"name": "INTERP-v3n-interact",
+"sha": "4e137f703090d0cb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/lean-interp/0085_4e137f703090d0cb.py"
+}
+]
+}

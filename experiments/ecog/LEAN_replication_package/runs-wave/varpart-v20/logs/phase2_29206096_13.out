@@ -1,0 +1,5 @@
+task 13/45: 3 fits, 3 to do
+loaded stats 1s
+drop:fut_med_contrast_6                                                                    raw= 3847 all166=0.0808 grid=0.0905 37s
+drop:stmf                                                                                  raw= 3512 all166=0.0816 grid=0.0912 28s
+alone:short_cochlea_contrast                                                               raw=   20 all166=0.0434 grid=0.0489 1s

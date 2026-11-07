@@ -1,0 +1,14 @@
+ok       reset-I__TFS_IF_v19_324c23                                             logged=0.0639 all166=0.06392 grid=0.07184 rc=0 335s
+ok       exceed-dense__DENSE_v5_42dd4a                                          logged=0.0772 all166=0.07718 grid=0.08603 rc=0 260s
+ok       reset-G__TEXTURE_v17_bfa279                                            logged=0.0663 all166=0.06631 grid=0.07522 rc=0 303s
+ok       reset-G__TEXTURE_v27_999ccb                                            logged=0.0685 all166=0.06847 grid=0.07784 rc=0 308s
+ok       reset-G__TEXTURE_v34_100c22                                            logged=0.0699 all166=0.06994 grid=0.07918 rc=0 302s
+ok       reset-I__TFS_IF_v6_203d5f                                              logged=0.0622 all166=0.06217 grid=0.06988 rc=0 313s
+ok       graft-lean__GRAFT_v9_tune_tex_multitau_56dbea                          logged=0.0759 all166=0.07587 grid=0.08435 rc=0 175s
+ok       lean-interp__INTERP_v2g_interact_d709d9                                logged=0.0762 all166=0.07624 grid=0.08535 rc=0 154s
+ok       lean-interp__INTERP_v2q_interact_1e1f92                                logged=0.0765 all166=0.07653 grid=0.08564 rc=0 162s
+ok       lean-interp__INTERP_v2y_interact_272e00                                logged=0.0774 all166=0.07741 grid=0.08635 rc=0 173s
+ok       lean-interp__INTERP_v2ii_interact_803f0a                               logged=0.0772 all166=0.07724 grid=0.08619 rc=0 178s
+ok       lean-interp__INTERP_v2rr_interact_f56daa                               logged=0.0771 all166=0.07709 grid=0.08620 rc=0 177s
+ok       lean-interp__INTERP_v3b_interact_8f60f5                                logged=0.0777 all166=0.07766 grid=0.08657 rc=0 189s
+pool exhausted; this task ran 13 trials

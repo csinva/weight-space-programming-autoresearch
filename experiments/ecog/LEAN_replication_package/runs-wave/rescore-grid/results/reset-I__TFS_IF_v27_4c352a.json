@@ -1,0 +1,1 @@
+{"id": "reset-I__TFS_IF_v27_4c352a", "run": "reset-I", "name": "TFS-IF-v27", "logged": 0.0652, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v27.py", "order": 488, "rc": 0, "seconds": 334, "all166": 0.06525435542706524, "grid": 0.07336822321555066, "P": 11856, "reproduced": true, "status": "ok"}

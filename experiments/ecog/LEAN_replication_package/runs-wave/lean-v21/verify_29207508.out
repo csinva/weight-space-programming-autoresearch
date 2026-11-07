@@ -1,0 +1,61 @@
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+  scattering: K=9 NB=1 dim=233 (S1m 9, joint 8, S2m 63, S2s 63)
+450a36e4_0190: v21 gate_signals frame-fraction > 0.5 at thresholds 0.15/0.3/0.6: [0.818, 0.333, 0.022] | v20 voicing gate min: 1.0
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+  scattering: K=9 NB=1 dim=233 (S1m 9, joint 8, S2m 63, S2s 63)
+450a36e4_0191: v21 gate_signals frame-fraction > 0.5 at thresholds 0.15/0.3/0.6: [0.83, 0.375, 0.096] | v20 voicing gate min: 1.0
+
+per group: kind, max relative |v21 - v20| over chunks (0 = bit-identical)
+  cochleagram                  unchanged  0.000e+00
+  adapt_delta                  unchanged  0.000e+00
+  pitch_salience               unchanged  0.000e+00
+  pitch_summary                unchanged  0.000e+00
+  pitch_dyn                    unchanged  0.000e+00
+  spectral_moments             unchanged  0.000e+00
+  spectral_flatness            unchanged  0.000e+00
+  spectral_rolloff             unchanged  0.000e+00
+  hnr                          unchanged  0.000e+00
+  phonetic                     unchanged  0.000e+00
+  flux                         unchanged  0.000e+00
+  modulation                   unchanged  0.000e+00
+  stmf                         mapped     0.000e+00
+  stmf_mean_gabor              mapped     0.000e+00
+  formants                     unchanged  0.000e+00
+  formant_dyn                  unchanged  0.000e+00
+  mod_depth                    unchanged  0.000e+00
+  tonic                        unchanged  0.000e+00
+  future_past                  unchanged  0.000e+00
+  f0_dyn                       unchanged  0.000e+00
+  hnr_dyn                      unchanged  0.000e+00
+  interact_v3e                 unchanged  0.000e+00
+  cpp                          unchanged  0.000e+00
+  region_flat                  unchanged  0.000e+00
+  spectral_contrast            unchanged  0.000e+00
+  contrast_short               mapped     0.000e+00
+  contrast_med                 unchanged  0.000e+00
+  cochlea_contrast             unchanged  0.000e+00
+  med_cochlea_contrast         unchanged  0.000e+00
+  short_cochlea_contrast       unchanged  0.000e+00
+  multitau_contrast            unchanged  0.000e+00
+  med_adapt_contrast           unchanged  0.000e+00
+  topbot                       unchanged  0.000e+00
+  topbot_short                 unchanged  0.000e+00
+  fut_cochlea_contrast         unchanged  0.000e+00
+  fut_cochlea_contrast_med     unchanged  0.000e+00
+  fut_med_contrast_6           unchanged  0.000e+00
+  fut_minus_cur_contrast       unchanged  0.000e+00
+  cube_fut_contrast            unchanged  0.000e+00
+  quad_modbank                 mapped     0.000e+00
+  quad_modbank_dyn             mapped     0.000e+00
+  quad_modbank_acausal         mapped     0.000e+00
+  quad_xrate_energy            by-design  3.757e-01
+  quad_xrate_energy_dyn        by-design  1.097e-01
+  cochlea_voiced_gated         by-design  2.478e+01
+  cochlea_voiced_gated_dyn     by-design  1.815e+01
+  gate_signals                 by-design  nan
+  gate_signals_dyn             by-design  nan
+  slow_quad_modbank            mapped     0.000e+00
+  slow_quad_modbank_dyn        mapped     0.000e+00
+  scattering                   mapped     2.306e-05  <-- MISMATCH
+
+RESULT: FAIL ['scattering']

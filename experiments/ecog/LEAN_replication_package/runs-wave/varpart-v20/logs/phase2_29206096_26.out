@@ -1,0 +1,5 @@
+task 26/45: 3 fits, 3 to do
+loaded stats 1s
+drop:hnr+phonetic+spectral_flatness+spectral_moments+spectral_rolloff                      raw= 3838 all166=0.0809 grid=0.0906 72s
+alone:future_past+mod_depth+tonic                                                          raw=  600 all166=0.0713 grid=0.0788 2s
+alone:region_flat                                                                          raw=    8 all166=0.0296 grid=0.0339 1s

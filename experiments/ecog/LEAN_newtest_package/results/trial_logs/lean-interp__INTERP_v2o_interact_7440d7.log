@@ -1,0 +1,4 @@
+### Fri Nov  6 20:53:59 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100 --interact-set v2o --name INTERP-v2o-interact --description v2o: v2h asymmetric (30) + multi-scale cross-lag k=2,4,8 (=67/133/267ms): 6 pair types × 3 lags = 18. 48 raw → 192 post-delay. Tests multi-scale temporal products.
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/lean-interp__INTERP_v2o_interact_7440d7/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+RESCORE P=6424 all166=0.07653 grid=0.08563 newtest_grid=0.06537 (n=493) (254s)

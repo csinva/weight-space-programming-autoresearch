@@ -1,0 +1,8 @@
+ok       reset-D__SCAT_v1_ffcfb0                                                logged=0.0509 all166=0.05088 grid=0.05794 rc=0 199s
+ok       reset-D__SCAT_v11_8a4615                                               logged=0.0656 all166=0.06562 grid=0.07228 rc=0 333s
+ok       reset-D__SCAT_v21_63728b                                               logged=0.0665 all166=0.06650 grid=0.07379 rc=0 455s
+ok       reset-D__SCAT_v31_58de37                                               logged=0.0704 all166=0.07028 grid=0.07829 rc=0 502s
+mismatch reset-G__TEXTURE_v8_d7e295                                             logged=0.0567 all166=0.05762 grid=0.06560 rc=0 339s
+ok       reset-G__TEXTURE_v22_d54009                                            logged=0.0665 all166=0.06655 grid=0.07590 rc=0 265s
+ok       reset-H__RES_v03_232a48                                                logged=0.0637 all166=0.06373 grid=0.07224 rc=0 466s
+ok       reset-H__RES_v13_2bf567                                                logged=0.0691 all166=0.06911 grid=0.07746 rc=0 1116s

@@ -1,0 +1,5 @@
+task 14/45: 3 fits, 3 to do
+loaded stats 1s
+drop:fut_med_contrast_6                                                                    raw= 3387 all166=0.0806 grid=0.0903 52s
+drop:tonic                                                                                 raw= 3092 all166=0.0767 grid=0.0863 38s
+alone:cochlea_voiced_gated_dyn                                                             raw=   20 all166=0.0266 grid=0.0321 1s

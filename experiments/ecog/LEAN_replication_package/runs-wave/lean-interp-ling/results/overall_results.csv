@@ -1,0 +1,3 @@
+subject,test_corr,train_corr,frac_test_elec_above_0.1,encoding_seconds,status,model_shorthand_name,n_params,description
+patient1,0.0760,0.0944,0.1988,210.7,success,LING-base,0.00e+00,"LEAN v16: also removed per-formant bandwidth + sharpness block (16 dim, 4 + 3 taus x 4). v15 test_corr=0.0760, raw emb=1574."
+patient1,0.0766,0.0944,0.1988,190.4,success,LING-v1,0.00e+00,"LEAN-v16 + STAGE-1 interpretable LINGUISTIC features (16 dim) injected via waveform-window fingerprint lookup: word onset/offset, in-word, content/function, word rate, since/to onset, word duration/length/syllables, lexical complexity, phrase boundary. Tests whether lexical/linguistic info absent from the acoustic LEAN basis adds over baseline 0.0760."

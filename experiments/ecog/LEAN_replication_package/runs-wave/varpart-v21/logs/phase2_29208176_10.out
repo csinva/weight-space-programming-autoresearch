@@ -1,0 +1,5 @@
+task 10/45: 3 fits, 3 to do
+loaded stats 1s
+drop:phonetic                                                                              raw= 3387 all166=0.0804 grid=0.0901 52s
+drop:slow_quad_modbank+slow_quad_modbank_dyn                                               raw= 3140 all166=0.0804 grid=0.0900 41s
+alone:contrast_short                                                                       raw=   20 all166=0.0368 grid=0.0422 1s

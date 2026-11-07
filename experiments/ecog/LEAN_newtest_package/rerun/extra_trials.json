@@ -1,0 +1,13 @@
+[
+{
+"id": "whisper-reference",
+"run": "lean-whisper",
+"name": "Whisper-only",
+"logged": 0.0817,
+"metric": "all166",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/whisper_only_encoder.py",
+"args": [],
+"source": "reference",
+"note": "old-test reference: all166 0.0817, grid 0.0933 (lean-whisper/diag_canon_23988279.out)"
+}
+]

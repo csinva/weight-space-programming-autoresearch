@@ -1,0 +1,6 @@
+ok       reset-D__SCAT_v10_b34fd3                                               logged=0.0648 all166=0.06482 grid=0.07102 rc=0 300s
+ok       reset-D__SCAT_v20_95d270                                               logged=0.0673 all166=0.06725 grid=0.07453 rc=0 431s
+ok       reset-D__SCAT_v30_da0b46                                               logged=0.0701 all166=0.07006 grid=0.07813 rc=0 485s
+ok       reset-H__RES_v02_9cc898                                                logged=0.0555 all166=0.05549 grid=0.06206 rc=0 638s
+ok       reset-H__RES_v12_a694aa                                                logged=0.0705 all166=0.07053 grid=0.07946 rc=0 803s
+ok       graft-lean__GRAFT_v2c_reservoir_0388d8                                 logged=0.0758 all166=0.07584 grid=0.08515 rc=0 681s

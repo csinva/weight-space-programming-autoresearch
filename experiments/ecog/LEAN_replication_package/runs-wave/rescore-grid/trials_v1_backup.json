@@ -1,0 +1,4082 @@
+[
+{
+"id": "wave-slurm-23628821__Gammatone_cochleagram_73067b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-cochleagram",
+"logged": 0.0403,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-cochleagram.py",
+"order": 1
+},
+{
+"id": "wave-slurm-23628821__Gammatone_log_5209d0",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-log",
+"logged": 0.0468,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-log.py",
+"order": 2
+},
+{
+"id": "wave-slurm-23628821__Gammatone_log_adapt_b1692a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-log-adapt",
+"logged": 0.0533,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-log-adapt.py",
+"order": 3
+},
+{
+"id": "wave-slurm-23628821__Gammatone_log_adapt_onset_b08bfb",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-log-adapt-onset",
+"logged": 0.0535,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-log-adapt-onset.py",
+"order": 4
+},
+{
+"id": "wave-slurm-23628821__Gammatone_log_adapt_LI_e80a49",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-log-adapt-LI",
+"logged": 0.052,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-log-adapt-LI.py",
+"order": 5
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multi_tau_9feea3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multi-tau",
+"logged": 0.0549,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multi-tau.py",
+"order": 6
+},
+{
+"id": "wave-slurm-23628821__Gammatone_AGC_multi_tau_6481da",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-AGC-multi-tau",
+"logged": 0.0515,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-AGC-multi-tau.py",
+"order": 7
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multiwin_d278e6",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multiwin",
+"logged": 0.0548,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multiwin.py",
+"order": 8
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multiwin_multi_tau_27a576",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multiwin-multi-tau",
+"logged": 0.0559,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multiwin-multi-tau.py",
+"order": 9
+},
+{
+"id": "wave-slurm-23628821__Gammatone_mod_bank_97689b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-mod-bank",
+"logged": 0.0554,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-mod-bank.py",
+"order": 10
+},
+{
+"id": "wave-slurm-23628821__Gammatone_PCEN_9aa061",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-PCEN",
+"logged": 0.0529,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-PCEN.py",
+"order": 11
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multiwin_64ch_11a469",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multiwin-64ch",
+"logged": 0.0552,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multiwin-64ch.py",
+"order": 12
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multiwin_mt_pitch_2dd978",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multiwin-mt-pitch",
+"logged": 0.0558,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multiwin-mt-pitch.py",
+"order": 13
+},
+{
+"id": "wave-slurm-23628821__Gammatone_multiwin_mt_LI_7eefb1",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-multiwin-mt-LI",
+"logged": 0.0543,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-multiwin-mt-LI.py",
+"order": 14
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_mt_e35bc3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-mt",
+"logged": 0.0565,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-mt.py",
+"order": 15
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_4tau_6903e9",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-4tau",
+"logged": 0.0569,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-4tau.py",
+"order": 16
+},
+{
+"id": "wave-slurm-23628821__Gammatone_4win_4tau_25415d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-4win-4tau",
+"logged": 0.0565,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-4win-4tau.py",
+"order": 17
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_4tau_mod4_7dafee",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-4tau-mod4",
+"logged": 0.056,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-4tau-mod4.py",
+"order": 18
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_5tau_1446d4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-5tau",
+"logged": 0.0592,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-5tau.py",
+"order": 19
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_d0ac56",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau",
+"logged": 0.0601,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau.py",
+"order": 20
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_8tau_dense_1db0b9",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-8tau-dense",
+"logged": 0.06,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-8tau-dense.py",
+"order": 21
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_24ch_a5086e",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-24ch",
+"logged": 0.0597,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-24ch.py",
+"order": 22
+},
+{
+"id": "wave-slurm-23628821__Gammatone_1win_6tau_40ch_87965c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-1win-6tau-40ch",
+"logged": 0.0592,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-1win-6tau-40ch.py",
+"order": 23
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMdepth_cc1508",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMdepth",
+"logged": 0.0607,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMdepth.py",
+"order": 24
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMdepth2_e2d501",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMdepth2",
+"logged": 0.0603,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMdepth2.py",
+"order": 25
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_dd8070",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull",
+"logged": 0.0608,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull.py",
+"order": 26
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_919834",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loud",
+"logged": 0.0609,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loud.py",
+"order": 27
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loudpeak_d66bd3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loudpeak",
+"logged": 0.0607,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loudpeak.py",
+"order": 28
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_order6_4e1703",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loud-order6",
+"logged": 0.0605,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loud-order6.py",
+"order": 29
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_centroid_b5b4af",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loud-centroid",
+"logged": 0.0612,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loud-centroid.py",
+"order": 30
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_cent_tilt_7b68ab",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+"logged": 0.061,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loud-cent-tilt.py",
+"order": 31
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_cochlear_stack_89648c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST-cochlear-stack",
+"logged": 0.0612,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-cochlear-stack.py",
+"order": 32
+},
+{
+"id": "wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_cent_HWR_onoff_1fc9e4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+"logged": 0.061,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff.py",
+"order": 33
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_highlevel_20c06d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+highlevel",
+"logged": 0.0618,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-highlevel.py",
+"order": 34
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_selective_mt_5d1186",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL-selective-mt",
+"logged": 0.062,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-selective-mt.py",
+"order": 36
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_flux_7d84c4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+flux",
+"logged": 0.064,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-flux.py",
+"order": 37
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_flux_modbank_6b847a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+flux+modbank",
+"logged": 0.0643,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-flux-modbank.py",
+"order": 40
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_flux_modbank_multi_ead393",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+flux+modbank-multi",
+"logged": 0.0658,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-flux-modbank-multi.py",
+"order": 41
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_all_0e3491",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank-all",
+"logged": 0.0666,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-modbank-all.py",
+"order": 42
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_flux_mt_all_965ab0",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+flux-mt-all",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-modbank-fluxmtall.py",
+"order": 48
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_STMF4_c7d710",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+STMF4",
+"logged": 0.0678,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-modbank-STMF4.py",
+"order": 52
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_STMF14_12363f",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+STMF14",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-HL-modbank-STMF14.py",
+"order": 53
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF17_hi_e4e705",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF17-hi",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-STMF17-hi.py",
+"order": 60
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF17_stmfmod_b8555c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF17+stmfmod",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-STMF17-final.py",
+"order": 64
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_v1_42d29b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack-v1",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-v1.py",
+"order": 65
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_final_7a8a3b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack-final",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-final.py",
+"order": 67
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF_ae5d03",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+liSTMF",
+"logged": 0.0695,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-liSTMF.py",
+"order": 68
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_a63977",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+liSTMF8",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-liSTMF8.py",
+"order": 70
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_final_74b924",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+liSTMF8-final",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-liSTMF8-final.py",
+"order": 72
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_prosody_hnronset_8cb98c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+prosody+hnronset",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-prosody-hnronset.py",
+"order": 74
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_lookahead_0d0ccc",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+lookahead",
+"logged": 0.0688,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-lookahead.py",
+"order": 75
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_STMF_adapt_29470d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+STMF-adapt",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-STMF-adapt.py",
+"order": 76
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_STMF_short_2f0d7a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+STMF-short",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-STMF-short.py",
+"order": 77
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_HLproducts_4104b7",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+HLproducts",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-HLproducts.py",
+"order": 78
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_90ac30",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants",
+"logged": 0.07,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants.py",
+"order": 79
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants3_9bb15d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants3",
+"logged": 0.0698,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants3.py",
+"order": 80
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_b17a30",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw",
+"logged": 0.0702,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw.py",
+"order": 81
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_LI_d2aff3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+LI",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-LI.py",
+"order": 82
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_vowelspace_3f5260",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+vowelspace",
+"logged": 0.07,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-vowelspace.py",
+"order": 83
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_shortfmt_5bc455",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+shortfmt",
+"logged": 0.0699,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-shortfmt.py",
+"order": 84
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_laplace_e9c0de",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+laplace",
+"logged": 0.0698,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-laplace.py",
+"order": 85
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_stability_a305a4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+stability",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-stability.py",
+"order": 86
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cuberoot_1557f2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cuberoot",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cuberoot.py",
+"order": 87
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cuberoot3win_76562e",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cuberoot3win",
+"logged": 0.0709,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cuberoot3win.py",
+"order": 88
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_sqrt_485608",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+sqrt",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-sqrt.py",
+"order": 89
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_slowadapt_bb6ed7",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+slowadapt",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-slowadapt.py",
+"order": 90
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_LIcube_cbb45b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+LIcube",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-LIcube.py",
+"order": 91
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_4thrt_3f8837",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+4thrt",
+"logged": 0.0709,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-4thrt.py",
+"order": 92
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_fine_e2124e",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+fine",
+"logged": 0.0705,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-fine.py",
+"order": 93
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_sqrtlong_3611cb",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+sqrtlong",
+"logged": 0.0709,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-sqrtlong.py",
+"order": 94
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar_01862d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-chanvar.py",
+"order": 95
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar3_2a6556",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar3",
+"logged": 0.0703,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-chanvar3.py",
+"order": 96
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar_cube_1f2437",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube",
+"logged": 0.0714,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-formants-bw-cube-chanvar-cube.py",
+"order": 97
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_HWR_cube_9e4ac3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+HWR-cube",
+"logged": 0.0713,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-HWR-cube.py",
+"order": 99
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_793b3f",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv",
+"logged": 0.0716,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-modenv.py",
+"order": 100
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_cubemod_be3496",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+cubemod",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-modenv-cubemod.py",
+"order": 102
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_chanskew_5429ca",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+chanskew",
+"logged": 0.0709,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-modenv-chanskew.py",
+"order": 103
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_zscore_1e9a15",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+zscore",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-modenv-zscore.py",
+"order": 105
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_tonicslow_3bcadb",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+tonicslow",
+"logged": 0.0735,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-chanvar-modenv-tonicslow.py",
+"order": 106
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonicslow_cubetonic_51a507",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonicslow+cubetonic",
+"logged": 0.0742,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-tonicslow-cubetonic.py",
+"order": 108
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_d250e2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win",
+"logged": 0.0748,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-tonic3win.py",
+"order": 109
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausaltonic_25d48a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+acausaltonic",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-full-stack-tonic3win-acausaltonic.py",
+"order": 113
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futdelta3_35b0b7",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futdelta3",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-tonic3win-acausal-futdelta3.py",
+"order": 118
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futdelta3_6_ebc465",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futdelta3-6",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-tonic3win-acausal-futdelta3-6.py",
+"order": 119
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_db9063",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-tonic3win-acausal-futpast-delta.py",
+"order": 120
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta3_12_93c5ee",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta3-12",
+"logged": 0.0765,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-tonic3win-acausal-futpast-delta3-12.py",
+"order": 121
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_cube6_7868db",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6",
+"logged": 0.0767,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-tonic3win-acausal-futpast-delta-cube6.py",
+"order": 123
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_peakhold_futpast_ae2fc8",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+peakhold-futpast",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-peakhold-futpast.py",
+"order": 134
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_TFS_zcr_acflags_1fcfb2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+TFS-zcr+acflags",
+"logged": 0.0749,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-TFS-zcr-acflags.py",
+"order": 135
+},
+{
+"id": "wave-slurm-23628821__Gammatone_LEAN_TFS_zcr_ACFperband_7642fb",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-LEAN+TFS-zcr+ACFperband",
+"logged": 0.0736,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-LEAN-TFS-zcr-ACFperband.py",
+"order": 136
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_CCEC_SACF_128a91",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+CCEC+SACF",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-CCEC-SACF.py",
+"order": 137
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_PB_EBAC_4a1a56",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+PB-EBAC",
+"logged": 0.0768,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-PB-EBAC.py",
+"order": 138
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_PB_EBAC_4x_b51748",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+PB-EBAC-4x",
+"logged": 0.0749,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-PB-EBAC-4x.py",
+"order": 139
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_PB_EBAC_XCH_Xcorr_ae10a2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+PB-EBAC+XCH-Xcorr",
+"logged": 0.0757,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-PB-EBAC-XCH-Xcorr.py",
+"order": 140
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_ChangLab_STG_129429",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+ChangLab-STG",
+"logged": 0.0755,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-ChangLab-STG.py",
+"order": 141
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_rel_pitch_a84ef6",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+rel-pitch",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-rel-pitch.py",
+"order": 142
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_powerlaw_adapt_16f1ac",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+powerlaw-adapt",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-powerlaw-adapt.py",
+"order": 144
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_peakRate_silenceOnset_0e0fc4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+peakRate-silenceOnset",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-peakRate-silenceOnset.py",
+"order": 145
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_cfa186",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+per-band-peakRate",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-per-band-peakRate.py",
+"order": 146
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_EBACtau30_63b06a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+per-band-peakRate+EBACtau30",
+"logged": 0.0768,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-pb-peakRate-EBACtau30.py",
+"order": 147
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_EBACtau15_3dbcd6",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+per-band-peakRate+EBACtau15",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-pb-peakRate-EBACtau15.py",
+"order": 148
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBACtau30_3476f3",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBACtau30",
+"logged": 0.0769,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-EBACtau30.py",
+"order": 150
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBACtau30_lag1_ea6805",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBACtau30+lag1",
+"logged": 0.0769,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-EBACtau30-lag1.py",
+"order": 151
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBACtau20_lag1_8d2e4b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBACtau20+lag1",
+"logged": 0.077,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-EBACtau20-lag1.py",
+"order": 152
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBACtau25_84f81f",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBACtau25",
+"logged": 0.077,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-slurm-23628821/wave_encoders_lib/Gammatone-BEST-EBACtau25.py",
+"order": 153
+},
+{
+"id": "wave-trim__LEAN_v1_6bff0c",
+"run": "wave-trim",
+"name": "LEAN-v1",
+"logged": 0.0765,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v1.py",
+"order": 156
+},
+{
+"id": "wave-trim__LEAN_v2_dfcc4e",
+"run": "wave-trim",
+"name": "LEAN-v2",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v2.py",
+"order": 157
+},
+{
+"id": "wave-trim__LEAN_v4_c89332",
+"run": "wave-trim",
+"name": "LEAN-v4",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v4.py",
+"order": 159
+},
+{
+"id": "wave-trim__LEAN_v7_b5c507",
+"run": "wave-trim",
+"name": "LEAN-v7",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v7.py",
+"order": 162
+},
+{
+"id": "wave-trim__LEAN_v8_69b209",
+"run": "wave-trim",
+"name": "LEAN-v8",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v8.py",
+"order": 163
+},
+{
+"id": "wave-trim__LEAN_v10_d38962",
+"run": "wave-trim",
+"name": "LEAN-v10",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v10.py",
+"order": 165
+},
+{
+"id": "wave-trim__LEAN_v11_6ec1a6",
+"run": "wave-trim",
+"name": "LEAN-v11",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v11.py",
+"order": 166
+},
+{
+"id": "wave-trim__LEAN_v13_a58040",
+"run": "wave-trim",
+"name": "LEAN-v13",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v13.py",
+"order": 168
+},
+{
+"id": "wave-trim__LEAN_v14_e0738e",
+"run": "wave-trim",
+"name": "LEAN-v14",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v14.py",
+"order": 169
+},
+{
+"id": "wave-trim__LEAN_v15_d0d9fb",
+"run": "wave-trim",
+"name": "LEAN-v15",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v15.py",
+"order": 170
+},
+{
+"id": "wave-trim__LEAN_v16_953005",
+"run": "wave-trim",
+"name": "LEAN-v16",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v16.py",
+"order": 171
+},
+{
+"id": "wave-trim__LEAN_v17_fcc06e",
+"run": "wave-trim",
+"name": "LEAN-v17",
+"logged": 0.0749,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v17.py",
+"order": 172
+},
+{
+"id": "wave-trim__LEAN_v18_03337a",
+"run": "wave-trim",
+"name": "LEAN-v18",
+"logged": 0.0744,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v18.py",
+"order": 173
+},
+{
+"id": "wave-trim__LEAN_v19_3388e1",
+"run": "wave-trim",
+"name": "LEAN-v19",
+"logged": 0.0744,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v19.py",
+"order": 174
+},
+{
+"id": "wave-trim__LEAN_v20_dcb891",
+"run": "wave-trim",
+"name": "LEAN-v20",
+"logged": 0.0744,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v20.py",
+"order": 175
+},
+{
+"id": "wave-trim__LEAN_v21_52edbf",
+"run": "wave-trim",
+"name": "LEAN-v21",
+"logged": 0.0743,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v21.py",
+"order": 176
+},
+{
+"id": "wave-trim__LEAN_v22_178299",
+"run": "wave-trim",
+"name": "LEAN-v22",
+"logged": 0.0743,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v22.py",
+"order": 177
+},
+{
+"id": "wave-trim__LEAN_v23_ca8685",
+"run": "wave-trim",
+"name": "LEAN-v23",
+"logged": 0.0742,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v23.py",
+"order": 178
+},
+{
+"id": "wave-lean__LEAN_v17_peakRate_2db380",
+"run": "wave-lean",
+"name": "LEAN-v17-peakRate",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v17-peakRate.py",
+"order": 179
+},
+{
+"id": "wave-lean__LEAN_v18_pitchZ_7a7592",
+"run": "wave-lean",
+"name": "LEAN-v18-pitchZ",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v18-pitchZ.py",
+"order": 180
+},
+{
+"id": "wave-lean__LEAN_v19_powerlaw_252fd8",
+"run": "wave-lean",
+"name": "LEAN-v19-powerlaw",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v19-powerlaw.py",
+"order": 181
+},
+{
+"id": "wave-lean__LEAN_v20_latInh_330295",
+"run": "wave-lean",
+"name": "LEAN-v20-latInh",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v20-latInh.py",
+"order": 182
+},
+{
+"id": "wave-lean__LEAN_v21_voicedInter_333206",
+"run": "wave-lean",
+"name": "LEAN-v21-voicedInter",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v21-voicedInter.py",
+"order": 183
+},
+{
+"id": "wave-lean__LEAN_v26_restoreV16_a6db1a",
+"run": "wave-lean",
+"name": "LEAN-v26-restoreV16",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v26-restoreV16.py",
+"order": 187
+},
+{
+"id": "wave-lean__LEAN_v28_safeRelPitch_f5393f",
+"run": "wave-lean",
+"name": "LEAN-v28-safeRelPitch",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v28-safeRelPitch.py",
+"order": 188
+},
+{
+"id": "wave-lean__LEAN_v29_syllableRate_71b654",
+"run": "wave-lean",
+"name": "LEAN-v29-syllableRate",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v29-syllableRate.py",
+"order": 189
+},
+{
+"id": "wave-lean__LEAN_v30_voiceGateInter_fdc96d",
+"run": "wave-lean",
+"name": "LEAN-v30-voiceGateInter",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v30-voiceGateInter.py",
+"order": 190
+},
+{
+"id": "wave-lean__LEAN_v31_bandFlux_c2fd9b",
+"run": "wave-lean",
+"name": "LEAN-v31-bandFlux",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v31-bandFlux.py",
+"order": 191
+},
+{
+"id": "wave-lean__LEAN_v32_multiSilOnset_266aa9",
+"run": "wave-lean",
+"name": "LEAN-v32-multiSilOnset",
+"logged": 0.0755,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v32-multiSilOnset.py",
+"order": 192
+},
+{
+"id": "wave-lean__LEAN_v33_perBandPeakRate_2d4f77",
+"run": "wave-lean",
+"name": "LEAN-v33-perBandPeakRate",
+"logged": 0.0755,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v33-perBandPeakRate.py",
+"order": 193
+},
+{
+"id": "wave-lean__LEAN_v34_scalarPowLaw_a573fa",
+"run": "wave-lean",
+"name": "LEAN-v34-scalarPowLaw",
+"logged": 0.0752,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v34-scalarPowLaw.py",
+"order": 194
+},
+{
+"id": "wave-lean__LEAN_v35_hires40_3e175a",
+"run": "wave-lean",
+"name": "LEAN-v35-hires40",
+"logged": 0.0752,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v35-hires40.py",
+"order": 195
+},
+{
+"id": "wave-lean__LEAN_v37_prune_000c7c",
+"run": "wave-lean",
+"name": "LEAN-v37-prune",
+"logged": 0.0757,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v37-prune.py",
+"order": 197
+},
+{
+"id": "wave-lean__LEAN_v38_v28only_6b09fe",
+"run": "wave-lean",
+"name": "LEAN-v38-v28only",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v38-v28only.py",
+"order": 198
+},
+{
+"id": "reset-A__BIOPHYS_v2_f70394",
+"run": "reset-A",
+"name": "BIOPHYS-v2",
+"logged": 0.0617,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v2.py",
+"order": 200
+},
+{
+"id": "reset-A__BIOPHYS_v3_c72fa8",
+"run": "reset-A",
+"name": "BIOPHYS-v3",
+"logged": 0.0633,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v3.py",
+"order": 201
+},
+{
+"id": "reset-A__BIOPHYS_v4_1e28b4",
+"run": "reset-A",
+"name": "BIOPHYS-v4",
+"logged": 0.0628,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v4.py",
+"order": 202
+},
+{
+"id": "reset-A__BIOPHYS_v5_3b44e7",
+"run": "reset-A",
+"name": "BIOPHYS-v5",
+"logged": 0.0643,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v5.py",
+"order": 203
+},
+{
+"id": "reset-A__BIOPHYS_v6_79b43f",
+"run": "reset-A",
+"name": "BIOPHYS-v6",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v6.py",
+"order": 204
+},
+{
+"id": "reset-A__BIOPHYS_v7_4fc68e",
+"run": "reset-A",
+"name": "BIOPHYS-v7",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v7.py",
+"order": 205
+},
+{
+"id": "reset-A__BIOPHYS_v8_3fb4b3",
+"run": "reset-A",
+"name": "BIOPHYS-v8",
+"logged": 0.0608,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v8.py",
+"order": 206
+},
+{
+"id": "reset-A__BIOPHYS_v10_03b122",
+"run": "reset-A",
+"name": "BIOPHYS-v10",
+"logged": 0.0628,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v10.py",
+"order": 207
+},
+{
+"id": "reset-A__BIOPHYS_v11_3d19f5",
+"run": "reset-A",
+"name": "BIOPHYS-v11",
+"logged": 0.0639,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v11.py",
+"order": 208
+},
+{
+"id": "reset-A__BIOPHYS_v12_b3dc58",
+"run": "reset-A",
+"name": "BIOPHYS-v12",
+"logged": 0.0642,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v12.py",
+"order": 209
+},
+{
+"id": "reset-A__BIOPHYS_v13_956d2c",
+"run": "reset-A",
+"name": "BIOPHYS-v13",
+"logged": 0.0636,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v13.py",
+"order": 210
+},
+{
+"id": "reset-A__BIOPHYS_v14_15cb9f",
+"run": "reset-A",
+"name": "BIOPHYS-v14",
+"logged": 0.0632,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v14.py",
+"order": 211
+},
+{
+"id": "reset-A__BIOPHYS_v15_7c174e",
+"run": "reset-A",
+"name": "BIOPHYS-v15",
+"logged": 0.0634,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v15.py",
+"order": 212
+},
+{
+"id": "reset-A__BIOPHYS_v16_566a11",
+"run": "reset-A",
+"name": "BIOPHYS-v16",
+"logged": 0.0618,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v16.py",
+"order": 213
+},
+{
+"id": "reset-A__BIOPHYS_v17_14985f",
+"run": "reset-A",
+"name": "BIOPHYS-v17",
+"logged": 0.0648,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v17.py",
+"order": 214
+},
+{
+"id": "reset-A__BIOPHYS_v18_6ce9f9",
+"run": "reset-A",
+"name": "BIOPHYS-v18",
+"logged": 0.0649,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v18.py",
+"order": 215
+},
+{
+"id": "reset-A__BIOPHYS_v19_c11b36",
+"run": "reset-A",
+"name": "BIOPHYS-v19",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v19.py",
+"order": 216
+},
+{
+"id": "reset-A__BIOPHYS_v20_a791be",
+"run": "reset-A",
+"name": "BIOPHYS-v20",
+"logged": 0.0653,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v20.py",
+"order": 217
+},
+{
+"id": "reset-A__BIOPHYS_v21_d7673d",
+"run": "reset-A",
+"name": "BIOPHYS-v21",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v21.py",
+"order": 218
+},
+{
+"id": "reset-A__BIOPHYS_v22_a14937",
+"run": "reset-A",
+"name": "BIOPHYS-v22",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v22.py",
+"order": 219
+},
+{
+"id": "reset-A__BIOPHYS_v23_5f62e4",
+"run": "reset-A",
+"name": "BIOPHYS-v23",
+"logged": 0.0653,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v23.py",
+"order": 220
+},
+{
+"id": "reset-A__BIOPHYS_v24_096e0e",
+"run": "reset-A",
+"name": "BIOPHYS-v24",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v24.py",
+"order": 221
+},
+{
+"id": "reset-A__BIOPHYS_v25_fa467e",
+"run": "reset-A",
+"name": "BIOPHYS-v25",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v25.py",
+"order": 222
+},
+{
+"id": "reset-A__BIOPHYS_v26_598f69",
+"run": "reset-A",
+"name": "BIOPHYS-v26",
+"logged": 0.0647,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v26.py",
+"order": 223
+},
+{
+"id": "reset-A__BIOPHYS_v27_b93fea",
+"run": "reset-A",
+"name": "BIOPHYS-v27",
+"logged": 0.0647,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v27.py",
+"order": 224
+},
+{
+"id": "reset-A__BIOPHYS_v28_df46ab",
+"run": "reset-A",
+"name": "BIOPHYS-v28",
+"logged": 0.0649,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v28.py",
+"order": 225
+},
+{
+"id": "reset-A__BIOPHYS_v29_1725aa",
+"run": "reset-A",
+"name": "BIOPHYS-v29",
+"logged": 0.0646,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v29.py",
+"order": 226
+},
+{
+"id": "reset-A__BIOPHYS_v30_91b0ca",
+"run": "reset-A",
+"name": "BIOPHYS-v30",
+"logged": 0.0646,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v30.py",
+"order": 227
+},
+{
+"id": "reset-A__BIOPHYS_v31_9d5fdc",
+"run": "reset-A",
+"name": "BIOPHYS-v31",
+"logged": 0.0642,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v31.py",
+"order": 228
+},
+{
+"id": "reset-A__BIOPHYS_v32_cc8399",
+"run": "reset-A",
+"name": "BIOPHYS-v32",
+"logged": 0.0646,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v32.py",
+"order": 229
+},
+{
+"id": "reset-A__BIOPHYS_v33_ac3656",
+"run": "reset-A",
+"name": "BIOPHYS-v33",
+"logged": 0.0647,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v33.py",
+"order": 230
+},
+{
+"id": "reset-A__BIOPHYS_v34_7d9814",
+"run": "reset-A",
+"name": "BIOPHYS-v34",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v34.py",
+"order": 231
+},
+{
+"id": "reset-A__BIOPHYS_v35_551303",
+"run": "reset-A",
+"name": "BIOPHYS-v35",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v35.py",
+"order": 232
+},
+{
+"id": "reset-A__BIOPHYS_v36_d3dccd",
+"run": "reset-A",
+"name": "BIOPHYS-v36",
+"logged": 0.0653,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v36.py",
+"order": 233
+},
+{
+"id": "reset-A__BIOPHYS_v37_2fa5bd",
+"run": "reset-A",
+"name": "BIOPHYS-v37",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v37.py",
+"order": 234
+},
+{
+"id": "reset-A__BIOPHYS_v38_6e821a",
+"run": "reset-A",
+"name": "BIOPHYS-v38",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v38.py",
+"order": 235
+},
+{
+"id": "reset-A__BIOPHYS_v39_ab1a05",
+"run": "reset-A",
+"name": "BIOPHYS-v39",
+"logged": 0.0656,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v39.py",
+"order": 236
+},
+{
+"id": "reset-B__STMF_v1_pure_c32207",
+"run": "reset-B",
+"name": "STMF-v1-pure",
+"logged": 0.0537,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v1-pure.py",
+"order": 237
+},
+{
+"id": "reset-B__STMF_v2_cube_detrend_1632c5",
+"run": "reset-B",
+"name": "STMF-v2-cube-detrend",
+"logged": 0.0488,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v2-cube-detrend.py",
+"order": 238
+},
+{
+"id": "reset-B__STMF_v3_pyramid_29d004",
+"run": "reset-B",
+"name": "STMF-v3-pyramid",
+"logged": 0.0494,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v3-pyramid.py",
+"order": 239
+},
+{
+"id": "reset-B__STMF_v5_divnorm_02d526",
+"run": "reset-B",
+"name": "STMF-v5-divnorm",
+"logged": 0.0535,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v5-divnorm.py",
+"order": 240
+},
+{
+"id": "reset-B__STMF_v6_amspec_bfb674",
+"run": "reset-B",
+"name": "STMF-v6-amspec",
+"logged": 0.0564,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v6-amspec.py",
+"order": 241
+},
+{
+"id": "reset-B__STMF_v7_amspec_dense_16441b",
+"run": "reset-B",
+"name": "STMF-v7-amspec-dense",
+"logged": 0.0565,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v7-amspec-dense.py",
+"order": 242
+},
+{
+"id": "reset-B__STMF_v8b_amspec_2nd_pooled_c72911",
+"run": "reset-B",
+"name": "STMF-v8b-amspec-2nd-pooled",
+"logged": 0.0575,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v8b-amspec-2nd-pooled.py",
+"order": 243
+},
+{
+"id": "reset-C__PHON_v1_1f392d",
+"run": "reset-C",
+"name": "PHON-v1",
+"logged": 0.0645,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v1.py",
+"order": 244
+},
+{
+"id": "reset-C__PHON_v2_24c55f",
+"run": "reset-C",
+"name": "PHON-v2",
+"logged": 0.0638,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v2.py",
+"order": 245
+},
+{
+"id": "reset-C__PHON_v3_c1e346",
+"run": "reset-C",
+"name": "PHON-v3",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v3.py",
+"order": 246
+},
+{
+"id": "reset-C__PHON_v4_11b181",
+"run": "reset-C",
+"name": "PHON-v4",
+"logged": 0.0675,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v4.py",
+"order": 247
+},
+{
+"id": "reset-C__PHON_v5_0656fa",
+"run": "reset-C",
+"name": "PHON-v5",
+"logged": 0.0675,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v5.py",
+"order": 248
+},
+{
+"id": "reset-C__PHON_v6_74286c",
+"run": "reset-C",
+"name": "PHON-v6",
+"logged": 0.0661,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v6.py",
+"order": 249
+},
+{
+"id": "reset-C__PHON_v7_8025d0",
+"run": "reset-C",
+"name": "PHON-v7",
+"logged": 0.0667,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v7.py",
+"order": 250
+},
+{
+"id": "reset-C__PHON_v8_8ecb4b",
+"run": "reset-C",
+"name": "PHON-v8",
+"logged": 0.0678,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v8.py",
+"order": 251
+},
+{
+"id": "reset-C__PHON_v9_3bc710",
+"run": "reset-C",
+"name": "PHON-v9",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v9.py",
+"order": 252
+},
+{
+"id": "reset-C__PHON_v10_560f1d",
+"run": "reset-C",
+"name": "PHON-v10",
+"logged": 0.0689,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v10.py",
+"order": 253
+},
+{
+"id": "reset-C__PHON_v11_c66083",
+"run": "reset-C",
+"name": "PHON-v11",
+"logged": 0.0688,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v11.py",
+"order": 254
+},
+{
+"id": "reset-C__PHON_v12_f18f76",
+"run": "reset-C",
+"name": "PHON-v12",
+"logged": 0.0704,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v12.py",
+"order": 255
+},
+{
+"id": "reset-C__PHON_v13_304ad1",
+"run": "reset-C",
+"name": "PHON-v13",
+"logged": 0.0704,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v13.py",
+"order": 256
+},
+{
+"id": "reset-C__PHON_v14_2abf5e",
+"run": "reset-C",
+"name": "PHON-v14",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v14.py",
+"order": 257
+},
+{
+"id": "reset-C__PHON_v15_cb1c14",
+"run": "reset-C",
+"name": "PHON-v15",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v15.py",
+"order": 258
+},
+{
+"id": "reset-C__PHON_v16_75ad2f",
+"run": "reset-C",
+"name": "PHON-v16",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v16.py",
+"order": 259
+},
+{
+"id": "reset-C__PHON_v17_65cabb",
+"run": "reset-C",
+"name": "PHON-v17",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v17.py",
+"order": 260
+},
+{
+"id": "reset-C__PHON_v18_9fc88e",
+"run": "reset-C",
+"name": "PHON-v18",
+"logged": 0.0703,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v18.py",
+"order": 261
+},
+{
+"id": "reset-C__PHON_v19_607aa2",
+"run": "reset-C",
+"name": "PHON-v19",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v19.py",
+"order": 262
+},
+{
+"id": "reset-C__PHON_v20_3cb7a2",
+"run": "reset-C",
+"name": "PHON-v20",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v20.py",
+"order": 263
+},
+{
+"id": "reset-C__PHON_v21_e40338",
+"run": "reset-C",
+"name": "PHON-v21",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v21.py",
+"order": 264
+},
+{
+"id": "reset-C__PHON_v22_7aba31",
+"run": "reset-C",
+"name": "PHON-v22",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v22.py",
+"order": 265
+},
+{
+"id": "reset-C__PHON_v23_30f1de",
+"run": "reset-C",
+"name": "PHON-v23",
+"logged": 0.0713,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v23.py",
+"order": 266
+},
+{
+"id": "reset-C__PHON_v24_fdeb22",
+"run": "reset-C",
+"name": "PHON-v24",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v24.py",
+"order": 267
+},
+{
+"id": "reset-C__PHON_v26_bde4e5",
+"run": "reset-C",
+"name": "PHON-v26",
+"logged": 0.0704,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v26.py",
+"order": 269
+},
+{
+"id": "reset-C__PHON_v27_78ada2",
+"run": "reset-C",
+"name": "PHON-v27",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v27.py",
+"order": 270
+},
+{
+"id": "reset-C__PHON_v28_4cb1bf",
+"run": "reset-C",
+"name": "PHON-v28",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v28.py",
+"order": 271
+},
+{
+"id": "reset-C__PHON_v29_82342a",
+"run": "reset-C",
+"name": "PHON-v29",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v29.py",
+"order": 272
+},
+{
+"id": "reset-C__PHON_v30_9f628a",
+"run": "reset-C",
+"name": "PHON-v30",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v30.py",
+"order": 273
+},
+{
+"id": "reset-C__PHON_v31_a87ff4",
+"run": "reset-C",
+"name": "PHON-v31",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v31.py",
+"order": 274
+},
+{
+"id": "reset-C__PHON_v32_a89394",
+"run": "reset-C",
+"name": "PHON-v32",
+"logged": 0.0716,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v32.py",
+"order": 275
+},
+{
+"id": "reset-C__PHON_v33_0be22e",
+"run": "reset-C",
+"name": "PHON-v33",
+"logged": 0.0716,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v33.py",
+"order": 276
+},
+{
+"id": "reset-C__PHON_v34_7accdf",
+"run": "reset-C",
+"name": "PHON-v34",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v34.py",
+"order": 277
+},
+{
+"id": "reset-C__PHON_v35_eca1e0",
+"run": "reset-C",
+"name": "PHON-v35",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v35.py",
+"order": 278
+},
+{
+"id": "reset-C__PHON_v36_53b8ff",
+"run": "reset-C",
+"name": "PHON-v36",
+"logged": 0.0709,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v36.py",
+"order": 279
+},
+{
+"id": "reset-C__PHON_v37_b1eb2e",
+"run": "reset-C",
+"name": "PHON-v37",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v37.py",
+"order": 280
+},
+{
+"id": "reset-C__PHON_v38_0eea5b",
+"run": "reset-C",
+"name": "PHON-v38",
+"logged": 0.0713,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v38.py",
+"order": 281
+},
+{
+"id": "reset-C__PHON_v39_5b7338",
+"run": "reset-C",
+"name": "PHON-v39",
+"logged": 0.0717,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v39.py",
+"order": 282
+},
+{
+"id": "reset-C__PHON_v40_8abe10",
+"run": "reset-C",
+"name": "PHON-v40",
+"logged": 0.0714,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v40.py",
+"order": 283
+},
+{
+"id": "reset-C__PHON_v41_a3b087",
+"run": "reset-C",
+"name": "PHON-v41",
+"logged": 0.0722,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v41.py",
+"order": 284
+},
+{
+"id": "reset-C__PHON_v42_6a751a",
+"run": "reset-C",
+"name": "PHON-v42",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v42.py",
+"order": 285
+},
+{
+"id": "reset-C__PHON_v43_6f956d",
+"run": "reset-C",
+"name": "PHON-v43",
+"logged": 0.0717,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v43.py",
+"order": 286
+},
+{
+"id": "reset-C__PHON_v44_8b005f",
+"run": "reset-C",
+"name": "PHON-v44",
+"logged": 0.0724,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v44.py",
+"order": 287
+},
+{
+"id": "reset-C__PHON_v45_5a2bd2",
+"run": "reset-C",
+"name": "PHON-v45",
+"logged": 0.0726,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v45.py",
+"order": 288
+},
+{
+"id": "reset-C__PHON_v46_97ecef",
+"run": "reset-C",
+"name": "PHON-v46",
+"logged": 0.0725,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v46.py",
+"order": 289
+},
+{
+"id": "reset-D__SCAT_v1_ffcfb0",
+"run": "reset-D",
+"name": "SCAT-v1",
+"logged": 0.0509,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v1.py",
+"order": 290
+},
+{
+"id": "reset-D__SCAT_v2_7d617e",
+"run": "reset-D",
+"name": "SCAT-v2",
+"logged": 0.0536,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v2.py",
+"order": 291
+},
+{
+"id": "reset-D__SCAT_v3_5301e5",
+"run": "reset-D",
+"name": "SCAT-v3",
+"logged": 0.0585,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v3.py",
+"order": 292
+},
+{
+"id": "reset-D__SCAT_v4_083dbb",
+"run": "reset-D",
+"name": "SCAT-v4",
+"logged": 0.0586,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v4.py",
+"order": 293
+},
+{
+"id": "reset-D__SCAT_v5_a570c7",
+"run": "reset-D",
+"name": "SCAT-v5",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v5.py",
+"order": 294
+},
+{
+"id": "reset-D__SCAT_v6_4a23a6",
+"run": "reset-D",
+"name": "SCAT-v6",
+"logged": 0.0656,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v6.py",
+"order": 295
+},
+{
+"id": "reset-D__SCAT_v7_c2ac94",
+"run": "reset-D",
+"name": "SCAT-v7",
+"logged": 0.0638,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v7.py",
+"order": 296
+},
+{
+"id": "reset-D__SCAT_v8_3bccd6",
+"run": "reset-D",
+"name": "SCAT-v8",
+"logged": 0.0655,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v8.py",
+"order": 297
+},
+{
+"id": "reset-D__SCAT_v9_d762d8",
+"run": "reset-D",
+"name": "SCAT-v9",
+"logged": 0.0657,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v9.py",
+"order": 298
+},
+{
+"id": "reset-D__SCAT_v10_b34fd3",
+"run": "reset-D",
+"name": "SCAT-v10",
+"logged": 0.0648,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v10.py",
+"order": 299
+},
+{
+"id": "reset-D__SCAT_v11_8a4615",
+"run": "reset-D",
+"name": "SCAT-v11",
+"logged": 0.0656,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v11.py",
+"order": 300
+},
+{
+"id": "reset-D__SCAT_v12_00e78d",
+"run": "reset-D",
+"name": "SCAT-v12",
+"logged": 0.0658,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v12.py",
+"order": 301
+},
+{
+"id": "reset-D__SCAT_v13_2c4ba4",
+"run": "reset-D",
+"name": "SCAT-v13",
+"logged": 0.066,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v13.py",
+"order": 302
+},
+{
+"id": "reset-D__SCAT_v14_b851c0",
+"run": "reset-D",
+"name": "SCAT-v14",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v14.py",
+"order": 303
+},
+{
+"id": "reset-D__SCAT_v15_a6976e",
+"run": "reset-D",
+"name": "SCAT-v15",
+"logged": 0.0665,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v15.py",
+"order": 304
+},
+{
+"id": "reset-D__SCAT_v16_d27457",
+"run": "reset-D",
+"name": "SCAT-v16",
+"logged": 0.0666,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v16.py",
+"order": 305
+},
+{
+"id": "reset-D__SCAT_v17_2e09ce",
+"run": "reset-D",
+"name": "SCAT-v17",
+"logged": 0.0672,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v17.py",
+"order": 306
+},
+{
+"id": "reset-D__SCAT_v18_32c9c0",
+"run": "reset-D",
+"name": "SCAT-v18",
+"logged": 0.0661,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v18.py",
+"order": 307
+},
+{
+"id": "reset-D__SCAT_v19_42d7b1",
+"run": "reset-D",
+"name": "SCAT-v19",
+"logged": 0.0659,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v19.py",
+"order": 308
+},
+{
+"id": "reset-D__SCAT_v20_95d270",
+"run": "reset-D",
+"name": "SCAT-v20",
+"logged": 0.0673,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v20.py",
+"order": 309
+},
+{
+"id": "reset-D__SCAT_v21_63728b",
+"run": "reset-D",
+"name": "SCAT-v21",
+"logged": 0.0665,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v21.py",
+"order": 310
+},
+{
+"id": "reset-D__SCAT_v22_a348b2",
+"run": "reset-D",
+"name": "SCAT-v22",
+"logged": 0.0667,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v22.py",
+"order": 311
+},
+{
+"id": "reset-D__SCAT_v23_d38090",
+"run": "reset-D",
+"name": "SCAT-v23",
+"logged": 0.0667,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v23.py",
+"order": 312
+},
+{
+"id": "reset-D__SCAT_v24_816cab",
+"run": "reset-D",
+"name": "SCAT-v24",
+"logged": 0.0671,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v24.py",
+"order": 313
+},
+{
+"id": "reset-D__SCAT_v25_d31ddf",
+"run": "reset-D",
+"name": "SCAT-v25",
+"logged": 0.0678,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v25.py",
+"order": 314
+},
+{
+"id": "reset-D__SCAT_v26_f13e78",
+"run": "reset-D",
+"name": "SCAT-v26",
+"logged": 0.0676,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v26.py",
+"order": 315
+},
+{
+"id": "reset-D__SCAT_v27_f27140",
+"run": "reset-D",
+"name": "SCAT-v27",
+"logged": 0.0684,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v27.py",
+"order": 316
+},
+{
+"id": "reset-D__SCAT_v28_b5f376",
+"run": "reset-D",
+"name": "SCAT-v28",
+"logged": 0.0687,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v28.py",
+"order": 317
+},
+{
+"id": "reset-D__SCAT_v29_a57204",
+"run": "reset-D",
+"name": "SCAT-v29",
+"logged": 0.0694,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v29.py",
+"order": 318
+},
+{
+"id": "reset-D__SCAT_v30_da0b46",
+"run": "reset-D",
+"name": "SCAT-v30",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v30.py",
+"order": 319
+},
+{
+"id": "reset-D__SCAT_v31_58de37",
+"run": "reset-D",
+"name": "SCAT-v31",
+"logged": 0.0704,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v31.py",
+"order": 320
+},
+{
+"id": "reset-D__SCAT_v32_3848be",
+"run": "reset-D",
+"name": "SCAT-v32",
+"logged": 0.0703,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v32.py",
+"order": 321
+},
+{
+"id": "reset-D__SCAT_v33_1db6d1",
+"run": "reset-D",
+"name": "SCAT-v33",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v33.py",
+"order": 322
+},
+{
+"id": "reset-D__SCAT_v34_a991e6",
+"run": "reset-D",
+"name": "SCAT-v34",
+"logged": 0.0702,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v34.py",
+"order": 323
+},
+{
+"id": "reset-D__SCAT_v35_e8b930",
+"run": "reset-D",
+"name": "SCAT-v35",
+"logged": 0.0716,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v35.py",
+"order": 324
+},
+{
+"id": "reset-D__SCAT_v36_3acc78",
+"run": "reset-D",
+"name": "SCAT-v36",
+"logged": 0.072,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v36.py",
+"order": 325
+},
+{
+"id": "reset-D__SCAT_v37_3ba1a5",
+"run": "reset-D",
+"name": "SCAT-v37",
+"logged": 0.0719,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v37.py",
+"order": 326
+},
+{
+"id": "reset-D__SCAT_v38_2998e3",
+"run": "reset-D",
+"name": "SCAT-v38",
+"logged": 0.0706,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-D/wave_encoders_lib/SCAT-v38.py",
+"order": 327
+},
+{
+"id": "reset-E__DN_v1_00f499",
+"run": "reset-E",
+"name": "DN-v1",
+"logged": 0.0545,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v1.py",
+"order": 328
+},
+{
+"id": "reset-E__DN_v2_c7f2a5",
+"run": "reset-E",
+"name": "DN-v2",
+"logged": 0.051,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v2.py",
+"order": 329
+},
+{
+"id": "reset-E__DN_v3_29caf3",
+"run": "reset-E",
+"name": "DN-v3",
+"logged": 0.0585,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v3.py",
+"order": 330
+},
+{
+"id": "reset-E__DN_v4_1d19fc",
+"run": "reset-E",
+"name": "DN-v4",
+"logged": 0.0601,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v4.py",
+"order": 331
+},
+{
+"id": "reset-E__DN_v5_344741",
+"run": "reset-E",
+"name": "DN-v5",
+"logged": 0.0591,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v5.py",
+"order": 332
+},
+{
+"id": "reset-E__DN_v6_af8182",
+"run": "reset-E",
+"name": "DN-v6",
+"logged": 0.0594,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v6.py",
+"order": 333
+},
+{
+"id": "reset-E__DN_v7_8d062c",
+"run": "reset-E",
+"name": "DN-v7",
+"logged": 0.0594,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v7.py",
+"order": 334
+},
+{
+"id": "reset-E__DN_v8_e4c6dc",
+"run": "reset-E",
+"name": "DN-v8",
+"logged": 0.0593,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v8.py",
+"order": 335
+},
+{
+"id": "reset-E__DN_v9_3a22ad",
+"run": "reset-E",
+"name": "DN-v9",
+"logged": 0.0658,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v9.py",
+"order": 336
+},
+{
+"id": "reset-E__DN_v10_ac3666",
+"run": "reset-E",
+"name": "DN-v10",
+"logged": 0.0662,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v10.py",
+"order": 337
+},
+{
+"id": "reset-E__DN_v11_de28a4",
+"run": "reset-E",
+"name": "DN-v11",
+"logged": 0.0666,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v11.py",
+"order": 338
+},
+{
+"id": "reset-E__DN_v12_cc15eb",
+"run": "reset-E",
+"name": "DN-v12",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v12.py",
+"order": 339
+},
+{
+"id": "reset-E__DN_v13_84acc7",
+"run": "reset-E",
+"name": "DN-v13",
+"logged": 0.0666,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v13.py",
+"order": 340
+},
+{
+"id": "reset-E__DN_v14_b11bc2",
+"run": "reset-E",
+"name": "DN-v14",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v14.py",
+"order": 341
+},
+{
+"id": "reset-E__DN_v15_73b8b1",
+"run": "reset-E",
+"name": "DN-v15",
+"logged": 0.0658,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v15.py",
+"order": 342
+},
+{
+"id": "reset-E__DN_v16_f540e5",
+"run": "reset-E",
+"name": "DN-v16",
+"logged": 0.0664,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v16.py",
+"order": 343
+},
+{
+"id": "reset-E__DN_v18_ffcd57",
+"run": "reset-E",
+"name": "DN-v18",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v18.py",
+"order": 344
+},
+{
+"id": "reset-E__DN_v20_515f60",
+"run": "reset-E",
+"name": "DN-v20",
+"logged": 0.0665,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v20.py",
+"order": 345
+},
+{
+"id": "reset-E__DN_v19_e523f2",
+"run": "reset-E",
+"name": "DN-v19",
+"logged": 0.0671,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v19.py",
+"order": 346
+},
+{
+"id": "reset-E__DN_v21_ce9530",
+"run": "reset-E",
+"name": "DN-v21",
+"logged": 0.0659,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v21.py",
+"order": 347
+},
+{
+"id": "reset-E__DN_v22_a37912",
+"run": "reset-E",
+"name": "DN-v22",
+"logged": 0.0654,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v22.py",
+"order": 348
+},
+{
+"id": "reset-E__DN_v23_b31959",
+"run": "reset-E",
+"name": "DN-v23",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v23.py",
+"order": 349
+},
+{
+"id": "reset-E__DN_v24_33d440",
+"run": "reset-E",
+"name": "DN-v24",
+"logged": 0.0644,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v24.py",
+"order": 350
+},
+{
+"id": "reset-E__DN_v25_c6ed97",
+"run": "reset-E",
+"name": "DN-v25",
+"logged": 0.0668,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v25.py",
+"order": 351
+},
+{
+"id": "reset-E__DN_v26_efb264",
+"run": "reset-E",
+"name": "DN-v26",
+"logged": 0.0668,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v26.py",
+"order": 352
+},
+{
+"id": "reset-E__DN_v27_a6185d",
+"run": "reset-E",
+"name": "DN-v27",
+"logged": 0.0674,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v27.py",
+"order": 353
+},
+{
+"id": "reset-E__DN_v29_5ed08b",
+"run": "reset-E",
+"name": "DN-v29",
+"logged": 0.0658,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v29.py",
+"order": 355
+},
+{
+"id": "reset-E__DN_v30_efdd1f",
+"run": "reset-E",
+"name": "DN-v30",
+"logged": 0.0666,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v30.py",
+"order": 356
+},
+{
+"id": "reset-E__DN_v31_36f0d5",
+"run": "reset-E",
+"name": "DN-v31",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v31.py",
+"order": 357
+},
+{
+"id": "reset-E__DN_v32_a1d345",
+"run": "reset-E",
+"name": "DN-v32",
+"logged": 0.0669,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v32.py",
+"order": 358
+},
+{
+"id": "reset-E__DN_v33_29b472",
+"run": "reset-E",
+"name": "DN-v33",
+"logged": 0.0678,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v33.py",
+"order": 359
+},
+{
+"id": "reset-E__DN_v34_eb9abf",
+"run": "reset-E",
+"name": "DN-v34",
+"logged": 0.0694,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v34.py",
+"order": 360
+},
+{
+"id": "reset-E__DN_v35_7dac14",
+"run": "reset-E",
+"name": "DN-v35",
+"logged": 0.069,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v35.py",
+"order": 361
+},
+{
+"id": "reset-E__DN_v36_a8f017",
+"run": "reset-E",
+"name": "DN-v36",
+"logged": 0.0695,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v36.py",
+"order": 362
+},
+{
+"id": "reset-F__PC_v1_3ca3c4",
+"run": "reset-F",
+"name": "PC-v1",
+"logged": 0.0597,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v1.py",
+"order": 363
+},
+{
+"id": "reset-F__PC_v2_42f5fd",
+"run": "reset-F",
+"name": "PC-v2",
+"logged": 0.0596,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v2.py",
+"order": 364
+},
+{
+"id": "reset-F__PC_v3_8cb87f",
+"run": "reset-F",
+"name": "PC-v3",
+"logged": 0.0598,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v3.py",
+"order": 365
+},
+{
+"id": "reset-F__PC_v4_44d68c",
+"run": "reset-F",
+"name": "PC-v4",
+"logged": 0.0592,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v4.py",
+"order": 366
+},
+{
+"id": "reset-F__PC_v5_c12e2f",
+"run": "reset-F",
+"name": "PC-v5",
+"logged": 0.0624,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v5.py",
+"order": 367
+},
+{
+"id": "reset-F__PC_v6_5cbbf1",
+"run": "reset-F",
+"name": "PC-v6",
+"logged": 0.0599,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v6.py",
+"order": 368
+},
+{
+"id": "reset-F__PC_v7_402911",
+"run": "reset-F",
+"name": "PC-v7",
+"logged": 0.0638,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v7.py",
+"order": 369
+},
+{
+"id": "reset-F__PC_v8_a2b8b5",
+"run": "reset-F",
+"name": "PC-v8",
+"logged": 0.0632,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v8.py",
+"order": 370
+},
+{
+"id": "reset-F__PC_v9_bc697e",
+"run": "reset-F",
+"name": "PC-v9",
+"logged": 0.0641,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v9.py",
+"order": 371
+},
+{
+"id": "reset-F__PC_v10_5bc954",
+"run": "reset-F",
+"name": "PC-v10",
+"logged": 0.0645,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v10.py",
+"order": 372
+},
+{
+"id": "reset-F__PC_v11_744086",
+"run": "reset-F",
+"name": "PC-v11",
+"logged": 0.0648,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v11.py",
+"order": 373
+},
+{
+"id": "reset-F__PC_v12_d80ac4",
+"run": "reset-F",
+"name": "PC-v12",
+"logged": 0.0685,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v12.py",
+"order": 374
+},
+{
+"id": "reset-F__PC_v13_f6b101",
+"run": "reset-F",
+"name": "PC-v13",
+"logged": 0.0693,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v13.py",
+"order": 375
+},
+{
+"id": "reset-F__PC_v14_eb0e16",
+"run": "reset-F",
+"name": "PC-v14",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v14.py",
+"order": 376
+},
+{
+"id": "reset-F__PC_v15_62e881",
+"run": "reset-F",
+"name": "PC-v15",
+"logged": 0.069,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v15.py",
+"order": 377
+},
+{
+"id": "reset-F__PC_v16_d7c99a",
+"run": "reset-F",
+"name": "PC-v16",
+"logged": 0.0698,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v16.py",
+"order": 378
+},
+{
+"id": "reset-F__PC_v17_089e67",
+"run": "reset-F",
+"name": "PC-v17",
+"logged": 0.0702,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v17.py",
+"order": 379
+},
+{
+"id": "reset-F__PC_v18_425bbd",
+"run": "reset-F",
+"name": "PC-v18",
+"logged": 0.0687,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v18.py",
+"order": 380
+},
+{
+"id": "reset-F__PC_v19_f48271",
+"run": "reset-F",
+"name": "PC-v19",
+"logged": 0.0682,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v19.py",
+"order": 381
+},
+{
+"id": "reset-F__PC_v20_425001",
+"run": "reset-F",
+"name": "PC-v20",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v20.py",
+"order": 382
+},
+{
+"id": "reset-F__PC_v21_8ffcf5",
+"run": "reset-F",
+"name": "PC-v21",
+"logged": 0.0701,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v21.py",
+"order": 383
+},
+{
+"id": "reset-F__PC_v22_90b03b",
+"run": "reset-F",
+"name": "PC-v22",
+"logged": 0.0702,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v22.py",
+"order": 384
+},
+{
+"id": "reset-F__PC_v23_46cada",
+"run": "reset-F",
+"name": "PC-v23",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v23.py",
+"order": 385
+},
+{
+"id": "reset-F__PC_v26_271ab4",
+"run": "reset-F",
+"name": "PC-v26",
+"logged": 0.0697,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v26.py",
+"order": 386
+},
+{
+"id": "reset-F__PC_v27_32ad6a",
+"run": "reset-F",
+"name": "PC-v27",
+"logged": 0.0704,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v27.py",
+"order": 387
+},
+{
+"id": "reset-F__PC_v24_761951",
+"run": "reset-F",
+"name": "PC-v24",
+"logged": 0.0705,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v24.py",
+"order": 388
+},
+{
+"id": "reset-F__PC_v28_9f34c6",
+"run": "reset-F",
+"name": "PC-v28",
+"logged": 0.0686,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v28.py",
+"order": 389
+},
+{
+"id": "reset-F__PC_v29_02e498",
+"run": "reset-F",
+"name": "PC-v29",
+"logged": 0.0699,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v29.py",
+"order": 390
+},
+{
+"id": "reset-F__PC_v30_081724",
+"run": "reset-F",
+"name": "PC-v30",
+"logged": 0.0702,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v30.py",
+"order": 391
+},
+{
+"id": "reset-F__PC_v31_a55ae4",
+"run": "reset-F",
+"name": "PC-v31",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v31.py",
+"order": 392
+},
+{
+"id": "reset-F__PC_v32_67545d",
+"run": "reset-F",
+"name": "PC-v32",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v32.py",
+"order": 393
+},
+{
+"id": "reset-F__PC_v33_9a9886",
+"run": "reset-F",
+"name": "PC-v33",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v33.py",
+"order": 394
+},
+{
+"id": "reset-F__PC_v34_e557c8",
+"run": "reset-F",
+"name": "PC-v34",
+"logged": 0.0711,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v34.py",
+"order": 395
+},
+{
+"id": "reset-F__PC_v35_afce5a",
+"run": "reset-F",
+"name": "PC-v35",
+"logged": 0.0708,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v35.py",
+"order": 396
+},
+{
+"id": "reset-F__PC_v36_cbdd2f",
+"run": "reset-F",
+"name": "PC-v36",
+"logged": 0.0707,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v36.py",
+"order": 397
+},
+{
+"id": "reset-F__PC_v37_64fff7",
+"run": "reset-F",
+"name": "PC-v37",
+"logged": 0.0706,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v37.py",
+"order": 398
+},
+{
+"id": "reset-F__PC_v39_a34a63",
+"run": "reset-F",
+"name": "PC-v39",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v39.py",
+"order": 400
+},
+{
+"id": "reset-F__PC_v40_09b707",
+"run": "reset-F",
+"name": "PC-v40",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v40.py",
+"order": 401
+},
+{
+"id": "reset-G__TEXTURE_v1_928328",
+"run": "reset-G",
+"name": "TEXTURE-v1",
+"logged": 0.0595,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v1.py",
+"order": 402
+},
+{
+"id": "reset-G__TEXTURE_v2_e7b709",
+"run": "reset-G",
+"name": "TEXTURE-v2",
+"logged": 0.057,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v2.py",
+"order": 403
+},
+{
+"id": "reset-G__TEXTURE_v3_c2bc1c",
+"run": "reset-G",
+"name": "TEXTURE-v3",
+"logged": 0.053,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v3.py",
+"order": 404
+},
+{
+"id": "reset-G__TEXTURE_v4_059912",
+"run": "reset-G",
+"name": "TEXTURE-v4",
+"logged": 0.0619,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v4.py",
+"order": 405
+},
+{
+"id": "reset-G__TEXTURE_v5_03a983",
+"run": "reset-G",
+"name": "TEXTURE-v5",
+"logged": 0.0621,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v5.py",
+"order": 406
+},
+{
+"id": "reset-G__TEXTURE_v6_ed3fe7",
+"run": "reset-G",
+"name": "TEXTURE-v6",
+"logged": 0.0625,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v6.py",
+"order": 407
+},
+{
+"id": "reset-G__TEXTURE_v7_a5e33e",
+"run": "reset-G",
+"name": "TEXTURE-v7",
+"logged": 0.0621,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v7.py",
+"order": 408
+},
+{
+"id": "reset-G__TEXTURE_v8_d7e295",
+"run": "reset-G",
+"name": "TEXTURE-v8",
+"logged": 0.0567,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v8.py",
+"order": 409
+},
+{
+"id": "reset-G__TEXTURE_v9_e3b8f7",
+"run": "reset-G",
+"name": "TEXTURE-v9",
+"logged": 0.0631,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v9.py",
+"order": 410
+},
+{
+"id": "reset-G__TEXTURE_v10_804fd3",
+"run": "reset-G",
+"name": "TEXTURE-v10",
+"logged": 0.0633,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v10.py",
+"order": 411
+},
+{
+"id": "reset-G__TEXTURE_v11_2945dc",
+"run": "reset-G",
+"name": "TEXTURE-v11",
+"logged": 0.0637,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v11.py",
+"order": 412
+},
+{
+"id": "reset-G__TEXTURE_v12_91858a",
+"run": "reset-G",
+"name": "TEXTURE-v12",
+"logged": 0.0617,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v12.py",
+"order": 413
+},
+{
+"id": "reset-G__TEXTURE_v13_d5fe17",
+"run": "reset-G",
+"name": "TEXTURE-v13",
+"logged": 0.0641,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v13.py",
+"order": 414
+},
+{
+"id": "reset-G__TEXTURE_v14_bee38c",
+"run": "reset-G",
+"name": "TEXTURE-v14",
+"logged": 0.0605,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v14.py",
+"order": 415
+},
+{
+"id": "reset-G__TEXTURE_v15_fee72e",
+"run": "reset-G",
+"name": "TEXTURE-v15",
+"logged": 0.0631,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v15.py",
+"order": 416
+},
+{
+"id": "reset-G__TEXTURE_v16_0906da",
+"run": "reset-G",
+"name": "TEXTURE-v16",
+"logged": 0.0661,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v16.py",
+"order": 417
+},
+{
+"id": "reset-G__TEXTURE_v17_bfa279",
+"run": "reset-G",
+"name": "TEXTURE-v17",
+"logged": 0.0663,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v17.py",
+"order": 418
+},
+{
+"id": "reset-G__TEXTURE_v18_088cce",
+"run": "reset-G",
+"name": "TEXTURE-v18",
+"logged": 0.0662,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v18.py",
+"order": 419
+},
+{
+"id": "reset-G__TEXTURE_v19_7c9873",
+"run": "reset-G",
+"name": "TEXTURE-v19",
+"logged": 0.0657,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v19.py",
+"order": 420
+},
+{
+"id": "reset-G__TEXTURE_v20_6a8f1a",
+"run": "reset-G",
+"name": "TEXTURE-v20",
+"logged": 0.066,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v20.py",
+"order": 421
+},
+{
+"id": "reset-G__TEXTURE_v21_898d64",
+"run": "reset-G",
+"name": "TEXTURE-v21",
+"logged": 0.0668,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v21.py",
+"order": 422
+},
+{
+"id": "reset-G__TEXTURE_v22_d54009",
+"run": "reset-G",
+"name": "TEXTURE-v22",
+"logged": 0.0665,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v22.py",
+"order": 423
+},
+{
+"id": "reset-G__TEXTURE_v23_731b12",
+"run": "reset-G",
+"name": "TEXTURE-v23",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v23.py",
+"order": 424
+},
+{
+"id": "reset-G__TEXTURE_v24_628ad9",
+"run": "reset-G",
+"name": "TEXTURE-v24",
+"logged": 0.067,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v24.py",
+"order": 425
+},
+{
+"id": "reset-G__TEXTURE_v25_3c9924",
+"run": "reset-G",
+"name": "TEXTURE-v25",
+"logged": 0.0682,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v25.py",
+"order": 426
+},
+{
+"id": "reset-G__TEXTURE_v26_e48186",
+"run": "reset-G",
+"name": "TEXTURE-v26",
+"logged": 0.0686,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v26.py",
+"order": 427
+},
+{
+"id": "reset-G__TEXTURE_v27_999ccb",
+"run": "reset-G",
+"name": "TEXTURE-v27",
+"logged": 0.0685,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v27.py",
+"order": 428
+},
+{
+"id": "reset-G__TEXTURE_v28_45e91b",
+"run": "reset-G",
+"name": "TEXTURE-v28",
+"logged": 0.0684,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v28.py",
+"order": 429
+},
+{
+"id": "reset-G__TEXTURE_v29_59d21e",
+"run": "reset-G",
+"name": "TEXTURE-v29",
+"logged": 0.0684,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v29.py",
+"order": 430
+},
+{
+"id": "reset-G__TEXTURE_v30_446273",
+"run": "reset-G",
+"name": "TEXTURE-v30",
+"logged": 0.069,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v30.py",
+"order": 431
+},
+{
+"id": "reset-G__TEXTURE_v32_8579e7",
+"run": "reset-G",
+"name": "TEXTURE-v32",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v32.py",
+"order": 432
+},
+{
+"id": "reset-G__TEXTURE_v33_95de48",
+"run": "reset-G",
+"name": "TEXTURE-v33",
+"logged": 0.0685,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v33.py",
+"order": 433
+},
+{
+"id": "reset-G__TEXTURE_v34_100c22",
+"run": "reset-G",
+"name": "TEXTURE-v34",
+"logged": 0.0699,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v34.py",
+"order": 434
+},
+{
+"id": "reset-G__TEXTURE_v35_46437c",
+"run": "reset-G",
+"name": "TEXTURE-v35",
+"logged": 0.0696,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v35.py",
+"order": 435
+},
+{
+"id": "reset-H__RES_v01_af3148",
+"run": "reset-H",
+"name": "RES-v01",
+"logged": 0.0558,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v01.py",
+"order": 436
+},
+{
+"id": "reset-H__RES_v02_9cc898",
+"run": "reset-H",
+"name": "RES-v02",
+"logged": 0.0555,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v02.py",
+"order": 437
+},
+{
+"id": "reset-H__RES_v03_232a48",
+"run": "reset-H",
+"name": "RES-v03",
+"logged": 0.0637,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v03.py",
+"order": 438
+},
+{
+"id": "reset-H__RES_v04_408285",
+"run": "reset-H",
+"name": "RES-v04",
+"logged": 0.0633,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v04.py",
+"order": 439
+},
+{
+"id": "reset-H__RES_v05_f86cf8",
+"run": "reset-H",
+"name": "RES-v05",
+"logged": 0.063,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v05.py",
+"order": 440
+},
+{
+"id": "reset-H__RES_v06_a0d8f7",
+"run": "reset-H",
+"name": "RES-v06",
+"logged": 0.0645,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v06.py",
+"order": 441
+},
+{
+"id": "reset-H__RES_v07_71cdcf",
+"run": "reset-H",
+"name": "RES-v07",
+"logged": 0.0686,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v07.py",
+"order": 442
+},
+{
+"id": "reset-H__RES_v08b_cb5221",
+"run": "reset-H",
+"name": "RES-v08b",
+"logged": 0.0678,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v08b.py",
+"order": 443
+},
+{
+"id": "reset-H__RES_v09_151675",
+"run": "reset-H",
+"name": "RES-v09",
+"logged": 0.071,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v09.py",
+"order": 444
+},
+{
+"id": "reset-H__RES_v10b_cc34ad",
+"run": "reset-H",
+"name": "RES-v10b",
+"logged": 0.0705,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v10b.py",
+"order": 445
+},
+{
+"id": "reset-H__RES_v11_a0ece4",
+"run": "reset-H",
+"name": "RES-v11",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v11.py",
+"order": 446
+},
+{
+"id": "reset-H__RES_v12_a694aa",
+"run": "reset-H",
+"name": "RES-v12",
+"logged": 0.0705,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v12.py",
+"order": 447
+},
+{
+"id": "reset-H__RES_v13_2bf567",
+"run": "reset-H",
+"name": "RES-v13",
+"logged": 0.0691,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v13.py",
+"order": 448
+},
+{
+"id": "reset-H__RES_v14_f6163e",
+"run": "reset-H",
+"name": "RES-v14",
+"logged": 0.0715,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v14.py",
+"order": 449
+},
+{
+"id": "reset-H__RES_v17_83e91e",
+"run": "reset-H",
+"name": "RES-v17",
+"logged": 0.0681,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v17.py",
+"order": 452
+},
+{
+"id": "reset-H__RES_v18b_5aec2e",
+"run": "reset-H",
+"name": "RES-v18b",
+"logged": 0.0681,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v18b.py",
+"order": 453
+},
+{
+"id": "reset-H__RES_v19_81e3d2",
+"run": "reset-H",
+"name": "RES-v19",
+"logged": 0.0712,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v19.py",
+"order": 454
+},
+{
+"id": "reset-H__RES_v21_d9f7ae",
+"run": "reset-H",
+"name": "RES-v21",
+"logged": 0.0686,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v21.py",
+"order": 456
+},
+{
+"id": "reset-H__RES_v22_003bf3",
+"run": "reset-H",
+"name": "RES-v22",
+"logged": 0.0676,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v22.py",
+"order": 457
+},
+{
+"id": "reset-H__RES_v23_afe46b",
+"run": "reset-H",
+"name": "RES-v23",
+"logged": 0.0713,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v23.py",
+"order": 458
+},
+{
+"id": "reset-H__RES_v25_a05d70",
+"run": "reset-H",
+"name": "RES-v25",
+"logged": 0.0714,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-H/wave_encoders_lib/RES-v25.py",
+"order": 460
+},
+{
+"id": "reset-I__TFS_IF_v1_8afc34",
+"run": "reset-I",
+"name": "TFS-IF-v1",
+"logged": 0.0556,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v1.py",
+"order": 462
+},
+{
+"id": "reset-I__TFS_IF_v2_94272d",
+"run": "reset-I",
+"name": "TFS-IF-v2",
+"logged": 0.052,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v2.py",
+"order": 463
+},
+{
+"id": "reset-I__TFS_IF_v3_8c5a6a",
+"run": "reset-I",
+"name": "TFS-IF-v3",
+"logged": 0.0591,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v3.py",
+"order": 464
+},
+{
+"id": "reset-I__TFS_IF_v4_4b9344",
+"run": "reset-I",
+"name": "TFS-IF-v4",
+"logged": 0.0586,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v4.py",
+"order": 465
+},
+{
+"id": "reset-I__TFS_IF_v5_c79e96",
+"run": "reset-I",
+"name": "TFS-IF-v5",
+"logged": 0.0617,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v5.py",
+"order": 466
+},
+{
+"id": "reset-I__TFS_IF_v6_203d5f",
+"run": "reset-I",
+"name": "TFS-IF-v6",
+"logged": 0.0622,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v6.py",
+"order": 468
+},
+{
+"id": "reset-I__TFS_IF_v7c_9f4101",
+"run": "reset-I",
+"name": "TFS-IF-v7c",
+"logged": 0.0627,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v7c.py",
+"order": 469
+},
+{
+"id": "reset-I__TFS_IF_v8b_0a6b29",
+"run": "reset-I",
+"name": "TFS-IF-v8b",
+"logged": 0.0632,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v8b.py",
+"order": 470
+},
+{
+"id": "reset-I__TFS_IF_v9_d30f33",
+"run": "reset-I",
+"name": "TFS-IF-v9",
+"logged": 0.0628,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v9.py",
+"order": 471
+},
+{
+"id": "reset-I__TFS_IF_v12_c7b8e1",
+"run": "reset-I",
+"name": "TFS-IF-v12",
+"logged": 0.0637,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v12.py",
+"order": 473
+},
+{
+"id": "reset-I__TFS_IF_v13_148fae",
+"run": "reset-I",
+"name": "TFS-IF-v13",
+"logged": 0.0632,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v13.py",
+"order": 474
+},
+{
+"id": "reset-I__TFS_IF_v14_283149",
+"run": "reset-I",
+"name": "TFS-IF-v14",
+"logged": 0.0642,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v14.py",
+"order": 475
+},
+{
+"id": "reset-I__TFS_IF_v15_78bc0d",
+"run": "reset-I",
+"name": "TFS-IF-v15",
+"logged": 0.064,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v15.py",
+"order": 476
+},
+{
+"id": "reset-I__TFS_IF_v16_7dde4b",
+"run": "reset-I",
+"name": "TFS-IF-v16",
+"logged": 0.0642,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v16.py",
+"order": 477
+},
+{
+"id": "reset-I__TFS_IF_v17_88aec1",
+"run": "reset-I",
+"name": "TFS-IF-v17",
+"logged": 0.0641,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v17.py",
+"order": 478
+},
+{
+"id": "reset-I__TFS_IF_v18_bc1a00",
+"run": "reset-I",
+"name": "TFS-IF-v18",
+"logged": 0.0636,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v18.py",
+"order": 479
+},
+{
+"id": "reset-I__TFS_IF_v19_324c23",
+"run": "reset-I",
+"name": "TFS-IF-v19",
+"logged": 0.0639,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v19.py",
+"order": 480
+},
+{
+"id": "reset-I__TFS_IF_v20_947899",
+"run": "reset-I",
+"name": "TFS-IF-v20",
+"logged": 0.0628,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v20.py",
+"order": 481
+},
+{
+"id": "reset-I__TFS_IF_v21_0bd825",
+"run": "reset-I",
+"name": "TFS-IF-v21",
+"logged": 0.0621,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v21.py",
+"order": 482
+},
+{
+"id": "reset-I__TFS_IF_v22_599117",
+"run": "reset-I",
+"name": "TFS-IF-v22",
+"logged": 0.0633,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v22.py",
+"order": 483
+},
+{
+"id": "reset-I__TFS_IF_v23_12b099",
+"run": "reset-I",
+"name": "TFS-IF-v23",
+"logged": 0.0633,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v23.py",
+"order": 484
+},
+{
+"id": "reset-I__TFS_IF_v24_c87563",
+"run": "reset-I",
+"name": "TFS-IF-v24",
+"logged": 0.0638,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v24.py",
+"order": 485
+},
+{
+"id": "reset-I__TFS_IF_v25_f3a1e5",
+"run": "reset-I",
+"name": "TFS-IF-v25",
+"logged": 0.0645,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v25.py",
+"order": 486
+},
+{
+"id": "reset-I__TFS_IF_v26_384e52",
+"run": "reset-I",
+"name": "TFS-IF-v26",
+"logged": 0.0665,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v26.py",
+"order": 487
+},
+{
+"id": "reset-I__TFS_IF_v27_4c352a",
+"run": "reset-I",
+"name": "TFS-IF-v27",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v27.py",
+"order": 488
+},
+{
+"id": "reset-I__TFS_IF_v28_273ecc",
+"run": "reset-I",
+"name": "TFS-IF-v28",
+"logged": 0.0657,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v28.py",
+"order": 489
+},
+{
+"id": "reset-I__TFS_IF_v29_d1f366",
+"run": "reset-I",
+"name": "TFS-IF-v29",
+"logged": 0.0662,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v29.py",
+"order": 490
+},
+{
+"id": "reset-I__TFS_IF_v30_f8f89d",
+"run": "reset-I",
+"name": "TFS-IF-v30",
+"logged": 0.0652,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v30.py",
+"order": 491
+},
+{
+"id": "reset-I__TFS_IF_v31_abb105",
+"run": "reset-I",
+"name": "TFS-IF-v31",
+"logged": 0.065,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v31.py",
+"order": 492
+},
+{
+"id": "reset-I__TFS_IF_v32_4c4169",
+"run": "reset-I",
+"name": "TFS-IF-v32",
+"logged": 0.066,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v32.py",
+"order": 493
+},
+{
+"id": "reset-I__TFS_IF_v33_0b289e",
+"run": "reset-I",
+"name": "TFS-IF-v33",
+"logged": 0.0656,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v33.py",
+"order": 494
+},
+{
+"id": "reset-I__TFS_IF_v34_e14a78",
+"run": "reset-I",
+"name": "TFS-IF-v34",
+"logged": 0.066,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v34.py",
+"order": 495
+},
+{
+"id": "reset-I__TFS_IF_v35_abb5a6",
+"run": "reset-I",
+"name": "TFS-IF-v35",
+"logged": 0.0656,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-I/wave_encoders_lib/TFS-IF-v35.py",
+"order": 496
+},
+{
+"id": "graft-lean__GRAFT_v1c_tfs_739eca",
+"run": "graft-lean",
+"name": "GRAFT-v1c-tfs",
+"logged": 0.0756,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v1c-tfs-revert.py",
+"order": 499
+},
+{
+"id": "graft-lean__GRAFT_v2c_reservoir_0388d8",
+"run": "graft-lean",
+"name": "GRAFT-v2c-reservoir",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v2c-reservoir-revert.py",
+"order": 501
+},
+{
+"id": "graft-lean__GRAFT_v3b_divnorm_79d0c8",
+"run": "graft-lean",
+"name": "GRAFT-v3b-divnorm",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v3b-divnorm-keep.py",
+"order": 503
+},
+{
+"id": "graft-lean__GRAFT_v4b_texture_cf48d4",
+"run": "graft-lean",
+"name": "GRAFT-v4b-texture",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v4b-texture-keep.py",
+"order": 505
+},
+{
+"id": "graft-lean__GRAFT_v5c_products_94b1a4",
+"run": "graft-lean",
+"name": "GRAFT-v5c-products",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v5c-products-keep.py",
+"order": 508
+},
+{
+"id": "graft-lean__GRAFT_v6_stacked_clean_75fff0",
+"run": "graft-lean",
+"name": "GRAFT-v6-stacked-clean",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v6-stacked-clean-keep.py",
+"order": 509
+},
+{
+"id": "graft-lean__GRAFT_v7_tune_tex8_3ccccd",
+"run": "graft-lean",
+"name": "GRAFT-v7-tune-tex8",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v7-tune-tex8-keep.py",
+"order": 510
+},
+{
+"id": "graft-lean__GRAFT_v8_tune_sat3_db7658",
+"run": "graft-lean",
+"name": "GRAFT-v8-tune-sat3",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v8-tune-sat3-revert.py",
+"order": 511
+},
+{
+"id": "graft-lean__GRAFT_v9_tune_tex_multitau_56dbea",
+"run": "graft-lean",
+"name": "GRAFT-v9-tune-tex-multitau",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v9-tune-tex-multitau-revert.py",
+"order": 512
+},
+{
+"id": "graft-lean__GRAFT_v10_tune_tlag_236e6a",
+"run": "graft-lean",
+"name": "GRAFT-v10-tune-tlag",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v10-tune-tlag-revert.py",
+"order": 513
+},
+{
+"id": "lean-interp__INTERP_v1a_cond_b8b291",
+"run": "lean-interp",
+"name": "INTERP-v1a-cond",
+"logged": 0.0761,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v1a-cond.py",
+"order": 516
+},
+{
+"id": "lean-interp__INTERP_v1b_cond_7cac13",
+"run": "lean-interp",
+"name": "INTERP-v1b-cond",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v1b-cond.py",
+"order": 517
+},
+{
+"id": "lean-interp__INTERP_v2a_interact_882ba9",
+"run": "lean-interp",
+"name": "INTERP-v2a-interact",
+"logged": 0.0759,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2a-interact.py",
+"order": 518
+},
+{
+"id": "lean-interp__INTERP_v2b_interact_03f169",
+"run": "lean-interp",
+"name": "INTERP-v2b-interact",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2b-interact.py",
+"order": 519
+},
+{
+"id": "lean-interp__INTERP_v2c_interact_760c61",
+"run": "lean-interp",
+"name": "INTERP-v2c-interact",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2c-interact.py",
+"order": 520
+},
+{
+"id": "lean-interp__INTERP_v2d_interact_3cac68",
+"run": "lean-interp",
+"name": "INTERP-v2d-interact",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2d-interact.py",
+"order": 521
+},
+{
+"id": "lean-interp__INTERP_v2e_interact_92544d",
+"run": "lean-interp",
+"name": "INTERP-v2e-interact",
+"logged": 0.0758,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2e-interact.py",
+"order": 522
+},
+{
+"id": "lean-interp__INTERP_v2f_interact_e00974",
+"run": "lean-interp",
+"name": "INTERP-v2f-interact",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2f-interact.py",
+"order": 523
+},
+{
+"id": "lean-interp__INTERP_v2g_interact_d709d9",
+"run": "lean-interp",
+"name": "INTERP-v2g-interact",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2g-interact.py",
+"order": 524
+},
+{
+"id": "lean-interp__INTERP_final_349f37",
+"run": "lean-interp",
+"name": "INTERP-final",
+"logged": 0.0762,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final.py",
+"order": 525
+},
+{
+"id": "lean-interp__INTERP_v2h_interact_b25019",
+"run": "lean-interp",
+"name": "INTERP-v2h-interact",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2h-interact.py",
+"order": 526
+},
+{
+"id": "lean-interp__INTERP_v2j_interact_afb3da",
+"run": "lean-interp",
+"name": "INTERP-v2j-interact",
+"logged": 0.0764,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2j-interact.py",
+"order": 527
+},
+{
+"id": "lean-interp__INTERP_v2k_interact_05b4b7",
+"run": "lean-interp",
+"name": "INTERP-v2k-interact",
+"logged": 0.076,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2k-interact.py",
+"order": 529
+},
+{
+"id": "lean-interp__INTERP_v2m_interact_ae86c9",
+"run": "lean-interp",
+"name": "INTERP-v2m-interact",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2m-interact.py",
+"order": 531
+},
+{
+"id": "lean-interp__INTERP_final2_16d678",
+"run": "lean-interp",
+"name": "INTERP-final2",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final2.py",
+"order": 535
+},
+{
+"id": "lean-interp__INTERP_v2q_interact_1e1f92",
+"run": "lean-interp",
+"name": "INTERP-v2q-interact",
+"logged": 0.0765,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2q-interact.py",
+"order": 536
+},
+{
+"id": "lean-interp__INTERP_v2r_interact_9b2159",
+"run": "lean-interp",
+"name": "INTERP-v2r-interact",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2r-interact.py",
+"order": 537
+},
+{
+"id": "lean-interp__INTERP_v2s_interact_1ddd82",
+"run": "lean-interp",
+"name": "INTERP-v2s-interact",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2s-interact.py",
+"order": 538
+},
+{
+"id": "lean-interp__INTERP_v2t_interact_9305cb",
+"run": "lean-interp",
+"name": "INTERP-v2t-interact",
+"logged": 0.0765,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2t-interact.py",
+"order": 539
+},
+{
+"id": "lean-interp__INTERP_v2u_interact_8acc97",
+"run": "lean-interp",
+"name": "INTERP-v2u-interact",
+"logged": 0.0767,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2u-interact.py",
+"order": 540
+},
+{
+"id": "lean-interp__INTERP_v2v_interact_9a6566",
+"run": "lean-interp",
+"name": "INTERP-v2v-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2v-interact.py",
+"order": 541
+},
+{
+"id": "lean-interp__INTERP_v2w_interact_5ce686",
+"run": "lean-interp",
+"name": "INTERP-v2w-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2w-interact.py",
+"order": 542
+},
+{
+"id": "lean-interp__INTERP_v2x_interact_379cd5",
+"run": "lean-interp",
+"name": "INTERP-v2x-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2x-interact.py",
+"order": 543
+},
+{
+"id": "lean-interp__INTERP_v2y_interact_272e00",
+"run": "lean-interp",
+"name": "INTERP-v2y-interact",
+"logged": 0.0774,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2y-interact.py",
+"order": 544
+},
+{
+"id": "lean-interp__INTERP_v2z_interact_c53d4a",
+"run": "lean-interp",
+"name": "INTERP-v2z-interact",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2z-interact.py",
+"order": 545
+},
+{
+"id": "lean-interp__INTERP_v2aa_interact_3e654c",
+"run": "lean-interp",
+"name": "INTERP-v2aa-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2aa-interact.py",
+"order": 546
+},
+{
+"id": "lean-interp__INTERP_v2bb_interact_cbaab4",
+"run": "lean-interp",
+"name": "INTERP-v2bb-interact",
+"logged": 0.0774,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2bb-interact.py",
+"order": 547
+},
+{
+"id": "lean-interp__INTERP_v2cc_interact_79663b",
+"run": "lean-interp",
+"name": "INTERP-v2cc-interact",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2cc-interact.py",
+"order": 548
+},
+{
+"id": "lean-interp__INTERP_v2dd_interact_f455ab",
+"run": "lean-interp",
+"name": "INTERP-v2dd-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2dd-interact.py",
+"order": 549
+},
+{
+"id": "lean-interp__INTERP_v2ee_interact_ac6f3b",
+"run": "lean-interp",
+"name": "INTERP-v2ee-interact",
+"logged": 0.0768,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ee-interact.py",
+"order": 550
+},
+{
+"id": "lean-interp__INTERP_v2ff_interact_b8ff25",
+"run": "lean-interp",
+"name": "INTERP-v2ff-interact",
+"logged": 0.0766,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ff-interact.py",
+"order": 551
+},
+{
+"id": "lean-interp__INTERP_v2gg_interact_8f42a8",
+"run": "lean-interp",
+"name": "INTERP-v2gg-interact",
+"logged": 0.0771,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2gg-interact.py",
+"order": 552
+},
+{
+"id": "lean-interp__INTERP_v2hh_interact_b55f1d",
+"run": "lean-interp",
+"name": "INTERP-v2hh-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2hh-interact.py",
+"order": 553
+},
+{
+"id": "lean-interp__INTERP_v2ii_interact_803f0a",
+"run": "lean-interp",
+"name": "INTERP-v2ii-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ii-interact.py",
+"order": 554
+},
+{
+"id": "lean-interp__INTERP_v2jj_interact_e91747",
+"run": "lean-interp",
+"name": "INTERP-v2jj-interact",
+"logged": 0.0774,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2jj-interact.py",
+"order": 555
+},
+{
+"id": "lean-interp__INTERP_v2kk_interact_3a24a2",
+"run": "lean-interp",
+"name": "INTERP-v2kk-interact",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2kk-interact.py",
+"order": 556
+},
+{
+"id": "lean-interp__INTERP_final3_f11e62",
+"run": "lean-interp",
+"name": "INTERP-final3",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final3.py",
+"order": 557
+},
+{
+"id": "lean-interp__INTERP_v2ll_interact_66d685",
+"run": "lean-interp",
+"name": "INTERP-v2ll-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ll-interact.py",
+"order": 558
+},
+{
+"id": "lean-interp__INTERP_v2mm_interact_087954",
+"run": "lean-interp",
+"name": "INTERP-v2mm-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2mm-interact.py",
+"order": 559
+},
+{
+"id": "lean-interp__INTERP_v2nn_interact_38a1f8",
+"run": "lean-interp",
+"name": "INTERP-v2nn-interact",
+"logged": 0.0771,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2nn-interact.py",
+"order": 560
+},
+{
+"id": "lean-interp__INTERP_v2oo_interact_496b46",
+"run": "lean-interp",
+"name": "INTERP-v2oo-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2oo-interact.py",
+"order": 561
+},
+{
+"id": "lean-interp__INTERP_v2pp_interact_f2ce01",
+"run": "lean-interp",
+"name": "INTERP-v2pp-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2pp-interact.py",
+"order": 562
+},
+{
+"id": "lean-interp__INTERP_v2qq_interact_697124",
+"run": "lean-interp",
+"name": "INTERP-v2qq-interact",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2qq-interact.py",
+"order": 563
+},
+{
+"id": "lean-interp__INTERP_v2rr_interact_f56daa",
+"run": "lean-interp",
+"name": "INTERP-v2rr-interact",
+"logged": 0.0771,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2rr-interact.py",
+"order": 564
+},
+{
+"id": "lean-interp__INTERP_v2ss_interact_9470ce",
+"run": "lean-interp",
+"name": "INTERP-v2ss-interact",
+"logged": 0.0774,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ss-interact.py",
+"order": 565
+},
+{
+"id": "lean-interp__INTERP_v2tt_interact_1e9027",
+"run": "lean-interp",
+"name": "INTERP-v2tt-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2tt-interact.py",
+"order": 566
+},
+{
+"id": "lean-interp__INTERP_v2uu_interact_a35034",
+"run": "lean-interp",
+"name": "INTERP-v2uu-interact",
+"logged": 0.0774,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2uu-interact.py",
+"order": 567
+},
+{
+"id": "lean-interp__INTERP_v2vv_interact_14d716",
+"run": "lean-interp",
+"name": "INTERP-v2vv-interact",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2vv-interact.py",
+"order": 568
+},
+{
+"id": "lean-interp__INTERP_v2ww_interact_6978cc",
+"run": "lean-interp",
+"name": "INTERP-v2ww-interact",
+"logged": 0.0771,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2ww-interact.py",
+"order": 569
+},
+{
+"id": "lean-interp__INTERP_v2xx_interact_f5ce0b",
+"run": "lean-interp",
+"name": "INTERP-v2xx-interact",
+"logged": 0.0776,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2xx-interact.py",
+"order": 570
+},
+{
+"id": "lean-interp__INTERP_v2yy_interact_6297c1",
+"run": "lean-interp",
+"name": "INTERP-v2yy-interact",
+"logged": 0.0776,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2yy-interact.py",
+"order": 571
+},
+{
+"id": "lean-interp__INTERP_final4_8d22bd",
+"run": "lean-interp",
+"name": "INTERP-final4",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final4.py",
+"order": 572
+},
+{
+"id": "lean-interp__INTERP_v2zz_interact_071c69",
+"run": "lean-interp",
+"name": "INTERP-v2zz-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v2zz-interact.py",
+"order": 573
+},
+{
+"id": "lean-interp__INTERP_v3a_interact_6e964b",
+"run": "lean-interp",
+"name": "INTERP-v3a-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3a-interact.py",
+"order": 574
+},
+{
+"id": "lean-interp__INTERP_v3b_interact_8f60f5",
+"run": "lean-interp",
+"name": "INTERP-v3b-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3b-interact.py",
+"order": 575
+},
+{
+"id": "lean-interp__INTERP_v3c_interact_3a42a3",
+"run": "lean-interp",
+"name": "INTERP-v3c-interact",
+"logged": 0.0776,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3c-interact.py",
+"order": 576
+},
+{
+"id": "lean-interp__INTERP_v3d_interact_4cc5c2",
+"run": "lean-interp",
+"name": "INTERP-v3d-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3d-interact.py",
+"order": 577
+},
+{
+"id": "lean-interp__INTERP_v3e_interact_fea224",
+"run": "lean-interp",
+"name": "INTERP-v3e-interact",
+"logged": 0.0778,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3e-interact.py",
+"order": 578
+},
+{
+"id": "lean-interp__INTERP_v3f_interact_c9eedc",
+"run": "lean-interp",
+"name": "INTERP-v3f-interact",
+"logged": 0.0775,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3f-interact.py",
+"order": 579
+},
+{
+"id": "lean-interp__INTERP_v3g_interact_c98b07",
+"run": "lean-interp",
+"name": "INTERP-v3g-interact",
+"logged": 0.0773,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3g-interact.py",
+"order": 580
+},
+{
+"id": "lean-interp__INTERP_v3h_interact_3448f4",
+"run": "lean-interp",
+"name": "INTERP-v3h-interact",
+"logged": 0.0776,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3h-interact.py",
+"order": 581
+},
+{
+"id": "lean-interp__INTERP_final5_96b584",
+"run": "lean-interp",
+"name": "INTERP-final5",
+"logged": 0.0778,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final5.py",
+"order": 582
+},
+{
+"id": "lean-interp__INTERP_v3i_interact_b30acd",
+"run": "lean-interp",
+"name": "INTERP-v3i-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3i-interact.py",
+"order": 583
+},
+{
+"id": "lean-interp__INTERP_v3j_interact_c8dfd9",
+"run": "lean-interp",
+"name": "INTERP-v3j-interact",
+"logged": 0.0776,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3j-interact.py",
+"order": 584
+},
+{
+"id": "lean-interp__INTERP_v3k_interact_be96e3",
+"run": "lean-interp",
+"name": "INTERP-v3k-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3k-interact.py",
+"order": 585
+},
+{
+"id": "lean-interp__INTERP_v3l_interact_12ba11",
+"run": "lean-interp",
+"name": "INTERP-v3l-interact",
+"logged": 0.0778,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3l-interact.py",
+"order": 586
+},
+{
+"id": "lean-interp__INTERP_final6_f24953",
+"run": "lean-interp",
+"name": "INTERP-final6",
+"logged": 0.0778,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-final6.py",
+"order": 587
+},
+{
+"id": "lean-interp__INTERP_v3m_interact_db5e2c",
+"run": "lean-interp",
+"name": "INTERP-v3m-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3m-interact.py",
+"order": 588
+},
+{
+"id": "lean-interp__INTERP_v3n_interact_1849f9",
+"run": "lean-interp",
+"name": "INTERP-v3n-interact",
+"logged": 0.0777,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-interp/wave_encoders_lib/INTERP-v3n-interact.py",
+"order": 589
+},
+{
+"id": "exceed-dense__DENSE_v1_06ce77",
+"run": "exceed-dense",
+"name": "DENSE-v1",
+"logged": 0.0768,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v1.py",
+"order": 590
+},
+{
+"id": "exceed-dense__DENSE_v2_0bfd22",
+"run": "exceed-dense",
+"name": "DENSE-v2",
+"logged": 0.0771,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v2.py",
+"order": 591
+},
+{
+"id": "exceed-dense__DENSE_v3_2a05ed",
+"run": "exceed-dense",
+"name": "DENSE-v3",
+"logged": 0.0763,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v3.py",
+"order": 592
+},
+{
+"id": "exceed-dense__DENSE_v4_ba4780",
+"run": "exceed-dense",
+"name": "DENSE-v4",
+"logged": 0.0778,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v4.py",
+"order": 593
+},
+{
+"id": "exceed-dense__DENSE_v5_42dd4a",
+"run": "exceed-dense",
+"name": "DENSE-v5",
+"logged": 0.0772,
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v5.py",
+"order": 594
+}
+]

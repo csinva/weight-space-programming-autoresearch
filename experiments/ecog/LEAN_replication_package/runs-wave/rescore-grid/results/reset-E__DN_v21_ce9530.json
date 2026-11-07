@@ -1,0 +1,1 @@
+{"id": "reset-E__DN_v21_ce9530", "run": "reset-E", "name": "DN-v21", "logged": 0.0659, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v21.py", "order": 347, "rc": 0, "seconds": 255, "all166": 0.06590587975951014, "grid": 0.07444833961991788, "P": 11132, "reproduced": true, "status": "ok"}

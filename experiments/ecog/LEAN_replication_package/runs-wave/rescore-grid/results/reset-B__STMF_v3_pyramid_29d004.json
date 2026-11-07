@@ -1,0 +1,1 @@
+{"id": "reset-B__STMF_v3_pyramid_29d004", "run": "reset-B", "name": "STMF-v3-pyramid", "logged": 0.0494, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v3-pyramid.py", "order": 239, "rc": 0, "seconds": 428, "all166": 0.049441711067645486, "grid": 0.05636519079914884, "P": 6144, "reproduced": true, "status": "ok"}

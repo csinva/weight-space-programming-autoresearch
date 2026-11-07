@@ -1,0 +1,5 @@
+task 5/45: 3 fits, 3 to do
+loaded stats 1s
+drop:hnr_dyn                                                                               raw= 3389 all166=0.0806 grid=0.0902 60s
+drop:quad_modbank                                                                          raw= 3260 all166=0.0801 grid=0.0899 44s
+alone:quad_xrate_energy_dyn                                                                raw=   36 all166=0.0381 grid=0.0452 1s

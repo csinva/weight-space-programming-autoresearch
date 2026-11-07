@@ -1,0 +1,5 @@
+task 44/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cochleagram                                                                           raw= 3332 all166=0.0804 grid=0.0903 50s
+alone:flux+formant_dyn+formants+hnr+phonetic+spectral_flatness+spectral_moments+spectral_r raw=   83 all166=0.0591 grid=0.0668 1s
+alone:spectral_flatness                                                                    raw=    1 all166=0.0327 grid=0.0375 1s

@@ -1,0 +1,1 @@
+{"id": "reset-C__PHON_v17_65cabb", "run": "reset-C", "name": "PHON-v17", "logged": 0.0711, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v17.py", "order": 260, "rc": 0, "seconds": 275, "all166": 0.07110033567019974, "grid": 0.07961990981841176, "P": 11308, "reproduced": true, "status": "ok"}

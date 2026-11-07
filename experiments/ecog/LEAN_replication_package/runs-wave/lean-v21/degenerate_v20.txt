@@ -1,0 +1,27 @@
+raw cols 3852; constant 22; columns duplicating an earlier column (|r|>0.9999) 489
+  contrast_short               const=  4 dup=  0
+  scattering                   const= 18 dup=  9
+  cochlea_voiced_gated         const=  0 dup= 39
+  cochlea_voiced_gated_dyn     const=  0 dup= 20
+  stmf                         const=  0 dup= 43
+  stmf_mean_gabor              const=  0 dup=  2
+  interact_v3e                 const=  0 dup=  2
+  slow_quad_modbank            const=  0 dup= 72
+  quad_modbank                 const=  0 dup= 51
+  quad_modbank_dyn             const=  0 dup=155
+  quad_modbank_acausal         const=  0 dup= 60
+  slow_quad_modbank_dyn        const=  0 dup= 36
+duplicate group pairs (dup-col group <- earlier group): example
+  cochlea_voiced_gated       <- cochleagram                e.g. (('cochlea_voiced_gated', 0), ('cochleagram', 40), 1.0)
+  cochlea_voiced_gated_dyn   <- adapt_delta                e.g. (('cochlea_voiced_gated_dyn', 0), ('adapt_delta', 240), 1.0)
+  stmf                       <- stmf                       e.g. (('stmf', 100), ('stmf', 80), 1.0)
+  stmf_mean_gabor            <- stmf_mean_gabor            e.g. (('stmf_mean_gabor', 5), ('stmf_mean_gabor', 4), 1.0)
+  interact_v3e               <- interact_v3e               e.g. (('interact_v3e', 393), ('interact_v3e', 382), 0.999977)
+  slow_quad_modbank          <- quad_modbank               e.g. (('slow_quad_modbank', 135), ('quad_modbank', 0), 1.0)
+  quad_modbank               <- quad_modbank               e.g. (('quad_modbank', 36), ('quad_modbank', 27), 1.0)
+  quad_modbank_dyn           <- quad_modbank_dyn           e.g. (('quad_modbank_dyn', 36), ('quad_modbank_dyn', 27), 1.0)
+  quad_modbank_acausal       <- quad_modbank_acausal       e.g. (('quad_modbank_acausal', 34), ('quad_modbank_acausal', 7), 0.999914)
+  cochlea_voiced_gated       <- cochlea_voiced_gated       e.g. (('cochlea_voiced_gated', 21), ('cochlea_voiced_gated', 20), 0.999975)
+  slow_quad_modbank          <- slow_quad_modbank          e.g. (('slow_quad_modbank', 36), ('slow_quad_modbank', 27), 1.0)
+  slow_quad_modbank_dyn      <- slow_quad_modbank_dyn      e.g. (('slow_quad_modbank_dyn', 36), ('slow_quad_modbank_dyn', 27), 1.0)
+  scattering                 <- scattering                 e.g. (('scattering', 1), ('scattering', 0), 1.0)

@@ -1,0 +1,5 @@
+task 6/45: 3 fits, 3 to do
+loaded stats 1s
+drop:spectral_moments                                                                      raw= 3848 all166=0.0809 grid=0.0905 79s
+drop:slow_quad_modbank                                                                     raw= 3672 all166=0.0807 grid=0.0903 61s
+alone:formant_dyn+formants                                                                 raw=   33 all166=0.0509 grid=0.0577 1s

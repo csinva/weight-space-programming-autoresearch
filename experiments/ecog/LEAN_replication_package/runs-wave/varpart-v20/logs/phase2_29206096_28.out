@@ -1,0 +1,5 @@
+task 28/45: 3 fits, 3 to do
+loaded stats 1s
+drop:quad_xrate_energy                                                                     raw= 3834 all166=0.0808 grid=0.0905 80s
+alone:interact_v3e                                                                         raw=  405 all166=0.0659 grid=0.0744 1s
+alone:pitch_dyn                                                                            raw=    6 all166=0.0299 grid=0.0362 1s

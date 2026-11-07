@@ -1,0 +1,5 @@
+task 22/45: 3 fits, 3 to do
+loaded stats 1s
+drop:topbot                                                                                raw= 3842 all166=0.0807 grid=0.0904 37s
+drop:modulation+quad_modbank+quad_modbank_acausal+quad_modbank_dyn+quad_xrate_energy+quad_ raw= 2049 all166=0.0797 grid=0.0884 7s
+alone:multitau_contrast                                                                    raw=   10 all166=0.0404 grid=0.0456 1s

@@ -1,0 +1,7 @@
+pilot=29208846 array=29208847
+array2=29210855 (pilot 29208846 done; array 29208847 cancelled by failed gate)
+only-rerun=29220314 (reset-A__BIOPHYS_v20_a791be,reset-A__BIOPHYS_v24_096e0e, expandable_segments)
+only-rerun2=29221932 (reset-A__BIOPHYS_v23_5f62e4,reset-A__BIOPHYS_v28_df46ab, expandable_segments)
+fix_np126=29222968 (NumPy 1.26 overlay: reset-D, reset-H, GRAFT-v2c)
+cancelled 68 idle pending main tasks at 19:47 (pool exhausted; kept 3 spares: 97 98 99 )
+cancelled the 3 spare main tasks at 20:02: main pool complete (446/446 non-fixer trials have results)

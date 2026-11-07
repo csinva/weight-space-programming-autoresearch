@@ -1,0 +1,147 @@
+{
+"run": "exceed-dense",
+"n_diverged": 0,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T03:45:46.385Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0768,
+0.0768
+],
+"crashed": false,
+"name": "DENSE-v1",
+"sha": "aef28ade4339cc73",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0000_aef28ade4339cc73.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T03:53:03.875Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0771,
+0.0771
+],
+"crashed": false,
+"name": "DENSE-v2",
+"sha": "8cd97dde110a4fe4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0001_8cd97dde110a4fe4.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:01:09.023Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "DENSE-v3",
+"sha": "c6324e7fcb073049",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0002_c6324e7fcb073049.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:10:36.099Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "DENSE-v4",
+"sha": "ba378e97fdbc0b4b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0003_ba378e97fdbc0b4b.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:18:19.856Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0778,
+0.0778
+],
+"crashed": false,
+"rows_seen": [
+[
+"DENSE-v1",
+0.0768
+],
+[
+"DENSE-v2",
+0.0771
+],
+[
+"DENSE-v3",
+0.0763
+],
+[
+"DENSE-v4",
+0.0778
+]
+],
+"name": "DENSE-v4",
+"sha": "e3cbc7642562d5c8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0004_e3cbc7642562d5c8.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:39:28.539Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772,
+0.0772
+],
+"crashed": false,
+"name": "DENSE-v5",
+"sha": "e270e1717bd19a06",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-dense/0005_e270e1717bd19a06.py"
+}
+]
+}

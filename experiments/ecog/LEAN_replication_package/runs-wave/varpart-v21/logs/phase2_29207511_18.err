@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/varpart-v21/phase2_fit.py", line 123, in <module>
+    main()
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/varpart-v21/phase2_fit.py", line 111, in main
+    rr, ab = fit_subset(cols, XtX, XtY, tune_X, tune_Y, tune_pos,
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/varpart-v21/phase2_fit.py", line 53, in fit_subset
+    V, Lam = encoding._eig_good(XtX_sub, SINGCUT)
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/varpart-v21/src/encoding.py", line 103, in _eig_good
+    Lam, V = torch.linalg.eigh(XtX)            # XtX = V diag(Lam) V^T, Lam ascending
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 5.48 GiB. GPU 0 has a total capacity of 15.77 GiB of which 5.45 GiB is free. Including non-PyTorch memory, this process has 10.31 GiB memory in use. Of the allocated memory 4.43 GiB is allocated by PyTorch, and 5.48 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

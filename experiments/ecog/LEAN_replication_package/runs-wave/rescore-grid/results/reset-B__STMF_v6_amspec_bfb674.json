@@ -1,0 +1,1 @@
+{"id": "reset-B__STMF_v6_amspec_bfb674", "run": "reset-B", "name": "STMF-v6-amspec", "logged": 0.0564, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v6-amspec.py", "order": 241, "rc": 0, "seconds": 538, "all166": 0.05637296719761513, "grid": 0.06331591667888244, "P": 7584, "reproduced": true, "status": "ok"}

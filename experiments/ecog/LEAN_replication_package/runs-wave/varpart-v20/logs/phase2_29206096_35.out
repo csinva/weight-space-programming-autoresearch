@@ -1,0 +1,5 @@
+task 35/45: 3 fits, 3 to do
+loaded stats 1s
+drop:formants                                                                              raw= 3828 all166=0.0807 grid=0.0904 72s
+alone:scattering                                                                           raw=  287 all166=0.0658 grid=0.0734 2s
+alone:fut_minus_cur_contrast                                                               raw=    5 all166=0.0164 grid=0.0184 1s

@@ -1,0 +1,26 @@
+train=500 test=23
+nresp=1750593 tune_union=4000
+  scattering: K=9 NB=1 dim=233 (S1m 9, joint 8, S2m 63, S2s 63)
+group layout verified against embedder output
+  train 1/500 rows=3511 40s
+  train 26/500 rows=90447 56s
+  train 51/500 rows=178119 71s
+  train 76/500 rows=265701 87s
+  train 101/500 rows=354275 102s
+  train 126/500 rows=441976 118s
+  train 151/500 rows=529261 133s
+  train 176/500 rows=616816 148s
+  train 201/500 rows=704428 164s
+  train 226/500 rows=792312 183s
+  train 251/500 rows=880170 198s
+  train 276/500 rows=966537 215s
+  train 301/500 rows=1052285 234s
+  train 326/500 rows=1139933 253s
+  train 351/500 rows=1227546 269s
+  train 376/500 rows=1315613 284s
+  train 401/500 rows=1403195 302s
+  train 426/500 rows=1490899 318s
+  train 451/500 rows=1578782 334s
+  train 476/500 rows=1666846 349s
+test chunks kept=23 rows=80653
+done 382s

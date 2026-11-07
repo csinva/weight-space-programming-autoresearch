@@ -1,0 +1,594 @@
+trial,phase,run,name,old_grid_r,new_grid_r,new_all493_grid_r,kept_model,kept_old_grid_r,kept_new_grid_r
+1,hand-design exploration,wave-slurm-23628821,Gammatone-cochleagram,0.04492,0.03903,0.03676,Gammatone-cochleagram,0.04492,0.03903
+2,hand-design exploration,wave-slurm-23628821,Gammatone-log,0.05197,0.04200,0.03981,Gammatone-log,0.05197,0.04200
+3,hand-design exploration,wave-slurm-23628821,Gammatone-log-adapt,0.05883,0.04615,0.04350,Gammatone-log-adapt,0.05883,0.04615
+4,hand-design exploration,wave-slurm-23628821,Gammatone-log-adapt-onset,0.05957,0.04996,0.04647,Gammatone-log-adapt-onset,0.05957,0.04996
+5,hand-design exploration,wave-slurm-23628821,Gammatone-log-adapt-LI,0.05802,0.04643,0.04371,Gammatone-log-adapt-onset,0.05957,0.04996
+6,hand-design exploration,wave-slurm-23628821,Gammatone-multi-tau,0.06087,0.04908,0.04620,Gammatone-multi-tau,0.06087,0.04908
+7,hand-design exploration,wave-slurm-23628821,Gammatone-AGC-multi-tau,0.05742,0.05022,0.04736,Gammatone-multi-tau,0.06087,0.04908
+8,hand-design exploration,wave-slurm-23628821,Gammatone-multiwin,0.06062,0.04806,0.04498,Gammatone-multi-tau,0.06087,0.04908
+9,hand-design exploration,wave-slurm-23628821,Gammatone-multiwin-multi-tau,0.06192,0.04979,0.04648,Gammatone-multiwin-multi-tau,0.06192,0.04979
+10,hand-design exploration,wave-slurm-23628821,Gammatone-mod-bank,0.06211,0.05727,0.05305,Gammatone-mod-bank,0.06211,0.05727
+11,hand-design exploration,wave-slurm-23628821,Gammatone-PCEN,0.05881,0.05095,0.04777,Gammatone-mod-bank,0.06211,0.05727
+12,hand-design exploration,wave-slurm-23628821,Gammatone-multiwin-64ch,0.06096,0.04891,0.04569,Gammatone-mod-bank,0.06211,0.05727
+13,hand-design exploration,wave-slurm-23628821,Gammatone-multiwin-mt-pitch,0.06184,0.05112,0.04762,Gammatone-mod-bank,0.06211,0.05727
+14,hand-design exploration,wave-slurm-23628821,Gammatone-multiwin-mt-LI,0.06029,0.05037,0.04701,Gammatone-mod-bank,0.06211,0.05727
+15,hand-design exploration,wave-slurm-23628821,Gammatone-3win-mt,0.06297,0.05058,0.04709,Gammatone-3win-mt,0.06297,0.05058
+16,hand-design exploration,wave-slurm-23628821,Gammatone-3win-4tau,0.06358,0.05127,0.04773,Gammatone-3win-4tau,0.06358,0.05127
+17,hand-design exploration,wave-slurm-23628821,Gammatone-4win-4tau,0.06306,0.05189,0.04833,Gammatone-3win-4tau,0.06358,0.05127
+18,hand-design exploration,wave-slurm-23628821,Gammatone-3win-4tau-mod4,0.06300,0.05542,0.05136,Gammatone-3win-4tau,0.06358,0.05127
+19,hand-design exploration,wave-slurm-23628821,Gammatone-3win-5tau,0.06621,0.05184,0.04812,Gammatone-3win-5tau,0.06621,0.05184
+20,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau,0.06672,0.05052,0.04704,Gammatone-3win-6tau,0.06672,0.05052
+21,hand-design exploration,wave-slurm-23628821,Gammatone-3win-8tau-dense,0.06649,0.05188,0.04818,Gammatone-3win-6tau,0.06672,0.05052
+22,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-24ch,0.06628,0.05049,0.04678,Gammatone-3win-6tau,0.06672,0.05052
+23,hand-design exploration,wave-slurm-23628821,Gammatone-1win-6tau-40ch,0.06529,0.05026,0.04699,Gammatone-3win-6tau,0.06672,0.05052
+24,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMdepth,0.06763,0.05362,0.04954,Gammatone-3win-6tau-AMdepth,0.06763,0.05362
+25,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMdepth2,0.06733,0.05349,0.04941,Gammatone-3win-6tau-AMdepth,0.06763,0.05362
+26,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull,0.06784,0.05401,0.04990,Gammatone-3win-6tau-AMfull,0.06784,0.05401
+27,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loud,0.06830,0.05433,0.05007,Gammatone-3win-6tau-AMfull-loud,0.06830,0.05433
+28,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loudpeak,0.06802,0.05456,0.05045,Gammatone-3win-6tau-AMfull-loud,0.06830,0.05433
+29,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loud-order6,0.06770,0.05370,0.04963,Gammatone-3win-6tau-AMfull-loud,0.06830,0.05433
+30,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loud-centroid,0.06860,0.05475,0.05041,Gammatone-3win-6tau-AMfull-loud-centroid,0.06860,0.05475
+31,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loud-cent-tilt,0.06833,0.05491,0.05051,Gammatone-3win-6tau-AMfull-loud-centroid,0.06860,0.05475
+32,hand-design exploration,wave-slurm-23628821,Gammatone-BEST-cochlear-stack,0.06860,0.05475,0.05041,Gammatone-3win-6tau-AMfull-loud-centroid,0.06860,0.05475
+33,hand-design exploration,wave-slurm-23628821,Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff,0.06813,0.05561,0.05126,Gammatone-3win-6tau-AMfull-loud-centroid,0.06860,0.05475
+34,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+highlevel,0.06931,0.05685,0.05263,Gammatone-BEST+highlevel,0.06931,0.05685
+35,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+highlevel-mt,0.06901,0.05742,0.05336,Gammatone-BEST+highlevel,0.06931,0.05685
+36,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL-selective-mt,0.06974,0.05708,0.05311,Gammatone-BEST+HL-selective-mt,0.06974,0.05708
+37,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+flux,0.07190,0.05961,0.05528,Gammatone-BEST+HL+flux,0.07190,0.05961
+38,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+bandflux,0.07168,0.06025,0.05587,Gammatone-BEST+HL+flux,0.07190,0.05961
+39,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+chanflux,0.07131,0.05952,0.05523,Gammatone-BEST+HL+flux,0.07190,0.05961
+40,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+flux+modbank,0.07219,0.06052,0.05616,Gammatone-BEST+HL+flux+modbank,0.07219,0.06052
+41,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+flux+modbank-multi,0.07419,0.06186,0.05770,Gammatone-BEST+HL+flux+modbank-multi,0.07419,0.06186
+42,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank-all,0.07545,0.06352,0.05958,Gammatone-BEST+HL+modbank-all,0.07545,0.06352
+43,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank-6rate,0.07530,0.06449,0.06073,Gammatone-BEST+HL+modbank-all,0.07545,0.06352
+44,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+chanmod,0.07515,0.06367,0.05968,Gammatone-BEST+HL+modbank-all,0.07545,0.06352
+45,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+zcr,0.07547,0.06387,0.05984,Gammatone-BEST+HL+modbank+zcr,0.07547,0.06387
+46,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+zcr+mfcc,0.07523,0.06401,0.05991,Gammatone-BEST+HL+modbank+zcr,0.07547,0.06387
+47,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+chan4Hz,0.07506,0.06354,0.05961,Gammatone-BEST+HL+modbank+zcr,0.07547,0.06387
+48,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+flux-mt-all,0.07595,0.06368,0.05970,Gammatone-BEST+HL+modbank+flux-mt-all,0.07595,0.06368
+49,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+slowfast,0.07579,0.06371,0.05968,Gammatone-BEST+HL+modbank+flux-mt-all,0.07595,0.06368
+50,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+LI2scale,0.07502,0.06394,0.05981,Gammatone-BEST+HL+modbank+flux-mt-all,0.07595,0.06368
+51,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+products,0.07579,0.06395,0.05996,Gammatone-BEST+HL+modbank+flux-mt-all,0.07595,0.06368
+52,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+STMF4,0.07683,0.06473,0.06078,Gammatone-BEST+HL+modbank+STMF4,0.07683,0.06473
+53,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636,0.06256,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+54,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF-long+short,0.07798,0.06619,0.06242,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+55,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF23,0.07815,0.06652,0.06267,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+56,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF14-prune,0.07771,0.06617,0.06239,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+57,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF+STMFonset,0.07799,0.06655,0.06275,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+58,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF14-slowtau,0.07824,0.06636,0.06256,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+59,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF14+midSTMF,0.07808,0.06609,0.06227,Gammatone-BEST+HL+modbank+STMF14,0.07824,0.06636
+60,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF17-hi,0.07841,0.06639,0.06256,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+61,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF17-lean,0.07717,0.06610,0.06212,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+62,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF17-fine40,0.07607,0.06552,0.06165,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+63,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF17+adapt4,0.07786,0.06641,0.06261,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+64,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+STMF17+stmfmod,0.07832,0.06637,0.06261,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+65,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack-v1,0.07832,0.06637,0.06261,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+66,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+fastSTMF,0.07802,0.06629,0.06259,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+67,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack-final,0.07832,0.06637,0.06261,Gammatone-BEST+STMF17-hi,0.07841,0.06639
+68,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+liSTMF,0.07871,0.06644,0.06259,Gammatone-BEST+full-stack+liSTMF,0.07871,0.06644
+69,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+liSTMF2,0.07860,0.06661,0.06272,Gammatone-BEST+full-stack+liSTMF,0.07871,0.06644
+70,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+liSTMF8,0.07899,0.06672,0.06290,Gammatone-BEST+full-stack+liSTMF8,0.07899,0.06672
+71,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+liSTMF8+li,0.07861,0.06660,0.06276,Gammatone-BEST+full-stack+liSTMF8,0.07899,0.06672
+72,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+liSTMF8-final,0.07899,0.06672,0.06290,Gammatone-BEST+full-stack+liSTMF8,0.07899,0.06672
+73,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+prosody,0.07909,0.06674,0.06291,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+74,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+prosody+hnronset,0.07904,0.06674,0.06291,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+75,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+lookahead,0.07820,0.06737,0.06346,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+76,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+STMF-adapt,0.07834,0.06675,0.06293,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+77,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+STMF-short,0.07819,0.06629,0.06258,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+78,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+HLproducts,0.07862,0.06680,0.06300,Gammatone-BEST+full-stack+prosody,0.07909,0.06674
+79,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants,0.07924,0.06703,0.06319,Gammatone-BEST+full-stack+formants,0.07924,0.06703
+80,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants3,0.07920,0.06710,0.06325,Gammatone-BEST+full-stack+formants,0.07924,0.06703
+81,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710,0.06333,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+82,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+LI,0.07926,0.06717,0.06346,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+83,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+vowelspace,0.07912,0.06720,0.06337,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+84,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+shortfmt,0.07903,0.06705,0.06329,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+85,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+laplace,0.07889,0.06696,0.06315,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+86,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+stability,0.07929,0.06707,0.06327,Gammatone-BEST+full-stack+formants+bw,0.07939,0.06710
+87,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cuberoot,0.07991,0.06727,0.06352,Gammatone-BEST+full-stack+formants+bw+cuberoot,0.07991,0.06727
+88,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742,0.06368,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+89,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+sqrt,0.08003,0.06734,0.06362,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+90,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+slowadapt,0.07980,0.06741,0.06363,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+91,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+LIcube,0.07979,0.06748,0.06374,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+92,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+4thrt,0.07990,0.06742,0.06369,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+93,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+fine,0.07971,0.06751,0.06372,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+94,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+sqrtlong,0.07995,0.06730,0.06356,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,0.08006,0.06742
+95,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+chanvar,0.08010,0.06772,0.06411,Gammatone-BEST+full-stack+formants+bw+cube+chanvar,0.08010,0.06772
+96,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+chanvar3,0.07958,0.06831,0.06465,Gammatone-BEST+full-stack+formants+bw+cube+chanvar,0.08010,0.06772
+97,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube,0.08030,0.06789,0.06432,Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube,0.08030,0.06789
+98,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+formants+bw+cube+chanvar3win,0.07989,0.06774,0.06415,Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube,0.08030,0.06789
+99,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+HWR-cube,0.08018,0.06779,0.06419,Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube,0.08030,0.06789
+100,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804,0.06437,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804
+101,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv4,0.08003,0.06852,0.06462,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804
+102,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+cubemod,0.08050,0.06791,0.06427,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804
+103,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+chanskew,0.08010,0.06785,0.06430,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804
+104,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+LImodenv,0.08015,0.06834,0.06466,Gammatone-BEST+full-stack+chanvar+modenv,0.08052,0.06804
+105,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+zscore,0.08053,0.06805,0.06438,Gammatone-BEST+full-stack+chanvar+modenv+zscore,0.08053,0.06805
+106,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+tonicslow,0.08237,0.06828,0.06427,Gammatone-BEST+full-stack+chanvar+modenv+tonicslow,0.08237,0.06828
+107,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+chanvar+modenv+tonic4tau,0.08247,0.06808,0.06413,Gammatone-BEST+full-stack+chanvar+modenv+tonic4tau,0.08247,0.06808
+108,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonicslow+cubetonic,0.08315,0.06873,0.06447,Gammatone-BEST+full-stack+tonicslow+cubetonic,0.08315,0.06873
+109,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win,0.08377,0.06822,0.06394,Gammatone-BEST+full-stack+tonic3win,0.08377,0.06822
+110,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+midtau,0.08353,0.06806,0.06382,Gammatone-BEST+full-stack+tonic3win,0.08377,0.06822
+111,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+tonicLI,0.08321,0.06806,0.06384,Gammatone-BEST+full-stack+tonic3win,0.08377,0.06822
+112,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+discoursetau,0.08190,0.06679,0.06248,Gammatone-BEST+full-stack+tonic3win,0.08377,0.06822
+113,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932,0.06501,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932
+114,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+acausal3win,0.08386,0.06897,0.06468,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932
+115,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+acausal+long150-cube,0.08484,0.06957,0.06509,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932
+116,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+acausal+trend,0.08492,0.06934,0.06507,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932
+117,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+full-stack+tonic3win+acausal+residual-LP,0.08471,0.06935,0.06508,Gammatone-BEST+full-stack+tonic3win+acausaltonic,0.08494,0.06932
+118,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futdelta3,0.08508,0.06931,0.06505,Gammatone-BEST+tonic3win+acausal+futdelta3,0.08508,0.06931
+119,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futdelta3-6,0.08546,0.06961,0.06536,Gammatone-BEST+tonic3win+acausal+futdelta3-6,0.08546,0.06961
+120,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futpast-delta,0.08552,0.06957,0.06535,Gammatone-BEST+tonic3win+acausal+futpast-delta,0.08552,0.06957
+121,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futpast-delta3-12,0.08578,0.07008,0.06589,Gammatone-BEST+tonic3win+acausal+futpast-delta3-12,0.08578,0.07008
+122,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futpast-delta3-24,0.08562,0.07008,0.06589,Gammatone-BEST+tonic3win+acausal+futpast-delta3-12,0.08578,0.07008
+123,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6,0.08584,0.07024,0.06603,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6,0.08584,0.07024
+124,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube36,0.08581,0.07022,0.06599,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6,0.08584,0.07024
+125,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043,0.06610,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+126,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+futdelta+loudfut,0.08572,0.07027,0.06603,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+127,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+futdelta+cube612,0.08569,0.07026,0.06608,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+128,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+futdelta+shortfut,0.08583,0.07023,0.06603,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+129,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic3win+futdelta+futdelta-LP,0.08592,0.07027,0.06604,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+130,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic+futdelta+absdelta,0.08560,0.07033,0.06609,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+131,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic+futdelta+state-prod,0.08593,0.07030,0.06609,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+132,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+tonic+futdelta+midfut,0.08572,0.07013,0.06596,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+133,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+drop-tau150,0.08580,0.07025,0.06605,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+134,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+peakhold-futpast,0.08560,0.07053,0.06628,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+135,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+TFS-zcr+acflags,0.08427,0.07000,0.06590,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+136,hand-design exploration,wave-slurm-23628821,Gammatone-LEAN+TFS-zcr+ACFperband,0.08212,0.06968,0.06544,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+137,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+CCEC+SACF,0.08545,0.07055,0.06620,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+138,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+PB-EBAC,0.08586,0.07039,0.06639,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+139,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+PB-EBAC-4x,0.08372,0.07049,0.06626,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+140,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+PB-EBAC+XCH-Xcorr,0.08469,0.07008,0.06624,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+141,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+ChangLab-STG,0.08465,0.06971,0.06581,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+142,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+rel-pitch,0.08540,0.07030,0.06635,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+143,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+rel-pitch-cubeAblation,0.08412,0.07011,0.06608,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+144,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+powerlaw-adapt,0.08543,0.07009,0.06611,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+145,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+peakRate-silenceOnset,0.08537,0.07000,0.06609,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+146,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+per-band-peakRate,0.08523,0.07003,0.06610,Gammatone-BEST+tonic3win+acausal+cube-acausal,0.08595,0.07043
+147,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+per-band-peakRate+EBACtau30,0.08604,0.07056,0.06648,Gammatone-BEST+per-band-peakRate+EBACtau30,0.08604,0.07056
+148,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+per-band-peakRate+EBACtau15,0.08579,0.07079,0.06661,Gammatone-BEST+per-band-peakRate+EBACtau30,0.08604,0.07056
+149,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+pb-peakRate+EBAC-dual-tau,0.08570,0.07030,0.06624,Gammatone-BEST+per-band-peakRate+EBACtau30,0.08604,0.07056
+150,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBACtau30,0.08620,0.07063,0.06654,Gammatone-BEST+EBACtau30,0.08620,0.07063
+151,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBACtau30+lag1,0.08601,0.07083,0.06672,Gammatone-BEST+EBACtau30,0.08620,0.07063
+152,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBACtau20+lag1,0.08616,0.07093,0.06674,Gammatone-BEST+EBACtau30,0.08620,0.07063
+153,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBACtau25,0.08617,0.07092,0.06675,Gammatone-BEST+EBACtau30,0.08620,0.07063
+154,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBAC-multi-tau,0.08549,0.07059,0.06645,Gammatone-BEST+EBACtau30,0.08620,0.07063
+155,hand-design exploration,wave-slurm-23628821,Gammatone-BEST+EBACtau20+dropTAU150,0.08586,0.07091,0.06676,Gammatone-BEST+EBACtau30,0.08620,0.07063
+156,trim + lit. → v16,wave-trim,LEAN-v1,0.08543,0.07005,0.06608,Gammatone-BEST+EBACtau30,0.08620,0.07063
+157,trim + lit. → v16,wave-trim,LEAN-v2,0.08529,0.06994,0.06573,Gammatone-BEST+EBACtau30,0.08620,0.07063
+158,trim + lit. → v16,wave-trim,LEAN-v3,0.08122,0.06932,0.06576,Gammatone-BEST+EBACtau30,0.08620,0.07063
+159,trim + lit. → v16,wave-trim,LEAN-v4,0.08493,0.06974,0.06553,Gammatone-BEST+EBACtau30,0.08620,0.07063
+160,trim + lit. → v16,wave-trim,LEAN-v5,0.08392,0.06878,0.06444,Gammatone-BEST+EBACtau30,0.08620,0.07063
+161,trim + lit. → v16,wave-trim,LEAN-v6,0.08365,0.06856,0.06418,Gammatone-BEST+EBACtau30,0.08620,0.07063
+162,trim + lit. → v16,wave-trim,LEAN-v7,0.08488,0.06958,0.06532,Gammatone-BEST+EBACtau30,0.08620,0.07063
+163,trim + lit. → v16,wave-trim,LEAN-v8,0.08522,0.06960,0.06524,Gammatone-BEST+EBACtau30,0.08620,0.07063
+164,trim + lit. → v16,wave-trim,LEAN-v9,0.08442,0.06887,0.06463,Gammatone-BEST+EBACtau30,0.08620,0.07063
+165,trim + lit. → v16,wave-trim,LEAN-v10,0.08542,0.06960,0.06525,Gammatone-BEST+EBACtau30,0.08620,0.07063
+166,trim + lit. → v16,wave-trim,LEAN-v11,0.08509,0.06957,0.06522,Gammatone-BEST+EBACtau30,0.08620,0.07063
+167,trim + lit. → v16,wave-trim,LEAN-v12,0.08423,0.06949,0.06516,Gammatone-BEST+EBACtau30,0.08620,0.07063
+168,trim + lit. → v16,wave-trim,LEAN-v13,0.08505,0.06946,0.06510,Gammatone-BEST+EBACtau30,0.08620,0.07063
+169,trim + lit. → v16,wave-trim,LEAN-v14,0.08521,0.06951,0.06511,Gammatone-BEST+EBACtau30,0.08620,0.07063
+170,trim + lit. → v16,wave-trim,LEAN-v15,0.08520,0.06949,0.06511,Gammatone-BEST+EBACtau30,0.08620,0.07063
+171,trim + lit. → v16,wave-trim,LEAN-v16,0.08522,0.06925,0.06489,Gammatone-BEST+EBACtau30,0.08620,0.07063
+172,trim + lit. → v16,wave-trim,LEAN-v17,0.08382,0.06838,0.06387,Gammatone-BEST+EBACtau30,0.08620,0.07063
+173,trim + lit. → v16,wave-trim,LEAN-v18,0.08348,0.06820,0.06367,Gammatone-BEST+EBACtau30,0.08620,0.07063
+174,trim + lit. → v16,wave-trim,LEAN-v19,0.08355,0.06820,0.06366,Gammatone-BEST+EBACtau30,0.08620,0.07063
+175,trim + lit. → v16,wave-trim,LEAN-v20,0.08353,0.06820,0.06366,Gammatone-BEST+EBACtau30,0.08620,0.07063
+176,trim + lit. → v16,wave-trim,LEAN-v21,0.08338,0.06813,0.06361,Gammatone-BEST+EBACtau30,0.08620,0.07063
+177,trim + lit. → v16,wave-trim,LEAN-v22,0.08332,0.06804,0.06353,Gammatone-BEST+EBACtau30,0.08620,0.07063
+178,trim + lit. → v16,wave-trim,LEAN-v23,0.08322,0.06798,0.06347,Gammatone-BEST+EBACtau30,0.08620,0.07063
+179,trim + lit. → v16,wave-lean,LEAN-v17-peakRate,0.08527,0.06931,0.06495,Gammatone-BEST+EBACtau30,0.08620,0.07063
+180,trim + lit. → v16,wave-lean,LEAN-v18-pitchZ,0.08527,0.06941,0.06504,Gammatone-BEST+EBACtau30,0.08620,0.07063
+181,trim + lit. → v16,wave-lean,LEAN-v19-powerlaw,0.08523,0.06939,0.06503,Gammatone-BEST+EBACtau30,0.08620,0.07063
+182,trim + lit. → v16,wave-lean,LEAN-v20-latInh,0.08517,0.06934,0.06483,Gammatone-BEST+EBACtau30,0.08620,0.07063
+183,trim + lit. → v16,wave-lean,LEAN-v21-voicedInter,0.08506,0.06933,0.06493,Gammatone-BEST+EBACtau30,0.08620,0.07063
+184,trim + lit. → v16,wave-lean,LEAN-v23-2DContrast,0.08326,0.06801,0.06334,Gammatone-BEST+EBACtau30,0.08620,0.07063
+185,trim + lit. → v16,wave-lean,LEAN-v24-uttContext,0.08428,0.06847,0.06402,Gammatone-BEST+EBACtau30,0.08620,0.07063
+186,trim + lit. → v16,wave-lean,LEAN-v25-multiLagFlux,0.08386,0.06850,0.06399,Gammatone-BEST+EBACtau30,0.08620,0.07063
+187,trim + lit. → v16,wave-lean,LEAN-v26-restoreV16,0.08522,0.06925,0.06489,Gammatone-BEST+EBACtau30,0.08620,0.07063
+188,trim + lit. → v16,wave-lean,LEAN-v28-safeRelPitch,0.08524,0.06945,0.06502,Gammatone-BEST+EBACtau30,0.08620,0.07063
+189,trim + lit. → v16,wave-lean,LEAN-v29-syllableRate,0.08502,0.06931,0.06483,Gammatone-BEST+EBACtau30,0.08620,0.07063
+190,trim + lit. → v16,wave-lean,LEAN-v30-voiceGateInter,0.08488,0.06932,0.06482,Gammatone-BEST+EBACtau30,0.08620,0.07063
+191,trim + lit. → v16,wave-lean,LEAN-v31-bandFlux,0.08498,0.06943,0.06494,Gammatone-BEST+EBACtau30,0.08620,0.07063
+192,trim + lit. → v16,wave-lean,LEAN-v32-multiSilOnset,0.08457,0.06942,0.06490,Gammatone-BEST+EBACtau30,0.08620,0.07063
+193,trim + lit. → v16,wave-lean,LEAN-v33-perBandPeakRate,0.08451,0.06948,0.06496,Gammatone-BEST+EBACtau30,0.08620,0.07063
+194,trim + lit. → v16,wave-lean,LEAN-v34-scalarPowLaw,0.08434,0.06970,0.06514,Gammatone-BEST+EBACtau30,0.08620,0.07063
+195,trim + lit. → v16,wave-lean,LEAN-v35-hires40,0.08433,0.06971,0.06515,Gammatone-BEST+EBACtau30,0.08620,0.07063
+196,trim + lit. → v16,wave-lean,LEAN-v36-full40band,0.08398,0.06974,0.06522,Gammatone-BEST+EBACtau30,0.08620,0.07063
+197,trim + lit. → v16,wave-lean,LEAN-v37-prune,0.08481,0.06939,0.06493,Gammatone-BEST+EBACtau30,0.08620,0.07063
+198,trim + lit. → v16,wave-lean,LEAN-v38-v28only,0.08524,0.06945,0.06502,Gammatone-BEST+EBACtau30,0.08620,0.07063
+199,graft + interactions → v17,graft-lean,GRAFT-v1-tfs,0.08349,0.06914,0.06467,Gammatone-BEST+EBACtau30,0.08620,0.07063
+200,graft + interactions → v17,graft-lean,GRAFT-v1b-tfs,0.08425,0.06929,0.06486,Gammatone-BEST+EBACtau30,0.08620,0.07063
+201,graft + interactions → v17,graft-lean,GRAFT-v1c-tfs,0.08461,0.06921,0.06480,Gammatone-BEST+EBACtau30,0.08620,0.07063
+202,graft + interactions → v17,graft-lean,GRAFT-v2c-reservoir,0.08515,0.07024,0.06590,Gammatone-BEST+EBACtau30,0.08620,0.07063
+203,graft + interactions → v17,graft-lean,GRAFT-v3b-divnorm,0.08498,0.06982,0.06539,Gammatone-BEST+EBACtau30,0.08620,0.07063
+204,graft + interactions → v17,graft-lean,GRAFT-v4b-texture,0.08516,0.06992,0.06561,Gammatone-BEST+EBACtau30,0.08620,0.07063
+205,graft + interactions → v17,graft-lean,GRAFT-v5c-products,0.08512,0.06989,0.06552,Gammatone-BEST+EBACtau30,0.08620,0.07063
+206,graft + interactions → v17,graft-lean,GRAFT-v6-stacked-clean,0.08516,0.06992,0.06561,Gammatone-BEST+EBACtau30,0.08620,0.07063
+207,graft + interactions → v17,graft-lean,GRAFT-v7-tune-tex8,0.08509,0.06986,0.06559,Gammatone-BEST+EBACtau30,0.08620,0.07063
+208,graft + interactions → v17,graft-lean,GRAFT-v8-tune-sat3,0.08506,0.06986,0.06557,Gammatone-BEST+EBACtau30,0.08620,0.07063
+209,graft + interactions → v17,graft-lean,GRAFT-v9-tune-tex-multitau,0.08435,0.06993,0.06569,Gammatone-BEST+EBACtau30,0.08620,0.07063
+210,graft + interactions → v17,graft-lean,GRAFT-v10-tune-tlag,0.08450,0.07015,0.06574,Gammatone-BEST+EBACtau30,0.08620,0.07063
+211,graft + interactions → v17,lean-interp,INTERP-v1a-cond,0.08540,0.06941,0.06502,Gammatone-BEST+EBACtau30,0.08620,0.07063
+212,graft + interactions → v17,lean-interp,INTERP-v1b-cond,0.08553,0.06943,0.06501,Gammatone-BEST+EBACtau30,0.08620,0.07063
+213,graft + interactions → v17,lean-interp,INTERP-v2a-interact,0.08504,0.06924,0.06484,Gammatone-BEST+EBACtau30,0.08620,0.07063
+214,graft + interactions → v17,lean-interp,INTERP-v2b-interact,0.08508,0.06922,0.06483,Gammatone-BEST+EBACtau30,0.08620,0.07063
+215,graft + interactions → v17,lean-interp,INTERP-v2c-interact,0.08509,0.06928,0.06489,Gammatone-BEST+EBACtau30,0.08620,0.07063
+216,graft + interactions → v17,lean-interp,INTERP-v2d-interact,0.08514,0.06929,0.06488,Gammatone-BEST+EBACtau30,0.08620,0.07063
+217,graft + interactions → v17,lean-interp,INTERP-v2e-interact,0.08500,0.06957,0.06511,Gammatone-BEST+EBACtau30,0.08620,0.07063
+218,graft + interactions → v17,lean-interp,INTERP-v2f-interact,0.08539,0.06932,0.06494,Gammatone-BEST+EBACtau30,0.08620,0.07063
+219,graft + interactions → v17,lean-interp,INTERP-v2g-interact,0.08535,0.06930,0.06491,Gammatone-BEST+EBACtau30,0.08620,0.07063
+220,graft + interactions → v17,lean-interp,INTERP-final,0.08535,0.06930,0.06491,Gammatone-BEST+EBACtau30,0.08620,0.07063
+221,graft + interactions → v17,lean-interp,INTERP-v2h-interact,0.08560,0.06966,0.06524,Gammatone-BEST+EBACtau30,0.08620,0.07063
+222,graft + interactions → v17,lean-interp,INTERP-v2j-interact,0.08546,0.06940,0.06500,Gammatone-BEST+EBACtau30,0.08620,0.07063
+223,graft + interactions → v17,lean-interp,INTERP-v2i-interact,0.08562,0.06967,0.06524,Gammatone-BEST+EBACtau30,0.08620,0.07063
+224,graft + interactions → v17,lean-interp,INTERP-v2k-interact,0.08505,0.06947,0.06505,Gammatone-BEST+EBACtau30,0.08620,0.07063
+225,graft + interactions → v17,lean-interp,INTERP-v2l-interact,0.08528,0.06956,0.06510,Gammatone-BEST+EBACtau30,0.08620,0.07063
+226,graft + interactions → v17,lean-interp,INTERP-v2m-interact,0.08575,0.06971,0.06530,Gammatone-BEST+EBACtau30,0.08620,0.07063
+227,graft + interactions → v17,lean-interp,INTERP-v2n-interact,0.08579,0.06976,0.06533,Gammatone-BEST+EBACtau30,0.08620,0.07063
+228,graft + interactions → v17,lean-interp,INTERP-v2o-interact,0.08563,0.06985,0.06537,Gammatone-BEST+EBACtau30,0.08620,0.07063
+229,graft + interactions → v17,lean-interp,INTERP-v2p-interact,0.08547,0.06974,0.06527,Gammatone-BEST+EBACtau30,0.08620,0.07063
+230,graft + interactions → v17,lean-interp,INTERP-final2,0.08575,0.06971,0.06530,Gammatone-BEST+EBACtau30,0.08620,0.07063
+231,graft + interactions → v17,lean-interp,INTERP-v2q-interact,0.08564,0.06990,0.06539,Gammatone-BEST+EBACtau30,0.08620,0.07063
+232,graft + interactions → v17,lean-interp,INTERP-v2r-interact,0.08581,0.06976,0.06531,Gammatone-BEST+EBACtau30,0.08620,0.07063
+233,graft + interactions → v17,lean-interp,INTERP-v2s-interact,0.08572,0.06972,0.06530,Gammatone-BEST+EBACtau30,0.08620,0.07063
+234,graft + interactions → v17,lean-interp,INTERP-v2t-interact,0.08570,0.06984,0.06543,Gammatone-BEST+EBACtau30,0.08620,0.07063
+235,graft + interactions → v17,lean-interp,INTERP-v2u-interact,0.08578,0.06977,0.06536,Gammatone-BEST+EBACtau30,0.08620,0.07063
+236,graft + interactions → v17,lean-interp,INTERP-v2v-interact,0.08633,0.07020,0.06577,INTERP-v2v-interact,0.08633,0.07020
+237,graft + interactions → v17,lean-interp,INTERP-v2w-interact,0.08644,0.07017,0.06577,INTERP-v2w-interact,0.08644,0.07017
+238,graft + interactions → v17,lean-interp,INTERP-v2x-interact,0.08618,0.07039,0.06591,INTERP-v2w-interact,0.08644,0.07017
+239,graft + interactions → v17,lean-interp,INTERP-v2y-interact,0.08635,0.07016,0.06580,INTERP-v2w-interact,0.08644,0.07017
+240,graft + interactions → v17,lean-interp,INTERP-v2z-interact,0.08647,0.07041,0.06603,INTERP-v2z-interact,0.08647,0.07041
+241,graft + interactions → v17,lean-interp,INTERP-v2aa-interact,0.08634,0.07024,0.06585,INTERP-v2z-interact,0.08647,0.07041
+242,graft + interactions → v17,lean-interp,INTERP-v2bb-interact,0.08639,0.07036,0.06600,INTERP-v2z-interact,0.08647,0.07041
+243,graft + interactions → v17,lean-interp,INTERP-v2cc-interact,0.08657,0.07071,0.06630,INTERP-v2cc-interact,0.08657,0.07071
+244,graft + interactions → v17,lean-interp,INTERP-v2dd-interact,0.08620,0.07044,0.06607,INTERP-v2cc-interact,0.08657,0.07071
+245,graft + interactions → v17,lean-interp,INTERP-v2ee-interact,0.08592,0.07034,0.06592,INTERP-v2cc-interact,0.08657,0.07071
+246,graft + interactions → v17,lean-interp,INTERP-v2ff-interact,0.08554,0.07084,0.06629,INTERP-v2cc-interact,0.08657,0.07071
+247,graft + interactions → v17,lean-interp,INTERP-v2gg-interact,0.08622,0.07042,0.06597,INTERP-v2cc-interact,0.08657,0.07071
+248,graft + interactions → v17,lean-interp,INTERP-v2hh-interact,0.08626,0.07045,0.06604,INTERP-v2cc-interact,0.08657,0.07071
+249,graft + interactions → v17,lean-interp,INTERP-v2ii-interact,0.08619,0.07037,0.06599,INTERP-v2cc-interact,0.08657,0.07071
+250,graft + interactions → v17,lean-interp,INTERP-v2jj-interact,0.08646,0.07044,0.06606,INTERP-v2cc-interact,0.08657,0.07071
+251,graft + interactions → v17,lean-interp,INTERP-v2kk-interact,0.08644,0.07037,0.06599,INTERP-v2cc-interact,0.08657,0.07071
+252,graft + interactions → v17,lean-interp,INTERP-final3,0.08647,0.07041,0.06603,INTERP-v2cc-interact,0.08657,0.07071
+253,graft + interactions → v17,lean-interp,INTERP-v2ll-interact,0.08613,0.07036,0.06599,INTERP-v2cc-interact,0.08657,0.07071
+254,graft + interactions → v17,lean-interp,INTERP-v2mm-interact,0.08618,0.07048,0.06605,INTERP-v2cc-interact,0.08657,0.07071
+255,graft + interactions → v17,lean-interp,INTERP-v2nn-interact,0.08621,0.07027,0.06588,INTERP-v2cc-interact,0.08657,0.07071
+256,graft + interactions → v17,lean-interp,INTERP-v2oo-interact,0.08627,0.07040,0.06604,INTERP-v2cc-interact,0.08657,0.07071
+257,graft + interactions → v17,lean-interp,INTERP-v2pp-interact,0.08632,0.07033,0.06588,INTERP-v2cc-interact,0.08657,0.07071
+258,graft + interactions → v17,lean-interp,INTERP-v2qq-interact,0.08611,0.07027,0.06585,INTERP-v2cc-interact,0.08657,0.07071
+259,graft + interactions → v17,lean-interp,INTERP-v2rr-interact,0.08620,0.07030,0.06589,INTERP-v2cc-interact,0.08657,0.07071
+260,graft + interactions → v17,lean-interp,INTERP-v2ss-interact,0.08633,0.07035,0.06596,INTERP-v2cc-interact,0.08657,0.07071
+261,graft + interactions → v17,lean-interp,INTERP-v2tt-interact,0.08625,0.07028,0.06589,INTERP-v2cc-interact,0.08657,0.07071
+262,graft + interactions → v17,lean-interp,INTERP-v2uu-interact,0.08640,0.07036,0.06598,INTERP-v2cc-interact,0.08657,0.07071
+263,graft + interactions → v17,lean-interp,INTERP-v2vv-interact,0.08644,0.07047,0.06605,INTERP-v2cc-interact,0.08657,0.07071
+264,graft + interactions → v17,lean-interp,INTERP-v2ww-interact,0.08611,0.07050,0.06615,INTERP-v2cc-interact,0.08657,0.07071
+265,graft + interactions → v17,lean-interp,INTERP-v2xx-interact,0.08665,0.07039,0.06596,INTERP-v2xx-interact,0.08665,0.07039
+266,graft + interactions → v17,lean-interp,INTERP-v2yy-interact,0.08665,0.07051,0.06603,INTERP-v2yy-interact,0.08665,0.07051
+267,graft + interactions → v17,lean-interp,INTERP-final4,0.08647,0.07041,0.06603,INTERP-v2yy-interact,0.08665,0.07051
+268,graft + interactions → v17,lean-interp,INTERP-v2zz-interact,0.08658,0.07057,0.06612,INTERP-v2yy-interact,0.08665,0.07051
+269,graft + interactions → v17,lean-interp,INTERP-v3a-interact,0.08661,0.07065,0.06618,INTERP-v2yy-interact,0.08665,0.07051
+270,graft + interactions → v17,lean-interp,INTERP-v3b-interact,0.08657,0.07069,0.06619,INTERP-v2yy-interact,0.08665,0.07051
+271,graft + interactions → v17,lean-interp,INTERP-v3c-interact,0.08651,0.07059,0.06615,INTERP-v2yy-interact,0.08665,0.07051
+272,graft + interactions → v17,lean-interp,INTERP-v3d-interact,0.08659,0.07056,0.06610,INTERP-v2yy-interact,0.08665,0.07051
+273,graft + interactions → v17,lean-interp,INTERP-v3e-interact,0.08665,0.07069,0.06625,INTERP-v2yy-interact,0.08665,0.07051
+274,graft + interactions → v17,lean-interp,INTERP-v3f-interact,0.08648,0.07078,0.06635,INTERP-v2yy-interact,0.08665,0.07051
+275,graft + interactions → v17,lean-interp,INTERP-v3g-interact,0.08638,0.07064,0.06620,INTERP-v2yy-interact,0.08665,0.07051
+276,graft + interactions → v17,lean-interp,INTERP-v3h-interact,0.08656,0.07072,0.06629,INTERP-v2yy-interact,0.08665,0.07051
+277,graft + interactions → v17,lean-interp,INTERP-final5,0.08665,0.07069,0.06625,INTERP-v2yy-interact,0.08665,0.07051
+278,graft + interactions → v17,lean-interp,INTERP-v3i-interact,0.08667,0.07072,0.06626,INTERP-v3i-interact,0.08667,0.07072
+279,graft + interactions → v17,lean-interp,INTERP-v3j-interact,0.08657,0.07089,0.06640,INTERP-v3i-interact,0.08667,0.07072
+280,graft + interactions → v17,lean-interp,INTERP-v3k-interact,0.08663,0.07083,0.06641,INTERP-v3i-interact,0.08667,0.07072
+281,graft + interactions → v17,lean-interp,INTERP-v3l-interact,0.08671,0.07070,0.06624,INTERP-v3l-interact,0.08671,0.07070
+282,graft + interactions → v17,lean-interp,INTERP-final6,0.08665,0.07069,0.06625,INTERP-v3l-interact,0.08671,0.07070
+283,graft + interactions → v17,lean-interp,INTERP-v3m-interact,0.08661,0.07063,0.06623,INTERP-v3l-interact,0.08671,0.07070
+284,graft + interactions → v17,lean-interp,INTERP-v3n-interact,0.08655,0.07089,0.06643,INTERP-v3l-interact,0.08671,0.07070
+285,graft + interactions → v17,exceed-dense,DENSE-v1,0.08574,0.07139,0.06686,INTERP-v3l-interact,0.08671,0.07070
+286,graft + interactions → v17,exceed-dense,DENSE-v2,0.08605,0.07086,0.06636,INTERP-v3l-interact,0.08671,0.07070
+287,graft + interactions → v17,exceed-dense,DENSE-v3,0.08486,0.07120,0.06674,INTERP-v3l-interact,0.08671,0.07070
+288,graft + interactions → v17,exceed-dense,DENSE-v4,0.08673,0.07131,0.06670,DENSE-v4,0.08673,0.07131
+289,graft + interactions → v17,exceed-dense,DENSE-v5,0.08603,0.07094,0.06636,DENSE-v4,0.08673,0.07131
+290,front end + scattering → v18,exceed-frontend,LEAN-v17,0.08665,0.07069,0.06625,DENSE-v4,0.08673,0.07131
+291,front end + scattering → v18,exceed-frontend,LEAN-v18-FINE40,0.08665,0.07074,0.06628,DENSE-v4,0.08673,0.07131
+292,front end + scattering → v18,exceed-frontend,LEAN-v19-F0DENSE,0.08622,0.07083,0.06633,DENSE-v4,0.08673,0.07131
+293,front end + scattering → v18,exceed-frontend,LEAN-v20-PERBANDMOD,0.08526,0.07060,0.06609,DENSE-v4,0.08673,0.07131
+294,front end + scattering → v18,exceed-frontend,LEAN-v21-SHORTWIN,0.08665,0.07081,0.06634,DENSE-v4,0.08673,0.07131
+295,front end + scattering → v18,exceed-frontend,LEAN-v22-LCN,0.08645,0.07072,0.06626,DENSE-v4,0.08673,0.07131
+296,front end + scattering → v18,exceed-frontend,LEAN-v23-ACFSLICE,0.08610,0.07082,0.06634,DENSE-v4,0.08673,0.07131
+297,front end + scattering → v18,exceed-frontend,LEAN-v24-GTCC,0.08628,0.07066,0.06621,DENSE-v4,0.08673,0.07131
+298,front end + scattering → v18,exceed-frontend,LEAN-v25-FASTONSET,0.08651,0.07063,0.06621,DENSE-v4,0.08673,0.07131
+299,front end + scattering → v18,exceed-frontend,LEAN-v26-DOG,0.08611,0.07044,0.06593,DENSE-v4,0.08673,0.07131
+300,front end + scattering → v18,exceed-frontend,LEAN-v27-TILT,0.08655,0.07072,0.06626,DENSE-v4,0.08673,0.07131
+301,front end + scattering → v18,exceed-frontend,LEAN-v28-FINEADAPT,0.08619,0.07080,0.06631,DENSE-v4,0.08673,0.07131
+302,front end + scattering → v18,exceed-frontend,LEAN-v29-ZCR,0.08628,0.07047,0.06600,DENSE-v4,0.08673,0.07131
+303,front end + scattering → v18,exceed-frontend,LEAN-v30-FINESTMF,0.08625,0.07084,0.06638,DENSE-v4,0.08673,0.07131
+304,front end + scattering → v18,exceed-frontend,LEAN-v31-BANDKURT,0.08647,0.07043,0.06610,DENSE-v4,0.08673,0.07131
+305,front end + scattering → v18,exceed-frontend,LEAN-v32-CPP,0.08671,0.07076,0.06629,DENSE-v4,0.08673,0.07131
+306,front end + scattering → v18,exceed-frontend,LEAN-v33-REGIONFLAT,0.08686,0.07082,0.06634,LEAN-v33-REGIONFLAT,0.08686,0.07082
+307,front end + scattering → v18,exceed-frontend,LEAN-v34-MULTITILT,0.08686,0.07077,0.06628,LEAN-v33-REGIONFLAT,0.08686,0.07082
+308,front end + scattering → v18,exceed-frontend,LEAN-v35-PHASEINC,0.08684,0.07081,0.06632,LEAN-v33-REGIONFLAT,0.08686,0.07082
+309,front end + scattering → v18,exceed-frontend,LEAN-v36-ALPHARATIO,0.08676,0.07078,0.06629,LEAN-v33-REGIONFLAT,0.08686,0.07082
+310,front end + scattering → v18,exceed-frontend,LEAN-v37-4REGIONFLAT,0.08683,0.07086,0.06639,LEAN-v33-REGIONFLAT,0.08686,0.07082
+311,front end + scattering → v18,exceed-frontend,LEAN-v38-H1H2,0.08669,0.07079,0.06632,LEAN-v33-REGIONFLAT,0.08686,0.07082
+312,front end + scattering → v18,exceed-frontend,LEAN-v39-CREST,0.08662,0.07080,0.06631,LEAN-v33-REGIONFLAT,0.08686,0.07082
+313,front end + scattering → v18,exceed-frontend,LEAN-v40-SUBCENT,0.08663,0.07069,0.06622,LEAN-v33-REGIONFLAT,0.08686,0.07082
+314,front end + scattering → v18,exceed-frontend,LEAN-v41-REGIONSKEW,0.08680,0.07071,0.06633,LEAN-v33-REGIONFLAT,0.08686,0.07082
+315,front end + scattering → v18,exceed-frontend,LEAN-v42-SHORTCPP,0.08677,0.07079,0.06632,LEAN-v33-REGIONFLAT,0.08686,0.07082
+316,front end + scattering → v18,exceed-frontend,LEAN-v43-LOWCEP,0.08680,0.07081,0.06629,LEAN-v33-REGIONFLAT,0.08686,0.07082
+317,front end + scattering → v18,exceed-frontend,LEAN-v44-CONTRAST,0.08702,0.07098,0.06647,LEAN-v44-CONTRAST,0.08702,0.07098
+318,front end + scattering → v18,exceed-frontend,LEAN-v45-SHORTCONTRAST,0.08706,0.07095,0.06641,LEAN-v45-SHORTCONTRAST,0.08706,0.07095
+319,front end + scattering → v18,exceed-frontend,LEAN-v46-MEDCONTRAST,0.08719,0.07097,0.06643,LEAN-v46-MEDCONTRAST,0.08719,0.07097
+320,front end + scattering → v18,exceed-frontend,LEAN-v47-HIGHCONTRAST,0.08719,0.07102,0.06655,LEAN-v47-HIGHCONTRAST,0.08719,0.07102
+321,front end + scattering → v18,exceed-frontend,LEAN-v48-HALFOCT,0.08697,0.07096,0.06640,LEAN-v47-HIGHCONTRAST,0.08719,0.07102
+322,front end + scattering → v18,exceed-frontend,LEAN-v49-AGGRCONTRAST,0.08694,0.07068,0.06619,LEAN-v47-HIGHCONTRAST,0.08719,0.07102
+323,front end + scattering → v18,exceed-frontend,LEAN-v50-OCTENT,0.08710,0.07098,0.06645,LEAN-v47-HIGHCONTRAST,0.08719,0.07102
+324,front end + scattering → v18,exceed-frontend,LEAN-v51-FORMCONTRAST,0.08709,0.07098,0.06646,LEAN-v47-HIGHCONTRAST,0.08719,0.07102
+325,front end + scattering → v18,exceed-frontend,LEAN-v52-COCHLEACONTRAST,0.08724,0.07101,0.06646,LEAN-v52-COCHLEACONTRAST,0.08724,0.07101
+326,front end + scattering → v18,exceed-frontend,LEAN-v53-FINECOCHLEACONTRAST,0.08667,0.07091,0.06635,LEAN-v52-COCHLEACONTRAST,0.08724,0.07101
+327,front end + scattering → v18,exceed-frontend,LEAN-v54-MEDCOCHLEACONTRAST,0.08739,0.07117,0.06663,LEAN-v54-MEDCOCHLEACONTRAST,0.08739,0.07117
+328,front end + scattering → v18,exceed-frontend,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122,0.06665,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+329,front end + scattering → v18,exceed-frontend,LEAN-v56-SLIDECONTRAST,0.08706,0.07152,0.06703,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+330,front end + scattering → v18,exceed-frontend,LEAN-v57-ADAPTCONTRAST,0.08727,0.07113,0.06653,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+331,front end + scattering → v18,exceed-frontend,LEAN-v58-CUBECONTRAST,0.08740,0.07116,0.06660,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+332,front end + scattering → v18,exceed-frontend,LEAN-v59-WIDECONTRAST,0.08738,0.07126,0.06670,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+333,front end + scattering → v18,exceed-frontend,LEAN-v60-COCHENT,0.08740,0.07129,0.06673,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+334,front end + scattering → v18,exceed-frontend,LEAN-v61-PAIRCONTRAST,0.08708,0.07153,0.06684,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+335,front end + scattering → v18,exceed-frontend,LEAN-v62-IMPHARM,0.08728,0.07128,0.06670,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+336,front end + scattering → v18,exceed-frontend,LEAN-v63-LOUDPEAK,0.08733,0.07154,0.06693,LEAN-v55-SHORTCOCHLEACONTRAST,0.08742,0.07122
+337,front end + scattering → v18,exceed-frontend,LEAN-v64-MULTITAUCONTRAST,0.08744,0.07127,0.06670,LEAN-v64-MULTITAUCONTRAST,0.08744,0.07127
+338,front end + scattering → v18,exceed-frontend,LEAN-v65-3TAUCONTRAST,0.08739,0.07121,0.06663,LEAN-v64-MULTITAUCONTRAST,0.08744,0.07127
+339,front end + scattering → v18,exceed-frontend,LEAN-v66-3TAU145,0.08744,0.07126,0.06669,LEAN-v64-MULTITAUCONTRAST,0.08744,0.07127
+340,front end + scattering → v18,exceed-frontend,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122,0.06665,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+341,front end + scattering → v18,exceed-frontend,LEAN-v68-SHORTADAPTCONTRAST,0.08743,0.07123,0.06666,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+342,front end + scattering → v18,exceed-frontend,LEAN-v69-MEDADAPT15,0.08742,0.07123,0.06666,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+343,front end + scattering → v18,exceed-frontend,LEAN-v70-THIRDOCT,0.08740,0.07120,0.06664,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+344,front end + scattering → v18,exceed-frontend,LEAN-v71-LATINH,0.08702,0.07096,0.06634,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+345,front end + scattering → v18,exceed-frontend,LEAN-v72-LOUDGATE,0.08743,0.07121,0.06665,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+346,front end + scattering → v18,exceed-frontend,LEAN-v73-CUBEMED,0.08747,0.07123,0.06666,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+347,front end + scattering → v18,exceed-frontend,LEAN-v74-COCH4GROUP,0.08736,0.07123,0.06664,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+348,front end + scattering → v18,exceed-frontend,LEAN-v75-TEMPCONTRAST,0.08743,0.07122,0.06664,LEAN-v67-MEDADAPTCONTRAST,0.08747,0.07122
+349,front end + scattering → v18,exceed-frontend,LEAN-v76-LOUDTEMP,0.08747,0.07148,0.06687,LEAN-v76-LOUDTEMP,0.08747,0.07148
+350,front end + scattering → v18,exceed-frontend,LEAN-v77-LOUDMINMAX,0.08747,0.07137,0.06679,LEAN-v76-LOUDTEMP,0.08747,0.07148
+351,front end + scattering → v18,exceed-frontend,LEAN-v78-SHORT45,0.08741,0.07126,0.06669,LEAN-v76-LOUDTEMP,0.08747,0.07148
+352,front end + scattering → v18,exceed-frontend,LEAN-v79-LONG45,0.08745,0.07123,0.06666,LEAN-v76-LOUDTEMP,0.08747,0.07148
+353,front end + scattering → v18,exceed-frontend,LEAN-v80-MEDADAPT60,0.08744,0.07123,0.06666,LEAN-v76-LOUDTEMP,0.08747,0.07148
+354,front end + scattering → v18,exceed-frontend,LEAN-v81-LONG60,0.08739,0.07119,0.06662,LEAN-v76-LOUDTEMP,0.08747,0.07148
+355,front end + scattering → v18,exceed-frontend,LEAN-v82-TOPBOT,0.08749,0.07121,0.06663,LEAN-v82-TOPBOT,0.08749,0.07121
+356,front end + scattering → v18,exceed-frontend,LEAN-v83-TOPBOTMED,0.08748,0.07125,0.06666,LEAN-v82-TOPBOT,0.08749,0.07121
+357,front end + scattering → v18,exceed-frontend,LEAN-v84-TOPBOTSHORT,0.08751,0.07121,0.06663,LEAN-v84-TOPBOTSHORT,0.08751,0.07121
+358,front end + scattering → v18,exceed-frontend,LEAN-v85-TOPBOTADAPT,0.08751,0.07122,0.06663,LEAN-v84-TOPBOTSHORT,0.08751,0.07121
+359,front end + scattering → v18,exceed-frontend,LEAN-v86-FMTBANDS,0.08731,0.07122,0.06663,LEAN-v84-TOPBOTSHORT,0.08751,0.07121
+360,front end + scattering → v18,exceed-frontend,LEAN-v87-TOPBOTLONG15,0.08748,0.07119,0.06659,LEAN-v84-TOPBOTSHORT,0.08751,0.07121
+361,front end + scattering → v18,exceed-frontend,LEAN-v88-NARROWBAND,0.08733,0.07111,0.06653,LEAN-v84-TOPBOTSHORT,0.08751,0.07121
+362,front end + scattering → v18,exceed-frontend,LEAN-v89-FUTCONTRAST,0.08765,0.07134,0.06675,LEAN-v89-FUTCONTRAST,0.08765,0.07134
+363,front end + scattering → v18,exceed-frontend,LEAN-v90-PASTCONTRAST,0.08763,0.07135,0.06675,LEAN-v89-FUTCONTRAST,0.08765,0.07134
+364,front end + scattering → v18,exceed-frontend,LEAN-v91-FUTCONTRAST6,0.08759,0.07146,0.06683,LEAN-v89-FUTCONTRAST,0.08765,0.07134
+365,front end + scattering → v18,exceed-frontend,LEAN-v92-FUTCONTRASTMED,0.08769,0.07142,0.06681,LEAN-v92-FUTCONTRASTMED,0.08769,0.07142
+366,front end + scattering → v18,exceed-frontend,LEAN-v93-FUTCONTRASTSHORT,0.08763,0.07143,0.06682,LEAN-v92-FUTCONTRASTMED,0.08769,0.07142
+367,front end + scattering → v18,exceed-frontend,LEAN-v94-FUTSPEC,0.08764,0.07148,0.06685,LEAN-v92-FUTCONTRASTMED,0.08769,0.07142
+368,front end + scattering → v18,exceed-frontend,LEAN-v95-FUTLONG9,0.08748,0.07145,0.06681,LEAN-v92-FUTCONTRASTMED,0.08769,0.07142
+369,front end + scattering → v18,exceed-frontend,LEAN-v96-FUTMED6,0.08775,0.07155,0.06693,LEAN-v96-FUTMED6,0.08775,0.07155
+370,front end + scattering → v18,exceed-frontend,LEAN-v97-FUTMED9,0.08770,0.07160,0.06697,LEAN-v96-FUTMED6,0.08775,0.07155
+371,front end + scattering → v18,exceed-frontend,LEAN-v98-FUTSHORT6,0.08774,0.07153,0.06692,LEAN-v96-FUTMED6,0.08775,0.07155
+372,front end + scattering → v18,exceed-frontend,LEAN-v99-FUTPASTAVG,0.08764,0.07154,0.06693,LEAN-v96-FUTMED6,0.08775,0.07155
+373,front end + scattering → v18,exceed-frontend,LEAN-v100-FUTMINUSCUR,0.08776,0.07154,0.06693,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+374,front end + scattering → v18,exceed-frontend,LEAN-v101-FUTADAPT,0.08761,0.07147,0.06687,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+375,front end + scattering → v18,exceed-frontend,LEAN-v102-FUTLONG6,0.08767,0.07153,0.06692,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+376,front end + scattering → v18,exceed-frontend,LEAN-v103-FUTTOPBOTMED,0.08755,0.07145,0.06683,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+377,front end + scattering → v18,exceed-frontend,LEAN-v104-FUTTOPBOTLONG,0.08757,0.07147,0.06685,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+378,front end + scattering → v18,exceed-frontend,LEAN-v105-FUTSPECMED,0.08775,0.07154,0.06693,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+379,front end + scattering → v18,exceed-frontend,LEAN-v106-FUTLONG4,0.08771,0.07154,0.06692,LEAN-v100-FUTMINUSCUR,0.08776,0.07154
+380,front end + scattering → v18,exceed-frontend,LEAN-v107-FUTCUBELONG,0.08785,0.07158,0.06697,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+381,front end + scattering → v18,exceed-frontend,LEAN-v108-FUTCUBEMED,0.08777,0.07154,0.06695,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+382,front end + scattering → v18,exceed-frontend,LEAN-v109-FUTCUBELONG6,0.08770,0.07157,0.06698,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+383,front end + scattering → v18,exceed-frontend,LEAN-v110-FUTCUBESHORT,0.08763,0.07144,0.06683,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+384,front end + scattering → v18,exceed-frontend,LEAN-v111-FUTCUBELONG2,0.08781,0.07156,0.06696,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+385,front end + scattering → v18,exceed-frontend,LEAN-v112-FUTCUBEMED6,0.08784,0.07159,0.06699,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+386,front end + scattering → v18,exceed-frontend,LEAN-v113-CUBETOPBOT,0.08778,0.07158,0.06697,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+387,front end + scattering → v18,exceed-frontend,LEAN-v114-SQRTFUTLONG,0.08783,0.07155,0.06694,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+388,front end + scattering → v18,exceed-frontend,LEAN-v115-FUTCUBE4G,0.08776,0.07157,0.06695,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+389,front end + scattering → v18,exceed-frontend,LEAN-v116-FUTCUBETOPBOT,0.08763,0.07148,0.06685,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+390,front end + scattering → v18,exceed-frontend,LEAN-v117-FUTCUBEMED4,0.08780,0.07156,0.06697,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+391,front end + scattering → v18,exceed-frontend,LEAN-v118-CUBECURLONG,0.08783,0.07157,0.06698,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+392,front end + scattering → v18,exceed-frontend,LEAN-v119-FUTCUBETOPBOTMED,0.08759,0.07149,0.06690,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+393,front end + scattering → v18,exceed-frontend,LEAN-v120-FUTMED5,0.08776,0.07155,0.06693,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+394,front end + scattering → v18,exceed-frontend,LEAN-v121-FINETOPBOT,0.08773,0.07163,0.06702,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+395,front end + scattering → v18,exceed-frontend,LEAN-v122-FUTCUBE5,0.08781,0.07166,0.06705,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+396,front end + scattering → v18,exceed-frontend,LEAN-v123-SHIFTGROUPS,0.08768,0.07154,0.06692,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+397,front end + scattering → v18,exceed-frontend,LEAN-v124-AVGCONTRAST,0.08784,0.07157,0.06696,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+398,front end + scattering → v18,exceed-frontend,LEAN-v125-FUTSMOOTH,0.08757,0.07149,0.06689,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+399,front end + scattering → v18,exceed-frontend,LEAN-v126-FUTCUBESHORT2,0.08763,0.07143,0.06682,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+400,front end + scattering → v18,exceed-frontend,LEAN-v127-DIFFCONTRAST,0.08784,0.07149,0.06689,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+401,front end + scattering → v18,exceed-frontend,LEAN-v128-SHORTMEDDIFF,0.08774,0.07154,0.06692,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+402,front end + scattering → v18,exceed-frontend,LEAN-v108-GTCC,0.07334,0.06160,0.05747,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+403,front end + scattering → v18,exceed-frontend,LEAN-v108-GTCC,0.08741,0.07137,0.06676,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+404,front end + scattering → v18,exceed-frontend,LEAN-v109-DENSEF0,0.08752,0.07161,0.06702,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+405,front end + scattering → v18,exceed-scatter,SCAT-v12,0.08612,0.07071,0.06627,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+406,front end + scattering → v18,exceed-scatter,SCAT-v14,0.08621,0.07049,0.06605,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+407,front end + scattering → v18,exceed-scatter,SCAT-v15,0.08581,0.07057,0.06612,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+408,front end + scattering → v18,exceed-scatter,SCAT-v16,0.08624,0.07086,0.06638,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+409,front end + scattering → v18,exceed-scatter,SCAT-v17,0.08596,0.07075,0.06630,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+410,front end + scattering → v18,exceed-scatter,SCAT-v18,0.08632,0.07097,0.06648,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+411,front end + scattering → v18,exceed-scatter,SCAT-v19,0.08609,0.07080,0.06632,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+412,front end + scattering → v18,exceed-scatter,SCAT-v20,0.08605,0.07076,0.06624,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+413,front end + scattering → v18,exceed-scatter,SCAT-v21,0.08597,0.07071,0.06618,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+414,front end + scattering → v18,exceed-scatter,SCAT-v22,0.08649,0.07075,0.06625,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+415,front end + scattering → v18,exceed-scatter,SCAT-v24,0.08666,0.07074,0.06629,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+416,front end + scattering → v18,exceed-scatter,SCAT-v25,0.08657,0.07071,0.06623,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+417,front end + scattering → v18,exceed-scatter,SCAT-v26,0.08653,0.07078,0.06631,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+418,front end + scattering → v18,exceed-scatter,SCAT-v27,0.08671,0.07081,0.06637,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+419,front end + scattering → v18,exceed-scatter,SCAT-v28,0.08624,0.07071,0.06626,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+420,front end + scattering → v18,exceed-scatter,SCAT-v29,0.08709,0.07086,0.06647,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+421,front end + scattering → v18,exceed-scatter,SCAT-v30,0.08754,0.07112,0.06678,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+422,front end + scattering → v18,exceed-scatter,SCAT-v31,0.08756,0.07123,0.06691,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+423,front end + scattering → v18,exceed-scatter,SCAT-v34,0.08761,0.07123,0.06692,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+424,front end + scattering → v18,exceed-scatter,SCAT-v35,0.08736,0.07126,0.06695,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+425,front end + scattering → v18,exceed-scatter,SCAT-v36,0.08671,0.07100,0.06663,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+426,front end + scattering → v18,exceed-scatter,SCAT-v37,0.08712,0.07128,0.06687,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+427,front end + scattering → v18,exceed-scatter,SCAT-v38,0.08707,0.07112,0.06675,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+428,front end + scattering → v18,exceed-scatter,SCAT-v39,0.08780,0.07135,0.06700,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+429,front end + scattering → v18,exceed-scatter,SCAT-v40,0.08784,0.07136,0.06703,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+430,front end + scattering → v18,exceed-scatter,SCAT-v41,0.08772,0.07127,0.06691,LEAN-v107-FUTCUBELONG,0.08785,0.07158
+431,front end + scattering → v18,exceed-scatter,SCAT-v42,0.08790,0.07135,0.06700,SCAT-v42,0.08790,0.07135
+432,front end + scattering → v18,exceed-scatter,SCAT-v47,0.08694,0.07158,0.06696,SCAT-v42,0.08790,0.07135
+433,front end + scattering → v18,exceed-scatter,SCAT-v48,0.08647,0.07188,0.06718,SCAT-v42,0.08790,0.07135
+434,front end + scattering → v18,exceed-scatter,SCAT-v49,0.08724,0.07133,0.06685,SCAT-v42,0.08790,0.07135
+435,front end + scattering → v18,exceed-scatter,SCAT-v50,0.08701,0.07123,0.06679,SCAT-v42,0.08790,0.07135
+436,front end + scattering → v18,exceed-scatter,SCAT-v51,0.08758,0.07131,0.06695,SCAT-v42,0.08790,0.07135
+437,front end + scattering → v18,exceed-scatter,SCAT-v52,0.08766,0.07123,0.06687,SCAT-v42,0.08790,0.07135
+438,front end + scattering → v18,exceed-scatter,SCAT-v53,0.08792,0.07136,0.06702,SCAT-v53,0.08792,0.07136
+439,front end + scattering → v18,exceed-scatter,SCAT-v54,0.08785,0.07135,0.06700,SCAT-v53,0.08792,0.07136
+440,front end + scattering → v18,exceed-scatter,SCAT-v56,0.08786,0.07144,0.06709,SCAT-v53,0.08792,0.07136
+441,front end + scattering → v18,exceed-scatter,SCAT-v57,0.08776,0.07140,0.06705,SCAT-v53,0.08792,0.07136
+442,front end + scattering → v18,exceed-scatter,SCAT-v58,0.08725,0.07137,0.06710,SCAT-v53,0.08792,0.07136
+443,front end + scattering → v18,exceed-scatter,SCAT-v59,0.08681,0.07121,0.06676,SCAT-v53,0.08792,0.07136
+444,front end + scattering → v18,exceed-scatter,SCAT-v60,0.08785,0.07135,0.06700,SCAT-v53,0.08792,0.07136
+445,front end + scattering → v18,exceed-scatter,SCAT-v61,0.08806,0.07145,0.06707,SCAT-v61,0.08806,0.07145
+446,front end + scattering → v18,exceed-scatter,SCAT-v62,0.08807,0.07144,0.06707,SCAT-v62,0.08807,0.07144
+447,front end + scattering → v18,exceed-scatter,SCAT-v64,0.08710,0.07080,0.06646,SCAT-v62,0.08807,0.07144
+448,front end + scattering → v18,exceed-scatter,SCAT-v65,0.08809,0.07143,0.06706,SCAT-v65,0.08809,0.07143
+449,front end + scattering → v18,exceed-scatter,SCAT-v68,0.08760,0.07133,0.06684,SCAT-v65,0.08809,0.07143
+450,front end + scattering → v18,exceed-scatter,SCAT-v69,0.08809,0.07142,0.06704,SCAT-v65,0.08809,0.07143
+451,front end + scattering → v18,exceed-scatter,SCAT-v70,0.08623,0.07107,0.06679,SCAT-v65,0.08809,0.07143
+452,front end + scattering → v18,exceed-scatter,SCAT-v71,0.08767,0.07143,0.06695,SCAT-v65,0.08809,0.07143
+453,front end + scattering → v18,exceed-scatter,SCAT-v73,0.08807,0.07140,0.06704,SCAT-v65,0.08809,0.07143
+454,front end + scattering → v18,exceed-scatter,SCAT-v74,0.08817,0.07142,0.06708,SCAT-v74,0.08817,0.07142
+455,front end + scattering → v18,exceed-scatter,SCAT-v75,0.08811,0.07144,0.06708,SCAT-v74,0.08817,0.07142
+456,front end + scattering → v18,exceed-scatter,SCAT-v76,0.08802,0.07138,0.06701,SCAT-v74,0.08817,0.07142
+457,front end + scattering → v18,exceed-scatter,SCAT-v80,0.08820,0.07154,0.06714,SCAT-v80,0.08820,0.07154
+458,front end + scattering → v18,exceed-scatter,SCAT-v81,0.08796,0.07138,0.06704,SCAT-v80,0.08820,0.07154
+459,front end + scattering → v18,exceed-scatter,SCAT-v82,0.08779,0.07140,0.06707,SCAT-v80,0.08820,0.07154
+460,front end + scattering → v18,exceed-scatter,SCAT-v83,0.08744,0.07133,0.06684,SCAT-v80,0.08820,0.07154
+461,front end + scattering → v18,exceed-scatter,SCAT-v84,0.08811,0.07138,0.06702,SCAT-v80,0.08820,0.07154
+462,front end + scattering → v18,exceed-scatter,SCAT-v86,0.08742,0.07128,0.06678,SCAT-v80,0.08820,0.07154
+463,front end + scattering → v18,exceed-scatter,SCAT-v88,0.08810,0.07140,0.06704,SCAT-v80,0.08820,0.07154
+464,front end + scattering → v18,exceed-scatter,SCAT-v89,0.08756,0.07142,0.06697,SCAT-v80,0.08820,0.07154
+465,front end + scattering → v18,exceed-scatter,SCAT-v90,0.08674,0.07104,0.06669,SCAT-v80,0.08820,0.07154
+466,front end + scattering → v18,exceed-scatter,SCAT-v91,0.08810,0.07145,0.06707,SCAT-v80,0.08820,0.07154
+467,front end + scattering → v18,exceed-scatter,SCAT-v92,0.08810,0.07137,0.06700,SCAT-v80,0.08820,0.07154
+468,front end + scattering → v18,exceed-scatter,SCAT-v93,0.08736,0.07151,0.06711,SCAT-v80,0.08820,0.07154
+469,front end + scattering → v18,exceed-scatter,SCAT-v94,0.08810,0.07163,0.06723,SCAT-v80,0.08820,0.07154
+470,front end + scattering → v18,exceed-scatter,SCAT-v95,0.08810,0.07137,0.06700,SCAT-v80,0.08820,0.07154
+471,front end + scattering → v18,exceed-scatter,SCAT-v97,0.08722,0.07115,0.06676,SCAT-v80,0.08820,0.07154
+472,front end + scattering → v18,exceed-scatter,SCAT-v98,0.08768,0.07134,0.06685,SCAT-v80,0.08820,0.07154
+473,front end + scattering → v18,exceed-scatter,SCAT-v99,0.08658,0.07194,0.06731,SCAT-v80,0.08820,0.07154
+474,front end + scattering → v18,exceed-scatter,SCAT-v100,0.08810,0.07137,0.06700,SCAT-v80,0.08820,0.07154
+475,front end + scattering → v18,exceed-scatter,SCAT-v101,0.08702,0.07139,0.06699,SCAT-v80,0.08820,0.07154
+476,front end + scattering → v18,exceed-scatter,SCAT-v102,0.08804,0.07134,0.06698,SCAT-v80,0.08820,0.07154
+477,front end + scattering → v18,exceed-scatter,SCAT-v103,0.08823,0.07139,0.06704,SCAT-v103,0.08823,0.07139
+478,front end + scattering → v18,exceed-scatter,SCAT-v104,0.08820,0.07142,0.06706,SCAT-v103,0.08823,0.07139
+479,front end + scattering → v18,exceed-scatter,SCAT-v105,0.08810,0.07173,0.06732,SCAT-v103,0.08823,0.07139
+480,front end + scattering → v18,exceed-scatter,SCAT-v106,0.08821,0.07142,0.06707,SCAT-v103,0.08823,0.07139
+481,front end + scattering → v18,exceed-scatter,SCAT-v110,0.08821,0.07142,0.06707,SCAT-v103,0.08823,0.07139
+482,front end + scattering → v18,exceed-scatter,SCAT-v112,0.08821,0.07142,0.06707,SCAT-v103,0.08823,0.07139
+483,front end + scattering → v18,exceed-combine,COMBINE-v1-LEAN107+SCAT103,0.07010,0.05880,0.05452,SCAT-v103,0.08823,0.07139
+484,front end + scattering → v18,exceed-combine,COMBINE-v1-LEAN107+SCAT103,0.07720,0.06636,0.06235,SCAT-v103,0.08823,0.07139
+485,front end + scattering → v18,exceed-combine,COMBINE-v1-LEAN107+SCAT103,0.07956,0.06651,0.06240,SCAT-v103,0.08823,0.07139
+486,front end + scattering → v18,exceed-combine,COMBINE-v1-LEAN107+SCAT103,0.08394,0.07079,0.06649,SCAT-v103,0.08823,0.07139
+487,front end + scattering → v18,exceed-combine,COMBINE-v1-LEAN107+SCAT103,0.08784,0.07174,0.06713,SCAT-v103,0.08823,0.07139
+488,front end + scattering → v18,exceed-combine,COMBINE-v2-LEAN107+SCAT103-nointeract,0.08803,0.07121,0.06673,SCAT-v103,0.08823,0.07139
+489,front end + scattering → v18,exceed-combine,COMBINE-v4-LEAN107+SCAT103-disk,0.08867,0.07209,0.06749,COMBINE-v4-LEAN107+SCAT103-disk,0.08867,0.07209
+490,front end + scattering → v18,exceed-combine,COMBINE-v5-S2s+s1dyn,0.08904,0.07223,0.06771,COMBINE-v5-S2s+s1dyn,0.08904,0.07223
+491,front end + scattering → v18,exceed-combine,COMBINE-v6-cohdyn+s2pj1dyn,0.08853,0.07250,0.06784,COMBINE-v5-S2s+s1dyn,0.08904,0.07223
+492,front end + scattering → v18,exceed-combine,COMBINE-v7-NB2,0.08903,0.07229,0.06777,COMBINE-v5-S2s+s1dyn,0.08904,0.07223
+493,front end + scattering → v18,exceed-combine,COMBINE-v8-s1sub_fut,0.08907,0.07231,0.06777,COMBINE-v8-s1sub_fut,0.08907,0.07231
+494,front end + scattering → v18,exceed-combine,COMBINE-v9-modcentroid,0.08889,0.07239,0.06777,COMBINE-v8-s1sub_fut,0.08907,0.07231
+495,front end + scattering → v18,exceed-combine,COMBINE-v10-K17,0.08814,0.07224,0.06776,COMBINE-v8-s1sub_fut,0.08907,0.07231
+496,front end + scattering → v18,exceed-combine,COMBINE-v11-s1sub_dyn_asym,0.08891,0.07215,0.06764,COMBINE-v8-s1sub_fut,0.08907,0.07231
+497,front end + scattering → v18,exceed-combine,COMBINE-v12-cohdyn,0.08870,0.07218,0.06764,COMBINE-v8-s1sub_fut,0.08907,0.07231
+498,front end + scattering → v18,exceed-combine,COMBINE-v13-Q2-2,0.08944,0.07219,0.06769,COMBINE-v13-Q2-2,0.08944,0.07219
+499,front end + scattering → v18,exceed-combine,COMBINE-v14-Q2-3,0.08926,0.07215,0.06765,COMBINE-v13-Q2-2,0.08944,0.07219
+500,front end + scattering → v18,exceed-combine,COMBINE-v15-Q1-6,0.08890,0.07197,0.06746,COMBINE-v13-Q2-2,0.08944,0.07219
+501,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q1-QUADBANK,0.08941,0.07255,0.06796,COMBINE-v13-Q2-2,0.08944,0.07219
+502,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q2-QUADDYN,0.08985,0.07306,0.06840,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+503,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q3-QUADHIRATES,0.08971,0.07294,0.06822,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+504,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q4-PITCHSOFT,0.08969,0.07301,0.06838,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+505,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q5-QUADBIN5,0.08950,0.07329,0.06862,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+506,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q6-XFINECOCHLEA,0.08951,0.07313,0.06850,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+507,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q7-XFAMILY,0.08957,0.07296,0.06833,LEAN-v18.q2-QUADDYN,0.08985,0.07306
+508,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302,0.06845,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+509,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q9-QUADPHASEPROD,0.08976,0.07301,0.06835,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+510,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q10-SCATDENSER,0.08871,0.07288,0.06814,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+511,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q11-VOICEDBAND,0.08973,0.07297,0.06834,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+512,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q12-QUADMED,0.08978,0.07307,0.06843,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+513,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q13-LATINH,0.08969,0.07303,0.06829,LEAN-v18.q8-QUADACAUSAL,0.08993,0.07302
+514,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q14-QUADPROSDYN,0.09001,0.07309,0.06844,LEAN-v18.q14-QUADPROSDYN,0.09001,0.07309
+515,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q15-QUADACAUSAL60,0.09014,0.07301,0.06849,LEAN-v18.q15-QUADACAUSAL60,0.09014,0.07301
+516,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q16-QUADACAUSAL2,0.08993,0.07329,0.06877,LEAN-v18.q15-QUADACAUSAL60,0.09014,0.07301
+517,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q17-XRATE-ENERGY,0.09017,0.07332,0.06876,LEAN-v18.q17-XRATE-ENERGY,0.09017,0.07332
+518,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q18-COCHLEAACAUSALLONG,0.09005,0.07310,0.06852,LEAN-v18.q17-XRATE-ENERGY,0.09017,0.07332
+519,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q19-VOICEDGATE,0.09016,0.07333,0.06878,LEAN-v18.q17-XRATE-ENERGY,0.09017,0.07332
+520,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q20-VOICEDQUADMAG,0.09018,0.07338,0.06882,LEAN-v18.q20-VOICEDQUADMAG,0.09018,0.07338
+521,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q21-VOICINGONSET,0.09012,0.07332,0.06877,LEAN-v18.q20-VOICEDQUADMAG,0.09018,0.07338
+522,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q22-MULTITHRESHGATE,0.09009,0.07335,0.06880,LEAN-v18.q20-VOICEDQUADMAG,0.09018,0.07338
+523,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q23-FLATGATE,0.09021,0.07338,0.06886,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+524,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q24-VOICEDFINE,0.09011,0.07334,0.06882,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+525,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q25-VOICEDMULTITAU,0.09012,0.07336,0.06881,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+526,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q26-ZCR,0.08993,0.07331,0.06877,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+527,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q27-CUBEFINE,0.09001,0.07338,0.06884,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+528,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q28-FUTURELAGS,0.09008,0.07335,0.06880,LEAN-v18.q23-FLATGATE,0.09021,0.07338
+529,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q29-GATESIGS,0.09034,0.07342,0.06886,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+530,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q30-GATEMORE,0.09025,0.07341,0.06880,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+531,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q31-DIVERSEGATES,0.09028,0.07350,0.06899,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+532,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q32-GATEXLAG,0.09017,0.07330,0.06883,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+533,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q33-GATExKEYSIG,0.09032,0.07337,0.06882,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+534,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q34-WAVESTATS,0.09008,0.07339,0.06882,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+535,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q35-SHARPGATES,0.09030,0.07339,0.06883,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+536,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q36-BANDRATIOS,0.09015,0.07343,0.06888,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+537,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q37-LOUDHNRGATES,0.09028,0.07342,0.06885,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+538,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q38-ALTGATES,0.09026,0.07333,0.06879,LEAN-v18.q29-GATESIGS,0.09034,0.07342
+539,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q39-GATEEXTRATAU,0.09035,0.07341,0.06883,LEAN-v18.q39-GATEEXTRATAU,0.09035,0.07341
+540,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q40-SOFTARGMAX,0.08985,0.07319,0.06861,LEAN-v18.q39-GATEEXTRATAU,0.09035,0.07341
+541,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q41-GATEFUTURE,0.09018,0.07343,0.06889,LEAN-v18.q39-GATEEXTRATAU,0.09035,0.07341
+542,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q42-SLOWQUAD,0.09043,0.07360,0.06904,LEAN-v18.q42-SLOWQUAD,0.09043,0.07360
+543,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q43-SLOWQUADACAUSAL,0.09025,0.07350,0.06897,LEAN-v18.q42-SLOWQUAD,0.09043,0.07360
+544,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357,0.06897,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+545,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q45-SLOWQUAD5SCALES,0.09045,0.07352,0.06897,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+546,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q46-SLOWQUAD5BINS,0.08977,0.07345,0.06888,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+547,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q47-SLOWQUADADDLOW,0.09040,0.07361,0.06901,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+548,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q48-SLOWQUADMULTITAU,0.09012,0.07334,0.06877,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+549,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q50-SLOWQUADCUBE,0.08998,0.07347,0.06892,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+550,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q51-SLOWQUADMED,0.09018,0.07338,0.06883,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+551,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q52-MEDRATEQUAD,0.09013,0.07345,0.06888,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+552,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q53-SPECTRALTILT,0.09043,0.07361,0.06899,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+553,"quad. banks + gates → v19, v20",exceed-v18,LEAN-v18.q54-SLOWQUADMAGCOARSE,0.09013,0.07337,0.06879,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+554,"context, coupling, speaker",exceed-v20-context,LEAN-v20,0.09045,0.07352,0.06897,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+555,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c1,0.08872,0.07299,0.06849,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+556,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c3,0.08966,0.07331,0.06872,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+557,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c4,0.08954,0.07349,0.06874,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+558,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c5,0.09019,0.07320,0.06872,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+559,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c7,0.08983,0.07332,0.06875,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+560,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c8,0.08998,0.07338,0.06884,LEAN-v18.q44-SLOWQUADWIDER,0.09045,0.07357
+561,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c9,0.09048,0.07333,0.06876,LEAN-v21-c9,0.09048,0.07333
+562,"context, coupling, speaker",exceed-v20-context,LEAN-v21-c10,0.09056,0.07348,0.06889,LEAN-v21-c10,0.09056,0.07348
+563,"context, coupling, speaker",exceed-v20-deep,LEAN-v21-PAC,0.09001,0.07333,0.06873,LEAN-v21-c10,0.09056,0.07348
+564,"context, coupling, speaker",exceed-v20-deep,LEAN-v22-XLAG,0.09072,0.07369,0.06911,LEAN-v22-XLAG,0.09072,0.07369
+565,"context, coupling, speaker",exceed-v20-deep,LEAN-v23-XLAG6,0.09042,0.07369,0.06910,LEAN-v22-XLAG,0.09072,0.07369
+566,"context, coupling, speaker",exceed-v20-deep,LEAN-v24-XLAGLONG,0.09026,0.07347,0.06897,LEAN-v22-XLAG,0.09072,0.07369
+567,"context, coupling, speaker",exceed-v20-deep,LEAN-v25-TS3,0.09049,0.07366,0.06909,LEAN-v22-XLAG,0.09072,0.07369
+568,"context, coupling, speaker",exceed-v20-deep,LEAN-v26-AUTOLAG,0.09070,0.07376,0.06918,LEAN-v22-XLAG,0.09072,0.07369
+569,"context, coupling, speaker",exceed-v20-deep,LEAN-v27-XLAGSIGN,0.09036,0.07347,0.06894,LEAN-v22-XLAG,0.09072,0.07369
+570,"context, coupling, speaker",exceed-v20-deep,LEAN-v28-ACCEL,0.09035,0.07361,0.06906,LEAN-v22-XLAG,0.09072,0.07369
+571,"context, coupling, speaker",exceed-v20-deep,LEAN-v29-CROSSWIN,0.09056,0.07358,0.06901,LEAN-v22-XLAG,0.09072,0.07369
+572,"context, coupling, speaker",exceed-v20-deep,LEAN-v30-MFCC,0.09034,0.07356,0.06903,LEAN-v22-XLAG,0.09072,0.07369
+573,"context, coupling, speaker",exceed-v20-deep,LEAN-v31-LOGEPROD8,0.09045,0.07388,0.06925,LEAN-v22-XLAG,0.09072,0.07369
+574,"context, coupling, speaker",exceed-v20-deep,LEAN-v32-TRIPLET,0.09032,0.07347,0.06892,LEAN-v22-XLAG,0.09072,0.07369
+575,"context, coupling, speaker",exceed-v20-deep,LEAN-v33-XLAGMULTITAU,0.09086,0.07365,0.06907,LEAN-v33-XLAGMULTITAU,0.09086,0.07365
+576,"context, coupling, speaker",exceed-v20-deep,LEAN-v34-XLAGABS,0.09084,0.07315,0.06860,LEAN-v33-XLAGMULTITAU,0.09086,0.07365
+577,"context, coupling, speaker",exceed-v20-deep,LEAN-v35-AUTOLAGZ,0.09093,0.07374,0.06913,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+578,"context, coupling, speaker",exceed-v20-deep,LEAN-v36-XLAGCUBE,0.09065,0.07329,0.06873,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+579,"context, coupling, speaker",exceed-v20-deep,LEAN-v37-XLAG20,0.09081,0.07349,0.06896,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+580,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21a,0.08929,0.07362,0.06896,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+581,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21b,0.08984,0.07332,0.06869,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+582,"context, coupling, speaker",exceed-v20-speaker,LEAN-v22a,0.09006,0.07338,0.06882,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+583,"context, coupling, speaker",exceed-v20-speaker,LEAN-v23a,0.09041,0.07350,0.06900,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+584,"context, coupling, speaker",exceed-v20-speaker,LEAN-v23b,0.09015,0.07328,0.06881,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+585,"context, coupling, speaker",exceed-v20-speaker,LEAN-v24a,0.09025,0.07358,0.06913,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+586,"context, coupling, speaker",exceed-v20-speaker,LEAN-v25a,0.09022,0.07357,0.06903,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+587,"context, coupling, speaker",exceed-v20-speaker,LEAN-v26a,0.09020,0.07344,0.06893,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+588,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN1,0.08942,0.07279,0.06825,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+589,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN2,0.08999,0.07321,0.06866,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+590,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN3,0.08992,0.07334,0.06884,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+591,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN4,0.09023,0.07338,0.06888,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+592,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN5,0.09020,0.07335,0.06887,LEAN-v35-AUTOLAGZ,0.09093,0.07374
+593,"context, coupling, speaker",exceed-v20-speaker,LEAN-v21-VTLN6,0.09050,0.07334,0.06872,LEAN-v35-AUTOLAGZ,0.09093,0.07374

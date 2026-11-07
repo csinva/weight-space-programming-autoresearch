@@ -1,0 +1,1 @@
+{"id": "reset-A__BIOPHYS_v25_fa467e", "run": "reset-A", "name": "BIOPHYS-v25", "logged": 0.065, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v25.py", "order": 222, "rc": 0, "seconds": 531, "all166": 0.0649948865299958, "grid": 0.07216855815997673, "P": 11968, "reproduced": true, "status": "ok"}

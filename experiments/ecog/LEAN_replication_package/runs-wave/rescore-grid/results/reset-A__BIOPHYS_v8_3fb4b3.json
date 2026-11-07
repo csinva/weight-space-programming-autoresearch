@@ -1,0 +1,1 @@
+{"id": "reset-A__BIOPHYS_v8_3fb4b3", "run": "reset-A", "name": "BIOPHYS-v8", "logged": 0.0608, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-A/wave_encoders_lib/BIOPHYS-v8.py", "order": 206, "rc": 0, "seconds": 155, "all166": 0.06079244275128828, "grid": 0.06800124704448539, "P": 3348, "reproduced": true, "status": "ok"}

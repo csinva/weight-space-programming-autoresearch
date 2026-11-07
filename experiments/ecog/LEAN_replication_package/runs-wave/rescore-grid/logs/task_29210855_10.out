@@ -1,0 +1,14 @@
+ok       reset-I__TFS_IF_v20_947899                                             logged=0.0628 all166=0.06284 grid=0.07107 rc=0 337s
+ok       reset-G__TEXTURE_v12_91858a                                            logged=0.0617 all166=0.06170 grid=0.07060 rc=0 270s
+ok       reset-G__TEXTURE_v20_6a8f1a                                            logged=0.0660 all166=0.06604 grid=0.07475 rc=0 582s
+ok       reset-I__TFS_IF_v1_8afc34                                              logged=0.0556 all166=0.05558 grid=0.06259 rc=0 365s
+ok       graft-lean__GRAFT_v6_stacked_clean_75fff0                              logged=0.0764 all166=0.07638 grid=0.08516 rc=0 164s
+ok       graft-lean__GRAFT_v8_tune_sat3_db7658                                  logged=0.0763 all166=0.07633 grid=0.08506 rc=0 168s
+ok       lean-interp__INTERP_v2f_interact_e00974                                logged=0.0762 all166=0.07623 grid=0.08539 rc=0 148s
+ok       lean-interp__INTERP_final2_16d678                                      logged=0.0766 all166=0.07656 grid=0.08575 rc=0 150s
+ok       lean-interp__INTERP_v2x_interact_379cd5                                logged=0.0772 all166=0.07723 grid=0.08618 rc=0 168s
+ok       lean-interp__INTERP_v2hh_interact_b55f1d                               logged=0.0772 all166=0.07720 grid=0.08626 rc=0 179s
+ok       lean-interp__INTERP_v2qq_interact_697124                               logged=0.0772 all166=0.07716 grid=0.08611 rc=0 176s
+ok       lean-interp__INTERP_v2zz_interact_071c69                               logged=0.0777 all166=0.07767 grid=0.08658 rc=0 182s
+ok       lean-interp__INTERP_v3i_interact_b30acd                                logged=0.0777 all166=0.07773 grid=0.08667 rc=0 188s
+pool exhausted; this task ran 13 trials

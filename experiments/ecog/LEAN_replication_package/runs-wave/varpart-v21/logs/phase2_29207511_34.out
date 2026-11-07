@@ -1,0 +1,5 @@
+task 34/45: 3 fits, 3 to do
+loaded stats 1s
+drop:short_cochlea_contrast                                                                raw= 3372 all166=0.0806 grid=0.0901 61s
+alone:future_past                                                                          raw=  260 all166=0.0517 grid=0.0585 1s
+alone:fut_minus_cur_contrast                                                               raw=    5 all166=0.0164 grid=0.0184 1s

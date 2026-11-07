@@ -1,0 +1,330 @@
+{
+"run": "exceed-v20-deep",
+"n_diverged": 0,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T18:39:33.008Z",
+"how": "backfill:edit",
+"verified": null,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v20",
+"sha": "2466bae7ed782ac4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0000_2466bae7ed782ac4.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T18:56:06.672Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v21-PAC",
+"sha": "357b776b611fecbb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0001_357b776b611fecbb.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:11:24.103Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v22-XLAG",
+"sha": "30303a118a8a74d1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0002_30303a118a8a74d1.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:26:04.348Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v23-XLAG6",
+"sha": "f4507602d63eded0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0003_f4507602d63eded0.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:41:21.629Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v24-XLAGLONG",
+"sha": "9ac8879f0742a099",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0004_9ac8879f0742a099.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:56:37.979Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v25-TS3",
+"sha": "3dfe563d9d8fe9f7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0005_3dfe563d9d8fe9f7.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:11:33.597Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v26-AUTOLAG",
+"sha": "5ae88910ba63b510",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0006_5ae88910ba63b510.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:26:14.882Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v27-XLAGSIGN",
+"sha": "974ce1b132d79d5a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0007_974ce1b132d79d5a.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:41:36.694Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v28-ACCEL",
+"sha": "9e0c970445f7f03a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0008_9e0c970445f7f03a.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:56:58.275Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v29-CROSSWIN",
+"sha": "04e825ae54e474f6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0009_04e825ae54e474f6.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:12:01.744Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v30-MFCC",
+"sha": "6bf6e7bd9a92b25c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0010_6bf6e7bd9a92b25c.py"
+},
+{
+"k": 11,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:27:33.918Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v31-LOGEPROD8",
+"sha": "fefcd6d4a5c0f9b4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0011_fefcd6d4a5c0f9b4.py"
+},
+{
+"k": 12,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:42:22.376Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v32-TRIPLET",
+"sha": "a0256681ed5afb62",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0012_a0256681ed5afb62.py"
+},
+{
+"k": 13,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:57:00.282Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v33-XLAGMULTITAU",
+"sha": "57aa4dc083b408d2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0013_57aa4dc083b408d2.py"
+},
+{
+"k": 14,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T22:11:43.821Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v34-XLAGABS",
+"sha": "6bfb289a3bf4a5a9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0014_6bfb289a3bf4a5a9.py"
+},
+{
+"k": 15,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T22:26:49.515Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v35-AUTOLAGZ",
+"sha": "88d214609f5ef78c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0015_88d214609f5ef78c.py"
+},
+{
+"k": 16,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T22:42:21.490Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v36-XLAGCUBE",
+"sha": "4b00b5a42b051219",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0016_4b00b5a42b051219.py"
+},
+{
+"k": 17,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T22:57:13.008Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v37-XLAG20",
+"sha": "c2f6ed0f138104f8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-deep/0017_c2f6ed0f138104f8.py"
+}
+]
+}

@@ -1,0 +1,12 @@
+raw cols 3392; constant 0; columns duplicating an earlier column (|r|>0.9999) 31
+  stmf                         const=  0 dup=  3
+  interact_v3e                 const=  0 dup=  2
+  quad_modbank                 const=  0 dup=  3
+  quad_modbank_dyn             const=  0 dup= 11
+  quad_modbank_acausal         const=  0 dup= 12
+duplicate group pairs (dup-col group <- earlier group): example
+  stmf                       <- stmf                       e.g. (('stmf', 241), ('stmf', 221), 0.99993)
+  interact_v3e               <- interact_v3e               e.g. (('interact_v3e', 393), ('interact_v3e', 382), 0.999977)
+  quad_modbank               <- quad_modbank               e.g. (('quad_modbank', 120), ('quad_modbank', 111), 0.999937)
+  quad_modbank_dyn           <- quad_modbank_dyn           e.g. (('quad_modbank_dyn', 120), ('quad_modbank_dyn', 111), 0.99994)
+  quad_modbank_acausal       <- quad_modbank_acausal       e.g. (('quad_modbank_acausal', 34), ('quad_modbank_acausal', 7), 0.999914)

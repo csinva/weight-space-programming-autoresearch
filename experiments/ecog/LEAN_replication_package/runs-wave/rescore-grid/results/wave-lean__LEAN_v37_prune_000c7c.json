@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v37_prune_000c7c", "run": "wave-lean", "name": "LEAN-v37-prune", "logged": 0.0757, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v37-prune.py", "order": 197, "rc": 0, "seconds": 155, "all166": 0.0757111637607721, "grid": 0.08480530386502094, "P": 6460, "reproduced": true, "status": "ok"}

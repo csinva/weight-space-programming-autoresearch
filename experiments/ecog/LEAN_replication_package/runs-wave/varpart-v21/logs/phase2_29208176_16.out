@@ -1,0 +1,5 @@
+task 16/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cube_fut_contrast                                                                     raw= 3387 all166=0.0804 grid=0.0901 52s
+drop:adapt_delta+cochleagram                                                               raw= 3032 all166=0.0800 grid=0.0898 36s
+alone:quad_xrate_energy                                                                    raw=   18 all166=0.0458 grid=0.0514 1s

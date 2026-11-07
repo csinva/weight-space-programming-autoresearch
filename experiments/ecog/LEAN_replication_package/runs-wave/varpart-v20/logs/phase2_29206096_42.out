@@ -1,0 +1,5 @@
+task 42/45: 3 fits, 3 to do
+loaded stats 1s
+drop:mod_depth                                                                             raw= 3812 all166=0.0800 grid=0.0899 71s
+alone:modulation                                                                           raw=  132 all166=0.0499 grid=0.0577 2s
+alone:spectral_rolloff                                                                     raw=    2 all166=0.0293 grid=0.0329 1s

@@ -49,6 +49,12 @@ Our searches scored 3 stories, but `onapproachtopluto` is not in the public rele
 
 The visual cortex searches have their own harness and commands. See `vision/README.md`, and run them from that folder.
 
+## ECoG
+
+The ECoG searches and analyses are in `ecog/`. `LEAN_replication_package` holds the June searches and analyses, and `LEAN_newtest_package` reruns them on a new test set. Start with the report in each folder. The patient data are not included, so the code here documents the runs and cannot rerun them without those data.
+
+These folders are anonymized. The study ID is replaced with `patient1`, cluster paths with `/path/to/...`, and node and account names with neutral labels, in the logs as well as the code. Plots that showed the study ID or electrode locations were removed or had their titles blanked, and `corr_over_iterations` plots can be remade from each run's `overall_results.csv`.
+
 ## Reading weights
 
 These tests ask whether Claude Opus 5.5 can predict what an edit will do from reading a real model's weights. Over 420 edits, the answer is mostly no. The code samples the edits, gives the model what it needs, and measures the true effects:

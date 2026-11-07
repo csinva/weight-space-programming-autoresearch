@@ -1,0 +1,10 @@
+train=500 test=23 (canonical fixed test set)
+p=12972 ndelays=4 nvox=166 train_rows=1750593
+fitting LEAN-only...
+fitting Whisper-only...
+
+=== CANONICAL test set, per-electrode canonical metric ===
+ALL-166      : LEAN 0.0778  Whisper 0.0817  W-L +0.0040
+GRID 0-124   : LEAN 0.0866  Whisper 0.0933  W-L +0.0067
+STRIPS 125-31: LEAN 0.0243  Whisper 0.0268  W-L +0.0025
+DEPTH 132-165: LEAN 0.0561  Whisper 0.0505  W-L -0.0056

@@ -1,0 +1,6 @@
+ok       wave-slurm-23628821__Gammatone_cochleagram_73067b                      logged=0.0403 all166=0.04028 grid=0.04492 rc=0 65s
+ok       wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_EBACtau15_3dbcd6 logged=0.0766 all166=0.07662 grid=0.08579 rc=0 252s
+ok       reset-C__PHON_v18_9fc88e                                               logged=0.0703 all166=0.07030 grid=0.07888 rc=0 313s
+ok       reset-F__PC_v1_3ca3c4                                                  logged=0.0597 all166=0.05971 grid=0.06837 rc=0 273s
+ok       reset-I__TFS_IF_v8b_0a6b29                                             logged=0.0632 all166=0.06322 grid=0.07098 rc=0 369s
+ok       lean-interp__INTERP_v3k_interact_be96e3                                logged=0.0777 all166=0.07766 grid=0.08663 rc=0 232s

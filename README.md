@@ -50,6 +50,7 @@ uv run interpretable_transformer.py --task addition-five-digits
 | Text bottleneck | `experiments/nl-bottleneck/` | [Experiments guide](experiments/README.md#text-bottleneck) |
 | Story-listening fMRI | `experiments/evolve-neuro/` | [Experiments guide](experiments/README.md#story-listening-fmri) |
 | Visual cortex | `experiments/vision/` | [Its README](experiments/vision/README.md) |
+| ECoG responses to audio | `experiments/ecog/` | [Experiments guide](experiments/README.md#ecog) |
 | Reading a real model's weights | `experiments/systematic-tests/` | [Experiments guide](experiments/README.md#reading-weights) |
 
 ## Repository layout
@@ -59,6 +60,7 @@ experiments/
   evolve/             harness, prompt and audits for the transformer runs
   evolve-neuro/       harness and prompt for the story-listening fMRI runs
   vision/             harness for the visual cortex searches, with its own history
+  ecog/               ECoG searches, analyses and new test set results
   nl-bottleneck/      text bottleneck: describe a model, rebuild it, compare
   systematic-tests/   tests of whether an LLM can read a real model's weights
   runs/               every run: opus55, sonnet55, haiku55 and may15 (transformers), neuro (story fMRI)

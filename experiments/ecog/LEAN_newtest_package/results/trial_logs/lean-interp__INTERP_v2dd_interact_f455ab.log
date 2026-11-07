@@ -1,0 +1,4 @@
+### Fri Nov  6 20:58:56 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100 --interact-set v2dd --cond-mode none
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/lean-interp__INTERP_v2dd_interact_f455ab/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+RESCORE P=7300 all166=0.07726 grid=0.08620 newtest_grid=0.06607 (n=493) (331s)

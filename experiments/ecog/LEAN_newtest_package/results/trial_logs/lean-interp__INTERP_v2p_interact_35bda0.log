@@ -1,0 +1,4 @@
+### Fri Nov  6 20:54:07 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100 --interact-set v2p --name INTERP-v2p-interact --description v2p: v2m + asymmetric on formant 1-D (f1_loc, f2_loc, f1_amp, f2_amp): 4 sigs × {ReLU+, ReLU-, z^3} = 12. 48 raw → 192 post-delay.
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/lean-interp__INTERP_v2p_interact_35bda0/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+RESCORE P=6424 all166=0.07632 grid=0.08547 newtest_grid=0.06527 (n=493) (249s)

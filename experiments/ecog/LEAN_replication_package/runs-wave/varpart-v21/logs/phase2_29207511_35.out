@@ -1,0 +1,5 @@
+task 35/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cochlea_voiced_gated_dyn                                                              raw= 3372 all166=0.0806 grid=0.0903 59s
+alone:slow_quad_modbank+slow_quad_modbank_dyn                                              raw=  252 all166=0.0627 grid=0.0704 1s
+alone:cube_fut_contrast                                                                    raw=    5 all166=0.0350 grid=0.0380 1s

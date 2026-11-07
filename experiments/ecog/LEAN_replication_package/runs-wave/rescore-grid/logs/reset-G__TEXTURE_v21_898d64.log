@@ -1,0 +1,4 @@
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/rescore-grid/work/reset-G__TEXTURE_v21_898d64/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+feature dim per frame = 2766
+RESCORE P=11064 all166=0.06679 grid=0.07591 (265s)

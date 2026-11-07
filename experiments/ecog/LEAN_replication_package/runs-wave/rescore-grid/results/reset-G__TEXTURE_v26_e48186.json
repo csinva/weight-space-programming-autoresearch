@@ -1,0 +1,1 @@
+{"id": "reset-G__TEXTURE_v26_e48186", "run": "reset-G", "name": "TEXTURE-v26", "logged": 0.0686, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v26.py", "order": 427, "rc": 0, "seconds": 344, "all166": 0.06859064074120949, "grid": 0.07792938026411322, "P": 11312, "reproduced": true, "status": "ok"}

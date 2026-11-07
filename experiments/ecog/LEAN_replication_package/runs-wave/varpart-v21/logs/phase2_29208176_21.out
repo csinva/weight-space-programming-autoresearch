@@ -1,0 +1,5 @@
+task 21/45: 3 fits, 3 to do
+loaded stats 1s
+drop:gate_signals_dyn                                                                      raw= 3383 all166=0.0804 grid=0.0901 26s
+drop:adapt_delta+cochleagram+future_past+mod_depth+tonic                                   raw= 2432 all166=0.0748 grid=0.0844 11s
+alone:multitau_contrast                                                                    raw=   10 all166=0.0404 grid=0.0456 1s

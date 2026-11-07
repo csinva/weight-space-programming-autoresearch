@@ -1,0 +1,6 @@
+ok       wave-slurm-23628821__Gammatone_log_5209d0                              logged=0.0468 all166=0.04678 grid=0.05197 rc=0 65s
+ok       wave-slurm-23628821__Gammatone_BEST_EBACtau30_3476f3                   logged=0.0769 all166=0.07695 grid=0.08620 rc=0 252s
+ok       reset-C__PHON_v19_607aa2                                               logged=0.0712 all166=0.07118 grid=0.07971 rc=0 345s
+ok       reset-F__PC_v2_42f5fd                                                  logged=0.0596 all166=0.05956 grid=0.06810 rc=0 262s
+ok       reset-I__TFS_IF_v9_d30f33                                              logged=0.0628 all166=0.06278 grid=0.07047 rc=0 350s
+ok       lean-interp__INTERP_v3l_interact_12ba11                                logged=0.0778 all166=0.07781 grid=0.08671 rc=0 230s

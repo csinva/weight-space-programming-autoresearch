@@ -1,0 +1,5 @@
+task 29/45: 3 fits, 3 to do
+loaded stats 1s
+drop:quad_xrate_energy                                                                     raw= 3374 all166=0.0805 grid=0.0902 59s
+alone:adapt_delta+cochleagram                                                              raw=  360 all166=0.0601 grid=0.0667 1s
+alone:phonetic                                                                             raw=    5 all166=0.0459 grid=0.0510 1s

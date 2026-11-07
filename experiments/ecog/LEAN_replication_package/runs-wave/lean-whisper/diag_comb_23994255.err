@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/diag_combined_v20.py", line 80, in <module>
+    main()
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/diag_combined_v20.py", line 57, in main
+    ftr, rtr = features.get_features_per_chunk(stim, resp, train, emb)
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/src/features.py", line 73, in get_features_per_chunk
+    emb = np.asarray(embedder(windows), dtype=np.float32)     # (T, H)
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/diag_combined_v20.py", line 25, in __call__
+    lean = np.asarray(self.base(windows), dtype=np.float32)  # (T, D_lean)
+  File "/path/to/ecog_data/circuit-building-autoresearch/.venv/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/lean_v20_enc.py", line 848, in __call__
+    p = power_spectrum(xw, w, self.device)
+  File "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/lean-whisper/lean_v20_enc.py", line 226, in power_spectrum
+    return torch.fft.rfft(windows_t * hann, n=win).abs() ** 2
+RuntimeError: The size of tensor a (512) must match the size of tensor b (1024) at non-singleton dimension 1

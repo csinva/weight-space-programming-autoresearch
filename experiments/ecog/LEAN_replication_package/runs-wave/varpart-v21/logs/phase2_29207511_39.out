@@ -1,0 +1,5 @@
+task 39/45: 3 fits, 3 to do
+loaded stats 1s
+drop:formant_dyn+formants                                                                  raw= 3359 all166=0.0805 grid=0.0902 26s
+alone:modulation                                                                           raw=  132 all166=0.0499 grid=0.0577 1s
+alone:hnr_dyn                                                                              raw=    3 all166=0.0068 grid=0.0088 0s

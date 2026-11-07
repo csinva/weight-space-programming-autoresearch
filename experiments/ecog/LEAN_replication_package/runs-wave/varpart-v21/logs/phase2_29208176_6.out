@@ -1,0 +1,5 @@
+task 6/45: 3 fits, 3 to do
+loaded stats 1s
+drop:gate_signals                                                                          raw= 3389 all166=0.0805 grid=0.0901 60s
+drop:quad_modbank_acausal                                                                  raw= 3260 all166=0.0802 grid=0.0896 45s
+alone:formant_dyn+formants                                                                 raw=   33 all166=0.0509 grid=0.0577 1s

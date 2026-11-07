@@ -1,0 +1,4 @@
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/rescore-grid/work/lean-interp__INTERP_v1a_cond_b8b291/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+  group conditioning: pitch_salience×5(11→55), pitch_summary×8(2→16), pitch_dyn×8(6→48), spectral_moments×8(4→32), spectral_flatness×8(1→8), spectral_rolloff×8(2→16), hnr×8(2→16), phonetic×8(5→40), flux×2(36→72), stmf_mean_gabor×4(17→68), formants×2(24→48), formant_dyn×7(9→63), mod_depth×2(40→80), f0_dyn×8(4→32), hnr_dyn×8(3→24)
+RESCORE P=8040 all166=0.07614 grid=0.08540 (215s)

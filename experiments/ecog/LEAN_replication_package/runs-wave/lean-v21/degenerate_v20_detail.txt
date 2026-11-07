@@ -1,0 +1,471 @@
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 21 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 22 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 23 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 24 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 25 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 26 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 27 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 28 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 29 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 30 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 31 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 32 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 33 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 34 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 35 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 36 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 37 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 38 == 20
+   1  cochlea_voiced_gated     dup of cochlea_voiced_gated: 39 == 20
+   1  cochlea_voiced_gated     dup of cochleagram: 0 == 40
+   1  cochlea_voiced_gated     dup of cochleagram: 1 == 41
+   1  cochlea_voiced_gated     dup of cochleagram: 10 == 50
+   1  cochlea_voiced_gated     dup of cochleagram: 11 == 51
+   1  cochlea_voiced_gated     dup of cochleagram: 12 == 52
+   1  cochlea_voiced_gated     dup of cochleagram: 13 == 53
+   1  cochlea_voiced_gated     dup of cochleagram: 14 == 54
+   1  cochlea_voiced_gated     dup of cochleagram: 15 == 55
+   1  cochlea_voiced_gated     dup of cochleagram: 16 == 56
+   1  cochlea_voiced_gated     dup of cochleagram: 17 == 57
+   1  cochlea_voiced_gated     dup of cochleagram: 18 == 58
+   1  cochlea_voiced_gated     dup of cochleagram: 19 == 59
+   1  cochlea_voiced_gated     dup of cochleagram: 2 == 42
+   1  cochlea_voiced_gated     dup of cochleagram: 3 == 43
+   1  cochlea_voiced_gated     dup of cochleagram: 4 == 44
+   1  cochlea_voiced_gated     dup of cochleagram: 5 == 45
+   1  cochlea_voiced_gated     dup of cochleagram: 6 == 46
+   1  cochlea_voiced_gated     dup of cochleagram: 7 == 47
+   1  cochlea_voiced_gated     dup of cochleagram: 8 == 48
+   1  cochlea_voiced_gated     dup of cochleagram: 9 == 49
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 0 == 240
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 1 == 241
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 10 == 250
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 11 == 251
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 12 == 252
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 13 == 253
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 14 == 254
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 15 == 255
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 16 == 256
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 17 == 257
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 18 == 258
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 19 == 259
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 2 == 242
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 3 == 243
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 4 == 244
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 5 == 245
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 6 == 246
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 7 == 247
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 8 == 248
+   1  cochlea_voiced_gated_dyn dup of adapt_delta: 9 == 249
+   1  contrast_short           CONST 0
+   1  contrast_short           CONST 12
+   1  contrast_short           CONST 18
+   1  contrast_short           CONST 6
+   1  interact_v3e             dup of interact_v3e: 393 == 382
+   1  interact_v3e             dup of interact_v3e: 396 == 385
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.25 bin0 cos == 12Hz sc0.25 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.25 bin1 cos == 12Hz sc0.25 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.25 bin2 cos == 12Hz sc0.25 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin0 mag == 12Hz sc0.5 bin0 mag
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin1 mag == 12Hz sc0.5 bin1 mag
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin2 mag == 12Hz sc0.5 bin2 mag
+   1  quad_modbank             dup of quad_modbank: 12Hz sc-0.5 bin2 sin == 8Hz sc0.5 bin2 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin0 cos == 8Hz sc0 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin0 sin == 8Hz sc0 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin1 cos == 8Hz sc0 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin1 sin == 8Hz sc0 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin2 cos == 8Hz sc0 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 12Hz sc0.5 bin2 sin == 8Hz sc0.5 bin2 sin
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin0 cos == 2Hz sc0.5 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin0 mag == 2Hz sc0.5 bin0 mag
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin0 sin == 2Hz sc0.5 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin1 cos == 2Hz sc0.5 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin1 mag == 2Hz sc0.5 bin1 mag
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin1 sin == 2Hz sc0.5 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin2 cos == 2Hz sc0.5 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin2 mag == 2Hz sc0.5 bin2 mag
+   1  quad_modbank             dup of quad_modbank: 2Hz sc-0.5 bin2 sin == 2Hz sc0.5 bin2 sin
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin0 cos == 4Hz sc0.5 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin0 mag == 4Hz sc0.5 bin0 mag
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin0 sin == 4Hz sc0.5 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin1 cos == 4Hz sc0.5 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin1 mag == 4Hz sc0.5 bin1 mag
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin1 sin == 4Hz sc0.5 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin2 cos == 4Hz sc0.5 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin2 mag == 4Hz sc0.5 bin2 mag
+   1  quad_modbank             dup of quad_modbank: 4Hz sc-0.5 bin2 sin == 4Hz sc0.5 bin2 sin
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin0 mag == 8Hz sc0.5 bin0 mag
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin1 mag == 8Hz sc0.5 bin1 mag
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin2 mag == 8Hz sc0.5 bin2 mag
+   1  quad_modbank             dup of quad_modbank: 8Hz sc-0.5 bin2 sin == 8Hz sc0.5 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin0 cos == 8Hz sc-0.25 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin0 mag == 12Hz sc0.25 bin0 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin1 cos == 8Hz sc-0.25 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin1 mag == 12Hz sc0.25 bin1 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin2 cos == 8Hz sc0.25 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.25 bin2 mag == 12Hz sc0.25 bin2 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin0 mag == 12Hz sc0.5 bin0 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin1 mag == 12Hz sc0.5 bin1 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin2 mag == 12Hz sc0.5 bin2 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc-0.5 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin0 cos == 8Hz sc0 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin0 sin == 8Hz sc0 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin1 cos == 8Hz sc0 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin1 sin == 8Hz sc0 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin2 cos == 8Hz sc0 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.25 bin0 cos == 8Hz sc0.25 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.25 bin1 cos == 8Hz sc0.25 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.25 bin2 cos == 8Hz sc0.25 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 12Hz sc0.5 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin0 cos == 2Hz sc0.5 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin0 mag == 2Hz sc0.5 bin0 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin0 sin == 2Hz sc0.5 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin1 cos == 2Hz sc0.5 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin1 mag == 2Hz sc0.5 bin1 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin1 sin == 2Hz sc0.5 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin2 cos == 2Hz sc0.5 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin2 mag == 2Hz sc0.5 bin2 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc-0.5 bin2 sin == 2Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 2Hz sc0.5 bin2 sin == 2Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin0 cos == 4Hz sc0.5 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin0 mag == 4Hz sc0.5 bin0 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin0 sin == 4Hz sc0.5 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin1 cos == 4Hz sc0.5 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin1 mag == 4Hz sc0.5 bin1 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin1 sin == 4Hz sc0.5 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin2 cos == 4Hz sc0.5 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin2 mag == 4Hz sc0.5 bin2 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc-0.5 bin2 sin == 4Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 4Hz sc0.5 bin2 sin == 4Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin0 cos == 8Hz sc0.5 bin0 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin0 mag == 8Hz sc0.5 bin0 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin0 sin == 8Hz sc0.5 bin0 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin1 cos == 8Hz sc0.5 bin1 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin1 mag == 8Hz sc0.5 bin1 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin1 sin == 8Hz sc0.5 bin1 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin2 cos == 8Hz sc0.5 bin2 cos
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin2 mag == 8Hz sc0.5 bin2 mag
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc-0.5 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank_acausal     dup of quad_modbank_acausal: 8Hz sc0.5 bin2 sin == 8Hz sc0 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.25 bin0 cos == tau0 12Hz sc0.25 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.25 bin1 cos == tau0 12Hz sc0.25 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.25 bin2 cos == tau0 12Hz sc0.25 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin0 cos == tau0 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin0 mag == tau0 12Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin0 sin == tau0 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin1 cos == tau0 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin1 mag == tau0 12Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin1 sin == tau0 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin2 cos == tau0 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin2 mag == tau0 12Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc-0.5 bin2 sin == tau0 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin0 cos == tau0 8Hz sc0 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin0 sin == tau0 8Hz sc0 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin1 cos == tau0 8Hz sc0 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin1 sin == tau0 8Hz sc0 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin2 cos == tau0 8Hz sc0 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0 bin2 sin == tau0 8Hz sc0 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin0 cos == tau0 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin0 sin == tau0 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin1 cos == tau0 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin1 sin == tau0 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin2 cos == tau0 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 12Hz sc0.5 bin2 sin == tau0 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 cos == tau0 2Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 mag == tau0 2Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 sin == tau0 2Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 cos == tau0 2Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 mag == tau0 2Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 sin == tau0 2Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 cos == tau0 2Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 mag == tau0 2Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 sin == tau0 2Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin0 cos == tau0 4Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin0 mag == tau0 4Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin0 sin == tau0 4Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin1 cos == tau0 4Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin1 mag == tau0 4Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin1 sin == tau0 4Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin2 cos == tau0 4Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin2 mag == tau0 4Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 4Hz sc-0.5 bin2 sin == tau0 4Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin0 cos == tau0 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin0 mag == tau0 8Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin0 sin == tau0 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin1 cos == tau0 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin1 mag == tau0 8Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin1 sin == tau0 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin2 cos == tau0 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin2 mag == tau0 8Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau0 8Hz sc-0.5 bin2 sin == tau0 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.25 bin0 cos == tau1 12Hz sc0.25 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.25 bin1 cos == tau1 12Hz sc0.25 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.25 bin2 cos == tau1 12Hz sc0.25 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin0 cos == tau1 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin0 mag == tau1 12Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin0 sin == tau1 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin1 cos == tau1 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin1 mag == tau1 12Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin1 sin == tau1 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin2 cos == tau1 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin2 mag == tau1 12Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc-0.5 bin2 sin == tau1 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin0 cos == tau1 8Hz sc0 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin0 sin == tau1 8Hz sc0 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin1 cos == tau1 8Hz sc0 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin1 sin == tau1 8Hz sc0 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin2 cos == tau1 8Hz sc0 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0 bin2 sin == tau1 8Hz sc0 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin0 cos == tau1 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin0 sin == tau1 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin1 cos == tau1 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin1 sin == tau1 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin2 cos == tau1 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 12Hz sc0.5 bin2 sin == tau1 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin0 cos == tau1 2Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin0 mag == tau1 2Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin0 sin == tau1 2Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin1 cos == tau1 2Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin1 mag == tau1 2Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin1 sin == tau1 2Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin2 cos == tau1 2Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin2 mag == tau1 2Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 2Hz sc-0.5 bin2 sin == tau1 2Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin0 cos == tau1 4Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin0 mag == tau1 4Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin0 sin == tau1 4Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin1 cos == tau1 4Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin1 mag == tau1 4Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin1 sin == tau1 4Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin2 cos == tau1 4Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin2 mag == tau1 4Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 4Hz sc-0.5 bin2 sin == tau1 4Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin0 cos == tau1 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin0 mag == tau1 8Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin0 sin == tau1 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin1 cos == tau1 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin1 mag == tau1 8Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin1 sin == tau1 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin2 cos == tau1 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin2 mag == tau1 8Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau1 8Hz sc-0.5 bin2 sin == tau1 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.25 bin0 cos == tau2 12Hz sc0.25 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.25 bin1 cos == tau2 12Hz sc0.25 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.25 bin2 cos == tau2 8Hz sc0.25 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.25 bin2 mag == tau2 12Hz sc0.25 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin0 cos == tau2 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin0 mag == tau2 12Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin0 sin == tau2 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin1 cos == tau2 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin1 mag == tau2 12Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin1 sin == tau2 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin2 cos == tau2 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin2 mag == tau2 12Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc-0.5 bin2 sin == tau2 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin0 cos == tau2 8Hz sc0 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin0 sin == tau2 8Hz sc0 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin1 cos == tau2 8Hz sc0 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin1 sin == tau2 8Hz sc0 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin2 cos == tau2 8Hz sc0 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0 bin2 sin == tau2 8Hz sc0 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.25 bin2 cos == tau2 8Hz sc0.25 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin0 cos == tau2 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin0 sin == tau2 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin1 cos == tau2 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin1 sin == tau2 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin2 cos == tau2 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 12Hz sc0.5 bin2 sin == tau2 8Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin0 cos == tau2 2Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin0 mag == tau2 2Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin0 sin == tau2 2Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin1 cos == tau2 2Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin1 mag == tau2 2Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin1 sin == tau2 2Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin2 cos == tau2 2Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin2 mag == tau2 2Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 2Hz sc-0.5 bin2 sin == tau2 2Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin0 cos == tau2 4Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin0 mag == tau2 4Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin0 sin == tau2 4Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin1 cos == tau2 4Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin1 mag == tau2 4Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin1 sin == tau2 4Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin2 cos == tau2 4Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin2 mag == tau2 4Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 4Hz sc-0.5 bin2 sin == tau2 4Hz sc0.5 bin2 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin0 cos == tau2 8Hz sc0.5 bin0 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin0 mag == tau2 8Hz sc0.5 bin0 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin0 sin == tau2 8Hz sc0.5 bin0 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin1 cos == tau2 8Hz sc0.5 bin1 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin1 mag == tau2 8Hz sc0.5 bin1 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin1 sin == tau2 8Hz sc0.5 bin1 sin
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin2 cos == tau2 8Hz sc0.5 bin2 cos
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin2 mag == tau2 8Hz sc0.5 bin2 mag
+   1  quad_modbank_dyn         dup of quad_modbank_dyn: tau2 8Hz sc-0.5 bin2 sin == tau2 8Hz sc0.5 bin2 sin
+   1  scattering               CONST S2s j1=100Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=100Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=12800Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=12800Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=1600Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=1600Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=200Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=200Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=3200Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=3200Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=400Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=400Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=50Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=50Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=6400Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=6400Hz fc2=1.0Hz
+   1  scattering               CONST S2s j1=800Hz fc2=0.5Hz
+   1  scattering               CONST S2s j1=800Hz fc2=1.0Hz
+   1  scattering               dup of scattering: S2m j1=100Hz fc2=1.0Hz == S2m j1=100Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=12800Hz fc2=1.0Hz == S2m j1=12800Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=1600Hz fc2=1.0Hz == S2m j1=1600Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=200Hz fc2=1.0Hz == S2m j1=200Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=3200Hz fc2=1.0Hz == S2m j1=3200Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=400Hz fc2=1.0Hz == S2m j1=400Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=50Hz fc2=1.0Hz == S2m j1=50Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=6400Hz fc2=1.0Hz == S2m j1=6400Hz fc2=0.5Hz
+   1  scattering               dup of scattering: S2m j1=800Hz fc2=1.0Hz == S2m j1=800Hz fc2=0.5Hz
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin0 cos == 2Hz sc-0.25 bin0 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin0 mag == 2Hz sc-0.25 bin0 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin0 sin == 2Hz sc-0.25 bin0 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin1 cos == 2Hz sc-0.25 bin1 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin1 mag == 2Hz sc-0.25 bin1 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin1 sin == 2Hz sc-0.25 bin1 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin2 cos == 2Hz sc-0.25 bin2 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin2 mag == 2Hz sc-0.25 bin2 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.25 bin2 sin == 2Hz sc-0.25 bin2 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin0 cos == 2Hz sc0.5 bin0 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin0 mag == 2Hz sc0.5 bin0 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin0 sin == 2Hz sc0.5 bin0 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin1 cos == 2Hz sc0.5 bin1 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin1 mag == 2Hz sc0.5 bin1 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin1 sin == 2Hz sc0.5 bin1 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin2 cos == 2Hz sc0.5 bin2 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin2 mag == 2Hz sc0.5 bin2 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc-0.5 bin2 sin == 2Hz sc0.5 bin2 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin0 cos == 2Hz sc0 bin0 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin0 mag == 2Hz sc0 bin0 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin0 sin == 2Hz sc0 bin0 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin1 cos == 2Hz sc0 bin1 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin1 mag == 2Hz sc0 bin1 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin1 sin == 2Hz sc0 bin1 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin2 cos == 2Hz sc0 bin2 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin2 mag == 2Hz sc0 bin2 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0 bin2 sin == 2Hz sc0 bin2 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin0 cos == 2Hz sc0.25 bin0 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin0 mag == 2Hz sc0.25 bin0 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin0 sin == 2Hz sc0.25 bin0 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin1 cos == 2Hz sc0.25 bin1 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin1 mag == 2Hz sc0.25 bin1 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin1 sin == 2Hz sc0.25 bin1 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin2 cos == 2Hz sc0.25 bin2 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin2 mag == 2Hz sc0.25 bin2 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.25 bin2 sin == 2Hz sc0.25 bin2 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin0 cos == 2Hz sc0.5 bin0 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin0 mag == 2Hz sc0.5 bin0 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin0 sin == 2Hz sc0.5 bin0 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin1 cos == 2Hz sc0.5 bin1 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin1 mag == 2Hz sc0.5 bin1 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin1 sin == 2Hz sc0.5 bin1 sin
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin2 cos == 2Hz sc0.5 bin2 cos
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin2 mag == 2Hz sc0.5 bin2 mag
+   1  slow_quad_modbank        dup of quad_modbank: 2Hz sc0.5 bin2 sin == 2Hz sc0.5 bin2 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin0 cos == 0.5Hz sc0.5 bin0 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin0 mag == 0.5Hz sc0.5 bin0 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin0 sin == 0.5Hz sc0.5 bin0 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin1 cos == 0.5Hz sc0.5 bin1 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin1 mag == 0.5Hz sc0.5 bin1 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin1 sin == 0.5Hz sc0.5 bin1 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin2 cos == 0.5Hz sc0.5 bin2 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin2 mag == 0.5Hz sc0.5 bin2 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 0.5Hz sc-0.5 bin2 sin == 0.5Hz sc0.5 bin2 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin0 cos == 1.5Hz sc0.5 bin0 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin0 mag == 1.5Hz sc0.5 bin0 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin0 sin == 1.5Hz sc0.5 bin0 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin1 cos == 1.5Hz sc0.5 bin1 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin1 mag == 1.5Hz sc0.5 bin1 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin1 sin == 1.5Hz sc0.5 bin1 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin2 cos == 1.5Hz sc0.5 bin2 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin2 mag == 1.5Hz sc0.5 bin2 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1.5Hz sc-0.5 bin2 sin == 1.5Hz sc0.5 bin2 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin0 cos == 1Hz sc0.5 bin0 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin0 mag == 1Hz sc0.5 bin0 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin0 sin == 1Hz sc0.5 bin0 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin1 cos == 1Hz sc0.5 bin1 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin1 mag == 1Hz sc0.5 bin1 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin1 sin == 1Hz sc0.5 bin1 sin
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin2 cos == 1Hz sc0.5 bin2 cos
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin2 mag == 1Hz sc0.5 bin2 mag
+   1  slow_quad_modbank        dup of slow_quad_modbank: 1Hz sc-0.5 bin2 sin == 1Hz sc0.5 bin2 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin0 cos == tau0 0.5Hz sc0.5 bin0 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin0 mag == tau0 0.5Hz sc0.5 bin0 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin0 sin == tau0 0.5Hz sc0.5 bin0 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin1 cos == tau0 0.5Hz sc0.5 bin1 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin1 mag == tau0 0.5Hz sc0.5 bin1 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin1 sin == tau0 0.5Hz sc0.5 bin1 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin2 cos == tau0 0.5Hz sc0.5 bin2 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin2 mag == tau0 0.5Hz sc0.5 bin2 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 0.5Hz sc-0.5 bin2 sin == tau0 0.5Hz sc0.5 bin2 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin0 cos == tau0 1.5Hz sc0.5 bin0 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin0 mag == tau0 1.5Hz sc0.5 bin0 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin0 sin == tau0 1.5Hz sc0.5 bin0 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin1 cos == tau0 1.5Hz sc0.5 bin1 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin1 mag == tau0 1.5Hz sc0.5 bin1 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin1 sin == tau0 1.5Hz sc0.5 bin1 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin2 cos == tau0 1.5Hz sc0.5 bin2 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin2 mag == tau0 1.5Hz sc0.5 bin2 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1.5Hz sc-0.5 bin2 sin == tau0 1.5Hz sc0.5 bin2 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin0 cos == tau0 1Hz sc0.5 bin0 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin0 mag == tau0 1Hz sc0.5 bin0 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin0 sin == tau0 1Hz sc0.5 bin0 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin1 cos == tau0 1Hz sc0.5 bin1 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin1 mag == tau0 1Hz sc0.5 bin1 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin1 sin == tau0 1Hz sc0.5 bin1 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin2 cos == tau0 1Hz sc0.5 bin2 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin2 mag == tau0 1Hz sc0.5 bin2 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 1Hz sc-0.5 bin2 sin == tau0 1Hz sc0.5 bin2 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 cos == tau0 2Hz sc0.5 bin0 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 mag == tau0 2Hz sc0.5 bin0 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin0 sin == tau0 2Hz sc0.5 bin0 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 cos == tau0 2Hz sc0.5 bin1 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 mag == tau0 2Hz sc0.5 bin1 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin1 sin == tau0 2Hz sc0.5 bin1 sin
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 cos == tau0 2Hz sc0.5 bin2 cos
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 mag == tau0 2Hz sc0.5 bin2 mag
+   1  slow_quad_modbank_dyn    dup of slow_quad_modbank_dyn: tau0 2Hz sc-0.5 bin2 sin == tau0 2Hz sc0.5 bin2 sin
+   3  stmf                     dup of stmf: (12Hz,0) == (8Hz,0)
+  20  stmf                     dup of stmf: (4Hz,-0.5) == (4Hz,0.5)
+  20  stmf                     dup of stmf: (8Hz,-0.5) == (8Hz,0.5)
+   1  stmf_mean_gabor          dup of stmf_mean_gabor: (4, -0.5) == (4, 0.5)
+   1  stmf_mean_gabor          dup of stmf_mean_gabor: (8, -0.5) == (8, 0.5)

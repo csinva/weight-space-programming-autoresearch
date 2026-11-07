@@ -1,0 +1,2352 @@
+{
+"run": "exceed-scatter",
+"n_diverged": 4,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T03:44:19.658Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "SCAT-v1",
+"sha": "9a0e302ed382c85a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0000_9a0e302ed382c85a.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T03:53:04.188Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774,
+0.0774
+],
+"crashed": false,
+"name": "SCAT-v2",
+"sha": "d3723132e2999b37",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0001_d3723132e2999b37.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:02:33.237Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.077,
+0.077
+],
+"crashed": false,
+"name": "SCAT-v3",
+"sha": "bbffbad5d3d01097",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0002_bbffbad5d3d01097.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:13:32.002Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773
+],
+"crashed": false,
+"name": "SCAT-v4",
+"sha": "ef07ecbb0b048a8d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0003_ef07ecbb0b048a8d.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:24:54.959Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"rows_seen": [
+[
+"SCAT-v1",
+0.0773
+],
+[
+"SCAT-v2",
+0.0774
+],
+[
+"SCAT-v3",
+0.077
+],
+[
+"SCAT-v4",
+0.0773
+],
+[
+"SCAT-v5",
+0.0772
+]
+],
+"name": "SCAT-v5",
+"sha": "941c6bf9f8dbeff2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0004_941c6bf9f8dbeff2.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:39:26.231Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.076,
+0.076,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"rows_seen": [
+[
+"SCAT-v1",
+0.0773
+],
+[
+"SCAT-v2",
+0.0774
+],
+[
+"SCAT-v3",
+0.077
+],
+[
+"SCAT-v4",
+0.0773
+],
+[
+"SCAT-v5",
+0.0772
+],
+[
+"SCAT-v6",
+0.076
+]
+],
+"name": "SCAT-v6",
+"sha": "0e685ac64c37dee5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0005_0e685ac64c37dee5.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T04:56:49.652Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766
+],
+"crashed": false,
+"name": "SCAT-v7",
+"sha": "c6c5886faf58664d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0006_c6c5886faf58664d.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:04:32.363Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772,
+0.0772
+],
+"crashed": false,
+"name": "SCAT-v8",
+"sha": "17fd90260c11c97a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0007_17fd90260c11c97a.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:12:36.837Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0772,
+0.0772
+],
+"crashed": false,
+"name": "SCAT-v9",
+"sha": "41a739830bc25b89",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0008_41a739830bc25b89.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:21:03.498Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0774,
+0.0774
+],
+"crashed": false,
+"name": "SCAT-v10",
+"sha": "912bd415a3dae056",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0009_912bd415a3dae056.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:30:47.769Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0773,
+0.0773,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775,
+0.0775
+],
+"crashed": false,
+"name": "SCAT-v11",
+"sha": "fbde35b3646e9d7c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0010_fbde35b3646e9d7c.py"
+},
+{
+"k": 11,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--name",
+"LEAN-v17-baseline"
+],
+"env": {},
+"ts": "2026-06-06T05:42:48.277Z",
+"how": "replay",
+"verified": false,
+"scores": [
+0.0866
+],
+"crashed": false,
+"name": "LEAN-v17-baseline",
+"sha": "5136effc13012d18",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0011_5136effc13012d18.py"
+},
+{
+"k": 12,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:50:27.679Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v12",
+"sha": "0f931d1997bc3d98",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0012_0f931d1997bc3d98.py"
+},
+{
+"k": 13,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T05:59:34.611Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0861
+],
+"crashed": false,
+"name": "SCAT-v12",
+"sha": "40742f76106c2f19",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0013_40742f76106c2f19.py"
+},
+{
+"k": 14,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:06:28.073Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v13",
+"sha": "1d4e647c76843ff6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0014_1d4e647c76843ff6.py"
+},
+{
+"k": 15,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:14:42.985Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0862
+],
+"crashed": false,
+"name": "SCAT-v14",
+"sha": "80d4fc4f2a779d84",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0015_80d4fc4f2a779d84.py"
+},
+{
+"k": 16,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:23:31.529Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0859
+],
+"crashed": false,
+"name": "SCAT-v15",
+"sha": "5fffa30f5954e7ae",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0016_5fffa30f5954e7ae.py"
+},
+{
+"k": 17,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:31:23.125Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0862
+],
+"crashed": false,
+"name": "SCAT-v16",
+"sha": "c28eba4923025266",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0017_c28eba4923025266.py"
+},
+{
+"k": 18,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:39:29.485Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.086
+],
+"crashed": false,
+"name": "SCAT-v17",
+"sha": "6ccdc81b8640bc3f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0018_6ccdc81b8640bc3f.py"
+},
+{
+"k": 19,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:48:00.493Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0863
+],
+"crashed": false,
+"name": "SCAT-v18",
+"sha": "62bffb673614f441",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0019_62bffb673614f441.py"
+},
+{
+"k": 20,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T06:57:06.073Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0861
+],
+"crashed": false,
+"name": "SCAT-v19",
+"sha": "5c68694d96295021",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0020_5c68694d96295021.py"
+},
+{
+"k": 21,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:07:15.064Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.086
+],
+"crashed": false,
+"name": "SCAT-v20",
+"sha": "e456a1f7b6b2d4e7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0021_e456a1f7b6b2d4e7.py"
+},
+{
+"k": 22,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:16:18.843Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.086
+],
+"crashed": false,
+"name": "SCAT-v21",
+"sha": "d5ee361992cc5567",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0022_d5ee361992cc5567.py"
+},
+{
+"k": 23,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:24:43.540Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0865
+],
+"crashed": false,
+"name": "SCAT-v22",
+"sha": "a329cab9509989ca",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0023_a329cab9509989ca.py"
+},
+{
+"k": 24,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:34:18.800Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0867
+],
+"crashed": false,
+"name": "SCAT-v24",
+"sha": "889657d85ebfd07f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0024_889657d85ebfd07f.py"
+},
+{
+"k": 25,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:42:04.857Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0866
+],
+"crashed": false,
+"name": "SCAT-v25",
+"sha": "49b367e998f6cd13",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0025_49b367e998f6cd13.py"
+},
+{
+"k": 26,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:50:12.182Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0865
+],
+"crashed": false,
+"name": "SCAT-v26",
+"sha": "020e29cba8bb8db5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0026_020e29cba8bb8db5.py"
+},
+{
+"k": 27,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T07:58:21.821Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0867
+],
+"crashed": false,
+"name": "SCAT-v27",
+"sha": "7c03c11e62564db6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0027_7c03c11e62564db6.py"
+},
+{
+"k": 28,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:07:25.006Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0862
+],
+"crashed": false,
+"name": "SCAT-v28",
+"sha": "05fc6887ba8dc5ea",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0028_05fc6887ba8dc5ea.py"
+},
+{
+"k": 29,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:15:22.065Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0871
+],
+"crashed": false,
+"name": "SCAT-v29",
+"sha": "d62ae8310725d2ae",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0029_d62ae8310725d2ae.py"
+},
+{
+"k": 30,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:23:25.349Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0875
+],
+"crashed": false,
+"name": "SCAT-v30",
+"sha": "06b415ec9305f0bb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0030_06b415ec9305f0bb.py"
+},
+{
+"k": 31,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:31:39.841Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0876
+],
+"crashed": false,
+"name": "SCAT-v31",
+"sha": "49ff1ec389a50504",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0031_49ff1ec389a50504.py"
+},
+{
+"k": 32,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:39:21.950Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v32",
+"sha": "4caf59926f676fd1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0032_4caf59926f676fd1.py"
+},
+{
+"k": 33,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:46:14.951Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v33",
+"sha": "e6486fc64832c570",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0033_e6486fc64832c570.py"
+},
+{
+"k": 34,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T08:55:21.115Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0876
+],
+"crashed": false,
+"name": "SCAT-v34",
+"sha": "3394b7af1a32cf1c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0034_3394b7af1a32cf1c.py"
+},
+{
+"k": 35,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:04:01.270Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0873
+],
+"crashed": false,
+"name": "SCAT-v35",
+"sha": "3e95a6b3ad6f172e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0035_3e95a6b3ad6f172e.py"
+},
+{
+"k": 36,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:12:51.926Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0867
+],
+"crashed": false,
+"name": "SCAT-v36",
+"sha": "2d1a3c236bc5bc2c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0036_2d1a3c236bc5bc2c.py"
+},
+{
+"k": 37,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:21:31.599Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0871
+],
+"crashed": false,
+"name": "SCAT-v37",
+"sha": "128ab0656ca13bba",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0037_128ab0656ca13bba.py"
+},
+{
+"k": 38,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:29:33.417Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0871
+],
+"crashed": false,
+"name": "SCAT-v38",
+"sha": "68c68285d5616baf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0038_68c68285d5616baf.py"
+},
+{
+"k": 39,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:37:51.342Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0878
+],
+"crashed": false,
+"name": "SCAT-v39",
+"sha": "06792cccc5e469c6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0039_06792cccc5e469c6.py"
+},
+{
+"k": 40,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:47:12.888Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v40",
+"sha": "62b4643da67e332b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0040_62b4643da67e332b.py"
+},
+{
+"k": 41,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T09:56:29.080Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0877
+],
+"crashed": false,
+"name": "SCAT-v41",
+"sha": "1a6136c9004737e5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0041_1a6136c9004737e5.py"
+},
+{
+"k": 42,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:05:50.938Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v42",
+"sha": "46ba122b48340421",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0042_46ba122b48340421.py"
+},
+{
+"k": 43,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:14:14.115Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v43",
+"sha": "d6e2eacecd4b2142",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0043_d6e2eacecd4b2142.py"
+},
+{
+"k": 44,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:21:59.000Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v44",
+"sha": "c2788725b0c656e1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0044_c2788725b0c656e1.py"
+},
+{
+"k": 45,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:30:22.041Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v45",
+"sha": "2d7c0f44de49f448",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0045_2d7c0f44de49f448.py"
+},
+{
+"k": 46,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:37:55.254Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v46",
+"sha": "f6be51c28a4ce935",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0046_f6be51c28a4ce935.py"
+},
+{
+"k": 47,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:47:02.775Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0869
+],
+"crashed": false,
+"name": "SCAT-v47",
+"sha": "8b3250ab88473765",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0047_8b3250ab88473765.py"
+},
+{
+"k": 48,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T10:56:23.026Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0865
+],
+"crashed": false,
+"name": "SCAT-v48",
+"sha": "98e701143120609e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0048_98e701143120609e.py"
+},
+{
+"k": 49,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:05:17.986Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0872
+],
+"crashed": false,
+"name": "SCAT-v49",
+"sha": "d1f398d9cd9b0d00",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0049_d1f398d9cd9b0d00.py"
+},
+{
+"k": 50,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:15:04.933Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.087
+],
+"crashed": false,
+"name": "SCAT-v50",
+"sha": "d2f08be1f3b2bf57",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0050_d2f08be1f3b2bf57.py"
+},
+{
+"k": 51,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:24:39.150Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0876
+],
+"crashed": false,
+"name": "SCAT-v51",
+"sha": "44bce478d3da0610",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0051_44bce478d3da0610.py"
+},
+{
+"k": 52,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:34:49.110Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0877
+],
+"crashed": false,
+"name": "SCAT-v52",
+"sha": "0e35766877c0cfb2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0052_0e35766877c0cfb2.py"
+},
+{
+"k": 53,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:44:11.688Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v53",
+"sha": "75a682244c5f1920",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0053_75a682244c5f1920.py"
+},
+{
+"k": 54,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T11:53:08.565Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v54",
+"sha": "56fb5c2b7d1db879",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0054_56fb5c2b7d1db879.py"
+},
+{
+"k": 55,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:00:12.871Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v55",
+"sha": "20072ea634668fdf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0055_20072ea634668fdf.py"
+},
+{
+"k": 56,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:09:13.114Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0878
+],
+"crashed": false,
+"name": "SCAT-v56",
+"sha": "66a7c99aec3216de",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0056_66a7c99aec3216de.py"
+},
+{
+"k": 57,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:18:26.241Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0878
+],
+"crashed": false,
+"name": "SCAT-v57",
+"sha": "2d718df0a6d30e69",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0057_2d718df0a6d30e69.py"
+},
+{
+"k": 58,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:27:54.861Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0873
+],
+"crashed": false,
+"name": "SCAT-v58",
+"sha": "5c4605521f64bd89",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0058_5c4605521f64bd89.py"
+},
+{
+"k": 59,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:38:07.386Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0868
+],
+"crashed": false,
+"name": "SCAT-v59",
+"sha": "29d6b537e5b4b877",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0059_29d6b537e5b4b877.py"
+},
+{
+"k": 60,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:47:37.018Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v60",
+"sha": "9c0d9d6eb50cc970",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0060_9c0d9d6eb50cc970.py"
+},
+{
+"k": 61,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T12:57:03.778Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.088
+],
+"crashed": false,
+"name": "SCAT-v61",
+"sha": "55533d42ea91c595",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0061_55533d42ea91c595.py"
+},
+{
+"k": 62,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:06:46.877Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v62",
+"sha": "189ece34674cb924",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0062_189ece34674cb924.py"
+},
+{
+"k": 63,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:13:57.431Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v63",
+"sha": "442eb0c29636d792",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0063_442eb0c29636d792.py"
+},
+{
+"k": 64,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:20:51.254Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v63",
+"sha": "442eb0c29636d792",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0064_442eb0c29636d792.py"
+},
+{
+"k": 65,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:30:04.381Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0871
+],
+"crashed": false,
+"name": "SCAT-v64",
+"sha": "73968916ace416ec",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0065_73968916ace416ec.py"
+},
+{
+"k": 66,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:39:08.036Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v65",
+"sha": "a342e299ec487b04",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0066_a342e299ec487b04.py"
+},
+{
+"k": 67,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:46:20.683Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v66",
+"sha": "30f4d8d02d6a344f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0067_30f4d8d02d6a344f.py"
+},
+{
+"k": 68,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T13:54:39.848Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v67",
+"sha": "8bd625ee6b63948a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0068_8bd625ee6b63948a.py"
+},
+{
+"k": 69,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:03:58.089Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0876
+],
+"crashed": false,
+"name": "SCAT-v68",
+"sha": "e53a685b13f39a89",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0069_e53a685b13f39a89.py"
+},
+{
+"k": 70,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:13:22.016Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.088
+],
+"crashed": false,
+"name": "SCAT-v69",
+"sha": "22b37ef7612f92c0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0070_22b37ef7612f92c0.py"
+},
+{
+"k": 71,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:22:58.080Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0863
+],
+"crashed": false,
+"name": "SCAT-v70",
+"sha": "3db76ea0f04aa389",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0071_3db76ea0f04aa389.py"
+},
+{
+"k": 72,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:32:11.364Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0877
+],
+"crashed": false,
+"name": "SCAT-v71",
+"sha": "8ad96f2dec69853f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0072_8ad96f2dec69853f.py"
+},
+{
+"k": 73,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:41:41.519Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v73",
+"sha": "e9221f9b8eef9606",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0073_e9221f9b8eef9606.py"
+},
+{
+"k": 74,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T14:50:55.892Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v74",
+"sha": "a78f7bf64e9cc095",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0074_a78f7bf64e9cc095.py"
+},
+{
+"k": 75,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:00:18.842Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v75",
+"sha": "5ca9408fa8c0b27f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0075_5ca9408fa8c0b27f.py"
+},
+{
+"k": 76,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:10:25.121Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.088
+],
+"crashed": false,
+"name": "SCAT-v76",
+"sha": "73f54318400570ac",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0076_73f54318400570ac.py"
+},
+{
+"k": 77,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:18:06.930Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v77",
+"sha": "c6382b43a82b503b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0077_c6382b43a82b503b.py"
+},
+{
+"k": 78,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:26:09.847Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v79",
+"sha": "e885cca44b64d296",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0078_e885cca44b64d296.py"
+},
+{
+"k": 79,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:35:45.961Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v80",
+"sha": "11cf9fea04b2371e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0079_11cf9fea04b2371e.py"
+},
+{
+"k": 80,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:45:04.966Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0879
+],
+"crashed": false,
+"name": "SCAT-v81",
+"sha": "27a0947c12019b89",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0080_27a0947c12019b89.py"
+},
+{
+"k": 81,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T15:54:14.361Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0877
+],
+"crashed": false,
+"name": "SCAT-v82",
+"sha": "26f6506b2b3e46ad",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0081_26f6506b2b3e46ad.py"
+},
+{
+"k": 82,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:03:24.106Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0874
+],
+"crashed": false,
+"name": "SCAT-v83",
+"sha": "19bbca77876d4a1f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0082_19bbca77876d4a1f.py"
+},
+{
+"k": 83,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:13:40.011Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v84",
+"sha": "0a0866f622412ca0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0083_0a0866f622412ca0.py"
+},
+{
+"k": 84,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:21:51.489Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v85",
+"sha": "9918d60cda969a18",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0084_9918d60cda969a18.py"
+},
+{
+"k": 85,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:30:04.720Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v86",
+"sha": "f0a5fae8763d0e9a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0085_f0a5fae8763d0e9a.py"
+},
+{
+"k": 86,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:39:32.136Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0874
+],
+"crashed": false,
+"name": "SCAT-v86",
+"sha": "b1637c0f3a5f7b0d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0086_b1637c0f3a5f7b0d.py"
+},
+{
+"k": 87,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:47:59.755Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v87",
+"sha": "f7d69705ed7c83f6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0087_f7d69705ed7c83f6.py"
+},
+{
+"k": 88,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T16:56:18.498Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v88",
+"sha": "09b0985263153dad",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0088_09b0985263153dad.py"
+},
+{
+"k": 89,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:05:54.098Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v88",
+"sha": "8c732ab94633e1e1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0089_8c732ab94633e1e1.py"
+},
+{
+"k": 90,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:13:48.105Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v89",
+"sha": "cc7316bd92468da1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0090_cc7316bd92468da1.py"
+},
+{
+"k": 91,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:22:41.686Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0876
+],
+"crashed": false,
+"name": "SCAT-v89",
+"sha": "fa6c867fca5d7819",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0091_fa6c867fca5d7819.py"
+},
+{
+"k": 92,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:31:52.271Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0867
+],
+"crashed": false,
+"name": "SCAT-v90",
+"sha": "b5cabb94c021e44a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0092_b5cabb94c021e44a.py"
+},
+{
+"k": 93,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:40:55.995Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v91",
+"sha": "7c179772c7cbd68a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0093_7c179772c7cbd68a.py"
+},
+{
+"k": 94,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:49:43.959Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v92",
+"sha": "f6193521a2c0aa7d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0094_f6193521a2c0aa7d.py"
+},
+{
+"k": 95,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T17:58:36.523Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0874
+],
+"crashed": false,
+"name": "SCAT-v93",
+"sha": "bfabfeb7872ef792",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0095_bfabfeb7872ef792.py"
+},
+{
+"k": 96,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:07:55.115Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.088
+],
+"crashed": false,
+"name": "SCAT-v94",
+"sha": "e6a140c24fd7759c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0096_e6a140c24fd7759c.py"
+},
+{
+"k": 97,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:17:21.937Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v95",
+"sha": "382e1fb1b0221c47",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0097_382e1fb1b0221c47.py"
+},
+{
+"k": 98,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:25:01.710Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v96",
+"sha": "a7ae1d99b4534d72",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0098_a7ae1d99b4534d72.py"
+},
+{
+"k": 99,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:34:14.930Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0872
+],
+"crashed": false,
+"name": "SCAT-v97",
+"sha": "66306906b7e9a857",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0099_66306906b7e9a857.py"
+},
+{
+"k": 100,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:43:32.767Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0877
+],
+"crashed": false,
+"name": "SCAT-v98",
+"sha": "b0df546efc662e90",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0100_b0df546efc662e90.py"
+},
+{
+"k": 101,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T18:52:32.700Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0866
+],
+"crashed": false,
+"name": "SCAT-v99",
+"sha": "4e12a94ffd1e46d7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0101_4e12a94ffd1e46d7.py"
+},
+{
+"k": 102,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:01:18.586Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v100",
+"sha": "2a7f50e698f11bf2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0102_2a7f50e698f11bf2.py"
+},
+{
+"k": 103,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:10:18.340Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.087
+],
+"crashed": false,
+"name": "SCAT-v101",
+"sha": "5f212280b11d35b4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0103_5f212280b11d35b4.py"
+},
+{
+"k": 104,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:19:27.416Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v102",
+"sha": "521b711f8a8bfc8d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0104_521b711f8a8bfc8d.py"
+},
+{
+"k": 105,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:28:55.748Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0882
+],
+"crashed": false,
+"name": "SCAT-v103",
+"sha": "504fe0cd7c034522",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0105_504fe0cd7c034522.py"
+},
+{
+"k": 106,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:38:42.818Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0882
+],
+"crashed": false,
+"name": "SCAT-v104",
+"sha": "5ac6c1e2a7df3a8a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0106_5ac6c1e2a7df3a8a.py"
+},
+{
+"k": 107,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:48:28.795Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0881
+],
+"crashed": false,
+"name": "SCAT-v105",
+"sha": "aa62b611d44c0146",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0107_aa62b611d44c0146.py"
+},
+{
+"k": 108,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T19:58:38.904Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0882
+],
+"crashed": false,
+"name": "SCAT-v106",
+"sha": "f942d4d50502f5ae",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0108_f942d4d50502f5ae.py"
+},
+{
+"k": 109,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:05:57.486Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v107",
+"sha": "76248b981c468974",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0109_76248b981c468974.py"
+},
+{
+"k": 110,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:13:47.927Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v108",
+"sha": "9ed1b68abb3d93a8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0110_9ed1b68abb3d93a8.py"
+},
+{
+"k": 111,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:21:51.887Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v109",
+"sha": "1e5bffb56e92f2b3",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0111_1e5bffb56e92f2b3.py"
+},
+{
+"k": 112,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:31:33.872Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0882
+],
+"crashed": false,
+"name": "SCAT-v110",
+"sha": "157f648ba4d78e21",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0112_157f648ba4d78e21.py"
+},
+{
+"k": 113,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:39:09.412Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "SCAT-v111",
+"sha": "0c2183f5a06d6606",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0113_0c2183f5a06d6606.py"
+},
+{
+"k": 114,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-06T20:49:09.851Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0882
+],
+"crashed": false,
+"rows_seen": [
+[
+"SCAT-v106",
+0.08822
+],
+[
+"SCAT-v110",
+0.08822
+],
+[
+"SCAT-v112",
+0.08822
+]
+],
+"name": "SCAT-v112",
+"sha": "652d7df4eb9b73b1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-scatter/0114_652d7df4eb9b73b1.py"
+}
+]
+}

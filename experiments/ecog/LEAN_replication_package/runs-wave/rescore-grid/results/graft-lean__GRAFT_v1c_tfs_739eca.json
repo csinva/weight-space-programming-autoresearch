@@ -1,0 +1,1 @@
+{"id": "graft-lean__GRAFT_v1c_tfs_739eca", "run": "graft-lean", "name": "GRAFT-v1c-tfs", "logged": 0.0756, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/graft-lean/wave_encoders_lib/GRAFT-v1c-tfs-revert.py", "order": 499, "rc": 0, "seconds": 195, "all166": 0.07558528499895734, "grid": 0.08461306095228503, "P": 6616, "reproduced": true, "status": "ok"}

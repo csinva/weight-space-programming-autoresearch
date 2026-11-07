@@ -1,0 +1,9 @@
+train=500 test=23 (canonical fixed test set)
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+p=20528 nvox=166 train_rows=1750593 Xtr=144GB
+
+=== COMBINED LEAN-v20+Whisper vs Whisper (canonical test set) ===
+ALL-166      : comb 0.0920  Whisper 0.0817  C-W +0.0103
+GRID 0-124   : comb 0.1038  Whisper 0.0933  C-W +0.0105
+STRIPS 125-31: comb 0.0318  Whisper 0.0268  C-W +0.0050
+DEPTH 132-165: comb 0.0614  Whisper 0.0505  C-W +0.0109

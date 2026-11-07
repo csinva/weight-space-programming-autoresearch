@@ -1,0 +1,5 @@
+task 41/45: 3 fits, 3 to do
+loaded stats 1s
+drop:quad_xrate_energy_dyn                                                                 raw= 3356 all166=0.0805 grid=0.0902 31s
+alone:quad_modbank_acausal                                                                 raw=  132 all166=0.0504 grid=0.0570 1s
+alone:pitch_summary                                                                        raw=    2 all166=0.0332 grid=0.0379 0s

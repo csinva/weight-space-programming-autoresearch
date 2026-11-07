@@ -1,0 +1,4 @@
+### Fri Nov  6 20:19:38 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/wave-slurm-23628821__Gammatone_BEST_PB_EBAC_XCH_Xcorr_ae10a2/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+RESCORE P=9372 all166=0.07571 grid=0.08469 newtest_grid=0.06624 (n=493) (359s)

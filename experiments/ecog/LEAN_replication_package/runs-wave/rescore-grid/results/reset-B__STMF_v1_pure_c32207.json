@@ -1,0 +1,1 @@
+{"id": "reset-B__STMF_v1_pure_c32207", "run": "reset-B", "name": "STMF-v1-pure", "logged": 0.0537, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v1-pure.py", "order": 237, "rc": 0, "seconds": 599, "all166": 0.05373299117475094, "grid": 0.060798500374460905, "P": 11520, "reproduced": true, "status": "ok"}

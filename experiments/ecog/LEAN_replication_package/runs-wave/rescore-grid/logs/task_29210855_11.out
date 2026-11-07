@@ -1,0 +1,12 @@
+ok       reset-I__TFS_IF_v21_0bd825                                             logged=0.0621 all166=0.06209 grid=0.07017 rc=0 373s
+ok       reset-G__TEXTURE_v18_088cce                                            logged=0.0662 all166=0.06623 grid=0.07508 rc=0 301s
+ok       reset-G__TEXTURE_v26_e48186                                            logged=0.0686 all166=0.06859 grid=0.07793 rc=0 344s
+ok       reset-G__TEXTURE_v35_46437c                                            logged=0.0696 all166=0.06962 grid=0.07877 rc=0 342s
+ok       reset-I__TFS_IF_v23_12b099                                             logged=0.0633 all166=0.06325 grid=0.07107 rc=0 381s
+ok       lean-interp__INTERP_v2e_interact_92544d                                logged=0.0758 all166=0.07585 grid=0.08500 rc=0 206s
+ok       lean-interp__INTERP_v2t_interact_9305cb                                logged=0.0765 all166=0.07648 grid=0.08570 rc=0 194s
+ok       lean-interp__INTERP_v2ee_interact_ac6f3b                               logged=0.0768 all166=0.07680 grid=0.08592 rc=0 196s
+ok       lean-interp__INTERP_v2nn_interact_38a1f8                               logged=0.0771 all166=0.07713 grid=0.08621 rc=0 189s
+ok       lean-interp__INTERP_v2xx_interact_f5ce0b                               logged=0.0776 all166=0.07764 grid=0.08665 rc=0 192s
+ok       lean-interp__INTERP_v3h_interact_3448f4                                logged=0.0776 all166=0.07761 grid=0.08656 rc=0 207s
+pool exhausted; this task ran 11 trials

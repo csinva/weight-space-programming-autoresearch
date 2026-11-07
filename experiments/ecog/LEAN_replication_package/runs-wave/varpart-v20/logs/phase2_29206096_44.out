@@ -1,0 +1,5 @@
+task 44/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cochleagram                                                                           raw= 3792 all166=0.0805 grid=0.0906 35s
+alone:cochlea_voiced_gated+cochlea_voiced_gated_dyn+gate_signals+gate_signals_dyn          raw=   84 all166=0.0552 grid=0.0608 1s
+alone:spectral_flatness                                                                    raw=    1 all166=0.0327 grid=0.0375 1s

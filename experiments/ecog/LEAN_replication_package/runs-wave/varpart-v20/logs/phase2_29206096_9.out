@@ -1,0 +1,5 @@
+task 9/45: 3 fits, 3 to do
+loaded stats 1s
+drop:phonetic                                                                              raw= 3847 all166=0.0807 grid=0.0904 82s
+drop:future_past                                                                           raw= 3592 all166=0.0803 grid=0.0899 58s
+alone:contrast_short                                                                       raw=   24 all166=0.0368 grid=0.0422 1s

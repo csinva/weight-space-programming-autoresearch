@@ -1,0 +1,5 @@
+task 19/45: 3 fits, 3 to do
+loaded stats 1s
+drop:region_flat                                                                           raw= 3384 all166=0.0803 grid=0.0900 52s
+drop:future_past+mod_depth+tonic                                                           raw= 2792 all166=0.0767 grid=0.0860 29s
+alone:cpp+region_flat                                                                      raw=   12 all166=0.0324 grid=0.0371 1s

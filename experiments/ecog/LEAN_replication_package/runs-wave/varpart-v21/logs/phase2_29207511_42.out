@@ -1,0 +1,5 @@
+task 42/45: 3 fits, 3 to do
+loaded stats 0s
+drop:mod_depth                                                                             raw= 3352 all166=0.0799 grid=0.0899 26s
+alone:cochlea_voiced_gated+cochlea_voiced_gated_dyn+cpp+f0_dyn+gate_signals+gate_signals_d raw=  110 all166=0.0559 grid=0.0634 1s
+alone:spectral_rolloff                                                                     raw=    2 all166=0.0293 grid=0.0329 0s

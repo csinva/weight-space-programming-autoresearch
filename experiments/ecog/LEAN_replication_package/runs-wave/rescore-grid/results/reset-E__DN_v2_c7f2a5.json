@@ -1,0 +1,1 @@
+{"id": "reset-E__DN_v2_c7f2a5", "run": "reset-E", "name": "DN-v2", "logged": 0.051, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v2.py", "order": 329, "rc": 0, "seconds": 163, "all166": 0.05096165732107176, "grid": 0.058462499763909784, "P": 7296, "reproduced": true, "status": "ok"}

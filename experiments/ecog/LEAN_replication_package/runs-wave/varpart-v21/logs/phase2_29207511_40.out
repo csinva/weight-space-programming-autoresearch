@@ -1,0 +1,5 @@
+task 40/45: 3 fits, 3 to do
+loaded stats 1s
+drop:flux                                                                                  raw= 3356 all166=0.0804 grid=0.0900 26s
+alone:quad_modbank                                                                         raw=  132 all166=0.0578 grid=0.0652 1s
+alone:gate_signals                                                                         raw=    3 all166=0.0334 grid=0.0380 0s

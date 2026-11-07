@@ -1,0 +1,1 @@
+{"id": "exceed-dense__DENSE_v1_06ce77", "run": "exceed-dense", "name": "DENSE-v1", "logged": 0.0768, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/exceed-dense/wave_encoders_lib/DENSE-v1.py", "order": 590, "rc": 0, "seconds": 269, "all166": 0.0767507111089686, "grid": 0.08573610203808325, "P": 10796, "reproduced": true, "status": "ok"}

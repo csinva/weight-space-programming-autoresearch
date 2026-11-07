@@ -1,0 +1,5 @@
+task 28/45: 3 fits, 3 to do
+loaded stats 1s
+drop:stmf_mean_gabor                                                                       raw= 3377 all166=0.0805 grid=0.0901 54s
+alone:quad_modbank_dyn                                                                     raw=  396 all166=0.0536 grid=0.0625 1s
+alone:pitch_dyn                                                                            raw=    6 all166=0.0299 grid=0.0362 1s

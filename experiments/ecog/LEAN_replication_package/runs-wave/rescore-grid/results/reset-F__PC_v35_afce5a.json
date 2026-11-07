@@ -1,0 +1,1 @@
+{"id": "reset-F__PC_v35_afce5a", "run": "reset-F", "name": "PC-v35", "logged": 0.0708, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v35.py", "order": 396, "rc": 0, "seconds": 298, "all166": 0.07076798046078152, "grid": 0.07903187370782175, "P": 12304, "reproduced": true, "status": "ok"}

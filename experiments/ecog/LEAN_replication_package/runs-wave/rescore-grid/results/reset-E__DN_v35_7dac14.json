@@ -1,0 +1,1 @@
+{"id": "reset-E__DN_v35_7dac14", "run": "reset-E", "name": "DN-v35", "logged": 0.069, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v35.py", "order": 361, "rc": 0, "seconds": 266, "all166": 0.06903286498080484, "grid": 0.07743222440384753, "P": 12284, "reproduced": true, "status": "ok"}

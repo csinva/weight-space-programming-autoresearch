@@ -1,0 +1,1 @@
+{"id": "reset-E__DN_v18_ffcd57", "run": "reset-E", "name": "DN-v18", "logged": 0.067, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-E/wave_encoders_lib/DN-v18.py", "order": 344, "rc": 0, "seconds": 334, "all166": 0.06696489672737019, "grid": 0.074810557688917, "P": 11612, "reproduced": true, "status": "ok"}

@@ -1,0 +1,1 @@
+{"id": "wave-trim__LEAN_v17_fcc06e", "run": "wave-trim", "name": "LEAN-v17", "logged": 0.0749, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-trim/wave_encoders_lib/LEAN-v17.py", "order": 172, "rc": 0, "seconds": 199, "all166": 0.07775824780578178, "grid": 0.086647946869968, "P": 7852, "reproduced": false, "status": "mismatch"}

@@ -1,0 +1,5 @@
+task 18/45: 3 fits, 3 to do
+loaded stats 1s
+drop:f0_dyn+hnr_dyn                                                                        raw= 3845 all166=0.0808 grid=0.0905 82s
+drop:quad_modbank_dyn                                                                      raw= 3312 all166=0.0809 grid=0.0904 46s
+alone:stmf_mean_gabor                                                                      raw=   17 all166=0.0154 grid=0.0168 1s

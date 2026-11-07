@@ -1,0 +1,15 @@
+train chunks: 30   test chunks: 23
+loading melspec + high-gamma...
+extracting features...
+feature shapes (104579, 12888) (80653, 12888) response shapes (104579, 166) (80653, 166)
+fitting ridge encoding model...
+train_corr=0.2238  test_corr=0.0543  frac_elec>0.1=0.1386  (91.6s)
+Overall results saved → /path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/results/overall_results.csv
+Plot saved → /path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/results/corr_over_iterations.pdf
+
+---
+subject:        patient1
+test_corr:      0.0543  (train_corr=0.2238, frac_elec>0.1=0.1386)
+n_params:       0.00e+00
+encoding_secs:  91.6s
+total_seconds:  93.6s

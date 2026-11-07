@@ -1,0 +1,224 @@
+{
+"run": "exceed-v20-context",
+"n_diverged": 0,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T18:39:23.265Z",
+"how": "backfill:edit",
+"verified": null,
+"scores": [
+0.0904
+],
+"crashed": false,
+"name": "LEAN-v20",
+"sha": "2466bae7ed782ac4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0000_2466bae7ed782ac4.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T18:53:36.464Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0887
+],
+"crashed": false,
+"name": "LEAN-v21-c1",
+"sha": "bdfe3d4dddfe9dde",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0001_bdfe3d4dddfe9dde.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:08:36.446Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0905
+],
+"crashed": false,
+"name": "LEAN-v21-c2",
+"sha": "061f909c7f78dc56",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0002_061f909c7f78dc56.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:24:56.596Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0897
+],
+"crashed": false,
+"name": "LEAN-v21-c3",
+"sha": "bd9da433072eba83",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0003_bd9da433072eba83.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T19:56:12.324Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0896
+],
+"crashed": false,
+"name": "LEAN-v21-c4",
+"sha": "3f2f9aa2d8742e2a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0004_3f2f9aa2d8742e2a.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:17:02.768Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0902
+],
+"crashed": false,
+"name": "LEAN-v21-c5",
+"sha": "5982136df8073ade",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0005_5982136df8073ade.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:37:48.391Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0896
+],
+"crashed": false,
+"name": "LEAN-v21-c6",
+"sha": "56c9896cad823e84",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0006_56c9896cad823e84.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T20:58:57.554Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0898
+],
+"crashed": false,
+"name": "LEAN-v21-c7",
+"sha": "d39e51ae8a82375d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0007_d39e51ae8a82375d.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:19:47.902Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.09
+],
+"crashed": false,
+"name": "LEAN-v21-c8",
+"sha": "31243117b4f61603",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0008_31243117b4f61603.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T21:40:31.320Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0904
+],
+"crashed": false,
+"name": "LEAN-v21-c9",
+"sha": "ba713d247e1dcb53",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0009_ba713d247e1dcb53.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T22:01:10.051Z",
+"how": "replay",
+"verified": null,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v21-c10",
+"sha": "ac1ce7e9ff08e2b6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-context/0010_ac1ce7e9ff08e2b6.py"
+}
+]
+}

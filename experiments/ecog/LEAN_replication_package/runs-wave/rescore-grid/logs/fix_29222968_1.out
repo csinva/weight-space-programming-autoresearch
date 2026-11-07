@@ -1,0 +1,8 @@
+ok       reset-D__SCAT_v2_7d617e                                                logged=0.0536 all166=0.05362 grid=0.06007 rc=0 151s
+ok       reset-D__SCAT_v12_00e78d                                               logged=0.0658 all166=0.06580 grid=0.07234 rc=0 327s
+ok       reset-D__SCAT_v22_a348b2                                               logged=0.0667 all166=0.06662 grid=0.07416 rc=0 481s
+ok       reset-D__SCAT_v32_3848be                                               logged=0.0703 all166=0.07037 grid=0.07856 rc=0 508s
+ok       reset-H__RES_v04_408285                                                logged=0.0633 all166=0.06329 grid=0.07221 rc=0 634s
+ok       reset-H__RES_v14_f6163e                                                logged=0.0715 all166=0.07148 grid=0.08026 rc=0 1153s
+ok       lean-interp__INTERP_v1a_cond_b8b291                                    logged=0.0761 all166=0.07614 grid=0.08540 rc=0 226s
+ok       lean-interp__INTERP_v1b_cond_7cac13                                    logged=0.0762 all166=0.07625 grid=0.08553 rc=0 263s

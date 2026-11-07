@@ -1,0 +1,1 @@
+{"id": "reset-F__PC_v13_f6b101", "run": "reset-F", "name": "PC-v13", "logged": 0.0693, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v13.py", "order": 375, "rc": 0, "seconds": 281, "all166": 0.06931426497896137, "grid": 0.07766547922030233, "P": 12168, "reproduced": true, "status": "ok"}

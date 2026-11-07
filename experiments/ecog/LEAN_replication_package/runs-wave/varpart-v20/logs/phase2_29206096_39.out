@@ -1,0 +1,5 @@
+task 39/45: 3 fits, 3 to do
+loaded stats 1s
+drop:formant_dyn+formants                                                                  raw= 3819 all166=0.0807 grid=0.0904 73s
+alone:quad_modbank_acausal                                                                 raw=  180 all166=0.0503 grid=0.0570 1s
+alone:cpp                                                                                  raw=    4 all166=0.0279 grid=0.0321 1s

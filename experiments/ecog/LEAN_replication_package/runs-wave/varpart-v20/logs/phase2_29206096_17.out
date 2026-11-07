@@ -1,0 +1,5 @@
+task 17/45: 3 fits, 3 to do
+loaded stats 1s
+drop:gate_signals                                                                          raw= 3846 all166=0.0806 grid=0.0903 82s
+drop:interact_v3e                                                                          raw= 3447 all166=0.0795 grid=0.0896 51s
+alone:gate_signals_dyn                                                                     raw=   18 all166=0.0026 grid=0.0028 1s

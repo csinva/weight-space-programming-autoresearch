@@ -1,0 +1,5 @@
+
+---
+subject:        patient1
+test_corr:      0.0733  (train_corr=0.1646, frac_elec>0.1=0.2080)  [GRID-ONLY n=125]
+total_seconds:  101.6s

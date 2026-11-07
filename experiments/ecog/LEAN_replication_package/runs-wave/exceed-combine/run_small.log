@@ -1,0 +1,6 @@
+  scattering: K=9 NB=1 dim=260 (S1m 9, joint 8, S2m 90, S2s 90)
+
+---
+subject:        patient1
+test_corr:      0.0702  (train_corr=0.1993, frac_elec>0.1=0.2080)  [GRID-ONLY n=125]
+total_seconds:  88.3s

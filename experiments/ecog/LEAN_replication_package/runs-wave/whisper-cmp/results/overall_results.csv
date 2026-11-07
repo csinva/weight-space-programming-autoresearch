@@ -1,0 +1,2 @@
+subject,test_corr,train_corr,frac_test_elec_above_0.1,encoding_seconds,status,model_shorthand_name,n_params,description
+patient1,0.0592,0.1059,0.1627,215.7,success,LEAN-v16,0.00e+00,"LEAN v16: also removed per-formant bandwidth + sharpness block (16 dim, 4 + 3 taus x 4). v15 test_corr=0.0760, raw emb=1574."

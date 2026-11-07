@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v35_hires40_3e175a", "run": "wave-lean", "name": "LEAN-v35-hires40", "logged": 0.0752, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v35-hires40.py", "order": 195, "rc": 0, "seconds": 166, "all166": 0.07515554266682618, "grid": 0.08433120358588653, "P": 6516, "reproduced": true, "status": "ok"}

@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v18_pitchZ_7a7592", "run": "wave-lean", "name": "LEAN-v18-pitchZ", "logged": 0.0761, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v18-pitchZ.py", "order": 180, "rc": 0, "seconds": 148, "all166": 0.07614034486065566, "grid": 0.08526985301056897, "P": 6264, "reproduced": true, "status": "ok"}

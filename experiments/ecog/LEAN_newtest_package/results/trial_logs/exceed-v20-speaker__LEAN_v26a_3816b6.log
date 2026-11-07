@@ -1,0 +1,8 @@
+### Fri Nov  6 20:05:51 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100 --cond-mode rep_target30_k4
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/exceed-v20-speaker__LEAN_v26a_3816b6/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[newtest] kept streamed get_features_per_chunk (ignored encoder's monkey-patch)
+[newtest] intercepted training features: ndelays=4 lag=3 trim=30
+  group conditioning: pitch_salience×3(11→33), pitch_summary×4(2→8), pitch_dyn×4(6→24), spectral_moments×4(4→16), spectral_flatness×4(1→4), spectral_rolloff×4(2→8), hnr×4(2→8), phonetic×4(5→20), stmf_mean_gabor×2(17→34), formant_dyn×3(9→27), f0_dyn×4(4→16), hnr_dyn×4(3→12), cpp×4(4→16), region_flat×4(8→32), cochlea_contrast×2(20→40), med_cochlea_contrast×2(20→40), short_cochlea_contrast×2(20→40), multitau_contrast×3(10→30), med_adapt_contrast×4(5→20), topbot×3(10→30), topbot_short×3(10→30), fut_cochlea_contrast×4(5→20), fut_cochlea_contrast_med×4(5→20), fut_med_contrast_6×4(5→20), fut_minus_cur_contrast×4(5→20), cube_fut_contrast×4(5→20), quad_xrate_energy×2(18→36), cochlea_voiced_gated_dyn×2(20→40), gate_signals×4(6→24), gate_signals_dyn×2(18→36), cep_lowq×2(20→40)
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+RESCORE P=17424 all166=0.08070 grid=0.09020 newtest_grid=0.06893 (n=493) (895s)

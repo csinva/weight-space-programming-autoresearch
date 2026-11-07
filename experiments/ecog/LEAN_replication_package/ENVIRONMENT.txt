@@ -1,0 +1,4 @@
+python: Python 3.10.18
+torch 2.10.0+cu128 cuda 12.8
+numpy 2.2.6
+GPU used for all scored runs: NVIDIA A100 (40/80 GB), SLURM partitions gpu_dev / gpu_short / gpu_long

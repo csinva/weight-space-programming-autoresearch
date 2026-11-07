@@ -1,0 +1,1 @@
+{"id": "reset-G__TEXTURE_v17_bfa279", "run": "reset-G", "name": "TEXTURE-v17", "logged": 0.0663, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-G/wave_encoders_lib/TEXTURE-v17.py", "order": 418, "rc": 0, "seconds": 303, "all166": 0.06630942943289453, "grid": 0.07521626252272033, "P": 12296, "reproduced": true, "status": "ok"}

@@ -1,0 +1,52 @@
+[
+{
+"id": "graft-lean__GRAFT_v2b_reservoir_bcf964",
+"run": "graft-lean",
+"name": "GRAFT-v2b-reservoir",
+"logged": 0.0744,
+"order": 201,
+"phase": "graft + interactions \u2192 v17",
+"metric": "all166",
+"why": "no eval of this name in the logs"
+},
+{
+"id": "graft-lean__GRAFT_v3_divnorm_f5dabe",
+"run": "graft-lean",
+"name": "GRAFT-v3-divnorm",
+"logged": 0.0755,
+"order": 203,
+"phase": "graft + interactions \u2192 v17",
+"metric": "all166",
+"why": "no eval of this name in the logs"
+},
+{
+"id": "graft-lean__GRAFT_v4_texture_80a576",
+"run": "graft-lean",
+"name": "GRAFT-v4-texture",
+"logged": 0.0755,
+"order": 205,
+"phase": "graft + interactions \u2192 v17",
+"metric": "all166",
+"why": "no eval of this name in the logs"
+},
+{
+"id": "graft-lean__GRAFT_v5_products_493f9d",
+"run": "graft-lean",
+"name": "GRAFT-v5-products",
+"logged": 0.0762,
+"order": 207,
+"phase": "graft + interactions \u2192 v17",
+"metric": "all166",
+"why": "no eval of this name in the logs"
+},
+{
+"id": "graft-lean__GRAFT_v5b_products_3561e7",
+"run": "graft-lean",
+"name": "GRAFT-v5b-products",
+"logged": 0.0763,
+"order": 208,
+"phase": "graft + interactions \u2192 v17",
+"metric": "all166",
+"why": "no eval of this name in the logs"
+}
+]

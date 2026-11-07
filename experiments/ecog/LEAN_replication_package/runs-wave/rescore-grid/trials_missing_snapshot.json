@@ -1,0 +1,682 @@
+[
+{
+"id": "wave-slurm-23628821__Wave_melspec_floor_275995",
+"run": "wave-slurm-23628821",
+"name": "Wave-melspec-floor",
+"logged": 0.0457,
+"snapshot": null,
+"order": 0
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_highlevel_mt_d438ae",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+highlevel-mt",
+"logged": 0.0612,
+"snapshot": null,
+"order": 35
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_bandflux_d2e218",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+bandflux",
+"logged": 0.0637,
+"snapshot": null,
+"order": 38
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_chanflux_ac87b1",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+chanflux",
+"logged": 0.0634,
+"snapshot": null,
+"order": 39
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_6rate_08bef4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank-6rate",
+"logged": 0.0667,
+"snapshot": null,
+"order": 43
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_chanmod_b85fa2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+chanmod",
+"logged": 0.0663,
+"snapshot": null,
+"order": 44
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_zcr_49a002",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+zcr",
+"logged": 0.0666,
+"snapshot": null,
+"order": 45
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_zcr_mfcc_7f7133",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+zcr+mfcc",
+"logged": 0.0663,
+"snapshot": null,
+"order": 46
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_chan4Hz_a65505",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+chan4Hz",
+"logged": 0.0663,
+"snapshot": null,
+"order": 47
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_slowfast_b5ae2c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+slowfast",
+"logged": 0.0669,
+"snapshot": null,
+"order": 49
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_LI2scale_dc4588",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+LI2scale",
+"logged": 0.0658,
+"snapshot": null,
+"order": 50
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_HL_modbank_products_0d59de",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+HL+modbank+products",
+"logged": 0.0668,
+"snapshot": null,
+"order": 51
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF_long_short_721666",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF-long+short",
+"logged": 0.0688,
+"snapshot": null,
+"order": 54
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF23_9d2cb1",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF23",
+"logged": 0.0691,
+"snapshot": null,
+"order": 55
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF14_prune_9580e2",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF14-prune",
+"logged": 0.0688,
+"snapshot": null,
+"order": 56
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF_STMFonset_03d5b7",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF+STMFonset",
+"logged": 0.069,
+"snapshot": null,
+"order": 57
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF14_slowtau_420bab",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF14-slowtau",
+"logged": 0.0691,
+"snapshot": null,
+"order": 58
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF14_midSTMF_ea7cac",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF14+midSTMF",
+"logged": 0.069,
+"snapshot": null,
+"order": 59
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF17_lean_68d1c8",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF17-lean",
+"logged": 0.0684,
+"snapshot": null,
+"order": 61
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF17_fine40_c45615",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF17-fine40",
+"logged": 0.0674,
+"snapshot": null,
+"order": 62
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_STMF17_adapt4_3aefea",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+STMF17+adapt4",
+"logged": 0.0689,
+"snapshot": null,
+"order": 63
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_fastSTMF_66f90d",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+fastSTMF",
+"logged": 0.0689,
+"snapshot": null,
+"order": 66
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF2_147441",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+liSTMF2",
+"logged": 0.0695,
+"snapshot": null,
+"order": 69
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_li_d787c7",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+liSTMF8+li",
+"logged": 0.0693,
+"snapshot": null,
+"order": 71
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_prosody_9930ad",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+prosody",
+"logged": 0.0697,
+"snapshot": null,
+"order": 73
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar3win_47df4a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar3win",
+"logged": 0.0708,
+"snapshot": null,
+"order": 98
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv4_af7c34",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv4",
+"logged": 0.0709,
+"snapshot": null,
+"order": 101
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_LImodenv_1841c4",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+LImodenv",
+"logged": 0.0715,
+"snapshot": null,
+"order": 104
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_tonic4tau_20a136",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+tonic4tau",
+"logged": 0.0732,
+"snapshot": null,
+"order": 107
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_midtau_ab72cd",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+midtau",
+"logged": 0.0747,
+"snapshot": null,
+"order": 110
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_tonicLI_4a7b13",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+tonicLI",
+"logged": 0.0742,
+"snapshot": null,
+"order": 111
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_discoursetau_dc4906",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+discoursetau",
+"logged": 0.0726,
+"snapshot": null,
+"order": 112
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal3win_b150e0",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal3win",
+"logged": 0.075,
+"snapshot": null,
+"order": 114
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_long150_cube_54495b",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+long150-cube",
+"logged": 0.0758,
+"snapshot": null,
+"order": 115
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_trend_9d3076",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+trend",
+"logged": 0.0758,
+"snapshot": null,
+"order": 116
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_residual_LP_5f689c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+residual-LP",
+"logged": 0.0756,
+"snapshot": null,
+"order": 117
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta3_24_22081f",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta3-24",
+"logged": 0.0764,
+"snapshot": null,
+"order": 122
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_cube36_6f5098",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta+cube36",
+"logged": 0.0767,
+"snapshot": null,
+"order": 124
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_cube_acausal_827f59",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+acausal+cube-acausal",
+"logged": 0.0767,
+"snapshot": null,
+"order": 125
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_loudfut_e21c4c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+futdelta+loudfut",
+"logged": 0.0765,
+"snapshot": null,
+"order": 126
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_cube612_2a6774",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+futdelta+cube612",
+"logged": 0.0765,
+"snapshot": null,
+"order": 127
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_shortfut_f638f5",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+futdelta+shortfut",
+"logged": 0.0767,
+"snapshot": null,
+"order": 128
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_futdelta_LP_6e727c",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic3win+futdelta+futdelta-LP",
+"logged": 0.0767,
+"snapshot": null,
+"order": 129
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_absdelta_85574a",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic+futdelta+absdelta",
+"logged": 0.0765,
+"snapshot": null,
+"order": 130
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_state_prod_e3f00e",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic+futdelta+state-prod",
+"logged": 0.0767,
+"snapshot": null,
+"order": 131
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_midfut_097ecf",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+tonic+futdelta+midfut",
+"logged": 0.0766,
+"snapshot": null,
+"order": 132
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_drop_tau150_ed9914",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+drop-tau150",
+"logged": 0.0766,
+"snapshot": null,
+"order": 133
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_rel_pitch_cubeAblation_43d6de",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+rel-pitch-cubeAblation",
+"logged": 0.0748,
+"snapshot": null,
+"order": 143
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_pb_peakRate_EBAC_dual_tau_558859",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+pb-peakRate+EBAC-dual-tau",
+"logged": 0.0766,
+"snapshot": null,
+"order": 149
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBAC_multi_tau_a35b88",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBAC-multi-tau",
+"logged": 0.0763,
+"snapshot": null,
+"order": 154
+},
+{
+"id": "wave-slurm-23628821__Gammatone_BEST_EBACtau20_dropTAU150_ab2cf6",
+"run": "wave-slurm-23628821",
+"name": "Gammatone-BEST+EBACtau20+dropTAU150",
+"logged": 0.0768,
+"snapshot": null,
+"order": 155
+},
+{
+"id": "wave-trim__LEAN_v3_3454e3",
+"run": "wave-trim",
+"name": "LEAN-v3",
+"logged": 0.0723,
+"snapshot": null,
+"order": 158
+},
+{
+"id": "wave-trim__LEAN_v5_459e80",
+"run": "wave-trim",
+"name": "LEAN-v5",
+"logged": 0.0751,
+"snapshot": null,
+"order": 160
+},
+{
+"id": "wave-trim__LEAN_v6_4b3815",
+"run": "wave-trim",
+"name": "LEAN-v6",
+"logged": 0.075,
+"snapshot": null,
+"order": 161
+},
+{
+"id": "wave-trim__LEAN_v9_2d4e0c",
+"run": "wave-trim",
+"name": "LEAN-v9",
+"logged": 0.0754,
+"snapshot": null,
+"order": 164
+},
+{
+"id": "wave-trim__LEAN_v12_5b50c7",
+"run": "wave-trim",
+"name": "LEAN-v12",
+"logged": 0.0752,
+"snapshot": null,
+"order": 167
+},
+{
+"id": "wave-lean__LEAN_v23_2DContrast_6767d1",
+"run": "wave-lean",
+"name": "LEAN-v23-2DContrast",
+"logged": 0.0743,
+"snapshot": null,
+"order": 184
+},
+{
+"id": "wave-lean__LEAN_v24_uttContext_595273",
+"run": "wave-lean",
+"name": "LEAN-v24-uttContext",
+"logged": 0.0752,
+"snapshot": null,
+"order": 185
+},
+{
+"id": "wave-lean__LEAN_v25_multiLagFlux_375102",
+"run": "wave-lean",
+"name": "LEAN-v25-multiLagFlux",
+"logged": 0.0749,
+"snapshot": null,
+"order": 186
+},
+{
+"id": "wave-lean__LEAN_v36_full40band_ecf1fe",
+"run": "wave-lean",
+"name": "LEAN-v36-full40band",
+"logged": 0.0749,
+"snapshot": null,
+"order": 196
+},
+{
+"id": "reset-A__BIOPHYS_v1_88f553",
+"run": "reset-A",
+"name": "BIOPHYS-v1",
+"logged": 0.0588,
+"snapshot": null,
+"order": 199
+},
+{
+"id": "reset-C__PHON_v25_9424f8",
+"run": "reset-C",
+"name": "PHON-v25",
+"logged": 0.0575,
+"snapshot": null,
+"order": 268
+},
+{
+"id": "reset-E__DN_v28_8993c8",
+"run": "reset-E",
+"name": "DN-v28",
+"logged": 0.0549,
+"snapshot": null,
+"order": 354
+},
+{
+"id": "reset-F__PC_v38_76f198",
+"run": "reset-F",
+"name": "PC-v38",
+"logged": 0.071,
+"snapshot": null,
+"order": 399
+},
+{
+"id": "reset-H__RES_v15_78e63d",
+"run": "reset-H",
+"name": "RES-v15",
+"logged": 0.0708,
+"snapshot": null,
+"order": 450
+},
+{
+"id": "reset-H__RES_v16_4bae08",
+"run": "reset-H",
+"name": "RES-v16",
+"logged": 0.0709,
+"snapshot": null,
+"order": 451
+},
+{
+"id": "reset-H__RES_v20_640ee4",
+"run": "reset-H",
+"name": "RES-v20",
+"logged": 0.068,
+"snapshot": null,
+"order": 455
+},
+{
+"id": "reset-H__RES_v24_0d6d1f",
+"run": "reset-H",
+"name": "RES-v24",
+"logged": 0.071,
+"snapshot": null,
+"order": 459
+},
+{
+"id": "reset-H__RES_v26_3c3b46",
+"run": "reset-H",
+"name": "RES-v26",
+"logged": 0.0711,
+"snapshot": null,
+"order": 461
+},
+{
+"id": "reset-I__TFS_IF_v7_56cf14",
+"run": "reset-I",
+"name": "TFS-IF-v7",
+"logged": 0.0527,
+"snapshot": null,
+"order": 467
+},
+{
+"id": "reset-I__TFS_IF_v11_6b9ca7",
+"run": "reset-I",
+"name": "TFS-IF-v11",
+"logged": 0.0568,
+"snapshot": null,
+"order": 472
+},
+{
+"id": "graft-lean__GRAFT_v1_tfs_21c02a",
+"run": "graft-lean",
+"name": "GRAFT-v1-tfs",
+"logged": 0.0745,
+"snapshot": null,
+"order": 497
+},
+{
+"id": "graft-lean__GRAFT_v1b_tfs_5aa20f",
+"run": "graft-lean",
+"name": "GRAFT-v1b-tfs",
+"logged": 0.0753,
+"snapshot": null,
+"order": 498
+},
+{
+"id": "graft-lean__GRAFT_v2b_reservoir_bcf964",
+"run": "graft-lean",
+"name": "GRAFT-v2b-reservoir",
+"logged": 0.0744,
+"snapshot": null,
+"order": 500
+},
+{
+"id": "graft-lean__GRAFT_v3_divnorm_f5dabe",
+"run": "graft-lean",
+"name": "GRAFT-v3-divnorm",
+"logged": 0.0755,
+"snapshot": null,
+"order": 502
+},
+{
+"id": "graft-lean__GRAFT_v4_texture_80a576",
+"run": "graft-lean",
+"name": "GRAFT-v4-texture",
+"logged": 0.0755,
+"snapshot": null,
+"order": 504
+},
+{
+"id": "graft-lean__GRAFT_v5_products_493f9d",
+"run": "graft-lean",
+"name": "GRAFT-v5-products",
+"logged": 0.0762,
+"snapshot": null,
+"order": 506
+},
+{
+"id": "graft-lean__GRAFT_v5b_products_3561e7",
+"run": "graft-lean",
+"name": "GRAFT-v5b-products",
+"logged": 0.0763,
+"snapshot": null,
+"order": 507
+},
+{
+"id": "lean-interp-ling__LING_base_7215ec",
+"run": "lean-interp-ling",
+"name": "LING-base",
+"logged": 0.076,
+"snapshot": null,
+"order": 514
+},
+{
+"id": "lean-interp-ling__LING_v1_260c64",
+"run": "lean-interp-ling",
+"name": "LING-v1",
+"logged": 0.0766,
+"snapshot": null,
+"order": 515
+},
+{
+"id": "lean-interp__INTERP_v2i_interact_ef8f9a",
+"run": "lean-interp",
+"name": "INTERP-v2i-interact",
+"logged": 0.0764,
+"snapshot": null,
+"order": 528
+},
+{
+"id": "lean-interp__INTERP_v2l_interact_a0f160",
+"run": "lean-interp",
+"name": "INTERP-v2l-interact",
+"logged": 0.0763,
+"snapshot": null,
+"order": 530
+},
+{
+"id": "lean-interp__INTERP_v2n_interact_09a4cd",
+"run": "lean-interp",
+"name": "INTERP-v2n-interact",
+"logged": 0.0766,
+"snapshot": null,
+"order": 532
+},
+{
+"id": "lean-interp__INTERP_v2o_interact_7440d7",
+"run": "lean-interp",
+"name": "INTERP-v2o-interact",
+"logged": 0.0765,
+"snapshot": null,
+"order": 533
+},
+{
+"id": "lean-interp__INTERP_v2p_interact_35bda0",
+"run": "lean-interp",
+"name": "INTERP-v2p-interact",
+"logged": 0.0763,
+"snapshot": null,
+"order": 534
+}
+]

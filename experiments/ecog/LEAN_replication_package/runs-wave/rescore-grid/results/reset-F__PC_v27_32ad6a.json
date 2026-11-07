@@ -1,0 +1,1 @@
+{"id": "reset-F__PC_v27_32ad6a", "run": "reset-F", "name": "PC-v27", "logged": 0.0704, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v27.py", "order": 387, "rc": 0, "seconds": 286, "all166": 0.07037906582279249, "grid": 0.07838959282229163, "P": 12340, "reproduced": true, "status": "ok"}

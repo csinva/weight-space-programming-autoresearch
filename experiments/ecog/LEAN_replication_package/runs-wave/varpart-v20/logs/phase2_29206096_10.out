@@ -1,0 +1,5 @@
+task 10/45: 3 fits, 3 to do
+loaded stats 1s
+drop:med_adapt_contrast                                                                    raw= 3847 all166=0.0808 grid=0.0904 82s
+drop:scattering                                                                            raw= 3565 all166=0.0790 grid=0.0885 57s
+alone:contrast_med                                                                         raw=   24 all166=0.0398 grid=0.0460 1s

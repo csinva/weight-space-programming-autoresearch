@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v20_latInh_330295", "run": "wave-lean", "name": "LEAN-v20-latInh", "logged": 0.0759, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v20-latInh.py", "order": 182, "rc": 0, "seconds": 165, "all166": 0.07588249190505504, "grid": 0.08517313943514056, "P": 6552, "reproduced": true, "status": "ok"}

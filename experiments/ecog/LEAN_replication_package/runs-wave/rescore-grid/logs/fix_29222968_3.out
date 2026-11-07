@@ -1,0 +1,6 @@
+ok       reset-D__SCAT_v4_083dbb                                                logged=0.0586 all166=0.05864 grid=0.06532 rc=0 300s
+ok       reset-D__SCAT_v14_b851c0                                               logged=0.0654 all166=0.06538 grid=0.07250 rc=0 337s
+ok       reset-D__SCAT_v24_816cab                                               logged=0.0671 all166=0.06717 grid=0.07440 rc=0 488s
+ok       reset-D__SCAT_v34_a991e6                                               logged=0.0702 all166=0.07018 grid=0.07815 rc=0 536s
+ok       reset-H__RES_v06_a0d8f7                                                logged=0.0645 all166=0.06445 grid=0.07242 rc=0 285s
+ok       reset-H__RES_v18b_5aec2e                                               logged=0.0681 all166=0.06808 grid=0.07696 rc=0 769s

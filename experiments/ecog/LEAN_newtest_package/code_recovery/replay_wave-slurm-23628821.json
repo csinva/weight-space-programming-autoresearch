@@ -1,0 +1,4993 @@
+{
+"run": "wave-slurm-23628821",
+"n_diverged": 7,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T16:42:31.414Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0403,
+0.0403
+],
+"crashed": false,
+"name": "Gammatone-cochleagram",
+"sha": "0a45c0c929f1fd33",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0000_0a45c0c929f1fd33.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T16:47:09.581Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0468,
+0.0468
+],
+"crashed": false,
+"name": "Gammatone-log",
+"sha": "8b89896a1704ea96",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0001_8b89896a1704ea96.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T16:57:44.042Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0533,
+0.0533
+],
+"crashed": false,
+"name": "Gammatone-log-adapt",
+"sha": "6e2f39398e556435",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0002_6e2f39398e556435.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T17:08:23.906Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-log-adapt-onset",
+"sha": "42a16c12785e486d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0003_42a16c12785e486d.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T17:29:17.946Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.052,
+0.052
+],
+"crashed": false,
+"name": "Gammatone-log-adapt-LI",
+"sha": "7424584107d95bd9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0004_7424584107d95bd9.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T17:45:35.689Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0549,
+0.0549
+],
+"crashed": false,
+"name": "Gammatone-multi-tau",
+"sha": "adf8b80e551d602c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0005_adf8b80e551d602c.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T18:12:18.991Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0515,
+0.0515
+],
+"crashed": false,
+"name": "Gammatone-AGC-multi-tau",
+"sha": "5243a64b1924cb6b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0006_5243a64b1924cb6b.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T18:33:25.904Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0548,
+0.0548
+],
+"crashed": false,
+"name": "Gammatone-multiwin",
+"sha": "b5fe4ef7e7848586",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0007_b5fe4ef7e7848586.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T18:46:03.068Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0559,
+0.0559
+],
+"crashed": false,
+"name": "Gammatone-multiwin-multi-tau",
+"sha": "9ac442271e42001e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0008_9ac442271e42001e.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T19:04:58.161Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0554,
+0.0554
+],
+"crashed": false,
+"name": "Gammatone-mod-bank",
+"sha": "ed85bf98dc9229b9",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0009_ed85bf98dc9229b9.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T19:29:01.899Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0529,
+0.0529
+],
+"crashed": false,
+"name": "Gammatone-PCEN",
+"sha": "6509309ef209416b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0010_6509309ef209416b.py"
+},
+{
+"k": 11,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T19:42:58.510Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0552,
+0.0552
+],
+"crashed": false,
+"name": "Gammatone-multiwin-64ch",
+"sha": "fa35bc8b3ac5960f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0011_fa35bc8b3ac5960f.py"
+},
+{
+"k": 12,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T20:09:36.483Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0558,
+0.0558
+],
+"crashed": false,
+"name": "Gammatone-multiwin-mt-pitch",
+"sha": "bcace738472fd045",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0012_bcace738472fd045.py"
+},
+{
+"k": 13,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T20:30:46.630Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0543,
+0.0543
+],
+"crashed": false,
+"name": "Gammatone-multiwin-mt-LI",
+"sha": "6dcce4ebaffe5a2d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0013_6dcce4ebaffe5a2d.py"
+},
+{
+"k": 14,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T21:01:56.763Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0565,
+0.0565
+],
+"crashed": false,
+"name": "Gammatone-3win-mt",
+"sha": "6390b6f0674ca3a3",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0014_6390b6f0674ca3a3.py"
+},
+{
+"k": 15,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T21:28:42.677Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0569,
+0.0569
+],
+"crashed": false,
+"name": "Gammatone-3win-4tau",
+"sha": "05b0751e8c73fad7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0015_05b0751e8c73fad7.py"
+},
+{
+"k": 16,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T21:59:41.014Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0565,
+0.0565
+],
+"crashed": false,
+"name": "Gammatone-4win-4tau",
+"sha": "6142807db3bb0ac2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0016_6142807db3bb0ac2.py"
+},
+{
+"k": 17,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T22:30:43.903Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.056,
+0.056
+],
+"crashed": false,
+"name": "Gammatone-3win-4tau-mod4",
+"sha": "934af05d72598323",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0017_934af05d72598323.py"
+},
+{
+"k": 18,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T23:08:54.949Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0592,
+0.0592
+],
+"crashed": false,
+"name": "Gammatone-3win-5tau",
+"sha": "ad7f4dd5941b200d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0018_ad7f4dd5941b200d.py"
+},
+{
+"k": 19,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-02T23:49:47.800Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0601,
+0.0601
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau",
+"sha": "62781a7383b5e841",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0019_62781a7383b5e841.py"
+},
+{
+"k": 20,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T00:30:55.530Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.06,
+0.06
+],
+"crashed": false,
+"name": "Gammatone-3win-8tau-dense",
+"sha": "2e6d76a20e744aa1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0020_2e6d76a20e744aa1.py"
+},
+{
+"k": 21,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T01:22:00.553Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0597,
+0.0597
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-24ch",
+"sha": "d2293d883a3c0b76",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0021_d2293d883a3c0b76.py"
+},
+{
+"k": 22,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T02:14:22.726Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0592,
+0.0592
+],
+"crashed": false,
+"name": "Gammatone-1win-6tau-40ch",
+"sha": "37843a4b9bc70910",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0022_37843a4b9bc70910.py"
+},
+{
+"k": 23,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T02:43:59.320Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0607,
+0.0607
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMdepth",
+"sha": "6d8d43bd3bfcc9b0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0023_6d8d43bd3bfcc9b0.py"
+},
+{
+"k": 24,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:27:54.501Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0603,
+0.0603
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMdepth2",
+"sha": "c0ce106b394f7a9d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0024_c0ce106b394f7a9d.py"
+},
+{
+"k": 25,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:31:27.481Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0608,
+0.0608
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull",
+"sha": "6992ec627be3aa63",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0025_6992ec627be3aa63.py"
+},
+{
+"k": 26,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:34:47.526Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0609,
+0.0609
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loud",
+"sha": "2993ff915a48bf60",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0026_2993ff915a48bf60.py"
+},
+{
+"k": 27,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:38:35.406Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0607,
+0.0607
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loudpeak",
+"sha": "76781b52dd326078",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0027_76781b52dd326078.py"
+},
+{
+"k": 28,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:42:22.932Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0605,
+0.0605
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loud-order6",
+"sha": "163681aa5b49e099",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0028_163681aa5b49e099.py"
+},
+{
+"k": 29,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:45:53.885Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0612,
+0.0612
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loud-centroid",
+"sha": "0f5089ffc1e3a5e5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0029_0f5089ffc1e3a5e5.py"
+},
+{
+"k": 30,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:49:16.121Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.061,
+0.061
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+"sha": "769bc86ec101bf96",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0030_769bc86ec101bf96.py"
+},
+{
+"k": 31,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T03:52:41.896Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0612,
+0.0612
+],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+]
+],
+"name": "Gammatone-BEST-cochlear-stack",
+"sha": "cd1d287a77616a8a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0031_cd1d287a77616a8a.py"
+},
+{
+"k": 32,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T05:48:36.464Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.061,
+0.061
+],
+"crashed": false,
+"name": "Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+"sha": "908eff19d0860feb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0032_908eff19d0860feb.py"
+},
+{
+"k": 33,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T06:00:09.638Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+]
+],
+"name": "Gammatone-BEST+STMF12",
+"sha": "5d6c9960c4bd7ace",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0033_5d6c9960c4bd7ace.py"
+},
+{
+"k": 34,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T06:45:19.213Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"rows_seen": [
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+]
+],
+"name": "Gammatone-BEST+STMF12",
+"sha": "5d6c9960c4bd7ace",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0034_5d6c9960c4bd7ace.py"
+},
+{
+"k": 35,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T07:15:43.491Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+],
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+]
+],
+"name": "Gammatone-BEST+STMF12",
+"sha": "5d6c9960c4bd7ace",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0035_5d6c9960c4bd7ace.py"
+},
+{
+"k": 36,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:31:54.038Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0618,
+0.0618
+],
+"crashed": false,
+"name": "Gammatone-BEST+highlevel",
+"sha": "afea9a2c21d00771",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0036_afea9a2c21d00771.py"
+},
+{
+"k": 37,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:34:24.940Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0612,
+0.0612
+],
+"crashed": false,
+"name": "Gammatone-BEST+highlevel-mt",
+"sha": "97813888a5212e52",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0037_97813888a5212e52.py"
+},
+{
+"k": 38,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:36:47.059Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.062,
+0.062
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL-selective-mt",
+"sha": "3e5d7a56586fea15",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0038_3e5d7a56586fea15.py"
+},
+{
+"k": 39,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:39:07.783Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.064,
+0.064
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+flux",
+"sha": "6ee231831322f24f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0039_6ee231831322f24f.py"
+},
+{
+"k": 40,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:41:30.916Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0637
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+bandflux",
+"sha": "1abd1ccae71836d2",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0040_1abd1ccae71836d2.py"
+},
+{
+"k": 41,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:43:43.067Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0634
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+chanflux",
+"sha": "68dc9ab818ca7efc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0041_68dc9ab818ca7efc.py"
+},
+{
+"k": 42,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:46:31.408Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0643
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+flux+modbank",
+"sha": "c6c09f3e1b1f0cf8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0042_c6c09f3e1b1f0cf8.py"
+},
+{
+"k": 43,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:48:45.752Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0658
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+flux+modbank-multi",
+"sha": "4ddd9ddd5c02f33b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0043_4ddd9ddd5c02f33b.py"
+},
+{
+"k": 44,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:51:24.384Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0666
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank-all",
+"sha": "0a3b567da4d4360d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0044_0a3b567da4d4360d.py"
+},
+{
+"k": 45,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:54:14.632Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0667
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank-6rate",
+"sha": "31f4ab8b1f79de3d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0045_31f4ab8b1f79de3d.py"
+},
+{
+"k": 46,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:56:56.930Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0663
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+chanmod",
+"sha": "a528d37e53c8e170",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0046_a528d37e53c8e170.py"
+},
+{
+"k": 47,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T11:59:40.107Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0666
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+zcr",
+"sha": "029cb4e958db1ab1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0047_029cb4e958db1ab1.py"
+},
+{
+"k": 48,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:02:49.843Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0663
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+zcr+mfcc",
+"sha": "6267820a91c10201",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0048_6267820a91c10201.py"
+},
+{
+"k": 49,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:05:35.921Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0663
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+chan4Hz",
+"sha": "e24584111ee3e88e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0049_e24584111ee3e88e.py"
+},
+{
+"k": 50,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:08:49.607Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.067
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+flux-mt-all",
+"sha": "f8ebfc593e21f233",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0050_f8ebfc593e21f233.py"
+},
+{
+"k": 51,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:12:08.778Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0669
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+slowfast",
+"sha": "4c0c71ec78518076",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0051_4c0c71ec78518076.py"
+},
+{
+"k": 52,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:15:28.851Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0658
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+LI2scale",
+"sha": "dcc3eed5876843d6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0052_dcc3eed5876843d6.py"
+},
+{
+"k": 53,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:18:42.432Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0668
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+products",
+"sha": "f7906f0412c4e4de",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0053_f7906f0412c4e4de.py"
+},
+{
+"k": 54,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:22:12.538Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0678
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+STMF4",
+"sha": "831a24e9d7784516",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0054_831a24e9d7784516.py"
+},
+{
+"k": 55,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:25:46.131Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0691
+],
+"crashed": false,
+"name": "Gammatone-BEST+HL+modbank+STMF14",
+"sha": "0f7a8ac1a0dea558",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0055_0f7a8ac1a0dea558.py"
+},
+{
+"k": 56,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:30:27.336Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0688
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF-long+short",
+"sha": "fe32d152d35de43a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0056_fe32d152d35de43a.py"
+},
+{
+"k": 57,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:34:43.224Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0691
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF23",
+"sha": "1b5370e590732eb7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0057_1b5370e590732eb7.py"
+},
+{
+"k": 58,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:38:30.562Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0688
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF14-prune",
+"sha": "2a7703ca6d69f867",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0058_2a7703ca6d69f867.py"
+},
+{
+"k": 59,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:42:38.186Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.069
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF+STMFonset",
+"sha": "bd9c70abe462a482",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0059_bd9c70abe462a482.py"
+},
+{
+"k": 60,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:46:32.623Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0691
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF14-slowtau",
+"sha": "a13b39be097349d4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0060_a13b39be097349d4.py"
+},
+{
+"k": 61,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:50:35.207Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.069
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF14+midSTMF",
+"sha": "1bfc85afd91b61db",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0061_1bfc85afd91b61db.py"
+},
+{
+"k": 62,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:55:07.787Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF17-hi",
+"sha": "f40de2fc58f50091",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0062_f40de2fc58f50091.py"
+},
+{
+"k": 63,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T12:58:50.521Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0684
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF17-lean",
+"sha": "a9f029a825bcfb93",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0063_a9f029a825bcfb93.py"
+},
+{
+"k": 64,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:03:45.352Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0674
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF17-fine40",
+"sha": "f6180aecdf9ed350",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0064_f6180aecdf9ed350.py"
+},
+{
+"k": 65,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:08:11.363Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0689
+],
+"crashed": false,
+"name": "Gammatone-BEST+STMF17+adapt4",
+"sha": "97d71ce1d312e2f6",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0065_97d71ce1d312e2f6.py"
+},
+{
+"k": 66,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:12:12.028Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693
+],
+"crashed": false,
+"rows_seen": [
+[
+"Gammatone-BEST+STMF+STMFonset",
+0.069
+],
+[
+"Gammatone-BEST+STMF14-slowtau",
+0.0691
+],
+[
+"Gammatone-BEST+STMF14+midSTMF",
+0.069
+],
+[
+"Gammatone-BEST+STMF17-hi",
+0.0693
+],
+[
+"Gammatone-BEST+STMF17-lean",
+0.0684
+],
+[
+"Gammatone-BEST+STMF17-fine40",
+0.0674
+],
+[
+"Gammatone-BEST+STMF17+adapt4",
+0.0689
+],
+[
+"Gammatone-BEST+STMF17+stmfmod",
+0.0693
+]
+],
+"name": "Gammatone-BEST+STMF17+stmfmod",
+"sha": "cd2fa84727939c1b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0066_cd2fa84727939c1b.py"
+},
+{
+"k": 67,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:16:38.445Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack-v1",
+"sha": "eb78d40bee2a1ecc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0067_eb78d40bee2a1ecc.py"
+},
+{
+"k": 68,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:20:51.904Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0689
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+fastSTMF",
+"sha": "a5824db9a71c3227",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0068_a5824db9a71c3227.py"
+},
+{
+"k": 69,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:24:39.190Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack-final",
+"sha": "b5247bc9a9012246",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0069_b5247bc9a9012246.py"
+},
+{
+"k": 70,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:28:50.561Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0695
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+liSTMF",
+"sha": "8fb79b9ea181cd5e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0070_8fb79b9ea181cd5e.py"
+},
+{
+"k": 71,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:33:12.107Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0695
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+liSTMF2",
+"sha": "358e4f81a4cccd64",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0071_358e4f81a4cccd64.py"
+},
+{
+"k": 72,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:37:29.782Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0697
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+liSTMF8",
+"sha": "c8af62b6e47b0019",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0072_c8af62b6e47b0019.py"
+},
+{
+"k": 73,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:41:55.285Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+liSTMF8+li",
+"sha": "5f02f997e8f2024b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0073_5f02f997e8f2024b.py"
+},
+{
+"k": 74,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:46:09.770Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0697
+],
+"crashed": false,
+"rows_seen": [
+[
+"Gammatone-BEST+STMF17+adapt4",
+0.0689
+],
+[
+"Gammatone-BEST+STMF17+stmfmod",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack-v1",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+fastSTMF",
+0.0689
+],
+[
+"Gammatone-BEST+full-stack-final",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+liSTMF",
+0.0695
+],
+[
+"Gammatone-BEST+full-stack+liSTMF2",
+0.0695
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8",
+0.0697
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8+li",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8-final",
+0.0697
+]
+],
+"name": "Gammatone-BEST+full-stack+liSTMF8-final",
+"sha": "e1ba77bb1988eb8e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0074_e1ba77bb1988eb8e.py"
+},
+{
+"k": 75,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:50:38.910Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0697
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+prosody",
+"sha": "bc21765129c55471",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0075_bc21765129c55471.py"
+},
+{
+"k": 76,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:55:28.852Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0697,
+0.0697,
+0.0697
+],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+],
+[
+"Gammatone-BEST+highlevel",
+0.0618
+],
+[
+"Gammatone-BEST+highlevel-mt",
+0.0612
+],
+[
+"Gammatone-BEST+HL-selective-mt",
+0.062
+],
+[
+"Gammatone-BEST+HL+flux",
+0.064
+],
+[
+"Gammatone-BEST+HL+bandflux",
+0.0637
+],
+[
+"Gammatone-BEST+HL+chanflux",
+0.0634
+],
+[
+"Gammatone-BEST+HL+flux+modbank",
+0.0643
+],
+[
+"Gammatone-BEST+HL+flux+modbank-multi",
+0.0658
+],
+[
+"Gammatone-BEST+HL+modbank-all",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank-6rate",
+0.0667
+],
+[
+"Gammatone-BEST+HL+modbank+chanmod",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+zcr",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank+zcr+mfcc",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+chan4Hz",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+zcr",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank+zcr+mfcc",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+chan4Hz",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+flux-mt-all",
+0.067
+],
+[
+"Gammatone-BEST+HL+modbank+slowfast",
+0.0669
+],
+[
+"Gammatone-BEST+HL+modbank+LI2scale",
+0.0658
+],
+[
+"Gammatone-BEST+HL+modbank+products",
+0.0668
+],
+[
+"Gammatone-BEST+HL+modbank+STMF4",
+0.0678
+],
+[
+"Gammatone-BEST+HL+modbank+STMF14",
+0.0691
+],
+[
+"Gammatone-BEST+STMF-long+short",
+0.0688
+],
+[
+"Gammatone-BEST+STMF23",
+0.0691
+],
+[
+"Gammatone-BEST+STMF14-prune",
+0.0688
+],
+[
+"Gammatone-BEST+STMF+STMFonset",
+0.069
+],
+[
+"Gammatone-BEST+STMF14-slowtau",
+0.0691
+],
+[
+"Gammatone-BEST+STMF14+midSTMF",
+0.069
+],
+[
+"Gammatone-BEST+STMF17-hi",
+0.0693
+],
+[
+"Gammatone-BEST+STMF17-lean",
+0.0684
+],
+[
+"Gammatone-BEST+STMF17-fine40",
+0.0674
+],
+[
+"Gammatone-BEST+STMF17+adapt4",
+0.0689
+],
+[
+"Gammatone-BEST+STMF17+stmfmod",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack-v1",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+fastSTMF",
+0.0689
+],
+[
+"Gammatone-BEST+full-stack-final",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+liSTMF",
+0.0695
+],
+[
+"Gammatone-BEST+full-stack+liSTMF2",
+0.0695
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8",
+0.0697
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8+li",
+0.0693
+],
+[
+"Gammatone-BEST+full-stack+liSTMF8-final",
+0.0697
+],
+[
+"Gammatone-BEST+full-stack+prosody",
+0.0697
+],
+[
+"Gammatone-BEST+full-stack+prosody+hnronset",
+0.0697
+]
+],
+"name": "Gammatone-BEST+full-stack+prosody+hnronset",
+"sha": "0e729426bbc77de7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0076_0e729426bbc77de7.py"
+},
+{
+"k": 77,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T13:59:36.631Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+lookahead",
+"sha": "cd2c22bdf8f71bbf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0077_cd2c22bdf8f71bbf.py"
+},
+{
+"k": 78,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:07:07.420Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0691,
+0.0691
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+STMF-adapt",
+"sha": "bd290b28e4240930",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0078_bd290b28e4240930.py"
+},
+{
+"k": 79,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:12:07.072Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0691,
+0.0691
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+STMF-short",
+"sha": "7f635d168849dfce",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0079_7f635d168849dfce.py"
+},
+{
+"k": 80,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:16:41.092Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0693,
+0.0693
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+HLproducts",
+"sha": "5e8c65f782b1d794",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0080_5e8c65f782b1d794.py"
+},
+{
+"k": 81,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:21:58.970Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.07,
+0.07
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants",
+"sha": "2f607c73c03b4a41",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0081_2f607c73c03b4a41.py"
+},
+{
+"k": 82,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:26:51.717Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0698,
+0.0698
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants3",
+"sha": "1c0eed0c3628ca5b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0082_1c0eed0c3628ca5b.py"
+},
+{
+"k": 83,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:31:42.371Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0702,
+0.0702
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw",
+"sha": "50607eed3ae123b5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0083_50607eed3ae123b5.py"
+},
+{
+"k": 84,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:36:26.906Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0701,
+0.0701
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+LI",
+"sha": "d7863fdced5d4594",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0084_d7863fdced5d4594.py"
+},
+{
+"k": 85,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:41:05.404Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.07,
+0.07
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+vowelspace",
+"sha": "eb0982c1d10b404e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0085_eb0982c1d10b404e.py"
+},
+{
+"k": 86,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:45:43.005Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0699,
+0.0699
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+shortfmt",
+"sha": "9e30cfb93d9d9daa",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0086_9e30cfb93d9d9daa.py"
+},
+{
+"k": 87,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:50:35.331Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0698,
+0.0698
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+laplace",
+"sha": "4363774e5914a448",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0087_4363774e5914a448.py"
+},
+{
+"k": 88,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T14:55:19.908Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0701,
+0.0701
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+stability",
+"sha": "555a2c15b7ff4edb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0088_555a2c15b7ff4edb.py"
+},
+{
+"k": 89,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:00:17.284Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0708,
+0.0708
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cuberoot",
+"sha": "ee659035a5257538",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0089_ee659035a5257538.py"
+},
+{
+"k": 90,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:05:18.032Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0709,
+0.0709
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cuberoot3win",
+"sha": "9a56a24cf96ac9ac",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0090_9a56a24cf96ac9ac.py"
+},
+{
+"k": 91,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:10:37.060Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+sqrt",
+"sha": "a919a5e61a92df47",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0091_a919a5e61a92df47.py"
+},
+{
+"k": 92,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:17:46.582Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+slowadapt",
+"sha": "ea0c9b775f220d60",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0092_ea0c9b775f220d60.py"
+},
+{
+"k": 93,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:23:28.190Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+LIcube",
+"sha": "ef28529b3e672255",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0093_ef28529b3e672255.py"
+},
+{
+"k": 94,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:29:01.586Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0709,
+0.0709
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+4thrt",
+"sha": "974636f94d4349dd",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0094_974636f94d4349dd.py"
+},
+{
+"k": 95,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:34:44.201Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+fine",
+"sha": "89804b9458bcd1bf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0095_89804b9458bcd1bf.py"
+},
+{
+"k": 96,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:40:25.350Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0709,
+0.0709
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+sqrtlong",
+"sha": "424f5beb9baadfa1",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0096_424f5beb9baadfa1.py"
+},
+{
+"k": 97,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:46:07.449Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0712,
+0.0712
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar",
+"sha": "400ea6bb7237f17a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0097_400ea6bb7237f17a.py"
+},
+{
+"k": 98,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:51:28.890Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar3",
+"sha": "2e59a12a788586ac",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0098_2e59a12a788586ac.py"
+},
+{
+"k": 99,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T15:57:07.945Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube",
+"sha": "db76c77dc6654c6f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0099_db76c77dc6654c6f.py"
+},
+{
+"k": 100,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:02:46.285Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+formants+bw+cube+chanvar3win",
+"sha": "4d66cad429fbd080",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0100_4d66cad429fbd080.py"
+},
+{
+"k": 101,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:08:58.537Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+HWR-cube",
+"sha": "91b9323bbb3d1052",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0101_91b9323bbb3d1052.py"
+},
+{
+"k": 102,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:14:40.432Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv",
+"sha": "ce94dc7549a0ca02",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0102_ce94dc7549a0ca02.py"
+},
+{
+"k": 103,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:20:08.946Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv4",
+"sha": "75182742ffeb01a5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0103_75182742ffeb01a5.py"
+},
+{
+"k": 104,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:25:46.989Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+cubemod",
+"sha": "5e261ac1b828a511",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0104_5e261ac1b828a511.py"
+},
+{
+"k": 105,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:31:41.373Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+chanskew",
+"sha": "0a772f039dc501ed",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0105_0a772f039dc501ed.py"
+},
+{
+"k": 106,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:37:23.493Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+LImodenv",
+"sha": "15a13a42be39e9bb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0106_15a13a42be39e9bb.py"
+},
+{
+"k": 107,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:42:51.689Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0715,
+0.0715
+],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+zscore",
+"sha": "12fe004160385eea",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0107_12fe004160385eea.py"
+},
+{
+"k": 108,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:48:30.492Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+tonicslow",
+"sha": "6470f498ff030e26",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0108_6470f498ff030e26.py"
+},
+{
+"k": 109,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:53:54.855Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+chanvar+modenv+tonic4tau",
+"sha": "dba0a68e684d7d3c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0109_dba0a68e684d7d3c.py"
+},
+{
+"k": 110,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T16:59:46.925Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonicslow+cubetonic",
+"sha": "c67736a8b703ef8a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0110_c67736a8b703ef8a.py"
+},
+{
+"k": 111,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:05:12.700Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win",
+"sha": "1db1e946977ba886",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0111_1db1e946977ba886.py"
+},
+{
+"k": 112,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:11:16.840Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+midtau",
+"sha": "fe3434c2405c920e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0112_fe3434c2405c920e.py"
+},
+{
+"k": 113,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:18:00.484Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+tonicLI",
+"sha": "13426c00924f8182",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0113_13426c00924f8182.py"
+},
+{
+"k": 114,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:24:10.111Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+discoursetau",
+"sha": "8f35f9ad18f3a49a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0114_8f35f9ad18f3a49a.py"
+},
+{
+"k": 115,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:30:45.320Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+acausaltonic",
+"sha": "7aa1dc0c81c57bca",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0115_7aa1dc0c81c57bca.py"
+},
+{
+"k": 116,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:36:57.410Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal3win",
+"sha": "22d2f29e074e3938",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0116_22d2f29e074e3938.py"
+},
+{
+"k": 117,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:43:28.720Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+long150-cube",
+"sha": "f178943e28ee5716",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0117_f178943e28ee5716.py"
+},
+{
+"k": 118,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:49:54.660Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+trend",
+"sha": "20f120a4fa5951ce",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0118_20f120a4fa5951ce.py"
+},
+{
+"k": 119,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T17:56:28.327Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+full-stack+tonic3win+acausal+residual-LP",
+"sha": "0067367c09b7f4a4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0119_0067367c09b7f4a4.py"
+},
+{
+"k": 120,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:03:18.157Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futdelta3",
+"sha": "568bcc0a717d1fc4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0120_568bcc0a717d1fc4.py"
+},
+{
+"k": 121,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:09:37.047Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futdelta3-6",
+"sha": "f4eff82fa5f2f884",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0121_f4eff82fa5f2f884.py"
+},
+{
+"k": 122,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:16:05.135Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta",
+"sha": "6430a4ba34ce39f5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0122_6430a4ba34ce39f5.py"
+},
+{
+"k": 123,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:22:43.495Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta3-12",
+"sha": "35a6ab9bbdfeb280",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0123_35a6ab9bbdfeb280.py"
+},
+{
+"k": 124,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:29:30.470Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta3-24",
+"sha": "b14f02556381fab0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0124_b14f02556381fab0.py"
+},
+{
+"k": 125,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:36:44.456Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6",
+"sha": "815fdf24e175cb81",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0125_815fdf24e175cb81.py"
+},
+{
+"k": 126,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:43:32.886Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta+cube36",
+"sha": "f57ebb977b395a08",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0126_f57ebb977b395a08.py"
+},
+{
+"k": 127,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:50:43.899Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+acausal+cube-acausal",
+"sha": "537d9e6fef27ff59",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0127_537d9e6fef27ff59.py"
+},
+{
+"k": 128,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T18:57:56.820Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+futdelta+loudfut",
+"sha": "d553047e6ddfdb23",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0128_d553047e6ddfdb23.py"
+},
+{
+"k": 129,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:04:55.915Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+futdelta+cube612",
+"sha": "e3912277fa83c150",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0129_e3912277fa83c150.py"
+},
+{
+"k": 130,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:12:04.898Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+futdelta+shortfut",
+"sha": "4bfc379ebaa402dc",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0130_4bfc379ebaa402dc.py"
+},
+{
+"k": 131,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:19:19.072Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic3win+futdelta+futdelta-LP",
+"sha": "cd7d90e6d0d09840",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0131_cd7d90e6d0d09840.py"
+},
+{
+"k": 132,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:26:55.120Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic+futdelta+absdelta",
+"sha": "8d58081681600cf3",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0132_8d58081681600cf3.py"
+},
+{
+"k": 133,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:34:27.238Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic+futdelta+state-prod",
+"sha": "a8d61bb89a6bbcc8",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0133_a8d61bb89a6bbcc8.py"
+},
+{
+"k": 134,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:41:46.941Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+tonic+futdelta+midfut",
+"sha": "8ccaee7982d924b4",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0134_8ccaee7982d924b4.py"
+},
+{
+"k": 135,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:49:06.226Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+],
+[
+"Gammatone-BEST+highlevel",
+0.0618
+],
+[
+"Gammatone-BEST+highlevel-mt",
+0.0612
+],
+[
+"Gammatone-BEST+HL-selective-mt",
+0.062
+],
+[
+"Gammatone-BEST+HL+flux",
+0.064
+],
+[
+"Gammatone-BEST+HL+bandflux",
+0.0637
+],
+[
+"Gammatone-BEST+HL+chanflux",
+0.0634
+],
+[
+"Gammatone-BEST+HL+flux+modbank",
+0.0643
+],
+[
+"Gammatone-BEST+HL+flux+modbank-multi",
+0.0658
+],
+[
+"Gammatone-BEST+HL+modbank-all",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank-6rate",
+0.0667
+],
+[
+"Gammatone-BEST+HL+modbank+chanmod",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+zcr",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank+zcr+mfcc",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+chan4Hz",
+0.0663
+]
+],
+"name": "Gammatone-BEST+drop-tau150",
+"sha": "500d0c7f518b5a5e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0135_500d0c7f518b5a5e.py"
+},
+{
+"k": 136,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T19:59:17.092Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+peakhold-futpast",
+"sha": "cb47ca571833fc24",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0136_cb47ca571833fc24.py"
+},
+{
+"k": 137,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"2"
+],
+"env": {},
+"ts": "2026-06-03T20:04:08.314Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+peakhold-futpast",
+"sha": "cb47ca571833fc24",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0137_cb47ca571833fc24.py"
+},
+{
+"k": 138,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T20:09:32.916Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0764,
+0.0764
+],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+],
+[
+"Gammatone-log-adapt",
+0.0533
+],
+[
+"Gammatone-log-adapt-onset",
+0.0535
+],
+[
+"Gammatone-log-adapt-LI",
+0.052
+],
+[
+"Gammatone-multi-tau",
+0.0549
+],
+[
+"Gammatone-AGC-multi-tau",
+0.0515
+],
+[
+"Gammatone-multiwin",
+0.0548
+],
+[
+"Gammatone-multiwin-multi-tau",
+0.0559
+],
+[
+"Gammatone-mod-bank",
+0.0554
+],
+[
+"Gammatone-PCEN",
+0.0529
+],
+[
+"Gammatone-multiwin-64ch",
+0.0552
+],
+[
+"Gammatone-multiwin-mt-pitch",
+0.0558
+],
+[
+"Gammatone-multiwin-mt-LI",
+0.0543
+],
+[
+"Gammatone-3win-mt",
+0.0565
+],
+[
+"Gammatone-3win-4tau",
+0.0569
+],
+[
+"Gammatone-4win-4tau",
+0.0565
+],
+[
+"Gammatone-3win-4tau-mod4",
+0.056
+],
+[
+"Gammatone-3win-5tau",
+0.0592
+],
+[
+"Gammatone-3win-6tau",
+0.0601
+],
+[
+"Gammatone-3win-8tau-dense",
+0.06
+],
+[
+"Gammatone-3win-6tau-24ch",
+0.0597
+],
+[
+"Gammatone-1win-6tau-40ch",
+0.0592
+],
+[
+"Gammatone-3win-6tau-AMdepth",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMdepth2",
+0.0603
+],
+[
+"Gammatone-3win-6tau-AMfull",
+0.0608
+],
+[
+"Gammatone-3win-6tau-AMfull-loud",
+0.0609
+],
+[
+"Gammatone-3win-6tau-AMfull-loudpeak",
+0.0607
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-order6",
+0.0605
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-centroid",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-tilt",
+0.061
+],
+[
+"Gammatone-BEST-cochlear-stack",
+0.0612
+],
+[
+"Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff",
+0.061
+],
+[
+"Gammatone-BEST+highlevel",
+0.0618
+],
+[
+"Gammatone-BEST+highlevel-mt",
+0.0612
+],
+[
+"Gammatone-BEST+HL-selective-mt",
+0.062
+],
+[
+"Gammatone-BEST+HL+flux",
+0.064
+],
+[
+"Gammatone-BEST+HL+bandflux",
+0.0637
+],
+[
+"Gammatone-BEST+HL+chanflux",
+0.0634
+],
+[
+"Gammatone-BEST+HL+flux+modbank",
+0.0643
+],
+[
+"Gammatone-BEST+HL+flux+modbank-multi",
+0.0658
+],
+[
+"Gammatone-BEST+HL+modbank-all",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank-6rate",
+0.0667
+],
+[
+"Gammatone-BEST+HL+modbank+chanmod",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+zcr",
+0.0666
+],
+[
+"Gammatone-BEST+HL+modbank+zcr+mfcc",
+0.0663
+],
+[
+"Gammatone-BEST+HL+modbank+chan4Hz",
+0.0663
+]
+],
+"name": "Gammatone-BEST+peakhold-futpast",
+"sha": "cb47ca571833fc24",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0138_cb47ca571833fc24.py"
+},
+{
+"k": 139,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T20:27:01.383Z",
+"how": "replay",
+"verified": null,
+"scores": [
+0.0749,
+0.0749
+],
+"crashed": false,
+"name": "Gammatone-BEST+TFS-zcr+acflags",
+"sha": "6ed546effe9b8a3d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0139_6ed546effe9b8a3d.py"
+},
+{
+"k": 140,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T20:33:31.898Z",
+"how": "replay",
+"verified": null,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+TFS-perband+ACFperband",
+"sha": "8f52578b018fc39d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0140_8f52578b018fc39d.py"
+},
+{
+"k": 141,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T20:38:51.754Z",
+"how": "replay",
+"verified": null,
+"scores": [],
+"crashed": false,
+"name": "Gammatone-BEST+TFS-perband+ACFperband",
+"sha": "8f52578b018fc39d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0141_8f52578b018fc39d.py"
+},
+{
+"k": 142,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T20:44:12.795Z",
+"how": "replay",
+"verified": null,
+"scores": [
+0.0736
+],
+"crashed": false,
+"rows_seen": [
+[
+"Gammatone-BEST+TFS-zcr+acflags",
+0.0749
+],
+[
+"Gammatone-BEST+full-stack+tonic3win+discoursetau",
+0.0726
+],
+[
+"Gammatone-BEST+full-stack+tonic3win+acausal3win",
+0.075
+],
+[
+"Gammatone-BEST+full-stack+tonic3win+acausal+long150-cube",
+0.0758
+],
+[
+"Gammatone-BEST+tonic3win+acausal+cube-acausal",
+0.0767
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futpast-delta+cube36",
+0.0767
+],
+[
+"Gammatone-BEST+tonic+futdelta+midfut",
+0.0766
+],
+[
+"Gammatone-BEST+peakhold-futpast",
+0.0764
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futpast-delta3-24",
+0.0764
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futpast-delta3-12",
+0.0765
+],
+[
+"Gammatone-BEST+tonic3win+futdelta+futdelta-LP",
+0.0767
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6",
+0.0767
+],
+[
+"Gammatone-BEST+tonic3win+futdelta+loudfut",
+0.0765
+],
+[
+"Gammatone-BEST+tonic3win+futdelta+cube612",
+0.0765
+],
+[
+"Gammatone-BEST+tonic+futdelta+state-prod",
+0.0767
+],
+[
+"Gammatone-BEST+tonic3win+futdelta+shortfut",
+0.0767
+],
+[
+"Gammatone-BEST+tonic+futdelta+absdelta",
+0.0765
+],
+[
+"Gammatone-BEST+drop-tau150",
+0.0766
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futpast-delta",
+0.0763
+],
+[
+"Gammatone-BEST+tonic3win+acausal+futdelta3-6",
+0.0762
+]
+],
+"name": "Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6",
+"sha": "815fdf24e175cb81",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0142_815fdf24e175cb81.py"
+},
+{
+"k": 143,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T21:44:58.208Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": true,
+"name": "Gammatone-BEST+HilbertTFS-perband",
+"sha": "9f6025dfc2b5f396",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0143_9f6025dfc2b5f396.py"
+},
+{
+"k": 144,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T21:57:39.103Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": true,
+"name": "Gammatone-BEST+HilbertTFS-perband",
+"sha": "181d4dc1e86ad12e",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0144_181d4dc1e86ad12e.py"
+},
+{
+"k": 145,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T22:12:59.538Z",
+"how": "replay",
+"verified": null,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "Gammatone-BEST+CCEC+SACF",
+"sha": "3c5b2a08e1e6a0af",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0145_3c5b2a08e1e6a0af.py"
+},
+{
+"k": 146,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T22:26:02.454Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0768,
+0.0768
+],
+"crashed": false,
+"name": "Gammatone-BEST+PB-EBAC",
+"sha": "c77f8bdfec7718aa",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0146_c77f8bdfec7718aa.py"
+},
+{
+"k": 147,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T22:38:14.188Z",
+"how": "replay",
+"verified": null,
+"scores": [
+0.0749,
+0.0749
+],
+"crashed": false,
+"name": "Gammatone-BEST+PB-EBAC-4x",
+"sha": "73b221af9bf8cb3f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0147_73b221af9bf8cb3f.py"
+},
+{
+"k": 148,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T22:52:35.837Z",
+"how": "replay",
+"verified": null,
+"scores": [
+0.0757,
+0.0757
+],
+"crashed": false,
+"rows_seen": [
+[
+"Wave-melspec-floor",
+0.0457
+],
+[
+"Whisper-reference",
+0.0794
+],
+[
+"Gammatone-cochleagram",
+0.0403
+],
+[
+"Gammatone-log",
+0.0468
+]
+],
+"name": "Gammatone-BEST+PB-EBAC+XCH-Xcorr",
+"sha": "152099a8437cc4f0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0148_152099a8437cc4f0.py"
+},
+{
+"k": 149,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T23:27:40.463Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0755,
+0.0755
+],
+"crashed": false,
+"name": "Gammatone-BEST+ChangLab-STG",
+"sha": "44eafd0ba51fc121",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0149_44eafd0ba51fc121.py"
+},
+{
+"k": 150,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T23:36:56.206Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "Gammatone-BEST+rel-pitch",
+"sha": "f0d24e272a0dff8d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0150_f0d24e272a0dff8d.py"
+},
+{
+"k": 151,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T23:44:17.710Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0748,
+0.0748
+],
+"crashed": false,
+"name": "Gammatone-BEST+rel-pitch-cubeAblation",
+"sha": "4b4f3d9d31d859c7",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0151_4b4f3d9d31d859c7.py"
+},
+{
+"k": 152,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-03T23:53:12.103Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "Gammatone-BEST+powerlaw-adapt",
+"sha": "f5457d07d9d5ca7f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0152_f5457d07d9d5ca7f.py"
+},
+{
+"k": 153,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:01:42.804Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "Gammatone-BEST+peakRate-silenceOnset",
+"sha": "1d5639ec02ce6a66",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0153_1d5639ec02ce6a66.py"
+},
+{
+"k": 154,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:10:36.729Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0762,
+0.0762
+],
+"crashed": false,
+"name": "Gammatone-BEST+per-band-peakRate",
+"sha": "0390bc69bd197dfb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0154_0390bc69bd197dfb.py"
+},
+{
+"k": 155,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:19:04.831Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0768,
+0.0768
+],
+"crashed": false,
+"name": "Gammatone-BEST+per-band-peakRate+EBACtau30",
+"sha": "b8750ceb6bbb9a3a",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0155_b8750ceb6bbb9a3a.py"
+},
+{
+"k": 156,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:27:25.819Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766
+],
+"crashed": false,
+"name": "Gammatone-BEST+per-band-peakRate+EBACtau15",
+"sha": "b79174079d5ffc1d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0156_b79174079d5ffc1d.py"
+},
+{
+"k": 157,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:35:59.958Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0766,
+0.0766
+],
+"crashed": false,
+"name": "Gammatone-BEST+pb-peakRate+EBAC-dual-tau",
+"sha": "83557dcf6f299480",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0157_83557dcf6f299480.py"
+},
+{
+"k": 158,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:44:23.419Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0769,
+0.0769
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBACtau30",
+"sha": "6495908979752988",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0158_6495908979752988.py"
+},
+{
+"k": 159,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T00:52:53.627Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0769,
+0.0769
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBACtau30+lag1",
+"sha": "a52fd2f325dc796c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0159_a52fd2f325dc796c.py"
+},
+{
+"k": 160,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T01:01:12.449Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.077,
+0.077
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBACtau20+lag1",
+"sha": "09e96627a74ae2fb",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0160_09e96627a74ae2fb.py"
+},
+{
+"k": 161,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T01:09:31.653Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.077,
+0.077
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBACtau25",
+"sha": "565bcd1ec266bef5",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0161_565bcd1ec266bef5.py"
+},
+{
+"k": 162,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T01:18:02.049Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0763,
+0.0763
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBAC-multi-tau",
+"sha": "b4af39ece53bd507",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0162_b4af39ece53bd507.py"
+},
+{
+"k": 163,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-04T01:26:17.995Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0768,
+0.0768
+],
+"crashed": false,
+"name": "Gammatone-BEST+EBACtau20+dropTAU150",
+"sha": "c245f70ef0b4b614",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/wave-slurm-23628821/0163_c245f70ef0b4b614.py"
+}
+]
+}

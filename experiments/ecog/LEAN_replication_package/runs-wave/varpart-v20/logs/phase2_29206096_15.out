@@ -1,0 +1,5 @@
+task 15/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cube_fut_contrast                                                                     raw= 3847 all166=0.0808 grid=0.0904 82s
+drop:adapt_delta+cochleagram                                                               raw= 3492 all166=0.0802 grid=0.0900 53s
+alone:pitch_dyn+pitch_salience+pitch_summary                                               raw=   19 all166=0.0418 grid=0.0489 1s

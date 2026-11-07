@@ -1,0 +1,5 @@
+### Fri Nov  6 21:29:27 2026 pythonpath=- cmd=wave_encoder.py --num-train 500 --num-test 100
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/work/exceed-frontend__LEAN_v55_SHORTCOCHLEACONTRAST_7f0677/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[newtest] intercepted training features: ndelays=4 lag=3 trim=30
+RESCORE P=8428 all166=0.07837 grid=0.08742 newtest_grid=0.06665 (n=493) (343s)

@@ -1,0 +1,5 @@
+task 3/45: 3 fits, 3 to do
+loaded stats 1s
+drop:spectral_rolloff                                                                      raw= 3390 all166=0.0805 grid=0.0902 28s
+drop:cochlea_voiced_gated+cochlea_voiced_gated_dyn+cpp+f0_dyn+gate_signals+gate_signals_dy raw= 3282 all166=0.0806 grid=0.0902 23s
+alone:cochlea_voiced_gated                                                                 raw=   40 all166=0.0436 grid=0.0497 1s

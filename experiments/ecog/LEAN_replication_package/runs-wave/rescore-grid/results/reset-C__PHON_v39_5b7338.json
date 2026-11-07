@@ -1,0 +1,1 @@
+{"id": "reset-C__PHON_v39_5b7338", "run": "reset-C", "name": "PHON-v39", "logged": 0.0717, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v39.py", "order": 282, "rc": 0, "seconds": 402, "all166": 0.07171841265965137, "grid": 0.07990295570043135, "P": 11776, "reproduced": true, "status": "ok"}

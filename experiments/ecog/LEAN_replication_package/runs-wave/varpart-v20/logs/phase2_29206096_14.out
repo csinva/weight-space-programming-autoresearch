@@ -1,0 +1,5 @@
+task 14/45: 3 fits, 3 to do
+loaded stats 1s
+drop:fut_minus_cur_contrast                                                                raw= 3847 all166=0.0808 grid=0.0904 81s
+drop:stmf+stmf_mean_gabor                                                                  raw= 3495 all166=0.0814 grid=0.0910 53s
+alone:cochlea_voiced_gated_dyn                                                             raw=   20 all166=0.0326 grid=0.0382 1s

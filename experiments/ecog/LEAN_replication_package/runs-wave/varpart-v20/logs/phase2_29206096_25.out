@@ -1,0 +1,5 @@
+task 25/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cpp+region_flat                                                                       raw= 3840 all166=0.0808 grid=0.0904 37s
+alone:quad_modbank+quad_modbank_acausal+quad_modbank_dyn+quad_xrate_energy+quad_xrate_ener raw=  954 all166=0.0691 grid=0.0781 2s
+alone:formant_dyn                                                                          raw=    9 all166=0.0194 grid=0.0228 1s

@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v31_bandFlux_c2fd9b", "run": "wave-lean", "name": "LEAN-v31-bandFlux", "logged": 0.0758, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v31-bandFlux.py", "order": 191, "rc": 0, "seconds": 158, "all166": 0.07577784324558641, "grid": 0.08497876272761426, "P": 6396, "reproduced": true, "status": "ok"}

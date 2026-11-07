@@ -1,0 +1,334 @@
+{
+"run": "exceed-v20-speaker",
+"n_diverged": 1,
+"evals": [
+{
+"k": 0,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T23:25:30.002Z",
+"how": "backfill:edit",
+"verified": null,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v20",
+"sha": "c5407be64dbfb463",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0000_c5407be64dbfb463.py"
+},
+{
+"k": 1,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T23:40:07.888Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v21a",
+"sha": "c1ac6299b87fb41d",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0001_c1ac6299b87fb41d.py"
+},
+{
+"k": 2,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-07T23:56:09.657Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0898
+],
+"crashed": false,
+"name": "LEAN-v21b",
+"sha": "700d52d99f485d37",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0002_700d52d99f485d37.py"
+},
+{
+"k": 3,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T00:12:46.762Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v22a",
+"sha": "9fdb73a343a73c8c",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0003_9fdb73a343a73c8c.py"
+},
+{
+"k": 4,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T00:28:47.069Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v23a",
+"sha": "71a36574ab3230f0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0004_71a36574ab3230f0.py"
+},
+{
+"k": 5,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T00:43:04.147Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v23b",
+"sha": "923b7f0c58c4b84b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0005_923b7f0c58c4b84b.py"
+},
+{
+"k": 6,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T00:58:14.880Z",
+"how": "replay",
+"verified": true,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v24a",
+"sha": "887b4cd2b714a8a0",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0006_887b4cd2b714a8a0.py"
+},
+{
+"k": 7,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T01:12:52.108Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0902
+],
+"crashed": false,
+"name": "LEAN-v25a",
+"sha": "ed786b8e7fc88c76",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0007_ed786b8e7fc88c76.py"
+},
+{
+"k": 8,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100",
+"--cond-mode",
+"rep_target30_k4"
+],
+"env": {},
+"ts": "2026-06-08T01:27:48.169Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0902
+],
+"crashed": false,
+"name": "LEAN-v26a",
+"sha": "948f32923b27416b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0008_948f32923b27416b.py"
+},
+{
+"k": 9,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T01:43:44.966Z",
+"how": "replay",
+"verified": false,
+"scores": [],
+"crashed": false,
+"name": "LEAN-v27a",
+"sha": "e08b70ec81a54693",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0009_e08b70ec81a54693.py"
+},
+{
+"k": 10,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T01:58:01.408Z",
+"how": "replay",
+"verified": false,
+"scores": [
+0.0904
+],
+"crashed": false,
+"name": "LEAN-v27a",
+"sha": "e08b70ec81a54693",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0010_e08b70ec81a54693.py"
+},
+{
+"k": 11,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T02:12:29.885Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0894
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN1",
+"sha": "91fe61c0b330f836",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0011_91fe61c0b330f836.py"
+},
+{
+"k": 12,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T02:34:44.867Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.09
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN2",
+"sha": "78ce1754c4746e77",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0012_78ce1754c4746e77.py"
+},
+{
+"k": 13,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T02:56:06.799Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0899
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN3",
+"sha": "f369cceee546f12f",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0013_f369cceee546f12f.py"
+},
+{
+"k": 14,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T03:18:57.701Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0902
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN4",
+"sha": "4c86883e13338438",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0014_4c86883e13338438.py"
+},
+{
+"k": 15,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T03:39:56.650Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0901
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN5",
+"sha": "de356170b7fe5d9b",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0015_de356170b7fe5d9b.py"
+},
+{
+"k": 16,
+"args": [
+"--num-train",
+"500",
+"--num-test",
+"100"
+],
+"env": {},
+"ts": "2026-06-08T04:01:11.970Z",
+"how": "replay",
+"verified": true,
+"scores": [
+0.0905
+],
+"crashed": false,
+"name": "LEAN-v21-VTLN6",
+"sha": "72fdb5ff201b38cf",
+"snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/newtest/snapshots/exceed-v20-speaker/0016_72fdb5ff201b38cf.py"
+}
+]
+}

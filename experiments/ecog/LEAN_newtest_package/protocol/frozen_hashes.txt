@@ -1,0 +1,4 @@
+train_frozen     n= 500 sha256=7d317eca03e19253
+test_old         n=  23 sha256=ed6106da5d08ceff
+test_candidates  n= 493 sha256=feab7ef00a35f0d5
+test_primary     n= 317 sha256=b4eb89b19bf9b8aa

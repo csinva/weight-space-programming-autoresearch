@@ -1,0 +1,1 @@
+{"id": "reset-F__PC_v4_44d68c", "run": "reset-F", "name": "PC-v4", "logged": 0.0592, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-F/wave_encoders_lib/PC-v4.py", "order": 366, "rc": 0, "seconds": 271, "all166": 0.05915059629471305, "grid": 0.0677222365107687, "P": 10656, "reproduced": true, "status": "ok"}

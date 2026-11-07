@@ -1,0 +1,1 @@
+{"id": "wave-lean__LEAN_v38_v28only_6b09fe", "run": "wave-lean", "name": "LEAN-v38-v28only", "logged": 0.0761, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/wave-lean/wave_encoders_lib/LEAN-v38-v28only.py", "order": 198, "rc": 0, "seconds": 154, "all166": 0.07609428688163392, "grid": 0.08523815871112055, "P": 6296, "reproduced": true, "status": "ok"}

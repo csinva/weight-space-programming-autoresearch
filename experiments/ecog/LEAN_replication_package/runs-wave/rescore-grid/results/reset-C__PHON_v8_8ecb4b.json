@@ -1,0 +1,1 @@
+{"id": "reset-C__PHON_v8_8ecb4b", "run": "reset-C", "name": "PHON-v8", "logged": 0.0678, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-C/wave_encoders_lib/PHON-v8.py", "order": 251, "rc": 0, "seconds": 150, "all166": 0.06784641433437548, "grid": 0.07581628648426732, "P": 6460, "reproduced": true, "status": "ok"}

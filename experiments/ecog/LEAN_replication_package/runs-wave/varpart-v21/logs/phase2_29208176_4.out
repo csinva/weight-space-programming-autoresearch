@@ -1,0 +1,5 @@
+task 4/45: 3 fits, 3 to do
+loaded stats 1s
+drop:hnr                                                                                   raw= 3390 all166=0.0806 grid=0.0903 33s
+drop:modulation                                                                            raw= 3260 all166=0.0792 grid=0.0891 23s
+alone:flux                                                                                 raw=   36 all166=0.0525 grid=0.0591 1s

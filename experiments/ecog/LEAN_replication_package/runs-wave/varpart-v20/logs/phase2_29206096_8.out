@@ -1,0 +1,5 @@
+task 8/45: 3 fits, 3 to do
+loaded stats 1s
+drop:cpp                                                                                   raw= 3848 all166=0.0809 grid=0.0905 82s
+drop:cochlea_contrast+contrast_med+contrast_short+cube_fut_contrast+fut_cochlea_contrast+f raw= 3660 all166=0.0801 grid=0.0897 61s
+alone:spectral_contrast                                                                    raw=   24 all166=0.0423 grid=0.0489 3s

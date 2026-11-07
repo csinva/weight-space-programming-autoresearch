@@ -1,0 +1,1 @@
+{"id": "reset-B__STMF_v5_divnorm_02d526", "run": "reset-B", "name": "STMF-v5-divnorm", "logged": 0.0535, "snapshot": "/path/to/ecog_data/circuit-building-autoresearch/runs-wave/reset-B/wave_encoders_lib/STMF-v5-divnorm.py", "order": 240, "rc": 0, "seconds": 723, "all166": 0.0535268184300977, "grid": 0.06048192129293648, "P": 11520, "reproduced": true, "status": "ok"}

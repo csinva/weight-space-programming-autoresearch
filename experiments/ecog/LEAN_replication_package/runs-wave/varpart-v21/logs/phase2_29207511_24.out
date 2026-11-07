@@ -1,0 +1,5 @@
+task 24/45: 3 fits, 3 to do
+loaded stats 1s
+drop:topbot_short                                                                          raw= 3382 all166=0.0805 grid=0.0901 59s
+alone:adapt_delta+cochleagram+future_past+mod_depth+tonic                                  raw=  960 all166=0.0733 grid=0.0811 3s
+alone:formant_dyn                                                                          raw=    9 all166=0.0194 grid=0.0228 1s

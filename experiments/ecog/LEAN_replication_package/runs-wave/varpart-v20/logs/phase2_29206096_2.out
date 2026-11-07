@@ -1,0 +1,5 @@
+task 2/45: 3 fits, 3 to do
+loaded stats 1s
+drop:pitch_summary                                                                         raw= 3850 all166=0.0808 grid=0.0905 78s
+drop:cochlea_voiced_gated+cochlea_voiced_gated_dyn+cpp+f0_dyn+gate_signals+gate_signals_dy raw= 3730 all166=0.0803 grid=0.0903 67s
+alone:mod_depth                                                                            raw=   40 all166=0.0517 grid=0.0581 1s

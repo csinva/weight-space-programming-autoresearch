@@ -1,0 +1,5 @@
+ok       lean-interp__INTERP_v2cc_interact_79663b                               logged=0.0775 all166=0.07747 grid=0.08657 rc=0 196s
+ok       lean-interp__INTERP_v2mm_interact_087954                               logged=0.0773 all166=0.07727 grid=0.08618 rc=0 194s
+ok       lean-interp__INTERP_v2ww_interact_6978cc                               logged=0.0771 all166=0.07715 grid=0.08611 rc=0 191s
+ok       lean-interp__INTERP_v3f_interact_c9eedc                                logged=0.0775 all166=0.07754 grid=0.08648 rc=0 206s
+pool exhausted; this task ran 4 trials

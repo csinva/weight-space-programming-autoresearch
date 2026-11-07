@@ -1,0 +1,5 @@
+task 38/45: 3 fits, 3 to do
+loaded stats 1s
+drop:contrast_med                                                                          raw= 3828 all166=0.0804 grid=0.0902 72s
+alone:quad_modbank                                                                         raw=  180 all166=0.0578 grid=0.0653 2s
+alone:f0_dyn                                                                               raw=    4 all166=0.0128 grid=0.0151 1s

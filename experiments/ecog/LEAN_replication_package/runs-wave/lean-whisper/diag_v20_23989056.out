@@ -1,0 +1,7 @@
+train=500 test=23 (canonical fixed test set)
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+p=15408 nvox=166 train_rows=1750593
+
+=== LEAN-v20 per-electrode canonical metric (canonical test set) ===
+ALL-166 0.0808  GRID 0.0904  STRIPS 0.0259  DEPTH 0.0566
+(grid should be ~0.0905 to confirm correct v20 config)

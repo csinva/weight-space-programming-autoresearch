@@ -1,0 +1,5 @@
+task 1/45: 3 fits, 3 to do
+loaded stats 1s
+drop:spectral_flatness                                                                     raw= 3391 all166=0.0804 grid=0.0901 30s
+drop:flux+formant_dyn+formants+hnr+phonetic+spectral_flatness+spectral_moments+spectral_ro raw= 3309 all166=0.0806 grid=0.0902 24s
+alone:cochleagram                                                                          raw=   60 all166=0.0486 grid=0.0543 1s

@@ -1,0 +1,5 @@
+task 21/45: 3 fits, 3 to do
+loaded stats 1s
+drop:multitau_contrast                                                                     raw= 3842 all166=0.0808 grid=0.0904 37s
+drop:adapt_delta+cochleagram+future_past+mod_depth+tonic                                   raw= 2892 all166=0.0757 grid=0.0853 17s
+alone:pitch_salience                                                                       raw=   11 all166=0.0370 grid=0.0423 1s

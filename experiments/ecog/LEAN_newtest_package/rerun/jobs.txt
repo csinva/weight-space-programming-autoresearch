@@ -1,0 +1,6 @@
+29263192
+29263490
+pilot=29263798 array=29263799 (afterok pilot)
+whisper=29264153
+dev-eligible tasks 96-99 (4h) 18:55
+cancelled idle pending tasks 16-95 (pool exhausted, all 596 claimed) 23:55
