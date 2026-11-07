@@ -26,7 +26,7 @@ def _login_files(provider: str, destination: Path) -> None:
     home = Path.home()
     locations = {
         'codex': [(Path(os.environ.get('CODEX_HOME', home / '.codex')) / 'auth.json', '.codex/auth.json')],
-        'claude': [(home / '.claude/.credentials.json', '.claude/.credentials.json')],
+        'claude': [],  # Interactive refresh credentials must never be cloned.
         'agy': [(Path(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS', home / '.config/gcloud/application_default_credentials.json')),
                  '.config/gcloud/application_default_credentials.json')],
     }
@@ -37,7 +37,7 @@ def _login_files(provider: str, destination: Path) -> None:
             shutil.copyfile(source, target)
             target.chmod(0o600)
     if provider == 'claude':
-        # Avoid interactive onboarding; authentication still comes from the saved login.
+        # Avoid interactive onboarding; authentication uses an automation token.
         (destination / '.claude.json').write_text('{"hasCompletedOnboarding":true}')
 
 
@@ -82,6 +82,21 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
         home = root / 'home'
         home.mkdir()
         _login_files(agent.provider, home)
+        provider_argv = [executable, *argv[1:]]
+        if agent.provider == 'claude':
+            from search.auth import claude_token
+            token = claude_token()
+            # Transfer through a private temporary file, never argv or run artifacts.
+            token_path = home / '.automation-token'
+            token_path.touch(mode=0o600)
+            token_path.write_text(token)
+            bootstrap = (
+                "import os, pathlib, sys; "
+                "p = pathlib.Path('/home/agent/.automation-token'); "
+                "os.environ['CLAUDE_CODE_OAUTH_TOKEN'] = p.read_text(); "
+                "p.unlink(); os.execv(sys.argv[1], sys.argv[1:])"
+            )
+            provider_argv = [sys.executable, '-c', bootstrap, *provider_argv]
         public = root / 'reference'
         public.mkdir()
         for name in ('neuro_eval/rsa.py', 'neuro_eval/encoding.py', 'neuro_eval/benchmarks.py', 'README.md', 'model.py'):
@@ -124,7 +139,7 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
                 if name in os.environ:
                     args += ['--setenv', name, os.environ[name]]
             with capture_native_usage(home, agent.provider, usage):
-                yield [*args, executable, *argv[1:]]
+                yield [*args, *provider_argv]
 
 
 @contextmanager
@@ -253,7 +268,27 @@ def stop_process(child, grace=2):
     """Reap a session and every remaining tool before its replacement starts."""
     import signal
     import time
+    descendants = set()
     for sig in (signal.SIGTERM, signal.SIGKILL):
+        # Repairs/provider tools can create their own sessions. Capture their
+        # ancestry before terminating the leader, then kill them individually.
+        parents = {}
+        for entry in Path('/proc').glob('[0-9]*/stat'):
+            try:
+                fields = entry.read_text().rsplit(')', 1)[1].split()
+                parents[int(entry.parent.name)] = int(fields[1])
+            except (OSError, ValueError, IndexError):
+                continue
+        pending = {child.pid, *descendants}
+        while pending:
+            children = {pid for pid, parent in parents.items() if parent in pending} - descendants
+            descendants.update(children)
+            pending = children
+        for pid in descendants:
+            try:
+                os.kill(pid, sig)
+            except ProcessLookupError:
+                pass
         try:
             os.killpg(child.pid, sig)
         except ProcessLookupError:
@@ -267,7 +302,6 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     """Supervise isolated provider sessions and one recoverable evaluator pool."""
     import signal
     import time
-    import json
     from search import queue
     root = Path(run)
     (root / 'logs').mkdir(exist_ok=True)
@@ -281,6 +315,9 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     summarize_run(root)
     next_usage = time.monotonic() + 5
     disabled = set()
+    failures = {}
+    retry_at = {}
+    launched_at = {}
     next_coordinator = started
 
     def halt(*_):
@@ -292,6 +329,7 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
     def launch(name, spec=None):
         env = os.environ.copy()
         env.pop('LAB_PROPOSER', None)
+        env['LAB_RUN'] = str(root.resolve())
         if name.startswith('eval'):
             cards = os.environ.get('NEURO_EVAL_GPUS', '').split(',')
             if cards[0]:
@@ -317,6 +355,7 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
             child = subprocess.Popen(argv, cwd=REPO, env=env, stdin=subprocess.PIPE if prompt else subprocess.DEVNULL,
                                      stdout=log, stderr=subprocess.STDOUT, text=True, start_new_session=True)
         sessions[name] = child
+        launched_at[name] = time.monotonic()
         if prompt:
             try:
                 child.stdin.write(prompt)
@@ -340,10 +379,12 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                     continue
                 stop_process(child, grace=0.05)
                 del sessions[name]
+                runtime = time.monotonic() - launched_at.pop(name)
                 if name.startswith('eval'):
                     # Stop peers before requeueing: a live claim must never be reset.
                     for peer in [key for key in sessions if key.startswith('eval')]:
                         stop_process(sessions.pop(peer))
+                        launched_at.pop(peer)
                     queue.requeue_orphans(run)
                     for i in range(evaluators):
                         launch(f'eval{i}')
@@ -352,13 +393,28 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                     disabled.add(name)
                     print(f'[search] {name} disabled after terminal provider failure', flush=True)
                 elif name.startswith('p'):
-                    if code == 0 and deadline - time.monotonic() <= 120:
+                    if code == 0 or runtime >= 300:
+                        failures[name] = 0
+                    if code != 0:
+                        failures[name] = failures.get(name, 0) + 1
+                        if failures[name] >= 5:
+                            disabled.add(name)
+                            print(f'[search] {name} disabled after {failures[name]} consecutive provider failures (exit {code})', flush=True)
+                        else:
+                            delay = min(60, 2 ** (failures[name] - 1))
+                            retry_at[name] = time.monotonic() + delay
+                            print(f'[search] {name} failed (exit {code}); retry in {delay}s (failure {failures[name]}/5)', flush=True)
+                    elif deadline - time.monotonic() <= 120:
                         print(f'[search] {name} finished; no restart in final two minutes', flush=True)
                     else:
                         launch(name, roster[int(name[1:])])
             if all(f'p{i:02d}' in disabled for i in range(len(roster))):
                 return 78
             now = time.monotonic()
+            for name, ready_at in list(retry_at.items()):
+                if ready_at <= now < deadline:
+                    del retry_at[name]
+                    launch(name, roster[int(name[1:])])
             if (epoch_mins > 0 and 'coordinator' not in disabled and now >= next_coordinator):
                 if 'coordinator' not in sessions:
                     launch('coordinator', os.environ['NEURO_COORDINATOR_MODEL'])

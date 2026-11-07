@@ -40,8 +40,8 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     monkeypatch.setattr(providers, 'preflight', lambda agents: observed.extend(agents))
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     assert run.main(['laion', '--region', 'ventral', '--preflight']) == 0
-    # Two Codex proposers plus the coordinator and optional repair agent.
-    assert Counter(agent.provider for agent in observed) == {'codex': 4, 'agy': 2}
+    # Five proposers and the Codex coordinator/optional repair agent.
+    assert Counter(agent.provider for agent in observed) == {'claude': 2, 'agy': 3, 'codex': 2}
 
     source.write_bytes(b'')
     observed.clear()
@@ -52,7 +52,7 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
 
 
 def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, hours=.0003,
-               coordinator_seconds=0, coordinator_starts=None):
+               coordinator_seconds=0, coordinator_starts=None, session_starts=None):
     monkeypatch.setenv('NEURO_REGION', 'ventral')
     monkeypatch.setenv('NEURO_METRIC', 'rsa')
     events = []
@@ -75,16 +75,23 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, 
             else:
                 self.name = Path(argv[argv.index('--cwd') + 1]).name
             self.started = clock[0]
+            if session_starts is not None:
+                session_starts.setdefault(self.name, []).append(self.started)
             if self.name == 'coordinator' and coordinator_starts is not None:
                 coordinator_starts.append(self.started)
             self.pid = 100 + len(events)
             self.stdin = PromptInput()
             results = outcomes.get(self.name, [None])
             self.code = results[min(counts[self.name], len(results) - 1)]
+            self.duration = 0
+            if isinstance(self.code, tuple):
+                self.code, self.duration = self.code
             counts[self.name] += 1
             events.append(('start', self.name))
 
         def poll(self):
+            if clock[0] - self.started < self.duration:
+                return None
             if self.name == 'coordinator' and clock[0] - self.started < coordinator_seconds:
                 return None
             return self.code
@@ -235,10 +242,9 @@ def test_supervisor_refreshes_usage_on_resume_and_shutdown(tmp_path, monkeypatch
     assert refreshed == [tmp_path, tmp_path, tmp_path]
 
 
-@pytest.mark.parametrize('args', [[], ['--dataset', 'laion'],
-                                  ['--region', 'joint'],
+@pytest.mark.parametrize('args', [['--region', 'joint'],
                                   ['--region', 'early', '--metric', 'unknown']])
-def test_launcher_requires_supported_explicit_configuration(args, monkeypatch):
+def test_launcher_rejects_unsupported_configuration(args, monkeypatch):
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     with pytest.raises(SystemExit) as result:
         run.main(args)
@@ -266,3 +272,55 @@ def test_conductor_uses_fixed_start_slots_without_overlap(tmp_path, monkeypatch,
                 assert active
                 active = False
     assert not active
+
+
+def test_repeated_failures_back_off_and_disable_only_failed_slot(tmp_path, monkeypatch, capsys):
+    starts = {}
+    code, _, counts = simulation(
+        tmp_path, monkeypatch, {'p00': [1], 'p01': [(0, 2), None], 'eval': [(70, 3), None], 'coordinator': [0]},
+        hours=.04, coordinator=.1, session_starts=starts)
+    assert code == 0
+    # Polling observes restarted children on the next tick; delays grow 1, 2, 4, 8 seconds.
+    assert starts['p00'] == [0, 1, 3.25, 7.5, 15.75]
+    assert counts['p00'] == 5
+    assert starts['p01'] == [0, 2]
+    assert starts['eval'] == [0, 3]
+    assert starts['coordinator'][:3] == [0, 6, 12]
+    assert 'disabled after 5 consecutive provider failures' in capsys.readouterr().out
+
+
+def test_all_repeatedly_failing_slots_stop_run(tmp_path, monkeypatch):
+    code, events, counts = simulation(tmp_path, monkeypatch, {'p00': [1], 'p01': [1]}, hours=.04)
+    assert code == 78
+    assert counts['p00'] == counts['p01'] == 5
+    assert ('stop', 'eval') in events
+
+
+@pytest.mark.parametrize('recovery', [0, (1, 300)])
+def test_failure_streak_resets_after_success_or_long_session(tmp_path, monkeypatch, recovery):
+    starts = {}
+    code, _, counts = simulation(
+        tmp_path, monkeypatch, {'p00': [1, 1, 1, recovery, 1, None]},
+        hours=.2, session_starts=starts)
+    assert code == 0
+    assert counts['p00'] == 6
+    if recovery == 0:
+        assert starts['p00'][4:] == [7.75, 9]
+    else:
+        assert starts['p00'][4:] == [308.5, 310.75]
+
+
+def test_pending_retry_does_not_launch_after_deadline(tmp_path, monkeypatch):
+    code, _, counts = simulation(tmp_path, monkeypatch, {'p00': [1]}, hours=1 / 3600)
+    assert code == 0
+    assert counts['p00'] == 1
+
+
+@pytest.mark.parametrize('args', [[], ['--dataset', 'laion']])
+def test_launcher_accepts_default_configuration(args, monkeypatch, capsys):
+    monkeypatch.delenv('NEURO_REGION', raising=False)
+    monkeypatch.delenv('NEURO_METRIC', raising=False)
+    monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
+    monkeypatch.setattr('search.providers.preflight', lambda *a, **kw: pytest.fail('live preflight'))
+    assert run.main([*args, '--show-config']) == 0
+    assert 'configuration: region=visual dataset=laion metric=encoding' in capsys.readouterr().out

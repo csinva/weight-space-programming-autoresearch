@@ -39,6 +39,8 @@ def test_real_adapter_executes_one_prompt_without_shell(tmp_path, provider, spec
     expected_model = {"codex": "gpt-6-astra", "claude": "claude-opus-5-5", "agy": "gemini-4-argon-high"}[provider]
     env = {**os.environ, f"NEURO_{provider.upper()}_BIN": str(executable),
            f"NEURO_{provider.upper()}_MODEL": expected_model}
+    if provider == "claude":
+        env["CLAUDE_CODE_OAUTH_TOKEN"] = "fake-automation-token"
     result = subprocess.run([sys.executable, "-m", "search.providers", "run",
                              "--agent", spec, "--cwd", str(tmp_path), "--write-dir", str(tmp_path),
                              "--prompt-file", str(prompt_file)], env=env, capture_output=True, text=True)
@@ -218,3 +220,85 @@ def test_non_agy_usage_relay_preserves_native_events(tmp_path, capsys):
     assert run_provider([str(executable), 'prompt'], str(tmp_path), usage, validate_agy=False) == 0
     assert usage.events == [event]
     assert json.loads(capsys.readouterr().out) == event
+
+
+@pytest.mark.parametrize("token", [None, "", "   "])
+def test_claude_preflight_requires_automation_token(tmp_path, monkeypatch, token):
+    monkeypatch.setattr("search.auth.token_path", lambda: tmp_path / "missing-token")
+    from search.providers import Agent, preflight
+
+    executable = fake_cli(tmp_path, "claude")
+    if token is None:
+        monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
+    else:
+        monkeypatch.setenv("CLAUDE_CODE_OAUTH_TOKEN", token)
+    with pytest.raises(ValueError, match="claude setup-token.*export CLAUDE_CODE_OAUTH_TOKEN"):
+        preflight([Agent("claude", "claude-opus-5-5", "high", str(executable))])
+    assert not (tmp_path / "capture.json").exists()
+
+
+@pytest.mark.parametrize("event", [
+    {"type": "assistant", "error": "authentication_failed",
+     "message": {"content": [{"type": "text", "text": "secret-token"}]}},
+    {"type": "result", "subtype": "error_during_execution", "is_error": True,
+     "errors": ["API Error: 401 Unauthorized; secret-token"]},
+    {"type": "result", "subtype": "success", "is_error": True,
+     "result": "Invalid API key · Please run /login; secret-token"},
+    {"type": "result", "is_error": True,
+     "error": {"type": "authentication_error", "message": "secret-token"}},
+    {"type": "result", "is_error": True,
+     "errors": ["OAuth token has expired. secret-token"]},
+])
+@pytest.mark.parametrize("exit_code", [0, 1])
+def test_claude_auth_failures_stop_slot_without_echoing_secrets(tmp_path, capsys, event, exit_code):
+    from search.providers import run_provider
+
+    executable = fake_cli(tmp_path, "claude", event)
+    executable.write_text(executable.read_text() + f"sys.exit({exit_code})\n")
+    assert run_provider([str(executable)], str(tmp_path), provider="claude") == 78
+    output = capsys.readouterr()
+    assert json.loads(output.out) == event
+    assert "claude setup-token" in output.err
+    assert "CLAUDE_CODE_OAUTH_TOKEN" in output.err
+    assert "secret-token" not in output.err
+
+
+@pytest.mark.parametrize("event,expected", [
+    ({"type": "result", "is_error": True, "errors": ["API Error: 529 overloaded"]}, 1),
+    ({"type": "result", "subtype": "error_during_execution", "errors": ["Connection timed out"]}, 1),
+    ({"type": "assistant", "error": "rate_limit"}, 1),
+    ({"type": "assistant", "message": {"content": [{"type": "text", "text": "Invalid API key"}]}}, 0),
+    ({"type": "user", "error": "authentication_failed", "message": {"content": "Please run /login"}}, 0),
+    ({"type": "tool_result", "error": "authentication_failed"}, 0),
+    ({"type": "result", "subtype": "success", "is_error": False, "result": "Please run /login"}, 0),
+    ({"type": "result", "is_error": True, "result": "File permission denied"}, 1),
+])
+def test_claude_classification_ignores_content_and_retries_transient_failures(tmp_path, capsys, event, expected):
+    from search.providers import run_provider
+
+    executable = fake_cli(tmp_path, "claude", event)
+    assert run_provider([str(executable)], str(tmp_path), provider="claude") == expected
+    assert capsys.readouterr().err == ""
+
+
+def test_claude_native_auth_event_survives_terminal_and_usage_relay(tmp_path, capsys):
+    from search.providers import run_provider
+
+    events = [
+        {"type": "assistant", "error": "authentication_failed"},
+        {"type": "result", "subtype": "success", "is_error": True, "result": "Request failed"},
+    ]
+    executable = tmp_path / "claude"
+    executable.write_text(f"#!{sys.executable}\n" + "\n".join(f"print({json.dumps(event)!r})" for event in events))
+    executable.chmod(0o755)
+    class Usage:
+        def __init__(self):
+            self.events = []
+
+        def observe(self, event):
+            self.events.append(event)
+
+    usage = Usage()
+    assert run_provider([str(executable)], str(tmp_path), usage, provider="claude") == 78
+    assert usage.events == events
+    assert [json.loads(line) for line in capsys.readouterr().out.splitlines()] == events

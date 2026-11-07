@@ -87,7 +87,7 @@ def write_env_json(run_dir: str, dataset: str, region: str | None = None, metric
 
 
 def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
-                 n_proposers: int = 4, *, region: str | None = None, metric: str | None = None) -> str:
+                 n_proposers: int = 5, *, region: str | None = None, metric: str | None = None) -> str:
     """Create (or idempotently complete) ``search_runs/<dataset>__<region>__<metric>__<date>/`` + N proposer sandboxes + eval.
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).
@@ -128,12 +128,12 @@ def validate_sources(dataset: str) -> dict[str, str]:
 
 
 def configure():
-    """Load declarative defaults and retain machine login authentication."""
+    """Load defaults, preserving the explicit Claude automation token."""
     from dotenv import dotenv_values
     for name, value in dotenv_values(os.path.join(REPO, 'search/config.env')).items():
         if value is not None:
             os.environ.setdefault(name, value)
-    for name in ('ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_CODE_OAUTH_TOKEN',
+    for name in ('ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN',
                  'CLAUDE_CODE_USE_BEDROCK', 'CLAUDE_CODE_USE_VERTEX', 'CLAUDE_CODE_USE_FOUNDRY', 'ANTHROPIC_BASE_URL'):
         os.environ.pop(name, None)
 
@@ -153,8 +153,8 @@ def main(argv=None):
                              'Triple-N early/visual use M1 and M4, the monkeys with early units)')
     parser.add_argument('--metric', choices=('rsa', 'encoding'), default=os.environ.get('NEURO_METRIC', DEFAULT_SEARCH_METRIC))
     parser.add_argument('--hours', type=float, default=12)
-    parser.add_argument('--epoch-mins', type=float, default=60,
-                        help='Coordinator start interval from run startup (default: 60 minutes; occupied slots skipped; 0 disables)')
+    parser.add_argument('--epoch-mins', type=float, default=120,
+                        help='Coordinator start interval from run startup (default: 120 minutes; occupied slots skipped; 0 disables)')
     parser.add_argument('--gpu', default=os.environ.get('CUDA_VISIBLE_DEVICES', ''))
     parser.add_argument('--date', default=None)
     parser.add_argument('--preflight', '--dry-run', action='store_true')

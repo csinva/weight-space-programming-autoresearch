@@ -11,13 +11,14 @@ import argparse
 from dataclasses import asdict, dataclass
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import signal
 import subprocess
 import sys
 
-DEFAULT_ROSTER = "codex:gpt-6-astra:medium codex:gpt-6-astra:medium agy:argon4:medium agy:argon4:medium"
+DEFAULT_ROSTER = "claude:opus5.5:medium claude:opus5.5:medium agy:argon4:medium agy:argon4:medium agy:argon4:medium"
 PROVIDER_UNAVAILABLE = 78
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 
@@ -84,7 +85,7 @@ def _restrictions(agent: Agent) -> list[str]:
             flags.extend(["--disable", feature])
         return flags
     if agent.provider == "claude":
-        # Unlike --bare, safe mode preserves the saved OAuth login.
+        # Unlike --bare, safe mode supports the subscription OAuth token.
         return ["--safe-mode", "--tools", "Bash,Read,Edit,Write,Glob,Grep",
                 "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}',
                 "--disable-slash-commands"]
@@ -124,6 +125,9 @@ def preflight(agents: list[Agent]) -> list[dict]:
     checked: dict[str, str] = {}
     agy_models: dict[str, set[str]] = {}
     for agent in agents:
+        if agent.provider == "claude":
+            from search.auth import claude_token
+            claude_token()
         if not shutil.which(agent.executable):
             raise ValueError(f"Missing {agent.provider} executable: {agent.executable}")
         if agent.executable not in checked:
@@ -146,9 +150,48 @@ def preflight(agents: list[Agent]) -> list[dict]:
     return [asdict(agent) for agent in agents]
 
 
-def run_provider(argv: list[str], cwd: str, usage=None, *, validate_agy=True) -> int:
-    """Relay native logs and signals, rejecting success with denied tool actions."""
+def _claude_auth_error(event: dict) -> bool:
+    """Inspect native error fields only, never user/tool content or normal replies."""
+    if event.get("type") == "assistant":
+        return event.get("error") in ("authentication_failed", "authentication_error")
+    if event.get("type") != "result" or not _claude_result_failed(event):
+        return False
+    values = [event.get("error", ""), event.get("result", "")]
+    errors = event.get("errors", [])
+    if isinstance(errors, list):
+        values.extend(errors)
+    # Terminal errors can be strings or native structured API errors. Inspect
+    # only their explicit error fields rather than arbitrary nested payloads.
+    def error_text(value):
+        if isinstance(value, str):
+            return value
+        if isinstance(value, dict):
+            return " ".join(error_text(value.get(key, ""))
+                            for key in ("type", "code", "message", "error"))
+        return ""
+    text = " ".join(error_text(value) for value in values).lower()
+    return bool(re.search(
+        r"authentication[_ ](?:failed|error)|invalid[ _-](?:api[ _-]key|auth(?:entication)?[ _-]token)|"
+        r"(?:oauth|access|authentication|auth) token (?:has )?(?:expired|is invalid)|"
+        r"not (?:logged in|authenticated)|please (?:run /login|log in|login)|"
+        r"\b401\b.*(?:unauthorized|authentication|invalid|expired)", text))
+
+
+def _claude_result_failed(event: dict) -> bool:
+    return event.get("is_error") is True or str(event.get("subtype", "")).startswith("error")
+
+
+def run_provider(argv: list[str], cwd: str, usage=None, *, validate_agy=True,
+                 provider: str | None = None) -> int:
+    """Relay native logs/signals and classify failures for the explicit provider.
+
+    Legacy callers retain agy validation by default or raw exit codes with
+    validate_agy=False. Explicit provider identity takes precedence.
+    """
+    provider = provider or ("agy" if validate_agy else "codex")
     terminal = None
+    claude_auth_failed = False
+    claude_failed = False
     with subprocess.Popen(argv, cwd=cwd, stdout=subprocess.PIPE, text=True) as child:
         previous = {}
         for sig in (signal.SIGTERM, signal.SIGINT):
@@ -163,14 +206,30 @@ def run_provider(argv: list[str], cwd: str, usage=None, *, validate_agy=True) ->
                     continue
                 if isinstance(event, dict) and usage is not None:
                     usage.observe(event)
-                if isinstance(event, dict) and event.get("event") == "result":
-                    terminal = event.get("result")
+                if isinstance(event, dict):
+                    if provider == "claude":
+                        claude_auth_failed |= _claude_auth_error(event)
+                        if event.get("type") == "assistant" and event.get("error"):
+                            claude_failed = True
+                        if event.get("type") == "result":
+                            terminal = event
+                    elif event.get("event") == "result":
+                        terminal = event.get("result")
             code = child.wait()
             code = code if code >= 0 else 128 - code
         finally:
             for sig, handler in previous.items():
                 signal.signal(sig, handler)
-    if not validate_agy:
+    if provider == "claude":
+        if claude_auth_failed:
+            print("[provider] Claude authentication failed; stopping this slot. "
+                  "Run claude setup-token, then python -m search.auth to save it, or export a fresh CLAUDE_CODE_OAUTH_TOKEN before restarting.",
+                  file=sys.stderr)
+            return PROVIDER_UNAVAILABLE
+        if claude_failed or (isinstance(terminal, dict) and _claude_result_failed(terminal)):
+            return code or 1
+        return code
+    if provider != "agy":
         return code
     if not isinstance(terminal, dict):
         if code:
@@ -236,7 +295,7 @@ def main(argv=None) -> int:
         code = None
         try:
             with agent_command(agent, argv, cwd, args.role, usage=usage) as isolated:
-                code = run_provider(isolated, cwd, usage, validate_agy=agent.provider == 'agy')
+                code = run_provider(isolated, cwd, usage, provider=agent.provider)
             return code
         finally:
             if usage is not None:

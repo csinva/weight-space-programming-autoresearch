@@ -52,7 +52,7 @@ Run configurations sequentially on a single GPU. Each run is stored as
 `<dataset>__<region>__<metric>__<date>`; `--date YYYY-MM-DD` selects the date.
 Relaunching the same configuration/date resumes only if code, data and scientific
 settings still match. Search defaults to 12 hours; `--hours` overrides it. Ctrl+C
-stops the search. The coordinator starts at startup and every 60 minutes thereafter
+stops the search. The coordinator starts at startup and every 120 minutes thereafter
 (on a fixed schedule); an occupied slot is skipped to prevent overlapping reviews.
 `--epoch-mins` changes this interval and `--epoch-mins 0` disables coordination.
 Each review starts a fresh provider conversation without the preceding transcript.
@@ -60,14 +60,39 @@ Its short `scratch/notes.md`, current directions and search results persist and
 remain available through the workspace/API. Start a new run after changing the
 evaluation code.
 
-The default proposer roster is two Codex Astra and two agy Argon agents at medium effort, with an
+The default proposer roster is two Claude Code Opus 5.5 and three agy Argon agents at medium effort, with an
 Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
 repair is off by default (the worker's `--max-repairs` flag enables it). Defaults live in
-[`search/config.env`](search/config.env). Provider CLIs reuse existing machine
+[`search/config.env`](search/config.env). Codex and agy reuse existing machine
 logins, with permission prompts disabled inside the outer isolation boundary.
+Claude automation requires a token from `claude setup-token`;
+it never copies the interactive Claude login or its refresh credentials.
 The launcher selects agy's ADC authentication and clears conflicting Claude
-process-local authentication overrides; it does not change global login settings.
+API-key/provider overrides while preserving this automation token. Global login
+settings remain unchanged.
 Missing providers, data or usable Bubblewrap isolation fail preflight.
+
+For a Claude proposer, run `claude setup-token` once and complete its browser
+authorization. Then save the generated token using the hidden terminal prompt:
+
+```bash
+python -m search.auth
+NEURO_MODEL_ROSTER="claude:opus5.5:medium" python -m search.run --preflight
+NEURO_MODEL_ROSTER="claude:opus5.5:medium" python -m search.run --gpu 0
+```
+
+The token uses your Claude subscription. Keep it out of Git and run artifacts;
+the saved file is `~/.config/neuro-autoresearch/claude-oauth-token` (mode 600,
+inside a mode-700 directory). Claude launches load it automatically across SSH
+sessions, tmux panes and reboots. An explicit `CLAUDE_CODE_OAUTH_TOKEN` environment
+variable takes precedence. Re-run `python -m search.auth` to replace the saved token.
+It enters only the Claude sandbox through a private temporary file that is removed
+before Claude starts, and is not included in command-line arguments. Missing tokens
+fail preflight; preflight does not make model requests or verify server-side token
+validity. Expired or revoked tokens require a replacement from `claude setup-token`.
+Claude authentication failures disable the affected slot instead of restarting it.
+Other proposer failures retry with exponential delays, with a bounded number of
+consecutive failures; healthy proposers and evaluators continue running.
 
 Token-cost estimates use the public standard API rates verified on October 22,
 2026 in [`search/pricing.json`](search/pricing.json), including cache usage and
