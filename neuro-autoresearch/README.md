@@ -18,12 +18,11 @@ A high search score is predictive evidence, not a mechanistic explanation.
 
 ## Run
 
-Use Python 3.12 or newer, from the repository root:
+Dependencies live in the `pyproject.toml` at the root of this repo. Run these commands from this folder:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
+uv sync --extra dev --extra dashboard
+source "$(git rev-parse --show-toplevel)/.venv/bin/activate"
 
 # Print settings, then check data, providers and isolation without model requests.
 python -m search.run --region early --show-config
@@ -92,7 +91,6 @@ python -m search.score --region early --metric encoding --model model.py
 python final_eval.py --model model.py --search-dataset laion --region early
 
 # Optional read-only dashboard over search_runs/.
-pip install -e '.[dashboard]'
 python -m dashboard
 
 # Tests use fake providers and synthetic data; no live model requests.
