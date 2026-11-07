@@ -30,3 +30,7 @@ Use these commands:
 - Or using uv CLI:
   - `uv add package-name --script script.py`
   - `uv remove package-name --script script.py`
+
+# Fixed paths
+
+- Never move, rename or delete `analyze/toy_examples/report.html`. Its path is a public link, on GitHub and at https://csinva.io/weight-space-programming-autoresearch/analyze/toy_examples/report.html. Before any restructuring, check that this file stays at this exact path.
