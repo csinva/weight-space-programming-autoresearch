@@ -27,9 +27,14 @@ def test_config_contract_and_unsupported_cohort(metric):
     for region in ('early', 'visual'):
         assert protocol_for('triplen', region=region, metric=metric).search_subjects == ('M1', 'M4')
     assert protocol_for('triplen', region='ventral', metric=metric).search_subjects == ('M1', 'M2', 'M3', 'M4', 'M5')
-    for name in ('nsd', 'tvsd'):
-        with pytest.raises(ValueError, match='reserved'):
-            validate_search_dataset(name)
+    with pytest.raises(ValueError, match='reserved'):
+        validate_search_dataset('tvsd')
+    # LAION and NSD hold out disjoint subjects within the dataset.
+    for name, n_subjects in (('laion', 5), ('nsd', 8)):
+        protocol = protocol_for(name, region='visual', metric=metric)
+        assert protocol.final_dataset == name
+        assert not set(protocol.search_subjects) & set(protocol.final_subjects)
+        assert len(protocol.search_subjects + protocol.final_subjects) == n_subjects
 
 
 def native_split():
@@ -40,12 +45,18 @@ def native_split():
         'nsd_source_ids': ['2', '5']}
 
 
-def test_laion_keeps_all_shared_test_and_native_training_images():
+def test_human_datasets_split_shared_images_and_train_on_private_images(monkeypatch):
+    from dataclasses import replace
+    from neuro_eval import readers
     native = native_split()
-    assert _selected_ids(get_dataset('laion', metric='rsa'), native, 0) == ([], ['4', '5', '6'])
-    assert _selected_ids(get_dataset('laion', metric='encoding'), native, 0) == (['1', '2', '3'], ['4', '5', '6'])
-    del native['nsd_source_ids']
-    assert _selected_ids(get_dataset('laion', metric='encoding'), native, 0) == (['1', '2', '3'], ['4', '5', '6'])
+    monkeypatch.setattr(readers, 'shared_image_sources', lambda name: {'4': 'a', '5': 'a', '6': 'b'})
+    for name in ('laion', 'nsd'):
+        d = get_dataset(name, metric='encoding')
+        train, search = _selected_ids(d, native, 0)
+        _, held_out = _selected_ids(replace(d, images='heldout'), native, 0)
+        assert train == ['1', '2', '3'] and len(search) == 1
+        assert sorted(search + held_out) == ['4', '5', '6']
+        assert _selected_ids(get_dataset(name, metric='rsa'), native, 0) == ([], search)
 
 
 def test_triplen_rsa_keeps_all_images_encoding_retains_source_fold():
@@ -90,8 +101,8 @@ def test_final_rows_preserve_originating_search_metric():
     metadata = _row_metadata(dataset)
     assert dataset.metric == 'encoding'
     assert dataset.reward_roi == 'early visual stream'
-    assert metadata['protocol'] == protocol_for('laion', region='early', metric='encoding').name
-    assert metadata['search_image_policy'] == protocol_for('laion', region='early', metric='encoding').image_policy
+    assert metadata['protocol'] == protocol_for('nsd', region='early', metric='encoding').name
+    assert metadata['search_image_policy'] == protocol_for('nsd', region='early', metric='encoding').image_policy
 
 
 @pytest.mark.parametrize('region', ['early', 'ventral'])

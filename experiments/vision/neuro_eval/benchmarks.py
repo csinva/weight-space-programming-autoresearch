@@ -1,22 +1,27 @@
-"""Immutable cross-dataset evaluation contracts (standard-library only).
+"""Immutable evaluation contracts (standard-library only).
 
 Subject names are public dataset identifiers, never zero-based pickle indices.
 Search rewards use a selected region (pooled early + ventral by default) and
-encoding (default) or RSA; final neural responses
-stay held out. LAION search includes NSD-source images, so NSD is not image-held-out.
+encoding (default) or RSA. LAION and NSD hold out subjects and images within
+the dataset: search scores its search subjects on one half of the shared
+images, and final evaluation scores held-out subjects on the other half.
+Every subject's ridge readout is fit on that subject's unique images only.
+Triple-N search is paired with final TVSD evaluation.
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
+import hashlib
 
 
-PROTOCOL_VERSION = "looped-cross-dataset-v4"
+PROTOCOL_VERSION = "held-out-subjects-images-v5"
 DIAGNOSTIC_POLICY_VERSION = "selected-stream-intersection-v1"
+_HUMAN_SUBREGIONS = {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA"),
+                     "visual": ("early visual stream", "ventral visual stream",
+                                "V1", "V2", "V3", "hV4", "FFA", "PPA")}
 SEARCH_SUBREGIONS = {
-    "laion": {"early": ("V1", "V2", "V3"), "ventral": ("hV4", "FFA", "PPA"),
-              "visual": ("early visual stream", "ventral visual stream",
-                         "V1", "V2", "V3", "hV4", "FFA", "PPA")},
+    "laion": _HUMAN_SUBREGIONS, "nsd": _HUMAN_SUBREGIONS,
     # Triple-N ventral = IT; its early stream pools V1, V2, the V1/V2 border and V4.
     "triplen": {"early": ("V1", "V2", "V4"), "ventral": ("IT",),
                 "visual": ("early visual stream", "ventral visual stream", "V1", "V2", "V4")},
@@ -49,13 +54,20 @@ class Protocol:
         return asdict(self)
 
 
+HALVES_POLICY = "unique_train_shared_halves_by_source"
 PROTOCOLS = {
     "laion": Protocol(
-        name="laion-rsa-to-nsd-encoding",
-        search_dataset="laion", final_dataset="nsd",
-        search_subjects=("sub-01", "sub-03", "sub-05", "sub-06", "sub-07"),
-        final_subjects=tuple(f"{i:02d}" for i in range(1, 9)),
-        image_policy="shared_test_all_sources",
+        name="laion-rsa-to-laion-encoding",
+        search_dataset="laion", final_dataset="laion",
+        search_subjects=("sub-01", "sub-03", "sub-05"), final_subjects=("sub-06", "sub-07"),
+        image_policy=HALVES_POLICY,
+    ),
+    # Each NSD cohort pairs two subjects who completed all 40 sessions with two who did not.
+    "nsd": Protocol(
+        name="nsd-rsa-to-nsd-encoding",
+        search_dataset="nsd", final_dataset="nsd",
+        search_subjects=("01", "02", "03", "04"), final_subjects=("05", "06", "07", "08"),
+        image_policy=HALVES_POLICY,
     ),
     "triplen": Protocol(
         name="triplen-rsa-to-tvsd-encoding",
@@ -96,8 +108,8 @@ def validate_search_dataset(dataset: str) -> str:
     """Return the canonical search dataset, rejecting held-out datasets."""
     key = canonical_dataset(dataset)
     if key not in PROTOCOLS:
-        raise ValueError(f"{dataset!r} is not a search dataset; choose laion or triplen. "
-                         "NSD and TVSD are reserved for final encoding evaluation.")
+        raise ValueError(f"{dataset!r} is not a search dataset; choose laion, nsd or triplen. "
+                         "TVSD is reserved for final encoding evaluation.")
     return key
 
 
@@ -149,12 +161,26 @@ def protocol_for(dataset: str, region: str = "ventral", metric: str = "rsa") -> 
         # M2, M3 and M5 have no early units: the cohort is the monkeys with both streams.
         base = replace(base, search_subjects=TRIPLEN_EARLY_SUBJECTS)
     policy = base.image_policy
-    if metric == "encoding":
-        policy = ("source_train_shared_test_all_sources" if base.search_dataset == "laion"
-                  else "source_fold_0_train_test")
+    if metric == "encoding" and base.search_dataset == "triplen":
+        policy = "source_fold_0_train_test"
     return replace(base, search_region=region, search_metric=metric, image_policy=policy,
                    name=f"{base.search_dataset}-{region}-{metric}-to-{base.final_dataset}-encoding")
 
 
 def search_subjects_csv(dataset: str) -> str:
     return ",".join(protocol_for(validate_search_dataset(dataset)).search_subjects)
+
+
+def image_halves(sources: dict[str, str]) -> tuple[list[str], list[str]]:
+    """Split shared image IDs into (search, held-out) halves within each source.
+
+    Each source's IDs are ordered by their SHA-256 hash, so the split is fixed
+    across runs and machines without a random seed.
+    """
+    search, held_out = [], []
+    for source in sorted(set(sources.values())):
+        ids = sorted((i for i, s in sources.items() if s == source),
+                     key=lambda i: hashlib.sha256(i.encode()).hexdigest())
+        search += ids[:len(ids) // 2]
+        held_out += ids[len(ids) // 2:]
+    return sorted(search, key=int), sorted(held_out, key=int)

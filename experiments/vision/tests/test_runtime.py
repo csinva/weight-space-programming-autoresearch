@@ -13,7 +13,6 @@ from search import agents, queue, run, worker
 @pytest.mark.parametrize('args', [
     ['--hours', 'nan'],
     ['--date', 'bad'],
-    ['nsd'],
     ['tvsd'],
 ])
 def test_invalid_launch_never_scaffolds(args, monkeypatch):
@@ -40,8 +39,8 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     monkeypatch.setattr(providers, 'preflight', lambda agents: observed.extend(agents))
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     assert run.main(['laion', '--region', 'ventral', '--preflight']) == 0
-    # Five proposers and the Codex coordinator/optional repair agent.
-    assert Counter(agent.provider for agent in observed) == {'claude': 2, 'agy': 3, 'codex': 2}
+    # Three proposers and the Codex coordinator/optional repair agent.
+    assert Counter(agent.provider for agent in observed) == {'claude': 1, 'agy': 2, 'codex': 2}
 
     source.write_bytes(b'')
     observed.clear()

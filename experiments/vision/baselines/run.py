@@ -1,4 +1,4 @@
-"""Score baselines under the exact search protocol, or the paired final protocol.
+"""Score baselines under the exact search protocol, or on its held-out final data.
 
     python -m baselines.run --dataset laion --region visual
     python -m baselines.run --dataset laion --region visual --final --only gabor,gist
@@ -23,9 +23,9 @@ AREAS = ("V1", "V2", "V3", "hV4", "FFA", "PPA")
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--dataset", default="laion", choices=("laion", "triplen"))
+    parser.add_argument("--dataset", default="laion", choices=("laion", "nsd", "triplen"))
     parser.add_argument("--region", default=None, choices=("visual", "early", "ventral"))
-    parser.add_argument("--final", action="store_true", help="score the paired final dataset (NSD/TVSD)")
+    parser.add_argument("--final", action="store_true", help="score held-out subjects and images (TVSD for triplen)")
     parser.add_argument("--only", help="comma-separated baseline names")
     parser.add_argument("--model", action="append", default=[], metavar="[NAME=]PATH",
                         help="also score a candidate model file, sandboxed as in search (repeatable)")
@@ -48,7 +48,7 @@ def main(argv=None):
             os.environ["NEURO_MAX_PARAMS"] = str(10**9)
             dataset = get_dataset(protocol.final_dataset, region=region, search_metric="encoding")
             rows = score_final(models, dataset, protocol.final_subjects)
-            out = OUT / f"{protocol.final_dataset}__{region}__encoding.json"
+            out = OUT / f"{protocol.final_dataset}__{region}__encoding__final.json"
     else:
         os.environ.update(NEURO_DATASET=args.dataset, NEURO_REGION=region, NEURO_METRIC="encoding", NEURO_STAGE="search")
         os.environ.pop("NEURO_SUBJECT", None)

@@ -64,7 +64,7 @@ def _dataset(name, subject=None):
 
 
 @pytest.mark.parametrize("metric", ["rsa", "encoding"])
-def test_laion_includes_nsd_source_preserving_native_split_and_alignment(tmp_path, monkeypatch, metric):
+def test_laion_holds_out_half_of_each_source_and_trains_on_private_images(tmp_path, monkeypatch, metric):
     from neuro_eval.readers import _LAION_REGION_MAP
     root = tmp_path / "laion"
     monkeypatch.setenv("LAION_DATA_DIR", str(root / "processed"))
@@ -79,7 +79,10 @@ def test_laion_includes_nsd_source_preserving_native_split_and_alignment(tmp_pat
     }
     _write_pickle(root / "processed/laion_data.pkl", source)
     _write_images(root / "stimuli/images/task-images_stimuli.h5", encoded=True)
-    d = replace(_dataset("laion"), metric=metric)
+    # One image per source: each lands in the held-out half, leaving the search half empty.
+    with pytest.raises(ValueError, match="No evaluation stimuli"):
+        load_split(replace(_dataset("laion"), metric=metric))
+    d = replace(_dataset("laion"), metric=metric, images="heldout")
     Xtr, Xte, Ytr, Yte, masks, nc = load_split(d)
     if metric == "rsa":
         assert Xtr.shape == (0, 12) and Ytr.shape == (0, 2)
@@ -171,14 +174,16 @@ def test_nsd_metadata_selects_volumes_preserves_holdout_and_invalidates_cache(tm
 
     write_volume(early, [0.2, 0.25, 0.8])
     write_volume(ventral, [0.8, 0.1, 0.1])
-    d = _dataset("nsd", "03")
+    d = replace(_dataset("nsd", "03"), stage="final", metric="encoding")  # final loads both streams
+    # The two shared images split into one search image (3) and one held-out image (1).
+    assert dataset_provenance(replace(d, images="heldout"))["test_ids"] == ["1"]
     before = load_split(d)
     Xtr, Xte, Ytr, Yte, masks, nc = before
-    assert Xtr.shape[0] == Xte.shape[0] == 2
+    assert (Xtr.shape[0], Xte.shape[0]) == (2, 1)
     np.testing.assert_allclose(Xtr[:, 0], [0, 40 / 255])
-    np.testing.assert_allclose(Xte[:, 0], [20 / 255, 60 / 255])
+    np.testing.assert_allclose(Xte[:, 0], [60 / 255])
     np.testing.assert_array_equal(Ytr, [[1, 2, 0], [21, 22, 20]])
-    np.testing.assert_array_equal(Yte, [[11, 12, 10], [31, 32, 30]])
+    np.testing.assert_array_equal(Yte, [[31, 32, 30]])
     assert [m.sum() for m in masks.values()] == [2, 1]
     assert nc is None
     files = dataset_provenance(d)["files"]

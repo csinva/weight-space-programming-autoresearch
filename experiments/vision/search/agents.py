@@ -349,7 +349,7 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
             prompt = (f'This run: dataset={dataset}; region={env["NEURO_REGION"]}; metric={env["NEURO_METRIC"]}; role={name}; '
                       f'remaining session budget at launch={remaining:.1f} minutes. '
                       'The launcher stops this session at its deadline. Optimize only the named region and metric. '
-                      'Final NSD/TVSD encoding is unavailable. Use "$NEURO_PYTHON" api.py for feedback.\n\n'
+                      'Held-out subjects, images and final TVSD encoding are unavailable. Use "$NEURO_PYTHON" api.py for feedback.\n\n'
                       + (REPO / 'search/prompts' / f'{role}.md').read_text())
         with (root / 'logs' / f'{name}.jsonl').open('a') as log:
             child = subprocess.Popen(argv, cwd=REPO, env=env, stdin=subprocess.PIPE if prompt else subprocess.DEVNULL,

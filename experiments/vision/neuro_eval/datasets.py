@@ -13,7 +13,7 @@ from PIL import Image
 import numpy as np
 import torch
 
-from neuro_eval.benchmarks import canonical_dataset, protocol_for, SOURCE_REVISION, REGIONS, FILTERS, SEARCH_REGIONS, STREAM_COMPONENTS, UNION_ROIS, default_search_region, DEFAULT_SEARCH_METRIC, search_subregions, DIAGNOSTIC_POLICY_VERSION
+from neuro_eval.benchmarks import canonical_dataset, image_halves, protocol_for, SOURCE_REVISION, REGIONS, FILTERS, SEARCH_REGIONS, STREAM_COMPONENTS, UNION_ROIS, default_search_region, DEFAULT_SEARCH_METRIC, search_subregions, DIAGNOSTIC_POLICY_VERSION
 from neuro_eval import readers
 
 
@@ -31,6 +31,8 @@ class Dataset:
     stage: str = "search"
     loader: str = "laion"
     subject: str = "sub-01"
+    cohort: str = "search"  # subjects: "search" or "heldout"
+    images: str = "search"  # shared-image half: "search" or "heldout"
 
 # Anatomical region coverage and thresholds are fixed in benchmarks.py.
 PRESETS: dict[str, Dataset] = {
@@ -39,9 +41,9 @@ PRESETS: dict[str, Dataset] = {
     "triplen": Dataset(study="TripleNM1", loader="triplen", neural="spikes",
                        reward_roi="ventral visual stream", subject="M1", metric="rsa", stage="search"),
     "nsd": Dataset(study="NsdBetasSubj01", loader="nsd", neural="fmri",
-                   reward_roi="ventral visual stream", subject="01", metric="encoding", stage="final"),
-    "tvsd": Dataset(study="TvsdMonkeyF", loader="tvsd", neural="spikes",
-                    reward_roi="ventral visual stream", subject="F", metric="encoding", stage="final"),
+                   reward_roi="ventral visual stream", subject="01", metric="rsa", stage="search"),
+    "tvsd": Dataset(study="TvsdMonkeyF", loader="tvsd", neural="spikes", reward_roi="ventral visual stream",
+                    subject="F", metric="encoding", stage="final", cohort="heldout", images="heldout"),
 }
 # Accepted public spellings resolve to the same fixed benchmark.
 PRESETS["laion-fmri"] = PRESETS["laion"]
@@ -57,12 +59,12 @@ def with_subject(dataset: Dataset, subject: str) -> Dataset:
         sid = subject.strip().lower()
         if not sid.startswith("sub-"):
             sid = f"sub-{int(sid):02d}"
-        if sid not in protocol_for("laion").search_subjects:
+        if sid not in readers.LAION_SUBJECTS:
             raise ValueError(f"Unknown LAION subject {subject!r}; expected sub-01,03,05,06,07")
         return replace(dataset, subject=sid, study=f"LaionFmri{sid}")
     if dataset.loader == "nsd":
         sid = int(subject)
-        if f"{sid:02d}" not in protocol_for("nsd").final_subjects:
+        if not 1 <= sid <= 8:
             raise ValueError("NSD subject must be 1 through 8")
         return replace(dataset, subject=f"{sid:02d}", study=f"NsdBetasSubj{sid:02d}")
     if dataset.loader == "tvsd":
@@ -93,6 +95,8 @@ def get_dataset(name: str, subject: str | None = None, *, region: str | None = N
     NEURO_SUBJECT entry. Protocol evaluators validate the complete fixed cohort.
     """
     dataset = PRESETS[canonical_dataset(name)]
+    if search_metric is not None:  # final evaluation of that search: held-out subjects and images
+        dataset = replace(dataset, stage="final", metric="encoding", cohort="heldout", images="heldout")
     if dataset.stage == "search":
         protocol = protocol_for(dataset.loader, region or os.environ.get("NEURO_REGION") or default_search_region(dataset.loader),
                                 metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
@@ -132,7 +136,7 @@ class VisionSplit(tuple):
 
 def _source_groups(d: Dataset, native: dict, ids: list[str]) -> dict[str, list[int]]:
     # Report each source separately, excluding the overlapping no_ood grouping.
-    # NSD here labels images with LAION responses, not final NSD responses.
+    # "nsd" here labels NSD-source images with LAION responses.
     if dataset_key(d) != "laion":
         return {}
     return {name: [i for i, sid in enumerate(ids) if sid in members]
@@ -209,7 +213,8 @@ def _load_native(d: Dataset):
     if d.stage == "search":
         # Diagnostic data never change the pooled response block or image policy.
         data["diagnostic_units"], data["unavailable_regions"] = {}, {}
-        loader = readers.load_all_laion_data if name == "laion" else readers.load_all_triplen_data
+        loader = {"laion": readers.load_all_laion_data, "nsd": readers.load_all_nsd_data,
+                  "triplen": readers.load_all_triplen_data}[name]
         for region in search_subregions(name, d.search_region):
             if region in data["regions"]:
                 continue  # a stream block of the pooled union already has exact masks
@@ -232,11 +237,11 @@ def _selected_ids(d: Dataset, native: dict, subject: int):
         split = native["neural"][region][subject]
         if set(split["train"]) != train_ids or set(split["test"]) != test_ids:
             raise ValueError(f"Stimulus IDs differ across regions for {region}")
-    if name == "laion":
-        shared = set(native["shared_test_ids"])
-        # All shared images contribute, including NSD-source stimuli measured
-        # in LAION. Final NSD neural responses remain unavailable to search.
-        test_ids = shared
+    if name in ("laion", "nsd"):
+        # Train on this subject's unique images; test on one half of the images every subject saw.
+        test_ids = set(image_halves(readers.shared_image_sources(name))[d.images == "heldout"])
+        if not test_ids <= set(first["test"]):
+            raise ValueError(f"{d.subject} lacks shared images every {name} subject saw")
         if d.metric == "rsa":
             train_ids = set()
     elif name == "triplen" and d.metric == "rsa":
@@ -386,6 +391,7 @@ def load_looped(d: Dataset):
     protocol = protocol_for(dataset_key(d), d.search_region, d.metric if d.stage == "search" else d.search_metric)
     _PROVENANCE[dataset_cache_key(d)] = {
         "source_revision": SOURCE_REVISION, "dataset": dataset_key(d), "subject": d.subject,
+        "cohort": d.cohort, "images": d.images,
         "protocol": protocol.to_dict(), "metric": d.metric, "stage": d.stage,
         "search_region": d.search_region, "reward_roi": d.reward_roi,
         "files": {key: _file_identity(path) for key, path in dataset_source_paths(d).items()},

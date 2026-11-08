@@ -3,17 +3,24 @@
 Open-ended agentic search for computational models of the visual cortex: discover
 image-to-representation functions and the computational principles they express.
 Search a selected brain region with **encoding** (default) or **RSA**, then freeze
-the winner and measure transfer with final encoding evaluation.
+the winner and measure how it generalizes to new subjects and new images.
 Only the candidate `model.py` evolves during search; the scientific code stays fixed.
 
 | Track | Phase 1: search feedback | Phase 2: final evaluation |
 | --- | --- | --- |
-| fMRI | LAION-fMRI, all five subjects, RSA or encoding | NSD, all eight subjects, encoding |
+| fMRI | LAION-fMRI sub-01, 03, 05 on the search image half, RSA or encoding | LAION-fMRI sub-06, 07 on the held-out image half, encoding |
+| fMRI | NSD subjects 1–4 on the search image half, RSA or encoding | NSD subjects 5–8 on the held-out image half, encoding |
 | Spiking | Triple-N, all five monkeys (ventral) or M1 and M4 (early/visual), RSA or encoding | TVSD, both monkeys, encoding |
 
-NSD and TVSD neural responses, scores and final artifacts must never guide search,
-coordination, repair or model selection. LAION search includes its NSD-source images
-with LAION responses; final NSD evaluation is therefore not image-held-out from search.
+LAION and NSD each hold out subjects and images within the dataset. Their shared
+images (seen by every subject) are split in half within each image source, by the
+SHA-256 hash of the stimulus ID: LAION's 1,492 into 745 search and 747 held-out
+images (LAION, THINGSplus, NSD and OOD sources), and NSD's 907 into 453 and 454.
+NSD has 907 rather than 1,000 shared images because subjects 3, 4, 6 and 8 did not
+complete all sessions; each cohort pairs two subjects who did with two who did not.
+Encoding readouts are fit on each subject's own unique images only. Held-out
+subjects, held-out images, TVSD responses and final artifacts must never guide
+search, coordination, repair or model selection.
 A high search score is predictive evidence, not a mechanistic explanation.
 
 ## Run
@@ -31,9 +38,9 @@ python -m search.run --preflight
 # Phase 1: autonomous search, 12 hours by default (sends real model requests).
 # Default: LAION, pooled early + ventral streams (--region visual), encoding.
 python -m search.run --gpu 0
-python -m search.run --region early --gpu 0
+python -m search.run --dataset nsd --gpu 0
 
-# Phase 2: freeze the search winner and evaluate it on NSD.
+# Phase 2: freeze the search winner and evaluate it on held-out subjects and images.
 # Use the run directory printed by the search launcher.
 python final_eval.py --run search_runs/laion__visual__encoding__2026-11-05
 ```
@@ -60,7 +67,7 @@ Its short `scratch/notes.md`, current directions and search results persist and
 remain available through the workspace/API. Start a new run after changing the
 evaluation code.
 
-The default proposer roster is two Claude Code Opus 5.5 and three agy Argon agents at medium effort, with an
+The default proposer roster is one Claude Code Opus 5.5 and two agy Argon agents at medium effort, with an
 Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
 repair is off by default (the worker's `--max-repairs` flag enables it). Defaults live in
 [`search/config.env`](search/config.env). Codex and agy reuse existing machine
@@ -143,7 +150,8 @@ priori or chosen on search data only.
 ```bash
 pip install -e '.[baselines]'
 python -m baselines.run --dataset laion --region visual            # search protocol
-python -m baselines.run --dataset laion --region visual --final    # paired NSD protocol
+python -m baselines.run --dataset laion --region visual --final    # held-out LAION subjects and images
+python -m baselines.run --dataset nsd --final --model champion=final_results/.../model.py  # any champion on NSD
 python -m baselines.run --dataset triplen --only gabor,hmax
 ```
 
@@ -204,9 +212,8 @@ checks. Every subject and prescribed region is still scored separately. Models
 must bound intermediate memory (internal chunking is allowed); encoding
 retains its batched forwards.
 
-- For RSA, LAION uses all shared test images, including NSD-source stimuli: 1,492 images
-  in the current prepared release, for sub-01, sub-03, sub-05, sub-06 and sub-07.
-  Subject-private training images are excluded.
+- For RSA, LAION and NSD use the search half of the shared images for their search
+  subjects. Subject-private training images are excluded.
 - For RSA, Triple-N combines its source folds and uses all 1,000 images for M1–M5.
 - The full selected stream mask determines each subject's reward; average these
   pooled-stream scores equally across all required subjects. Never average the
@@ -227,11 +234,12 @@ available through `status <id> --details`. A subregion or source-group cohort sc
 requires all subjects; unavailable diagnostics do not change the pooled reward.
 Repeatedly optimized search scores are not independent held-out confirmation.
 
-**Encoding:** use the dataset's existing source train/test split. For LAION search,
-include all source groups in both splits: each subject's private training images and
-all 1,492 shared test images in the prepared release (including NSD and OOD images).
-Triple-N uses source fold 0. For final evaluation, freeze the selected model before
-loading any paired final-dataset responses. Center features and normalize
+**Encoding:** for LAION and NSD, fit each subject's readout on that subject's private
+images and test on one half of the shared images: the search half during search,
+the held-out half for the final headline score. Triple-N uses source fold 0. For
+final evaluation, freeze the selected model before loading any held-out responses.
+LAION and NSD final evaluation reports the held-out subjects on held-out images
+as the headline and the three other subject × image cells as diagnostics. Center features and normalize
 their overall scale using training data; z-score targets with training statistics.
 Choose a ridge penalty per neural target using five-fold training CV over the
 source's 20-alpha grid. Report test Pearson r for the pooled selected stream,
@@ -252,11 +260,9 @@ These execution changes leave image policies, cohorts, ridge CV and rewards inta
 Evaluation-code identity still changes, so use a new run after updating the evaluator.
 
 Both RSA and encoding are raw scores, without noise-ceiling normalization.
-NSD-source stimuli in LAION contribute LAION neural responses to search. Final NSD
-responses remain reserved for evaluation after model selection, but these results
-are not image-held-out confirmation. No comprehensive pixel-level duplicate audit
-across releases is claimed. This all-source policy uses protocol v4; start a new
-run rather than resuming a run scored under the previous image policy.
+No comprehensive pixel-level duplicate audit across releases is claimed. The
+held-out subject and image policy uses protocol v5; start a new run rather than
+resuming a run scored under a previous policy.
 
 ### LAION region definitions
 

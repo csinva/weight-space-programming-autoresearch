@@ -36,7 +36,7 @@ def test_laion_defaults_to_pooled_visual_encoding_and_triplen_to_ventral():
     assert (t.search_region, t.metric) == ("ventral", "encoding")
     visual = protocol_for("triplen", "visual", "encoding")
     assert (visual.name, visual.search_subjects) == ("triplen-visual-encoding-to-tvsd-encoding", ("M1", "M4"))
-    assert protocol_for("laion", "visual", "encoding").name == "laion-visual-encoding-to-nsd-encoding"
+    assert protocol_for("laion", "visual", "encoding").name == "laion-visual-encoding-to-laion-encoding"
 
 
 def test_launcher_default_region_and_metric(monkeypatch):
@@ -74,8 +74,9 @@ def _write_laion(root, coordinates):
 
 def _visual_dataset():
     d = with_subject(PRESETS["laion"], "sub-01")
+    # Each fixture source has one shared image, so all three fall in the held-out half.
     return replace(d, imsize=2, search_region="visual", search_metric="encoding",
-                   metric="encoding", reward_roi=UNION)
+                   metric="encoding", reward_roi=UNION, images="heldout")
 
 
 COORDS = {EARLY: [0, 1, 2], VENTRAL: [10, 11, 12],

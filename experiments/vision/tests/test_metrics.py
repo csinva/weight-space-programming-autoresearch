@@ -143,8 +143,12 @@ def test_partial_cohort_and_search_on_final_data_fail_before_loading(monkeypatch
     partial = evaluate_subjects(Identity(), get_dataset("triplen"))
     assert "complete cohort" in partial["status"]
     monkeypatch.delenv("NEURO_SUBJECT")
-    wrong_stage = evaluate_subjects(Identity(), get_dataset("nsd"), stage="search")
+    wrong_stage = evaluate_subjects(Identity(), get_dataset("tvsd"), stage="search")
     assert "fixed 'final'" in wrong_stage["status"]
+    from dataclasses import replace
+    for field in ("cohort", "images"):
+        held_out = evaluate_subjects(Identity(), replace(get_dataset("laion"), **{field: "heldout"}))
+        assert "search subjects and search images" in held_out["status"]
 
 
 def test_source_group_rsa_is_aligned_and_does_not_change_primary_reward():
@@ -206,15 +210,15 @@ def test_source_group_cohort_requires_complete_coverage(monkeypatch):
     monkeypatch.setattr("neuro_eval.datasets.load_split", fake_load)
     row = evaluate_subjects(Identity(), get_dataset("laion"))
     assert row["status"] == "ok"
-    assert row["subjects"] == ["sub-01", "sub-03", "sub-05", "sub-06", "sub-07"]
+    assert row["subjects"] == ["sub-01", "sub-03", "sub-05"]
     assert row["reward"] == pytest.approx(np.mean(list(row["subject_scores"].values())))
     complete = row["rsa_diagnostics"]["source_groups"]["ood"]
-    assert complete["status"] == "ok" and complete["n_subjects"] == 5
+    assert complete["status"] == "ok" and complete["n_subjects"] == 3
     assert complete["rsa"] == pytest.approx(np.mean([
         entry["rsa"] for entry in complete["subject_results"].values()]))
     group = row["rsa_diagnostics"]["source_groups"]["laion"]
     assert group["status"] == "unavailable" and group["rsa"] is None
-    assert group["n_subjects"] == 4
+    assert group["n_subjects"] == 2
     assert group["subject_results"]["sub-03"]["status"] == "unavailable"
     assert all(region["rsa"] is None and region["status"] == "unavailable"
                for region in group["regions"].values())
@@ -236,7 +240,7 @@ def test_phase_entry_points_reject_other_phase_before_loading(monkeypatch, phase
 
 
 @pytest.mark.parametrize("name,subjects", [
-    ("nsd", ["01", "02", "03", "04", "05", "06", "07", "08"]),
+    ("nsd", ["05", "06", "07", "08"]),
     ("tvsd", ["F", "N"]),
 ])
 def test_final_encoding_keeps_complete_cohort_and_equal_subject_mean(monkeypatch, name, subjects):
@@ -251,7 +255,7 @@ def test_final_encoding_keeps_complete_cohort_and_equal_subject_mean(monkeypatch
         return X[:22], X[22:], Y[:22], Y[22:], masks, None
 
     monkeypatch.setattr("neuro_eval.datasets.load_split", load)
-    row = evaluate_final(Identity(), get_dataset(name))
+    row = evaluate_final(Identity(), get_dataset(name, search_metric="encoding"))
     assert row["status"] == "ok"
     assert seen == subjects
     assert row["score"] == pytest.approx(np.mean(list(row["subject_scores"].values())))

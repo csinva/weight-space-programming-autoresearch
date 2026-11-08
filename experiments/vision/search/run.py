@@ -144,8 +144,8 @@ def main(argv=None):
     from search.providers import resolve, command, preflight
     configure()
     parser = argparse.ArgumentParser(description='Launch a visual-cortex search (default: pooled early + ventral streams, encoding).')
-    parser.add_argument('legacy_dataset', nargs='?', choices=('laion', 'triplen'))
-    parser.add_argument('--dataset', choices=('laion', 'triplen'), default=None)
+    parser.add_argument('legacy_dataset', nargs='?', choices=('laion', 'nsd', 'triplen'))
+    parser.add_argument('--dataset', choices=('laion', 'nsd', 'triplen'), default=None)
     parser.add_argument('--region', '--config', choices=('visual', 'early', 'ventral'),
                         default=os.environ.get('NEURO_REGION') or None,
                         help='visual pools every early and ventral unit (LAION default); '

@@ -1,4 +1,4 @@
-"""Freeze the RSA winner before final encoding, without feeding search."""
+"""Freeze the search winner before held-out encoding, without feeding search."""
 import hashlib
 import json
 from pathlib import Path
@@ -57,8 +57,9 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
         assert manifest["evaluation_sha256"]
         assert manifest["protocol"] == json.loads(json.dumps(protocol_for("laion").to_dict()))
         assert dataset.search_region == "ventral" and dataset.search_metric == "rsa"
-        assert dataset.loader == "nsd" and dataset.metric == "encoding" and stage == "final"
-        return {"status": "ok", "test_corr": 0.42}
+        assert dataset.loader == "laion" and dataset.metric == "encoding" and stage == "final"
+        held_out = dataset.cohort == dataset.images == "heldout"
+        return {"status": "ok", "test_corr": 0.42 if held_out else 0.1}
 
     monkeypatch.setattr(model, "IsolatedModel", FakeIsolatedModel)
     monkeypatch.setattr(model, "scan_source", lambda path: None)
@@ -66,10 +67,14 @@ def test_final_evaluation_freezes_model_and_does_not_update_queue(run, tmp_path,
     monkeypatch.setattr(datasets, "dataset_provenance", lambda dataset: {})
     assert final.run_final(selected, output) == output
     document = json.loads(output.read_text())
-    assert document["dataset"] == "nsd"
+    assert document["dataset"] == "laion"
     assert document["encoding_score"] == 0.42
+    assert document["cell_scores"] == {"heldout_subjects__heldout_images": 0.42, "heldout_subjects__search_images": 0.1,
+                                       "search_subjects__heldout_images": 0.1, "search_subjects__search_images": 0.1}
     assert document["selection"]["search_score"] == 0.2
-    assert set(document["data_provenance"]) == set(protocol_for("laion").final_subjects)
+    protocol = protocol_for("laion")
+    assert set(document["data_provenance"]["heldout_subjects__heldout_images"]) == set(protocol.final_subjects)
+    assert set(document["data_provenance"]["search_subjects__search_images"]) == set(protocol.search_subjects)
     with queue.connect(str(run)) as connection:
         assert list(connection.iterdump()) == before
     with pytest.raises(FileExistsError):
@@ -100,7 +105,7 @@ def test_failed_final_can_retry_only_the_same_frozen_selection(tmp_path, monkeyp
     assert (output.parent / "selection.json").read_bytes() == manifest
 
     monkeypatch.setattr(final, "evaluate_frozen", lambda selection, frozen: (
-        {"status": "ok", "test_corr": 0.3}, {}))
+        {final.HEADLINE: {"status": "ok", "test_corr": 0.3}}, {}))
     assert final.run_final(selected) == output
     assert json.loads(output.read_text())["dataset"] == "tvsd"
     assert (output.parent / "selection.json").read_bytes() == manifest
@@ -180,7 +185,7 @@ def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, 
     def evaluate(candidate, dataset, stage):
         assert dataset.search_region == region and dataset.search_metric == metric
         assert dataset.reward_roi == f'{region} visual stream'
-        assert dataset.loader == 'nsd' and dataset.metric == 'encoding' and stage == 'final'
+        assert dataset.loader == 'laion' and dataset.metric == 'encoding' and stage == 'final'
         return {'status': 'ok', 'test_corr': .3}
 
     monkeypatch.setattr(model, 'IsolatedModel', FakeModel)
@@ -192,11 +197,8 @@ def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, 
     assert artifact['protocol'] == json.loads(json.dumps(protocol.to_dict()))
     assert artifact['selection']['search_region'] == region
     assert artifact['selection']['search_metric'] == metric
-    assert set(artifact['data_provenance']) == set(protocol.final_subjects)
+    assert set(artifact['data_provenance'][final.HEADLINE]) == set(protocol.final_subjects)
     scope = artifact['evaluation_scope']
-    assert scope['final_neural_data_usage'] == 'final_only'
-    assert scope['image_held_out_from_search'] is False
-    assert 'NSD-source stimuli' in scope['limitation']
-    assert 'must not be interpreted as image-held-out' in scope['limitation']
+    assert scope == {'final_neural_data_usage': 'final_only', 'headline': final.HEADLINE}
     manifest = json.loads((output.parent / 'selection.json').read_text())
     assert manifest['evaluation_scope'] == scope

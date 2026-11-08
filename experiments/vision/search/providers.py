@@ -18,7 +18,7 @@ import signal
 import subprocess
 import sys
 
-DEFAULT_ROSTER = "claude:opus5.5:medium claude:opus5.5:medium agy:argon4:medium agy:argon4:medium agy:argon4:medium"
+DEFAULT_ROSTER = "claude:opus5.5:medium agy:argon4:medium agy:argon4:medium"
 PROVIDER_UNAVAILABLE = 78
 EFFORTS = {"low", "medium", "high", "xhigh", "max"}
 

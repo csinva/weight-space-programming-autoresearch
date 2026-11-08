@@ -371,6 +371,21 @@ def load_all_laion_data(cfg, subjects=None, regions=None) -> dict:
     }
 
 
+def shared_image_sources(name: str) -> dict[str, str]:
+    """{stimulus id: source} of the shared images seen by every subject of LAION or NSD.
+
+    NSD: 907 of shared1000, since subjects 3, 4, 6 and 8 did not finish all sessions.
+    """
+    if name == "nsd":
+        source = load_nsd_pickle(os.environ.get("NSD_DATA_FILE", "nsd_data.pkl"))
+    else:
+        source = load_pickle(os.path.join(get_env_var("LAION_DATA_DIR"), "laion_data.pkl"))
+    block = source["data"]["early"]
+    ids = set(source["shared_ids"]).intersection(
+        *({int(i) for i in block[s].coords["stimulus"].values} for s in sorted(block)))
+    return {str(i): "nsd" if name == "nsd" else source["stimuli"]["dataset"].iat[i] for i in sorted(ids)}
+
+
 # Triple-N responses and source folds
 
 TRIPLEN_SUBJECTS = ["M1", "M2", "M3", "M4", "M5"]

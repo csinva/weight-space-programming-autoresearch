@@ -129,15 +129,19 @@ def _validate_contract(dataset: Dataset, stage: str | None = None) -> None:
         raise ValueError(f"Unknown image benchmark {dataset.loader!r}")
     protocol = protocol_for(dataset.loader, dataset.search_region,
                                 dataset.metric if dataset.stage == "search" else dataset.search_metric)
-    expected_stage = "search" if dataset_key(dataset) == protocol.search_dataset else "final"
-    expected_metric = protocol.search_metric if expected_stage == "search" else protocol.final_metric
-    if dataset.stage != expected_stage or dataset.metric != expected_metric:
-        raise ValueError(f"{dataset.loader} is fixed to {expected_stage}/{expected_metric}")
+    # Search sees only search subjects and search images; final runs on the protocol's final dataset.
+    search = dataset.stage == "search"
+    expected_metric = protocol.search_metric if search else protocol.final_metric
+    allowed = (dataset_key(dataset) == protocol.search_dataset and dataset.cohort == dataset.images == "search"
+               if search else dataset.stage == "final" and dataset_key(dataset) == protocol.final_dataset)
+    if not allowed or dataset.metric != expected_metric:
+        raise ValueError(f"{dataset.loader} {dataset.stage}/{dataset.metric} is outside the protocol: "
+                         "search uses search subjects and search images")
     if dataset.stage == "search" and dataset.reward_roi != SEARCH_REGIONS[dataset.search_region]:
         raise ValueError("Search reward must use the selected anatomical region")
     for label, requested, expected in (
-        ("stage", stage, expected_stage),
-        ("NEURO_STAGE", os.environ.get("NEURO_STAGE"), expected_stage),
+        ("stage", stage, dataset.stage),
+        ("NEURO_STAGE", os.environ.get("NEURO_STAGE"), dataset.stage),
         ("NEURO_METRIC", os.environ.get("NEURO_METRIC"), expected_metric),
         ("NEURO_REGION", os.environ.get("NEURO_REGION"), dataset.search_region),
     ):
@@ -359,7 +363,7 @@ def evaluate_subjects(model, dataset: Dataset, scorer, *, stage: str) -> dict:
         _validate_contract(dataset, stage)
         protocol = protocol_for(dataset.loader, dataset.search_region,
                                 dataset.metric if dataset.stage == "search" else dataset.search_metric)
-        required = protocol.search_subjects if dataset.stage == "search" else protocol.final_subjects
+        required = protocol.search_subjects if dataset.cohort == "search" else protocol.final_subjects
         if tokens:
             selected = [with_subject(dataset, token).subject for token in tokens]
             if len(selected) != len(required) or set(selected) != set(required):

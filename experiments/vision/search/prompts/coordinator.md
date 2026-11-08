@@ -24,11 +24,11 @@ leader. Neither complexity nor an unsupported novelty story counts as discovery.
 The objective is this run's primary score: the single NEURO_REGION (visual: every
 early and ventral unit pooled; or early or ventral alone), measured with
 NEURO_METRIC (RSA or encoding), averaged equally over
-all five LAION-fMRI subjects or the run's fixed Triple-N monkeys (all five for ventral;
-M1 and M4, the only monkeys with early units, for early or visual).
-LAION includes all image sources, including NSD-source images with LAION responses;
-final NSD evaluation is not image-held-out from LAION search.
-NSD/TVSD neural responses, scores and final artifacts must
+the run's fixed search subjects (LAION-fMRI sub-01, 03, 05; NSD subjects 1-4) or
+Triple-N monkeys (all five for ventral; M1 and M4, the only monkeys with early
+units, for early or visual). LAION and NSD search score one half of the shared
+images; the other half and the other subjects are held out for final evaluation.
+Held-out subjects and images, TVSD responses, scores and final artifacts must
 never guide search, repair, resets or selection. Diagnostics cannot replace the
 objective or change the cohort, filters or weights. Search gains are not independent
 held-out evidence or proof of a neural mechanism.

@@ -14,7 +14,7 @@ the current search workflow, evaluation protocols and commands.
 - `search/notes.py`: resumable working-note templates; `search/prompts/`: proposer/coordinator instructions; proposer instructions are copied into workspace `AGENTS.md`, `GEMINI.md` and `CLAUDE.md` files.
 - `search/costs.py` and `pricing.json`: usage accounting and fixed price snapshot.
 - `neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
-- `final_eval.py`: select and freeze the search winner, then evaluate on the paired final dataset.
+- `final_eval.py`: select and freeze the search winner, then evaluate it on held-out subjects and images (TVSD for Triple-N).
 - `dashboard/`: read-only monitoring UI/API; `tests/`: scientific and operational checks.
 - `search_runs/` and `final_results/`: generated run state and final artifacts; untracked.
 
@@ -23,6 +23,6 @@ the current search workflow, evaluation protocols and commands.
 - When creating Git commits or otherwise acting on GitHub for the user, use the user's name, Yash Mehta. Before committing, verify that the Git author name is `Yash Mehta`.
 - During autonomous model search, only `model.py` and the proposer's notes/scratch are editable. Infrastructure maintenance is a separate task.
 - Search defaults to LAION, `--region visual` (every early and ventral unit pooled) and `--metric encoding`; `--region early|ventral` and `--metric rsa` are supported, and Triple-N defaults to ventral (IT, all five monkeys); Triple-N early/visual use M1 and M4, the only monkeys with early units. Region/metric/dataset are fixed per run. Reward is the pooled score over the selected units, averaged over subjects; per-stream and subregion values are diagnostics only.
-- LAION-fMRI and Triple-N supply search feedback. LAION includes all image sources, including NSD-source stimuli with LAION responses. NSD and TVSD neural responses, scores and final artifacts are final-only; never use them to guide search, repair, coordination or model selection. Final NSD evaluation is not image-held-out from LAION search.
+- LAION-fMRI, NSD and Triple-N supply search feedback. LAION and NSD hold out subjects and images within the dataset: search uses LAION sub-01, 03, 05 or NSD subjects 1–4 on one half of the shared images (split within each image source); final evaluation uses LAION sub-06, 07 or NSD subjects 5–8 on the other half. Readouts are fit on each subject's unique images only. Held-out subjects, held-out images, TVSD responses, scores and final artifacts are final-only; never use them to guide search, repair, coordination or model selection.
 - Keep all subjects, fixed image policies, source filters, source metric kernels and explicit protocol provenance intact when maintaining `neuro_eval/`.
 - Do not commit run databases, data files, caches, credentials or machine-local `.env` settings.

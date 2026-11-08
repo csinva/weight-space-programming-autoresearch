@@ -37,7 +37,7 @@ def cohort(*, numpy_inputs=False, variant=None):
     for index, subject in enumerate(protocol_for('laion', 'early', 'encoding').search_subjects):
         train = torch.randn(15, 4, generator=generator)
         test = shared.clone()
-        if index == 2:
+        if index == 1:
             if variant == 'changed':
                 test[0, 0] += 3
             elif variant == 'reordered':
@@ -82,7 +82,7 @@ def test_full_cohort_matches_uncached_ridge_with_exact_image_identity(monkeypatc
     model = RecordingModel()
     actual = encoding.evaluate_subjects(model, dataset)
     compare(actual, expected)
-    assert model.calls.count(15) == 5  # Private training is never cached.
+    assert model.calls.count(15) == len(splits)  # Private training is never cached.
     assert model.calls.count(8) == test_calls
 
 
@@ -134,7 +134,7 @@ def test_oversize_cache_skips_reuse_without_changing_scores(monkeypatch):
     model = RecordingModel()
     actual = encoding.evaluate_subjects(model, dataset)
     compare(actual, baseline['subject_results'])
-    assert model.calls.count(8) == 5
+    assert model.calls.count(8) == len(splits)
 
 
 def test_candidate_cache_cleared_on_success_failure_and_exception(monkeypatch):
@@ -222,8 +222,8 @@ def test_final_evaluation_does_not_use_search_cache_or_forward(monkeypatch):
     model = RecordingModel()
     result = encoding.evaluate_subjects(model, dataset)
     assert result['status'] == 'ok'
-    assert len(result['subjects']) == 8
-    assert model.calls.count(15) == model.calls.count(8) == 8
+    assert result['subjects'] == list(protocol_for('nsd').final_subjects)
+    assert model.calls.count(15) == model.calls.count(8) == 4
 
 
 def test_scoring_cannot_mutate_the_cached_raw_representation(monkeypatch):

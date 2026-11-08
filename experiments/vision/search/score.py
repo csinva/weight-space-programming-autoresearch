@@ -53,7 +53,7 @@ def main(argv=None):
     import argparse
     import json
     parser = argparse.ArgumentParser(description='Score a model on the complete search cohort.')
-    parser.add_argument('--dataset', default='laion', choices=('laion', 'triplen'))
+    parser.add_argument('--dataset', default='laion', choices=('laion', 'nsd', 'triplen'))
     parser.add_argument('--region', default=None, choices=('visual', 'early', 'ventral'))
     parser.add_argument('--metric', default=None, choices=('rsa', 'encoding'))
     parser.add_argument('--model', default='model.py')

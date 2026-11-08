@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
-"""Freeze a search-selected model, then evaluate its paired final dataset with encoding.
+"""Freeze a search-selected model, then evaluate it on held-out data with encoding.
 
-    python final_eval.py --run search_runs/laion__ventral__rsa__2026-10-21
-    python final_eval.py --model model.py --search-dataset triplen --region ventral
+    python final_eval.py --run search_runs/laion__visual__encoding__2026-11-07
+    python final_eval.py --model model.py --search-dataset nsd --region visual
 
-No encoding result is written to the search database. Model selection finishes
-before any final-dataset responses are loaded.
-NSD neural responses remain final-only, but LAION search includes NSD-source
-stimuli, so final NSD encoding is not an image-held-out evaluation from search.
+LAION and NSD champions are scored on the same dataset's held-out subjects and
+held-out shared images (the headline), plus the three other subject x image
+cells as diagnostics. Triple-N champions are scored on TVSD. No encoding result
+is written to the search database. Model selection finishes before any held-out
+responses are loaded.
 """
 from __future__ import annotations
 
 import argparse
 import contextlib
 import hashlib
+import itertools
 import json
 import math
 import os
 from pathlib import Path
 import sqlite3
+from dataclasses import replace
 from datetime import datetime, timezone
 
 REPO = Path(__file__).resolve().parent
+HEADLINE = "heldout_subjects__heldout_images"  # LAION/NSD cells: "<subjects>_subjects__<images>_images"
 
 from neuro_eval.benchmarks import SOURCE_REVISION, protocol_for, validate_search_dataset
 
@@ -84,8 +88,9 @@ def final_environment(selection: dict):
     previous = os.environ.copy()
     try:
         saved = selection["environment"]
-        storage_keys = (("NSD_DATA_DIR", "NSD_DATA_FILE", "NSD_ROOT", "NSD_STIMULI_HDF5_PATH", "NSD_BETAS_DIR")
-                        if protocol.final_dataset == "nsd" else ("TVSD_DATA_DIR", "TVSD_STIMULI_HDF5_PATH"))
+        storage_keys = {"nsd": ("NSD_DATA_DIR", "NSD_DATA_FILE", "NSD_ROOT", "NSD_STIMULI_HDF5_PATH", "NSD_BETAS_DIR"),
+                        "laion": ("LAION_DATA_DIR", "LAION_FMRI_DIR"),
+                        "tvsd": ("TVSD_DATA_DIR", "TVSD_STIMULI_HDF5_PATH")}[protocol.final_dataset]
         storage_overrides = {key: previous[key] for key in storage_keys if key in previous}
         if saved:
             for key in EVAL_ENV_KEYS:
@@ -93,7 +98,8 @@ def final_environment(selection: dict):
             os.environ.update({k: str(saved[k]) for k in EVAL_ENV_KEYS if k in saved})
         os.environ.update(storage_overrides)
         os.environ.update(NEURO_DATASET=protocol.final_dataset, NEURO_STAGE="final",
-                          NEURO_METRIC="encoding", NEURO_REGION=protocol.search_region, NEURO_SUBJECT=",".join(protocol.final_subjects))
+                          NEURO_METRIC="encoding", NEURO_REGION=protocol.search_region)
+        os.environ.pop("NEURO_SUBJECT", None)  # each cell scores its complete protocol cohort
         os.environ.pop("LAB_RUN", None)
         os.environ.pop("LAB_PROPOSER", None)
         yield protocol
@@ -103,7 +109,10 @@ def final_environment(selection: dict):
 
 
 def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:
-    """Load final data only after the caller has frozen the selected model."""
+    """Load final data only after the caller has frozen the selected model.
+
+    Returns {cell: result} and {cell: {subject: provenance}}.
+    """
     from neuro_eval.model import scan_source
 
     reason = scan_source(str(frozen))
@@ -118,12 +127,17 @@ def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:
             raise ValueError("Frozen model no longer matches the selected hash")
         dataset = get_dataset(protocol.final_dataset, region=protocol.search_region,
                               search_metric=protocol.search_metric)
-        result = evaluate_subjects(model, dataset, stage="final")
-        if result.get("status") != "ok" or not math.isfinite(result.get("test_corr", float("nan"))):
-            raise RuntimeError(f"Final encoding failed: {result.get('status')}")
-        provenance = {subject: dataset_provenance(with_subject(dataset, subject))
-                      for subject in protocol.final_subjects}
-    return result, provenance
+        halves = ("heldout", "search") if protocol.final_dataset == protocol.search_dataset else ("heldout",)
+        results, provenance = {}, {}
+        for cohort, images in itertools.product(halves, halves):
+            cell = replace(dataset, cohort=cohort, images=images)
+            name = f"{cohort}_subjects__{images}_images"
+            results[name] = evaluate_subjects(model, cell, stage="final")
+            if results[name].get("status") != "ok" or not math.isfinite(results[name].get("test_corr", float("nan"))):
+                raise RuntimeError(f"Final encoding failed on {name}: {results[name].get('status')}")
+            subjects = protocol.final_subjects if cohort == "heldout" else protocol.search_subjects
+            provenance[name] = {s: dataset_provenance(with_subject(cell, s)) for s in subjects}
+    return results, provenance
 
 
 def run_final(selection: dict, output: str | Path | None = None) -> Path:
@@ -151,14 +165,7 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
         with frozen.open("xb") as file:
             file.write(model_bytes)
     from neuro_eval.model import evaluation_sha256, runtime_versions
-    evaluation_scope = {"final_neural_data_usage": "final_only"}
-    if protocol.final_dataset == "nsd":
-        evaluation_scope.update(
-            image_held_out_from_search=False,
-            limitation=("LAION search includes NSD-source stimuli. Final NSD neural "
-                        "responses remain final-only, but final NSD encoding must not "
-                        "be interpreted as image-held-out generalization from search."),
-        )
+    evaluation_scope = {"final_neural_data_usage": "final_only", "headline": HEADLINE}
     manifest = {
         "schema_version": 1, "stage": "frozen_before_final",
         "model_sha256": selection["sha256"], "frozen_model": str(frozen),
@@ -197,7 +204,8 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
         "model_sha256": selection["sha256"],
         "frozen_model": str(frozen),
         "dataset": protocol.final_dataset,
-        "encoding_score": result["test_corr"],
+        "encoding_score": result[HEADLINE]["test_corr"],
+        "cell_scores": {name: cell["test_corr"] for name, cell in result.items()},
         "result": result,
         "data_provenance": data,
         "evaluation_scope": manifest["evaluation_scope"],
@@ -215,7 +223,7 @@ def main(argv=None):
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--run", help="search run from which to select the champion")
     source.add_argument("--model", help="explicit model file, without claiming a searched champion")
-    parser.add_argument("--search-dataset", help="laion or triplen; required with --model")
+    parser.add_argument("--search-dataset", help="laion, nsd or triplen; required with --model")
     parser.add_argument("--region", choices=("visual", "early", "ventral"), help="required with --model; inferred from --run")
     parser.add_argument("--output", help="final JSON path outside the search run")
     args = parser.parse_args(argv)
