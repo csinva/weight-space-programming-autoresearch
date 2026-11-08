@@ -148,7 +148,7 @@ They run in-process as trusted code, with the same evaluator, and write to
 priori or chosen on search data only.
 
 ```bash
-pip install -e '.[baselines]'
+uv sync --extra baselines
 python -m baselines.run --dataset laion --region visual            # search protocol
 python -m baselines.run --dataset laion --region visual --final    # held-out LAION subjects and images
 python -m baselines.run --dataset nsd --final --model champion=final_results/.../model.py  # any champion on NSD
