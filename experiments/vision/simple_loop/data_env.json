@@ -1,0 +1,9 @@
+{
+ "NSD_ROOT": "/data19/chandan/wsp_vision/data/allen2021.natural_scenes",
+ "NSD_DATA_DIR": "/data19/chandan/wsp_vision/data/nsd_processed",
+ "LAION_DATA_DIR": "/data19/chandan/wsp_vision/data/laion_fmri/processed",
+ "LAION_FMRI_DIR": "/data19/chandan/wsp_vision/data/laion_fmri",
+ "TRIPLEN_DATA_DIR": "/data19/chandan/wsp_vision/data/triplen/processed",
+ "TVSD_DATA_DIR": "/data19/chandan/wsp_vision/data/papale2025.tvsd/processed",
+ "NEURO_SPLIT_CACHE": "/data19/chandan/wsp_vision/split_cache"
+}
