@@ -452,6 +452,7 @@ def _candidate_worker():
         os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
 
     resource.setrlimit(resource.RLIMIT_FSIZE, (2_000_000_000, 2_000_000_000))
+    torch.backends.cudnn.allow_tf32 = False  # TF32 convolutions vary with batch size by up to ~1%
     spec = importlib.util.spec_from_file_location('candidate', '/model.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
