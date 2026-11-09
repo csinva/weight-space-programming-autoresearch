@@ -4,9 +4,17 @@ A 16-layer convolutional network that reads handwritten digits at **96.17% MNIST
 whose weights, laid out in layer order, form the Mona Lisa. Claude Opus 5.5 wrote every weight by
 hand: no training, no gradients, no fitted statistics.
 
-Videos: [`figures/assembly_animation.mp4`](figures/assembly_animation.mp4) (the weights flying in to
-form the painting, 8 s) and [`figures/monalisa_explainer.mp4`](figures/monalisa_explainer.mp4)
-(how it works, 42 s).
+<video src="https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/assembly_animation.mp4" controls autoplay loop muted playsinline width="100%">
+  <a href="https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/assembly_animation.mp4">Watch the assembly animation</a>
+</video>
+
+The weights flying in to form the painting (8 s). [Open the video](https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/assembly_animation.mp4)
+
+<video src="https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/monalisa_explainer.mp4" controls playsinline width="100%">
+  <a href="https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/monalisa_explainer.mp4">Watch the explainer</a>
+</video>
+
+How it works (42 s). [Open the video](https://csinva.io/weight-space-programming-autoresearch/experiments/mona-lisa/figures/monalisa_explainer.mp4)
 
 ## The prompt
 
