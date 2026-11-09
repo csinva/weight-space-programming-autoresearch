@@ -10,7 +10,7 @@ Installing the Python package does not provision the complete research environme
 
 | Requirement | Needed for |
 | --- | --- |
-| Python 3.12+ and `pip install -e .` | Python commands and evaluation libraries |
+| Python 3.12+, the parent repository's `uv sync`, and `PYTHONPATH=src:.` | Python commands and evaluation libraries |
 | Linux, Bubblewrap (`bwrap` on PATH), usable mount/PID/user/network namespaces | Search and isolated final evaluation; unsupported isolation fails preflight |
 | Prepared response files and matching stimuli | Neural scoring; files are not bundled or downloaded |
 | Installed, authenticated agent CLI and model access | Autonomous search; compression specifically uses Claude Code |
@@ -33,12 +33,12 @@ used here for dataset paths. Use a model available to your account.
 
 ## Setup and launch
 
-Use Python 3.12 or newer, from the repository root:
+Use Python 3.12 or newer, from this folder (`experiments/vision`):
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
+uv sync --extra dev --extra dashboard
+source "$(git rev-parse --show-toplevel)/.venv/bin/activate"
+export PYTHONPATH="$PWD/src:$PWD"
 
 # Print settings, then check data, providers and isolation without model requests.
 python -m search.run --show-config
@@ -138,7 +138,7 @@ python -m search.score --region ventral --metric rsa --model model.py
 python -m final_eval --model model.py --search-dataset laion --region visual
 
 # Optional read-only dashboard over artifacts/search/.
-pip install -e '.[dashboard]'
+uv sync --extra dashboard
 python -m dashboard
 
 # Tests use fake providers and synthetic data; no live model requests.

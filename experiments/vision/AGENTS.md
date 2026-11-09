@@ -22,7 +22,7 @@ the current search workflow, evaluation protocols and commands.
 - `artifacts/search/` and `artifacts/final/`: generated run state and final artifacts; `artifacts/logs/`: operational logs; `artifacts/archive/{runs,results,local}/`: legacy contents. All are untracked.
 - `.env`: optional machine-local configuration, retained at the repository root and untracked.
 
-Install with `pip install -e .` before running module commands. Package imports
+Before running module commands, install the parent repository's dependencies with `uv sync` and set `PYTHONPATH=src:.` from this folder. Package imports
 stay unchanged; use `python -m search.run`, `python -m final_eval` and
 `python -m compress`. Research code lives in `src/`, monitoring in root
 `dashboard/`, and generated outputs in `artifacts/`.

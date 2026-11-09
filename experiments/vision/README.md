@@ -19,12 +19,12 @@ neural data, and an installed, authenticated agent CLI. These are not installed 
 `pip`. Dataset download and preparation are not automated here; raw dataset files
 alone are not sufficient. See [setup requirements](docs/operations.md#setup-requirements).
 
-Use Python 3.12 or newer and run commands from the repository root:
+In this repository the project lives in `experiments/vision`; "repository root" below means this folder. Dependencies are in the `pyproject.toml` at the top of the parent repository. Use Python 3.12 or newer and run commands from this folder:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -e '.[dev]'
+uv sync --extra dev --extra dashboard
+source "$(git rev-parse --show-toplevel)/.venv/bin/activate"
+export PYTHONPATH="$PWD/src:$PWD"
 python -m pytest -q
 cp .env.example .env
 # Edit .env to point to your prepared data and stimuli before continuing.
@@ -79,7 +79,7 @@ tests how well independent models rebuilt from a short description retain the
 original model's score and representation.
 
 ```bash
-pip install -e '.[baselines]'
+uv sync --extra baselines
 python -m baselines.run --dataset laion --region visual
 python -m baselines.run --dataset laion --region visual --final
 python -m compress --model path/to/model.py --words 200 --builders 4
