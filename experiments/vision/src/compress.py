@@ -1,8 +1,8 @@
 """Natural-language compression: describe a model in <= N words, rebuild it from the text alone, compare.
 
-    python compress.py --model path/to/model.py --words 200 --builders 4
-    python compress.py --model path/to/model.py --words 50,100,200,400
-    python compress.py --model path/to/model.py --description "A V1-like Gabor energy model."
+    python -m compress --model path/to/model.py --words 200 --builders 4
+    python -m compress --model path/to/model.py --words 50,100,200,400
+    python -m compress --model path/to/model.py --description "A V1-like Gabor energy model."
 
 1. Describe: Claude reads only the code and writes <= N words of plain prose (no code or identifiers).
 2. Rebuild: K fresh Claude calls each see only that text plus the model contract and write a model.py;
@@ -24,7 +24,7 @@ from pathlib import Path
 
 import torch
 
-REPO = Path(__file__).resolve().parent
+REPO = Path(__file__).resolve().parents[1]
 CLAUDE = ["claude", "-p", "--model", "claude-opus-5-5", "--effort", "medium", "--tools", "",
           "--setting-sources", "", "--strict-mcp-config", "--no-session-persistence", "--output-format", "json"]
 FLOOR = "gabor_norm"
@@ -156,7 +156,9 @@ def main(argv=None):
 
     code = args.model.read_text()
     name = args.name or args.model.resolve().parent.name[:12]
-    out = REPO / "final_results" / "compression" / f"{name}__{date.today()}"
+    out = REPO / "artifacts" / "final" / "compression" / f"{name}__{date.today()}"
+    if out.resolve().is_relative_to((REPO / "artifacts" / "search").resolve()):
+        raise ValueError("Write compression results outside search storage")
     out.mkdir(parents=True, exist_ok=True)
     budgets = ["given"] if args.description else args.words.split(",")
     paths, runs, cost = {"original": args.model.resolve()}, {}, 0.0

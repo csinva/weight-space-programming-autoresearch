@@ -48,5 +48,15 @@ def test_compression_scores_models_directly(tmp_path, monkeypatch, final):
     assert [kwargs["final"] for _, kwargs in calls] == ([False, True] if final else [False])
     assert all(kwargs["trusted"] == (run.FLOOR,) for _, kwargs in calls)
     assert all(set(models) == {"original", "rebuild_200w_0", run.FLOOR} for models, _ in calls)
+    assert reports[0][0].parent == tmp_path / "artifacts/final/compression"
     assert len(reports[0][2]) == len(calls)
     assert len(list(reports[0][0].glob("laion__visual__encoding*.json"))) == len(calls)
+
+
+def test_compression_rejects_search_output(tmp_path, monkeypatch):
+    monkeypatch.setattr(run, "REPO", tmp_path)
+    original = tmp_path / "model.py"
+    original.write_text("MODEL = None\n")
+    with pytest.raises(ValueError, match="outside search storage"):
+        run.main(["--model", str(original), "--name", str(tmp_path / "artifacts" / "search" / "run")])
+    assert not (tmp_path / "artifacts" / "search").exists()

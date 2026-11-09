@@ -15,8 +15,8 @@ import stat
 import time
 from datetime import datetime, timezone
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, REPO)
+SOURCE = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.insert(0, SOURCE)
 from search import queue
 from search.score import score
 # noqa: E402  (the run API: get_next_model / score / record / requeue_orphans)
@@ -35,7 +35,7 @@ def repair(model_file, log_file, rmodel, reffort, timeout=300):
               "activations for flattened RGB images. Error:\n" + open(log_file).read()[-6000:])
     with subprocess.Popen([sys.executable, "-m", "search.providers", "run", "--agent", rmodel,
                            "--effort", reffort, "--role", "repair", "--cwd", os.path.dirname(model_file)],
-                          stdin=subprocess.PIPE, text=True, cwd=REPO, start_new_session=True) as child:
+                          stdin=subprocess.PIPE, text=True, cwd=SOURCE, start_new_session=True) as child:
         try:
             child.communicate(prompt, timeout=timeout)
         except subprocess.TimeoutExpired:

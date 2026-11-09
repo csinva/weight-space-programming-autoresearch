@@ -13,7 +13,8 @@ for LAION and NSD are fit on each subject's unique images only. See the
 
 ## Setup and search
 
-Use Python 3.12 or newer. Run commands from the repository root:
+Use Python 3.12 or newer. Install the packages from `src/` in editable mode, then
+run commands from the repository root:
 
 ```bash
 python -m venv .venv
@@ -41,12 +42,12 @@ Use the run directory printed by the launcher. Selection and freezing happen
 before held-out responses are loaded; final evaluation always uses encoding.
 
 ```bash
-python final_eval.py --run search_runs/laion__visual__encoding__2026-11-05
+python -m final_eval --run artifacts/search/laion__visual__encoding__2026-11-05
 # Or evaluate an explicitly supplied frozen model:
-python final_eval.py --model model.py --search-dataset laion --region visual
+python -m final_eval --model model.py --search-dataset laion --region visual
 ```
 
-Final artifacts go to `final_results/` and never enter search feedback. Existing
+Final artifacts go to `artifacts/final/` and never enter search feedback. Existing
 artifacts are not overwritten. [Protocol details](docs/protocol.md) explain the
 headline scores and diagnostic subject × image comparisons.
 
@@ -60,10 +61,10 @@ original model's score and representation.
 pip install -e '.[baselines]'
 python -m baselines.run --dataset laion --region visual
 python -m baselines.run --dataset laion --region visual --final
-python compress.py --model path/to/model.py --words 200 --builders 4
+python -m compress --model path/to/model.py --words 200 --builders 4
 ```
 
-Results stay in `final_results/baselines/` and `final_results/compression/`.
+Results stay in `artifacts/final/baselines/` and `artifacts/final/compression/`.
 See [comparisons](docs/comparisons.md) for available baselines, frozen-model
 comparisons, word budgets and retention scores.
 
@@ -72,14 +73,18 @@ comparisons, word budgets and retention scores.
 | Path | Responsibility |
 | --- | --- |
 | `model.py` | Starting candidate exporting `MODEL` |
-| `search/` | Search launcher, agents, queue, scoring, configuration and costs |
-| `final_eval.py` | Select, freeze and evaluate the winner |
-| `baselines/`, `compress.py` | Reference comparisons and description-based rebuilding |
-| `neuro_eval/` | Fixed scientific contracts, data loading, model isolation and evaluation |
-| `neuro_eval/comparison.py` | Shared scoring for baseline and compression comparisons |
+| `src/search/` | Search launcher, agents, queue, scoring, configuration and costs |
+| `src/final_eval.py` | Select, freeze and evaluate the winner |
+| `src/baselines/`, `src/compress.py` | Reference comparisons and description-based rebuilding |
+| `src/neuro_eval/` | Fixed scientific contracts, data loading, model isolation and evaluation |
+| `src/neuro_eval/comparison.py` | Shared scoring for baseline and compression comparisons |
 | `dashboard/` | Read-only search monitoring |
 | `tests/` | Scientific and operational checks |
-| `search_runs/`, `final_results/` | Generated search state and final artifacts; untracked |
+| `docs/` | Operations, scientific protocol, comparisons and writing guidance |
+| `.env` | Optional machine-local configuration at the repository root; untracked |
+| `artifacts/search/`, `artifacts/final/` | Generated search state and final artifacts; untracked |
+| `artifacts/logs/` | Top-level operational logs; untracked |
+| `artifacts/archive/` | Legacy runs, results and local files; untracked |
 
 The [full map](docs/repository.md) identifies individual modules. Run checks with
 `python -m pytest -q`; tests use fake providers and synthetic data, without live

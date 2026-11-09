@@ -19,7 +19,9 @@ import numpy as np
 
 from neuro_eval.model import sandbox_command, check_isolation
 
-REPO = Path(__file__).resolve().parents[1]
+PACKAGE = Path(__file__).resolve().parent
+SOURCE = PACKAGE.parent
+REPO = SOURCE.parent
 
 
 def _login_files(provider: str, destination: Path) -> None:
@@ -99,8 +101,9 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
             provider_argv = [sys.executable, '-c', bootstrap, *provider_argv]
         public = root / 'reference'
         public.mkdir()
-        for name in ('neuro_eval/rsa.py', 'neuro_eval/encoding.py', 'neuro_eval/benchmarks.py', 'README.md', 'model.py'):
-            source = REPO / name
+        references = [SOURCE / 'neuro_eval' / name for name in ('rsa.py', 'encoding.py', 'benchmarks.py')]
+        references += [REPO / 'README.md', REPO / 'model.py']
+        for source in references:
             if source.is_file():
                 shutil.copyfile(source, public / source.name)
         socket_dir = root / 'broker'
@@ -115,7 +118,7 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
                     '--bind', str(home), '/home/agent',
                     '--ro-bind', str(public), '/reference',
                     '--bind', str(workspace), str(workspace),
-                    '--ro-bind', str(REPO / 'search/api.py'), str(workspace / 'api.py'),
+                    '--ro-bind', str(PACKAGE / 'api.py'), str(workspace / 'api.py'),
                     '--ro-bind', str(socket_dir), '/broker',
                     '--setenv', 'HOME', '/home/agent', '--setenv', 'PATH', path,
                     '--setenv', 'NEURO_PYTHON', sys.executable,
@@ -127,7 +130,7 @@ def agent_command(agent, argv: list[str], workspace: str, role: str, usage=None)
             if role == 'proposer':
                 for name in ('AGENTS.md', 'CLAUDE.md', 'GEMINI.md'):
                     if (workspace / name).is_file():
-                        args += ['--ro-bind', str(REPO / 'search/prompts/proposer.md'), str(workspace / name)]
+                        args += ['--ro-bind', str(PACKAGE / 'prompts/proposer.md'), str(workspace / name)]
             if run and (Path(run) / 'public').is_dir():
                 args += ['--ro-bind', str(Path(run) / 'public'), '/inputs']
             for name in ('resolv.conf', 'hosts', 'nsswitch.conf', 'ssl/certs', 'pki'):
@@ -244,7 +247,7 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
     """Seed a workspace without replacing an existing candidate or scratch."""
     os.makedirs(path, exist_ok=True)
     # Expose only the bounded socket client in provider workspaces.
-    client = os.path.join(repo_root, "search", "api.py")
+    client = PACKAGE / "api.py"
     api_path = os.path.join(path, "api.py")
     if os.path.islink(api_path):
         os.unlink(api_path)
@@ -253,7 +256,7 @@ def make_sandbox(path: str, repo_root: str = REPO) -> str:
     model_py = os.path.join(path, "model.py")
     if not os.path.exists(model_py):                       # seed the baseline (don't clobber a resumed run)
         shutil.copy2(os.path.join(repo_root, "model.py"), model_py)
-    prompt = os.path.join(repo_root, "search", "prompts", "proposer.md")
+    prompt = PACKAGE / "prompts" / "proposer.md"
     for filename in ("AGENTS.md", "GEMINI.md", "CLAUDE.md"):
         target = os.path.join(path, filename)
         if os.path.islink(target):
@@ -350,9 +353,9 @@ def supervise(run, dataset, roster, hours, epoch_mins, evaluators=1):
                       f'remaining session budget at launch={remaining:.1f} minutes. '
                       'The launcher stops this session at its deadline. Optimize only the named region and metric. '
                       'Held-out subjects, images and final TVSD encoding are unavailable. Use "$NEURO_PYTHON" api.py for feedback.\n\n'
-                      + (REPO / 'search/prompts' / f'{role}.md').read_text())
+                      + (PACKAGE / 'prompts' / f'{role}.md').read_text())
         with (root / 'logs' / f'{name}.jsonl').open('a') as log:
-            child = subprocess.Popen(argv, cwd=REPO, env=env, stdin=subprocess.PIPE if prompt else subprocess.DEVNULL,
+            child = subprocess.Popen(argv, cwd=SOURCE, env=env, stdin=subprocess.PIPE if prompt else subprocess.DEVNULL,
                                      stdout=log, stderr=subprocess.STDOUT, text=True, start_new_session=True)
         sessions[name] = child
         launched_at[name] = time.monotonic()

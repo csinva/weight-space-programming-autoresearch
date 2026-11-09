@@ -66,6 +66,8 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, 
 
     class Child:
         def __init__(self, argv, **kwargs):
+            assert kwargs["cwd"] == agents.SOURCE
+            assert (Path(kwargs["cwd"]) / "search" / "providers.py").is_file()
             if 'search.worker' in argv:
                 self.name = 'eval'
                 assert '-u' in argv
@@ -323,3 +325,18 @@ def test_launcher_accepts_default_configuration(args, monkeypatch, capsys):
     monkeypatch.setattr('search.providers.preflight', lambda *a, **kw: pytest.fail('live preflight'))
     assert run.main([*args, '--show-config']) == 0
     assert 'configuration: region=visual dataset=laion metric=encoding' in capsys.readouterr().out
+
+
+def test_sandbox_uses_package_resources_with_root_candidate(tmp_path):
+    repo = tmp_path / "checkout"
+    repo.mkdir()
+    (repo / "model.py").write_text("MODEL = 'seed'\n")
+    workspace = tmp_path / "workspace"
+    agents.make_sandbox(str(workspace), str(repo))
+    assert (workspace / "model.py").read_text() == "MODEL = 'seed'\n"
+    assert (workspace / "api.py").read_bytes() == (agents.PACKAGE / "api.py").read_bytes()
+    for name in ("AGENTS.md", "CLAUDE.md", "GEMINI.md"):
+        assert (workspace / name).read_bytes() == (agents.PACKAGE / "prompts/proposer.md").read_bytes()
+    (workspace / "model.py").write_text("MODEL = 'candidate'\n")
+    agents.make_sandbox(str(workspace), str(repo))
+    assert (workspace / "model.py").read_text() == "MODEL = 'candidate'\n"

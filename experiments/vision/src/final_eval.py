@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Freeze a search-selected model, then evaluate it on held-out data with encoding.
 
-    python final_eval.py --run search_runs/laion__visual__encoding__2026-11-07
-    python final_eval.py --model model.py --search-dataset nsd --region visual
+    python -m final_eval --run artifacts/search/laion__visual__encoding__2026-11-07
+    python -m final_eval --model model.py --search-dataset nsd --region visual
 
 LAION and NSD champions are scored on the same dataset's held-out subjects and
 held-out shared images (the headline), plus the three other subject x image
@@ -22,7 +22,7 @@ import sqlite3
 from dataclasses import replace
 from datetime import datetime, timezone
 
-REPO = Path(__file__).resolve().parent
+REPO = Path(__file__).resolve().parents[1]
 HEADLINE = "heldout_subjects__heldout_images"  # LAION/NSD cells: "<subjects>_subjects__<images>_images"
 
 from neuro_eval.benchmarks import SOURCE_REVISION, protocol_for, validate_search_dataset
@@ -115,11 +115,11 @@ def run_final(selection: dict, output: str | Path | None = None) -> Path:
     protocol = protocol_for(selection["search_dataset"], region=selection["search_region"],
                             metric=selection["search_metric"] or "rsa")
     output = Path(output) if output else (
-        REPO / "final_results" / protocol.name / selection["sha256"] / "evaluation.json")
+        REPO / "artifacts" / "final" / protocol.name / selection["sha256"] / "evaluation.json")
     output = output.resolve()
     if output.name in {"model.py", "selection.json"}:
         raise ValueError("Final output must not replace the frozen model or selection manifest")
-    if output.is_relative_to((REPO / "search_runs").resolve()) or (
+    if output.is_relative_to((REPO / "artifacts" / "search").resolve()) or (
             selection["run"] and output.is_relative_to(Path(selection["run"]).resolve())):
         raise ValueError("Write final results outside the search run so agents cannot read OOD feedback")
     if output.exists():

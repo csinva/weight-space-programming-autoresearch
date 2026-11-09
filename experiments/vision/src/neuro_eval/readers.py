@@ -33,7 +33,7 @@ DEFAULT_DATA_DIRS = {
 
 
 def get_env_var(key: str) -> str:
-    load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+    load_dotenv(Path(__file__).resolve().parents[2] / ".env")
     value = os.environ.get(key, DEFAULT_DATA_DIRS.get(key))
     if not value:
         raise RuntimeError(f"Missing required env var: {key} (check this repository's .env)")
@@ -151,7 +151,7 @@ _NSD_SUBJECTS = list(range(8))
 
 def nsd_root() -> str:
     """NSD release root: $NSD_ROOT (env or .env), else the gpu2 shared copy."""
-    load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+    load_dotenv(Path(__file__).resolve().parents[2] / ".env")
     return os.environ.get("NSD_ROOT", "/data/shared/datasets/allen2021.natural_scenes")
 
 

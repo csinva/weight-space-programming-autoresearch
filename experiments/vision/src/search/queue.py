@@ -44,7 +44,7 @@ def find_run(start: str | None = None) -> str:
         parent = os.path.dirname(d)
         if parent == d:
             raise RuntimeError(
-                "no run found: set $LAB_RUN to a search_runs/<dataset>__<date>/ dir, or run inside one")
+                "no run found: set $LAB_RUN to an artifacts/search/<dataset>__<date>/ dir, or run inside one")
         d = parent
 
 

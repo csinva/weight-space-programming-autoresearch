@@ -14,9 +14,11 @@ from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if REPO not in sys.path:
-    sys.path.insert(0, REPO)
+PACKAGE = Path(__file__).resolve().parent
+SOURCE = PACKAGE.parent
+REPO = str(SOURCE.parent)
+if str(SOURCE) not in sys.path:
+    sys.path.insert(0, str(SOURCE))
 from neuro_eval.benchmarks import protocol_for, validate_search_dataset, canonical_region, validate_search_metric, SOURCE_REVISION, default_search_region, DEFAULT_SEARCH_METRIC
 
 from neuro_eval.model import EVAL_ENV_KEYS, evaluation_sha256, runtime_versions
@@ -88,7 +90,7 @@ def write_env_json(run_dir: str, dataset: str, region: str | None = None, metric
 
 def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
                  n_proposers: int = 5, *, region: str | None = None, metric: str | None = None) -> str:
-    """Create (or idempotently complete) ``search_runs/<dataset>__<region>__<metric>__<date>/`` + N proposer sandboxes + eval.
+    """Create (or idempotently complete) ``artifacts/search/<dataset>__<region>__<metric>__<date>/`` + N proposer sandboxes + eval.
 
     Returns the run dir. Safe to re-run: existing sandboxes/DB are left intact (a resumed search).
     """
@@ -99,9 +101,8 @@ def scaffold_run(dataset: str, date: str | None = None, repo_root: str = REPO,
     datetime.strptime(date, "%Y-%m-%d")
     region = canonical_region(region or os.environ.get("NEURO_REGION") or default_search_region(dataset))
     metric = validate_search_metric(metric or os.environ.get("NEURO_METRIC", DEFAULT_SEARCH_METRIC))
-    run_dir = os.path.join(repo_root, "search_runs", f"{dataset}__{region}__{metric}__{date}")
+    run_dir = os.path.join(repo_root, "artifacts", "search", f"{dataset}__{region}__{metric}__{date}")
     from search.agents import make_sandbox
-    sys.path.insert(0, repo_root)
     from search import queue
     write_env_json(run_dir, dataset, region, metric)               # eval-env snapshot for later re-scoring
     queue.init(run_dir)                              # search.db + models/
@@ -130,7 +131,7 @@ def validate_sources(dataset: str) -> dict[str, str]:
 def configure():
     """Load defaults, preserving the explicit Claude automation token."""
     from dotenv import dotenv_values
-    for name, value in dotenv_values(os.path.join(REPO, 'search/config.env')).items():
+    for name, value in dotenv_values(PACKAGE / 'config.env').items():
         if value is not None:
             os.environ.setdefault(name, value)
     for name in ('ANTHROPIC_API_KEY', 'ANTHROPIC_AUTH_TOKEN',

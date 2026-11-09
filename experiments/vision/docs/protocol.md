@@ -126,8 +126,8 @@ available **IT** units, intersected by their source unit identifiers.
 
 ## Implementation provenance
 
-RSA and encoding kernels are implemented directly in `neuro_eval/rsa.py` and
-`neuro_eval/encoding.py`; source-file loading is implemented in `neuro_eval/readers.py`.
+RSA and encoding kernels are implemented directly in `src/neuro_eval/rsa.py` and
+`src/neuro_eval/encoding.py`; source-file loading is implemented in `src/neuro_eval/readers.py`.
 These implementations originate from `looped-networks` revision
 `3ee575baeceb1ad784102162a051b7444182fdaa` (`looped/metrics/{rsa,encoding}.py`
 and `looped/data/{nsd,laion,triplen,tvsd,stimuli}.py`), imported October 21, 2026.
@@ -136,5 +136,5 @@ unused source helpers are omitted. Local adaptations resolve repository `.env`
 and shared-storage paths, cache prepared files by identity, and identify NSD
 reliability volumes from response metadata. There is no dependency on the original
 checkout or a second copy of the implementations. `SOURCE_REVISION` in
-`neuro_eval/benchmarks.py` and the evaluation-code hash identify their provenance
+`src/neuro_eval/benchmarks.py` and the evaluation-code hash identify their provenance
 in every run and final artifact.

@@ -2,10 +2,10 @@
 
     python -m baselines.run --dataset laion --region visual
     python -m baselines.run --dataset laion --region visual --final --only gabor,gist
-    python -m baselines.run --final --only pixels --model champion=final_results/.../model.py
+    python -m baselines.run --final --only pixels --model champion=artifacts/final/.../model.py
 
 Baselines are fixed a priori, so scoring them on final data selects nothing; results
-go to final_results/baselines/, never to search_runs/. Final NSD rows add named-area
+go to artifacts/final/baselines/, never to artifacts/search/. Final NSD rows add named-area
 diagnostics (each area's retained voxels within the pooled units), as in search.
 """
 import argparse
@@ -15,7 +15,8 @@ from pathlib import Path
 from neuro_eval.comparison import table
 from neuro_eval.model import load_model
 
-OUT = Path(__file__).resolve().parents[1] / "final_results" / "baselines"
+REPO = Path(__file__).resolve().parents[2]
+OUT = REPO / "artifacts" / "final" / "baselines"
 
 
 def main(argv=None):
@@ -28,6 +29,8 @@ def main(argv=None):
                         help="also score a frozen model file (repeatable)")
     parser.add_argument("--out", type=Path, default=OUT, help="results directory")
     args = parser.parse_args(argv)
+
+    validate_output(args.out)
 
     from baselines import load
     from neuro_eval.benchmarks import default_search_region, protocol_for
@@ -50,7 +53,13 @@ def candidates(specs):
             for name, _, path in (spec.rpartition("=") for spec in specs)}
 
 
+def validate_output(out):
+    if Path(out).resolve().is_relative_to((REPO / "artifacts" / "search").resolve()):
+        raise ValueError("Write comparison results outside search storage")
+
+
 def save(rows, out):
+    validate_output(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     results = json.loads(out.read_text()) if out.exists() else {}
     results.update(rows)

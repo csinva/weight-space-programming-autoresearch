@@ -88,7 +88,7 @@ def test_failed_final_can_retry_only_the_same_frozen_selection(tmp_path, monkeyp
     source = tmp_path / "candidate.py"
     source.write_text("MODEL = None\n")
     selected = final.manual_model(source, "triplen", "ventral")
-    output = tmp_path / "final_results" / protocol_for("triplen").name / selected["sha256"] / "evaluation.json"
+    output = tmp_path / "artifacts" / "final" / protocol_for("triplen").name / selected["sha256"] / "evaluation.json"
 
     def fail(selection, frozen):
         assert (frozen.parent / "selection.json").is_file()
@@ -141,8 +141,8 @@ def test_manual_final_cannot_write_into_search_storage(tmp_path, monkeypatch):
     source.write_text("MODEL = None\n")
     selection = final.manual_model(source, "laion", "ventral")
     with pytest.raises(ValueError, match="outside the search run"):
-        final.run_final(selection, tmp_path / "search_runs/laion__2026-10-22/final.json")
-    assert not (tmp_path / "search_runs").exists()
+        final.run_final(selection, tmp_path / "artifacts" / "search" / "laion__2026-10-22/final.json")
+    assert not (tmp_path / "artifacts" / "search").exists()
 
 
 def test_model_change_before_freezing_creates_no_final_artifact(tmp_path):
@@ -162,7 +162,7 @@ def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, 
     from search.run import scaffold_run
     from neuro_eval import datasets, encoding, model
 
-    configured = Path(scaffold_run('laion', '2026-10-22', str(run.parent.parent), 1,
+    configured = Path(scaffold_run('laion', '2026-10-22', str(run.parents[2]), 1,
                                    region=region, metric=metric))
     protocol = protocol_for('laion', region=region, metric=metric)
     monkeypatch.setenv('NEURO_REGION', region)
@@ -202,3 +202,17 @@ def test_final_preserves_selected_objective(run, tmp_path, monkeypatch, region, 
     assert scope == {'final_neural_data_usage': 'final_only', 'headline': final.HEADLINE}
     manifest = json.loads((output.parent / 'selection.json').read_text())
     assert manifest['evaluation_scope'] == scope
+
+
+def test_manual_final_rejects_symlink_into_search(tmp_path, monkeypatch):
+    monkeypatch.setattr(final, "REPO", tmp_path)
+    storage = tmp_path / "artifacts" / "search"
+    storage.mkdir(parents=True)
+    alias = tmp_path / "output"
+    alias.symlink_to(storage, target_is_directory=True)
+    source = tmp_path / "model.py"
+    source.write_text("MODEL = None\n")
+    selection = final.manual_model(source, "laion", "ventral")
+    with pytest.raises(ValueError, match="outside the search run"):
+        final.run_final(selection, alias / "final.json")
+    assert not list(storage.iterdir())

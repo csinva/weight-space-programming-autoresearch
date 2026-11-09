@@ -24,7 +24,7 @@ python -m search.run --dataset nsd --gpu 0
 
 # Phase 2: freeze the search winner and evaluate it on held-out subjects and images.
 # Use the run directory printed by the search launcher.
-python final_eval.py --run search_runs/laion__visual__encoding__2026-11-05
+python -m final_eval --run artifacts/search/laion__visual__encoding__2026-11-05
 ```
 
 `--dataset laion`, `--region visual` and `--metric encoding` are defaults.
@@ -52,7 +52,7 @@ evaluation code.
 The default proposer roster is one Claude Code Opus 5.5 and two agy Argon agents at medium effort, with an
 Astra xhigh coordinator. Proposers correct their own failed candidates; automatic
 repair is off by default (the worker's `--max-repairs` flag enables it). Defaults live in
-[`search/config.env`](../search/config.env). Codex and agy reuse existing machine
+[`src/search/config.env`](../src/search/config.env). Codex and agy reuse existing machine
 logins, with permission prompts disabled inside the outer isolation boundary.
 Claude automation requires a token from `claude setup-token`;
 it never copies the interactive Claude login or its refresh credentials.
@@ -84,7 +84,7 @@ Other proposer failures retry with exponential delays, with a bounded number of
 consecutive failures; healthy proposers and evaluators continue running.
 
 Token-cost estimates use the public standard API rates verified on October 22,
-2026 in [`search/pricing.json`](../search/pricing.json), including cache usage and
+2026 in [`src/search/pricing.json`](../src/search/pricing.json), including cache usage and
 reasoning tokens. Each run preserves this fixed snapshot; monitoring does not
 fetch prices online. Estimates are not invoices and exclude subscription costs,
 special service tiers and non-token charges. Gemini Argon's introductory rates
@@ -108,9 +108,9 @@ python -m search.score --model model.py
 python -m search.score --region ventral --metric rsa --model model.py
 
 # Evaluate an explicitly supplied frozen model, recording that selection method.
-python final_eval.py --model model.py --search-dataset laion --region visual
+python -m final_eval --model model.py --search-dataset laion --region visual
 
-# Optional read-only dashboard over search_runs/.
+# Optional read-only dashboard over artifacts/search/.
 pip install -e '.[dashboard]'
 python -m dashboard
 
@@ -121,7 +121,9 @@ python -m pytest -q
 ## Data, isolation and outputs
 
 Prepared data is reused in place; no download or multi-gigabyte copy is needed.
-Paths can be overridden in the shell or an untracked local `.env`.
+Paths can be overridden in the shell or an untracked `.env` at the repository root.
+Editable installation makes the packages under `src/` available to the module
+commands above.
 
 | Variable | Default response file |
 | --- | --- |
@@ -172,6 +174,11 @@ untrained or explainable.
 Each search run records its benchmark, source/code identity, runtime versions and
 data-file identities in `env.json`. Candidate SHA256 hashes identify the bytes
 that were scored. Final evaluation verifies the winner and writes `selection.json`,
-a frozen `model.py` and `evaluation.json` under `final_results/`. It never writes
+a frozen `model.py` and `evaluation.json` under `artifacts/final/`. It never writes
 scores to the search database, and existing final artifacts are not overwritten.
+Search state lives under `artifacts/search/`; top-level operational logs live
+under `artifacts/logs/`. Legacy `runs/`, `results/` and `.local/` contents are archived in
+`artifacts/archive/runs/`, `artifacts/archive/results/` and
+`artifacts/archive/local/`. Research code lives in `src/`, monitoring in root
+`dashboard/`, and generated outputs in `artifacts/`.
 Run databases, data, outputs, credentials and caches must stay out of Git.

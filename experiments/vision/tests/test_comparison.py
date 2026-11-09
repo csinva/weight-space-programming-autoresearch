@@ -96,3 +96,14 @@ def test_model_loading_retains_static_scan(tmp_path):
     path.write_text("import requests\nMODEL = None\n")
     with pytest.raises(ValueError, match="rejected"):
         load_model(path)
+
+
+def test_baselines_reject_search_output_before_evaluation(tmp_path, monkeypatch):
+    from baselines import run
+    monkeypatch.setattr(run, "REPO", tmp_path)
+    output = tmp_path / "artifacts" / "search" / "run"
+    with pytest.raises(ValueError, match="outside search storage"):
+        run.main(["--out", str(output)])
+    with pytest.raises(ValueError, match="outside search storage"):
+        run.save({}, output / "results.json")
+    assert not output.exists()
