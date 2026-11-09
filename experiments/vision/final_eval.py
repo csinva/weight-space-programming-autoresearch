@@ -13,12 +13,10 @@ responses are loaded.
 from __future__ import annotations
 
 import argparse
-import contextlib
 import hashlib
 import itertools
 import json
 import math
-import os
 from pathlib import Path
 import sqlite3
 from dataclasses import replace
@@ -28,6 +26,7 @@ REPO = Path(__file__).resolve().parent
 HEADLINE = "heldout_subjects__heldout_images"  # LAION/NSD cells: "<subjects>_subjects__<images>_images"
 
 from neuro_eval.benchmarks import SOURCE_REVISION, protocol_for, validate_search_dataset
+from neuro_eval.environment import final_environment
 
 
 def sha256(path: Path) -> str:
@@ -78,34 +77,6 @@ def manual_model(path: str | Path, dataset: str, region: str) -> dict:
     return {"path": str(path), "sha256": sha256(path), "model_id": None,
             "search_score": None, "search_metric": None, "search_region": protocol.search_region, "run": None,
             "search_dataset": dataset, "environment": {}, "selection_rule": "explicit_manual_model"}
-
-
-@contextlib.contextmanager
-def final_environment(selection: dict):
-    protocol = protocol_for(selection["search_dataset"], region=selection["search_region"],
-                            metric=selection["search_metric"] or "rsa")
-    from neuro_eval.model import EVAL_ENV_KEYS
-    previous = os.environ.copy()
-    try:
-        saved = selection["environment"]
-        storage_keys = {"nsd": ("NSD_DATA_DIR", "NSD_DATA_FILE", "NSD_ROOT", "NSD_STIMULI_HDF5_PATH", "NSD_BETAS_DIR"),
-                        "laion": ("LAION_DATA_DIR", "LAION_FMRI_DIR"),
-                        "tvsd": ("TVSD_DATA_DIR", "TVSD_STIMULI_HDF5_PATH")}[protocol.final_dataset]
-        storage_overrides = {key: previous[key] for key in storage_keys if key in previous}
-        if saved:
-            for key in EVAL_ENV_KEYS:
-                os.environ.pop(key, None)
-            os.environ.update({k: str(saved[k]) for k in EVAL_ENV_KEYS if k in saved})
-        os.environ.update(storage_overrides)
-        os.environ.update(NEURO_DATASET=protocol.final_dataset, NEURO_STAGE="final",
-                          NEURO_METRIC="encoding", NEURO_REGION=protocol.search_region)
-        os.environ.pop("NEURO_SUBJECT", None)  # each cell scores its complete protocol cohort
-        os.environ.pop("LAB_RUN", None)
-        os.environ.pop("LAB_PROPOSER", None)
-        yield protocol
-    finally:
-        os.environ.clear()
-        os.environ.update(previous)
 
 
 def evaluate_frozen(selection: dict, frozen: Path) -> tuple[dict, dict]:

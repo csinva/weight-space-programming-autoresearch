@@ -1,7 +1,8 @@
 """OS-isolated image-only candidate execution; private scoring stays in the caller.
 
-Bubblewrap supplies mount, PID, user and network namespaces. There is no fallback
-that imports a candidate in the scorer. Installed Python packages are trusted
+Bubblewrap supplies mount, PID, user and network namespaces. Search has no fallback
+that imports a candidate in the scorer. The explicit load_model utility supports
+standalone, in-process comparisons of frozen files. Installed Python packages are trusted
 runtime inputs; datasets, run directories, HOME and the repository are not mounts.
 """
 
@@ -523,6 +524,21 @@ def _candidate_worker():
         forward('/images.npy')
 
 
+
+def load_model(path):
+    """Import a frozen file for standalone comparison after the static source scan.
+
+    This executes code in-process; search and frozen final evaluation continue
+    to use IsolatedModel.
+    """
+    import importlib.util
+    path = Path(path).resolve()
+    if reason := scan_source(str(path)):
+        raise ValueError(f"{path} rejected: {reason}")
+    spec = importlib.util.spec_from_file_location(f"model_{abs(hash(path))}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.MODEL
 
 if __name__ == "__main__":
     _candidate_worker()

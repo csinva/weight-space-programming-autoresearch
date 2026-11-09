@@ -15,6 +15,7 @@ the current search workflow, evaluation protocols and commands.
 - `search/costs.py` and `pricing.json`: usage accounting and fixed price snapshot.
 - `neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
 - `final_eval.py`: select and freeze the search winner, then evaluate it on held-out subjects and images (TVSD for Triple-N).
+- `baselines/` and `compress.py`: fixed reference comparisons and natural-language reconstruction; shared scoring lives in `neuro_eval/comparison.py`, with scoped evaluation settings in `neuro_eval/environment.py`.
 - `dashboard/`: read-only monitoring UI/API; `tests/`: scientific and operational checks.
 - `search_runs/` and `final_results/`: generated run state and final artifacts; untracked.
 
