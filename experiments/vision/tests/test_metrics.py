@@ -262,7 +262,7 @@ def test_final_encoding_keeps_complete_cohort_and_equal_subject_mean(monkeypatch
     assert row["reward"] is None
 
 
-# Frozen CPU outputs from looped-networks revision
+# Frozen CPU outputs from source revision
 # 3ee575baeceb1ad784102162a051b7444182fdaa, captured before consolidation.
 # Scores check every held-out row; one prediction per target also pins the scale.
 SOURCE_BASELINES = {

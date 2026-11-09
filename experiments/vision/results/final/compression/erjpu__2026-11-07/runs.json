@@ -1,0 +1,32 @@
+{
+  "runs": {
+    "rebuild_200w_0": {
+      "description": "200w",
+      "contract_ok": true,
+      "attempts": 1
+    },
+    "rebuild_200w_1": {
+      "description": "200w",
+      "contract_ok": true,
+      "attempts": 1
+    },
+    "rebuild_200w_2": {
+      "description": "200w",
+      "contract_ok": true,
+      "attempts": 1
+    },
+    "rebuild_200w_3": {
+      "description": "200w",
+      "contract_ok": true,
+      "attempts": 1
+    }
+  },
+  "cka": {
+    "original": 1.0000000000000007,
+    "rebuild_200w_0": 0.7098933071485602,
+    "rebuild_200w_1": 0.7145249890646801,
+    "rebuild_200w_2": 0.7612735458776303,
+    "rebuild_200w_3": 0.7074250835474142
+  },
+  "cost_usd": 3.2126650000000003
+}

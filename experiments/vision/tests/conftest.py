@@ -40,9 +40,7 @@ def clean_environment(monkeypatch, tmp_path):
 @pytest.fixture
 def run(tmp_path, clean_environment):
     root = tmp_path / "repository"
-    (root / "neuro_eval").mkdir(parents=True)
-    (root / "search/prompts").mkdir(parents=True)
-    (root / "search/prompts/proposer.md").write_text("Only edit model.py.\n")
+    root.mkdir(parents=True)
     shutil.copyfile(REPO / "model.py", root / "model.py")
     return Path(scaffold_run("laion", "2026-10-21", str(root), 2))
 

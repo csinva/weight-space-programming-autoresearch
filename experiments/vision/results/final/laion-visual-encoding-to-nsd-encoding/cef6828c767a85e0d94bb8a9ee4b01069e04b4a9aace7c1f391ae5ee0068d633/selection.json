@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "stage": "frozen_before_final",
+  "model_sha256": "cef6828c767a85e0d94bb8a9ee4b01069e04b4a9aace7c1f391ae5ee0068d633",
+  "frozen_model": "<repo>/final_results/laion-visual-encoding-to-nsd-encoding/cef6828c767a85e0d94bb8a9ee4b01069e04b4a9aace7c1f391ae5ee0068d633/model.py",
+  "selection": {
+    "path": "<repo>/search_runs/laion__visual__encoding__2026-11-05/models/erjpu.py",
+    "sha256": "cef6828c767a85e0d94bb8a9ee4b01069e04b4a9aace7c1f391ae5ee0068d633",
+    "model_id": "erjpu",
+    "search_score": 0.48746224902406465,
+    "search_metric": "encoding",
+    "search_region": "visual",
+    "run": "<repo>/search_runs/laion__visual__encoding__2026-11-05",
+    "search_dataset": "laion",
+    "selection_rule": "highest_search_score_then_created_at_then_id"
+  },
+  "search_environment": {
+    "NEURO_SUBJECT": "sub-01,sub-03,sub-05,sub-06,sub-07",
+    "NEURO_IMSIZE": "128",
+    "NEURO_MAX_PARAMS": "100000",
+    "NEURO_DATASET": "laion",
+    "NEURO_METRIC": "encoding",
+    "NEURO_REGION": "visual",
+    "NEURO_STAGE": "search",
+    "protocol": {
+      "name": "laion-visual-encoding-to-nsd-encoding",
+      "search_dataset": "laion",
+      "final_dataset": "nsd",
+      "search_subjects": [
+        "sub-01",
+        "sub-03",
+        "sub-05",
+        "sub-06",
+        "sub-07"
+      ],
+      "final_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08"
+      ],
+      "image_policy": "source_train_shared_test_all_sources",
+      "search_region": "visual",
+      "search_metric": "encoding",
+      "final_metric": "encoding",
+      "aggregation": "selected_region_then_equal_subject_mean",
+      "version": "looped-cross-dataset-v4"
+    },
+    "source_revision": "3ee575baeceb1ad784102162a051b7444182fdaa",
+    "evaluation_sha256": "851413f6609fece2f16aba0ce1e9c6f86417a3bc853f3fae4bdfa66130b5f986",
+    "runtime_versions": {
+      "python": "3.13.2",
+      "torch": "2.14.1",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "h5py": "3.16.0",
+      "pillow": "13.0.0",
+      "nibabel": "5.4.2",
+      "xarray": "2026.9.0",
+      "pandas": "3.0.6"
+    },
+    "data_files": {
+      "responses": {
+        "path": "/data/shared/datasets/laion_fmri/processed/laion_data.pkl",
+        "size_bytes": 1693689259,
+        "mtime_ns": 1792070296357192281
+      },
+      "stimuli": {
+        "path": "/data/shared/datasets/laion_fmri/stimuli/images/task-images_stimuli.h5",
+        "size_bytes": 3422259504,
+        "mtime_ns": 1792068341745058177
+      }
+    },
+    "providers": {
+      "NEURO_MODEL_ROSTER": "codex:gpt-6-astra:medium codex:gpt-6-astra:medium agy:gemini-4-argon-medium:medium agy:gemini-4-argon-medium:medium",
+      "NEURO_EFFORT": "medium",
+      "NEURO_REPAIR_MODEL": "codex:gpt-6-astra",
+      "NEURO_REPAIR_EFFORT": "medium",
+      "NEURO_COORDINATOR_MODEL": "codex:gpt-6-astra:xhigh",
+      "NEURO_COORDINATOR_EFFORT": "xhigh",
+      "AGY_ADC_AUTH": "true"
+    }
+  },
+  "protocol": {
+    "name": "laion-visual-encoding-to-nsd-encoding",
+    "search_dataset": "laion",
+    "final_dataset": "nsd",
+    "search_subjects": [
+      "sub-01",
+      "sub-03",
+      "sub-05",
+      "sub-06",
+      "sub-07"
+    ],
+    "final_subjects": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08"
+    ],
+    "image_policy": "source_train_shared_test_all_sources",
+    "search_region": "visual",
+    "search_metric": "encoding",
+    "final_metric": "encoding",
+    "aggregation": "selected_region_then_equal_subject_mean",
+    "version": "looped-cross-dataset-v4"
+  },
+  "source_revision": "3ee575baeceb1ad784102162a051b7444182fdaa",
+  "evaluation_scope": {
+    "final_neural_data_usage": "final_only",
+    "image_held_out_from_search": false,
+    "limitation": "LAION search includes NSD-source stimuli. Final NSD neural responses remain final-only, but final NSD encoding must not be interpreted as image-held-out generalization from search."
+  },
+  "evaluation_sha256": "851413f6609fece2f16aba0ce1e9c6f86417a3bc853f3fae4bdfa66130b5f986",
+  "runtime_versions": {
+    "python": "3.13.2",
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "h5py": "3.16.0",
+    "pillow": "13.0.0",
+    "nibabel": "5.4.2",
+    "xarray": "2026.9.0",
+    "pandas": "3.0.6"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "early and ventral visual streams": "conv4",
+  "early visual stream": "conv3",
+  "ventral visual stream": "fc6",
+  "V1": "conv3",
+  "V2": "conv3",
+  "V3": "conv3",
+  "hV4": "conv3",
+  "FFA": "fc8",
+  "PPA": "fc7"
+}

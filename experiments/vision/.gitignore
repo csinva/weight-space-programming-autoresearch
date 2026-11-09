@@ -1,15 +1,9 @@
 # Specs and local-only state
 specs/
-.local/
 
 # Machine-written outputs and caches (never commit)
 /data/
-/search_runs/
-/final_results/
-# Existing local outputs from before the reorganization stay untracked.
-/runs/
-/results/
-logs/
+/artifacts/
 __pycache__/
 .venv/
 *.egg-info/

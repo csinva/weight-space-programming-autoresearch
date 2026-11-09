@@ -1,0 +1,19 @@
+group,families,roi,gain_x1000,share_of_roi_gain_pct
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,Pooled,17.5,39.5
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,Early,9.19,25.0
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,Ventral,26.42,50.5
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,V1,12.92,29.6
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,V2,7.57,23.4
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,V3,6.85,19.6
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,hV4,11.88,28.8
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,FFA,42.54,57.8
+Correlation statistics (cross-octave + geometry relations + texture + joint covariance),cross_octave+geometry_relations+texture_covariance+joint_covariance,PPA,24.54,55.4
+Surface geometry,surface_geometry,Pooled,11.23,25.4
+Surface geometry,surface_geometry,Early,12.91,35.2
+Surface geometry,surface_geometry,Ventral,9.47,18.1
+Surface geometry,surface_geometry,V1,14.17,32.5
+Surface geometry,surface_geometry,V2,11.86,36.6
+Surface geometry,surface_geometry,V3,13.54,38.8
+Surface geometry,surface_geometry,hV4,15.38,37.2
+Surface geometry,surface_geometry,FFA,12.46,16.9
+Surface geometry,surface_geometry,PPA,2.81,6.4
