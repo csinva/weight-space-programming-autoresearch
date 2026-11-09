@@ -1,7 +1,7 @@
 """Encoding scoring for complete search or final fixed cohorts.
 
-Numerical kernels copied unchanged from looped-networks, revision
-3ee575baeceb1ad784102162a051b7444182fdaa, looped/metrics/encoding.py.
+Numerical kernels copied unchanged from source revision
+3ee575baeceb1ad784102162a051b7444182fdaa, metrics/encoding.py.
 Unused source experiment helpers are omitted. Cohort policies live in benchmarks.
 Train statistics center/scale features and z-score targets; five unshuffled folds
 select each target's alpha by mean negative MSE with the source log-alpha tie

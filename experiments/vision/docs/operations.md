@@ -4,6 +4,33 @@
 
 Run all commands from the repository root. Dataset, region and metric stay fixed for each run.
 
+## Setup requirements
+
+Installing the Python package does not provision the complete research environment.
+
+| Requirement | Needed for |
+| --- | --- |
+| Python 3.12+ and `pip install -e .` | Python commands and evaluation libraries |
+| Linux, Bubblewrap (`bwrap` on PATH), usable mount/PID/user/network namespaces | Search and isolated final evaluation; unsupported isolation fails preflight |
+| Prepared response files and matching stimuli | Neural scoring; files are not bundled or downloaded |
+| Installed, authenticated agent CLI and model access | Autonomous search; compression specifically uses Claude Code |
+| Optional baseline dependencies and pretrained weights | Selected reference comparisons |
+
+Install Bubblewrap through your Linux distribution. Check isolation independently
+with `python -c 'from neuro_eval.model import check_isolation; check_isolation()'`.
+The repository does not provide a raw-data preparation pipeline. Obtain compatible
+prepared files before attempting a search; their directory layout is described
+[below](#data-isolation-and-outputs). Copy [`.env.example`](../.env.example) to `.env`
+and replace the example paths. Each dataset must retain the subjects, filters and
+image policies in the [scientific protocol](protocol.md).
+
+The default roster uses three separate CLIs/accounts. For a smaller setup, install
+and authenticate Claude Code, follow the token instructions below, and export
+`NEURO_MODEL_ROSTER="claude:opus5.5:medium"`. Pass `--epoch-mins 0` to disable the
+coordinator. With automatic repairs disabled, that configuration requires only
+Claude. Provider and model overrides belong in the shell environment; `.env` is
+used here for dataset paths. Use a model available to your account.
+
 ## Setup and launch
 
 Use Python 3.12 or newer, from the repository root:
@@ -120,8 +147,10 @@ python -m pytest -q
 
 ## Data, isolation and outputs
 
-Prepared data is reused in place; no download or multi-gigabyte copy is needed.
-Paths can be overridden in the shell or an untracked `.env` at the repository root.
+Prepared data is read in place. On a new machine, you must obtain compatible
+response files and matching stimuli first. No acquisition or raw-data preparation
+command is included. The defaults below are lab-specific examples; override paths
+in the shell or an untracked `.env` at the repository root.
 Editable installation makes the packages under `src/` available to the module
 commands above.
 
@@ -135,7 +164,12 @@ commands above.
 Overrides name directories; filenames stay fixed except for `NSD_DATA_FILE`.
 Stimulus paths follow the source readers: `LAION_FMRI_DIR`, `NSD_ROOT`,
 `NSD_STIMULI_HDF5_PATH` and `TVSD_DATA_DIR`. NSD also requires the source ncsnr
-volumes for reliability filtering.
+volumes for reliability filtering. Triple-N also uses the NSD stimulus HDF5 file;
+set `NSD_STIMULI_HDF5_PATH` even when not evaluating NSD responses. LAION expects
+`stimuli/images/task-images_stimuli.h5` beneath `LAION_FMRI_DIR`; TVSD expects
+`tvsd_stimuli.h5` alongside `tvsd_data.pkl` in `TVSD_DATA_DIR`. Preflight checks
+required files for readability, but does not replace a complete data preparation
+and schema-validation workflow.
 
 Search agents receive a private workspace and role-bound API. Each proposer can
 have one queued or running candidate. Lists and `my-best` return compact summaries;

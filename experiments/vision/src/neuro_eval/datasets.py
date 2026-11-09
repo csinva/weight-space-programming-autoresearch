@@ -205,7 +205,7 @@ def _load_native(d: Dataset):
         subject = readers.TVSD_SUBJECTS.index(d.subject)
         data = readers.load_all_tvsd_data(cfg, subjects=[subject], regions=regions)
     else:
-        raise ValueError(f"Not a looped vision dataset: {name}")
+        raise ValueError(f"Unsupported vision dataset: {name}")
     missing = [] if d.reward_roi == "all" else [
         r for r in UNION_ROIS.get(d.reward_roi, (d.reward_roi,)) if r not in data["regions"]]
     if missing:
@@ -264,7 +264,7 @@ def _pixels(stimuli, ids: list[str], imsize: int) -> torch.Tensor:
     use_cache = not os.environ.get("NEURO_NO_CACHE")
     if use_cache and key in _PIXEL_MEMO:
         return _PIXEL_MEMO[key]
-    cache_path = _pixel_cache_dir() / f"looped_pixels_{key}.npy"
+    cache_path = _pixel_cache_dir() / f"pixels_{key}.npy"
     if use_cache and cache_path.exists():
         # Copy-on-write mapping lets model input cloning remain inexpensive and
         # prevents a tensor mutation from changing the persisted stimulus cache.
@@ -279,7 +279,7 @@ def _pixels(stimuli, ids: list[str], imsize: int) -> torch.Tensor:
             pixels[row] = np.asarray(im, dtype=np.float32).reshape(-1) / 255.0
         if use_cache:
             cache_path.parent.mkdir(parents=True, exist_ok=True)
-            fd, temporary = tempfile.mkstemp(prefix="looped_pixels_", suffix=".npy", dir=cache_path.parent)
+            fd, temporary = tempfile.mkstemp(prefix="pixels_", suffix=".npy", dir=cache_path.parent)
             try:
                 with os.fdopen(fd, "wb") as file:
                     np.save(file, pixels, allow_pickle=False)
@@ -375,7 +375,7 @@ def _stream_masks(d, native, subject, masks):
     return masks, unavailable
 
 
-def load_looped(d: Dataset):
+def load_dataset_split(d: Dataset):
     """Return Xtrain, Xtest, Ytrain, Ytest, region masks, None.
 
     Noise ceilings are deliberately not returned: source alignment uses raw RSA
@@ -421,5 +421,5 @@ def load_split(dataset: Dataset):
     """Load one immutable split, invalidating cache when source files change."""
     key = (dataset_cache_key(dataset), tuple(os.environ.get(k) for k in _SPLIT_ENV_KEYS))
     if key not in _SPLIT_MEMO:
-        _SPLIT_MEMO[key] = load_looped(dataset)
+        _SPLIT_MEMO[key] = load_dataset_split(dataset)
     return _SPLIT_MEMO[key]

@@ -39,8 +39,8 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
     monkeypatch.setattr(providers, 'preflight', lambda agents: observed.extend(agents))
     monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
     assert run.main(['laion', '--region', 'ventral', '--preflight']) == 0
-    # Three proposers and the Codex coordinator/optional repair agent.
-    assert Counter(agent.provider for agent in observed) == {'claude': 1, 'agy': 2, 'codex': 2}
+    # Three proposers and the enabled Codex coordinator.
+    assert Counter(agent.provider for agent in observed) == {'claude': 1, 'agy': 2, 'codex': 1}
 
     source.write_bytes(b'')
     observed.clear()
@@ -48,6 +48,38 @@ def test_preflight_checks_sources_and_providers_without_creating_run(tmp_path, m
         run.main(['laion', '--region', 'ventral', '--preflight'])
     assert result.value.code == 2
     assert observed == []
+
+
+@pytest.mark.parametrize('epoch_mins', ['0', '120'])
+def test_preflight_only_requires_active_providers(epoch_mins, monkeypatch, capsys):
+    from search import providers
+
+    monkeypatch.setenv('NEURO_MODEL_ROSTER', 'claude:opus5.5:medium')
+    monkeypatch.setenv('NEURO_REPAIR_MODEL', 'invalid-unused-repair')
+    monkeypatch.setenv('NEURO_COORDINATOR_MODEL', 'codex:astra')
+    monkeypatch.delenv('VANILLA_AUTORESEARCH', raising=False)
+    monkeypatch.setattr(run, 'evaluation_environment', lambda d: {'NEURO_SUBJECT': 'sub-01,sub-03,sub-05'})
+    monkeypatch.setattr(run, 'validate_sources', lambda d: {})
+    monkeypatch.setattr('neuro_eval.model.check_isolation', lambda: None)
+    monkeypatch.setattr(run, 'scaffold_run', lambda *a, **kw: pytest.fail('created run'))
+    observed = []
+
+    def preflight(active_agents):
+        observed.extend(agent.provider for agent in active_agents)
+        if 'codex' in observed:
+            raise ValueError('Missing codex executable: codex')
+
+    monkeypatch.setattr(providers, 'preflight', preflight)
+    args = ['--preflight', '--epoch-mins', epoch_mins]
+    if epoch_mins == '0':
+        assert run.main(args) == 0
+        assert observed == ['claude']
+    else:
+        with pytest.raises(SystemExit) as result:
+            run.main(args)
+        assert result.value.code == 2
+        assert observed == ['claude', 'codex']
+        assert 'Missing codex executable' in capsys.readouterr().err
 
 
 def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, hours=.0003,
@@ -71,6 +103,7 @@ def simulation(tmp_path, monkeypatch, outcomes, *, evaluators=1, coordinator=0, 
             if 'search.worker' in argv:
                 self.name = 'eval'
                 assert '-u' in argv
+                assert '--max-repairs' not in argv  # keep the worker's zero-repair default
             elif argv[argv.index('--role') + 1] == 'coordinator':
                 self.name = 'coordinator'
             else:

@@ -185,7 +185,7 @@ def main(argv=None):
         if os.environ.get('VANILLA_AUTORESEARCH') == '1':
             args.epoch_mins = 0
         roles = [(f'p{i:02d}', spec, 'medium') for i, spec in enumerate(roster)]
-        roles += [('repair', os.environ['NEURO_REPAIR_MODEL'], os.environ['NEURO_REPAIR_EFFORT'])]
+        # Supervised workers leave repairs to proposers (--max-repairs defaults to 0).
         if args.epoch_mins:
             roles += [('coordinator', os.environ['NEURO_COORDINATOR_MODEL'], os.environ['NEURO_COORDINATOR_EFFORT'])]
         agents = [resolve(spec, effort) for _, spec, effort in roles]

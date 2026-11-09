@@ -24,6 +24,17 @@ python -m baselines.run --dataset nsd --final --model champion=artifacts/final/.
 python -m baselines.run --dataset triplen --only gabor,hmax
 ```
 
+ImageNet-trained AlexNet requires `alexnet-owt-7be5be79.pth`. Set
+`NEURO_ALEXNET_WEIGHTS` in the shell to its absolute path, or place it under
+`checkpoints/` in the standard PyTorch Hub cache (`TORCH_HOME` configures the cache).
+Weights are not downloaded automatically. Seeded-random AlexNet and analytic
+baselines do not require this checkpoint. For example:
+
+```bash
+export NEURO_ALEXNET_WEIGHTS=/absolute/path/to/alexnet-owt-7be5be79.pth
+python -m baselines.run --dataset laion --only alexnet_fc8
+```
+
 ## Natural-language compression
 
 `src/compress.py` tests whether a model's broad computation can be specified in

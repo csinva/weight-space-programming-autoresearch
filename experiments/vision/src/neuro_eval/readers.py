@@ -1,4 +1,4 @@
-"""Prepared response and lazy stimulus readers from looped-networks.
+"""Prepared response and lazy stimulus readers.
 
 Source revision: 3ee575baeceb1ad784102162a051b7444182fdaa (imported 2026-10-21).
 Consolidates data/{stimuli,nsd,laion,triplen,tvsd}.py and the local path/pickle

@@ -13,17 +13,38 @@ for LAION and NSD are fit on each subject's unique images only. See the
 
 ## Setup and search
 
-Use Python 3.12 or newer. Install the packages from `src/` in editable mode, then
-run commands from the repository root:
+The Python package can be installed independently. A full search additionally
+requires Linux with Bubblewrap (`bwrap`) and usable namespaces, compatible prepared
+neural data, and an installed, authenticated agent CLI. These are not installed by
+`pip`. Dataset download and preparation are not automated here; raw dataset files
+alone are not sufficient. See [setup requirements](docs/operations.md#setup-requirements).
+
+Use Python 3.12 or newer and run commands from the repository root:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev]'
-python -m search.run --show-config
-python -m search.run --preflight
-python -m search.run --gpu 0
+python -m pytest -q
+cp .env.example .env
+# Edit .env to point to your prepared data and stimuli before continuing.
 ```
+
+A single-provider search avoids the multi-provider defaults. After installing
+and authenticating Claude Code, save its automation token with `python -m search.auth`
+(see [authentication](docs/operations.md#setup-and-launch)), then run:
+
+```bash
+export NEURO_MODEL_ROSTER="claude:opus5.5:medium"
+python -m search.run --epoch-mins 0 --show-config
+python -m search.run --epoch-mins 0 --preflight
+python -m search.run --epoch-mins 0 --gpu 0
+```
+
+This example disables coordination and does not require a repair provider.
+Choose a model identifier available to your account. Optional baseline and
+isolation tests can skip when their dependencies or system capabilities are missing;
+a passing test suite does not verify dataset availability or provider authentication.
 
 Preflight checks data, provider authentication and Bubblewrap isolation without
 model requests. Search sends real model requests and defaults to 12 hours of
