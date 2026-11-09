@@ -16,6 +16,7 @@ the current search workflow, evaluation protocols and commands.
 - `src/neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
 - `src/final_eval.py`: select and freeze the search winner, then evaluate it on held-out subjects and images (TVSD for Triple-N).
 - `src/baselines/` and `src/compress.py`: fixed reference comparisons and natural-language reconstruction; shared scoring lives in `src/neuro_eval/comparison.py`, with scoped evaluation settings in `src/neuro_eval/environment.py`.
+- `src/analysis/families.py`: per-voxel Shapley attribution of the LAION champion erjpu over six computational families (edges, color, surface shape, corners/contours, texture statistics, global layout).
 - `dashboard/`: read-only monitoring UI/API; `tests/`: scientific and operational checks.
 - `docs/`: operations, protocol, comparisons and technical-writing guidance.
 - `artifacts/search/` and `artifacts/final/`: generated run state and final artifacts; `artifacts/logs/`: operational logs; `artifacts/archive/{runs,results,local}/`: legacy contents. All are untracked.
