@@ -7,7 +7,7 @@ channels it is computed from (see erjpu's model.py):
                       edge-like channels of later stages: dominant orientation and its strength, structure-tensor
                       edge strength and coherence, signed brightness-gradient direction
   K  color            red-green / blue-yellow energy and DoG channels of the V1-like stage, color layout
-  S  surface shape    Hessian shape index (dome, ridge, saddle, rut, cup), curvedness and anisotropy
+  S  luminance curvature  Hessian shape index (dome, ridge, saddle, rut, cup), curvedness and anisotropy
                       channels, and anything computed only from them (co-occurrence, symmetry, cross-scale)
   C  corners/contours corner strength (luminance and color), crossing orientations, isophote and
                       orientation-field curvature, iso- vs ortho-surround, line type (bright bar, dark crease,
@@ -22,13 +22,16 @@ takes that channel's family; a co-occurrence column takes S if both channels are
 is, and T otherwise.
 
 For all 2^6 = 64 subsets of {E, K, S, C, T, G} the search encoding readout (center design, per-voxel
-5-fold-CV ridge) is refit on the current LAION search split and scored per voxel on the test images.
+5-fold-CV ridge) is refit on erjpu's search setting (protocol v4: all five LAION subjects, all shared images) and scored per voxel on the test images.
 Exact Shapley values per voxel are computed for two games, both from the same 64 fits:
   full:         v(S) = score(S), all six families compete, v(empty) = 0
   beyond_edges: v(S) = score(S + E) - score(E), the five non-edge families share the gain over edges
 Scores are kept as Pearson r and as signed explained variance sign(r) r^2.
 
-Usage: python src/analysis/families.py OUTDIR
+Panel D of the fMRI figure (src/figures/fmri/spec.md). Writes per-voxel results to OUTDIR
+(default artifacts/figures/fmri/data/d/) and the panel data to artifacts/figures/fmri/data/d.json.
+
+Usage: python src/figures/fmri/d_families.py [OUTDIR]
 """
 import itertools
 import json
@@ -42,10 +45,13 @@ from pathlib import Path
 import numpy as np
 import torch
 
-REPO = Path(__file__).resolve().parents[2]
+REPO = Path(__file__).resolve().parents[3]
+DATA = REPO / "artifacts/figures/fmri/data"
+V4_SUBJECTS = ("sub-01", "sub-03", "sub-05", "sub-06", "sub-07")
+D_ROIS = ["V1", "V2", "V3", "hV4", "FFA", "PPA"]
 FROZEN = REPO / ("artifacts/final/laion-visual-encoding-to-nsd-encoding/"
                  "cef6828c767a85e0d94bb8a9ee4b01069e04b4a9aace7c1f391ae5ee0068d633/model.py")
-FAMILIES = {"E": "edges", "K": "color", "S": "surface shape", "C": "corners and contours",
+FAMILIES = {"E": "edges", "K": "color", "S": "luminance curvature", "C": "corners and contours",
             "T": "texture statistics", "G": "global layout"}
 
 BLOCKS = ["path", "persistence",
@@ -146,6 +152,14 @@ def block_labels(widths):
     return np.array([x for b in BLOCKS for x in L[b]])
 
 
+def v4_selected_ids(d, native, subject):
+    """erjpu's search split (protocol v4): each subject's unique images for training, every shared image for test."""
+    first = native["neural"][native["regions"][0]][subject]
+    train_ids, test_ids = set(first["train"]), set(native["shared_test_ids"])
+    assert not train_ids & test_ids and test_ids <= set(first["test"])
+    return sorted(train_ids, key=int), sorted(test_ids, key=int)
+
+
 def load_champion():
     source = FROZEN.read_text()
     marker = "            out_chunks.append(torch.cat(feats, dim=1))"
@@ -171,7 +185,7 @@ def shapley(values, players):
 
 
 def main():
-    out = Path(sys.argv[1])
+    out = Path(sys.argv[1]) if len(sys.argv) > 1 else DATA / "d"
     out.mkdir(parents=True, exist_ok=True)
     os.environ.update(NEURO_DATASET="laion", NEURO_STAGE="search", NEURO_METRIC="encoding",
                       NEURO_REGION="visual", NEURO_IMSIZE="128")
@@ -193,7 +207,12 @@ def main():
     (out / "column_labels.json").write_text(json.dumps({"labels": lab.tolist(), "counts": counts,
                                                        "families": FAMILIES}))
 
-    subjects = list(protocol_for("laion", "visual", "encoding").search_subjects)
+    # erjpu was searched under protocol v4: all five LAION subjects, readout fit on each subject's
+    # unique images and scored on every shared image. Panel D reproduces that setting.
+    import neuro_eval.datasets as nd
+
+    nd._selected_ids = v4_selected_ids
+    subjects = list(V4_SUBJECTS)
     base = get_dataset("laion", region="visual", metric="encoding")
     players = list(FAMILIES)
     subsets = [frozenset(c) for k in range(1, 7) for c in itertools.combinations(players, k)]
@@ -253,6 +272,8 @@ def main():
                 arrays[f"{scale}_full_{p}"] = phi_full[p]
             for p in rest:
                 arrays[f"{scale}_beyond_edges_{p}"] = phi_beyond[p]
+            for p in players:  # unique: loss when only family p is removed from all six
+                arrays[f"{scale}_unique_{p}"] = v[frozenset(players)] - v[frozenset(players) - {p}]
             arrays[f"{scale}_six_families"] = v[frozenset(players)]
             arrays[f"{scale}_edges_only"] = v[frozenset({"E"})]
         arrays["r_all_columns"] = r["all_columns"]
@@ -265,8 +286,45 @@ def main():
     summary["roi_mean"] = {roi: {k: float(np.mean([summary["rois"][s][roi][k] for s in subjects]))
                                  for k in summary["rois"][subjects[0]][roi]} for roi in rois}
     (out / "summary.json").write_text(json.dumps(summary, indent=2))
-    print("summary written", flush=True)
+    write_panel_data(summary, out)
+    print("summary and d.json written", flush=True)
+
+
+def write_panel_data(summary, out):
+    """d.json: share of the gain beyond edges per family and ROI (signed explained variance), see spec.md."""
+    subjects, rest = summary["subjects"], [p for p in FAMILIES if p != "E"]
+    def shares(roi_values):
+        tot = sum(roi_values[f"r2_beyond_edges_{p}"] for p in rest)
+        return {p: roi_values[f"r2_beyond_edges_{p}"] / tot for p in rest}
+    per_subject = {s: {roi: shares(summary["rois"][s][roi]) for roi in D_ROIS} for s in subjects}
+    def edges_share(v):
+        return v["r2_full_E"] / sum(v[f"r2_full_{p}"] for p in FAMILIES)
+    data = {
+        "rois": D_ROIS,
+        "families": {p: FAMILIES[p] for p in rest},
+        "share_beyond_edges": {p: {roi: float(np.mean([per_subject[s][roi][p] for s in subjects])) for roi in D_ROIS}
+                               for p in rest},
+        "share_beyond_edges_subjects": {p: {roi: {s: per_subject[s][roi][p] for s in subjects} for roi in D_ROIS}
+                                        for p in rest},
+        "features_per_family": json.loads((out / "column_labels.json").read_text())["counts"],
+        "edges_share_of_total": {roi: float(np.mean([edges_share(summary["rois"][s][roi]) for s in subjects]))
+                                 for roi in D_ROIS},
+        "gain_beyond_edges_r2": {roi: summary["roi_mean"][roi]["r2_six_families"] - summary["roi_mean"][roi]["r2_edges_only"]
+                                 for roi in D_ROIS},
+        "subjects": subjects,
+        "provenance": {"model": str(FROZEN.relative_to(REPO)), "dataset": "laion", "stage": "search",
+                       "protocol": "looped-cross-dataset-v4 (erjpu search setting): all five subjects, all shared test images", "metric": "encoding",
+                       "value": "share of exact Shapley gain over edges, signed r^2, ROI voxel mean then subject mean",
+                       "per_voxel_dir": str(out.relative_to(REPO)) if out.is_relative_to(REPO) else str(out)},
+    }
+    DATA.mkdir(parents=True, exist_ok=True)
+    (DATA / "d.json").write_text(json.dumps(data, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    if "--panel-only" in sys.argv:  # rewrite d.json from an existing summary.json, no GPU
+        sys.argv.remove("--panel-only")
+        out = Path(sys.argv[1]) if len(sys.argv) > 1 else DATA / "d"
+        write_panel_data(json.loads((out / "summary.json").read_text()), out)
+    else:
+        main()

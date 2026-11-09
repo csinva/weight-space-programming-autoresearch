@@ -1,0 +1,374 @@
+<title>Searched Model Feature Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a reading column for the story, widening to a two-pane atlas (map + inspector) and a channel-map grid. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1c2230; --muted: #5d6677; --line: #dfe3ea; --accent: #2f5bd3;
+  --chip: #eef1f6;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  /* Family colors match the paper figure (Okabe-Ito). */
+  --fam-E: #8a8f99; --fam-K: #E69F00; --fam-S: #0072B2; --fam-C: #009E73; --fam-T: #CC79A7; --fam-G: #56B4E9; --fam-X: #c9ccd2;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11141a; --panel: #181c24; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2a303b; --accent: #7c9cff; --chip: #222833;
+  --fam-E: #a2a7b0; --fam-X: #4a505b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11141a; --panel: #181c24; --fg: #e6e9ef; --muted: #9aa3b2; --line: #2a303b; --accent: #7c9cff; --chip: #222833;
+  --fam-E: #a2a7b0; --fam-X: #4a505b; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 40px }
+h1, h2 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em }
+h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 700 }
+h2 { font-size: 22px; font-weight: 700 }
+p { margin: 0; max-width: 68ch }
+.lede { color: var(--muted); font-size: 16px }
+.eyebrow { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted) }
+section { display: grid; gap: 14px }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; font-variant-numeric: tabular-nums }
+.facts div { display: grid }
+.facts b { font-family: var(--f-display); font-size: 26px; font-weight: 700 }
+.facts span { color: var(--muted); font-size: 13px }
+/* Anatomy bar */
+.anatomy { display: flex; height: 38px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line) }
+.anatomy button { border: 0; padding: 0; cursor: pointer; min-width: 1px; border-right: 1px solid var(--bg); opacity: .92 }
+.anatomy button:hover, .anatomy button:focus-visible { opacity: 1; outline: 2px solid var(--fg); outline-offset: -2px }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted) }
+.legend button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--panel);
+  color: var(--fg); border-radius: 999px; padding: 3px 10px 3px 8px; font: inherit; font-size: 13px; cursor: pointer }
+.legend button[aria-pressed="false"] { opacity: .45 }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none }
+.hint { font-size: 13px; color: var(--muted) }
+/* Atlas */
+.atlas { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start }
+@media (max-width: 860px) { .atlas { grid-template-columns: minmax(0, 1fr) } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden }
+.seg button { border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 13px; padding: 5px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+input[type=search] { font: inherit; font-size: 13px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); color: var(--fg); min-width: 0; flex: 1 1 160px }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.mapbox { position: relative; width: 100%; aspect-ratio: 1; max-width: 100% }
+canvas { width: 100%; height: 100%; display: block; border-radius: 6px; cursor: crosshair }
+.tip { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 12px; padding: 4px 8px;
+  border-radius: 6px; max-width: 260px; transform: translate(10px, 10px) }
+.scale { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 8px; font-family: var(--f-mono) }
+.scale i { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #440154, #3b528b, #21918c, #5ec962, #fde725) }
+.insp { display: grid; gap: 14px }
+.insp h3 { font-family: var(--f-display); font-size: 18px; margin: 0; font-weight: 700; text-wrap: balance; overflow-wrap: anywhere }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--chip); border-radius: 999px; padding: 2px 10px;
+  font-size: 12.5px }
+.block { font-size: 13.5px; color: var(--muted) }
+.grid9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px }
+.thumb { aspect-ratio: 1; border-radius: 4px; background-color: var(--chip); background-repeat: no-repeat; width: 100% }
+.sub { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+svg text { fill: var(--muted); font-family: var(--f-mono); font-size: 10px }
+.bars { display: grid; gap: 6px; font-size: 13px }
+.bars div { display: grid; grid-template-columns: 44px 1fr 56px; gap: 8px; align-items: center; font-variant-numeric: tabular-nums }
+.bars i { height: 8px; border-radius: 4px; background: var(--accent); display: block }
+.bars em { font-style: normal; color: var(--muted); font-family: var(--f-mono); font-size: 12px; text-align: right }
+.track { background: var(--chip); border-radius: 4px; height: 8px }
+/* Top features per area */
+.areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px }
+.area ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px }
+.area li button { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; text-align: left;
+  border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 8px; padding: 6px 8px; font: inherit;
+  font-size: 12.5px; cursor: pointer }
+.area li button:hover { border-color: var(--accent) }
+.area li .t3 { display: flex; gap: 3px }
+.area li .t3 span { width: 30px; height: 30px; border-radius: 3px; background-repeat: no-repeat }
+.area h3 { margin: 0 0 8px; font-family: var(--f-display); font-size: 17px }
+/* Channel maps */
+.mapscroll { overflow-x: auto }
+.maptable { display: grid; gap: 4px; min-width: 560px }
+.maprow { display: grid; grid-template-columns: 210px repeat(6, 1fr); gap: 4px; align-items: center }
+.maprow > span { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere }
+.mtile { aspect-ratio: 1; border-radius: 3px; background-repeat: no-repeat; width: 100% }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:12px">
+    <div class="eyebrow">LAION-fMRI · agentic search · interpretable model</div>
+    <h1>What the searched model's 9,996 features see</h1>
+    <p class="lede">The searched model has no learned weights. Every feature is a named computation on the image: a filter
+      energy pooled over a grid cell, a co-occurrence of two channels, a statistic across scales. This atlas shows what
+      each feature responds to in natural images, how features relate, and which ones track each brain area.</p>
+    <div class="facts" id="facts"></div>
+  </header>
+
+  <section>
+    <div class="eyebrow">1 · Anatomy</div>
+    <h2>Where the features come from</h2>
+    <p class="hint">Each segment is one of the model's 36 computation blocks, sized by its number of features and colored by
+      family. Click a segment or a family to show only those features on the map.</p>
+    <div class="anatomy" id="anatomy" role="group" aria-label="Computation blocks"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">2 · Atlas</div>
+    <h2>Every feature, placed by what it responds to</h2>
+    <p class="hint">Features that respond to the same images sit close together (t-SNE of each feature's responses over 6,204
+      LAION images). Hover to identify a feature, click to inspect it. Color by a brain area to see which features track it.</p>
+    <div class="atlas">
+      <div class="card">
+        <div class="controls">
+          <div class="seg" id="colorby" role="group" aria-label="Color by"></div>
+          <input type="search" id="q" placeholder="Search names, e.g. saddle, red, corner" aria-label="Search features">
+        </div>
+        <div class="mapbox" id="mapbox"><canvas id="map" aria-label="Feature map"></canvas><div class="tip" id="tip" hidden></div></div>
+        <div class="scale" id="scale" hidden><span>0</span><i></i><span id="scalemax"></span></div>
+        <p class="hint" id="count" style="margin-top:6px"></p>
+      </div>
+      <div class="card insp" id="insp" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">3 · Brain areas</div>
+    <h2>The single features that best track each area</h2>
+    <p class="hint">Squared correlation between one feature and each voxel's response to the shared images, averaged over the
+      area's voxels and five subjects. This is univariate: the full model combines many features.</p>
+    <div class="areas" id="areas"></div>
+  </section>
+
+  <section>
+    <div class="eyebrow">4 · Channel maps</div>
+    <h2>The model's intermediate maps on six images</h2>
+    <p class="hint">Before pooling, the model computes dense maps. Brighter means a stronger response. Grid features average
+      these maps over cells; statistics features summarize them over the whole image.</p>
+    <div class="tabs seg" id="maptabs" role="group" aria-label="Map group" style="width:max-content;max-width:100%;flex-wrap:wrap"></div>
+    <div class="card mapscroll"><div class="maptable" id="maptable"></div></div>
+  </section>
+</div>
+
+<script>
+(async function () {
+  const css = getComputedStyle(document.documentElement);
+  const famColor = f => css.getPropertyValue("--fam-" + f).trim() || "#999";
+  const fmt = n => n.toLocaleString("en-US");
+  const [A, M] = await Promise.all([fetch("atlas.json").then(r => r.json()), fetch("maps.json").then(r => r.json())]);
+  const F = A.features, N = F.length, ROIS = A.rois;
+  const FAM_ORDER = ["E", "K", "S", "C", "T", "G", "X"];
+
+  // Facts
+  const famCount = {}; F.forEach(f => famCount[f[2]] = (famCount[f[2]] || 0) + 1);
+  document.getElementById("facts").innerHTML = [
+    [fmt(N), "features"], [A.blocks.length, "computation blocks"], ["0", "learned parameters"],
+    [fmt(A.n_images), "LAION images"]].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join("");
+
+  // Thumbnail helper (sprite of 48 px tiles, 64 per row)
+  const thumbStyle = (k, px) => {
+    const s = px / A.thumb, c = k % A.thumb_cols, r = Math.floor(k / A.thumb_cols);
+    return `background-image:url(thumbs.jpg);background-size:${A.thumb_cols * A.thumb * s}px auto;` +
+      `background-position:-${c * A.thumb * s}px -${r * A.thumb * s}px`;
+  };
+
+  // State
+  const state = { color: "family", fams: new Set(FAM_ORDER), block: null, q: "", sel: null };
+  const visible = i => {
+    const f = F[i];
+    if (!state.fams.has(f[2])) return false;
+    if (state.block !== null && f[3] !== state.block) return false;
+    if (state.q && !(f[4].toLowerCase().includes(state.q) || A.blocks[f[3]].info.toLowerCase().includes(state.q))) return false;
+    return true;
+  };
+
+  // Anatomy bar: blocks grouped by majority family
+  const blockFam = A.blocks.map((b, j) => {
+    const c = {}; F.forEach(f => { if (f[3] === j) c[f[2]] = (c[f[2]] || 0) + 1 });
+    return Object.entries(c).sort((a, b) => b[1] - a[1])[0][0];
+  });
+  const order = A.blocks.map((_, j) => j).sort((a, b) => FAM_ORDER.indexOf(blockFam[a]) - FAM_ORDER.indexOf(blockFam[b]));
+  const anat = document.getElementById("anatomy");
+  anat.innerHTML = order.map(j => `<button style="flex:${A.blocks[j].width};background:${famColor(blockFam[j])}"
+    data-b="${j}" title="${A.blocks[j].info} (${A.blocks[j].width} features)" aria-label="${A.blocks[j].info}"></button>`).join("");
+  anat.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const j = +b.dataset.b; state.block = state.block === j ? null : j; draw();
+  });
+  const legend = document.getElementById("legend");
+  const renderLegend = () => {
+    legend.innerHTML = FAM_ORDER.filter(f => famCount[f]).map(f => `<button data-f="${f}" aria-pressed="${state.fams.has(f)}">
+      <span class="dot" style="background:${famColor(f)}"></span>${A.families[f]} <span style="color:var(--muted)">${fmt(famCount[f])}</span></button>`).join("") +
+      (state.block !== null ? `<button data-clear="1" aria-pressed="true">Showing one block · clear</button>` : "");
+  };
+  legend.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.clear) { state.block = null; draw(); return; }
+    const f = b.dataset.f;
+    if (state.fams.size === FAM_ORDER.length) state.fams = new Set([f]);
+    else if (state.fams.has(f)) { state.fams.delete(f); if (!state.fams.size) state.fams = new Set(FAM_ORDER); }
+    else state.fams.add(f);
+    draw();
+  });
+
+  // Color-by control
+  const modes = [["family", "Family"], ...ROIS.map(r => [r, r])];
+  const seg = document.getElementById("colorby");
+  seg.innerHTML = modes.map(([k, l]) => `<button data-k="${k}" aria-pressed="${k === state.color}">${l}</button>`).join("");
+  seg.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.color = b.dataset.k; draw() });
+  document.getElementById("q").addEventListener("input", e => { state.q = e.target.value.trim().toLowerCase(); draw() });
+
+  // Viridis LUT
+  const VIR = ["#440154", "#482777", "#3f4a8a", "#31678e", "#26838f", "#1f9d8a", "#6cce5a", "#b6de2b", "#fee825"];
+  const lerpHex = (a, b, t) => { const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const x = p(a), y = p(b); return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(",")})` };
+  const viridis = t => { t = Math.max(0, Math.min(1, t)) * (VIR.length - 1); const i = Math.min(VIR.length - 2, Math.floor(t));
+    return lerpHex(VIR[i], VIR[i + 1], t - i) };
+
+  // Map canvas
+  const canvas = document.getElementById("map"), box = document.getElementById("mapbox"), tip = document.getElementById("tip");
+  const ctx = canvas.getContext("2d");
+  let W = 0, pad = 14;
+  const px = i => pad + F[i][0] * (W - 2 * pad), py = i => pad + (1 - F[i][1]) * (W - 2 * pad);
+  function resize() {
+    const r = box.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+    W = r.width; canvas.width = W * d; canvas.height = W * d; ctx.setTransform(d, 0, 0, d, 0, 0); drawMap();
+  }
+  function drawMap() {
+    const bg = css.getPropertyValue("--panel").trim();
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, W);
+    const ri = ROIS.indexOf(state.color), rmax = ri >= 0 ? A.rel_max[state.color] : 1;
+    const idx = [...Array(N).keys()];
+    if (ri >= 0) idx.sort((a, b) => F[a][6][ri] - F[b][6][ri]);
+    const faded = css.getPropertyValue("--line").trim();
+    let shown = 0;
+    for (const i of idx) {
+      const v = visible(i);
+      if (!v) { ctx.fillStyle = faded; ctx.fillRect(px(i) - 1, py(i) - 1, 2, 2); continue; }
+      shown++;
+      ctx.fillStyle = ri >= 0 ? viridis(F[i][6][ri] / rmax) : famColor(F[i][2]);
+      ctx.beginPath(); ctx.arc(px(i), py(i), W > 500 ? 2.1 : 1.6, 0, 6.283); ctx.fill();
+    }
+    if (state.sel !== null) {
+      ctx.strokeStyle = css.getPropertyValue("--fg").trim(); ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(px(state.sel), py(state.sel), 7, 0, 6.283); ctx.stroke();
+    }
+    document.getElementById("count").textContent = `${fmt(shown)} of ${fmt(N)} features shown`;
+    document.getElementById("scale").hidden = ri < 0;
+    if (ri >= 0) document.getElementById("scalemax").textContent = `${rmax.toFixed(3)} mean r² in ${state.color}`;
+  }
+  // Nearest-point lookup on a coarse grid
+  const G = 60, cells = Array.from({ length: G * G }, () => []);
+  F.forEach((f, i) => cells[Math.min(G - 1, Math.floor(f[0] * G)) + G * Math.min(G - 1, Math.floor((1 - f[1]) * G))].push(i));
+  function nearest(mx, my) {
+    const u = (mx - pad) / (W - 2 * pad), v = (my - pad) / (W - 2 * pad), cx = Math.floor(u * G), cy = Math.floor(v * G);
+    let best = null, bd = 100;
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      const c = cells[(cx + dx) + G * (cy + dy)]; if (!c || cx + dx < 0 || cx + dx >= G) continue;
+      for (const i of c) { if (!visible(i)) continue; const d = (px(i) - mx) ** 2 + (py(i) - my) ** 2; if (d < bd) { bd = d; best = i } }
+    }
+    return best;
+  }
+  canvas.addEventListener("mousemove", e => {
+    const r = canvas.getBoundingClientRect(), i = nearest(e.clientX - r.left, e.clientY - r.top);
+    if (i === null) { tip.hidden = true; return }
+    tip.hidden = false; tip.style.left = (e.clientX - r.left) + "px"; tip.style.top = (e.clientY - r.top) + "px";
+    tip.textContent = F[i][4];
+  });
+  canvas.addEventListener("mouseleave", () => tip.hidden = true);
+  canvas.addEventListener("click", e => {
+    const r = canvas.getBoundingClientRect(), i = nearest(e.clientX - r.left, e.clientY - r.top);
+    if (i !== null) select(i);
+  });
+
+  // Small line chart (SVG) drawn to scale
+  function lineChart(vals, labels, title, unit) {
+    const w = 220, h = 96, l = 28, b = 18, t = 6, r = 6;
+    const lo = Math.min(0, ...vals), hi = Math.max(0.5, ...vals);
+    const X = k => l + k * (w - l - r) / (vals.length - 1), Y = v => t + (hi - v) * (h - t - b) / (hi - lo);
+    const path = vals.map((v, k) => `${k ? "L" : "M"}${X(k).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+    const tickIdx = [0, Math.floor((vals.length - 1) / 2), vals.length - 1];
+    return `<div><div class="sub">${title}</div><svg viewBox="0 0 ${w} ${h}" width="100%" role="img" aria-label="${title}">
+      <line x1="${l}" x2="${w - r}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--line)"/>
+      <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="1.8"/>
+      ${vals.map((v, k) => `<circle cx="${X(k)}" cy="${Y(v)}" r="1.8" fill="var(--accent)"/>`).join("")}
+      <text x="${l - 4}" y="${Y(hi) + 4}" text-anchor="end">${hi.toFixed(1)}</text>
+      <text x="${l - 4}" y="${Y(0) + 3}" text-anchor="end">0</text>
+      ${tickIdx.map(k => `<text x="${X(k)}" y="${h - 4}" text-anchor="middle">${labels[k]}</text>`).join("")}
+    </svg><div class="hint" style="font-size:11.5px">${unit}</div></div>`;
+  }
+
+  const insp = document.getElementById("insp");
+  function select(i) {
+    state.sel = i; const f = F[i], blk = A.blocks[f[3]];
+    const rel = f[6], rmax = Math.max(...ROIS.map(r => A.rel_max[r]));
+    insp.innerHTML = `
+      <div style="display:grid;gap:6px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="chip"><span class="dot" style="background:${famColor(f[2])}"></span>${A.families[f[2]]}</span>
+          <span class="chip" style="font-family:var(--f-mono)">#${i}</span></div>
+        <h3>${f[4]}</h3>
+        <div class="block">${blk.info}</div></div>
+      <div><div class="sub">Top 9 of ${fmt(A.n_images)} images</div>
+        <div class="grid9">${f[5].map(k => `<div class="thumb" data-k="${k}"></div>`).join("")}</div></div>
+      <div class="charts">
+        ${lineChart(f[7], A.grating.orientations_deg.map(d => d + "°"), "Grating orientation", "Best response over frequencies, z vs natural images")}
+        ${lineChart(f[8], A.grating.cycles_per_image.map(c => c + ""), "Grating frequency", "Cycles per image, best orientation")}
+      </div>
+      <div><div class="sub">Tracks brain area (mean r²)</div><div class="bars">
+        ${ROIS.map((r, k) => `<div><span>${r}</span><span class="track"><i style="width:${(100 * rel[k] / rmax).toFixed(1)}%"></i></span><em>${rel[k].toFixed(3)}</em></div>`).join("")}
+      </div></div>`;
+    insp.querySelectorAll(".thumb").forEach(el => { el.style.cssText += ";" + thumbStyle(+el.dataset.k, el.clientWidth || 100) });
+    drawMap();
+  }
+  window.addEventListener("resize", () => { resize(); if (state.sel !== null) select(state.sel) });
+
+  // Top features per area
+  const areas = document.getElementById("areas");
+  areas.innerHTML = ROIS.map((r, k) => {
+    const top = [...Array(N).keys()].sort((a, b) => F[b][6][k] - F[a][6][k]).slice(0, 8);
+    return `<div class="card area"><h3>${r}</h3><ol>${top.map(i => `<li><button data-i="${i}">
+      <span><span class="dot" style="background:${famColor(F[i][2])};margin-right:6px"></span>${F[i][4]}
+      <span style="color:var(--muted);font-family:var(--f-mono)"> ${F[i][6][k].toFixed(3)}</span></span>
+      <span class="t3">${F[i][5].slice(0, 3).map(t => `<span style="${thumbStyle(t, 30)}"></span>`).join("")}</span></button></li>`).join("")}</ol></div>`;
+  }).join("");
+  areas.addEventListener("click", e => {
+    const b = e.target.closest("button[data-i]"); if (!b) return;
+    select(+b.dataset.i); document.getElementById("mapbox").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  // Channel maps
+  const groups = [...new Set(M.channels.map(c => c.group))];
+  const tabs = document.getElementById("maptabs"), table = document.getElementById("maptable");
+  let gsel = groups[0];
+  function renderMaps() {
+    tabs.innerHTML = groups.map(g => `<button data-g="${g}" aria-pressed="${g === gsel}">${g}</button>`).join("");
+    const rows = M.channels.filter(c => c.group === gsel);
+    const tile = M.tile, n = M.n_images;
+    const cell = (sheet, row, k) => `<div class="mtile" data-sheet="${sheet}" data-row="${row}" data-k="${k}"></div>`;
+    table.innerHTML = `<div class="maprow"><span>Image</span>${[...Array(n).keys()].map(k => cell("map_images.jpg", 0, k)).join("")}</div>` +
+      rows.map(c => `<div class="maprow"><span>${c.name}</span>${[...Array(n).keys()].map(k => cell("maps.jpg", c.row, k)).join("")}</div>`).join("");
+    const sz = table.querySelector(".mtile").clientWidth;
+    table.querySelectorAll(".mtile").forEach(el => {
+      const s = sz / tile, k = +el.dataset.k, row = +el.dataset.row;
+      el.style.cssText = `background-image:url(${el.dataset.sheet});background-size:${n * tile * s}px auto;background-position:-${k * tile * s}px -${row * tile * s}px`;
+    });
+  }
+  tabs.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; gsel = b.dataset.g; renderMaps() });
+
+  function draw() {
+    seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === state.color));
+    renderLegend(); drawMap();
+  }
+  renderLegend(); resize();
+  // Start on the feature that best tracks FFA.
+  const ffa = ROIS.indexOf("FFA");
+  select([...Array(N).keys()].reduce((a, b) => F[b][6][ffa] > F[a][6][ffa] ? b : a, 0));
+  renderMaps();
+  window.addEventListener("resize", renderMaps);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => location.reload());
+})();
+</script>

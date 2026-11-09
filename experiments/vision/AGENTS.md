@@ -16,7 +16,7 @@ the current search workflow, evaluation protocols and commands.
 - `src/neuro_eval/`: scientific contracts (`benchmarks.py`), data loading (`datasets.py`, `readers.py`), model validation/isolation (`model.py`), metrics (`rsa.py`, `encoding.py`) and shared evaluation (`_evaluation.py`).
 - `src/final_eval.py`: select and freeze the search winner, then evaluate it on held-out subjects and images (TVSD for Triple-N).
 - `src/baselines/` and `src/compress.py`: fixed reference comparisons and natural-language reconstruction; shared scoring lives in `src/neuro_eval/comparison.py`, with scoped evaluation settings in `src/neuro_eval/environment.py`.
-- `src/analysis/families.py`: per-voxel Shapley attribution of the LAION champion erjpu over six computational families (edges, color, surface shape, corners/contours, texture statistics, global layout).
+- `src/figures/<figure>/`: one folder per paper figure: a data script per panel (writes `artifacts/figures/<figure>/data/`) and `make_figure.py`; `src/figures/fmri/spec.md` describes the fMRI figure.
 - `dashboard/`: read-only monitoring UI/API; `tests/`: scientific and operational checks.
 - `docs/`: operations, protocol, comparisons and technical-writing guidance.
 - `artifacts/search/` and `artifacts/final/`: generated run state and final artifacts; `artifacts/logs/`: operational logs; `artifacts/archive/{runs,results,local}/`: legacy contents. All are untracked.
@@ -26,6 +26,15 @@ Install with `pip install -e .` before running module commands. Package imports
 stay unchanged; use `python -m search.run`, `python -m final_eval` and
 `python -m compress`. Research code lives in `src/`, monitoring in root
 `dashboard/`, and generated outputs in `artifacts/`.
+
+## Manuscript
+
+The paper's LaTeX source lives in `neuro_autoresearch_latex/`, a separate Git
+repository cloned from https://github.com/yashsmehta/neuro_autoresearch_latex
+and excluded from this repository. Before writing or editing any manuscript
+text, including the abstract, sections, captions, tables and responses to
+reviews, read `docs/technical-writing.md` in full and follow it. This applies to
+every manuscript edit, however small.
 
 ## Working agreements
 
