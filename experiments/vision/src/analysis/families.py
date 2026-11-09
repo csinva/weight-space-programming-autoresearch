@@ -3,12 +3,15 @@
 Every one of erjpu's 9,996 feature columns gets one label by tracing it to the intermediate
 channels it is computed from (see erjpu's model.py):
 
-  E  edges            light/dark Gabor energy and DoG channels of the V1-like stage, luminance layout
+  E  edges            light/dark Gabor energy and DoG channels of the V1-like stage, luminance layout, and
+                      edge-like channels of later stages: dominant orientation and its strength, structure-tensor
+                      edge strength and coherence, signed brightness-gradient direction
   K  color            red-green / blue-yellow energy and DoG channels of the V1-like stage, color layout
   S  surface shape    Hessian shape index (dome, ridge, saddle, rut, cup), curvedness and anisotropy
                       channels, and anything computed only from them (co-occurrence, symmetry, cross-scale)
-  C  corners/contours structure tensor (corners, edge strength, coherence), isophote and orientation-field
-                      curvature, surround pop-out, phase (line vs edge)
+  C  corners/contours corner strength (luminance and color), crossing orientations, isophote and
+                      orientation-field curvature, iso- vs ortho-surround, line type (bright bar, dark crease,
+                      line vs step), phase congruency, fine-vs-coarse energy
   T  texture stats    co-occurrence and cross-scale relations of non-surface channels, second-order edges
   G  global layout    symmetry and centre-vs-periphery of non-surface channels, bright/dark blob count,
                       color similarity and boundary crossings from corner/centre anchors (path maps)
@@ -59,14 +62,21 @@ BLOCKS = ["path", "persistence",
 
 # Channel families of erjpu's intermediate maps.
 C30 = ["E"] * 18 + ["K"] * 12  # 16 luminance Gabor energies + 2 luminance DoG, 8 RG/BY energies + 4 RG/BY DoG
-GMAP = list("SSSSS") + ["C", "C", "C", "C", "C", "S", "S", "C", "C"]  # 5 shape bins, mu_min, mu_max,
+# Edge-like channels outside the V1-like stage count as edges: dominant orientation and its strength
+# (2nd orientation harmonic), structure-tensor edge strength (mu_max) and coherence, signed gradient direction.
+GMAP = list("SSSSS") + ["C", "E", "E", "C", "C", "S", "S", "C", "C"]  # 5 shape bins, mu_min, mu_max,
 #                                                     coherence, k+, k-, |Lxx-Lyy|, |2Lxy|, chromatic i2D rg/by
 G6 = list("SSSCCC")    # convex (ridge+dome), concave (cup+rut), saddle, mu_min, k+, k-
-GC6 = list("SSCCSS")   # dome-ridge, cup-rut, mu_max, coherence, |Lxx-Lyy|, |2Lxy|
-OCT12 = list("EEEEE") + ["S"] + list("KK") + list("CCCC")  # ori4, dog, convex, rg, by, m2, |curv|, mu_min, phase coh
-ENV8 = ["E", "S", "K", "K", "C", "C", "C", "C"]            # dog, convex, rg, by, m2, m4, |curv|, e_ortho
-SYM9 = list("EEE") + ["S"] + list("KK") + list("CCC")      # h0, hv, dog, convex, rg, by, m2, |curv|, phase coh
-CSC24 = list("CCCCCCC") + G6 + list("CCCCC") + list("EEKKKK")  # curvature 7, geometry 6, phase 5, DoG/color 6
+GC6 = list("SSEESS")   # dome-ridge, cup-rut, mu_max, coherence, |Lxx-Lyy|, |2Lxy|
+ORI13 = list("EEE") + list("CCC") + list("CCCCC") + list("CC")  # c2, s2, m2, c4, s4, m4, curvature x+-, y+-,
+#                                                                 |curv|, iso-surround, ortho-surround
+PH9 = list("CCCCC") + list("EEEE")  # ridge, crease, line-vs-edge, phase coherence, fine-vs-coarse, gx+-, gy+-
+OCT12 = list("EEEEE") + ["S"] + list("KK") + ["E"] + list("CCC")  # ori4, dog, convex, rg, by, m2, |curv|, mu_min,
+#                                                                   phase coh
+ENV8 = ["E", "S", "K", "K", "E", "C", "C", "C"]            # dog, convex, rg, by, m2, m4, |curv|, e_ortho
+SYM9 = list("EEE") + ["S"] + list("KK") + ["E"] + list("CC")  # h0, hv, dog, convex, rg, by, m2, |curv|, phase coh
+CSC24 = list("EEEC") + list("CCC") + G6 + list("CCCCC") + list("EEKKKK")  # c2, s2, m2, m4, |curv|, iso, ortho;
+#                                                                   geometry 6, phase 5, DoG/color 6
 GIN12 = G6 + GC6
 GIN11 = G6[:4] + ["C"] + GC6
 
@@ -102,9 +112,13 @@ def block_labels(widths):
     L = {}
     uniform = {"path": "G", "persistence": "G", "second_order_grid": "T", "second_order_stats": "T",
                "cov_within_scale": "T", "cov_quadrant": "T"}
-    uniform.update({b: "C" for b in BLOCKS if b.startswith(("orient_field", "phase_"))})
     for b, f in uniform.items():
         L[b] = [f] * widths[b]
+    # Orientation-field (13 channels) and phase (9 channels) maps: 4x4, 4x4, then 2x2 + global mean + std.
+    for prefix, chans in (("orient_field", ORI13), ("phase", PH9)):
+        L[f"{prefix}_o0"] = per_channel(chans, 16)
+        L[f"{prefix}_o1"] = per_channel(chans, 16)
+        L[f"{prefix}_o2"] = per_channel(chans, 4) + chans + chans
     # V1-like stage: 30 channels pooled on grids (channel-major), split into luminance (E) and color (K).
     for b, cells in (("s1_cort_mean_o0", 81), ("s1_std_peak_o0", 25), ("s1_cort_mean_o1", 36),
                      ("s1_std_peak_o1", 9), ("s1_cort_mean_o2", 16), ("s1_std_peak_o2", 4)):
