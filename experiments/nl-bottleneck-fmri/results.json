@@ -1,0 +1,346 @@
+[
+ {
+  "iteration": 1,
+  "name": "BoCharMean-d256",
+  "original": {
+   "visible": 0.03394564804687136,
+   "hidden": 0.01642145842947032,
+   "hidden_middle": 0.016808261481308224
+  },
+  "rebuilt": {
+   "visible": 0.03250704405396643,
+   "hidden": 0.016091798915507195,
+   "hidden_middle": 0.01656397776440975,
+   "pred_similarity": 0.9594928622245789,
+   "map_similarity": 0.9818197353619991
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rec-bochar-mean-d256-v1",
+    "visible": 0.03250704405396643,
+    "hidden": 0.016091798915507195,
+    "pred_similarity": 0.9594928622245789,
+    "map_similarity": 0.9818197353619991,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "bochar-mean-d256-v1",
+    "visible": 0.03250704405396643,
+    "hidden": 0.016091798915507195,
+    "pred_similarity": 0.9594928622245789,
+    "map_similarity": 0.9818197353619991,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.15469100000000002,
+  "experiments": [
+   1,
+   1
+  ]
+ },
+ {
+  "iteration": 40,
+  "name": "MultiScaleSubword+FuncWordTags",
+  "original": {
+   "visible": 0.041340846702240114,
+   "hidden": 0.020085139515496394,
+   "hidden_middle": 0.021230983077763048
+  },
+  "rebuilt": {
+   "visible": 0.03492183846677995,
+   "hidden": 0.016465278291743185,
+   "hidden_middle": 0.017279856025342398,
+   "pred_similarity": 0.7098608911037445,
+   "map_similarity": 0.8777619304345861
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rec-msub-fwtags-v2-shared64",
+    "visible": 0.03196656543055671,
+    "hidden": 0.014650411801596009,
+    "pred_similarity": 0.6434274911880493,
+    "map_similarity": 0.8582350651858905,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "msub_fwtags_v2_512emb",
+    "visible": 0.03787711150300319,
+    "hidden": 0.018280144781890363,
+    "pred_similarity": 0.7762942910194397,
+    "map_similarity": 0.8972887956832817,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.5508494,
+  "experiments": [
+   2,
+   2
+  ]
+ },
+ {
+  "iteration": 76,
+  "name": "AllNewFeats-Words15",
+  "original": {
+   "visible": 0.04279817312642865,
+   "hidden": 0.02158499001521091,
+   "hidden_middle": 0.02272809173140885
+  },
+  "rebuilt": {
+   "visible": 0.029860784913501588,
+   "hidden": 0.017748545137194316,
+   "hidden_middle": 0.017820627553336917,
+   "pred_similarity": 0.6252581775188446,
+   "map_similarity": 0.8420565576311374
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rebuild-hashtf-v3-final",
+    "visible": 0.029970108649861577,
+    "hidden": 0.017790674471540233,
+    "pred_similarity": 0.6268646717071533,
+    "map_similarity": 0.8426694323153027,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "rebuild-primacy-hashbag-v1",
+    "visible": 0.029751461177141603,
+    "hidden": 0.017706415802848402,
+    "pred_similarity": 0.6236516833305359,
+    "map_similarity": 0.8414436829469722,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.5743887999999999,
+  "experiments": [
+   3,
+   2
+  ]
+ },
+ {
+  "iteration": 152,
+  "name": "ExpDec-R4.0",
+  "original": {
+   "visible": 0.044045768626068044,
+   "hidden": 0.022193768570587896,
+   "hidden_middle": 0.023214999596999287
+  },
+  "rebuilt": {
+   "visible": 0.035412339774722176,
+   "hidden": 0.01823993405432186,
+   "hidden_middle": 0.018747154157032517,
+   "pred_similarity": 0.7414000034332275,
+   "map_similarity": 0.8918169224013541
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "hashbag-frontheavy-v2",
+    "visible": 0.03410098714859539,
+    "hidden": 0.018270688907684653,
+    "pred_similarity": 0.705457866191864,
+    "map_similarity": 0.8851195256227447,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "hashbag-frontheavy-v4-rawlen",
+    "visible": 0.036723692400848953,
+    "hidden": 0.018209179200959064,
+    "pred_similarity": 0.7773421406745911,
+    "map_similarity": 0.8985143191799636,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.6651864000000001,
+  "experiments": [
+   3,
+   4
+  ]
+ },
+ {
+  "iteration": 192,
+  "name": "DenseSemXX-N20",
+  "original": {
+   "visible": 0.0561343319969902,
+   "hidden": 0.025654022185571706,
+   "hidden_middle": 0.0267421056978041
+  },
+  "rebuilt": {
+   "visible": 0.04252770925287832,
+   "hidden": 0.019281774617662995,
+   "hidden_middle": 0.020203438608569296,
+   "pred_similarity": 0.60138139128685,
+   "map_similarity": 0.8580652537888211
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rec-densesem-v3",
+    "visible": 0.042790554202942664,
+    "hidden": 0.01963917989626871,
+    "pred_similarity": 0.5819770097732544,
+    "map_similarity": 0.8554075524354767,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "rec-densesem-v4",
+    "visible": 0.042264864302813974,
+    "hidden": 0.01892436933905728,
+    "pred_similarity": 0.6207857728004456,
+    "map_similarity": 0.8607229551421657,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 1.2652084,
+  "experiments": [
+   4,
+   4
+  ]
+ },
+ {
+  "iteration": 238,
+  "name": "WordNetMorphLingMultiTau",
+  "original": {
+   "visible": 0.06576007126189522,
+   "hidden": 0.0317223041829515,
+   "hidden_middle": 0.02961125632973875
+  },
+  "rebuilt": {
+   "visible": 0.061311532202034405,
+   "hidden": 0.029802169376173766,
+   "hidden_middle": 0.02709567697551528,
+   "pred_similarity": 0.8765901327133179,
+   "map_similarity": 0.9542437874017862
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "wn-morph-ling-multitau-v1",
+    "visible": 0.06254391815446451,
+    "hidden": 0.03006750610242163,
+    "pred_similarity": 0.881523609161377,
+    "map_similarity": 0.9542148427791353,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "wnmorph-multitau-v1",
+    "visible": 0.0600791462496043,
+    "hidden": 0.0295368326499259,
+    "pred_similarity": 0.8716566562652588,
+    "map_similarity": 0.9542727320244372,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.8552692,
+  "experiments": [
+   1,
+   1
+  ]
+ },
+ {
+  "iteration": 239,
+  "name": "WordNetMorphLingStoryArc",
+  "original": {
+   "visible": 0.09835972807993967,
+   "hidden": 0.043330012450628584,
+   "hidden_middle": 0.02315197729163188
+  },
+  "rebuilt": {
+   "visible": 0.09191986466070419,
+   "hidden": 0.04086151647200499,
+   "hidden_middle": 0.022476573218584824,
+   "pred_similarity": 0.9080281257629395,
+   "map_similarity": 0.9682873679244569
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rec-storyarc-wnlex-v1",
+    "visible": 0.09269051389526492,
+    "hidden": 0.041346038010284615,
+    "pred_similarity": 0.9072811603546143,
+    "map_similarity": 0.9689051792371044,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "rec-arc-content-v1",
+    "visible": 0.09114921542614346,
+    "hidden": 0.04037699493372536,
+    "pred_similarity": 0.9087750911712646,
+    "map_similarity": 0.9676695566118094,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.7751002,
+  "experiments": [
+   1,
+   1
+  ]
+ },
+ {
+  "iteration": 242,
+  "name": "WordNetMorphLingNovelty",
+  "original": {
+   "visible": 0.10866969755466675,
+   "hidden": 0.04825539884396758,
+   "hidden_middle": 0.02568292545337631
+  },
+  "rebuilt": {
+   "visible": 0.09393922700352487,
+   "hidden": 0.044062991119201325,
+   "hidden_middle": 0.026394880334747496,
+   "pred_similarity": 0.8485430181026459,
+   "map_similarity": 0.9438664791574458
+  },
+  "rebuilt_each": [
+   {
+    "rep": 1,
+    "final": "rec-wnmorph-v1",
+    "visible": 0.09833950552290492,
+    "hidden": 0.0458862076841144,
+    "pred_similarity": 0.8823862671852112,
+    "map_similarity": 0.9551915591166408,
+    "error": null
+   },
+   {
+    "rep": 2,
+    "final": "rec-wnpos-v2",
+    "visible": 0.08953894848414483,
+    "hidden": 0.04223977455428824,
+    "pred_similarity": 0.8146997690200806,
+    "map_similarity": 0.932541399198251,
+    "error": null
+   }
+  ],
+  "n_ok": 2,
+  "n": 2,
+  "cost_usd": 0.8893606000000001,
+  "experiments": [
+   1,
+   2
+  ]
+ }
+]

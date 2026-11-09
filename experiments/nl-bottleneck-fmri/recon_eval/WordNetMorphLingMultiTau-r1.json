@@ -1,0 +1,12 @@
+{
+ "visible": 0.06254391815446451,
+ "hidden": 0.03006750610242163,
+ "hidden_middle": 0.02753788468215403,
+ "train": 0.4435421048637699,
+ "n_features": 1888,
+ "name": "WordNetMorphLingMultiTau",
+ "rep": 1,
+ "final": "wn-morph-ling-multitau-v1",
+ "pred_similarity": 0.881523609161377,
+ "map_similarity": 0.9542148427791353
+}

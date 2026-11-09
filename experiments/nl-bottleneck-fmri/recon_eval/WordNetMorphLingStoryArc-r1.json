@@ -1,0 +1,12 @@
+{
+ "visible": 0.09269051389526492,
+ "hidden": 0.041346038010284615,
+ "hidden_middle": 0.022810264716995755,
+ "train": 0.3126646623467379,
+ "n_features": 740,
+ "name": "WordNetMorphLingStoryArc",
+ "rep": 1,
+ "final": "rec-storyarc-wnlex-v1",
+ "pred_similarity": 0.9072811603546143,
+ "map_similarity": 0.9689051792371044
+}

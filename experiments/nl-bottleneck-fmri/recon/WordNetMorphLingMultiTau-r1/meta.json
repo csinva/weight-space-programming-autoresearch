@@ -1,0 +1,10 @@
+{
+ "name": "WordNetMorphLingMultiTau",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.42280840000000003,
+ "turns": 7,
+ "seconds": 286,
+ "final": "wn-morph-ling-multitau-v1",
+ "final_text": ") without saying which ones, and I included only the 5-minus-500 one.\n\nBecause the score was already close, I stopped after one of the six allowed runs rather than adjust anything toward a number. The scoring output included overflow and divide-by-zero warnings from the ridge regression's matrix maths; the run still finished with status \"success\". I couldn't test the code separately before scoring, because running Python outside score.py needed approval.\n\nFinal model: `wn-morph-ling-multitau-v1`"
+}

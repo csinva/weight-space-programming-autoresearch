@@ -1,0 +1,10 @@
+{
+ "name": "ExpDec-R4.0",
+ "rep": 1,
+ "experiments": 3,
+ "cost_usd": 0.3273776,
+ "turns": 17,
+ "seconds": 717,
+ "final": "hashbag-frontheavy-v2",
+ "final_text": "aled to half the size of the word vector (v1 made it ~0.025\u00d7, effectively absent) | 0.0341 |\n| v3 | context at 0.75 instead of 0.5 | 0.0328 |\n\nI used 3 of the 6 allowed runs. I stopped there rather than keep trying settings just to raise the score, since the goal was to match the original, not beat it. The remaining gap probably comes from details the description leaves open, such as exact scaling choices and how the original's random transformer mixed values.\n\nFinal model: hashbag-frontheavy-v2"
+}

@@ -1,0 +1,10 @@
+{
+ "name": "WordNetMorphLingStoryArc",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.39092520000000003,
+ "turns": 8,
+ "seconds": 216,
+ "final": "rec-arc-content-v1",
+ "final_text": " the content block, mostly the 10-gram sums of word categories. I followed the description's \"summed\" literally rather than adjusting for this.\n\n**Warnings during scoring:** the ridge regression code printed divide-by-zero and overflow warnings. Scoring still completed successfully, but I haven't checked what caused them.\n\nI stopped after one run instead of adjusting the model to close the gap, because the goal was faithfulness rather than matching the score.\n\nFinal model: **rec-arc-content-v1**"
+}

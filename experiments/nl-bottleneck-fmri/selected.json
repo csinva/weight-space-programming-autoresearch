@@ -1,0 +1,51 @@
+{
+ "BoCharMean-d256": {
+  "iteration": 1,
+  "helpers": []
+ },
+ "MultiScaleSubword+FuncWordTags": {
+  "iteration": 40,
+  "helpers": []
+ },
+ "AllNewFeats-Words15": {
+  "iteration": 76,
+  "helpers": []
+ },
+ "ExpDec-R4.0": {
+  "iteration": 152,
+  "helpers": []
+ },
+ "DenseSemXX-N20": {
+  "iteration": 192,
+  "helpers": []
+ },
+ "WordNetMorphLingMultiTau": {
+  "iteration": 238,
+  "helpers": [
+   "WordNetMorphLing-tau50.py",
+   "WordNetFeats-noTransformer.py",
+   "interpretable_transformer.py"
+  ]
+ },
+ "WordNetMorphLingStoryArc": {
+  "iteration": 239,
+  "helpers": [
+   "WordNetMorphLingMultiTau.py",
+   "WordNetMorphLing-tau50.py",
+   "WordNetFeats-noTransformer.py",
+   "interpretable_transformer.py"
+  ]
+ },
+ "WordNetMorphLingNovelty": {
+  "iteration": 242,
+  "helpers": [
+   "WordNetMorphLingDiscoursePos.py",
+   "WordNetMorphLingStoryArcSent.py",
+   "WordNetMorphLingStoryArc.py",
+   "WordNetMorphLingMultiTau.py",
+   "WordNetMorphLing-tau50.py",
+   "WordNetFeats-noTransformer.py",
+   "interpretable_transformer.py"
+  ]
+ }
+}

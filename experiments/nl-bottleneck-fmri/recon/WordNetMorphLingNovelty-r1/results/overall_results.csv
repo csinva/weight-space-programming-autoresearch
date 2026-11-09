@@ -1,0 +1,2 @@
+model_name,visible_corr,train_corr,n_features,seconds,status,description
+rec-wnmorph-v1,0.0983,0.3348,1064,108,success,"Position (Fourier/Chebyshev/Legendre/Gaussian bumps/log edges, var 0.5), sentence and merged-paragraph units, punctuation decays tau 2-200, WordNet 45 lexnames direct+expanded, 72 hand semantic categories, word lists, suffixes, letter phonology summed over 10-gram and EMAs tau 5-500, novelty; low-variance dims dropped on first story."

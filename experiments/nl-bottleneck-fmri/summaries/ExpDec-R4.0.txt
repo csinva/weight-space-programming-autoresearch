@@ -1,0 +1,7 @@
+This model has no training and no semantic resources; it uses only PyTorch, a fixed random seed and MD5 hashing (hashlib).
+
+Each 10-gram is lowercased into a token sequence: its characters (separate random vectors for last-word versus earlier characters), then, per word from oldest to newest, hashed tokens for word-length bucket, first-plus-last letter pair, skip-bigram (word i−2, word i), crude suffix-stripped stem, boundary-padded character 2- to 5-grams, and finally the whole word, so the last token is the current word's identity. Tokens share 4096 hash buckets, each a fixed Gaussian 1024-dimensional vector.
+
+An untrained one-layer transformer pools them: eight 128-dimensional slices each average all tokens with nearly uniform, slightly recency-tilted weights. Crucially, a large position signal entering LayerNorm before attention shrinks each token's contribution roughly as 1/position, so the first few characters of the 10-gram dominate the pooled part. Output is the current word's identity vector plus a smaller pooled context vector and three length-tracking dimensions, all rescaled by a length-dependent final LayerNorm.
+
+Rebuild: current-word hashed random embedding plus a down-weighted, front-heavy hashed bag of the 10-gram. Approximations: hash collisions, heuristic stemming, no meaning.

@@ -1,0 +1,12 @@
+{
+ "visible": 0.09833950552290492,
+ "hidden": 0.0458862076841144,
+ "hidden_middle": 0.02621934936666901,
+ "train": 0.33480782992090324,
+ "n_features": 1064,
+ "name": "WordNetMorphLingNovelty",
+ "rep": 1,
+ "final": "rec-wnmorph-v1",
+ "pred_similarity": 0.8823862671852112,
+ "map_similarity": 0.9551915591166408
+}

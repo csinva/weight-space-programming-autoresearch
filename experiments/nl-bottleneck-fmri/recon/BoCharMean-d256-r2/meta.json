@@ -1,0 +1,10 @@
+{
+ "name": "BoCharMean-d256",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.06809420000000001,
+ "turns": 4,
+ "seconds": 145,
+ "final": "bochar-mean-d256-v1",
+ "final_text": "ixed random 256-dimensional Gaussian vector (seed 0), rescaled to zero mean and unit variance.\n- **Features:** the vectors are averaged with equal weight over the window, which amounts to a projection of the character proportions. I add the last character's vector at 1/16 weight, then layer-normalize the sum.\n\nThe scoring run printed numeric overflow warnings from the scoring library (`common.py`), not from my code. It still finished and reported the result.\n\nFinal model: **bochar-mean-d256-v1**"
+}

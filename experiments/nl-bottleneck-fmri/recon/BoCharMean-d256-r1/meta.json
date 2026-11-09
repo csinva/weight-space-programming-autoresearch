@@ -1,0 +1,10 @@
+{
+ "name": "BoCharMean-d256",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.0865968,
+ "turns": 5,
+ "seconds": 74,
+ "final": "rec-bochar-mean-d256-v1",
+ "final_text": "ere guesses, because the description doesn't pin them down:\n- **Punctuation set:** the description says only \"some punctuation\". I picked ten marks so the alphabet comes to exactly 49 symbols.\n- **Final-character weight:** \"the final character's raw vector, about 16 times weaker\" could mean a few things. I took it as the normalized vector divided by 16, which makes it about unit length.\n\nEither guess could account for the small gap to the original's score.\n\nFinal model: `rec-bochar-mean-d256-v1`"
+}

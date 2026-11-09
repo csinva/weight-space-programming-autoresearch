@@ -1,0 +1,12 @@
+{
+ "visible": 0.03196656543055671,
+ "hidden": 0.014650411801596009,
+ "hidden_middle": 0.015491280239330921,
+ "train": 0.329498084001604,
+ "n_features": 2048,
+ "name": "MultiScaleSubword+FuncWordTags",
+ "rep": 1,
+ "final": "rec-msub-fwtags-v2-shared64",
+ "pred_similarity": 0.6434274911880493,
+ "map_similarity": 0.8582350651858905
+}

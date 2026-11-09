@@ -1,0 +1,12 @@
+{
+ "visible": 0.036723692400848953,
+ "hidden": 0.018209179200959064,
+ "hidden_middle": 0.018911684635740562,
+ "train": 0.5703924508293474,
+ "n_features": 4108,
+ "name": "ExpDec-R4.0",
+ "rep": 2,
+ "final": "hashbag-frontheavy-v4-rawlen",
+ "pred_similarity": 0.7773421406745911,
+ "map_similarity": 0.8985143191799636
+}

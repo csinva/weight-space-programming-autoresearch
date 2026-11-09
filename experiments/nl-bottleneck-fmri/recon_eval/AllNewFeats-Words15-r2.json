@@ -1,0 +1,12 @@
+{
+ "visible": 0.029751461177141603,
+ "hidden": 0.017706415802848402,
+ "hidden_middle": 0.017777610555938503,
+ "train": 0.6206054300680629,
+ "n_features": 4104,
+ "name": "AllNewFeats-Words15",
+ "rep": 2,
+ "final": "rebuild-primacy-hashbag-v1",
+ "pred_similarity": 0.6236516833305359,
+ "map_similarity": 0.8414436829469722
+}

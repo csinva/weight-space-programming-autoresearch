@@ -1,0 +1,12 @@
+{
+ "visible": 0.042264864302813974,
+ "hidden": 0.01892436933905728,
+ "hidden_middle": 0.019774565471675234,
+ "train": 0.3740561974636049,
+ "n_features": 4096,
+ "name": "DenseSemXX-N20",
+ "rep": 2,
+ "final": "rec-densesem-v4",
+ "pred_similarity": 0.6207857728004456,
+ "map_similarity": 0.8607229551421657
+}

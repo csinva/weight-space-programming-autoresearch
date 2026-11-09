@@ -1,0 +1,12 @@
+{
+ "visible": 0.03250704405396643,
+ "hidden": 0.016091798915507195,
+ "hidden_middle": 0.01656397776440975,
+ "train": 0.21415295110310892,
+ "n_features": 1024,
+ "name": "BoCharMean-d256",
+ "rep": 1,
+ "final": "rec-bochar-mean-d256-v1",
+ "pred_similarity": 0.9594928622245789,
+ "map_similarity": 0.9818197353619991
+}

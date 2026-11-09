@@ -1,0 +1,7 @@
+Most of the signal comes from story position: position alone scores about 0.090; the full model 0.104 on UTS03.
+
+**Story-arc block:** for word i of N, let p = (i+0.5)/N. Compute sin and cos of 2πkp (k=1–10), Chebyshev and Legendre polynomials of 2p−1 (orders 1–10), and Gaussian bumps at evenly-spaced centres: 20 each at widths 0.5/21, 1/21 and 2/21, plus 5 at 0.2/6. Add log(i+1), log(N−i) and p−0.5. About 108 dimensions, each rescaled to variance 0.5.
+
+**Content block (~1,800 dims):** WordNet lexical-category histograms (NLTK), 72 curated semantic categories from an external helper (interpretable_transformer), 50 function words, closed-class lists (pronouns, modals, negation, mental verbs, deixis, discourse markers), suffix, length and syllable cues. Summed over the 10-gram and kept separately for the newest word. Newest-word features are also averaged over the story with exponential decay (time constants 5, 20, 100, 500 words), plus short-minus-long differences, new-word distance from averages, log words since last sentence end or pronoun, novelty rate, and raw word counters.
+
+**Variance mask:** dimensions with variance ≤0.14 on the first story are dropped, mainly keeping position, count and length/timing features. Category lists and mask are hand-tuned approximations.

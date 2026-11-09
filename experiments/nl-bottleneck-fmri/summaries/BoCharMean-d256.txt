@@ -1,0 +1,9 @@
+This model uses no word lists, lexicon or semantics. Its features are a bag of characters: a letter-frequency profile of the recent text.
+
+For each 10-gram, the text is lowercased and only the last 64 characters are kept, usually just the last few words. The alphabet has 49 symbols: a–z, space, apostrophe, digits and some punctuation; anything else maps to "unknown".
+
+Each symbol gets a fixed random Gaussian 256-dimensional vector (seed 0), nearly orthogonal. Each character's vector is rescaled to zero mean and unit variance (length about 16), and these are averaged with equal weight over the window, ignoring position, with no decay or time constant. The final character's raw vector, about 16 times weaker, is added, and the sum is layer-normalized.
+
+Effectively the output is a random linear projection of the character-proportion histogram (spaces included, so it reflects word length), plus a faint final-character signal. To rebuild it, use normalized character proportions over the last 64 characters plus a down-weighted one-hot of the last character; for ridge regression this is nearly equivalent, approximate because of the final normalization.
+
+It is a one-layer, hand-weighted PyTorch transformer; no external resources.

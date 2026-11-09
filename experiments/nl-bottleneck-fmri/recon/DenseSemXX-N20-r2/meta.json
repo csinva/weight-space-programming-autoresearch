@@ -1,0 +1,10 @@
+{
+ "name": "DenseSemXX-N20",
+ "rep": 2,
+ "experiments": 4,
+ "cost_usd": 0.6315542,
+ "turns": 20,
+ "seconds": 911,
+ "final": "rec-densesem-v4",
+ "final_text": "oded. The description doesn't pin down any of these, so my versions are guesses.\n\n**Notes:**\n- Scoring prints numpy overflow / divide-by-zero warnings, including inside the scoring code itself. All runs still finished with status `success`, and I hid the warnings from v2 onward.\n- I couldn't run quick checks outside `score.py` here (the commands needed approval), so I didn't directly check how often story words hit the lexicon. I deleted the unused check script.\n\nFinal model: **rec-densesem-v4**"
+}

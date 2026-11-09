@@ -1,0 +1,10 @@
+{
+ "name": "WordNetMorphLingNovelty",
+ "rep": 2,
+ "experiments": 2,
+ "cost_usd": 0.48808640000000003,
+ "turns": 16,
+ "seconds": 977,
+ "final": "rec-wnpos-v2",
+ "final_text": "he stories contain punctuation. Without it, the sentence, paragraph and decay features would be nearly empty, which could explain part of the gap.\n- **No validation of the anchor concepts:** I couldn't confirm each one exists in WordNet; any name that fails is silently left as an empty column.\n- **Unknown details:** my category table and exact bump widths are my own stand-ins for things the description doesn't specify, so the remaining gap may also come from those.\n\nFinal model: **rec-wnpos-v1**"
+}

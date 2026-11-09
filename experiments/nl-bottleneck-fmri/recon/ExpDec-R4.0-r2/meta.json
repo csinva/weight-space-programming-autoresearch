@@ -1,0 +1,10 @@
+{
+ "name": "ExpDec-R4.0",
+ "rep": 2,
+ "experiments": 4,
+ "cost_usd": 0.3378088,
+ "turns": 17,
+ "seconds": 885,
+ "final": "hashbag-frontheavy-v4-rawlen",
+ "final_text": "ned down by the description, so I guessed them: the context weight, the size of the length signal, the recency tilt and the suffix list for stemming. I didn't try further changes, because the goal was to match the description, not the score.\n\nThe `score.py` runs printed divide-by-zero/overflow warnings from matrix multiplications, including inside the scoring code itself. I didn't track down the cause; every run still finished with status \"success\".\n\nFinal model: **hashbag-frontheavy-v4-rawlen**"
+}

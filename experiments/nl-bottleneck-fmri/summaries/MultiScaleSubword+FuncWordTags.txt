@@ -1,0 +1,7 @@
+The model outputs a 512-dimensional vector per word, built from fixed random hashed embeddings; nothing is trained or semantic.
+
+Token stream. The lowercased 10-gram becomes one sequence: its characters, tagged as inside the last word or earlier; then a tag for each function word present (about 100 closed-class words like "the", "of", "was", "him"), oldest first; then, per word oldest to newest, its boundary-padded character 3-, 2-, 4- and 5-grams (capped at 14, 10, 10, 8); finally one whole-word identity token per word, so the current word comes last. Every n-gram and word is MD5-hashed into 4096 buckets, each with a random Gaussian vector, as is each character.
+
+Pooling. The 512 dimensions form eight 64-dim blocks. Each block averages the token stream with exponential recency weights, decay per token 0, 0.15, 0.3, 0.6, 1, 1.7, 3, 6: rate 0 is a uniform bag, rate 6 essentially the last token. The current word's identity vector is added and the result layer-normalized.
+
+Approximations: hash collisions blur identities; a raw position value inside the layer norm scales each vector by roughly 1/sequence length; sequences truncate at 512 tokens. Libraries: PyTorch, hashlib MD5.

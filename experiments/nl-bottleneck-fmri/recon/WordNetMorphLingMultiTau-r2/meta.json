@@ -1,0 +1,10 @@
+{
+ "name": "WordNetMorphLingMultiTau",
+ "rep": 2,
+ "experiments": 1,
+ "cost_usd": 0.4324608,
+ "turns": 8,
+ "seconds": 321,
+ "final": "wnmorph-multitau-v1",
+ "final_text": "ription:**\n- **Features kept:** 479 survive the variance filter, where the description says about 360. That count depends on how each feature is scaled, which the description doesn't specify, so I left it alone.\n- **Score:** 0.0601 is a little below the original's 0.0658.\n- **Warnings:** the scoring run printed overflow and divide-by-zero warnings inside the ridge regression code. The run still finished and reported success, but I didn't look into the cause.\n\nFinal model: **wnmorph-multitau-v1**"
+}

@@ -1,0 +1,10 @@
+{
+ "name": "DenseSemXX-N20",
+ "rep": 1,
+ "experiments": 4,
+ "cost_usd": 0.6336542,
+ "turns": 20,
+ "seconds": 1048,
+ "final": "rec-densesem-v3",
+ "final_text": "decay rates for heads 1\u20137, or how the position values are encoded. Changing the decay rates and the token order didn't move the score, so the lexicon is probably the main difference.\n\nAll four runs printed overflow and divide-by-zero warnings from matrix multiplications, including inside the scoring code. I wasn't allowed to run a quick check that the features contain no NaN or infinite values, so that is unconfirmed. Every run still finished with a valid score.\n\nFinal model: **rec-densesem-v3**"
+}

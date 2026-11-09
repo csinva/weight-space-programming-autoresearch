@@ -1,0 +1,10 @@
+{
+ "name": "WordNetMorphLingNovelty",
+ "rep": 1,
+ "experiments": 1,
+ "cost_usd": 0.4012742,
+ "turns": 8,
+ "seconds": 250,
+ "final": "rec-wnmorph-v1",
+ "final_text": "- **Dropping:** features with variance under 0.05 on the first story are removed.\n\nTwo things to know:\n- **Unchecked code:** I wasn't allowed to run Python outside the scoring command. That means I couldn't test the WordNet lookups or count the final features by hand before scoring.\n- **Warnings:** the run printed overflow and divide-by-zero warnings from inside the ridge-regression code. It still finished and produced a valid score. I didn't look into the cause.\n\nFinal model: **rec-wnmorph-v1**"
+}

@@ -1,0 +1,2 @@
+model_name,visible_corr,train_corr,n_features,seconds,status,description
+rec-storyarc-wnlex-v1,0.0927,0.3127,740,113,success,"Story-arc position block (108 dims, var 0.5) + WordNet lexname/72 semantic cats/50 function words/closed class/suffix/length cues: 10-gram sum, newest word, decayed averages (5,20,100,500), diffs, distances, timing counters; variance mask <=0.14 on first story."

@@ -1,0 +1,10 @@
+{
+ "name": "AllNewFeats-Words15",
+ "rep": 2,
+ "experiments": 2,
+ "cost_usd": 0.2892206,
+ "turns": 13,
+ "seconds": 515,
+ "final": "rebuild-primacy-hashbag-v1",
+ "final_text": "0.621 |\n| v2 | position divided by a fixed 512 | 0.0288 | 0.626 |\n\nI tried v2 because the 6n\u00b2/512 term hinted at a fixed 512 scale, but it scored slightly lower, so I put the v1 setting back. The scoring printed overflow warnings during prediction in both runs; it still finished and reported success.\n\n**Likely causes of the gap:** the original's embedding scales, how strongly its decay favours early tokens, and its exact word cleaning and tag spellings.\n\nFinal model: `rebuild-primacy-hashbag-v1`"
+}

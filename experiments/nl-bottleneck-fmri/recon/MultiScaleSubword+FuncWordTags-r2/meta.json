@@ -1,0 +1,10 @@
+{
+ "name": "MultiScaleSubword+FuncWordTags",
+ "rep": 2,
+ "experiments": 2,
+ "cost_usd": 0.21736740000000002,
+ "turns": 11,
+ "seconds": 468,
+ "final": "msub_fwtags_v2_512emb",
+ "final_text": " once per distinct word.\n- **Random vectors** are drawn at standard-normal scale.\n\nAny of these could explain the remaining gap. I stopped there rather than keep adjusting things to close it, since the aim was to match the description, not the score.\n\nBoth runs printed overflow warnings from a matrix multiply inside the shared scoring code (`common.py`). The runs still completed and reported scores, but I didn't check whether the warnings affect the numbers.\n\nFinal model: `msub_fwtags_v2_512emb`"
+}

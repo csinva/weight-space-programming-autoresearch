@@ -1,0 +1,12 @@
+{
+ "visible": 0.029970108649861577,
+ "hidden": 0.017790674471540233,
+ "hidden_middle": 0.017863644550735327,
+ "train": 0.6199001229514367,
+ "n_features": 4104,
+ "name": "AllNewFeats-Words15",
+ "rep": 1,
+ "final": "rebuild-hashtf-v3-final",
+ "pred_similarity": 0.6268646717071533,
+ "map_similarity": 0.8426694323153027
+}

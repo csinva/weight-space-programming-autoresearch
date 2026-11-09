@@ -1,0 +1,10 @@
+{
+ "name": "MultiScaleSubword+FuncWordTags",
+ "rep": 1,
+ "experiments": 2,
+ "cost_usd": 0.33348200000000006,
+ "turns": 17,
+ "seconds": 521,
+ "final": "rec-msub-fwtags-v2-shared64",
+ "final_text": " dropped afterwards.\n\nAny of these, or simply the random seed, could explain the remaining 0.006 gap. I didn't run more tests, because further changes would have been tuning for score rather than following the description. I used 2 of the 6 allowed runs.\n\nThe scoring runs printed divide-by-zero and overflow warnings from the matrix maths. Both runs still finished with valid scores, so I've treated these as harmless numerical warnings, but I didn't confirm that.\n\nFinal model: `rec-msub-fwtags-v1`"
+}

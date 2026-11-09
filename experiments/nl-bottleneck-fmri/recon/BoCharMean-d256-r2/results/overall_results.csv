@@ -1,0 +1,2 @@
+model_name,visible_corr,train_corr,n_features,seconds,status,description
+bochar-mean-d256-v1,0.0325,0.2142,1024,126,success,"Bag of characters: lowercase last 64 chars, 49-symbol alphabet; fixed random Gaussian 256-d vectors (seed 0) standardized per symbol, averaged equally over window, plus final char vector at 1/16 weight, then layer-norm."
