@@ -1,5 +1,7 @@
 """AlexNet reference: ImageNet-trained and untrained (random-init) layers, each pooled to < 10,000 features."""
 import functools
+import os
+from pathlib import Path
 
 import torch
 import torch.nn as nn
@@ -7,7 +9,8 @@ import torch.nn.functional as F
 
 from baselines.filters import chunked, images
 
-WEIGHTS = "/data/shared/cache/torch/hub/checkpoints/alexnet-owt-7be5be79.pth"
+WEIGHTS = Path(os.environ.get("NEURO_ALEXNET_WEIGHTS",
+                              Path(torch.hub.get_dir()) / "checkpoints" / "alexnet-owt-7be5be79.pth")).expanduser()
 MEAN = torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
 STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
 # (layer, module group, module index, pooled spatial size) -> features < 10,000
@@ -19,6 +22,10 @@ LAYERS = [("conv1", "features", 1, 12), ("conv2", "features", 4, 7), ("conv3", "
 @functools.cache
 def network(trained):
     """torchvision's AlexNet architecture, built once per weight type (ImageNet or seed-0 init)."""
+    if trained and not Path(WEIGHTS).is_file():
+        raise FileNotFoundError(
+            f"AlexNet checkpoint missing: {WEIGHTS}. Set NEURO_ALEXNET_WEIGHTS to the "
+            "ImageNet alexnet-owt-7be5be79.pth checkpoint, or select an untrained baseline.")
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(0)
         net = alexnet()

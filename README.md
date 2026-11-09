@@ -49,7 +49,7 @@ uv run interpretable_transformer.py --task addition-five-digits
 | Algorithmic and language transformers | `experiments/evolve/` | [Experiments guide](experiments/README.md#transformers) |
 | Text bottleneck | `experiments/nl-bottleneck/` | [Experiments guide](experiments/README.md#text-bottleneck) |
 | Story-listening fMRI | `experiments/evolve-neuro/` | [Experiments guide](experiments/README.md#story-listening-fmri) |
-| Visual cortex | `experiments/vision/` | [Its README](experiments/vision/README.md) |
+| Visual cortex | `experiments/vision/` | [Reproduce the fMRI figure](experiments/vision/figure/README.md); [search workflow](experiments/vision/README.md) |
 | ECoG responses to audio | `experiments/ecog/` | [Experiments guide](experiments/README.md#ecog) |
 | Reading a real model's weights | `experiments/systematic-tests/` | [Experiments guide](experiments/README.md#reading-weights) |
 

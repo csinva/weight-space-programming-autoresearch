@@ -47,7 +47,9 @@ Our searches scored 3 stories, but `onapproachtopluto` is not in the public rele
 
 ## Visual cortex
 
-The visual cortex searches have their own harness and commands. See `vision/README.md`, and run them from that folder.
+To reproduce the main fMRI figure, start with [vision/figure/README.md](vision/figure/README.md). The figure can be rendered from included results without neural datasets, a GPU or an agent. The same folder contains the frozen model and scripts for recomputing its scores from prepared data.
+
+The visual cortex searches have their own harness and commands in [vision/README.md](vision/README.md). Search is not required to reproduce the figure.
 
 ## ECoG
 
