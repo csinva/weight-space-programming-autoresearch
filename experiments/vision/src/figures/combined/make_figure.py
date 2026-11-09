@@ -165,7 +165,7 @@ def panel_b(fig, x, y, w, h, c):
         ax.spines["left"].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=4, labelleft=g == 0)
         ax.set_yticks([pos[k] for k in rows] + [ref_y],
-                      ["Searched model" if k == "erjpu" else models[k]["label"] for k in rows] + ["AlexNet"])
+                      ["iWSP model" if k == "erjpu" else models[k]["label"] for k in rows] + ["AlexNet"])
         if g == 0:
             labels = ax.get_yticklabels()
             labels[rows.index("erjpu")].set_color(PRIMARY)
