@@ -45,7 +45,7 @@ def run(job):
     env = dict(os.environ, NLBF_CODE=str(HERE), NLBF_DATA=str(WORK / 'data_visible'), NLBF_WORK=str(WORK),
                NLTK_DATA=str(WORK / 'data_visible' / 'nltk'), OMP_NUM_THREADS='4', PYTHONDONTWRITEBYTECODE='1')
     cmd = ['claude', '-p', prompt, '--model', 'claude-opus-5-5', '--restricted', '--tools', TOOLS, '--strict-mcp-config',
-           '--output-format', 'stream-json', '--verbose', '--allowedTools', f'Bash({PY} score.py)', f'Bash({PY} score.py:*)', 'Edit', 'Write']
+           '--output-format', 'stream-json', '--verbose', '--permission-mode', 'acceptEdits', '--allowedTools', f'Bash({PY} score.py)', f'Bash({PY} score.py:*)', 'Edit', 'Write']
     t0 = time.time()
     with (rd / 'agent_log.jsonl').open('w') as fh:
         subprocess.run(cmd, cwd=sb, stdout=fh, stderr=subprocess.STDOUT, text=True, env=env, timeout=4 * 3600)
