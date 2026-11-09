@@ -66,3 +66,7 @@ uv run python experiments/systematic-tests/run_round.py measure --round 0
 ```
 
 The exact commands for each experiment are in the Reproducibility section of `analyze/systematic_tests/report.html`. The formatted weight dumps and `dense_effects.npz` files are not committed, and these commands rebuild them.
+
+## Mona Lisa weights
+
+A 16-layer convnet whose weights, laid out in layer order as tiles, form the Mona Lisa, and which reads MNIST digits with no training (96.17% with 4.0M weights, 97.48% with 64M; a trained linear classifier gets 92.55%). Every weight is a painting pixel, a hand-written constant, or a painting pixel nudged by a stored training digit. The code, figures and an explainer video are in `mona-lisa/`; its README has the commands.

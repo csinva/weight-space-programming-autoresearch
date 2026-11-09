@@ -1,0 +1,45 @@
+{
+ "config": "small",
+ "W": 1680,
+ "H": 2408,
+ "cols": 60,
+ "rows": 172,
+ "tile": [
+  14,
+  28
+ ],
+ "n_layer1": 196,
+ "k1": 6,
+ "s1": 2,
+ "p1": 3,
+ "S": 15,
+ "shifts": [
+  2,
+  2
+ ],
+ "conv4_out": 6,
+ "conv15_out": 3386,
+ "order": [
+  "conv1",
+  "convT2_pairs",
+  "conv3_memory",
+  "conv4_max",
+  "conv5_max",
+  "conv6_max",
+  "conv7_max",
+  "conv8_max",
+  "conv9_max",
+  "conv10_max",
+  "conv11_max",
+  "conv12_max",
+  "conv13_max",
+  "conv14_max",
+  "conv15_max",
+  "conv16_out"
+ ],
+ "zero": 0.30273429970825544,
+ "alpha": 8.0,
+ "eps": 0.12,
+ "sigma": 1.0,
+ "per_class": 1024
+}
