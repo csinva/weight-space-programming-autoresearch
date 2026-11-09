@@ -1,0 +1,14 @@
+{
+  "runs": {
+    "rebuild_60w_0": {
+      "description": "60w",
+      "contract_ok": true,
+      "attempts": 1
+    }
+  },
+  "cka": {
+    "original": 0.9999999999999931,
+    "rebuild_60w_0": 0.9999999999999931
+  },
+  "cost_usd": 0.0695556
+}

@@ -7,12 +7,12 @@ from dashboard import _db
 
 
 def test_discovers_search_runs_without_final_results(tmp_path, monkeypatch):
-    runs = tmp_path / "search_runs"
+    runs = tmp_path / "artifacts" / "search"
     run = runs / "laion__2026-10-22"
     run.mkdir(parents=True)
     with sqlite3.connect(run / "search.db") as db:
         db.execute("CREATE TABLE models (id TEXT)")
-    final = tmp_path / "final_results" / "laion__2026-10-23"
+    final = tmp_path / "artifacts" / "final" / "laion__2026-10-23"
     final.mkdir(parents=True)
     (final / "search.db").touch()
     monkeypatch.setattr(_db, "RUNS_ROOT", runs)
@@ -83,3 +83,9 @@ def test_config_reports_persisted_objective_without_migrating_run(tmp_path, monk
     assert target in result["task"]["description"]
     assert "Discover computational principles" in result["task"]["description"]
     assert before == {p.name: p.read_bytes() for p in run.iterdir()}
+
+
+def test_default_discovery_root_is_search_artifacts():
+    from pathlib import Path
+    repo = Path(__file__).resolve().parents[1]
+    assert _db.RUNS_ROOT == repo / "artifacts" / "search"

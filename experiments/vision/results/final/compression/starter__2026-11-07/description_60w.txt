@@ -1,0 +1,1 @@
+Flatten each image's raw pixels into one vector. If it has 2,048 or fewer values, output it unchanged. Otherwise produce 2,048 features. Each feature sums four pixels, chosen uniformly at random with replacement, each multiplied by a random plus-or-minus-one sign, then divides by 2. The pixel choices and signs are fixed from seed 0 and shared across images. No learning.

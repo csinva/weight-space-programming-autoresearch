@@ -130,7 +130,7 @@ def test_repair_cannot_redirect_host_read(tmp_path):
 
 @pytest.mark.parametrize("change", ["settings", "data", "image_policy"])
 def test_resume_preserves_identity_before_writing(run, clean_environment, monkeypatch, change):
-    root = str(run.parents[1])
+    root = str(run.parents[2])
     before = (run / "env.json").read_bytes()
     assert Path(scaffold_run("laion", "2026-10-21", root, 2)) == run
     if change == "settings":
@@ -231,7 +231,7 @@ def test_configuration_lifecycle_and_feedback_isolation(run, region, metric, mon
     from search.run import write_env_json
     monkeypatch.setenv('NEURO_REGION', region)
     monkeypatch.setenv('NEURO_METRIC', metric)
-    root = str(run.parents[1])
+    root = str(run.parents[2])
     configured = scaffold_run('laion', '2026-10-21', root, 2, region=region, metric=metric)
     assert Path(configured).name == f'laion__{region}__{metric}__2026-10-21'
     protocol = protocol_for('laion', region, metric)

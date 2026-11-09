@@ -5,7 +5,7 @@ serving, opens its ``search.db`` read-only, and maps our ``models`` rows onto th
 CORAL's frontend expects (an ``Attempt``). Every endpoint handler builds on the helpers
 here so the mapping lives in exactly one place.
 
-Run dirs live at ``search_runs/<task>__<run>/`` (e.g. ``search_runs/laion__2026-10-22``): task = dataset,
+Run dirs live at ``artifacts/search/<task>__<run>/`` (e.g. ``artifacts/search/laion__2026-10-22``): task = dataset,
 run = date. ``search.db`` has one ``models`` row per model ever proposed; its ``status`` is
 the queue flag (queued -> running -> ok / error).
 """
@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-RUNS_ROOT = REPO_ROOT / "search_runs"
+RUNS_ROOT = REPO_ROOT / "artifacts" / "search"
 
 # A proposer/run counts as "alive" if something happened this recently (seconds).
 ALIVE_WINDOW = 180.0
@@ -39,7 +39,7 @@ def list_run_dirs() -> list[Path]:
 
 
 def split_run_name(p: Path) -> tuple[str, str]:
-    """``search_runs/laion__2026-10-22`` -> ``("laion", "2026-10-22")``."""
+    """``artifacts/search/laion__2026-10-22`` -> ``("laion", "2026-10-22")``."""
     task, _, run = p.name.partition("__")
     return task, run
 

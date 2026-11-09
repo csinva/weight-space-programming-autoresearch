@@ -1,0 +1,9 @@
+A fixed, parameter-free pipeline for square RGB images in 0–1. Apply a compressive gamma (offset 0.04, power 0.45), then convert to orthonormal luminance, red-green and blue-yellow channels. Also make a foveally magnified "cortical" copy, warping each axis by 0.58u plus 0.42u cubed.
+
+Three octaves: 7×7 quadrature Gabors (8 orientations, 2 frequencies) plus two difference-of-Gaussians give energies and rectified DoG responses; chromatic channels use coarse Gabors. Each pathway is divisively normalized by local 3×3 plus half global mean energy, then log1p-compressed. Means pool on cortical grids (9, 6, 4 per side); standard deviations plus peaks on retinal grids.
+
+Derived maps: orientation harmonics, curvature, surround pop-out; phase congruency, bar-versus-edge polarity; second-order modulation; off-diagonal channel correlations, global and per-quadrant; cross-octave persistence and differences; foveal-versus-peripheral contrast; mirror correlations.
+
+Most heavily weighted: five-octave surface geometry. This includes Hessian shape-index bins weighted by normalized curvedness, structure-tensor eigenvalues and coherence, isophote curvature, and chromatic corner strength. It is pooled on shrinking grids with weights 1.5 down to 0.35, plus cross-octave correlations.
+
+Extras: coarse color grids, anchor-distance path maps, local-extremum counts. Every block is separately L2-normalized and weighted; output totals roughly 10,000 dimensions.
