@@ -1,5 +1,11 @@
 # neuro-autoresearch
 
+**For the paper figure:** use [figure/README.md](figure/README.md). It provides a
+one-command render from included results, the frozen five-subject LAION model,
+and scripts to recompute the numerical panels. No agent or coordinator is needed.
+The search instructions below describe the newer subject/image holdout protocol;
+the paper figure records its historical protocol explicitly.
+
 Open-ended agentic search for computational models of the visual cortex: discover
 image-to-representation functions and the computational principles they express.
 Search a selected brain region with **encoding** (default) or **RSA**, then freeze
