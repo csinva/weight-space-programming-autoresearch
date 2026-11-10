@@ -114,8 +114,8 @@ def panel_a(fig, x, y, w, h, b):
     ax.set_xlim(0, 600)
     ax.set_xticks([0, 200, 400, 600])
     ax.set_yticks([0.3, 0.4, 0.5, 0.6])
-    ax.set_xlabel("Evaluated candidates")
-    ax.set_ylabel("Encoding $r$")
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Performance (correlation)")
     print(f"panel a: {hidden} of {2 * len(b['candidates'])} stream scores fall below {lo}")
 
 
@@ -165,21 +165,14 @@ def panel_b(fig, x, y, w, h, c):
         ax.spines["left"].set_visible(False)
         ax.tick_params(axis="y", length=0, pad=4, labelleft=g == 0)
         ax.set_yticks([pos[k] for k in rows] + [ref_y],
-                      ["iWSP model" if k == "erjpu" else models[k]["label"] for k in rows] + ["AlexNet"])
+                      ["iWSP model" if k == "erjpu" else models[k]["label"] for k in rows] + ["AlexNet (black-box)"])
         if g == 0:
             labels = ax.get_yticklabels()
             labels[rows.index("erjpu")].set_color(PRIMARY)
             labels[rows.index("erjpu")].set_fontweight("bold")
             labels[-1].set_color(MUTED)
-    # Group bracket: the searched model and the eight baselines are all interpretable models.
-    unit = h / (len(rows) + 0.6 - (ref_y - 0.6))
-    row_y = lambda v: y + (v - (ref_y - 0.6)) * unit
-    bx = x + 0.2
-    fig.add_artist(Line2D([bx / W] * 2, [row_y(0.62) / H, row_y(len(rows) + 0.38) / H], color=AXIS, lw=0.7))
-    text(fig, bx - 0.05, row_y((len(rows) + 1) / 2), "Interpretable models", rotation=90, ha="right", va="center",
-         fontsize=SMALL, color=MUTED)
     cx = x + label_w + col + gap / 2
-    text(fig, cx, y - 0.38, "Encoding $r$", ha="center")
+    text(fig, cx, y - 0.38, "Performance (correlation)", ha="center")
 
 
 def arrow(fig, x0, y0, x1, y1):
@@ -293,7 +286,7 @@ def main():
     fig = plt.figure(figsize=(W, H))
 
     top = H - 0.2
-    heading(fig, 0, top, "a", "Search on LAION-fMRI")
+    heading(fig, 0, top, "a", "")  # no subtitle for panel a
     panel_a(fig, 0.46, top - 1.66, 1.9, 1.42, b)
     heading(fig, 3.0, top, "b", "Transfer to NSD")
     panel_b(fig, 3.0, top - 1.66, 4.45, 1.42, c)
