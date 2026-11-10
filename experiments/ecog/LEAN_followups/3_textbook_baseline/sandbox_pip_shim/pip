@@ -1,0 +1,8 @@
+#!/bin/sh
+# Installs PyPI packages into /work/pkgs (on the Python path here and when your feature space is scored).
+# numpy, scipy and torch are pinned to the scoring environment's versions.
+case "$1" in
+  install) shift; exec /opt/bin/uv pip install --python /opt/venv/bin/python --target /work/pkgs --constraint /opt/bin/pins.txt "$@" ;;
+  list|freeze) ls /work/pkgs 2>/dev/null | grep -i 'dist-info' | sed 's/.dist-info//'; exit 0 ;;
+  *) echo "usage: pip install <package> [...]   (also: pip list)"; exit 1 ;;
+esac

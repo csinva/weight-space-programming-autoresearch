@@ -1,0 +1,4 @@
+describer=29368849 launch_rebuild=29368850 (afterok) controls=29368851 29368852 29368853 29368854 29368855 
+description words: 197
+rebuild jobs: 29368863 29368864 29368865 29368866 29368867 invariance=29368933 scoring=29368934 (afterok invariance; 66 tasks)
+pending tasks 20-65: + gl40s_short/long, mem 48G (features on CPU; float64 ridge GPU-agnostic) 16:51

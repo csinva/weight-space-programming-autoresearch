@@ -1,0 +1,10 @@
+agent 5 nonce 9f1226513c73 start 2026-11-09T13:00:16-05:00
+agent 3 nonce 6bde40ddafe3 start 2026-11-09T13:00:16-05:00
+agent 1 nonce 9edde0067e59 start 2026-11-09T13:00:19-05:00
+agent 4 nonce 0e43fb4fdaaa start 2026-11-09T13:00:19-05:00
+agent 2 nonce 163772b92da3 start 2026-11-09T13:00:20-05:00
+agent 1 end 2026-11-09T13:05:33-05:00 rc=0
+agent 4 end 2026-11-09T13:05:46-05:00 rc=0
+agent 3 end 2026-11-09T13:06:12-05:00 rc=0
+agent 5 end 2026-11-09T13:06:46-05:00 rc=0
+agent 2 end 2026-11-09T13:09:37-05:00 rc=0
