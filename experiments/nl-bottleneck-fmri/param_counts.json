@@ -1,0 +1,142 @@
+{
+ "original": {
+  "BoCharMean-d256": {
+   "iteration": 1,
+   "n_numbers": 326007,
+   "search_n_params": 325952
+  },
+  "MultiScaleSubword+FuncWordTags": {
+   "iteration": 40,
+   "n_numbers": 3528311,
+   "search_n_params": 3528256
+  },
+  "AllNewFeats-Words15": {
+   "iteration": 76,
+   "n_numbers": 9154681,
+   "search_n_params": 9154624
+  },
+  "ExpDec-R4.0": {
+   "iteration": 152,
+   "n_numbers": 9154681,
+   "search_n_params": 9154624
+  },
+  "DenseSemXX-N20": {
+   "iteration": 192,
+   "n_numbers": 11204729,
+   "search_n_params": 11204672
+  },
+  "WordNetMorphLingMultiTau": {
+   "iteration": 238,
+   "n_numbers": 8,
+   "search_n_params": 2
+  },
+  "WordNetMorphLingStoryArc": {
+   "iteration": 239,
+   "n_numbers": 13,
+   "search_n_params": 2
+  },
+  "WordNetMorphLingNovelty": {
+   "iteration": 242,
+   "n_numbers": 7,
+   "search_n_params": 2
+  }
+ },
+ "rebuilt": {
+  "AllNewFeats-Words15-r1": {
+   "name": "AllNewFeats-Words15",
+   "rep": 1,
+   "n_numbers": 4718592,
+   "search_n_params": null
+  },
+  "AllNewFeats-Words15-r2": {
+   "name": "AllNewFeats-Words15",
+   "rep": 2,
+   "n_numbers": 4718592,
+   "search_n_params": null
+  },
+  "BoCharMean-d256-r1": {
+   "name": "BoCharMean-d256",
+   "rep": 1,
+   "n_numbers": 12544,
+   "search_n_params": null
+  },
+  "BoCharMean-d256-r2": {
+   "name": "BoCharMean-d256",
+   "rep": 2,
+   "n_numbers": 12593,
+   "search_n_params": null
+  },
+  "DenseSemXX-N20-r1": {
+   "name": "DenseSemXX-N20",
+   "rep": 1,
+   "n_numbers": 4265984,
+   "search_n_params": null
+  },
+  "DenseSemXX-N20-r2": {
+   "name": "DenseSemXX-N20",
+   "rep": 2,
+   "n_numbers": 1888256,
+   "search_n_params": null
+  },
+  "ExpDec-R4.0-r1": {
+   "name": "ExpDec-R4.0",
+   "rep": 1,
+   "n_numbers": 4456456,
+   "search_n_params": null
+  },
+  "ExpDec-R4.0-r2": {
+   "name": "ExpDec-R4.0",
+   "rep": 2,
+   "n_numbers": 4194312,
+   "search_n_params": null
+  },
+  "MultiScaleSubword+FuncWordTags-r1": {
+   "name": "MultiScaleSubword+FuncWordTags",
+   "rep": 1,
+   "n_numbers": 262144,
+   "search_n_params": null
+  },
+  "MultiScaleSubword+FuncWordTags-r2": {
+   "name": "MultiScaleSubword+FuncWordTags",
+   "rep": 2,
+   "n_numbers": 2097152,
+   "search_n_params": null
+  },
+  "WordNetMorphLingMultiTau-r1": {
+   "name": "WordNetMorphLingMultiTau",
+   "rep": 1,
+   "n_numbers": 1,
+   "search_n_params": null
+  },
+  "WordNetMorphLingMultiTau-r2": {
+   "name": "WordNetMorphLingMultiTau",
+   "rep": 2,
+   "n_numbers": 0,
+   "search_n_params": null
+  },
+  "WordNetMorphLingNovelty-r1": {
+   "name": "WordNetMorphLingNovelty",
+   "rep": 1,
+   "n_numbers": 0,
+   "search_n_params": null
+  },
+  "WordNetMorphLingNovelty-r2": {
+   "name": "WordNetMorphLingNovelty",
+   "rep": 2,
+   "n_numbers": 0,
+   "search_n_params": null
+  },
+  "WordNetMorphLingStoryArc-r1": {
+   "name": "WordNetMorphLingStoryArc",
+   "rep": 1,
+   "n_numbers": 0,
+   "search_n_params": null
+  },
+  "WordNetMorphLingStoryArc-r2": {
+   "name": "WordNetMorphLingStoryArc",
+   "rep": 2,
+   "n_numbers": 0,
+   "search_n_params": null
+  }
+ }
+}

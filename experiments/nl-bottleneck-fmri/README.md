@@ -36,6 +36,14 @@ the last model before the scan-timing jump, the first model after it and the fin
    predicted responses, averaged over the original's 10% best-predicted voxels; and *map similarity*, the
    correlation across all voxels between their per-voxel hidden performance maps. Results are in
    `originals_eval/`, `recon_eval/` and `results.json` (`05_analyze.py`).
+4. **Compare predictions across models** (`06_pred_fractions.py`). Each rebuild's hidden-story predictions are
+   compared with every original's, on that original's best 1%, 2%, 5% and 10% of voxels, giving an 8 by 8 matrix
+   (rows: originals; columns: rebuilds, averaged over the two seeds) whose diagonal at 10% is the prediction
+   similarity above. An exact permutation test over all 40,320 pairings of originals with rebuilt models compares
+   the diagonal mean with the off-diagonal mean. Written to `pred_matrix.json`.
+5. **Count parameters** (`07_param_counts.py`). Every number a constructed model stores (tensor and array elements
+   and numeric constants; word lists and WordNet are not counted), for each original and rebuild, in
+   `param_counts.json`. The search's own count (torch parameters only) gives 2 for the WordNet-based models.
 
 ## Results
 
@@ -68,5 +76,5 @@ Set `NLBF_DATA` to a folder with the public release files (`grids/<story>.TextGr
 `respdict.json`, `split.json` with the `fit`, `visible` and `new` stories, and `nltk/` with WordNet), and
 `NLBF_WORK` to a scratch folder outside `~/.claude` (Claude Code will not edit files there). Then run
 `01_select.py`, `02_summarize.py`, `04_evaluate.py originals`, `03_reconstruct.py --reps 1 2`,
-`04_evaluate.py recon` and `05_analyze.py`. Scoring needs about 10 GB of memory, so `score.py` and
+`04_evaluate.py recon`, `05_analyze.py`, `06_pred_fractions.py` and `07_param_counts.py`. Scoring needs about 10 GB of memory, so `score.py` and
 `04_evaluate.py` share a lock that runs one scoring at a time.
