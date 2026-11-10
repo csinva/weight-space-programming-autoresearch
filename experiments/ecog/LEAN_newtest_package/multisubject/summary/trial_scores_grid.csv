@@ -1,0 +1,594 @@
+fig1_order,id,name,phase,patient1_old,patient1_new_primary,patient1_new_all493,patient2,patient3,patient4,patient5,patient6
+0,wave-slurm-23628821__Gammatone_cochleagram_73067b,Gammatone-cochleagram,hand-design exploration,0.04492,0.03903,0.03676,0.04888,0.04045,0.04052,0.03951,0.04303
+1,wave-slurm-23628821__Gammatone_log_5209d0,Gammatone-log,hand-design exploration,0.05197,0.04200,0.03981,0.04993,0.04272,0.04251,0.04030,0.04568
+2,wave-slurm-23628821__Gammatone_log_adapt_b1692a,Gammatone-log-adapt,hand-design exploration,0.05883,0.04615,0.04350,0.05237,0.04455,0.04356,0.04591,0.04934
+3,wave-slurm-23628821__Gammatone_log_adapt_onset_b08bfb,Gammatone-log-adapt-onset,hand-design exploration,0.05957,0.04996,0.04647,0.05353,0.04814,0.04395,0.04738,0.04977
+4,wave-slurm-23628821__Gammatone_log_adapt_LI_e80a49,Gammatone-log-adapt-LI,hand-design exploration,0.05802,0.04643,0.04371,0.04948,0.04455,0.04303,0.04583,0.04870
+5,wave-slurm-23628821__Gammatone_multi_tau_9feea3,Gammatone-multi-tau,hand-design exploration,0.06087,0.04908,0.04620,0.05394,0.04577,0.04354,0.04753,0.05182
+6,wave-slurm-23628821__Gammatone_AGC_multi_tau_6481da,Gammatone-AGC-multi-tau,hand-design exploration,0.05742,0.05022,0.04736,0.05296,0.04899,0.04573,0.04838,0.05208
+7,wave-slurm-23628821__Gammatone_multiwin_d278e6,Gammatone-multiwin,hand-design exploration,0.06062,0.04806,0.04498,0.05340,0.04627,0.04421,0.04670,0.04952
+8,wave-slurm-23628821__Gammatone_multiwin_multi_tau_27a576,Gammatone-multiwin-multi-tau,hand-design exploration,0.06192,0.04979,0.04648,0.05465,0.04718,0.04460,0.04850,0.05151
+9,wave-slurm-23628821__Gammatone_mod_bank_97689b,Gammatone-mod-bank,hand-design exploration,0.06211,0.05727,0.05305,0.06146,0.05354,0.05163,0.05675,0.05511
+10,wave-slurm-23628821__Gammatone_PCEN_9aa061,Gammatone-PCEN,hand-design exploration,0.05881,0.05095,0.04777,0.05497,0.04737,0.04467,0.04897,0.05337
+11,wave-slurm-23628821__Gammatone_multiwin_64ch_11a469,Gammatone-multiwin-64ch,hand-design exploration,0.06096,0.04891,0.04569,0.05291,0.04649,0.04429,0.04876,0.05068
+12,wave-slurm-23628821__Gammatone_multiwin_mt_pitch_2dd978,Gammatone-multiwin-mt-pitch,hand-design exploration,0.06184,0.05112,0.04762,0.05509,0.04761,0.04515,0.04878,0.05182
+13,wave-slurm-23628821__Gammatone_multiwin_mt_LI_7eefb1,Gammatone-multiwin-mt-LI,hand-design exploration,0.06029,0.05037,0.04701,0.05409,0.04710,0.04569,0.04883,0.05196
+14,wave-slurm-23628821__Gammatone_3win_mt_e35bc3,Gammatone-3win-mt,hand-design exploration,0.06297,0.05058,0.04709,0.05513,0.04761,0.04424,0.04977,0.05163
+15,wave-slurm-23628821__Gammatone_3win_4tau_6903e9,Gammatone-3win-4tau,hand-design exploration,0.06358,0.05127,0.04773,0.05538,0.04758,0.04434,0.04990,0.05167
+16,wave-slurm-23628821__Gammatone_4win_4tau_25415d,Gammatone-4win-4tau,hand-design exploration,0.06306,0.05189,0.04833,0.05547,0.04763,0.04473,0.04856,0.05120
+17,wave-slurm-23628821__Gammatone_3win_4tau_mod4_7dafee,Gammatone-3win-4tau-mod4,hand-design exploration,0.06300,0.05542,0.05136,0.05957,0.05275,0.04878,0.05370,0.05416
+18,wave-slurm-23628821__Gammatone_3win_5tau_1446d4,Gammatone-3win-5tau,hand-design exploration,0.06621,0.05184,0.04812,0.05496,0.04747,0.04519,0.04996,0.05393
+19,wave-slurm-23628821__Gammatone_3win_6tau_d0ac56,Gammatone-3win-6tau,hand-design exploration,0.06672,0.05052,0.04704,0.05318,0.04656,0.04384,0.04974,0.05341
+20,wave-slurm-23628821__Gammatone_3win_8tau_dense_1db0b9,Gammatone-3win-8tau-dense,hand-design exploration,0.06649,0.05188,0.04818,0.05307,0.04680,0.04415,0.04802,0.05273
+21,wave-slurm-23628821__Gammatone_3win_6tau_24ch_a5086e,Gammatone-3win-6tau-24ch,hand-design exploration,0.06628,0.05049,0.04678,0.05377,0.04742,0.04381,0.04944,0.05414
+22,wave-slurm-23628821__Gammatone_1win_6tau_40ch_87965c,Gammatone-1win-6tau-40ch,hand-design exploration,0.06529,0.05026,0.04699,0.05331,0.04699,0.04419,0.04859,0.05485
+23,wave-slurm-23628821__Gammatone_3win_6tau_AMdepth_cc1508,Gammatone-3win-6tau-AMdepth,hand-design exploration,0.06763,0.05362,0.04954,0.05567,0.05003,0.04446,0.05149,0.05517
+24,wave-slurm-23628821__Gammatone_3win_6tau_AMdepth2_e2d501,Gammatone-3win-6tau-AMdepth2,hand-design exploration,0.06733,0.05349,0.04941,0.05576,0.05000,0.04492,0.05155,0.05471
+25,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_dd8070,Gammatone-3win-6tau-AMfull,hand-design exploration,0.06784,0.05401,0.04990,0.05600,0.05042,0.04492,0.05167,0.05454
+26,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_919834,Gammatone-3win-6tau-AMfull-loud,hand-design exploration,0.06830,0.05433,0.05007,0.05607,0.05064,0.04520,0.05230,0.05399
+27,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loudpeak_d66bd3,Gammatone-3win-6tau-AMfull-loudpeak,hand-design exploration,0.06802,0.05456,0.05045,0.05608,0.05072,0.04538,0.05270,0.05441
+28,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_order6_4e1703,Gammatone-3win-6tau-AMfull-loud-order6,hand-design exploration,0.06770,0.05370,0.04963,0.05551,0.04969,0.04408,0.05191,0.05257
+29,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_centroid_b5b4af,Gammatone-3win-6tau-AMfull-loud-centroid,hand-design exploration,0.06860,0.05475,0.05041,0.05619,0.05106,0.04507,0.05273,0.05394
+30,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_cent_tilt_7b68ab,Gammatone-3win-6tau-AMfull-loud-cent-tilt,hand-design exploration,0.06833,0.05491,0.05051,0.05524,0.05075,0.04657,0.05254,0.05464
+31,wave-slurm-23628821__Gammatone_BEST_cochlear_stack_89648c,Gammatone-BEST-cochlear-stack,hand-design exploration,0.06860,0.05475,0.05041,0.05619,0.05106,0.04507,0.05273,0.05394
+32,wave-slurm-23628821__Gammatone_3win_6tau_AMfull_loud_cent_HWR_onoff_1fc9e4,Gammatone-3win-6tau-AMfull-loud-cent-HWR-onoff,hand-design exploration,0.06813,0.05561,0.05126,0.05738,0.05205,0.04893,0.05458,0.05475
+33,wave-slurm-23628821__Gammatone_BEST_highlevel_20c06d,Gammatone-BEST+highlevel,hand-design exploration,0.06931,0.05685,0.05263,0.05595,0.05258,0.04746,0.05246,0.05445
+34,wave-slurm-23628821__Gammatone_BEST_highlevel_mt_d438ae,Gammatone-BEST+highlevel-mt,hand-design exploration,0.06901,0.05742,0.05336,0.05483,0.05204,0.04869,0.05228,0.05419
+35,wave-slurm-23628821__Gammatone_BEST_HL_selective_mt_5d1186,Gammatone-BEST+HL-selective-mt,hand-design exploration,0.06974,0.05708,0.05311,0.05571,0.05247,0.04861,0.05257,0.05442
+36,wave-slurm-23628821__Gammatone_BEST_HL_flux_7d84c4,Gammatone-BEST+HL+flux,hand-design exploration,0.07190,0.05961,0.05528,0.05674,0.05393,0.04930,0.05386,0.05501
+37,wave-slurm-23628821__Gammatone_BEST_HL_bandflux_d2e218,Gammatone-BEST+HL+bandflux,hand-design exploration,0.07168,0.06025,0.05587,0.05624,0.05415,0.04995,0.05467,0.05464
+38,wave-slurm-23628821__Gammatone_BEST_HL_chanflux_ac87b1,Gammatone-BEST+HL+chanflux,hand-design exploration,0.07131,0.05952,0.05523,0.05676,0.05394,0.04942,0.05393,0.05479
+39,wave-slurm-23628821__Gammatone_BEST_HL_flux_modbank_6b847a,Gammatone-BEST+HL+flux+modbank,hand-design exploration,0.07219,0.06052,0.05616,0.05820,0.05456,0.05069,0.05535,0.05546
+40,wave-slurm-23628821__Gammatone_BEST_HL_flux_modbank_multi_ead393,Gammatone-BEST+HL+flux+modbank-multi,hand-design exploration,0.07419,0.06186,0.05770,0.06043,0.05524,0.05321,0.05698,0.05613
+41,wave-slurm-23628821__Gammatone_BEST_HL_modbank_all_0e3491,Gammatone-BEST+HL+modbank-all,hand-design exploration,0.07545,0.06352,0.05958,0.06124,0.05787,0.05519,0.05834,0.05746
+42,wave-slurm-23628821__Gammatone_BEST_HL_modbank_6rate_08bef4,Gammatone-BEST+HL+modbank-6rate,hand-design exploration,0.07530,0.06449,0.06073,0.06216,0.05844,0.05555,0.05840,0.05831
+43,wave-slurm-23628821__Gammatone_BEST_HL_modbank_chanmod_b85fa2,Gammatone-BEST+HL+modbank+chanmod,hand-design exploration,0.07515,0.06367,0.05968,0.06208,0.05805,0.05548,0.05896,0.05807
+44,wave-slurm-23628821__Gammatone_BEST_HL_modbank_zcr_49a002,Gammatone-BEST+HL+modbank+zcr,hand-design exploration,0.07547,0.06387,0.05984,0.06119,0.05757,0.05530,0.05843,0.05716
+45,wave-slurm-23628821__Gammatone_BEST_HL_modbank_zcr_mfcc_7f7133,Gammatone-BEST+HL+modbank+zcr+mfcc,hand-design exploration,0.07523,0.06401,0.05991,0.06099,0.05728,0.05594,0.05842,0.05785
+46,wave-slurm-23628821__Gammatone_BEST_HL_modbank_chan4Hz_a65505,Gammatone-BEST+HL+modbank+chan4Hz,hand-design exploration,0.07506,0.06354,0.05961,0.06169,0.05832,0.05549,0.05897,0.05826
+47,wave-slurm-23628821__Gammatone_BEST_HL_modbank_flux_mt_all_965ab0,Gammatone-BEST+HL+modbank+flux-mt-all,hand-design exploration,0.07595,0.06368,0.05970,0.06126,0.05786,0.05526,0.05839,0.05794
+48,wave-slurm-23628821__Gammatone_BEST_HL_modbank_slowfast_b5ae2c,Gammatone-BEST+HL+modbank+slowfast,hand-design exploration,0.07579,0.06371,0.05968,0.06189,0.05815,0.05579,0.05795,0.05828
+49,wave-slurm-23628821__Gammatone_BEST_HL_modbank_LI2scale_dc4588,Gammatone-BEST+HL+modbank+LI2scale,hand-design exploration,0.07502,0.06394,0.05981,0.06128,0.05767,0.05600,0.05856,0.05818
+50,wave-slurm-23628821__Gammatone_BEST_HL_modbank_products_0d59de,Gammatone-BEST+HL+modbank+products,hand-design exploration,0.07579,0.06395,0.05996,0.06103,0.05803,0.05529,0.05860,0.05772
+51,wave-slurm-23628821__Gammatone_BEST_HL_modbank_STMF4_c7d710,Gammatone-BEST+HL+modbank+STMF4,hand-design exploration,0.07683,0.06473,0.06078,0.06287,0.05913,0.05620,0.05903,0.05838
+52,wave-slurm-23628821__Gammatone_BEST_HL_modbank_STMF14_12363f,Gammatone-BEST+HL+modbank+STMF14,hand-design exploration,0.07824,0.06636,0.06256,0.06602,0.06049,0.05796,0.06121,0.06003
+53,wave-slurm-23628821__Gammatone_BEST_STMF_long_short_721666,Gammatone-BEST+STMF-long+short,hand-design exploration,0.07798,0.06619,0.06242,0.06562,0.06046,0.05811,0.06075,0.06014
+54,wave-slurm-23628821__Gammatone_BEST_STMF23_9d2cb1,Gammatone-BEST+STMF23,hand-design exploration,0.07815,0.06652,0.06267,0.06551,0.06098,0.05822,0.06141,0.06020
+55,wave-slurm-23628821__Gammatone_BEST_STMF14_prune_9580e2,Gammatone-BEST+STMF14-prune,hand-design exploration,0.07771,0.06617,0.06239,0.06616,0.06025,0.05800,0.06110,0.05990
+56,wave-slurm-23628821__Gammatone_BEST_STMF_STMFonset_03d5b7,Gammatone-BEST+STMF+STMFonset,hand-design exploration,0.07799,0.06655,0.06275,0.06581,0.06076,0.05777,0.06097,0.05986
+57,wave-slurm-23628821__Gammatone_BEST_STMF14_slowtau_420bab,Gammatone-BEST+STMF14-slowtau,hand-design exploration,0.07824,0.06636,0.06256,0.06602,0.06049,0.05796,0.06121,0.06003
+58,wave-slurm-23628821__Gammatone_BEST_STMF14_midSTMF_ea7cac,Gammatone-BEST+STMF14+midSTMF,hand-design exploration,0.07808,0.06609,0.06227,0.06566,0.06035,0.05786,0.06103,0.05974
+59,wave-slurm-23628821__Gammatone_BEST_STMF17_hi_e4e705,Gammatone-BEST+STMF17-hi,hand-design exploration,0.07841,0.06639,0.06256,0.06575,0.06065,0.05809,0.06082,0.06015
+60,wave-slurm-23628821__Gammatone_BEST_STMF17_lean_68d1c8,Gammatone-BEST+STMF17-lean,hand-design exploration,0.07717,0.06610,0.06212,0.06566,0.06039,0.05774,0.06086,0.06005
+61,wave-slurm-23628821__Gammatone_BEST_STMF17_fine40_c45615,Gammatone-BEST+STMF17-fine40,hand-design exploration,0.07607,0.06552,0.06165,0.06526,0.06015,0.05819,0.06092,0.05857
+62,wave-slurm-23628821__Gammatone_BEST_STMF17_adapt4_3aefea,Gammatone-BEST+STMF17+adapt4,hand-design exploration,0.07786,0.06641,0.06261,0.06598,0.06085,0.05836,0.06085,0.06000
+63,wave-slurm-23628821__Gammatone_BEST_STMF17_stmfmod_b8555c,Gammatone-BEST+STMF17+stmfmod,hand-design exploration,0.07832,0.06637,0.06261,0.06568,0.06047,0.05795,0.06142,0.06010
+64,wave-slurm-23628821__Gammatone_BEST_full_stack_v1_42d29b,Gammatone-BEST+full-stack-v1,hand-design exploration,0.07832,0.06637,0.06261,0.06568,0.06047,0.05795,0.06142,0.06010
+65,wave-slurm-23628821__Gammatone_BEST_full_stack_fastSTMF_66f90d,Gammatone-BEST+full-stack+fastSTMF,hand-design exploration,0.07802,0.06629,0.06259,0.06565,0.06049,0.05800,0.06130,0.05993
+66,wave-slurm-23628821__Gammatone_BEST_full_stack_final_7a8a3b,Gammatone-BEST+full-stack-final,hand-design exploration,0.07832,0.06637,0.06261,0.06568,0.06047,0.05795,0.06142,0.06010
+67,wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF_ae5d03,Gammatone-BEST+full-stack+liSTMF,hand-design exploration,0.07871,0.06644,0.06259,0.06573,0.06091,0.05771,0.06139,0.06017
+68,wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF2_147441,Gammatone-BEST+full-stack+liSTMF2,hand-design exploration,0.07860,0.06661,0.06272,0.06582,0.06088,0.05824,0.06143,0.05973
+69,wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_a63977,Gammatone-BEST+full-stack+liSTMF8,hand-design exploration,0.07899,0.06672,0.06290,0.06542,0.06108,0.05772,0.06146,0.06035
+70,wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_li_d787c7,Gammatone-BEST+full-stack+liSTMF8+li,hand-design exploration,0.07861,0.06660,0.06276,0.06553,0.06100,0.05770,0.06151,0.06050
+71,wave-slurm-23628821__Gammatone_BEST_full_stack_liSTMF8_final_74b924,Gammatone-BEST+full-stack+liSTMF8-final,hand-design exploration,0.07899,0.06672,0.06290,0.06542,0.06108,0.05772,0.06146,0.06035
+72,wave-slurm-23628821__Gammatone_BEST_full_stack_prosody_9930ad,Gammatone-BEST+full-stack+prosody,hand-design exploration,0.07909,0.06674,0.06291,0.06542,0.06108,0.05784,0.06147,0.06036
+73,wave-slurm-23628821__Gammatone_BEST_full_stack_prosody_hnronset_8cb98c,Gammatone-BEST+full-stack+prosody+hnronset,hand-design exploration,0.07904,0.06674,0.06291,0.06541,0.06108,0.05768,0.06153,0.06034
+74,wave-slurm-23628821__Gammatone_BEST_full_stack_lookahead_0d0ccc,Gammatone-BEST+full-stack+lookahead,hand-design exploration,0.07820,0.06737,0.06346,0.06666,0.06127,0.05889,0.06284,0.06115
+75,wave-slurm-23628821__Gammatone_BEST_full_stack_STMF_adapt_29470d,Gammatone-BEST+full-stack+STMF-adapt,hand-design exploration,0.07834,0.06675,0.06293,0.06570,0.06131,0.05768,0.06136,0.06004
+76,wave-slurm-23628821__Gammatone_BEST_full_stack_STMF_short_2f0d7a,Gammatone-BEST+full-stack+STMF-short,hand-design exploration,0.07819,0.06629,0.06258,0.06484,0.06095,0.05728,0.06121,0.06000
+77,wave-slurm-23628821__Gammatone_BEST_full_stack_HLproducts_4104b7,Gammatone-BEST+full-stack+HLproducts,hand-design exploration,0.07862,0.06680,0.06300,0.06479,0.06124,0.05786,0.06144,0.06008
+78,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_90ac30,Gammatone-BEST+full-stack+formants,hand-design exploration,0.07924,0.06703,0.06319,0.06514,0.06102,0.05748,0.06165,0.06017
+79,wave-slurm-23628821__Gammatone_BEST_full_stack_formants3_9bb15d,Gammatone-BEST+full-stack+formants3,hand-design exploration,0.07920,0.06710,0.06325,0.06514,0.06127,0.05751,0.06141,0.05992
+80,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_b17a30,Gammatone-BEST+full-stack+formants+bw,hand-design exploration,0.07939,0.06710,0.06333,0.06511,0.06121,0.05740,0.06177,0.06012
+81,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_LI_d2aff3,Gammatone-BEST+full-stack+formants+bw+LI,hand-design exploration,0.07926,0.06717,0.06346,0.06508,0.06111,0.05753,0.06152,0.06007
+82,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_vowelspace_3f5260,Gammatone-BEST+full-stack+formants+bw+vowelspace,hand-design exploration,0.07912,0.06720,0.06337,0.06531,0.06111,0.05732,0.06179,0.06000
+83,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_shortfmt_5bc455,Gammatone-BEST+full-stack+formants+bw+shortfmt,hand-design exploration,0.07903,0.06705,0.06329,0.06482,0.06109,0.05755,0.06172,0.05992
+84,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_laplace_e9c0de,Gammatone-BEST+full-stack+formants+bw+laplace,hand-design exploration,0.07889,0.06696,0.06315,0.06466,0.06121,0.05744,0.06187,0.05969
+85,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_stability_a305a4,Gammatone-BEST+full-stack+formants+bw+stability,hand-design exploration,0.07929,0.06707,0.06327,0.06509,0.06110,0.05745,0.06145,0.06009
+86,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cuberoot_1557f2,Gammatone-BEST+full-stack+formants+bw+cuberoot,hand-design exploration,0.07991,0.06727,0.06352,0.06452,0.06147,0.05774,0.06187,0.06050
+87,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cuberoot3win_76562e,Gammatone-BEST+full-stack+formants+bw+cuberoot3win,hand-design exploration,0.08006,0.06742,0.06368,0.06498,0.06137,0.05775,0.06173,0.06047
+88,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_sqrt_485608,Gammatone-BEST+full-stack+formants+bw+cube+sqrt,hand-design exploration,0.08003,0.06734,0.06362,0.06504,0.06139,0.05721,0.06181,0.06039
+89,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_slowadapt_bb6ed7,Gammatone-BEST+full-stack+formants+bw+cube+slowadapt,hand-design exploration,0.07980,0.06741,0.06363,0.06457,0.06127,0.05778,0.06145,0.06107
+90,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_LIcube_cbb45b,Gammatone-BEST+full-stack+formants+bw+cube+LIcube,hand-design exploration,0.07979,0.06748,0.06374,0.06473,0.06151,0.05728,0.06184,0.05983
+91,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_4thrt_3f8837,Gammatone-BEST+full-stack+formants+bw+cube+4thrt,hand-design exploration,0.07990,0.06742,0.06369,0.06502,0.06142,0.05721,0.06188,0.06058
+92,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_fine_e2124e,Gammatone-BEST+full-stack+formants+bw+cube+fine,hand-design exploration,0.07971,0.06751,0.06372,0.06495,0.06162,0.05733,0.06119,0.06060
+93,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_sqrtlong_3611cb,Gammatone-BEST+full-stack+formants+bw+cube+sqrtlong,hand-design exploration,0.07995,0.06730,0.06356,0.06488,0.06141,0.05739,0.06160,0.06046
+94,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar_01862d,Gammatone-BEST+full-stack+formants+bw+cube+chanvar,hand-design exploration,0.08010,0.06772,0.06411,0.06554,0.06168,0.05767,0.06242,0.06036
+95,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar3_2a6556,Gammatone-BEST+full-stack+formants+bw+cube+chanvar3,hand-design exploration,0.07958,0.06831,0.06465,0.06548,0.06153,0.05787,0.06261,0.06128
+96,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar_cube_1f2437,Gammatone-BEST+full-stack+formants+bw+cube+chanvar-cube,hand-design exploration,0.08030,0.06789,0.06432,0.06521,0.06183,0.05756,0.06251,0.05979
+97,wave-slurm-23628821__Gammatone_BEST_full_stack_formants_bw_cube_chanvar3win_47df4a,Gammatone-BEST+full-stack+formants+bw+cube+chanvar3win,hand-design exploration,0.07989,0.06774,0.06415,0.06444,0.06151,0.05637,0.06256,0.06029
+98,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_HWR_cube_9e4ac3,Gammatone-BEST+full-stack+chanvar+HWR-cube,hand-design exploration,0.08018,0.06779,0.06419,0.06500,0.06198,0.05710,0.06246,0.05938
+99,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_793b3f,Gammatone-BEST+full-stack+chanvar+modenv,hand-design exploration,0.08052,0.06804,0.06437,0.06488,0.06214,0.05714,0.06316,0.05982
+100,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv4_af7c34,Gammatone-BEST+full-stack+chanvar+modenv4,hand-design exploration,0.08003,0.06852,0.06462,0.06479,0.06210,0.05738,0.06341,0.05980
+101,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_cubemod_be3496,Gammatone-BEST+full-stack+chanvar+modenv+cubemod,hand-design exploration,0.08050,0.06791,0.06427,0.06506,0.06194,0.05726,0.06282,0.06030
+102,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_chanskew_5429ca,Gammatone-BEST+full-stack+chanvar+modenv+chanskew,hand-design exploration,0.08010,0.06785,0.06430,0.06501,0.06215,0.05713,0.06303,0.05965
+103,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_LImodenv_1841c4,Gammatone-BEST+full-stack+chanvar+modenv+LImodenv,hand-design exploration,0.08015,0.06834,0.06466,0.06567,0.06221,0.05747,0.06367,0.05924
+104,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_zscore_1e9a15,Gammatone-BEST+full-stack+chanvar+modenv+zscore,hand-design exploration,0.08053,0.06805,0.06438,0.06491,0.06216,0.05717,0.06318,0.05991
+105,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_tonicslow_3bcadb,Gammatone-BEST+full-stack+chanvar+modenv+tonicslow,hand-design exploration,0.08237,0.06828,0.06427,0.06421,0.06090,0.05723,0.06326,0.05947
+106,wave-slurm-23628821__Gammatone_BEST_full_stack_chanvar_modenv_tonic4tau_20a136,Gammatone-BEST+full-stack+chanvar+modenv+tonic4tau,hand-design exploration,0.08247,0.06808,0.06413,0.06279,0.06092,0.05743,0.06269,0.05822
+107,wave-slurm-23628821__Gammatone_BEST_full_stack_tonicslow_cubetonic_51a507,Gammatone-BEST+full-stack+tonicslow+cubetonic,hand-design exploration,0.08315,0.06873,0.06447,0.06342,0.06109,0.05726,0.06252,0.05917
+108,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_d250e2,Gammatone-BEST+full-stack+tonic3win,hand-design exploration,0.08377,0.06822,0.06394,0.06160,0.05980,0.05637,0.06152,0.05695
+109,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_midtau_ab72cd,Gammatone-BEST+full-stack+tonic3win+midtau,hand-design exploration,0.08353,0.06806,0.06382,0.06118,0.05967,0.05593,0.06127,0.05677
+110,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_tonicLI_4a7b13,Gammatone-BEST+full-stack+tonic3win+tonicLI,hand-design exploration,0.08321,0.06806,0.06384,0.06121,0.06012,0.05605,0.06192,0.05645
+111,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_discoursetau_dc4906,Gammatone-BEST+full-stack+tonic3win+discoursetau,hand-design exploration,0.08190,0.06679,0.06248,0.05959,0.05788,0.05344,0.05997,0.05510
+112,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausaltonic_25d48a,Gammatone-BEST+full-stack+tonic3win+acausaltonic,hand-design exploration,0.08494,0.06932,0.06501,0.06258,0.05998,0.05653,0.06204,0.05869
+113,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal3win_b150e0,Gammatone-BEST+full-stack+tonic3win+acausal3win,hand-design exploration,0.08386,0.06897,0.06468,0.06221,0.05956,0.05536,0.06178,0.05838
+114,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_long150_cube_54495b,Gammatone-BEST+full-stack+tonic3win+acausal+long150-cube,hand-design exploration,0.08484,0.06957,0.06509,0.06223,0.05972,0.05643,0.06243,0.05908
+115,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_trend_9d3076,Gammatone-BEST+full-stack+tonic3win+acausal+trend,hand-design exploration,0.08492,0.06934,0.06507,0.06239,0.05978,0.05689,0.06213,0.05913
+116,wave-slurm-23628821__Gammatone_BEST_full_stack_tonic3win_acausal_residual_LP_5f689c,Gammatone-BEST+full-stack+tonic3win+acausal+residual-LP,hand-design exploration,0.08471,0.06935,0.06508,0.06247,0.05988,0.05699,0.06155,0.05854
+117,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futdelta3_35b0b7,Gammatone-BEST+tonic3win+acausal+futdelta3,hand-design exploration,0.08508,0.06931,0.06505,0.06288,0.06027,0.05659,0.06180,0.05901
+118,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futdelta3_6_ebc465,Gammatone-BEST+tonic3win+acausal+futdelta3-6,hand-design exploration,0.08546,0.06961,0.06536,0.06310,0.06026,0.05690,0.06175,0.05895
+119,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_db9063,Gammatone-BEST+tonic3win+acausal+futpast-delta,hand-design exploration,0.08552,0.06957,0.06535,0.06301,0.06043,0.05711,0.06174,0.05912
+120,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta3_12_93c5ee,Gammatone-BEST+tonic3win+acausal+futpast-delta3-12,hand-design exploration,0.08578,0.07008,0.06589,0.06338,0.06045,0.05734,0.06193,0.05963
+121,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta3_24_22081f,Gammatone-BEST+tonic3win+acausal+futpast-delta3-24,hand-design exploration,0.08562,0.07008,0.06589,0.06328,0.06027,0.05787,0.06246,0.05978
+122,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_cube6_7868db,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube6,hand-design exploration,0.08584,0.07024,0.06603,0.06360,0.06039,0.05759,0.06242,0.05936
+123,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_futpast_delta_cube36_6f5098,Gammatone-BEST+tonic3win+acausal+futpast-delta+cube36,hand-design exploration,0.08581,0.07022,0.06599,0.06346,0.06038,0.05752,0.06242,0.05971
+124,wave-slurm-23628821__Gammatone_BEST_tonic3win_acausal_cube_acausal_827f59,Gammatone-BEST+tonic3win+acausal+cube-acausal,hand-design exploration,0.08595,0.07043,0.06610,0.06316,0.06010,0.05739,0.06265,0.05961
+125,wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_loudfut_e21c4c,Gammatone-BEST+tonic3win+futdelta+loudfut,hand-design exploration,0.08572,0.07027,0.06603,0.06351,0.06039,0.05779,0.06266,0.05979
+126,wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_cube612_2a6774,Gammatone-BEST+tonic3win+futdelta+cube612,hand-design exploration,0.08569,0.07026,0.06608,0.06369,0.06039,0.05763,0.06268,0.05934
+127,wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_shortfut_f638f5,Gammatone-BEST+tonic3win+futdelta+shortfut,hand-design exploration,0.08583,0.07023,0.06603,0.06385,0.06029,0.05741,0.06244,0.05926
+128,wave-slurm-23628821__Gammatone_BEST_tonic3win_futdelta_futdelta_LP_6e727c,Gammatone-BEST+tonic3win+futdelta+futdelta-LP,hand-design exploration,0.08592,0.07027,0.06604,0.06362,0.06037,0.05761,0.06243,0.05942
+129,wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_absdelta_85574a,Gammatone-BEST+tonic+futdelta+absdelta,hand-design exploration,0.08560,0.07033,0.06609,0.06417,0.06039,0.05730,0.06218,0.05976
+130,wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_state_prod_e3f00e,Gammatone-BEST+tonic+futdelta+state-prod,hand-design exploration,0.08593,0.07030,0.06609,0.06372,0.06039,0.05757,0.06243,0.05934
+131,wave-slurm-23628821__Gammatone_BEST_tonic_futdelta_midfut_097ecf,Gammatone-BEST+tonic+futdelta+midfut,hand-design exploration,0.08572,0.07013,0.06596,0.06356,0.06043,0.05729,0.06246,0.05934
+132,wave-slurm-23628821__Gammatone_BEST_drop_tau150_ed9914,Gammatone-BEST+drop-tau150,hand-design exploration,0.08580,0.07025,0.06605,0.06517,0.06052,0.05690,0.06280,0.05961
+133,wave-slurm-23628821__Gammatone_BEST_peakhold_futpast_ae2fc8,Gammatone-BEST+peakhold-futpast,hand-design exploration,0.08560,0.07053,0.06628,0.06374,0.06031,0.05765,0.06311,0.05969
+134,wave-slurm-23628821__Gammatone_BEST_TFS_zcr_acflags_1fcfb2,Gammatone-BEST+TFS-zcr+acflags,hand-design exploration,0.08427,0.07000,0.06590,0.06231,0.05933,0.05760,0.06172,0.06013
+135,wave-slurm-23628821__Gammatone_LEAN_TFS_zcr_ACFperband_7642fb,Gammatone-LEAN+TFS-zcr+ACFperband,hand-design exploration,0.08212,0.06968,0.06544,0.06549,0.06106,0.05725,0.06393,0.06103
+136,wave-slurm-23628821__Gammatone_BEST_CCEC_SACF_128a91,Gammatone-BEST+CCEC+SACF,hand-design exploration,0.08545,0.07055,0.06620,0.06386,0.06043,0.05796,0.06260,0.05966
+137,wave-slurm-23628821__Gammatone_BEST_PB_EBAC_4a1a56,Gammatone-BEST+PB-EBAC,hand-design exploration,0.08586,0.07039,0.06639,0.06287,0.05977,0.05828,0.06239,0.05949
+138,wave-slurm-23628821__Gammatone_BEST_PB_EBAC_4x_b51748,Gammatone-BEST+PB-EBAC-4x,hand-design exploration,0.08372,0.07049,0.06626,0.06289,0.05892,0.05842,0.06337,0.06181
+139,wave-slurm-23628821__Gammatone_BEST_PB_EBAC_XCH_Xcorr_ae10a2,Gammatone-BEST+PB-EBAC+XCH-Xcorr,hand-design exploration,0.08469,0.07008,0.06624,0.06259,0.05993,0.05779,0.06176,0.05888
+140,wave-slurm-23628821__Gammatone_BEST_ChangLab_STG_129429,Gammatone-BEST+ChangLab-STG,hand-design exploration,0.08465,0.06971,0.06581,0.06254,0.05980,0.05863,0.06181,0.06157
+141,wave-slurm-23628821__Gammatone_BEST_rel_pitch_a84ef6,Gammatone-BEST+rel-pitch,hand-design exploration,0.08540,0.07030,0.06635,0.06280,0.05988,0.05806,0.06215,0.05978
+142,wave-slurm-23628821__Gammatone_BEST_rel_pitch_cubeAblation_43d6de,Gammatone-BEST+rel-pitch-cubeAblation,hand-design exploration,0.08412,0.07011,0.06608,0.06501,0.05951,0.05829,0.06375,0.06315
+143,wave-slurm-23628821__Gammatone_BEST_powerlaw_adapt_16f1ac,Gammatone-BEST+powerlaw-adapt,hand-design exploration,0.08543,0.07009,0.06611,0.06304,0.05978,0.05818,0.06256,0.05967
+144,wave-slurm-23628821__Gammatone_BEST_peakRate_silenceOnset_0e0fc4,Gammatone-BEST+peakRate-silenceOnset,hand-design exploration,0.08537,0.07000,0.06609,0.06289,0.05975,0.05805,0.06230,0.05950
+145,wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_cfa186,Gammatone-BEST+per-band-peakRate,hand-design exploration,0.08523,0.07003,0.06610,0.06271,0.05990,0.05818,0.06240,0.05978
+146,wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_EBACtau30_63b06a,Gammatone-BEST+per-band-peakRate+EBACtau30,hand-design exploration,0.08604,0.07056,0.06648,0.06273,0.05980,0.05809,0.06264,0.05946
+147,wave-slurm-23628821__Gammatone_BEST_per_band_peakRate_EBACtau15_3dbcd6,Gammatone-BEST+per-band-peakRate+EBACtau15,hand-design exploration,0.08579,0.07079,0.06661,0.06288,0.05989,0.05758,0.06275,0.05957
+148,wave-slurm-23628821__Gammatone_BEST_pb_peakRate_EBAC_dual_tau_558859,Gammatone-BEST+pb-peakRate+EBAC-dual-tau,hand-design exploration,0.08570,0.07030,0.06624,0.06273,0.06073,0.05831,0.06293,0.05965
+149,wave-slurm-23628821__Gammatone_BEST_EBACtau30_3476f3,Gammatone-BEST+EBACtau30,hand-design exploration,0.08620,0.07063,0.06654,0.06276,0.05978,0.05767,0.06256,0.05909
+150,wave-slurm-23628821__Gammatone_BEST_EBACtau30_lag1_ea6805,Gammatone-BEST+EBACtau30+lag1,hand-design exploration,0.08601,0.07083,0.06672,0.06314,0.06004,0.05798,0.06324,0.05851
+151,wave-slurm-23628821__Gammatone_BEST_EBACtau20_lag1_8d2e4b,Gammatone-BEST+EBACtau20+lag1,hand-design exploration,0.08616,0.07093,0.06674,0.06337,0.06016,0.05783,0.06315,0.05929
+152,wave-slurm-23628821__Gammatone_BEST_EBACtau25_84f81f,Gammatone-BEST+EBACtau25,hand-design exploration,0.08617,0.07092,0.06675,0.06335,0.06007,0.05791,0.06321,0.05886
+153,wave-slurm-23628821__Gammatone_BEST_EBAC_multi_tau_a35b88,Gammatone-BEST+EBAC-multi-tau,hand-design exploration,0.08549,0.07059,0.06645,0.06313,0.06037,0.05774,0.06313,0.05975
+154,wave-slurm-23628821__Gammatone_BEST_EBACtau20_dropTAU150_ab2cf6,Gammatone-BEST+EBACtau20+dropTAU150,hand-design exploration,0.08586,0.07091,0.06676,0.06469,0.06018,0.05703,0.06377,0.05990
+155,wave-trim__LEAN_v1_6bff0c,LEAN-v1,trim + lit. → v16,0.08543,0.07005,0.06608,0.06367,0.05936,0.05816,0.06260,0.05957
+156,wave-trim__LEAN_v2_dfcc4e,LEAN-v2,trim + lit. → v16,0.08529,0.06994,0.06573,0.06445,0.05986,0.05807,0.06271,0.05999
+157,wave-trim__LEAN_v3_3454e3,LEAN-v3,trim + lit. → v16,0.08122,0.06932,0.06576,0.06655,0.06188,0.05884,0.06435,0.05966
+158,wave-trim__LEAN_v4_c89332,LEAN-v4,trim + lit. → v16,0.08493,0.06974,0.06553,0.06465,0.05979,0.05797,0.06295,0.05966
+159,wave-trim__LEAN_v5_459e80,LEAN-v5,trim + lit. → v16,0.08392,0.06878,0.06444,0.06342,0.05974,0.05707,0.06207,0.05914
+160,wave-trim__LEAN_v6_4b3815,LEAN-v6,trim + lit. → v16,0.08365,0.06856,0.06418,0.06304,0.05912,0.05674,0.06243,0.05777
+161,wave-trim__LEAN_v7_b5c507,LEAN-v7,trim + lit. → v16,0.08488,0.06958,0.06532,0.06479,0.05955,0.05770,0.06303,0.06020
+162,wave-trim__LEAN_v8_69b209,LEAN-v8,trim + lit. → v16,0.08522,0.06960,0.06524,0.06478,0.05930,0.05792,0.06280,0.06069
+163,wave-trim__LEAN_v9_2d4e0c,LEAN-v9,trim + lit. → v16,0.08442,0.06887,0.06463,0.06434,0.05900,0.05758,0.06189,0.06054
+164,wave-trim__LEAN_v10_d38962,LEAN-v10,trim + lit. → v16,0.08542,0.06960,0.06525,0.06471,0.05930,0.05764,0.06283,0.06066
+165,wave-trim__LEAN_v11_6ec1a6,LEAN-v11,trim + lit. → v16,0.08509,0.06957,0.06522,0.06577,0.05943,0.05751,0.06279,0.06023
+166,wave-trim__LEAN_v12_5b50c7,LEAN-v12,trim + lit. → v16,0.08423,0.06949,0.06516,0.06583,0.05894,0.05770,0.06308,0.06005
+167,wave-trim__LEAN_v13_a58040,LEAN-v13,trim + lit. → v16,0.08505,0.06946,0.06510,0.06589,0.05938,0.05741,0.06281,0.06013
+168,wave-trim__LEAN_v14_e0738e,LEAN-v14,trim + lit. → v16,0.08521,0.06951,0.06511,0.06586,0.05939,0.05740,0.06286,0.06024
+169,wave-trim__LEAN_v15_d0d9fb,LEAN-v15,trim + lit. → v16,0.08520,0.06949,0.06511,0.06614,0.05937,0.05756,0.06281,0.06038
+170,wave-trim__LEAN_v16_953005,LEAN-v16,trim + lit. → v16,0.08522,0.06925,0.06489,0.06612,0.05919,0.05751,0.06277,0.06062
+171,wave-trim__LEAN_v17_fcc06e,LEAN-v17,trim + lit. → v16,0.08382,0.06838,0.06387,0.06499,0.05897,0.05687,0.06223,0.05955
+172,wave-trim__LEAN_v18_03337a,LEAN-v18,trim + lit. → v16,0.08348,0.06820,0.06367,0.06522,0.05895,0.05688,0.06202,0.05900
+173,wave-trim__LEAN_v19_3388e1,LEAN-v19,trim + lit. → v16,0.08355,0.06820,0.06366,0.06522,0.05910,0.05697,0.06201,0.05901
+174,wave-trim__LEAN_v20_dcb891,LEAN-v20,trim + lit. → v16,0.08353,0.06820,0.06366,0.06521,0.05908,0.05695,0.06206,0.05893
+175,wave-trim__LEAN_v21_52edbf,LEAN-v21,trim + lit. → v16,0.08338,0.06813,0.06361,0.06523,0.05933,0.05683,0.06205,0.05916
+176,wave-trim__LEAN_v22_178299,LEAN-v22,trim + lit. → v16,0.08332,0.06804,0.06353,0.06554,0.05928,0.05703,0.06213,0.05902
+177,wave-trim__LEAN_v23_ca8685,LEAN-v23,trim + lit. → v16,0.08322,0.06798,0.06347,0.06542,0.05922,0.05681,0.06209,0.05905
+178,wave-lean__LEAN_v17_peakRate_2db380,LEAN-v17-peakRate,trim + lit. → v16,0.08527,0.06931,0.06495,0.06611,0.05920,0.05750,0.06277,0.06080
+179,wave-lean__LEAN_v18_pitchZ_7a7592,LEAN-v18-pitchZ,trim + lit. → v16,0.08527,0.06941,0.06504,0.06610,0.05929,0.05743,0.06291,0.06107
+180,wave-lean__LEAN_v19_powerlaw_252fd8,LEAN-v19-powerlaw,trim + lit. → v16,0.08523,0.06939,0.06503,0.06640,0.05900,0.05769,0.06307,0.06049
+181,wave-lean__LEAN_v20_latInh_330295,LEAN-v20-latInh,trim + lit. → v16,0.08517,0.06934,0.06483,0.06621,0.05921,0.05801,0.06250,0.06118
+182,wave-lean__LEAN_v21_voicedInter_333206,LEAN-v21-voicedInter,trim + lit. → v16,0.08506,0.06933,0.06493,0.06615,0.05918,0.05748,0.06283,0.06078
+183,wave-lean__LEAN_v23_2DContrast_6767d1,LEAN-v23-2DContrast,trim + lit. → v16,0.08326,0.06801,0.06334,0.06426,0.05833,0.05791,0.06225,0.05989
+184,wave-lean__LEAN_v24_uttContext_595273,LEAN-v24-uttContext,trim + lit. → v16,0.08428,0.06847,0.06402,0.06496,0.05899,0.05704,0.06167,0.05968
+185,wave-lean__LEAN_v25_multiLagFlux_375102,LEAN-v25-multiLagFlux,trim + lit. → v16,0.08386,0.06850,0.06399,0.06451,0.05872,0.05708,0.06227,0.05968
+186,wave-lean__LEAN_v26_restoreV16_a6db1a,LEAN-v26-restoreV16,trim + lit. → v16,0.08522,0.06925,0.06489,0.06612,0.05919,0.05751,0.06277,0.06062
+187,wave-lean__LEAN_v28_safeRelPitch_f5393f,LEAN-v28-safeRelPitch,trim + lit. → v16,0.08524,0.06945,0.06502,0.06602,0.05941,0.05785,0.06290,0.06104
+188,wave-lean__LEAN_v29_syllableRate_71b654,LEAN-v29-syllableRate,trim + lit. → v16,0.08502,0.06931,0.06483,0.06598,0.05937,0.05793,0.06300,0.06115
+189,wave-lean__LEAN_v30_voiceGateInter_fdc96d,LEAN-v30-voiceGateInter,trim + lit. → v16,0.08488,0.06932,0.06482,0.06630,0.05944,0.05794,0.06306,0.06102
+190,wave-lean__LEAN_v31_bandFlux_c2fd9b,LEAN-v31-bandFlux,trim + lit. → v16,0.08498,0.06943,0.06494,0.06611,0.05957,0.05788,0.06307,0.06100
+191,wave-lean__LEAN_v32_multiSilOnset_266aa9,LEAN-v32-multiSilOnset,trim + lit. → v16,0.08457,0.06942,0.06490,0.06606,0.05923,0.05783,0.06305,0.06126
+192,wave-lean__LEAN_v33_perBandPeakRate_2d4f77,LEAN-v33-perBandPeakRate,trim + lit. → v16,0.08451,0.06948,0.06496,0.06612,0.05926,0.05778,0.06304,0.06121
+193,wave-lean__LEAN_v34_scalarPowLaw_a573fa,LEAN-v34-scalarPowLaw,trim + lit. → v16,0.08434,0.06970,0.06514,0.06552,0.05942,0.05783,0.06296,0.06101
+194,wave-lean__LEAN_v35_hires40_3e175a,LEAN-v35-hires40,trim + lit. → v16,0.08433,0.06971,0.06515,0.06554,0.05978,0.05802,0.06294,0.06119
+195,wave-lean__LEAN_v36_full40band_ecf1fe,LEAN-v36-full40band,trim + lit. → v16,0.08398,0.06974,0.06522,0.06602,0.05983,0.05782,0.06250,0.06150
+196,wave-lean__LEAN_v37_prune_000c7c,LEAN-v37-prune,trim + lit. → v16,0.08481,0.06939,0.06493,0.06629,0.05951,0.05820,0.06295,0.06072
+197,wave-lean__LEAN_v38_v28only_6b09fe,LEAN-v38-v28only,trim + lit. → v16,0.08524,0.06945,0.06502,0.06602,0.05941,0.05785,0.06290,0.06104
+198,graft-lean__GRAFT_v1_tfs_21c02a,GRAFT-v1-tfs,graft + interactions → v17,0.08349,0.06914,0.06467,0.06591,0.05920,0.05733,0.06239,0.06090
+199,graft-lean__GRAFT_v1b_tfs_5aa20f,GRAFT-v1b-tfs,graft + interactions → v17,0.08425,0.06929,0.06486,0.06591,0.05932,0.05786,0.06264,0.06072
+200,graft-lean__GRAFT_v1c_tfs_739eca,GRAFT-v1c-tfs,graft + interactions → v17,0.08461,0.06921,0.06480,0.06592,0.05922,0.05799,0.06289,0.06076
+202,graft-lean__GRAFT_v2c_reservoir_0388d8,GRAFT-v2c-reservoir,graft + interactions → v17,0.08515,0.07024,0.06590,0.06695,0.06016,0.05811,0.06406,0.06212
+204,graft-lean__GRAFT_v3b_divnorm_79d0c8,GRAFT-v3b-divnorm,graft + interactions → v17,0.08498,0.06982,0.06539,0.06608,0.05827,0.05857,0.06304,0.06205
+206,graft-lean__GRAFT_v4b_texture_cf48d4,GRAFT-v4b-texture,graft + interactions → v17,0.08516,0.06992,0.06561,0.06720,0.05824,0.05811,0.06372,0.06155
+209,graft-lean__GRAFT_v5c_products_94b1a4,GRAFT-v5c-products,graft + interactions → v17,0.08512,0.06989,0.06552,0.06706,0.05832,0.05840,0.06364,0.06148
+210,graft-lean__GRAFT_v6_stacked_clean_75fff0,GRAFT-v6-stacked-clean,graft + interactions → v17,0.08516,0.06992,0.06561,0.06720,0.05824,0.05811,0.06372,0.06155
+211,graft-lean__GRAFT_v7_tune_tex8_3ccccd,GRAFT-v7-tune-tex8,graft + interactions → v17,0.08509,0.06986,0.06559,0.06729,0.05829,0.05818,0.06369,0.06166
+212,graft-lean__GRAFT_v8_tune_sat3_db7658,GRAFT-v8-tune-sat3,graft + interactions → v17,0.08506,0.06986,0.06557,0.06717,0.05827,0.05822,0.06385,0.06184
+213,graft-lean__GRAFT_v9_tune_tex_multitau_56dbea,GRAFT-v9-tune-tex-multitau,graft + interactions → v17,0.08435,0.06993,0.06569,0.06768,0.05796,0.05818,0.06320,0.06177
+214,graft-lean__GRAFT_v10_tune_tlag_236e6a,GRAFT-v10-tune-tlag,graft + interactions → v17,0.08450,0.07015,0.06574,0.06711,0.05835,0.05821,0.06343,0.06153
+215,lean-interp__INTERP_v1a_cond_b8b291,INTERP-v1a-cond,graft + interactions → v17,0.08540,0.06941,0.06502,0.06644,0.05950,0.05770,0.06277,0.06037
+216,lean-interp__INTERP_v1b_cond_7cac13,INTERP-v1b-cond,graft + interactions → v17,0.08553,0.06943,0.06501,0.06634,0.05991,0.05773,0.06259,0.06026
+217,lean-interp__INTERP_v2a_interact_882ba9,INTERP-v2a-interact,graft + interactions → v17,0.08504,0.06924,0.06484,0.06630,0.05930,0.05772,0.06279,0.06007
+218,lean-interp__INTERP_v2b_interact_03f169,INTERP-v2b-interact,graft + interactions → v17,0.08508,0.06922,0.06483,0.06623,0.05899,0.05786,0.06279,0.06041
+219,lean-interp__INTERP_v2c_interact_760c61,INTERP-v2c-interact,graft + interactions → v17,0.08509,0.06928,0.06489,0.06603,0.05912,0.05795,0.06294,0.06041
+220,lean-interp__INTERP_v2d_interact_3cac68,INTERP-v2d-interact,graft + interactions → v17,0.08514,0.06929,0.06488,0.06620,0.05904,0.05796,0.06291,0.06017
+221,lean-interp__INTERP_v2e_interact_92544d,INTERP-v2e-interact,graft + interactions → v17,0.08500,0.06957,0.06511,0.06624,0.05925,0.05770,0.06321,0.06067
+222,lean-interp__INTERP_v2f_interact_e00974,INTERP-v2f-interact,graft + interactions → v17,0.08539,0.06932,0.06494,0.06616,0.05924,0.05756,0.06292,0.06079
+223,lean-interp__INTERP_v2g_interact_d709d9,INTERP-v2g-interact,graft + interactions → v17,0.08535,0.06930,0.06491,0.06620,0.05926,0.05745,0.06283,0.06053
+224,lean-interp__INTERP_final_349f37,INTERP-final,graft + interactions → v17,0.08535,0.06930,0.06491,0.06620,0.05926,0.05745,0.06283,0.06053
+225,lean-interp__INTERP_v2h_interact_b25019,INTERP-v2h-interact,graft + interactions → v17,0.08560,0.06966,0.06524,0.06611,0.05934,0.05781,0.06336,0.06055
+226,lean-interp__INTERP_v2j_interact_afb3da,INTERP-v2j-interact,graft + interactions → v17,0.08546,0.06940,0.06500,0.06592,0.05928,0.05767,0.06299,0.06061
+227,lean-interp__INTERP_v2i_interact_ef8f9a,INTERP-v2i-interact,graft + interactions → v17,0.08562,0.06967,0.06524,0.06590,0.05927,0.05784,0.06336,0.06035
+228,lean-interp__INTERP_v2k_interact_05b4b7,INTERP-v2k-interact,graft + interactions → v17,0.08505,0.06947,0.06505,0.06596,0.05918,0.05772,0.06313,0.06119
+229,lean-interp__INTERP_v2l_interact_a0f160,INTERP-v2l-interact,graft + interactions → v17,0.08528,0.06956,0.06510,0.06604,0.05932,0.05789,0.06331,0.06145
+230,lean-interp__INTERP_v2m_interact_ae86c9,INTERP-v2m-interact,graft + interactions → v17,0.08575,0.06971,0.06530,0.06572,0.05937,0.05784,0.06337,0.06096
+231,lean-interp__INTERP_v2n_interact_09a4cd,INTERP-v2n-interact,graft + interactions → v17,0.08579,0.06976,0.06533,0.06575,0.05943,0.05784,0.06345,0.06088
+232,lean-interp__INTERP_v2o_interact_7440d7,INTERP-v2o-interact,graft + interactions → v17,0.08563,0.06985,0.06537,0.06594,0.05930,0.05790,0.06332,0.06110
+233,lean-interp__INTERP_v2p_interact_35bda0,INTERP-v2p-interact,graft + interactions → v17,0.08547,0.06974,0.06527,0.06589,0.05934,0.05780,0.06344,0.06082
+234,lean-interp__INTERP_final2_16d678,INTERP-final2,graft + interactions → v17,0.08575,0.06971,0.06530,0.06572,0.05937,0.05784,0.06337,0.06096
+235,lean-interp__INTERP_v2q_interact_1e1f92,INTERP-v2q-interact,graft + interactions → v17,0.08564,0.06990,0.06539,0.06584,0.05947,0.05784,0.06317,0.06044
+236,lean-interp__INTERP_v2r_interact_9b2159,INTERP-v2r-interact,graft + interactions → v17,0.08581,0.06976,0.06531,0.06584,0.05929,0.05783,0.06348,0.06051
+237,lean-interp__INTERP_v2s_interact_1ddd82,INTERP-v2s-interact,graft + interactions → v17,0.08572,0.06972,0.06530,0.06599,0.05940,0.05784,0.06326,0.06100
+238,lean-interp__INTERP_v2t_interact_9305cb,INTERP-v2t-interact,graft + interactions → v17,0.08570,0.06984,0.06543,0.06590,0.05946,0.05791,0.06355,0.06054
+239,lean-interp__INTERP_v2u_interact_8acc97,INTERP-v2u-interact,graft + interactions → v17,0.08578,0.06977,0.06536,0.06665,0.05946,0.05743,0.06308,0.06110
+240,lean-interp__INTERP_v2v_interact_9a6566,INTERP-v2v-interact,graft + interactions → v17,0.08633,0.07020,0.06577,0.06611,0.05942,0.05786,0.06348,0.06136
+241,lean-interp__INTERP_v2w_interact_5ce686,INTERP-v2w-interact,graft + interactions → v17,0.08644,0.07017,0.06577,0.06565,0.05913,0.05777,0.06361,0.06150
+242,lean-interp__INTERP_v2x_interact_379cd5,INTERP-v2x-interact,graft + interactions → v17,0.08618,0.07039,0.06591,0.06593,0.05961,0.05770,0.06361,0.06161
+243,lean-interp__INTERP_v2y_interact_272e00,INTERP-v2y-interact,graft + interactions → v17,0.08635,0.07016,0.06580,0.06571,0.05899,0.05750,0.06369,0.06107
+244,lean-interp__INTERP_v2z_interact_c53d4a,INTERP-v2z-interact,graft + interactions → v17,0.08647,0.07041,0.06603,0.06623,0.05902,0.05737,0.06351,0.06136
+245,lean-interp__INTERP_v2aa_interact_3e654c,INTERP-v2aa-interact,graft + interactions → v17,0.08634,0.07024,0.06585,0.06573,0.05946,0.05746,0.06341,0.06129
+246,lean-interp__INTERP_v2bb_interact_cbaab4,INTERP-v2bb-interact,graft + interactions → v17,0.08639,0.07036,0.06600,0.06648,0.05925,0.05735,0.06350,0.06141
+247,lean-interp__INTERP_v2cc_interact_79663b,INTERP-v2cc-interact,graft + interactions → v17,0.08657,0.07071,0.06630,0.06655,0.05909,0.05744,0.06370,0.06139
+248,lean-interp__INTERP_v2dd_interact_f455ab,INTERP-v2dd-interact,graft + interactions → v17,0.08620,0.07044,0.06607,0.06654,0.05937,0.05712,0.06350,0.06142
+249,lean-interp__INTERP_v2ee_interact_ac6f3b,INTERP-v2ee-interact,graft + interactions → v17,0.08592,0.07034,0.06592,0.06633,0.05892,0.05792,0.06349,0.06137
+250,lean-interp__INTERP_v2ff_interact_b8ff25,INTERP-v2ff-interact,graft + interactions → v17,0.08554,0.07084,0.06629,0.06668,0.06022,0.05759,0.06355,0.06095
+251,lean-interp__INTERP_v2gg_interact_8f42a8,INTERP-v2gg-interact,graft + interactions → v17,0.08622,0.07042,0.06597,0.06680,0.05929,0.05774,0.06385,0.06135
+252,lean-interp__INTERP_v2hh_interact_b55f1d,INTERP-v2hh-interact,graft + interactions → v17,0.08626,0.07045,0.06604,0.06632,0.05926,0.05723,0.06331,0.06147
+253,lean-interp__INTERP_v2ii_interact_803f0a,INTERP-v2ii-interact,graft + interactions → v17,0.08619,0.07037,0.06599,0.06648,0.05947,0.05739,0.06338,0.06137
+254,lean-interp__INTERP_v2jj_interact_e91747,INTERP-v2jj-interact,graft + interactions → v17,0.08646,0.07044,0.06606,0.06626,0.05900,0.05735,0.06359,0.06126
+255,lean-interp__INTERP_v2kk_interact_3a24a2,INTERP-v2kk-interact,graft + interactions → v17,0.08644,0.07037,0.06599,0.06620,0.05903,0.05741,0.06348,0.06156
+256,lean-interp__INTERP_final3_f11e62,INTERP-final3,graft + interactions → v17,0.08647,0.07041,0.06603,0.06623,0.05902,0.05737,0.06351,0.06136
+257,lean-interp__INTERP_v2ll_interact_66d685,INTERP-v2ll-interact,graft + interactions → v17,0.08613,0.07036,0.06599,0.06624,0.05927,0.05725,0.06332,0.06146
+258,lean-interp__INTERP_v2mm_interact_087954,INTERP-v2mm-interact,graft + interactions → v17,0.08618,0.07048,0.06605,0.06639,0.05945,0.05719,0.06351,0.06143
+259,lean-interp__INTERP_v2nn_interact_38a1f8,INTERP-v2nn-interact,graft + interactions → v17,0.08621,0.07027,0.06588,0.06616,0.05913,0.05730,0.06346,0.06133
+260,lean-interp__INTERP_v2oo_interact_496b46,INTERP-v2oo-interact,graft + interactions → v17,0.08627,0.07040,0.06604,0.06558,0.05897,0.05768,0.06343,0.06133
+261,lean-interp__INTERP_v2pp_interact_f2ce01,INTERP-v2pp-interact,graft + interactions → v17,0.08632,0.07033,0.06588,0.06613,0.05917,0.05773,0.06366,0.06128
+262,lean-interp__INTERP_v2qq_interact_697124,INTERP-v2qq-interact,graft + interactions → v17,0.08611,0.07027,0.06585,0.06634,0.05907,0.05758,0.06334,0.06154
+263,lean-interp__INTERP_v2rr_interact_f56daa,INTERP-v2rr-interact,graft + interactions → v17,0.08620,0.07030,0.06589,0.06673,0.05937,0.05764,0.06361,0.06094
+264,lean-interp__INTERP_v2ss_interact_9470ce,INTERP-v2ss-interact,graft + interactions → v17,0.08633,0.07035,0.06596,0.06615,0.05956,0.05737,0.06364,0.06117
+265,lean-interp__INTERP_v2tt_interact_1e9027,INTERP-v2tt-interact,graft + interactions → v17,0.08625,0.07028,0.06589,0.06639,0.05915,0.05735,0.06341,0.06150
+266,lean-interp__INTERP_v2uu_interact_a35034,INTERP-v2uu-interact,graft + interactions → v17,0.08640,0.07036,0.06598,0.06632,0.05894,0.05740,0.06359,0.06151
+267,lean-interp__INTERP_v2vv_interact_14d716,INTERP-v2vv-interact,graft + interactions → v17,0.08644,0.07047,0.06605,0.06644,0.05907,0.05743,0.06348,0.06151
+268,lean-interp__INTERP_v2ww_interact_6978cc,INTERP-v2ww-interact,graft + interactions → v17,0.08611,0.07050,0.06615,0.06679,0.05933,0.05760,0.06338,0.06140
+269,lean-interp__INTERP_v2xx_interact_f5ce0b,INTERP-v2xx-interact,graft + interactions → v17,0.08665,0.07039,0.06596,0.06626,0.05897,0.05732,0.06356,0.06112
+270,lean-interp__INTERP_v2yy_interact_6297c1,INTERP-v2yy-interact,graft + interactions → v17,0.08665,0.07051,0.06603,0.06651,0.05902,0.05712,0.06359,0.06141
+271,lean-interp__INTERP_final4_8d22bd,INTERP-final4,graft + interactions → v17,0.08647,0.07041,0.06603,0.06623,0.05902,0.05737,0.06351,0.06136
+272,lean-interp__INTERP_v2zz_interact_071c69,INTERP-v2zz-interact,graft + interactions → v17,0.08658,0.07057,0.06612,0.06568,0.05908,0.05733,0.06322,0.06118
+273,lean-interp__INTERP_v3a_interact_6e964b,INTERP-v3a-interact,graft + interactions → v17,0.08661,0.07065,0.06618,0.06565,0.05906,0.05701,0.06307,0.06119
+274,lean-interp__INTERP_v3b_interact_8f60f5,INTERP-v3b-interact,graft + interactions → v17,0.08657,0.07069,0.06619,0.06595,0.05919,0.05723,0.06342,0.06110
+275,lean-interp__INTERP_v3c_interact_3a42a3,INTERP-v3c-interact,graft + interactions → v17,0.08651,0.07059,0.06615,0.06534,0.05908,0.05735,0.06353,0.06092
+276,lean-interp__INTERP_v3d_interact_4cc5c2,INTERP-v3d-interact,graft + interactions → v17,0.08659,0.07056,0.06610,0.06567,0.05930,0.05721,0.06346,0.06115
+277,lean-interp__INTERP_v3e_interact_fea224,INTERP-v3e-interact,graft + interactions → v17,0.08665,0.07069,0.06625,0.06552,0.05926,0.05694,0.06323,0.06102
+278,lean-interp__INTERP_v3f_interact_c9eedc,INTERP-v3f-interact,graft + interactions → v17,0.08648,0.07078,0.06635,0.06554,0.05921,0.05713,0.06303,0.06108
+279,lean-interp__INTERP_v3g_interact_c98b07,INTERP-v3g-interact,graft + interactions → v17,0.08638,0.07064,0.06620,0.06582,0.05958,0.05653,0.06256,0.06099
+280,lean-interp__INTERP_v3h_interact_3448f4,INTERP-v3h-interact,graft + interactions → v17,0.08656,0.07072,0.06629,0.06556,0.05930,0.05694,0.06326,0.06098
+281,lean-interp__INTERP_final5_96b584,INTERP-final5,graft + interactions → v17,0.08665,0.07069,0.06625,0.06552,0.05926,0.05694,0.06323,0.06102
+282,lean-interp__INTERP_v3i_interact_b30acd,INTERP-v3i-interact,graft + interactions → v17,0.08667,0.07072,0.06626,0.06567,0.05922,0.05673,0.06315,0.06062
+283,lean-interp__INTERP_v3j_interact_c8dfd9,INTERP-v3j-interact,graft + interactions → v17,0.08657,0.07089,0.06640,0.06497,0.05937,0.05714,0.06324,0.06116
+284,lean-interp__INTERP_v3k_interact_be96e3,INTERP-v3k-interact,graft + interactions → v17,0.08663,0.07083,0.06641,0.06520,0.05915,0.05705,0.06301,0.06101
+285,lean-interp__INTERP_v3l_interact_12ba11,INTERP-v3l-interact,graft + interactions → v17,0.08671,0.07070,0.06624,0.06565,0.05929,0.05694,0.06320,0.06083
+286,lean-interp__INTERP_final6_f24953,INTERP-final6,graft + interactions → v17,0.08665,0.07069,0.06625,0.06552,0.05926,0.05694,0.06323,0.06102
+287,lean-interp__INTERP_v3m_interact_db5e2c,INTERP-v3m-interact,graft + interactions → v17,0.08661,0.07063,0.06623,0.06547,0.05923,0.05712,0.06318,0.06125
+288,lean-interp__INTERP_v3n_interact_1849f9,INTERP-v3n-interact,graft + interactions → v17,0.08655,0.07089,0.06643,0.06553,0.05926,0.05645,0.06302,0.06067
+289,exceed-dense__DENSE_v1_06ce77,DENSE-v1,graft + interactions → v17,0.08574,0.07139,0.06686,0.06589,0.06083,0.05638,0.06201,0.06136
+290,exceed-dense__DENSE_v2_0bfd22,DENSE-v2,graft + interactions → v17,0.08605,0.07086,0.06636,0.06524,0.05998,0.05630,0.06206,0.06141
+291,exceed-dense__DENSE_v3_2a05ed,DENSE-v3,graft + interactions → v17,0.08486,0.07120,0.06674,0.06560,0.05959,0.05658,0.06338,0.06093
+292,exceed-dense__DENSE_v4_ba4780,DENSE-v4,graft + interactions → v17,0.08673,0.07131,0.06670,0.06590,0.05955,0.05731,0.06334,0.06084
+293,exceed-dense__DENSE_v5_42dd4a,DENSE-v5,graft + interactions → v17,0.08603,0.07094,0.06636,0.06591,0.05931,0.05703,0.06272,0.06008
+294,exceed-frontend__LEAN_v17_ae26de,LEAN-v17,front end + scattering → v18,0.08665,0.07069,0.06625,0.06552,0.05926,0.05694,0.06323,0.06102
+295,exceed-frontend__LEAN_v18_FINE40_f91a08,LEAN-v18-FINE40,front end + scattering → v18,0.08665,0.07074,0.06628,0.06539,0.05961,0.05699,0.06284,0.06066
+296,exceed-frontend__LEAN_v19_F0DENSE_9891f6,LEAN-v19-F0DENSE,front end + scattering → v18,0.08622,0.07083,0.06633,0.06621,0.05946,0.05662,0.06258,0.06052
+297,exceed-frontend__LEAN_v20_PERBANDMOD_9cf86e,LEAN-v20-PERBANDMOD,front end + scattering → v18,0.08526,0.07060,0.06609,0.06569,0.05932,0.05695,0.06289,0.06091
+298,exceed-frontend__LEAN_v21_SHORTWIN_d11857,LEAN-v21-SHORTWIN,front end + scattering → v18,0.08665,0.07081,0.06634,0.06550,0.05969,0.05670,0.06299,0.06050
+299,exceed-frontend__LEAN_v22_LCN_e542a0,LEAN-v22-LCN,front end + scattering → v18,0.08645,0.07072,0.06626,0.06525,0.05919,0.05693,0.06321,0.06121
+300,exceed-frontend__LEAN_v23_ACFSLICE_729c9f,LEAN-v23-ACFSLICE,front end + scattering → v18,0.08610,0.07082,0.06634,0.06512,0.05959,0.05671,0.06310,0.06102
+301,exceed-frontend__LEAN_v24_GTCC_20775d,LEAN-v24-GTCC,front end + scattering → v18,0.08628,0.07066,0.06621,0.06457,0.05903,0.05724,0.06316,0.06123
+302,exceed-frontend__LEAN_v25_FASTONSET_1bcd7b,LEAN-v25-FASTONSET,front end + scattering → v18,0.08651,0.07063,0.06621,0.06572,0.05909,0.05689,0.06315,0.06101
+303,exceed-frontend__LEAN_v26_DOG_e65890,LEAN-v26-DOG,front end + scattering → v18,0.08611,0.07044,0.06593,0.06515,0.05972,0.05714,0.06296,0.06103
+304,exceed-frontend__LEAN_v27_TILT_348853,LEAN-v27-TILT,front end + scattering → v18,0.08655,0.07072,0.06626,0.06556,0.05929,0.05685,0.06324,0.06086
+305,exceed-frontend__LEAN_v28_FINEADAPT_d1c99f,LEAN-v28-FINEADAPT,front end + scattering → v18,0.08619,0.07080,0.06631,0.06521,0.05976,0.05631,0.06180,0.06111
+306,exceed-frontend__LEAN_v29_ZCR_6177fc,LEAN-v29-ZCR,front end + scattering → v18,0.08628,0.07047,0.06600,0.06538,0.05926,0.05719,0.06304,0.06072
+307,exceed-frontend__LEAN_v30_FINESTMF_18d0cf,LEAN-v30-FINESTMF,front end + scattering → v18,0.08625,0.07084,0.06638,0.06569,0.05927,0.05633,0.06288,0.06088
+308,exceed-frontend__LEAN_v31_BANDKURT_d56eb5,LEAN-v31-BANDKURT,front end + scattering → v18,0.08647,0.07043,0.06610,0.06565,0.05921,0.05698,0.06306,0.06093
+309,exceed-frontend__LEAN_v32_CPP_a8bebd,LEAN-v32-CPP,front end + scattering → v18,0.08671,0.07076,0.06629,0.06549,0.05936,0.05689,0.06320,0.06126
+310,exceed-frontend__LEAN_v33_REGIONFLAT_d1d3d4,LEAN-v33-REGIONFLAT,front end + scattering → v18,0.08686,0.07082,0.06634,0.06539,0.05961,0.05710,0.06384,0.06115
+311,exceed-frontend__LEAN_v34_MULTITILT_ad8a54,LEAN-v34-MULTITILT,front end + scattering → v18,0.08686,0.07077,0.06628,0.06549,0.05973,0.05685,0.06378,0.06097
+312,exceed-frontend__LEAN_v35_PHASEINC_bf7e40,LEAN-v35-PHASEINC,front end + scattering → v18,0.08684,0.07081,0.06632,0.06569,0.05947,0.05711,0.06368,0.06120
+313,exceed-frontend__LEAN_v36_ALPHARATIO_45554f,LEAN-v36-ALPHARATIO,front end + scattering → v18,0.08676,0.07078,0.06629,0.06534,0.05967,0.05704,0.06377,0.06115
+314,exceed-frontend__LEAN_v37_4REGIONFLAT_52875b,LEAN-v37-4REGIONFLAT,front end + scattering → v18,0.08683,0.07086,0.06639,0.06549,0.05984,0.05705,0.06368,0.06106
+315,exceed-frontend__LEAN_v38_H1H2_c5ec52,LEAN-v38-H1H2,front end + scattering → v18,0.08669,0.07079,0.06632,0.06538,0.05966,0.05704,0.06382,0.06111
+316,exceed-frontend__LEAN_v39_CREST_ffb085,LEAN-v39-CREST,front end + scattering → v18,0.08662,0.07080,0.06631,0.06547,0.05930,0.05711,0.06388,0.06116
+317,exceed-frontend__LEAN_v40_SUBCENT_4537b9,LEAN-v40-SUBCENT,front end + scattering → v18,0.08663,0.07069,0.06622,0.06529,0.05958,0.05721,0.06301,0.06164
+318,exceed-frontend__LEAN_v41_REGIONSKEW_25e800,LEAN-v41-REGIONSKEW,front end + scattering → v18,0.08680,0.07071,0.06633,0.06582,0.05964,0.05726,0.06360,0.06130
+319,exceed-frontend__LEAN_v42_SHORTCPP_1182e3,LEAN-v42-SHORTCPP,front end + scattering → v18,0.08677,0.07079,0.06632,0.06544,0.05973,0.05715,0.06377,0.06122
+320,exceed-frontend__LEAN_v43_LOWCEP_f2d856,LEAN-v43-LOWCEP,front end + scattering → v18,0.08680,0.07081,0.06629,0.06490,0.05961,0.05743,0.06394,0.06149
+321,exceed-frontend__LEAN_v44_CONTRAST_796a51,LEAN-v44-CONTRAST,front end + scattering → v18,0.08702,0.07098,0.06647,0.06533,0.05942,0.05762,0.06359,0.06098
+322,exceed-frontend__LEAN_v45_SHORTCONTRAST_21e7dc,LEAN-v45-SHORTCONTRAST,front end + scattering → v18,0.08706,0.07095,0.06641,0.06457,0.05887,0.05714,0.06369,0.06113
+323,exceed-frontend__LEAN_v46_MEDCONTRAST_abba67,LEAN-v46-MEDCONTRAST,front end + scattering → v18,0.08719,0.07097,0.06643,0.06537,0.05954,0.05713,0.06362,0.06112
+324,exceed-frontend__LEAN_v47_HIGHCONTRAST_6fc787,LEAN-v47-HIGHCONTRAST,front end + scattering → v18,0.08719,0.07102,0.06655,0.06542,0.05974,0.05735,0.06389,0.06087
+325,exceed-frontend__LEAN_v48_HALFOCT_85cd4e,LEAN-v48-HALFOCT,front end + scattering → v18,0.08697,0.07096,0.06640,0.06548,0.05956,0.05717,0.06368,0.06131
+326,exceed-frontend__LEAN_v49_AGGRCONTRAST_8c5d82,LEAN-v49-AGGRCONTRAST,front end + scattering → v18,0.08694,0.07068,0.06619,0.06536,0.05965,0.05721,0.06376,0.06109
+327,exceed-frontend__LEAN_v50_OCTENT_18aa89,LEAN-v50-OCTENT,front end + scattering → v18,0.08710,0.07098,0.06645,0.06575,0.05937,0.05698,0.06351,0.06111
+328,exceed-frontend__LEAN_v51_FORMCONTRAST_6bbd2a,LEAN-v51-FORMCONTRAST,front end + scattering → v18,0.08709,0.07098,0.06646,0.06532,0.05955,0.05699,0.06365,0.06109
+329,exceed-frontend__LEAN_v52_COCHLEACONTRAST_ec9b96,LEAN-v52-COCHLEACONTRAST,front end + scattering → v18,0.08724,0.07101,0.06646,0.06523,0.06025,0.05688,0.06380,0.06176
+330,exceed-frontend__LEAN_v53_FINECOCHLEACONTRAST_448690,LEAN-v53-FINECOCHLEACONTRAST,front end + scattering → v18,0.08667,0.07091,0.06635,0.06547,0.05959,0.05709,0.06381,0.06213
+331,exceed-frontend__LEAN_v54_MEDCOCHLEACONTRAST_d3ada1,LEAN-v54-MEDCOCHLEACONTRAST,front end + scattering → v18,0.08739,0.07117,0.06663,0.06466,0.06048,0.05718,0.06363,0.06134
+332,exceed-frontend__LEAN_v55_SHORTCOCHLEACONTRAST_7f0677,LEAN-v55-SHORTCOCHLEACONTRAST,front end + scattering → v18,0.08742,0.07122,0.06665,0.06446,0.06053,0.05714,0.06353,0.06120
+333,exceed-frontend__LEAN_v56_SLIDECONTRAST_8ed700,LEAN-v56-SLIDECONTRAST,front end + scattering → v18,0.08706,0.07152,0.06703,0.06414,0.06009,0.05735,0.06315,0.06101
+334,exceed-frontend__LEAN_v57_ADAPTCONTRAST_7d4fe5,LEAN-v57-ADAPTCONTRAST,front end + scattering → v18,0.08727,0.07113,0.06653,0.06439,0.05988,0.05705,0.06403,0.06154
+335,exceed-frontend__LEAN_v58_CUBECONTRAST_1a78d1,LEAN-v58-CUBECONTRAST,front end + scattering → v18,0.08740,0.07116,0.06660,0.06422,0.06001,0.05729,0.06350,0.06155
+336,exceed-frontend__LEAN_v59_WIDECONTRAST_853295,LEAN-v59-WIDECONTRAST,front end + scattering → v18,0.08738,0.07126,0.06670,0.06451,0.06053,0.05718,0.06382,0.06118
+337,exceed-frontend__LEAN_v60_COCHENT_395178,LEAN-v60-COCHENT,front end + scattering → v18,0.08740,0.07129,0.06673,0.06415,0.05989,0.05709,0.06373,0.06120
+338,exceed-frontend__LEAN_v61_PAIRCONTRAST_d6555f,LEAN-v61-PAIRCONTRAST,front end + scattering → v18,0.08708,0.07153,0.06684,0.06385,0.05971,0.05693,0.06338,0.06120
+339,exceed-frontend__LEAN_v62_IMPHARM_96496d,LEAN-v62-IMPHARM,front end + scattering → v18,0.08728,0.07128,0.06670,0.06440,0.06049,0.05709,0.06356,0.06125
+340,exceed-frontend__LEAN_v63_LOUDPEAK_858ccf,LEAN-v63-LOUDPEAK,front end + scattering → v18,0.08733,0.07154,0.06693,0.06454,0.06063,0.05716,0.06366,0.06120
+341,exceed-frontend__LEAN_v64_MULTITAUCONTRAST_b6a446,LEAN-v64-MULTITAUCONTRAST,front end + scattering → v18,0.08744,0.07127,0.06670,0.06444,0.06068,0.05710,0.06371,0.06131
+342,exceed-frontend__LEAN_v65_3TAUCONTRAST_eaca33,LEAN-v65-3TAUCONTRAST,front end + scattering → v18,0.08739,0.07121,0.06663,0.06430,0.06064,0.05704,0.06370,0.06133
+343,exceed-frontend__LEAN_v66_3TAU145_19b2ab,LEAN-v66-3TAU145,front end + scattering → v18,0.08744,0.07126,0.06669,0.06451,0.06068,0.05727,0.06387,0.06124
+344,exceed-frontend__LEAN_v67_MEDADAPTCONTRAST_7a84c5,LEAN-v67-MEDADAPTCONTRAST,front end + scattering → v18,0.08747,0.07122,0.06665,0.06458,0.06067,0.05705,0.06373,0.06132
+345,exceed-frontend__LEAN_v68_SHORTADAPTCONTRAST_c0bbf1,LEAN-v68-SHORTADAPTCONTRAST,front end + scattering → v18,0.08743,0.07123,0.06666,0.06440,0.06063,0.05729,0.06384,0.06133
+346,exceed-frontend__LEAN_v69_MEDADAPT15_fc4313,LEAN-v69-MEDADAPT15,front end + scattering → v18,0.08742,0.07123,0.06666,0.06452,0.06062,0.05726,0.06386,0.06131
+347,exceed-frontend__LEAN_v70_THIRDOCT_7b96e6,LEAN-v70-THIRDOCT,front end + scattering → v18,0.08740,0.07120,0.06664,0.06454,0.06079,0.05705,0.06374,0.06146
+348,exceed-frontend__LEAN_v71_LATINH_c1a371,LEAN-v71-LATINH,front end + scattering → v18,0.08702,0.07096,0.06634,0.06488,0.06057,0.05762,0.06381,0.06114
+349,exceed-frontend__LEAN_v72_LOUDGATE_a85eb5,LEAN-v72-LOUDGATE,front end + scattering → v18,0.08743,0.07121,0.06665,0.06457,0.06037,0.05713,0.06390,0.06121
+350,exceed-frontend__LEAN_v73_CUBEMED_16e30f,LEAN-v73-CUBEMED,front end + scattering → v18,0.08747,0.07123,0.06666,0.06429,0.06057,0.05710,0.06387,0.06136
+351,exceed-frontend__LEAN_v74_COCH4GROUP_854dc8,LEAN-v74-COCH4GROUP,front end + scattering → v18,0.08736,0.07123,0.06664,0.06445,0.06075,0.05710,0.06364,0.06123
+352,exceed-frontend__LEAN_v75_TEMPCONTRAST_eaf473,LEAN-v75-TEMPCONTRAST,front end + scattering → v18,0.08743,0.07122,0.06664,0.06446,0.06066,0.05699,0.06368,0.06144
+353,exceed-frontend__LEAN_v76_LOUDTEMP_767ce3,LEAN-v76-LOUDTEMP,front end + scattering → v18,0.08747,0.07148,0.06687,0.06456,0.06073,0.05713,0.06396,0.06115
+354,exceed-frontend__LEAN_v77_LOUDMINMAX_36fd07,LEAN-v77-LOUDMINMAX,front end + scattering → v18,0.08747,0.07137,0.06679,0.06451,0.06064,0.05706,0.06385,0.06115
+355,exceed-frontend__LEAN_v78_SHORT45_69bad2,LEAN-v78-SHORT45,front end + scattering → v18,0.08741,0.07126,0.06669,0.06440,0.06064,0.05726,0.06383,0.06136
+356,exceed-frontend__LEAN_v79_LONG45_52543b,LEAN-v79-LONG45,front end + scattering → v18,0.08745,0.07123,0.06666,0.06465,0.06065,0.05727,0.06387,0.06140
+357,exceed-frontend__LEAN_v80_MEDADAPT60_c0c7b4,LEAN-v80-MEDADAPT60,front end + scattering → v18,0.08744,0.07123,0.06666,0.06447,0.06065,0.05729,0.06374,0.06140
+358,exceed-frontend__LEAN_v81_LONG60_9ba7fe,LEAN-v81-LONG60,front end + scattering → v18,0.08739,0.07119,0.06662,0.06432,0.06066,0.05706,0.06371,0.06134
+359,exceed-frontend__LEAN_v82_TOPBOT_419a8f,LEAN-v82-TOPBOT,front end + scattering → v18,0.08749,0.07121,0.06663,0.06465,0.06071,0.05718,0.06368,0.06135
+360,exceed-frontend__LEAN_v83_TOPBOTMED_db1009,LEAN-v83-TOPBOTMED,front end + scattering → v18,0.08748,0.07125,0.06666,0.06471,0.06060,0.05721,0.06378,0.06135
+361,exceed-frontend__LEAN_v84_TOPBOTSHORT_78b1bf,LEAN-v84-TOPBOTSHORT,front end + scattering → v18,0.08751,0.07121,0.06663,0.06479,0.06065,0.05723,0.06378,0.06148
+362,exceed-frontend__LEAN_v85_TOPBOTADAPT_56fd9c,LEAN-v85-TOPBOTADAPT,front end + scattering → v18,0.08751,0.07122,0.06663,0.06488,0.06066,0.05722,0.06393,0.06127
+363,exceed-frontend__LEAN_v86_FMTBANDS_d3332a,LEAN-v86-FMTBANDS,front end + scattering → v18,0.08731,0.07122,0.06663,0.06481,0.06063,0.05734,0.06389,0.06148
+364,exceed-frontend__LEAN_v87_TOPBOTLONG15_507694,LEAN-v87-TOPBOTLONG15,front end + scattering → v18,0.08748,0.07119,0.06659,0.06482,0.06063,0.05742,0.06393,0.06135
+365,exceed-frontend__LEAN_v88_NARROWBAND_ea8af1,LEAN-v88-NARROWBAND,front end + scattering → v18,0.08733,0.07111,0.06653,0.06518,0.06073,0.05721,0.06377,0.06155
+366,exceed-frontend__LEAN_v89_FUTCONTRAST_8c5848,LEAN-v89-FUTCONTRAST,front end + scattering → v18,0.08765,0.07134,0.06675,0.06485,0.06075,0.05722,0.06368,0.06142
+367,exceed-frontend__LEAN_v90_PASTCONTRAST_08a445,LEAN-v90-PASTCONTRAST,front end + scattering → v18,0.08763,0.07135,0.06675,0.06477,0.06085,0.05724,0.06381,0.06135
+368,exceed-frontend__LEAN_v91_FUTCONTRAST6_1cc75f,LEAN-v91-FUTCONTRAST6,front end + scattering → v18,0.08759,0.07146,0.06683,0.06519,0.06081,0.05739,0.06368,0.06140
+369,exceed-frontend__LEAN_v92_FUTCONTRASTMED_893fcf,LEAN-v92-FUTCONTRASTMED,front end + scattering → v18,0.08769,0.07142,0.06681,0.06490,0.06075,0.05721,0.06367,0.06136
+370,exceed-frontend__LEAN_v93_FUTCONTRASTSHORT_a9366f,LEAN-v93-FUTCONTRASTSHORT,front end + scattering → v18,0.08763,0.07143,0.06682,0.06509,0.06080,0.05735,0.06360,0.06143
+371,exceed-frontend__LEAN_v94_FUTSPEC_058b2b,LEAN-v94-FUTSPEC,front end + scattering → v18,0.08764,0.07148,0.06685,0.06514,0.06076,0.05720,0.06365,0.06135
+372,exceed-frontend__LEAN_v95_FUTLONG9_9d2ba1,LEAN-v95-FUTLONG9,front end + scattering → v18,0.08748,0.07145,0.06681,0.06500,0.06081,0.05738,0.06370,0.06142
+373,exceed-frontend__LEAN_v96_FUTMED6_0a4959,LEAN-v96-FUTMED6,front end + scattering → v18,0.08775,0.07155,0.06693,0.06508,0.06080,0.05732,0.06365,0.06131
+374,exceed-frontend__LEAN_v97_FUTMED9_be30cc,LEAN-v97-FUTMED9,front end + scattering → v18,0.08770,0.07160,0.06697,0.06506,0.06081,0.05729,0.06371,0.06122
+375,exceed-frontend__LEAN_v98_FUTSHORT6_1ffbcc,LEAN-v98-FUTSHORT6,front end + scattering → v18,0.08774,0.07153,0.06692,0.06510,0.06076,0.05733,0.06365,0.06131
+376,exceed-frontend__LEAN_v99_FUTPASTAVG_022a1f,LEAN-v99-FUTPASTAVG,front end + scattering → v18,0.08764,0.07154,0.06693,0.06507,0.06087,0.05733,0.06366,0.06138
+377,exceed-frontend__LEAN_v100_FUTMINUSCUR_8f2b0d,LEAN-v100-FUTMINUSCUR,front end + scattering → v18,0.08776,0.07154,0.06693,0.06480,0.06080,0.05726,0.06364,0.06142
+378,exceed-frontend__LEAN_v101_FUTADAPT_4740fa,LEAN-v101-FUTADAPT,front end + scattering → v18,0.08761,0.07147,0.06687,0.06503,0.06095,0.05735,0.06372,0.06147
+379,exceed-frontend__LEAN_v102_FUTLONG6_f6d198,LEAN-v102-FUTLONG6,front end + scattering → v18,0.08767,0.07153,0.06692,0.06516,0.06082,0.05731,0.06367,0.06113
+380,exceed-frontend__LEAN_v103_FUTTOPBOTMED_19e061,LEAN-v103-FUTTOPBOTMED,front end + scattering → v18,0.08755,0.07145,0.06683,0.06530,0.06072,0.05739,0.06371,0.06126
+381,exceed-frontend__LEAN_v104_FUTTOPBOTLONG_6d077a,LEAN-v104-FUTTOPBOTLONG,front end + scattering → v18,0.08757,0.07147,0.06685,0.06505,0.06071,0.05744,0.06369,0.06131
+382,exceed-frontend__LEAN_v105_FUTSPECMED_3ff35b,LEAN-v105-FUTSPECMED,front end + scattering → v18,0.08775,0.07154,0.06693,0.06483,0.06076,0.05734,0.06364,0.06122
+383,exceed-frontend__LEAN_v106_FUTLONG4_44b445,LEAN-v106-FUTLONG4,front end + scattering → v18,0.08771,0.07154,0.06692,0.06481,0.06082,0.05726,0.06364,0.06114
+384,exceed-frontend__LEAN_v107_FUTCUBELONG_b52d45,LEAN-v107-FUTCUBELONG,front end + scattering → v18,0.08785,0.07158,0.06697,0.06472,0.06071,0.05739,0.06371,0.06117
+385,exceed-frontend__LEAN_v108_FUTCUBEMED_3616c3,LEAN-v108-FUTCUBEMED,front end + scattering → v18,0.08777,0.07154,0.06695,0.06470,0.06072,0.05746,0.06371,0.06116
+386,exceed-frontend__LEAN_v109_FUTCUBELONG6_1bb0d3,LEAN-v109-FUTCUBELONG6,front end + scattering → v18,0.08770,0.07157,0.06698,0.06476,0.06074,0.05733,0.06372,0.06102
+387,exceed-frontend__LEAN_v110_FUTCUBESHORT_bc4b03,LEAN-v110-FUTCUBESHORT,front end + scattering → v18,0.08763,0.07144,0.06683,0.06477,0.06072,0.05743,0.06384,0.06132
+388,exceed-frontend__LEAN_v111_FUTCUBELONG2_f48f37,LEAN-v111-FUTCUBELONG2,front end + scattering → v18,0.08781,0.07156,0.06696,0.06471,0.06070,0.05734,0.06371,0.06117
+389,exceed-frontend__LEAN_v112_FUTCUBEMED6_5b797a,LEAN-v112-FUTCUBEMED6,front end + scattering → v18,0.08784,0.07159,0.06699,0.06482,0.06073,0.05736,0.06373,0.06118
+390,exceed-frontend__LEAN_v113_CUBETOPBOT_d7db28,LEAN-v113-CUBETOPBOT,front end + scattering → v18,0.08778,0.07158,0.06697,0.06509,0.06074,0.05729,0.06387,0.06120
+391,exceed-frontend__LEAN_v114_SQRTFUTLONG_d61b08,LEAN-v114-SQRTFUTLONG,front end + scattering → v18,0.08783,0.07155,0.06694,0.06485,0.06069,0.05734,0.06382,0.06128
+392,exceed-frontend__LEAN_v115_FUTCUBE4G_e5476d,LEAN-v115-FUTCUBE4G,front end + scattering → v18,0.08776,0.07157,0.06695,0.06480,0.06080,0.05732,0.06374,0.06118
+393,exceed-frontend__LEAN_v116_FUTCUBETOPBOT_0b231e,LEAN-v116-FUTCUBETOPBOT,front end + scattering → v18,0.08763,0.07148,0.06685,0.06516,0.06063,0.05734,0.06399,0.06118
+394,exceed-frontend__LEAN_v117_FUTCUBEMED4_f0b0de,LEAN-v117-FUTCUBEMED4,front end + scattering → v18,0.08780,0.07156,0.06697,0.06481,0.06068,0.05737,0.06373,0.06114
+395,exceed-frontend__LEAN_v118_CUBECURLONG_242fce,LEAN-v118-CUBECURLONG,front end + scattering → v18,0.08783,0.07157,0.06698,0.06479,0.06072,0.05733,0.06383,0.06116
+396,exceed-frontend__LEAN_v119_FUTCUBETOPBOTMED_c359b4,LEAN-v119-FUTCUBETOPBOTMED,front end + scattering → v18,0.08759,0.07149,0.06690,0.06515,0.06076,0.05725,0.06380,0.06113
+397,exceed-frontend__LEAN_v120_FUTMED5_cc6efd,LEAN-v120-FUTMED5,front end + scattering → v18,0.08776,0.07155,0.06693,0.06474,0.06072,0.05739,0.06371,0.06119
+398,exceed-frontend__LEAN_v121_FINETOPBOT_8eae56,LEAN-v121-FINETOPBOT,front end + scattering → v18,0.08773,0.07163,0.06702,0.06469,0.06079,0.05741,0.06371,0.06126
+399,exceed-frontend__LEAN_v122_FUTCUBE5_cf9cd7,LEAN-v122-FUTCUBE5,front end + scattering → v18,0.08781,0.07166,0.06705,0.06472,0.06071,0.05735,0.06371,0.06118
+400,exceed-frontend__LEAN_v123_SHIFTGROUPS_00b86b,LEAN-v123-SHIFTGROUPS,front end + scattering → v18,0.08768,0.07154,0.06692,0.06472,0.06070,0.05745,0.06375,0.06118
+401,exceed-frontend__LEAN_v124_AVGCONTRAST_e93b12,LEAN-v124-AVGCONTRAST,front end + scattering → v18,0.08784,0.07157,0.06696,0.06474,0.06072,0.05735,0.06372,0.06120
+402,exceed-frontend__LEAN_v125_FUTSMOOTH_5eea7f,LEAN-v125-FUTSMOOTH,front end + scattering → v18,0.08757,0.07149,0.06689,0.06471,0.06087,0.05727,0.06370,0.06121
+403,exceed-frontend__LEAN_v126_FUTCUBESHORT2_2b9ccd,LEAN-v126-FUTCUBESHORT2,front end + scattering → v18,0.08763,0.07143,0.06682,0.06478,0.06072,0.05743,0.06371,0.06130
+404,exceed-frontend__LEAN_v127_DIFFCONTRAST_f2669e,LEAN-v127-DIFFCONTRAST,front end + scattering → v18,0.08784,0.07149,0.06689,0.06475,0.06071,0.05735,0.06371,0.06113
+405,exceed-frontend__LEAN_v128_SHORTMEDDIFF_04c896,LEAN-v128-SHORTMEDDIFF,front end + scattering → v18,0.08774,0.07154,0.06692,0.06464,0.06073,0.05733,0.06371,0.06120
+406,exceed-frontend__LEAN_v108_GTCC_39ce09,LEAN-v108-GTCC,front end + scattering → v18,0.07334,0.06160,0.05747,0.04947,0.04974,0.04484,0.05610,0.04636
+407,exceed-frontend__LEAN_v108_GTCC_eb0de7,LEAN-v108-GTCC,front end + scattering → v18,0.08741,0.07137,0.06676,0.06431,0.06056,0.05765,0.06405,0.06118
+408,exceed-frontend__LEAN_v109_DENSEF0_c5482e,LEAN-v109-DENSEF0,front end + scattering → v18,0.08752,0.07161,0.06702,0.06501,0.06076,0.05681,0.06356,0.06161
+409,exceed-scatter__SCAT_v12_d2bdd4,SCAT-v12,front end + scattering → v18,0.08612,0.07071,0.06627,0.06573,0.05942,0.05643,0.06327,0.06101
+410,exceed-scatter__SCAT_v14_ef9123,SCAT-v14,front end + scattering → v18,0.08621,0.07049,0.06605,0.06553,0.05940,0.05681,0.06308,0.06117
+411,exceed-scatter__SCAT_v15_302003,SCAT-v15,front end + scattering → v18,0.08581,0.07057,0.06612,0.06557,0.05975,0.05665,0.06310,0.06091
+412,exceed-scatter__SCAT_v16_731787,SCAT-v16,front end + scattering → v18,0.08624,0.07086,0.06638,0.06548,0.05960,0.05682,0.06330,0.06081
+413,exceed-scatter__SCAT_v17_edee6c,SCAT-v17,front end + scattering → v18,0.08596,0.07075,0.06630,0.06536,0.05980,0.05657,0.06333,0.06087
+414,exceed-scatter__SCAT_v18_3fcbef,SCAT-v18,front end + scattering → v18,0.08632,0.07097,0.06648,0.06527,0.05956,0.05690,0.06324,0.06100
+415,exceed-scatter__SCAT_v19_f6a9c6,SCAT-v19,front end + scattering → v18,0.08609,0.07080,0.06632,0.06521,0.05968,0.05635,0.06319,0.06051
+416,exceed-scatter__SCAT_v20_58a5aa,SCAT-v20,front end + scattering → v18,0.08605,0.07076,0.06624,0.06544,0.05971,0.05644,0.06317,0.06076
+417,exceed-scatter__SCAT_v21_1a8a32,SCAT-v21,front end + scattering → v18,0.08597,0.07071,0.06618,0.06518,0.05988,0.05628,0.06337,0.06067
+418,exceed-scatter__SCAT_v22_95123e,SCAT-v22,front end + scattering → v18,0.08649,0.07075,0.06625,0.06494,0.05937,0.05674,0.06295,0.06108
+419,exceed-scatter__SCAT_v24_0e7a97,SCAT-v24,front end + scattering → v18,0.08666,0.07074,0.06629,0.06531,0.05934,0.05665,0.06297,0.06123
+420,exceed-scatter__SCAT_v25_c47071,SCAT-v25,front end + scattering → v18,0.08657,0.07071,0.06623,0.06523,0.05933,0.05687,0.06304,0.06113
+421,exceed-scatter__SCAT_v26_b74146,SCAT-v26,front end + scattering → v18,0.08653,0.07078,0.06631,0.06540,0.05936,0.05663,0.06297,0.06119
+422,exceed-scatter__SCAT_v27_dcb42b,SCAT-v27,front end + scattering → v18,0.08671,0.07081,0.06637,0.06535,0.05943,0.05693,0.06320,0.06088
+423,exceed-scatter__SCAT_v28_d930d4,SCAT-v28,front end + scattering → v18,0.08624,0.07071,0.06626,0.06572,0.05956,0.05686,0.06309,0.06088
+424,exceed-scatter__SCAT_v29_f5c970,SCAT-v29,front end + scattering → v18,0.08709,0.07086,0.06647,0.06565,0.05932,0.05706,0.06316,0.06103
+425,exceed-scatter__SCAT_v30_91ef8f,SCAT-v30,front end + scattering → v18,0.08754,0.07112,0.06678,0.06574,0.05919,0.05717,0.06317,0.06090
+426,exceed-scatter__SCAT_v31_4597c0,SCAT-v31,front end + scattering → v18,0.08756,0.07123,0.06691,0.06579,0.05908,0.05701,0.06338,0.06092
+427,exceed-scatter__SCAT_v34_e9a0e8,SCAT-v34,front end + scattering → v18,0.08761,0.07123,0.06692,0.06574,0.05920,0.05713,0.06320,0.06097
+428,exceed-scatter__SCAT_v35_0223ac,SCAT-v35,front end + scattering → v18,0.08736,0.07126,0.06695,0.06582,0.05937,0.05690,0.06337,0.06065
+429,exceed-scatter__SCAT_v36_6ea51b,SCAT-v36,front end + scattering → v18,0.08671,0.07100,0.06663,0.06523,0.05909,0.05679,0.06328,0.06070
+430,exceed-scatter__SCAT_v37_5a2fb0,SCAT-v37,front end + scattering → v18,0.08712,0.07128,0.06687,0.06572,0.05934,0.05691,0.06355,0.06109
+431,exceed-scatter__SCAT_v38_6dd806,SCAT-v38,front end + scattering → v18,0.08707,0.07112,0.06675,0.06532,0.05927,0.05678,0.06321,0.06137
+432,exceed-scatter__SCAT_v39_80e55f,SCAT-v39,front end + scattering → v18,0.08780,0.07135,0.06700,0.06611,0.05915,0.05709,0.06356,0.06120
+433,exceed-scatter__SCAT_v40_d5e305,SCAT-v40,front end + scattering → v18,0.08784,0.07136,0.06703,0.06585,0.05922,0.05730,0.06360,0.06116
+434,exceed-scatter__SCAT_v41_9aba9e,SCAT-v41,front end + scattering → v18,0.08772,0.07127,0.06691,0.06545,0.05943,0.05691,0.06336,0.06112
+435,exceed-scatter__SCAT_v42_29c723,SCAT-v42,front end + scattering → v18,0.08790,0.07135,0.06700,0.06599,0.05933,0.05715,0.06361,0.06119
+436,exceed-scatter__SCAT_v47_3a19cf,SCAT-v47,front end + scattering → v18,0.08694,0.07158,0.06696,0.06630,0.05895,0.05740,0.06269,0.06165
+437,exceed-scatter__SCAT_v48_a6bcf8,SCAT-v48,front end + scattering → v18,0.08647,0.07188,0.06718,0.06726,0.05998,0.05782,0.06290,0.06156
+438,exceed-scatter__SCAT_v49_34fae8,SCAT-v49,front end + scattering → v18,0.08724,0.07133,0.06685,0.06580,0.05951,0.05669,0.06349,0.06115
+439,exceed-scatter__SCAT_v50_83fcea,SCAT-v50,front end + scattering → v18,0.08701,0.07123,0.06679,0.06596,0.05971,0.05628,0.06342,0.06097
+440,exceed-scatter__SCAT_v51_38b2a3,SCAT-v51,front end + scattering → v18,0.08758,0.07131,0.06695,0.06560,0.05957,0.05738,0.06356,0.06127
+441,exceed-scatter__SCAT_v52_865e05,SCAT-v52,front end + scattering → v18,0.08766,0.07123,0.06687,0.06592,0.05944,0.05715,0.06357,0.06108
+442,exceed-scatter__SCAT_v53_9abc1e,SCAT-v53,front end + scattering → v18,0.08792,0.07136,0.06702,0.06606,0.05915,0.05734,0.06360,0.06118
+443,exceed-scatter__SCAT_v54_47e122,SCAT-v54,front end + scattering → v18,0.08785,0.07135,0.06700,0.06604,0.05927,0.05726,0.06342,0.06112
+444,exceed-scatter__SCAT_v56_b09380,SCAT-v56,front end + scattering → v18,0.08786,0.07144,0.06709,0.06623,0.05950,0.05715,0.06343,0.06117
+445,exceed-scatter__SCAT_v57_a7fb7a,SCAT-v57,front end + scattering → v18,0.08776,0.07140,0.06705,0.06601,0.05958,0.05715,0.06345,0.06119
+446,exceed-scatter__SCAT_v58_52af92,SCAT-v58,front end + scattering → v18,0.08725,0.07137,0.06710,0.06510,0.05983,0.05702,0.06365,0.06179
+447,exceed-scatter__SCAT_v59_a80749,SCAT-v59,front end + scattering → v18,0.08681,0.07121,0.06676,0.06576,0.05958,0.05700,0.06328,0.06116
+448,exceed-scatter__SCAT_v60_7e6b6c,SCAT-v60,front end + scattering → v18,0.08785,0.07135,0.06700,0.06604,0.05927,0.05726,0.06342,0.06112
+449,exceed-scatter__SCAT_v61_18d9cc,SCAT-v61,front end + scattering → v18,0.08806,0.07145,0.06707,0.06597,0.05948,0.05730,0.06351,0.06135
+450,exceed-scatter__SCAT_v62_88ef71,SCAT-v62,front end + scattering → v18,0.08807,0.07144,0.06707,0.06594,0.05947,0.05745,0.06355,0.06143
+451,exceed-scatter__SCAT_v64_ea2773,SCAT-v64,front end + scattering → v18,0.08710,0.07080,0.06646,0.06620,0.05906,0.05709,0.06339,0.06125
+452,exceed-scatter__SCAT_v65_93ad08,SCAT-v65,front end + scattering → v18,0.08809,0.07143,0.06706,0.06599,0.05967,0.05731,0.06348,0.06138
+453,exceed-scatter__SCAT_v68_dcb2ce,SCAT-v68,front end + scattering → v18,0.08760,0.07133,0.06684,0.06589,0.05974,0.05725,0.06347,0.06122
+454,exceed-scatter__SCAT_v69_ee7406,SCAT-v69,front end + scattering → v18,0.08809,0.07142,0.06704,0.06581,0.05971,0.05705,0.06344,0.06091
+455,exceed-scatter__SCAT_v70_d7cabd,SCAT-v70,front end + scattering → v18,0.08623,0.07107,0.06679,0.06569,0.05959,0.05697,0.06290,0.06123
+456,exceed-scatter__SCAT_v71_5e7836,SCAT-v71,front end + scattering → v18,0.08767,0.07143,0.06695,0.06585,0.05963,0.05724,0.06368,0.06142
+457,exceed-scatter__SCAT_v73_4d58d3,SCAT-v73,front end + scattering → v18,0.08807,0.07140,0.06704,0.06607,0.05934,0.05751,0.06349,0.06117
+458,exceed-scatter__SCAT_v74_53402c,SCAT-v74,front end + scattering → v18,0.08817,0.07142,0.06708,0.06588,0.05951,0.05755,0.06347,0.06131
+459,exceed-scatter__SCAT_v75_71d5dd,SCAT-v75,front end + scattering → v18,0.08811,0.07144,0.06708,0.06565,0.05921,0.05732,0.06355,0.06108
+460,exceed-scatter__SCAT_v76_5ab0fb,SCAT-v76,front end + scattering → v18,0.08802,0.07138,0.06701,0.06590,0.05953,0.05727,0.06368,0.06102
+461,exceed-scatter__SCAT_v80_54328d,SCAT-v80,front end + scattering → v18,0.08820,0.07154,0.06714,0.06625,0.05953,0.05766,0.06361,0.06124
+462,exceed-scatter__SCAT_v81_01fffc,SCAT-v81,front end + scattering → v18,0.08796,0.07138,0.06704,0.06590,0.05950,0.05749,0.06360,0.06100
+463,exceed-scatter__SCAT_v82_6a9c29,SCAT-v82,front end + scattering → v18,0.08779,0.07140,0.06707,0.06593,0.05952,0.05742,0.06373,0.06095
+464,exceed-scatter__SCAT_v83_91fe1b,SCAT-v83,front end + scattering → v18,0.08744,0.07133,0.06684,0.06566,0.05967,0.05734,0.06350,0.06116
+465,exceed-scatter__SCAT_v84_5268a0,SCAT-v84,front end + scattering → v18,0.08811,0.07138,0.06702,0.06587,0.05971,0.05748,0.06350,0.06111
+466,exceed-scatter__SCAT_v86_4e1566,SCAT-v86,front end + scattering → v18,0.08742,0.07128,0.06678,0.06607,0.05975,0.05724,0.06351,0.06119
+467,exceed-scatter__SCAT_v88_4e5f28,SCAT-v88,front end + scattering → v18,0.08810,0.07140,0.06704,0.06564,0.05958,0.05722,0.06357,0.06100
+468,exceed-scatter__SCAT_v89_dda802,SCAT-v89,front end + scattering → v18,0.08756,0.07142,0.06697,0.06593,0.05960,0.05705,0.06372,0.06122
+469,exceed-scatter__SCAT_v90_9d1814,SCAT-v90,front end + scattering → v18,0.08674,0.07104,0.06669,0.06596,0.05955,0.05765,0.06377,0.06116
+470,exceed-scatter__SCAT_v91_2818b2,SCAT-v91,front end + scattering → v18,0.08810,0.07145,0.06707,0.06591,0.05961,0.05736,0.06367,0.06123
+471,exceed-scatter__SCAT_v92_e7f7f7,SCAT-v92,front end + scattering → v18,0.08810,0.07137,0.06700,0.06550,0.05979,0.05741,0.06362,0.06146
+472,exceed-scatter__SCAT_v93_91d2f6,SCAT-v93,front end + scattering → v18,0.08736,0.07151,0.06711,0.06511,0.06008,0.05749,0.06382,0.06124
+473,exceed-scatter__SCAT_v94_134e13,SCAT-v94,front end + scattering → v18,0.08810,0.07163,0.06723,0.06598,0.05952,0.05704,0.06367,0.06145
+474,exceed-scatter__SCAT_v95_d13004,SCAT-v95,front end + scattering → v18,0.08810,0.07137,0.06700,0.06550,0.05979,0.05741,0.06362,0.06146
+475,exceed-scatter__SCAT_v97_f03714,SCAT-v97,front end + scattering → v18,0.08722,0.07115,0.06676,0.06570,0.05925,0.05744,0.06329,0.06088
+476,exceed-scatter__SCAT_v98_33648d,SCAT-v98,front end + scattering → v18,0.08768,0.07134,0.06685,0.06547,0.05986,0.05724,0.06367,0.06137
+477,exceed-scatter__SCAT_v99_a39e69,SCAT-v99,front end + scattering → v18,0.08658,0.07194,0.06731,0.06638,0.06066,0.05780,0.06333,0.06178
+478,exceed-scatter__SCAT_v100_f3a3d4,SCAT-v100,front end + scattering → v18,0.08810,0.07137,0.06700,0.06550,0.05979,0.05741,0.06362,0.06146
+479,exceed-scatter__SCAT_v101_588d5b,SCAT-v101,front end + scattering → v18,0.08702,0.07139,0.06699,0.06553,0.05970,0.05723,0.06379,0.06150
+480,exceed-scatter__SCAT_v102_462e56,SCAT-v102,front end + scattering → v18,0.08804,0.07134,0.06698,0.06566,0.05981,0.05735,0.06359,0.06146
+481,exceed-scatter__SCAT_v103_4bfaba,SCAT-v103,front end + scattering → v18,0.08823,0.07139,0.06704,0.06562,0.05981,0.05727,0.06348,0.06143
+482,exceed-scatter__SCAT_v104_ab6c28,SCAT-v104,front end + scattering → v18,0.08820,0.07142,0.06706,0.06565,0.05957,0.05704,0.06359,0.06142
+483,exceed-scatter__SCAT_v105_9e6abb,SCAT-v105,front end + scattering → v18,0.08810,0.07173,0.06732,0.06613,0.05977,0.05710,0.06364,0.06142
+484,exceed-scatter__SCAT_v106_01acfb,SCAT-v106,front end + scattering → v18,0.08821,0.07142,0.06707,0.06566,0.05957,0.05697,0.06361,0.06137
+485,exceed-scatter__SCAT_v110_b45405,SCAT-v110,front end + scattering → v18,0.08821,0.07142,0.06707,0.06566,0.05957,0.05697,0.06361,0.06137
+486,exceed-scatter__SCAT_v112_0db87e,SCAT-v112,front end + scattering → v18,0.08821,0.07142,0.06707,0.06566,0.05957,0.05697,0.06361,0.06137
+487,exceed-combine__COMBINE_v1_LEAN107_SCAT103_c9f8cf,COMBINE-v1-LEAN107+SCAT103,front end + scattering → v18,0.07010,0.05880,0.05452,0.05753,0.04574,0.04545,0.04752,0.04358
+488,exceed-combine__COMBINE_v1_LEAN107_SCAT103_89adda,COMBINE-v1-LEAN107+SCAT103,front end + scattering → v18,0.07720,0.06636,0.06235,0.06464,0.05238,0.05078,0.05831,0.05366
+489,exceed-combine__COMBINE_v1_LEAN107_SCAT103_93d6b6,COMBINE-v1-LEAN107+SCAT103,front end + scattering → v18,0.07956,0.06651,0.06240,0.06198,0.05848,0.05460,0.06064,0.05245
+490,exceed-combine__COMBINE_v1_LEAN107_SCAT103_37d73b,COMBINE-v1-LEAN107+SCAT103,front end + scattering → v18,0.08394,0.07079,0.06649,0.06675,0.05676,0.05828,0.06421,0.06099
+491,exceed-combine__COMBINE_v1_LEAN107_SCAT103_6db763,COMBINE-v1-LEAN107+SCAT103,front end + scattering → v18,0.08784,0.07174,0.06713,0.06506,0.06099,0.05747,0.06436,0.06136
+492,exceed-combine__COMBINE_v2_LEAN107_SCAT103_nointeract_9f5ba2,COMBINE-v2-LEAN107+SCAT103-nointeract,front end + scattering → v18,0.08803,0.07121,0.06673,0.06584,0.06103,0.05845,0.06405,0.06177
+493,exceed-combine__COMBINE_v4_LEAN107_SCAT103_disk_409536,COMBINE-v4-LEAN107+SCAT103-disk,front end + scattering → v18,0.08867,0.07209,0.06749,0.06516,0.06099,0.05755,0.06456,0.06157
+494,exceed-combine__COMBINE_v5_S2s_s1dyn_837186,COMBINE-v5-S2s+s1dyn,front end + scattering → v18,0.08904,0.07223,0.06771,0.06450,0.06107,0.05783,0.06414,0.06162
+495,exceed-combine__COMBINE_v6_cohdyn_s2pj1dyn_522bac,COMBINE-v6-cohdyn+s2pj1dyn,front end + scattering → v18,0.08853,0.07250,0.06784,0.06530,0.06039,0.05826,0.06387,0.06116
+496,exceed-combine__COMBINE_v7_NB2_3885f7,COMBINE-v7-NB2,front end + scattering → v18,0.08903,0.07229,0.06777,0.06399,0.06095,0.05682,0.06368,0.06181
+497,exceed-combine__COMBINE_v8_s1sub_fut_7712bf,COMBINE-v8-s1sub_fut,front end + scattering → v18,0.08907,0.07231,0.06777,0.06496,0.06115,0.05758,0.06425,0.06166
+498,exceed-combine__COMBINE_v9_modcentroid_524125,COMBINE-v9-modcentroid,front end + scattering → v18,0.08889,0.07239,0.06777,0.06506,0.06008,0.05766,0.06393,0.06111
+499,exceed-combine__COMBINE_v10_K17_addd74,COMBINE-v10-K17,front end + scattering → v18,0.08814,0.07224,0.06776,0.06527,0.06103,0.05775,0.06363,0.06162
+500,exceed-combine__COMBINE_v11_s1sub_dyn_asym_b36bbd,COMBINE-v11-s1sub_dyn_asym,front end + scattering → v18,0.08891,0.07215,0.06764,0.06491,0.06073,0.05764,0.06387,0.06174
+501,exceed-combine__COMBINE_v12_cohdyn_6157e1,COMBINE-v12-cohdyn,front end + scattering → v18,0.08870,0.07218,0.06764,0.06471,0.06129,0.05795,0.06385,0.06142
+502,exceed-combine__COMBINE_v13_Q2_2_a6a507,COMBINE-v13-Q2-2,front end + scattering → v18,0.08944,0.07219,0.06769,0.06488,0.06129,0.05742,0.06415,0.06166
+503,exceed-combine__COMBINE_v14_Q2_3_327557,COMBINE-v14-Q2-3,front end + scattering → v18,0.08926,0.07215,0.06765,0.06451,0.06075,0.05769,0.06412,0.06146
+504,exceed-combine__COMBINE_v15_Q1_6_1664a1,COMBINE-v15-Q1-6,front end + scattering → v18,0.08890,0.07197,0.06746,0.06490,0.06049,0.05757,0.06444,0.06221
+505,exceed-v18__LEAN_v18_q1_QUADBANK_0adbf3,LEAN-v18.q1-QUADBANK,"quad. banks + gates → v19, v20",0.08941,0.07255,0.06796,0.06513,0.06131,0.05757,0.06434,0.06144
+506,exceed-v18__LEAN_v18_q2_QUADDYN_502870,LEAN-v18.q2-QUADDYN,"quad. banks + gates → v19, v20",0.08985,0.07306,0.06840,0.06513,0.06188,0.05756,0.06446,0.06127
+507,exceed-v18__LEAN_v18_q3_QUADHIRATES_a24d3c,LEAN-v18.q3-QUADHIRATES,"quad. banks + gates → v19, v20",0.08971,0.07294,0.06822,0.06533,0.06176,0.05744,0.06449,0.06129
+508,exceed-v18__LEAN_v18_q4_PITCHSOFT_5315cb,LEAN-v18.q4-PITCHSOFT,"quad. banks + gates → v19, v20",0.08969,0.07301,0.06838,0.06513,0.06158,0.05780,0.06433,0.06135
+509,exceed-v18__LEAN_v18_q5_QUADBIN5_8bae4f,LEAN-v18.q5-QUADBIN5,"quad. banks + gates → v19, v20",0.08950,0.07329,0.06862,0.06520,0.05986,0.05750,0.06407,0.06141
+510,exceed-v18__LEAN_v18_q6_XFINECOCHLEA_32df1a,LEAN-v18.q6-XFINECOCHLEA,"quad. banks + gates → v19, v20",0.08951,0.07313,0.06850,0.06527,0.06140,0.05751,0.06380,0.06155
+511,exceed-v18__LEAN_v18_q7_XFAMILY_4c5c60,LEAN-v18.q7-XFAMILY,"quad. banks + gates → v19, v20",0.08957,0.07296,0.06833,0.06540,0.06096,0.05754,0.06435,0.06124
+512,exceed-v18__LEAN_v18_q8_QUADACAUSAL_50cb40,LEAN-v18.q8-QUADACAUSAL,"quad. banks + gates → v19, v20",0.08993,0.07302,0.06845,0.06571,0.06181,0.05770,0.06370,0.06199
+513,exceed-v18__LEAN_v18_q9_QUADPHASEPROD_bedbaf,LEAN-v18.q9-QUADPHASEPROD,"quad. banks + gates → v19, v20",0.08976,0.07301,0.06835,0.06535,0.06203,0.05736,0.06441,0.06123
+514,exceed-v18__LEAN_v18_q10_SCATDENSER_e34c07,LEAN-v18.q10-SCATDENSER,"quad. banks + gates → v19, v20",0.08871,0.07288,0.06814,0.06548,0.06110,0.05770,0.06311,0.06109
+515,exceed-v18__LEAN_v18_q11_VOICEDBAND_23d2bf,LEAN-v18.q11-VOICEDBAND,"quad. banks + gates → v19, v20",0.08973,0.07297,0.06834,0.06494,0.06124,0.05732,0.06429,0.06118
+516,exceed-v18__LEAN_v18_q12_QUADMED_115ba5,LEAN-v18.q12-QUADMED,"quad. banks + gates → v19, v20",0.08978,0.07307,0.06843,0.06534,0.06193,0.05741,0.06438,0.06166
+517,exceed-v18__LEAN_v18_q13_LATINH_86f238,LEAN-v18.q13-LATINH,"quad. banks + gates → v19, v20",0.08969,0.07303,0.06829,0.06489,0.06176,0.05757,0.06435,0.06171
+518,exceed-v18__LEAN_v18_q14_QUADPROSDYN_f78949,LEAN-v18.q14-QUADPROSDYN,"quad. banks + gates → v19, v20",0.09001,0.07309,0.06844,0.06446,0.06097,0.05767,0.06408,0.06206
+519,exceed-v18__LEAN_v18_q15_QUADACAUSAL60_5510fc,LEAN-v18.q15-QUADACAUSAL60,"quad. banks + gates → v19, v20",0.09014,0.07301,0.06849,0.06446,0.06075,0.05763,0.06345,0.06159
+520,exceed-v18__LEAN_v18_q16_QUADACAUSAL2_f24673,LEAN-v18.q16-QUADACAUSAL2,"quad. banks + gates → v19, v20",0.08993,0.07329,0.06877,0.06504,0.06077,0.05777,0.06427,0.06102
+521,exceed-v18__LEAN_v18_q17_XRATE_ENERGY_405a09,LEAN-v18.q17-XRATE-ENERGY,"quad. banks + gates → v19, v20",0.09017,0.07332,0.06876,0.06477,0.06108,0.05770,0.06376,0.06141
+522,exceed-v18__LEAN_v18_q18_COCHLEAACAUSALLONG_85485e,LEAN-v18.q18-COCHLEAACAUSALLONG,"quad. banks + gates → v19, v20",0.09005,0.07310,0.06852,0.06449,0.06036,0.05748,0.06355,0.06207
+523,exceed-v18__LEAN_v18_q19_VOICEDGATE_012d25,LEAN-v18.q19-VOICEDGATE,"quad. banks + gates → v19, v20",0.09016,0.07333,0.06878,0.06483,0.06092,0.05761,0.06362,0.06138
+524,exceed-v18__LEAN_v18_q20_VOICEDQUADMAG_b834bb,LEAN-v18.q20-VOICEDQUADMAG,"quad. banks + gates → v19, v20",0.09018,0.07338,0.06882,0.06470,0.06109,0.05749,0.06391,0.06118
+525,exceed-v18__LEAN_v18_q21_VOICINGONSET_eaf684,LEAN-v18.q21-VOICINGONSET,"quad. banks + gates → v19, v20",0.09012,0.07332,0.06877,0.06455,0.06101,0.05759,0.06328,0.06135
+526,exceed-v18__LEAN_v18_q22_MULTITHRESHGATE_2f83c1,LEAN-v18.q22-MULTITHRESHGATE,"quad. banks + gates → v19, v20",0.09009,0.07335,0.06880,0.06480,0.06099,0.05749,0.06353,0.06134
+527,exceed-v18__LEAN_v18_q23_FLATGATE_a2aa68,LEAN-v18.q23-FLATGATE,"quad. banks + gates → v19, v20",0.09021,0.07338,0.06886,0.06481,0.06094,0.05750,0.06357,0.06138
+528,exceed-v18__LEAN_v18_q24_VOICEDFINE_6f47ba,LEAN-v18.q24-VOICEDFINE,"quad. banks + gates → v19, v20",0.09011,0.07334,0.06882,0.06469,0.06084,0.05752,0.06368,0.06151
+529,exceed-v18__LEAN_v18_q25_VOICEDMULTITAU_91819e,LEAN-v18.q25-VOICEDMULTITAU,"quad. banks + gates → v19, v20",0.09012,0.07336,0.06881,0.06484,0.06090,0.05775,0.06386,0.06138
+530,exceed-v18__LEAN_v18_q26_ZCR_0d4808,LEAN-v18.q26-ZCR,"quad. banks + gates → v19, v20",0.08993,0.07331,0.06877,0.06518,0.06115,0.05766,0.06365,0.06110
+531,exceed-v18__LEAN_v18_q27_CUBEFINE_b7d829,LEAN-v18.q27-CUBEFINE,"quad. banks + gates → v19, v20",0.09001,0.07338,0.06884,0.06538,0.06157,0.05700,0.06305,0.06129
+532,exceed-v18__LEAN_v18_q28_FUTURELAGS_50870b,LEAN-v18.q28-FUTURELAGS,"quad. banks + gates → v19, v20",0.09008,0.07335,0.06880,0.06502,0.06098,0.05739,0.06343,0.06130
+533,exceed-v18__LEAN_v18_q29_GATESIGS_7bcbee,LEAN-v18.q29-GATESIGS,"quad. banks + gates → v19, v20",0.09034,0.07342,0.06886,0.06483,0.06066,0.05743,0.06369,0.06139
+534,exceed-v18__LEAN_v18_q30_GATEMORE_ca586e,LEAN-v18.q30-GATEMORE,"quad. banks + gates → v19, v20",0.09025,0.07341,0.06880,0.06476,0.06070,0.05752,0.06384,0.06110
+535,exceed-v18__LEAN_v18_q31_DIVERSEGATES_1f16ea,LEAN-v18.q31-DIVERSEGATES,"quad. banks + gates → v19, v20",0.09028,0.07350,0.06899,0.06492,0.06036,0.05750,0.06372,0.06148
+536,exceed-v18__LEAN_v18_q32_GATEXLAG_82f909,LEAN-v18.q32-GATEXLAG,"quad. banks + gates → v19, v20",0.09017,0.07330,0.06883,0.06461,0.06063,0.05754,0.06414,0.06133
+537,exceed-v18__LEAN_v18_q33_GATExKEYSIG_17a61a,LEAN-v18.q33-GATExKEYSIG,"quad. banks + gates → v19, v20",0.09032,0.07337,0.06882,0.06499,0.06069,0.05774,0.06346,0.06094
+538,exceed-v18__LEAN_v18_q34_WAVESTATS_17aece,LEAN-v18.q34-WAVESTATS,"quad. banks + gates → v19, v20",0.09008,0.07339,0.06882,0.06498,0.06046,0.05754,0.06334,0.06147
+539,exceed-v18__LEAN_v18_q35_SHARPGATES_597bf1,LEAN-v18.q35-SHARPGATES,"quad. banks + gates → v19, v20",0.09030,0.07339,0.06883,0.06465,0.06053,0.05739,0.06358,0.06135
+540,exceed-v18__LEAN_v18_q36_BANDRATIOS_043222,LEAN-v18.q36-BANDRATIOS,"quad. banks + gates → v19, v20",0.09015,0.07343,0.06888,0.06461,0.05974,0.05786,0.06378,0.06081
+541,exceed-v18__LEAN_v18_q37_LOUDHNRGATES_50974b,LEAN-v18.q37-LOUDHNRGATES,"quad. banks + gates → v19, v20",0.09028,0.07342,0.06885,0.06479,0.06054,0.05762,0.06367,0.06127
+542,exceed-v18__LEAN_v18_q38_ALTGATES_18f2d4,LEAN-v18.q38-ALTGATES,"quad. banks + gates → v19, v20",0.09026,0.07333,0.06879,0.06481,0.06053,0.05752,0.06377,0.06138
+543,exceed-v18__LEAN_v18_q39_GATEEXTRATAU_6ac1df,LEAN-v18.q39-GATEEXTRATAU,"quad. banks + gates → v19, v20",0.09035,0.07341,0.06883,0.06482,0.06063,0.05743,0.06375,0.06139
+544,exceed-v18__LEAN_v18_q40_SOFTARGMAX_673b37,LEAN-v18.q40-SOFTARGMAX,"quad. banks + gates → v19, v20",0.08985,0.07319,0.06861,0.06446,0.06173,0.05701,0.06392,0.06129
+545,exceed-v18__LEAN_v18_q41_GATEFUTURE_1ccc95,LEAN-v18.q41-GATEFUTURE,"quad. banks + gates → v19, v20",0.09018,0.07343,0.06889,0.06481,0.06108,0.05739,0.06377,0.06136
+546,exceed-v18__LEAN_v18_q42_SLOWQUAD_ec60c4,LEAN-v18.q42-SLOWQUAD,"quad. banks + gates → v19, v20",0.09043,0.07360,0.06904,0.06441,0.06082,0.05751,0.06364,0.06135
+547,exceed-v18__LEAN_v18_q43_SLOWQUADACAUSAL_cd9e10,LEAN-v18.q43-SLOWQUADACAUSAL,"quad. banks + gates → v19, v20",0.09025,0.07350,0.06897,0.06425,0.06072,0.05738,0.06365,0.06151
+548,exceed-v18__LEAN_v18_q44_SLOWQUADWIDER_182206,LEAN-v18.q44-SLOWQUADWIDER,"quad. banks + gates → v19, v20",0.09045,0.07357,0.06897,0.06408,0.06001,0.05798,0.06390,0.06170
+549,exceed-v18__LEAN_v18_q45_SLOWQUAD5SCALES_989114,LEAN-v18.q45-SLOWQUAD5SCALES,"quad. banks + gates → v19, v20",0.09045,0.07352,0.06897,0.06431,0.06038,0.05781,0.06367,0.06145
+550,exceed-v18__LEAN_v18_q46_SLOWQUAD5BINS_c82cd6,LEAN-v18.q46-SLOWQUAD5BINS,"quad. banks + gates → v19, v20",0.08977,0.07345,0.06888,0.06466,0.05939,0.05772,0.06267,0.06198
+551,exceed-v18__LEAN_v18_q47_SLOWQUADADDLOW_e284d1,LEAN-v18.q47-SLOWQUADADDLOW,"quad. banks + gates → v19, v20",0.09040,0.07361,0.06901,0.06408,0.06030,0.05816,0.06396,0.06166
+552,exceed-v18__LEAN_v18_q48_SLOWQUADMULTITAU_7fd392,LEAN-v18.q48-SLOWQUADMULTITAU,"quad. banks + gates → v19, v20",0.09012,0.07334,0.06877,0.06428,0.05940,0.05761,0.06342,0.06131
+554,exceed-v18__LEAN_v18_q50_SLOWQUADCUBE_38a039,LEAN-v18.q50-SLOWQUADCUBE,"quad. banks + gates → v19, v20",0.08998,0.07347,0.06892,0.06391,0.05988,0.05822,0.06447,0.06203
+555,exceed-v18__LEAN_v18_q51_SLOWQUADMED_194923,LEAN-v18.q51-SLOWQUADMED,"quad. banks + gates → v19, v20",0.09018,0.07338,0.06883,0.06419,0.05989,0.05812,0.06401,0.06160
+556,exceed-v18__LEAN_v18_q52_MEDRATEQUAD_003747,LEAN-v18.q52-MEDRATEQUAD,"quad. banks + gates → v19, v20",0.09013,0.07345,0.06888,0.06404,0.06029,0.05825,0.06393,0.06186
+557,exceed-v18__LEAN_v18_q53_SPECTRALTILT_dd670d,LEAN-v18.q53-SPECTRALTILT,"quad. banks + gates → v19, v20",0.09043,0.07361,0.06899,0.06435,0.06041,0.05813,0.06348,0.06145
+558,exceed-v18__LEAN_v18_q54_SLOWQUADMAGCOARSE_e313cc,LEAN-v18.q54-SLOWQUADMAGCOARSE,"quad. banks + gates → v19, v20",0.09013,0.07337,0.06879,0.06446,0.06098,0.05812,0.06359,0.06159
+559,exceed-v20-context__LEAN_v20_1878d3,LEAN-v20,"context, coupling, speaker",0.09045,0.07352,0.06897,0.06431,0.06038,0.05781,0.06367,0.06145
+560,exceed-v20-context__LEAN_v21_c1_f28e9a,LEAN-v21-c1,"context, coupling, speaker",0.08872,0.07299,0.06849,0.06332,0.06052,0.05713,0.06162,0.06203
+562,exceed-v20-context__LEAN_v21_c3_284e3b,LEAN-v21-c3,"context, coupling, speaker",0.08966,0.07331,0.06872,0.06390,0.06062,0.05753,0.06361,0.06195
+563,exceed-v20-context__LEAN_v21_c4_854099,LEAN-v21-c4,"context, coupling, speaker",0.08954,0.07349,0.06874,0.06393,0.06030,0.05828,0.06347,0.06240
+564,exceed-v20-context__LEAN_v21_c5_e926d3,LEAN-v21-c5,"context, coupling, speaker",0.09019,0.07320,0.06872,0.06402,0.06032,0.05730,0.06406,0.06160
+566,exceed-v20-context__LEAN_v21_c7_0de011,LEAN-v21-c7,"context, coupling, speaker",0.08983,0.07332,0.06875,0.06431,0.06023,0.05834,0.06384,0.06189
+567,exceed-v20-context__LEAN_v21_c8_7f77c6,LEAN-v21-c8,"context, coupling, speaker",0.08998,0.07338,0.06884,0.06418,0.06038,0.05802,0.06388,0.06212
+568,exceed-v20-context__LEAN_v21_c9_1707a7,LEAN-v21-c9,"context, coupling, speaker",0.09048,0.07333,0.06876,0.06443,0.06031,0.05705,0.06336,0.06165
+569,exceed-v20-context__LEAN_v21_c10_0a6f9f,LEAN-v21-c10,"context, coupling, speaker",0.09056,0.07348,0.06889,0.06428,0.06043,0.05818,0.06398,0.06180
+570,exceed-v20-deep__LEAN_v21_PAC_ec73e2,LEAN-v21-PAC,"context, coupling, speaker",0.09001,0.07333,0.06873,0.06438,0.06018,0.05802,0.06364,0.06174
+571,exceed-v20-deep__LEAN_v22_XLAG_ae350b,LEAN-v22-XLAG,"context, coupling, speaker",0.09072,0.07369,0.06911,0.06445,0.06084,0.05698,0.06390,0.06175
+572,exceed-v20-deep__LEAN_v23_XLAG6_d71bbb,LEAN-v23-XLAG6,"context, coupling, speaker",0.09042,0.07369,0.06910,0.06430,0.05931,0.05691,0.06405,0.06177
+573,exceed-v20-deep__LEAN_v24_XLAGLONG_82bf07,LEAN-v24-XLAGLONG,"context, coupling, speaker",0.09026,0.07347,0.06897,0.06434,0.06086,0.05736,0.06367,0.06185
+574,exceed-v20-deep__LEAN_v25_TS3_74e6b7,LEAN-v25-TS3,"context, coupling, speaker",0.09049,0.07366,0.06909,0.06437,0.06073,0.05714,0.06377,0.06216
+575,exceed-v20-deep__LEAN_v26_AUTOLAG_9487ed,LEAN-v26-AUTOLAG,"context, coupling, speaker",0.09070,0.07376,0.06918,0.06428,0.06036,0.05748,0.06389,0.06203
+576,exceed-v20-deep__LEAN_v27_XLAGSIGN_2dadb6,LEAN-v27-XLAGSIGN,"context, coupling, speaker",0.09036,0.07347,0.06894,0.06436,0.06116,0.05772,0.06360,0.06186
+577,exceed-v20-deep__LEAN_v28_ACCEL_29cd47,LEAN-v28-ACCEL,"context, coupling, speaker",0.09035,0.07361,0.06906,0.06430,0.06048,0.05692,0.06382,0.06131
+578,exceed-v20-deep__LEAN_v29_CROSSWIN_836c08,LEAN-v29-CROSSWIN,"context, coupling, speaker",0.09056,0.07358,0.06901,0.06422,0.06031,0.05771,0.06378,0.06174
+579,exceed-v20-deep__LEAN_v30_MFCC_fe0b1d,LEAN-v30-MFCC,"context, coupling, speaker",0.09034,0.07356,0.06903,0.06415,0.05973,0.05853,0.06353,0.06187
+580,exceed-v20-deep__LEAN_v31_LOGEPROD8_785e26,LEAN-v31-LOGEPROD8,"context, coupling, speaker",0.09045,0.07388,0.06925,0.06451,0.05973,0.05719,0.06427,0.06189
+581,exceed-v20-deep__LEAN_v32_TRIPLET_b0dd48,LEAN-v32-TRIPLET,"context, coupling, speaker",0.09032,0.07347,0.06892,0.06400,0.06162,0.05705,0.06376,0.06187
+582,exceed-v20-deep__LEAN_v33_XLAGMULTITAU_6f6b45,LEAN-v33-XLAGMULTITAU,"context, coupling, speaker",0.09086,0.07365,0.06907,0.06403,0.06107,0.05740,0.06321,0.06188
+583,exceed-v20-deep__LEAN_v34_XLAGABS_3aca6f,LEAN-v34-XLAGABS,"context, coupling, speaker",0.09084,0.07315,0.06860,0.06365,0.06148,0.05711,0.06270,0.06083
+584,exceed-v20-deep__LEAN_v35_AUTOLAGZ_13ab46,LEAN-v35-AUTOLAGZ,"context, coupling, speaker",0.09093,0.07374,0.06913,0.06409,0.06029,0.05748,0.06339,0.06151
+585,exceed-v20-deep__LEAN_v36_XLAGCUBE_5ed9e3,LEAN-v36-XLAGCUBE,"context, coupling, speaker",0.09065,0.07329,0.06873,0.06405,0.06122,0.05703,0.06324,0.06113
+586,exceed-v20-deep__LEAN_v37_XLAG20_567de0,LEAN-v37-XLAG20,"context, coupling, speaker",0.09081,0.07349,0.06896,0.06414,0.06099,0.05735,0.06353,0.06150
+587,exceed-v20-speaker__LEAN_v21a_f725f7,LEAN-v21a,"context, coupling, speaker",0.08929,0.07362,0.06896,0.06354,0.06196,0.05698,0.06255,0.06181
+588,exceed-v20-speaker__LEAN_v21b_8d46ba,LEAN-v21b,"context, coupling, speaker",0.08984,0.07332,0.06869,0.06387,0.06041,0.05769,0.06296,0.06193
+589,exceed-v20-speaker__LEAN_v22a_db5824,LEAN-v22a,"context, coupling, speaker",0.09006,0.07338,0.06882,0.06416,0.05959,0.05821,0.06369,0.06131
+590,exceed-v20-speaker__LEAN_v23a_f5d097,LEAN-v23a,"context, coupling, speaker",0.09041,0.07350,0.06900,0.06455,0.06022,0.05786,0.06408,0.06168
+591,exceed-v20-speaker__LEAN_v23b_e38029,LEAN-v23b,"context, coupling, speaker",0.09015,0.07328,0.06881,0.06423,0.06012,0.05771,0.06413,0.06130
+592,exceed-v20-speaker__LEAN_v24a_5285a0,LEAN-v24a,"context, coupling, speaker",0.09025,0.07358,0.06913,0.06445,0.06048,0.05773,0.06375,0.06125
+593,exceed-v20-speaker__LEAN_v25a_205b60,LEAN-v25a,"context, coupling, speaker",0.09022,0.07357,0.06903,0.06440,0.06034,0.05816,0.06376,0.06164
+594,exceed-v20-speaker__LEAN_v26a_3816b6,LEAN-v26a,"context, coupling, speaker",0.09020,0.07344,0.06893,0.06461,0.06038,0.05774,0.06390,0.06142
+595,exceed-v20-speaker__LEAN_v21_VTLN1_e7987a,LEAN-v21-VTLN1,"context, coupling, speaker",0.08942,0.07279,0.06825,0.06424,0.06065,0.05809,0.06348,0.06164
+596,exceed-v20-speaker__LEAN_v21_VTLN2_7844a1,LEAN-v21-VTLN2,"context, coupling, speaker",0.08999,0.07321,0.06866,0.06394,0.06024,0.05771,0.06376,0.06166
+597,exceed-v20-speaker__LEAN_v21_VTLN3_7acc0d,LEAN-v21-VTLN3,"context, coupling, speaker",0.08992,0.07334,0.06884,0.06387,0.05969,0.05801,0.06397,0.06145
+598,exceed-v20-speaker__LEAN_v21_VTLN4_eb138d,LEAN-v21-VTLN4,"context, coupling, speaker",0.09023,0.07338,0.06888,0.06400,0.06078,0.05783,0.06369,0.06140
+599,exceed-v20-speaker__LEAN_v21_VTLN5_f795c6,LEAN-v21-VTLN5,"context, coupling, speaker",0.09020,0.07335,0.06887,0.06375,0.06099,0.05743,0.06337,0.06123
+600,exceed-v20-speaker__LEAN_v21_VTLN6_463d90,LEAN-v21-VTLN6,"context, coupling, speaker",0.09050,0.07334,0.06872,0.06394,0.06030,0.05817,0.06388,0.06145

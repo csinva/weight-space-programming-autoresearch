@@ -9,5 +9,6 @@ Start with **`NEWTEST_REPORT.md`** (results, methods, validation, how to reprodu
 - `varpart/RESULTS.md` — variance partitioning tables on the new test
 - `protocol/PROTOCOL.md` — the test-set rule, fixed before scoring
 - `both_lean_whisper/` — LEAN-v20 + Whisper ("Both") and the LEAN-vs-Whisper variance partitioning (report §12)
+- `multisubject/` — the full set of results on five more subjects, each on a held-out session (report §13)
 
 Companion package: `LEAN_replication_package.zip` (the original June search and the Nov 5 analyses).

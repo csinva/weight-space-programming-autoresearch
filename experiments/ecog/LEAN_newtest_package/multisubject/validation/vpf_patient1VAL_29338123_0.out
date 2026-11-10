@@ -1,0 +1,16 @@
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/multisubj/pkg/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+patient1VAL task 0/15: 9 fits, 9 to do
+fitted 9 167s
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+  full                                                         matches varpart-v20 (max|dr| 0.0e+00)
+  drop:cube_fut_contrast                                       matches varpart-v20 (max|dr| 9.8e-14)
+  drop:pitch_dyn+pitch_salience+pitch_summary                  matches varpart-v20 (max|dr| 1.1e-13)
+  drop:flux+formant_dyn+formants+hnr+phonetic+spectral_flatnes matches varpart-v20 (max|dr| 0.0e+00)
+  drop:adapt_delta+cochleagram                                 matches varpart-v20 (max|dr| 7.0e-14)
+  alone:slow_quad_modbank+slow_quad_modbank_dyn                matches varpart-v20 (max|dr| 3.6e-14)
+  alone:flux+formant_dyn+formants+hnr+phonetic+spectral_flatne matches varpart-v20 (max|dr| 0.0e+00)
+  alone:pitch_dyn+pitch_salience+pitch_summary                 matches varpart-v20 (max|dr| 3.9e-16)
+  alone:phonetic                                               matches varpart-v20 (max|dr| 4.2e-17)
+full: grid 0.0904 all 0.0808
+done 188s

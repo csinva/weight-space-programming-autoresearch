@@ -1,0 +1,5 @@
+patient2: valid 1504, train 500 sha cac730b00699ed7c, test 318 (236d910e) sha 84d9fdba17ead59e, sessions in train 5
+patient3: valid 2093, train 500 sha ea4c662afc9e7f67, test 416 (e3d31b95) sha 7b2aeb1e850e6565, sessions in train 4
+patient4: valid 1761, train 500 sha f111d01020b33f13, test 107 (2eeb170d) sha acb68fd046cc9e00, sessions in train 5
+patient5: valid 1418, train 500 sha 6fd90d1c430bb4a8, test 275 (5e416143) sha f7d2304e707760a8, sessions in train 6
+patient6: valid 1590, train 500 sha 8ea2676d5d3744ee, test 222 (5d2842ef) sha 4771b06f9d32853e, sessions in train 5

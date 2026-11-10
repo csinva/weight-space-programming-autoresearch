@@ -349,6 +349,7 @@ A100 caps of 8 GPUs per partition.
 | `varpart/` | Phase-2/3 scripts, `RESULTS.md`, `results_{family,section,group}.csv`, `perelec_R2.npz`, `fits_primary_float32.npz` (all 135 fits, 317 chunks × 166 electrodes; enough to rerun phase 3), `old_test_reference/` |
 | `figures/` | New-test Figures 1 and 2 (PNG/PDF) and their scripts, plotted data, captions, the old-test figures for comparison |
 | `both_lean_whisper/` | LEAN-v20 + Whisper ("Both") fit and the LEAN-vs-Whisper variance partitioning, old and new test (§12) |
+| `multisubject/` | Everything rerun on patient2, patient3, patient4, patient5, patient6 (§13) |
 
 Not included (on disk): full per-chunk per-electrode arrays for every trial
 (`runs-wave/newtest/results/*_rold.npy`, `*_rnew.npy`, 225 MB), full variance-partitioning fits with
@@ -410,3 +411,92 @@ independent fits in §7 (0.0735 and 0.0819, grid).
 - Scripts and job records: `run_fit.sh`, `run_agg.sh`, `jobs.txt`. Fit 29293608: 20 minutes on one
   A100, about 0.35 GPU-hours. A first submission, 29293422, stopped on the frozen-training-list check
   because the harness environment variables were missing; nothing was fit.
+
+---
+
+## 13. Five more subjects (`multisubject/`)
+
+*Added Nov 9, 2026.* The full set of results — every Figure 1 trial in order, the LEAN-v20 family
+partitioning and the LEAN-vs-Whisper ("Both") partitioning — rerun on patient2, patient3, patient4, patient5 and patient6.
+The features were designed on patient1 only, so for these subjects every score is out of sample twice over:
+new patients and a held-out session.
+
+**Design (`code/make_splits.py`, frozen before scoring; hashes in `code/frozen_hashes.txt`).**
+
+| Subject | Held-out session | Test chunks | Test hours | Train hours | Electrodes (grid) |
+|---|---|---|---|---|---|
+| patient2 | 236d910e | 318 | 10.33 | 16.21 | 235 (127) |
+| patient3 | e3d31b95 | 416 | 13.49 | 16.20 | 116 (63) |
+| patient4 | 2eeb170d | 107 | 3.44 | 16.20 | 155 (96) |
+| patient5 | 5e416143 | 275 | 8.93 | 16.20 | 188 (124) |
+| patient6 | 5d2842ef | 222 | 7.21 | 16.24 | 167 (127) |
+
+- Held-out session = the paper's standard holdout per subject (`molmo_subjects.json`); test = every valid
+  chunk of that session (no transcripts exist for these subjects, so no speech filter; patient1 is compared on
+  its unfiltered 493-chunk set). Train = the first 500 chunks of a seed-42 shuffle of the remaining valid
+  chunks (master list ∩ audio ∩ high-gamma ∩ Whisper). Grid = each subject's first n_grid electrodes
+  (`grid_masks`).
+- Same features, delays, ridge and metric as patient1. Code: `code/src_multi` (the harness with the subject's
+  paths, electrode count and frozen lists read from `split.json`), `code/rescore_task_multi.py` (2,980
+  subject × trial runs, work-stealing), `code/ms_analyses.py` + `code/varpart_aggregate.py` (family
+  partitioning and Both).
+
+**Validation.**
+- Audio alignment per subject (`code/check_subjects.py`): the waveform framing reproduces each subject's
+  saved mel-spectrogram at lag 0 (max error ≤ 0.17 dB, as for patient1); Whisper frame counts equal high-gamma
+  frame counts. Segments were built with code that rebuilds an existing patient1 segment bit-identically.
+- patient1VAL (the original patient1 split through the multi-subject harness): 5 pilot trials reproduce their
+  logged scores (0.07604, 0.06116, 0.09045, 0.08823, 0.07720); the family-partition fits match the stored
+  patient1 fits (max |Δr| ≤ 4e-16) and the full model gives 0.0904 / 0.0808; Both reproduces June exactly
+  (0.09204 / 0.10375, LEAN 0.08079 / 0.09045, Whisper 0.08172 / 0.09330). Logs in `validation/`.
+- All 2,980 subject × trial runs completed (none failed, including trials written for patient1).
+
+**Results** (grid electrodes, held-out sessions; `summary/SUMMARY.md`, `summary/summary_table.csv`):
+
+| Subject | Test chunks | v16 | v20 | Kept | v16→v20 | Whisper | Both | Both − Whisper | Unique LEAN [95% CI] | Unique Whisper | Shared | r(trials, patient1 old) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| patient1 | 493 | 0.0649 | 0.0690 | 0.0691 | +0.0041 | 0.0752 | 0.0810 | +0.0058 | 5.8% [4.9, 6.8] | 25.3% | 68.9% | 0.98 |
+| patient2 | 318 | 0.0661 | 0.0643 | 0.0641 | -0.0018 | 0.0776 | 0.0752 | -0.0023 | -0.1% [-3.3, 3.3] | 26.2% | 74.0% | 0.80 |
+| patient3 | 416 | 0.0592 | 0.0604 | 0.0603 | +0.0012 | 0.0710 | 0.0717 | +0.0007 | 1.4% [0.2, 2.7] | 26.4% | 72.2% | 0.84 |
+| patient4 | 107 | 0.0575 | 0.0578 | 0.0575 | +0.0003 | 0.0591 | 0.0604 | +0.0014 | 5.8% [-0.8, 13.6] | 9.1% | 85.2% | 0.85 |
+| patient5 | 275 | 0.0628 | 0.0637 | 0.0634 | +0.0009 | 0.0678 | 0.0778 | +0.0100 | 17.2% [12.6, 22.6] | 34.6% | 48.2% | 0.94 |
+| patient6 | 222 | 0.0606 | 0.0614 | 0.0615 | +0.0008 | 0.0649 | 0.0704 | +0.0055 | 11.8% [7.9, 16.3] | 23.6% | 64.6% | 0.89 |
+
+## LEAN-v20 family unique variance (% of full model)
+
+| Subject | Modulation filters | Interactions (v3e) | Wavelet scattering | Contrast | Pitch and voicing | Shape, flux, formants | Cochleagram + context |
+|---|---|---|---|---|---|---|---|
+| patient1 | 7.2 | 2.0 | 1.2 | 0.7 | 0.4 | 0.4 | 0.4 |
+| patient2 | 4.8 | 0.8 | 0.5 | 0.1 | 0.4 | -0.2 | -6.6 |
+| patient3 | 6.2 | 0.3 | 0.7 | -0.2 | 0.7 | -0.2 | -2.2 |
+| patient4 | 5.5 | -1.1 | 0.9 | 0.3 | -0.0 | -1.6 | -1.6 |
+| patient5 | 2.0 | -0.5 | -0.4 | 1.1 | 0.0 | -0.7 | -2.0 |
+| patient6 | 5.2 | -0.1 | -0.3 | -0.6 | -0.2 | -0.3 | 3.4 |
+
+**Findings.**
+- **The front end transfers; the late search does not.** On every subject most of the gain comes in the
+  first ~60 hand-design trials (cochleagram, compression and adaptation, multiple windows, modulation
+  filters), and trial scores correlate with patient1's at r = 0.80–0.94 (`summary/ms_fig1_progression`).
+  But v16 → v20 adds +0.0041 on patient1's held-out session and only −0.0018 to +0.0012 on the other
+  subjects; on patient2 the later versions are worse than v16.
+- **Whisper beats LEAN-v20 on every subject** (by 0.0013 on patient4 to 0.0133 on patient2, grid).
+- **LEAN still adds information Whisper lacks in most subjects.** Unique LEAN variance is above zero
+  (95% CI) on patient1, patient3, patient5 and patient6 — largest on patient5 (17%) and patient6 (12%), where Both beats
+  Whisper by +0.010 and +0.0055 r — about zero on patient2 (where Both is slightly below Whisper) and
+  uncertain on patient4 (107 test chunks). Whisper's unique share is 24–35% everywhere except patient4 (9%).
+- **Modulation filters are the one family with a robust unique contribution** (2.0–7.2% of the full model
+  on every subject). "Cochleagram + slow context + lookahead" — already the block that shrank on patient1's
+  new test — has negative unique variance on four of the five new subjects (−1.6% to −6.6%; 95% CI below zero
+  on patient2, patient3 and patient5): on those three, the model without it predicts the held-out session better. When a family's unique share is negative, the shared share
+  exceeds 100% (`summary/ms_fig2_families`).
+
+**Files (`multisubject/`).** `code/` (all scripts, SLURM files, job IDs); `subjects/<S>/split.json` (frozen
+lists); `subjects/<S>/trial_results.json` and `trials_compact.npz` (per trial: grid and all-electrode r,
+chunk-averaged r per electrode, grid-mean r per test chunk); `subjects/<S>/varpart/` (family partition
+tables, per-electrode R²); `subjects/<S>/both/` (LEAN-vs-Whisper tables, `perelec.npz` per-electrode arrays
+for brain maps, `perchunk_r.npz`); `subjects/patient1ALL/varpart/` (patient1 family partition on all 493 chunks);
+`summary/` (tables, `trial_scores_grid.csv`, figures `ms_fig1_progression`, `ms_fig2_families`,
+`ms_fig3_lean_whisper`); `validation/`. Full per-chunk × per-electrode results for every run stay on disk
+in `runs-wave/multisubj/results/<S>/` (with the aligned audio segments in `runs-wave/multisubj/<S>/wave_aligned/`).
+
+**Compute.** 303.6 A100 GPU-hours (trial reruns 294.0, family fits 7.4, Both 1.6, statistics 0.8), Nov 8–9.

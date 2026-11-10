@@ -1,0 +1,14 @@
+/path/to/ecog_data/circuit-building-autoresearch/runs-wave/multisubj/pkg/src/__init__.py:10: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+  scattering: K=9 NB=1 dim=287 (S1m 9, joint 8, S2m 90, S2s 90)
+  train 1/500 36s
+  train 51/500 77s
+  train 101/500 119s
+  train 151/500 159s
+  train 201/500 200s
+  train 251/500 240s
+  train 301/500 280s
+  train 351/500 320s
+  train 401/500 361s
+  train 451/500 402s
+stats done 443s

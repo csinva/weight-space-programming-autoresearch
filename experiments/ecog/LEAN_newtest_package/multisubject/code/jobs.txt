@@ -1,0 +1,9 @@
+extract=29337896
+pilot=29338043 array=29338044 (afterok pilot)
+patient1VAL: vp_stats=29338122 vp_fit=29338123 vp_agg=- both_fit=29338124 both_agg=29338125
+patient2: vp_stats=29338126 vp_fit=29338127 vp_agg=29338128 both_fit=29338129 both_agg=29338130
+patient3: vp_stats=29338131 vp_fit=29338132 vp_agg=29338133 both_fit=29338134 both_agg=29338135
+patient4: vp_stats=29338136 vp_fit=29338137 vp_agg=29338138 both_fit=29338139 both_agg=29338140
+patient5: vp_stats=29338141 vp_fit=29338142 vp_agg=29338143 both_fit=29338144 both_agg=29338145
+patient6: vp_stats=29338146 vp_fit=29338147 vp_agg=29338148 both_fit=29338149 both_agg=29338150
+added gpu_long to pending pilot/vps/vpf/bf jobs 12:43
